@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mathe 9b">
+  <title>Mathe Klasse 9b | Unterrichtsinhalte & Übungen</title>
+  
+  <!-- Modern System Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --accent: #8b5cf6;
+      --accent-light: #ede9fe;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+      --shadow-hover: 0 10px 25px rgba(59, 130, 246, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0 1rem 3rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      padding: 2.5rem 0 1.5rem 0;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Info Banner / Alert */
+    .alert-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin: 1.5rem 0 2.5rem 0;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .alert-icon {
+      font-size: 2rem;
+      line-height: 1;
+      background: rgba(255,255,255,0.1);
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+    }
+
+    .alert-content h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-content p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title span {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Topics Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .topic-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+    }
+
+    .topic-card.active-topic {
+      border: 2px solid var(--primary);
+    }
+
+    .topic-card.active-topic::before {
+      content: "AKTUELL";
+      position: absolute;
+      top: 12px;
+      right: -26px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 28px;
+      transform: rotate(45deg);
+      letter-spacing: 0.5px;
+    }
+
+    .topic-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+
+    .badge-current {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    .badge-upcoming {
+      background-color: var(--warning-light);
+      color: #b45309;
+    }
+
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .topic-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .btn-topic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-topic:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-disabled {
+      background-color: #f1f5f9;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    /* iPad Guide Box */
+    .ipad-guide {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .ipad-guide-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .step-item {
+      background-color: var(--bg);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .step-number {
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    .step-text strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .alert-card {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="badge-pill">Mathe 9b • Schulportal</div>
+      <h1>Mathematik Klasse 9b</h1>
+      <p class="subtitle">Deine Übersicht für Unterrichtsinhalte, Übungen, Merkblätter und Infos zu Klassenarbeiten.</p>
+    </header>
+
+    <!-- Important Notice / Next Exam -->
+    <div class="alert-card">
+      <div class="alert-icon">📌</div>
+      <div class="alert-content">
+        <h3>Aktuelle Information & Klassenarbeit</h3>
+        <p>Wir starten mit dem neuen Thema <strong>Lineare Gleichungssysteme (LGS)</strong>. Alle Regeln, Verfahren (Gleichsetzungs-, Einsetzungs- und Additionsverfahren) und interaktive Übungen werden hier laufend aktualisiert. Nutze die Seite insbesondere dann, wenn du krank warst oder Stoff nachholen möchtest!</p>
+      </div>
+    </div>
+
+    <!-- Topics Grid -->
+    <h2 class="section-title"><span>📚</span> Unterrichtsmodule</h2>
+    <div class="grid">
+
+      <!-- Modul: LGS (Active) -->
+      <div class="topic-card active-topic">
+        <span class="topic-badge badge-current">Aktuelles Thema</span>
+        <h3 class="topic-title">Lineare Gleichungssysteme (LGS)</h3>
+        <p class="topic-desc">Einführung in Gleichungssysteme mit zwei Variablen: Zeichnerische Lösung, Gleichsetzungs-, Einsetzungs- und Additionsverfahren mit Schritt-für-Schritt-Erklärungen und Selbsttests.</p>
+        <a href="lgs.html" class="btn-topic">Modul öffnen →</a>
+      </div>
+
+      <!-- Modul: Quadratische Funktionen -->
+      <div class="topic-card">
+        <span class="topic-badge badge-upcoming">Demnächst</span>
+        <h3 class="topic-title">Quadratische Funktionen</h3>
+        <p class="topic-desc">Parabeln, Scheitelpunktform, Normalform, Nullstellen und die quadratische Ergänzung bzw. p-q-Formel verstehen und anwenden.</p>
+        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
+      </div>
+
+      <!-- Modul: Satz des Pythagoras -->
+      <div class="topic-card">
+        <span class="topic-badge badge-upcoming">Im weiteren Verlauf</span>
+        <h3 class="topic-title">Satz des Pythagoras</h3>
+        <p class="topic-desc">Rechtwinklige Dreiecke, Katheten- und Höhensatz sowie praktische Anwendungen und geometrische Berechnungen im Raum.</p>
+        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
+      </div>
+
+    </div>
+
+    <!-- iPad Quick Guide -->
+    <div class="ipad-guide">
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+        📲 Tipp für dein iPad: Als App auf den Startbildschirm
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Damit du mit einem Klick auf die Mathe-Inhalte zugreifen kannst, füge diese Seite einfach deinem iPad-Home-Bildschirm hinzu:</p>
+      
+      <div class="ipad-guide-steps">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            <strong>Teilen-Symbol</strong>
+            Im Safari-Browser oben rechts auf das Viereck mit Pfeil nach oben tippen.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            <strong>Zum Home-Bildschirm</strong>
+            Nach unten scrollen und auf <em>„Zum Home-Bildschirm“</em> tippen.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-text">
+            <strong>Hinzufügen</strong>
+            Oben rechts auf <em>„Hinzufügen“</em> tippen – fertig ist deine Mathe-App!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Mathematik Klasse 9b • Erstellt für deinen Lernerfolg.</p>
+      <p style="margin-top: 4px;">Fragen zum Unterricht oder zu den Aufgaben? Schreibe mir gerne in <strong>Microsoft Teams</strong>!</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
