@@ -304,6 +304,189 @@
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
     }
+
+    /* Quiz Styling */
+    .quiz-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .quiz-question-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt-btn .opt-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.correct {
+      background: var(--success-light) !important;
+      border-color: var(--success) !important;
+      color: #065f46 !important;
+    }
+
+    .quiz-opt-btn.correct .opt-badge {
+      background: var(--success);
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: var(--merksatz-bg) !important;
+      border-color: var(--merksatz-border) !important;
+      color: var(--merksatz-text) !important;
+    }
+
+    .quiz-opt-btn.wrong .opt-badge {
+      background: var(--merksatz-accent);
+      color: white;
+    }
+
+    .quiz-feedback {
+      display: none;
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      margin-top: 1rem;
+      animation: fadeIn 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.is-correct {
+      background: var(--success-light);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .quiz-feedback.is-wrong {
+      background: var(--merksatz-bg);
+      border: 1px solid var(--merksatz-border);
+      color: var(--merksatz-text);
+    }
+
+    .btn-next-q {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 1rem;
+      transition: background 0.15s;
+    }
+
+    .btn-next-q:hover {
+      background: var(--primary-dark);
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .diag-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+    }
+
+    .diag-card h4 {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .diag-card .score-stat {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
@@ -328,6 +511,7 @@
       <button class="tab-btn" onclick="switchTab('tab-gleichsetzen')">2. Gleichsetzungsverfahren</button>
       <button class="tab-btn" onclick="switchTab('tab-graphisch')">3. Graphische Deutung</button>
       <button class="tab-btn" onclick="switchTab('tab-addieren')">4. Additionsverfahren</button>
+      <button class="tab-btn" onclick="switchTab('tab-quiz')" style="border-color: var(--primary); color: var(--primary); font-weight: 800;">5. Selbst-Check (Quiz) 🎯</button>
     </div>
 
     <!-- ========================================== -->
@@ -748,6 +932,100 @@
       </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- TAB 5: SELBST-CHECK (INTERAKTIVES QUIZ)   -->
+    <!-- ========================================== -->
+    <div id="tab-quiz" class="tab-panel">
+      <div class="card-section">
+        
+        <!-- Startbildschirm -->
+        <div id="quiz-start-view">
+          <h2 class="card-title">🎯 Selbst-Check: Eigendiagnose zu LGS</h2>
+          <p style="margin-bottom: 1.25rem;">
+            Finde heraus, wie sicher du im Thema <strong>Lineare Gleichungssysteme</strong> bist! 
+            Bei jedem Start wählt das System <strong>10 zufällige Fragen</strong> aus unserem Pool:
+          </p>
+
+          <div class="diag-grid" style="margin-bottom: 1.75rem;">
+            <div class="diag-card">
+              <h4>1. Strategie-Check</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">Welches Verfahren ist wann am schnellsten?</p>
+            </div>
+            <div class="diag-card">
+              <h4>2. Fehlersuche</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">Typische Leichtsinnsfehler sofort erkennen.</p>
+            </div>
+            <div class="diag-card">
+              <h4>3. Graphische Deutung</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">Geraden, Schnittpunkte und Sonderfälle.</p>
+            </div>
+            <div class="diag-card">
+              <h4>4. Schnelle Mini-Rechnung</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">Kopfrechnen, Terme und Proben.</p>
+            </div>
+          </div>
+
+          <button class="btn-next-q" onclick="startQuiz()" style="font-size: 1.05rem; padding: 12px 28px;">
+            Test jetzt starten (10 Fragen) →
+          </button>
+        </div>
+
+        <!-- Frage-Ansicht -->
+        <div id="quiz-play-view" style="display: none;">
+          <div class="quiz-progress-wrap">
+            <span id="quiz-progress-text">Frage 1 von 10</span>
+            <span id="quiz-score-live">Punkte: 0</span>
+          </div>
+          <div class="quiz-bar-bg">
+            <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+          </div>
+
+          <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+          <div id="quiz-question-text" class="quiz-question-title">Frage...</div>
+
+          <div id="quiz-options-box" class="quiz-options">
+            <!-- 4 Optionen dynamisch per JS -->
+          </div>
+
+          <div id="quiz-feedback-box" class="quiz-feedback">
+            <div id="quiz-feedback-title" style="font-weight: 800; margin-bottom: 0.35rem;"></div>
+            <div id="quiz-feedback-desc"></div>
+          </div>
+
+          <button id="quiz-btn-next" class="btn-next-q" style="display: none;" onclick="nextQuestion()">
+            Nächste Frage →
+          </button>
+        </div>
+
+        <!-- Auswertungs-Ansicht -->
+        <div id="quiz-result-view" style="display: none;">
+          <h2 class="card-title">🎉 Deine Eigendiagnose</h2>
+          
+          <div style="text-align: center; padding: 1.5rem 0;">
+            <div id="quiz-final-score" style="font-size: 3rem; font-weight: 800; color: var(--primary);">8 / 10</div>
+            <div id="quiz-final-badge" style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-top: 0.25rem;">Sehr gute Leistung!</div>
+          </div>
+
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-top: 1rem;">Ergebnis nach Bereichen:</h3>
+          <div class="diag-grid" id="quiz-cat-breakdown">
+            <!-- Kategorien-Auswertung per JS -->
+          </div>
+
+          <div class="box-merksatz" id="quiz-advice-box" style="margin-top: 1.5rem;">
+            <div class="box-merksatz-title">Empfehlung für deine Vorbereitung:</div>
+            <div class="box-merksatz-content" id="quiz-advice-text">
+              Lerneffekt...
+            </div>
+          </div>
+
+          <button class="btn-next-q" onclick="startQuiz()" style="margin-top: 1.5rem;">
+            🔄 Test mit 10 neuen Fragen wiederholen
+          </button>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Footer -->
     <div style="text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem;">
       <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Zurück zur Startseite</a>
@@ -756,7 +1034,7 @@
 
   </div>
 
-  <!-- Script für Tabs & Aufklapplösungen -->
+  <!-- Script für Tabs, Aufklapplösungen & Quiz -->
   <script>
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -764,11 +1042,466 @@
 
       event.currentTarget.classList.add('active');
       document.getElementById(tabId).classList.add('active');
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById(tabId), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
     }
 
     function toggleDrawer(drawerId) {
       const drawer = document.getElementById(drawerId);
       drawer.classList.toggle('open');
+    }
+
+    /* ===================================================
+       FRAGENPOOL FÜR DIE EIGENDIAGNOSE (20 Fragen)
+       =================================================== */
+    const QUESTION_POOL = [
+      {
+        cat: "Strategie-Check",
+        q: "Gegeben ist das LGS: $\\text{I) } y = 3x - 1$ und $\\text{II) } y = -x + 5$. Welches Lösungsverfahren führt hier am allerschnellsten zum Ziel?",
+        opts: [
+          "Gleichsetzungsverfahren, weil beide Seiten nach $y$ isoliert sind.",
+          "Additionsverfahren, indem man beide Gleichungen multipliziert.",
+          "Einsetzungsverfahren nach kompliziertem Umstellen.",
+          "Ausprobieren verschiedener Zahlenpaare."
+        ],
+        ans: 0,
+        exp: "Da beide Gleichungen bereits nach derselben Unbekannten ($y$) aufgelöst sind, setzt man sie direkt gleich: $3x - 1 = -x + 5$."
+      },
+      {
+        cat: "Strategie-Check",
+        q: "Gegeben ist: $\\text{I) } x = 4y + 2$ und $\\text{II) } 2x - 3y = 7$. Welches Verfahren bietet sich sofort an?",
+        opts: [
+          "Einsetzungsverfahren, weil $x$ in Gleichung I bereits alleine steht.",
+          "Gleichsetzungsverfahren, indem man II mühsam nach $x$ umformt.",
+          "Graphische Lösung auf Millimeterpapier.",
+          "Additionsverfahren mit Multiplikation."
+        ],
+        ans: 0,
+        exp: "Gleichung I ist bereits nach $x$ isoliert. Man kann den Term $(4y + 2)$ direkt für $x$ in Gleichung II einsetzen: $2(4y + 2) - 3y = 7$."
+      },
+      {
+        cat: "Strategie-Check",
+        q: "Gegeben ist: $\\text{I) } 3x + 2y = 12$ und $\\text{II) } 5x - 2y = 4$. Welcher Schritt löst das System am schnellsten?",
+        opts: [
+          "Additionsverfahren: Beide Gleichungen direkt addieren, da $+2y$ und $-2y$ wegfallen.",
+          "Einsetzungsverfahren: Gleichung I nach $y$ umstellen.",
+          "Gleichsetzungsverfahren nach Bruch-Umformung.",
+          "Beide Gleichungen quadrieren."
+        ],
+        ans: 0,
+        exp: "Wegen $+2y$ und $-2y$ heben sich die $y$-Terme bei der Addition sofort auf: $8x = 16 \\implies x = 2$."
+      },
+      {
+        cat: "Strategie-Check",
+        q: "Gegeben ist: $\\text{I) } 4x + 3y = 15$ und $\\text{II) } 2x - 5y = 1$. Was ist der geschickteste erste Schritt für das Additionsverfahren?",
+        opts: [
+          "Gleichung II mit 2 multiplizieren, damit bei beiden $4x$ steht.",
+          "Gleichung I durch 3 teilen.",
+          "Beide Gleichungen miteinander multiplizieren.",
+          "Gleichung I mit 5 und II mit 3 multiplizieren."
+        ],
+        ans: 0,
+        exp: "Multipliziert man II mit 2, erhält man $4x - 10y = 2$. Nun kann man $\\text{I} - \\text{II}$ rechnen und $4x$ fällt sofort weg."
+      },
+      {
+        cat: "Fehleranalyse",
+        q: "Max löst ein LGS mit dem Einsetzungsverfahren:<br>$\\text{I) } y = 2x + 3$<br>$\\text{II) } 3x - 2y = 4$<br>Er setzt ein: $3x - 2(2x + 3) = 4 \\implies 3x - 4x + 6 = 4$. Wo liegt sein Fehler?",
+        opts: [
+          "Vorzeichenfehler beim Ausmultiplizieren: $-2 \\cdot (+3) = -6$, nicht $+6$.",
+          "Er hätte das Gleichsetzungsverfahren nehmen müssen.",
+          "Beim Einsetzen darf man keine Klammern verwenden.",
+          "Die Rechnung ist fehlerfrei."
+        ],
+        ans: 0,
+        exp: "Klassische Vorzeichenfalle! Die $-2$ vor der Klammer multipliziert auch die $+3$: $-2 \\cdot 3 = -6$. Richtig ist: $3x - 4x - 6 = 4$."
+      },
+      {
+        cat: "Fehleranalyse",
+        q: "Lisa formt die Gleichung $s + h = 51$ nach $s$ um und schreibt: $s = h - 51$. Was ist hier falsch?",
+        opts: [
+          "Sie muss $-h$ rechnen, das richtige Ergebnis lautet $s = 51 - h$.",
+          "Man kann solche Gleichungen nicht umformen.",
+          "Richtig wäre $s = 51 + h$.",
+          "Es muss durch $h$ geteilt werden."
+        ],
+        ans: 0,
+        exp: "Um $+h$ von der linken Seite zu entfernen, rechnet man auf beiden Seiten $-h$. Das ergibt $s = 51 - h$."
+      },
+      {
+        cat: "Fehleranalyse",
+        q: "Felix formt die Gleichung $2x - 6y = -22$ nach $y$ um:<br>1. Schritt: $-6y = -2x - 22$<br>2. Schritt: $y = \\frac{1}{3}x - \\frac{11}{3}$. Welcher Fehler ist passiert?",
+        opts: [
+          "Minus durch Minus ergibt Plus: $-22 : (-6) = +\\frac{11}{3}$.",
+          "Die Steigung $\\frac{1}{3}$ ist falsch berechnet.",
+          "Man darf Gleichungen nicht durch negative Zahlen teilen.",
+          "Es gibt keinen Fehler."
+        ],
+        ans: 0,
+        exp: "Beim Teilen durch $-6$ müssen beide Vorzeichen wechseln: $-2 : (-6) = +\\frac{1}{3}$ und $-22 : (-6) = +\\frac{11}{3}$."
+      },
+      {
+        cat: "Fehleranalyse",
+        q: "Tim rechnet: $\\text{I) } 3a + 5b = 20$ und $\\text{II) } 3a + 2b = 14$. Er subtrahiert $\\text{I} - \\text{II}$: $3b = 6 \\implies b = 2$. Ist dieser Schritt mathematisch korrekt?",
+        opts: [
+          "Ja, der Schritt ist vollkommen fehlerfrei gerechnet.",
+          "Nein, $5b - 2b$ ergibt $7b$.",
+          "Nein, man darf Gleichungen niemals voneinander subtrahieren.",
+          "Nein, $20 - 14$ ergibt 8."
+        ],
+        ans: 0,
+        exp: "Vollkommen richtig gerechnet: $3a - 3a = 0$, $5b - 2b = 3b$ und $20 - 14 = 6$. Daraus folgt sofort $b = 2$."
+      },
+      {
+        cat: "Graphische Deutung",
+        q: "Was entspricht der rechnerischen Lösung eines linearen Gleichungssystems graphisch im Koordinatensystem?",
+        opts: [
+          "Dem Schnittpunkt der beiden Funktionsgraphen $S(x|y)$.",
+          "Dem Koordinatenursprung $(0|0)$.",
+          "Dem Abstand zwischen den beiden Geraden.",
+          "Dem Achsenabschnitt der ersten Geraden."
+        ],
+        ans: 0,
+        exp: "Die Lösung eines LGS ist das Wertepaar $(x|y)$, das beide Gleichungen gleichzeitig erfüllt – im Koordinatensystem ist das genau der Schnittpunkt beider Geraden."
+      },
+      {
+        cat: "Graphische Deutung",
+        q: "Zwei Geraden besitzen die gleiche Steigung $m = 2$, haben jedoch unterschiedliche Achsenabschnitte ($b_1 = 1, b_2 = -4$). Wie viele Lösungen hat das System?",
+        opts: [
+          "Keine Lösung (die Geraden sind echt parallel und schneiden sich nie).",
+          "Genau eine Lösung im Punkt $(2|1)$.",
+          "Unendlich viele Lösungen.",
+          "Zwei verschiedene Schnittpunkte."
+        ],
+        ans: 0,
+        exp: "Gleiche Steigung bei unterschiedlichem Achsenabschnitt bedeutet: Die Geraden sind parallel. Da es keinen Schnittpunkt gibt, ist $\\mathbb{L} = \\{\\}$."
+      },
+      {
+        cat: "Graphische Deutung",
+        q: "Beim Lösen eines Gleichungssystems entsteht am Ende die Zeile $0 = 0$ (eine wahre Aussage). Was bedeutet dies geometrisch?",
+        opts: [
+          "Beide Gleichungen beschreiben dieselbe Gerade (unendlich viele Lösungen).",
+          "Die Geraden schneiden sich im Ursprung $(0|0)$.",
+          "Es gibt keine Lösung, da $0 = 0$ sinnlos ist.",
+          "Die Geraden stehen senkrecht aufeinander."
+        ],
+        ans: 0,
+        exp: "Eine stets wahre Aussage wie $0 = 0$ bedeutet: Jedes Zahlenpaar auf der Geraden ist eine Lösung. Beide Geraden liegen exakt aufeinander."
+      },
+      {
+        cat: "Graphische Deutung",
+        q: "Beim Lösen eines LGS entsteht am Ende die Zeile $0 = 7$ (ein Widerspruch). Was bedeutet dies für die Lösungsmenge?",
+        opts: [
+          "Das System besitzt keine Lösung: $\\mathbb{L} = \\{\\}$.",
+          "Die Lösung ist $x = 0$ und $y = 7$.",
+          "Das System besitzt unendlich viele Lösungen.",
+          "Die Lösung liegt auf der $y$-Achse bei 7."
+        ],
+        ans: 0,
+        exp: "Da $0 = 7$ unmöglich wahr sein kann, gibt es kein Zahlenpaar, das beide Gleichungen erfüllt. Die Geraden sind parallel."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "„Auf einer Farm leben Hühner ($h$) und Schafe ($s$). Insgesamt sind es 30 Tiere.“ Welche Gleichung beschreibt diese Bedingung korrekt?",
+        opts: [
+          "$s + h = 30$",
+          "$4s + 2h = 30$",
+          "$s \\cdot h = 30$",
+          "$s = 30h$"
+        ],
+        ans: 0,
+        exp: "Da jedes Tier genau einen Kopf hat, addiert man einfach die Anzahlen: $s + h = 30$."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "„Hühner ($h$) haben 2 Beine, Schafe ($s$) haben 4 Beine. Zusammen zählt man 88 Beine.“ Welche Gleichung beschreibt die Anzahl der Beine?",
+        opts: [
+          "$4s + 2h = 88$",
+          "$2s + 4h = 88$",
+          "$s + h = 88$",
+          "$4s \\cdot 2h = 88$"
+        ],
+        ans: 0,
+        exp: "Jedes Schaf steuert 4 Beine bei ($4s$) und jedes Huhn 2 Beine ($2h$), also: $4s + 2h = 88$."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Familie Müller kauft an der Pommesbude 3 Pommes ($p$) und 2 Würstchen ($w$) für insgesamt 16 Euro. Wie lautet die Gleichung?",
+        opts: [
+          "$3p + 2w = 16$",
+          "$2p + 3w = 16$",
+          "$5(p + w) = 16$",
+          "$3p \\cdot 2w = 16$"
+        ],
+        ans: 0,
+        exp: "3 Portionen Pommes kosten $3p$, 2 Würstchen kosten $2w$. Zusammen sind das: $3p + 2w = 16$."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Ein Vater ($v$) ist heute doppelt so alt wie sein Sohn ($s$). Vor 5 Jahren war er dreimal so alt. Welche Gleichung beschreibt die Situation vor 5 Jahren?",
+        opts: [
+          "$v - 5 = 3(s - 5)$",
+          "$v - 5 = 3s - 5$",
+          "$v = 3s - 5$",
+          "$3(v - 5) = s - 5$"
+        ],
+        ans: 0,
+        exp: "Vor 5 Jahren waren beide 5 Jahre jünger: $(v - 5)$ und $(s - 5)$. Der Vater war 3-mal so alt wie der Sohn, daher gehört die 3 vor die Klammer des Sohnes."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Ist das Wertepaar $(2 \\mid 3)$ eine Lösung für das LGS mit $\\text{I) } x + y = 5$ und $\\text{II) } 2x - y = 1$?",
+        opts: [
+          "Ja, weil beide Gleichungen mit $x = 2$ und $y = 3$ wahr sind.",
+          "Nein, nur Gleichung I ist wahr.",
+          "Nein, nur Gleichung II ist wahr.",
+          "Nein, das Zahlenpaar ist falsch herum."
+        ],
+        ans: 0,
+        exp: "Probe: In I: $2 + 3 = 5$ (wahr). In II: $2 \\cdot 2 - 3 = 4 - 3 = 1$ (wahr). Beide Gleichungen stimmen, also ist $(2|3)$ die Lösung."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Gegeben ist die Gleichung $y = 3x$. Welcher Wert ergibt sich für $y$, wenn $x = 4$ ist?",
+        opts: [
+          "$y = 12$",
+          "$y = 7$",
+          "$y = 1$",
+          "$y = \\frac{4}{3}$"
+        ],
+        ans: 0,
+        exp: "Einfach $x = 4$ einsetzen: $y = 3 \\cdot 4 = 12$."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Gegeben: $\\text{I) } a + b = 10$ und $\\text{II) } a - b = 4$. Was ist der Wert von $a$?",
+        opts: [
+          "$a = 7$",
+          "$a = 6$",
+          "$a = 8$",
+          "$a = 3$"
+        ],
+        ans: 0,
+        exp: "Additionsverfahren: Addiert man beide Gleichungen, fällt $b$ weg: $2a = 14 \\implies a = 7$."
+      },
+      {
+        cat: "Alltag & Rechnen",
+        q: "Gegeben: $y = 5x$ und $y = 2x + 9$. Gleichsetzen ergibt $5x = 2x + 9$. Was ist die Lösung für $x$?",
+        opts: [
+          "$x = 3$",
+          "$x = 2$",
+          "$x = 9$",
+          "$x = 1$"
+        ],
+        ans: 0,
+        exp: "$5x = 2x + 9 \\quad \\mid -2x \\implies 3x = 9 \\quad \\mid :3 \\implies x = 3$."
+      }
+    ];
+
+    /* Quiz State */
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let catStats = {};
+
+    function startQuiz() {
+      // 10 Zufällige Fragen aus dem Pool ziehen (Fisher-Yates Shuffle)
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+      currentQuestions = poolCopy.slice(0, 10);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = ((currentQIdx) / 10) * 100;
+      
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von 10`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+      
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      // Optionen mischen
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      // Feedback und Weiter-Button verstecken
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+
+      // KaTeX rendern
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById('quiz-play-view'), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      // Alle Optionen sperren
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      // Statistik festhalten
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback show is-correct';
+        fbTitle.innerText = "Richtig! ✔";
+      } else {
+        selectedBtn.classList.add('wrong');
+        fbBox.className = 'quiz-feedback show is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+      }
+
+      fbDesc.innerHTML = q.exp;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-btn-next').style.display = 'inline-flex';
+
+      if (currentQIdx === 9) {
+        document.getElementById('quiz-btn-next').innerText = "Zur Auswertung →";
+      } else {
+        document.getElementById('quiz-btn-next').innerText = "Nächste Frage →";
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(fbBox, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < 10) {
+        renderCurrentQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / 10`;
+
+      let badgeText = "Solide Leistung!";
+      let badgeColor = "#2563eb";
+      if (quizScore >= 9) {
+        badgeText = "Hervorragend! Du bist top vorbereitet! 🌟";
+        badgeColor = "#059669";
+      } else if (quizScore >= 7) {
+        badgeText = "Gute Leistung! Die Grundlagen sitzen sicher. 👍";
+        badgeColor = "#2563eb";
+      } else if (quizScore >= 5) {
+        badgeText = "Auf gutem Weg! Wiederhole noch gezielt deine Schwachstellen.";
+        badgeColor = "#d97706";
+      } else {
+        badgeText = "Hier solltest du noch etwas üben. Schau dir die Module oben nochmals in Ruhe an.";
+        badgeColor = "#dc2626";
+      }
+
+      const badgeEl = document.getElementById('quiz-final-badge');
+      badgeEl.innerText = badgeText;
+      badgeEl.style.color = badgeColor;
+
+      // Bereichs-Breakdown
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      let weakCat = null;
+      let lowestRate = 1.0;
+
+      for (const [cat, data] of Object.entries(catStats)) {
+        const rate = data.correct / data.total;
+        if (rate < lowestRate) {
+          lowestRate = rate;
+          weakCat = cat;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'diag-card';
+        card.innerHTML = `
+          <h4>${cat}</h4>
+          <div class="score-stat">${data.correct} / ${data.total} richtig</div>
+        `;
+        breakdownBox.appendChild(card);
+      }
+
+      // Individuelle Handlungsempfehlung
+      const adviceEl = document.getElementById('quiz-advice-text');
+      if (quizScore >= 9) {
+        adviceEl.innerHTML = "Du beherrschst sowohl die Wahl des richtigen Lösungsverfahrens als auch die graphische Deutung und Fehlererkennung souverän. Mit diesem Kenntnisstand bist du bestens für die nächste Klassenarbeit aufgestellt!";
+      } else if (weakCat === "Strategie-Check") {
+        adviceEl.innerHTML = "Achte vor dem Rechnen immer zuerst auf die Gleichungen: Sind beide nach derselben Variable aufgelöst? $\\implies$ Gleichsetzen! Steht eine Variable schon alleine? $\\implies$ Einsetzen! Stehen gleiche Koeffizienten vor den Variablen? $\\implies$ Additionsverfahren!";
+      } else if (weakCat === "Fehleranalyse") {
+        adviceEl.innerHTML = "Typische Leichtsinnsfehler passieren fast immer bei Minuszeichen vor Klammern (z. B. $-2(2x + 3) = -4x - 6$). Nimm dir beim Einsetzungsverfahren immer eine extra Sekunde Zeit für die Vorzeichen.";
+      } else if (weakCat === "Graphische Deutung") {
+        adviceEl.innerHTML = "Wiederhole in <strong>Tab 3</strong> die Bedeutung der Graphen: Schnittpunkt = genau eine Lösung; parallele Geraden = keine Lösung; identische Geraden = unendlich viele Lösungen.";
+      } else {
+        adviceEl.innerHTML = "Nutze die Tabs 1 bis 4 oben, um die Schritt-für-Schritt-Anleitungen noch einmal nachzuvollziehen. Mache danach einfach einen neuen Durchgang dieses Tests mit 10 frischen Fragen!";
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById('quiz-result-view'), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
     }
   </script>
 
