@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Lineare Gleichungssysteme (LGS) | Mathe 9b</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" 
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success: #10b981;
+      --success-light: #f0fdf4;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --danger: #ef4444;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 3rem 1rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      padding: 1.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Module Header */
+    .module-header {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .module-tag {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+
+    .module-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Themenübersicht / Statusliste */
+    .toc-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .toc-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .toc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .toc-item:hover {
+      background: #f1f5f9;
+    }
+
+    .badge-status {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .status-active {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-next {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    /* Content Cards (Didaktische Boxen) */
+    .section-block {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Blaue Merkkiste */
+    .box-rule {
+      background: #f0f7ff;
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .box-rule h3 {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Grüne Musterbeispiel-Box */
+    .box-example {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .box-example-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .step {
+      background: var(--bg);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+    }
+
+    .step strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Gelbe Stolperfalle-Box */
+    .box-warning {
+      background: var(--warning-light);
+      border-left: 4px solid var(--warning);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .box-warning h3 {
+      color: #b45309;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Interaktive Übungsaufgabe */
+    .box-exercise {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .exercise-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .exercise-badge {
+      background: #ede9fe;
+      color: #6d28d9;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-solution {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #bfdbfe;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      margin-top: 1rem;
+    }
+
+    .btn-solution:hover {
+      background: #dbeafe;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1.25rem;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .solution-content.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Math Styling */
+    .math-block {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      overflow-x: auto;
+    }
+
+    /* Placeholder Box für nächste Themen */
+    .box-upcoming {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .box-upcoming h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <a href="index.html" class="back-btn">← Zurück zur Themenübersicht</a>
+      <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Mathe 9b • Kapitel 1</span>
+    </div>
+
+    <!-- Module Header -->
+    <div class="module-header">
+      <span class="module-tag">Themenmodul</span>
+      <h1>Lineare Gleichungssysteme (LGS)</h1>
+      <p class="module-desc">Ein lineares Gleichungssystem besteht aus mehreren linearen Gleichungen mit zwei Unbekannten ($x$ und $y$). Unser Ziel ist es, das Zahlenpaar $(x|y)$ zu finden, das beide Gleichungen gleichzeitig wahr macht.</p>
+    </div>
+
+    <!-- Themenübersicht / Inhaltsverzeichnis mit Status -->
+    <div class="toc-card">
+      <h2 class="toc-title">📋 Inhalte dieses Moduls</h2>
+      <div class="toc-list">
+        <a href="#teil1" class="toc-item">
+          <span>1. Was ist ein LGS? & Graphische Lösung</span>
+          <span class="badge-status status-active">Aktuell im Unterricht 🔴</span>
+        </a>
+        <a href="#teil2" class="toc-item">
+          <span>2. Das Gleichsetzungsverfahren</span>
+          <span class="badge-status status-next">Folgt als Nächstes</span>
+        </a>
+        <a href="#teil2" class="toc-item">
+          <span>3. Das Einsetzungsverfahren</span>
+          <span class="badge-status status-next">Geplant</span>
+        </a>
+        <a href="#teil2" class="toc-item">
+          <span>4. Das Additionsverfahren</span>
+          <span class="badge-status status-next">Geplant</span>
+        </a>
+        <a href="#teil2" class="toc-item">
+          <span>5. Text- & Anwendungsaufgaben</span>
+          <span class="badge-status status-next">Geplant</span>
+        </a>
+        <a href="#teil2" class="toc-item">
+          <span>🎯 Checkliste für die Klassenarbeit</span>
+          <span class="badge-status status-next">Vor der Arbeit</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TEIL 1: GRAPHISCHE LÖSUNG                  -->
+    <!-- ========================================== -->
+    <div class="section-block" id="teil1">
+      <h2 class="section-title">
+        <span>1. Was ist ein LGS? (Graphische Lösung)</span>
+      </h2>
+
+      <!-- Merkkasten -->
+      <div class="box-rule">
+        <h3>💡 Die Kernidee & Was bedeutet "Lösung"?</h3>
+        <p>Jede lineare Gleichung mit zwei Variablen (wie $y = 2x - 1$) stellt im Koordinatensystem eine <strong>Gerade</strong> dar. 
+        Die Lösung des Gleichungssystems ist der Punkt, der auf <strong>beiden Geraden gleichzeitig</strong> liegt – also der <strong>Schnittpunkt $S(x|y)$</strong>.</p>
+        <p style="margin-top: 0.5rem;">
+          Schreibweise der Lösungsmenge: $\mathbb{L} = \{ (x \mid y) \}$
+        </p>
+      </div>
+
+      <!-- Musterbeispiel -->
+      <div class="box-example">
+        <div class="box-example-header">
+          <span>✏️</span> Musterbeispiel: Graphisch lösen
+        </div>
+
+        <p>Bestimme die Lösungsmenge des folgenden linearen Gleichungssystems:</p>
+        
+        <div class="math-block">
+          $\text{I: } y = 2x - 1$<br>
+          $\text{II: } y = -x + 5$
+        </div>
+
+        <div class="step-list">
+          <div class="step">
+            <strong>Schritt 1: Beide Geraden in ein Koordinatensystem zeichnen</strong>
+            <ul>
+              <li><strong>Gerade I:</strong> $y$-Achsenabschnitt bei $(0 \mid -1)$, Steigung $m = 2$ (1 nach rechts, 2 nach oben).</li>
+              <li><strong>Gerade II:</strong> $y$-Achsenabschnitt bei $(0 \mid 5)$, Steigung $m = -1$ (1 nach rechts, 1 nach unten).</li>
+            </ul>
+          </div>
+
+          <div class="step">
+            <strong>Schritt 2: Schnittpunkt ablesen</strong>
+            Die beiden Geraden schneiden sich genau im Punkt:
+            $$\mathbf{S(2 \mid 3)}$$
+            Damit ist $x = 2$ und $y = 3$.
+          </div>
+
+          <div class="step">
+            <strong>Schritt 3: Probe machen (Sehr wichtig!)</strong>
+            Setze $x = 2$ und $y = 3$ in <strong>beide</strong> Ausgangsgleichungen ein:
+            <ul>
+              <li>In I: $3 = 2 \cdot 2 - 1 = 4 - 1 = 3$ &nbsp;✔ (wahr)</li>
+              <li>In II: $3 = -2 + 5 = 3$ &nbsp;✔ (wahr)</li>
+            </ul>
+            <strong>Lösungsmenge notieren:</strong> $\mathbb{L} = \{ (2 \mid 3) \}$
+          </div>
+        </div>
+      </div>
+
+      <!-- Stolperfalle: Sonderfälle -->
+      <div class="box-warning">
+        <h3>⚠️ Stolperfalle: Die 3 möglichen Fälle!</h3>
+        <p>Geraden schneiden sich nicht immer in genau einem Punkt. Es gibt 3 Fälle:</p>
+        <ul style="margin-left: 1.25rem; margin-top: 0.5rem;">
+          <li><strong>Genau 1 Schnittpunkt:</strong> Die Geraden haben verschiedene Steigungen $\rightarrow$ genau <strong>eine Lösung</strong>.</li>
+          <li><strong>Die Geraden sind parallel:</strong> Gleiche Steigung, anderer Achsenabschnitt $\rightarrow$ <strong>keine Lösung</strong> ($\mathbb{L} = \{\}$).</li>
+          <li><strong>Die Geraden sind identisch:</strong> Gleiche Steigung und gleicher Achsenabschnitt $\rightarrow$ <strong>unendlich viele Lösungen</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- Interaktive Übungsaufgabe mit Lösung auf Klick -->
+      <div class="box-exercise">
+        <div class="exercise-header">
+          <span style="font-weight: 700; font-size: 1.05rem;">✍️ Übungsaufgabe 1 (Selbsttest)</span>
+          <span class="exercise-badge">Graphisch lösen</span>
+        </div>
+
+        <p>Schnapp dir ein Karopapier, Geodreieck und Bleistift. Löse das Gleichungssystem graphisch und mache die Probe:</p>
+        
+        <div class="math-block">
+          $\text{I: } y = x + 1$<br>
+          $\text{II: } y = -2x + 4$
+        </div>
+
+        <button class="btn-solution" onclick="toggleSolution('sol1')">
+          <span>👁️</span> Lösung anzeigen / verbergen
+        </button>
+
+        <div class="solution-content" id="sol1">
+          <strong style="color: var(--success); display: block; margin-bottom: 0.5rem;">Musterlösung & Schritte:</strong>
+          <ol style="margin-left: 1.25rem; line-height: 1.7;">
+            <li><strong>Gerade I zeichnen:</strong> Start bei $(0 \mid 1)$, Steigung $m = 1$.</li>
+            <li><strong>Gerade II zeichnen:</strong> Start bei $(0 \mid 4)$, Steigung $m = -2$ (1 nach rechts, 2 nach unten).</li>
+            <li><strong>Schnittpunkt ablesen:</strong> Die Geraden schneiden sich bei $\mathbf{S(1 \mid 2)}$.</li>
+            <li><strong>Probe:</strong>
+              <br>In I: $2 = 1 + 1 = 2$ ✔
+              <br>In II: $2 = -2 \cdot 1 + 4 = 2$ ✔
+            </li>
+            <li><strong>Ergebnis:</strong> $\mathbb{L} = \{ (1 \mid 2) \}$</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VORSCHAU: WEITERE VERFAHREN                -->
+    <!-- ========================================== -->
+    <div class="box-upcoming" id="teil2">
+      <h3>🚀 Nächste Bausteine</h3>
+      <p>Hier ergänzen wir in den nächsten Stunden die rechnerischen Verfahren:</p>
+      <p style="font-weight: 600; color: var(--primary); margin-top: 0.5rem;">
+        Gleichsetzungsverfahren • Einsetzungsverfahren • Additionsverfahren
+      </p>
+      <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+        Sobald wir das im Unterricht besprechen, findest du hier wieder die passenden Merkkästen und Übungen.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem;">
+      <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Zurück zur Startseite</a>
+      <p style="margin-top: 6px;">Fragen? Gerne in Microsoft Teams melden!</p>
+    </div>
+
+  </div>
+
+  <!-- Einfaches JavaScript für die Aufklapp-Lösungen -->
+  <script>
+    function toggleSolution(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>
