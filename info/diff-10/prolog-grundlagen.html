@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Einführung in Prolog: Der Detektiv-Fall | Informatik Diff-10</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #f0fdfa;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    .btn-swish-ext {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #ffffff;
+      background: var(--primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-swish-ext:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Portal Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-diff { background: var(--primary-light); color: var(--primary); }
+
+    .portal-header h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .portal-header .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 780px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    /* Comparison Box */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 680px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+
+    .compare-col {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+    }
+
+    .compare-col.imperativ {
+      border-left: 4px solid #64748b;
+    }
+
+    .compare-col.deklarativ {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+    }
+
+    .compare-col h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    .data-table th {
+      background: #f8fafc;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid #cbd5e1;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    /* Alerts */
+    .alert-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .case-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #d97706;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 1rem;
+    }
+
+    .statement-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 24px;
+      margin: 1rem 0 0.5rem 1.5rem;
+      font-size: 0.98rem;
+    }
+
+    @media (max-width: 600px) {
+      .statement-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Light Mode Code Editor */
+    .code-editor-box {
+      background: #f8fafc;
+      color: #0f172a;
+      border: 1.5px solid #cbd5e1;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      margin: 1rem 0;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    .code-editor-box .comment { color: #64748b; font-style: italic; }
+    .code-editor-box .code-line { font-weight: 600; }
+
+    .btn-copy {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* COLLAPSIBLE SOLUTION DETAILS */
+    details.solution-card {
+      margin-top: 1rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    details.solution-card[open] {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.08);
+    }
+
+    summary.solution-toggle {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    summary.solution-toggle:hover {
+      background: var(--primary-light);
+    }
+
+    details.solution-card[open] summary.solution-toggle {
+      border-bottom: 1px solid #e2e8f0;
+      background: var(--primary-light);
+    }
+
+    .solution-content {
+      padding: 1.25rem;
+      background: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .solution-content strong { color: var(--text); }
+
+    .badge-correct {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-false {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Task Header */
+    .task-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Diff-10 Übersicht
+      </a>
+      <a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="btn-swish-ext">
+        🌐 Online-Editor SWISH öffnen ↗
+      </a>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-diff">Thema 1 • Halbjahr 1</div>
+      <h1>🕵️‍♂️ Einführung in Prolog: Denken wie ein Detektiv</h1>
+      <p class="subtitle">Logische Programmierung: Wissensbasen anlegen, Fakten deklarieren &amp; Anfragen stellen.</p>
+    </header>
+
+    <!-- SECTION 1: MOTIVATION -->
+    <div class="card">
+      <h3 class="card-title"><span>🧩</span> 1. Warum Prolog? – Ein völlig neues Programmier-Erlebnis</h3>
+      <p>
+        In fast allen bekannten Programmiersprachen (wie Python, Java oder Scratch) schreibst du ein <strong>Kochrezept</strong>: 
+        Du musst dem Computer jeden einzelnen Schritt haarklein vorschreiben (*„Zähle hoch, prüfe Bedingung x, springe weiter“*).
+      </p>
+      <p>
+        <strong>Prolog macht das genaue Gegenteil:</strong> 
+        Du schreibst keine Befehlsketten, sondern fütterst den Computer mit <strong>Wissen über die Welt</strong> (Fakten). Danach stellst du dem Computer einfach <strong>Fragen</strong> wie ein Detektiv – und Prolog ermittelt die Antwort durch <strong>automatische logische Schlussfolgerung</strong> ganz von alleine!
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-col imperativ">
+          <h4>Bisher: Imperativ (Java / Python)</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">Fokus: WIE muss der Computer arbeiten?</p>
+          <p style="font-size:0.9rem; margin:0;">
+            „Setze x=0. Solange x &lt; 5, durchsuche die Liste, prüfe den Raum, vergleiche die Namen...“
+          </p>
+        </div>
+
+        <div class="compare-col deklarativ">
+          <h4>Neu: Logisch mit PROLOG</h4>
+          <p style="font-size:0.85rem; color:var(--primary-dark); font-weight:700;">Fokus: WAS ist in unserer Welt wahr?</p>
+          <p style="font-size:0.9rem; margin:0;">
+            „Hier sind die Zeugenaussagen. Frage: Wer war am Tatort? Prolog findet die Lösung selbst!“
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: FACHBEGRIFFE -->
+    <div class="card">
+      <h3 class="card-title"><span>📋</span> 2. Die 6 Grundbegriffe für deinen Start</h3>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:25%;">Fachbegriff</th>
+            <th>Bedeutung</th>
+            <th style="width:35%;">Beispiel in Prolog</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Wissensbasis</strong><br><em>(Knowledge Base)</em></td>
+            <td>Die Sammlung aller bekannten Fakten über unsere Welt (dein Quellcode in der Datei).</td>
+            <td>Der gesamte Text im linken Editorfenster</td>
+          </tr>
+          <tr>
+            <td><strong>Fakt</strong><br><em>(Fact)</em></td>
+            <td>Eine Aussage, die bedingungslos wahr ist. Endet <strong>immer mit einem Punkt `.`</strong>!</td>
+            <td><code>ort(leo, lehrerzimmer).</code></td>
+          </tr>
+          <tr>
+            <td><strong>Prädikat &amp; Argumente</strong></td>
+            <td><strong>Prädikat:</strong> Die Beziehung (kleingeschrieben!).<br><strong>Argumente:</strong> Die Objekte in der Klammer.</td>
+            <td>Prädikat: <code>ort</code><br>Argumente: <code>leo</code> und <code>lehrerzimmer</code></td>
+          </tr>
+          <tr>
+            <td><strong>Atom</strong></td>
+            <td>Ein fester Eigenname oder Begriff. Beginnt zwingend mit einem <strong>KLEINBUCHSTABEN</strong>!</td>
+            <td><code>leo</code>, <code>turnhalle</code>, <code>dietrich</code></td>
+          </tr>
+          <tr>
+            <td><strong>Variable</strong></td>
+            <td>Ein Platzhalter für das Unbekannte bei Fragen. Beginnt zwingend mit einem <strong>GROSSBUCHSTABEN</strong>!</td>
+            <td><code>Wer</code>, <code>Wo</code>, <code>Was</code>, <code>X</code></td>
+          </tr>
+          <tr>
+            <td><strong>Anfrage</strong><br><em>(Query)</em></td>
+            <td>Eine Frage an die Wissensbasis, eingeleitet durch <code>?-</code>. Endet immer mit einem Punkt!</td>
+            <td><code>?- ort(Wer, lehrerzimmer).</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert-box">
+        <strong>⚠️ Das Detektiv-Gesetz (Closed World Assumption):</strong><br>
+        Prolog weiß <em>nur</em> das, was in der Wissensbasis steht. Was dort nicht aufgeschrieben wurde, ist für Prolog automatisch <strong><code>false.</code></strong> *(Nichtwissen = für Prolog unwahr!)*.
+      </div>
+    </div>
+
+    <!-- SECTION 3: DER FALL -->
+    <div class="card">
+      <h3 class="card-title"><span>🚨</span> 3. Der Kriminalfall: „Der verschwundene Schulpokal“</h3>
+      
+      <div class="case-box">
+        <strong>Tatort-Bericht der Schulleitung:</strong><br>
+        Gestern Nachmittag wurde der goldene Schulpokal aus dem <strong>Lehrerzimmer</strong> gestohlen! Ein Spurenexperte stellte fest, dass die Schranktür mit einem <strong>Dietrich</strong> aufgebrochen wurde. Die Hausmeisterin protokollierte folgende 8 Zeugenaussagen:
+      </div>
+
+      <div class="statement-grid">
+        <div>1. Tom war in der Turnhalle.</div>
+        <div>5. Tom hat einen Basketball dabei.</div>
+        <div>2. Mia war im Kunstraum.</div>
+        <div>6. Mia hat einen Pinsel dabei.</div>
+        <div>3. Leo war im Lehrerzimmer.</div>
+        <div>7. Leo hat einen Dietrich dabei.</div>
+        <div>4. Sophie war in der Bibliothek.</div>
+        <div>8. Sophie hat ein Buch dabei.</div>
+      </div>
+    </div>
+
+    <!-- AUFGABE 1: BASIS ANLEGEN -->
+    <div class="card">
+      <div class="task-header">
+        <span>✍️</span> Aufgabe 1: Die Wissensbasis in SWISH anlegen
+      </div>
+      <p>
+        Öffne auf deinem iPad <strong><a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" style="color:var(--primary); font-weight:700;">swish.swi-prolog.org</a></strong> und tippe die 8 Fakten in das linke Code-Fenster ein:
+      </p>
+
+      <div class="code-editor-box" id="baseCodeBox">
+        <button class="btn-copy" onclick="copyBaseCode()">📋 Code kopieren</button>
+        <span class="comment">% --- 1. ORTE DER VERDÄCHTIGEN ---</span><br>
+        <span class="code-line">ort(tom, turnhalle).</span><br>
+        <span class="code-line">ort(mia, kunstraum).</span><br>
+        <span class="code-line">ort(leo, lehrerzimmer).</span><br>
+        <span class="code-line">ort(sophie, bibliothek).</span><br>
+        <br>
+        <span class="comment">% --- 2. GEGENSTÄNDE DER VERDÄCHTIGEN ---</span><br>
+        <span class="code-line">hat(tom, basketball).</span><br>
+        <span class="code-line">hat(mia, pinsel).</span><br>
+        <span class="code-line">hat(leo, dietrich).</span><br>
+        <span class="code-line">hat(sophie, buch).</span>
+      </div>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-card">
+        <summary class="solution-toggle">
+          <span>💡</span> Lösung &amp; didaktische Erklärung anzeigen
+        </summary>
+        <div class="solution-content">
+          <p><strong>Erklärung zur Wissensbasis:</strong></p>
+          <ul style="margin-left: 1.5rem; line-height: 1.7;">
+            <li>Wir verwenden genau zwei Prädikate mit jeweils 2 Argumenten: <code>ort(Person, Raum).</code> und <code>hat(Person, Gegenstand).</code></li>
+            <li><strong>Wichtig:</strong> Alle Namen und Begriffe (z. B. <code>tom</code>, <code>turnhalle</code>, <code>dietrich</code>) müssen mit einem <strong>Kleinbuchstaben</strong> beginnen, weil sie Atome (Konstanten) sind.</li>
+            <li>Jeder Fakt endet zwingend mit einem <strong>Punkt `.`</strong>, damit Prolog das Ende der Anweisung erkennt.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 2: NEUE FAKTEN ERZEUGEN -->
+    <div class="card" style="border: 2px solid var(--primary);">
+      <div class="task-header" style="color:var(--primary);">
+        <span>🧩</span> Aufgabe 2 (Übung): Neue Aussagen selbstständig in Prolog-Code übersetzen
+      </div>
+      <p>
+        Die Schulleitung befragt zwei weitere Personen auf dem Schulgelände. 
+        Erzeuge für jede Aussage selbstständig den passenden Prolog-Code und <strong>füge die 4 neuen Zeilen in deine Wissensbasis in SWISH ein</strong>!
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:45%;">Natürlichsprachliche Aussage</th>
+            <th>Dein erzeugter Prolog-Code (Fakt)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Aussage A:</strong> Felix war auf dem Schulhof.</td>
+            <td><code>ort(felix, schulhof).</code> <em>(Beispiel)</em></td>
+          </tr>
+          <tr>
+            <td><strong>Aussage B:</strong> Felix hat ein Smartphone dabei.</td>
+            <td><em>Überlege selbst...</em></td>
+          </tr>
+          <tr>
+            <td><strong>Aussage C:</strong> Herr Müller war im Sekretariat.</td>
+            <td><em>Überlege selbst...</em></td>
+          </tr>
+          <tr>
+            <td><strong>Aussage D:</strong> Herr Müller hat einen Schlüssel dabei.</td>
+            <td><em>Überlege selbst...</em></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-card">
+        <summary class="solution-toggle">
+          <span>💡</span> Lösung zu Aufgabe 2 anzeigen
+        </summary>
+        <div class="solution-content">
+          <p>So lauten die vier korrekten Zeilen für deine Wissensbasis in SWISH:</p>
+          <div class="code-editor-box" style="margin: 8px 0;">
+            <span class="code-line">ort(felix, schulhof).</span><br>
+            <span class="code-line">hat(felix, smartphone).</span><br>
+            <span class="code-line">ort(mueller, sekretariat).</span>  <span class="comment">% oder: ort(herr_mueller, sekretariat).</span><br>
+            <span class="code-line">hat(mueller, schluessel).</span>   <span class="comment">% oder: hat(herr_mueller, schluessel).</span>
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-top:6px;">
+            ⚠️ <strong>Hinweis:</strong> Umlaute (wie ü) werden in Prädikaten und Atomen meist als <code>ue</code> geschrieben. Zusammengesetzte Namen wie <code>herr_mueller</code> werden mit Unterstrich verbunden!
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 3: JA/NEIN ANFRAGEN -->
+    <div class="card">
+      <div class="task-header">
+        <span>🔍</span> Aufgabe 3: Wahrheitsprüfung (Ja/Nein-Anfragen)
+      </div>
+      <p>
+        Tippe folgende Anfragen unten rechts in das Konsolenfenster von SWISH (hinter <code>?-</code>) ein und drücke Enter:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:42%;">Anfrage in Prolog</th>
+            <th style="width:33%;">Bedeutung</th>
+            <th>Antwort von Prolog</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>?- ort(leo, lehrerzimmer).</code></td>
+            <td>War Leo im Lehrerzimmer?</td>
+            <td><em>Tippe es in SWISH ein...</em></td>
+          </tr>
+          <tr>
+            <td><code>?- ort(tom, lehrerzimmer).</code></td>
+            <td>War Tom im Lehrerzimmer?</td>
+            <td><em>Tippe es in SWISH ein...</em></td>
+          </tr>
+          <tr>
+            <td><code>?- hat(sophie, buch).</code></td>
+            <td>Hat Sophie ein Buch dabei?</td>
+            <td><em>Tippe es in SWISH ein...</em></td>
+          </tr>
+          <tr>
+            <td><code>?- hat(felix, schluessel).</code></td>
+            <td>Hat Felix einen Schlüssel dabei?</td>
+            <td><em>Tippe es in SWISH ein...</em></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-card">
+        <summary class="solution-toggle">
+          <span>💡</span> Lösung zu Aufgabe 3 anzeigen
+        </summary>
+        <div class="solution-content">
+          <table class="data-table" style="margin:0;">
+            <thead>
+              <tr>
+                <th>Anfrage</th>
+                <th>Antwort</th>
+                <th>Begründung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>?- ort(leo, lehrerzimmer).</code></td>
+                <td><span class="badge-correct">true.</span></td>
+                <td>Der Fakt existiert exakt so in der Wissensbasis.</td>
+              </tr>
+              <tr>
+                <td><code>?- ort(tom, lehrerzimmer).</code></td>
+                <td><span class="badge-false">false.</span></td>
+                <td>Tom war laut Akte in der Turnhalle, nicht im Lehrerzimmer.</td>
+              </tr>
+              <tr>
+                <td><code>?- hat(sophie, buch).</code></td>
+                <td><span class="badge-correct">true.</span></td>
+                <td>Stimmt mit Fakt 8 überein.</td>
+              </tr>
+              <tr>
+                <td><code>?- hat(felix, schluessel).</code></td>
+                <td><span class="badge-false">false.</span></td>
+                <td>Felix hat ein Smartphone, keinen Schlüssel (den hat Herr Müller).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 4: VARIABLEN ANFRAGEN -->
+    <div class="card">
+      <div class="task-header">
+        <span>🔎</span> Aufgabe 4: Ermittlungs-Fragen mit Variablen (Wer? Wo? Was?)
+      </div>
+      <p>
+        Wenn wir die Antwort nicht kennen, setzen wir ein <strong>GROSSBUCHSTABEN-Wort</strong> als Variable ein. 
+        Formuliere die Anfragen und beobachte die Antworten:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:35%;">Gesuchte Information</th>
+            <th style="width:40%;">Deine Prolog-Anfrage</th>
+            <th>Ergebnis in SWISH</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wo war Sophie?</td>
+            <td><code>?- ort(sophie, Wo).</code></td>
+            <td><code>Wo = ...</code></td>
+          </tr>
+          <tr>
+            <td>Wer war im Lehrerzimmer?</td>
+            <td><code>?- ort(Wer, lehrerzimmer).</code></td>
+            <td><code>Wer = ...</code></td>
+          </tr>
+          <tr>
+            <td>Welchen Gegenstand hat Leo dabei?</td>
+            <td><code>?- ...</code></td>
+            <td><code>Was = ...</code></td>
+          </tr>
+          <tr>
+            <td>Welchen Gegenstand hat Felix dabei?</td>
+            <td><code>?- ...</code></td>
+            <td><code>Was = ...</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-card">
+        <summary class="solution-toggle">
+          <span>💡</span> Lösung zu Aufgabe 4 anzeigen
+        </summary>
+        <div class="solution-content">
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Wo war Sophie?</strong><br>Anfrage: <code>?- ort(sophie, Wo).</code> &rarr; Prolog antwortet: <strong><code>Wo = bibliothek.</code></strong></li>
+            <li><strong>Wer war im Lehrerzimmer?</strong><br>Anfrage: <code>?- ort(Wer, lehrerzimmer).</code> &rarr; Prolog antwortet: <strong><code>Wer = leo.</code></strong></li>
+            <li><strong>Welchen Gegenstand hat Leo dabei?</strong><br>Anfrage: <code>?- hat(leo, Was).</code> &rarr; Prolog antwortet: <strong><code>Was = dietrich.</code></strong></li>
+            <li><strong>Welchen Gegenstand hat Felix dabei?</strong><br>Anfrage: <code>?- hat(felix, Was).</code> &rarr; Prolog antwortet: <strong><code>Was = smartphone.</code></strong></li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 5: ERGEBNIS -->
+    <div class="card" style="background:#f0fdfa; border: 2px solid var(--primary);">
+      <div class="task-header" style="color:var(--primary-dark);">
+        <span>🏆</span> Aufgabe 5: Das Ermittlungsergebnis
+      </div>
+      <p>
+        Führe die beiden entscheidenden Beweise zusammen. Wer ist der Täter?
+      </p>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-card">
+        <summary class="solution-toggle">
+          <span>💡</span> Lösung zum Fall anzeigen
+        </summary>
+        <div class="solution-content">
+          <p style="font-size: 1.05rem; font-weight: 700; color: #0f766e;">
+            Der Täter ist <u>Leo</u>!
+          </p>
+          <p style="margin-top: 6px;">
+            <strong>Begründung:</strong> Leo war laut Wissensbasis als Einziger zur Tatzeit im <strong>Lehrerzimmer</strong> (dem Tatort) und trug als Einziger einen <strong>Dietrich</strong> bei sich, mit dem die Schranktür aufgebrochen wurde.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- DIDAKTISCHE RESERVE / BONUS -->
+    <div class="card" style="background:#fff7ed; border: 2px solid #ea580c;">
+      <div class="task-header" style="color:#c2410c;">
+        <span>⭐</span> Didaktische Reserve / Bonus: Die kombinierte Meister-Anfrage
+      </div>
+      <p>
+        In Aufgabe 5 hast du die beiden Beweise im Kopf zusammengefügt. Kann Prolog den Täter auch <strong>in einer einzigen Zeile</strong> selbstständig ermitteln?  
+        <strong>Ja – mit dem Komma (<code>, = UND</code>)!</strong>
+      </p>
+
+      <div class="code-editor-box" style="background:#ffffff; border-color:#fed7aa; margin: 10px 0;">
+        <strong>?- ort(X, lehrerzimmer), hat(X, dietrich).</strong>
+      </div>
+
+      <!-- Aufklappbare Lösung & Erklärung -->
+      <details class="solution-card">
+        <summary class="solution-toggle" style="color:#c2410c;">
+          <span>💡</span> Auswertung &amp; Erklärung: Warum steht dort ZWEIMAL dieselbe Variable X?
+        </summary>
+        <div class="solution-content">
+          <p><strong>Ergebnis in SWISH:</strong></p>
+          <div style="font-family:'JetBrains Mono', monospace; font-size:1.05rem; font-weight:700; color:#166534; margin: 6px 0;">
+            X = leo.
+          </div>
+          <p>Prolog hat den Täter in einem einzigen Schritt selbstständig ermittelt!</p>
+          
+          <hr style="margin: 12px 0; border: none; border-top: 1px solid var(--border);">
+
+          <h4 style="margin-bottom: 6px; color:#c2410c;">🧠 Wie arbeitet Prolog hier im Hintergrund (Variablenbindung)?</h4>
+          <ol style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Schritt 1 (Erstes Ziel):</strong> Prolog sucht: <em>Wer war im Lehrerzimmer?</em> &rarr; Es findet den Fakt <code>ort(leo, lehrerzimmer)</code> und <strong>bindet die Variable <code>X</code> an den Namen <code>leo</code></strong>.</li>
+            <li><strong>Schritt 2 (Zweites Ziel):</strong> Nun geht Prolog zum zweiten Teil hinter dem Komma über. Da <code>X</code> bereits an <code>leo</code> gebunden ist, prüft Prolog automatisch: <em>Hat Leo einen Dietrich?</em> (<code>hat(leo, dietrich)</code>).</li>
+            <li><strong>Schritt 3 (Erfolg):</strong> Da auch dieser Fakt wahr ist, ist die gesamte UND-Bedingung erfüllt &rarr; Prolog meldet: <code>X = leo.</code></li>
+          </ol>
+
+          <p style="margin-top: 10px; background:#fff7ed; padding:10px; border-radius:6px; font-size:0.9rem;">
+            <strong>Gegenprobe:</strong> Was wäre passiert bei <code>?- ort(X, lehrerzimmer), hat(Y, dietrich).</code>?<br>
+            Hier sucht Prolog nach irgendeiner Person X und irgendeiner Person Y. Das könnten zwei völlig verschiedene Personen sein! Nur weil beide Variablen <strong>denselben Namen <code>X</code></strong> tragen, weiß Prolog, dass es sich zwingend um ein und dieselbe Person handeln muss.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Differenzierung 10 (Diff-10)</strong> • Schuljahr 2026/2027</p>
+      <p style="margin-top: 4px;">Fragen zum Unterricht oder zu Aufgaben? Melde dich in <strong>Microsoft Teams</strong> oder sprich mich im Unterricht an!</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function copyBaseCode() {
+      const codeText = `% --- 1. ORTE DER VERDÄCHTIGEN ---
+ort(tom, turnhalle).
+ort(mia, kunstraum).
+ort(leo, lehrerzimmer).
+ort(sophie, bibliothek).
+
+% --- 2. GEGENSTÄNDE DER VERDÄCHTIGEN ---
+hat(tom, basketball).
+hat(mia, pinsel).
+hat(leo, dietrich).
+hat(sophie, buch).`;
+
+      navigator.clipboard.writeText(codeText).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        const oldText = btn.textContent;
+        btn.textContent = "✅ Kopiert!";
+        btn.style.color = "#059669";
+        setTimeout(() => {
+          btn.textContent = oldText;
+          btn.style.color = "";
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
