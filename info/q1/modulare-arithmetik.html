@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Modulare Arithmetik & mathematische Werkzeuge | Informatik Q1</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      function initKaTeX() {
+        if (typeof renderMathInElement === "function") {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        } else {
+          setTimeout(initKaTeX, 50);
+        }
+      }
+      initKaTeX();
+    });
+  </script>
+  
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-light: #eef2ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    /* Portal Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-q1 { background: var(--primary-light); color: var(--primary); }
+    .badge-sol { background: var(--success-light); color: var(--success); }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 840px;
+      line-height: 1.55;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    /* Quick Navigation */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 1rem 0 1.5rem 0;
+      padding: 10px 14px;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .quick-nav a {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      transition: all 0.2s ease;
+    }
+
+    .quick-nav a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Section Headings */
+    .section-heading {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 2.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-heading span.icon {
+      font-size: 1.4rem;
+    }
+
+    /* Concept & Formula Boxes */
+    .formula-box {
+      background: var(--primary-light);
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .concept-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .concept-card h4 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-card p {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    /* Task Box */
+    .task-box {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      gap: 12px;
+    }
+
+    .task-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .step-list {
+      margin-left: 1.35rem;
+      font-size: 0.94rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.85rem;
+      color: #334155;
+    }
+
+    .step-list li { margin-bottom: 6px; }
+
+    table.calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.85rem 0;
+      font-size: 0.92rem;
+    }
+
+    table.calc-table th, table.calc-table td {
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      text-align: center;
+    }
+
+    table.calc-table th {
+      background: var(--bg);
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* Collapsible Solution Box */
+    .solution-details {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: var(--radius-md);
+      margin-top: 1rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .solution-details[open] {
+      border-color: #22c55e;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.1);
+    }
+
+    .solution-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.15rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #15803d;
+      user-select: none;
+      background: #f0fdf4;
+      transition: background 0.2s ease;
+    }
+
+    .solution-summary:hover {
+      background: #dcfce7;
+    }
+
+    .solution-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-chevron {
+      font-size: 0.85rem;
+      transition: transform 0.2s ease;
+      color: #16a34a;
+    }
+
+    .solution-details[open] .summary-chevron {
+      transform: rotate(180deg);
+    }
+
+    .solution-content {
+      padding: 1.25rem;
+      border-top: 1px solid #bbf7d0;
+      background: #ffffff;
+      font-size: 0.93rem;
+      line-height: 1.65;
+    }
+
+    .solution-content strong {
+      color: #15803d;
+    }
+
+    /* Interaktives Labor */
+    .calc-box {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.5rem 0 2rem 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+
+    .calc-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .calc-input {
+      padding: 8px 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      width: 140px;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .calc-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-calc-action {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+    }
+
+    .btn-calc-action:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .calc-result-badge {
+      background: var(--bg);
+      border-left: 4px solid var(--primary);
+      padding: 0.85rem 1.15rem;
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      color: var(--text);
+    }
+
+    /* Quiz Engine */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.75rem 0 2.5rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .quiz-question-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt-btn:disabled {
+      cursor: default;
+    }
+
+    .quiz-opt-btn .opt-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+    }
+
+    .quiz-opt-btn.correct .opt-badge {
+      background: #10b981;
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-opt-btn.wrong .opt-badge {
+      background: #ef4444;
+      color: white;
+    }
+
+    .quiz-feedback {
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius-md);
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .quiz-feedback.is-correct {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .quiz-feedback.is-wrong {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-quiz-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-quiz-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    }
+
+    .quiz-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem 0;
+    }
+
+    .quiz-preview-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .quiz-preview-card h4 {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .quiz-preview-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .diag-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .diag-card-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .diag-card-score {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q1-Übersicht
+      </a>
+      <span class="badge-pill badge-q1">Informatik Q1 • Modul 02</span>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-q1">Kryptographie • Mathematische Werkzeuge</div>
+      <h1>Modulare Arithmetik & mathematische Werkzeuge</h1>
+      <p class="subtitle">
+        Uhren-Arithmetik, Rechnen mit Resten, Teilerfremdheit, die Eulersche Phi-Funktion $\varphi(N)$, multiplikative Inverse und der Satz von Euler – inklusive aller Musterlösungen und Laborrechner.
+      </p>
+      <div class="timestamp-pill">
+        <span>🟢</span> Stand: Schuljahr 2026/27 • Abiturschwerpunkt NRW
+      </div>
+    </header>
+
+    <!-- Quick Navigation -->
+    <nav class="quick-nav">
+      <strong style="font-size:0.85rem; display:flex; align-items:center; margin-right:4px;">Direktsprung:</strong>
+      <a href="#modulo">1. Uhren-Arithmetik</a>
+      <a href="#aufgabe1">Aufgabe 1: Reste-Rechnen</a>
+      <a href="#phi">2. Eulersche Phi-Funktion</a>
+      <a href="#aufgabe2">Aufgabe 2: $\varphi(N)$ bestimmen</a>
+      <a href="#inverses">3. Multiplikatives Inverses</a>
+      <a href="#aufgabe3">Aufgabe 3: Inverses finden</a>
+      <a href="#euler">4. Satz von Euler (Karussell)</a>
+      <a href="#labor">Labor: Mathe-Werkzeuge</a>
+      <a href="#selbsttest" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">⚡ Selbsttest (10 Fragen)</a>
+    </nav>
+
+    <!-- Intro Box -->
+    <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-left:5px solid var(--primary); border-radius:var(--radius-md); padding:1.25rem 1.4rem; margin-bottom:1.5rem;">
+      <h3 style="font-size:1.08rem; font-weight:800; color:#1e40af; margin-bottom:0.35rem;">
+        🔑 Warum braucht Kryptographie modulare Arithmetik?
+      </h3>
+      <p style="font-size:0.92rem; color:#1e3a8a; line-height:1.6; margin:0;">
+        Das RSA-Verfahren basiert auf einer genialen mathematischen Einwegfunktion: Zahlen zu multiplizieren ist für Computer ein Kinderspiel – das Produkt wieder in seine Primfaktoren zu zerlegen, ist praktisch unlösbar schwer. Als Rechenraum dient uns die <strong>modulare Arithmetik („Rechnen mit Resten“)</strong>.
+      </p>
+    </div>
+
+
+    <!-- =====================================================================
+         1. MODULO / UHREN-ARITHMETIK
+         ===================================================================== -->
+    <h2 class="section-heading" id="modulo">
+      <span class="icon">⏰</span> 1. Modulare Arithmetik („Uhren-Arithmetik“)
+    </h2>
+    <p style="margin-bottom: 1rem; color: var(--text-muted);">
+      Beim Rechnen modulo $m$ betrachten wir nicht den Quotienten, sondern ausschließlich den <strong>ganzzahligen Rest</strong> bei der Division durch $m$ (Modul).
+    </p>
+
+    <div class="formula-box">
+      <strong>Definition Kongruenz:</strong><br>
+      Zwei Zahlen $a$ und $b$ heißen <em>kongruent modulo $m$</em> (Schreibweise: $a \equiv b \pmod m$), wenn sie bei Division durch $m$ denselben Rest lassen. Das bedeutet: die Differenz $(a - b)$ ist ohne Rest durch $m$ teilbar.
+    </div>
+
+    <!-- AUFGABE 1 -->
+    <div class="task-box" id="aufgabe1">
+      <div class="task-header">
+        <span>Aufgabe 1: Reste-Rechnen im Kopf</span>
+        <span class="task-badge">Grundlagen</span>
+      </div>
+      <p>Berechne die folgenden Ausdrücke (gesucht ist jeweils der kleinste nicht-negative Rest $0 \le r < m$):</p>
+      
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th>Rechnung</th>
+            <th>Ergebnis (Rest)</th>
+            <th>Rechnung</th>
+            <th>Ergebnis (Rest)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$17 \pmod 5$</td>
+            <td>________</td>
+            <td>$43 \pmod 7$</td>
+            <td>________</td>
+          </tr>
+          <tr>
+            <td>$55 \pmod{11}$</td>
+            <td>________</td>
+            <td>$(14 + 19) \pmod{12}$</td>
+            <td>________</td>
+          </tr>
+          <tr>
+            <td>$4^3 \pmod{10}$</td>
+            <td>________</td>
+            <td>$2^5 \pmod{13}$</td>
+            <td>________</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 1 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <table class="calc-table" style="margin:0;">
+            <thead>
+              <tr><th>Rechnung</th><th>Lösungsweg & Rest</th><th>Rechnung</th><th>Lösungsweg & Rest</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>$17 \pmod 5$</td>
+                <td>$17 = 3 \cdot 5 + \mathbf{2}$</td>
+                <td>$43 \pmod 7$</td>
+                <td>$43 = 6 \cdot 7 + \mathbf{1}$</td>
+              </tr>
+              <tr>
+                <td>$55 \pmod{11}$</td>
+                <td>$55 = 5 \cdot 11 + \mathbf{0}$</td>
+                <td>$(14 + 19) \pmod{12}$</td>
+                <td>$33 = 2 \cdot 12 + \mathbf{9}$</td>
+              </tr>
+              <tr>
+                <td>$4^3 \pmod{10}$</td>
+                <td>$64 = 6 \cdot 10 + \mathbf{4}$</td>
+                <td>$2^5 \pmod{13}$</td>
+                <td>$32 = 2 \cdot 13 + \mathbf{6}$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         2. DIE EULERSCHE PHI-FUNKTION
+         ===================================================================== -->
+    <h2 class="section-heading" id="phi">
+      <span class="icon">🔢</span> 2. Die Eulersche Phi-Funktion $\varphi(N)$
+    </h2>
+    <p>
+      Für eine natürliche Zahl $N$ gibt $\varphi(N)$ an, wie viele Zahlen $a$ aus der Menge $\{1, 2, \dots, N-1\}$ <strong>teilerfremd</strong> zu $N$ sind (das bedeutet: $\operatorname{ggT}(a, N) = 1$).
+    </p>
+
+    <div style="background:#f1f5f9; padding:10px 14px; border-radius:var(--radius-sm); margin-bottom:1.25rem; font-size:0.9rem;">
+      <strong>Anschauliches Mini-Beispiel für $N = 6$:</strong> Wir prüfen alle Zahlen $\{1, 2, 3, 4, 5\}$ auf Teilerfremdheit zu $6$:<br>
+      • $a = 1$: $\operatorname{ggT}(1, 6) = 1$ ✔ &nbsp;|&nbsp; 
+      • $a = 2$: $\operatorname{ggT}(2, 6) = 2$ ✖ &nbsp;|&nbsp; 
+      • $a = 3$: $\operatorname{ggT}(3, 6) = 3$ ✖ &nbsp;|&nbsp; 
+      • $a = 4$: $\operatorname{ggT}(4, 6) = 2$ ✖ &nbsp;|&nbsp; 
+      • $a = 5$: $\operatorname{ggT}(5, 6) = 1$ ✔<br>
+      Nur $1$ und $5$ sind teilerfremd zu $6$. Es gibt also genau <strong>2</strong> solcher Zahlen $\implies \mathbf{\varphi(6) = 2}$.
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h4>1. Ist $p$ eine Primzahl:</h4>
+        <p>Da eine Primzahl nur durch 1 und sich selbst teilbar ist, sind <em>alle</em> Zahlen kleiner als $p$ teilerfremd zu $p$:</p>
+        <div style="font-weight:800; font-size:1.15rem; color:var(--primary); margin:8px 0;">$$\varphi(p) = p - 1$$</div>
+        <p style="font-size:0.84rem; color:var(--text-muted);">Beispiel: $\varphi(7) = 6$ (Zahlen 1, 2, 3, 4, 5, 6).</p>
+      </div>
+
+      <div class="concept-card">
+        <h4>2. Ist $N = p \cdot q$ (Primzahlprodukt):</h4>
+        <p>Dies ist das <strong>Fundament für RSA</strong>! Für zwei unterschiedliche Primzahlen $p$ und $q$ gilt:</p>
+        <div style="font-weight:800; font-size:1.15rem; color:var(--primary); margin:8px 0;">$$\varphi(N) = (p - 1) \cdot (q - 1)$$</div>
+        <p style="font-size:0.84rem; color:var(--text-muted);">Beispiel: $p=3, q=5 \Rightarrow N=15 \Rightarrow \varphi(15) = 2 \cdot 4 = 8$.</p>
+      </div>
+    </div>
+
+    <!-- AUFGABE 2 -->
+    <div class="task-box" id="aufgabe2">
+      <div class="task-header">
+        <span>Aufgabe 2: Bestimmung von $\varphi(N)$</span>
+        <span class="task-badge">Training</span>
+      </div>
+      <p>Berechne $\varphi(N)$ für folgende Primzahl-Kombinationen:</p>
+      <ol class="step-list">
+        <li>$p = 5$ und $q = 11 \implies N = \text{______} \implies \varphi(N) = \text{______}$</li>
+        <li>$p = 7$ und $q = 13 \implies N = \text{______} \implies \varphi(N) = \text{______}$</li>
+        <li>$p = 17$ und $q = 19 \implies N = \text{______} \implies \varphi(N) = \text{______}$</li>
+      </ol>
+      <p style="margin-top:0.75rem;">
+        <strong>Reflexionsfrage:</strong> Angenommen, Angreiferin Eve kennt nur das Produkt $N = 3233$, aber nicht die Faktoren $p$ und $q$. Kann sie $\varphi(N)$ einfach berechnen? Begründe!
+      </p>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 2 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <ol style="margin-left: 1.25rem;">
+            <li>$p = 5, q = 11 \implies N = 5 \cdot 11 = \mathbf{55} \implies \varphi(55) = (5-1) \cdot (11-1) = 4 \cdot 10 = \mathbf{40}$.</li>
+            <li>$p = 7, q = 13 \implies N = 7 \cdot 13 = \mathbf{91} \implies \varphi(91) = (7-1) \cdot (13-1) = 6 \cdot 12 = \mathbf{72}$.</li>
+            <li>$p = 17, q = 19 \implies N = 17 \cdot 19 = \mathbf{323} \implies \varphi(323) = 16 \cdot 18 = \mathbf{288}$.</li>
+          </ol>
+          <p style="margin-top: 0.85rem;"><strong>Antwort zur Reflexionsfrage:</strong></p>
+          <p>
+            <strong>Nein!</strong> Eve kann $\varphi(N)$ ohne die Faktoren $p$ und $q$ nicht direkt berechnen. Sie müsste $N$ mühsam in seine Primfaktoren zerlegen (Faktorisierung). Bei RSA-Schlüssellängen mit 2048 Bit (mehreren hundert Ziffern) bräuchten selbst Supercomputer dafür Millionen Jahre!
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         3. MULTIPLIKATIVES INVERSES
+         ===================================================================== -->
+    <h2 class="section-heading" id="inverses">
+      <span class="icon">🔄</span> 3. Das modulare multiplikative Inverse
+    </h2>
+
+    <div style="background:#f8fafc; border:1.5px solid var(--border); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.25rem;">
+      <h4 style="color:var(--primary-dark); margin-bottom:6px; font-size:1rem;">
+        💡 Wichtig: Dreifachstrich ($\equiv$) vs. Gleichheitszeichen ($=$)
+      </h4>
+      <p style="font-size:0.9rem; margin-bottom:8px;">
+        Das Kongruenz-Zeichen $\equiv$ bedeutet <strong>nicht</strong>, dass die beiden Zahlen gleich groß sind ($81 \neq 1$), sondern dass sie <strong>bei Division durch $m$ denselben Rest haben</strong>.
+      </p>
+      <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:10px 14px; font-size:0.88rem; line-height:1.7;">
+        <strong>📌 Beispiel mit $A = 81$ und Modul $m = 40$:</strong><br>
+        • Grundschul-Division mit Rest: $81 : 40 = 2 \quad\text{Rest } \mathbf{1}$<br>
+        • Rest-Gleichung (mit $=$): $\mathbf{(81 \bmod 40) = 1}$<br>
+        • Vielfachen-Gleichung (mit $=$): $81 = 2 \cdot 40 + \mathbf{1}$<br>
+        • Kongruenz (mit $\equiv$): $\mathbf{81 \equiv 1 \pmod{40}}$<br>
+        <em>👉 Alle vier Zeilen beschreiben exakt denselben mathematischen Sachverhalt!</em>
+      </div>
+    </div>
+
+    <div class="formula-box">
+      <strong>Bedingung für das modulare Inverse $d$:</strong>
+      <div style="font-size:1.1rem; margin:8px 0; text-align:center;">
+        $$(e \cdot d) \bmod m = 1 \quad\iff\quad e \cdot d \equiv 1 \pmod m$$
+      </div>
+      <p style="font-size:0.88rem; margin:0; color:var(--text-muted);">
+        Wir suchen eine ganze Zahl $d$, sodass das Produkt $e \cdot d$ bei Division durch $m$ den <strong>Rest 1</strong> ergibt. Dies existiert genau dann, wenn $\operatorname{ggT}(e, m) = 1$ (Teilerfremdheit).
+      </p>
+    </div>
+
+    <!-- AUFGABE 3 -->
+    <div class="task-box" id="aufgabe3">
+      <div class="task-header">
+        <span>Aufgabe 3: Inverses durch systematisches Probieren finden</span>
+        <span class="task-badge">Berechnung</span>
+      </div>
+      <p>
+        Gesucht ist das Inverse $d$ zu $e = 3$ modulo $m = 40$.<br>
+        Das bedeutet: Wir suchen ein $d$, für das gilt: $\mathbf{(3 \cdot d) \bmod 40 = 1}$.
+      </p>
+      <p style="font-size:0.9rem; color:var(--text-muted);">
+        Das Produkt $3 \cdot d$ muss also um $1$ größer sein als ein Vielfaches von $40$ (Kandidaten: $41, 81, 121, \dots$).
+      </p>
+
+      <ol class="step-list">
+        <li>Ist $41$ ohne Rest durch $3$ teilbar? $41 : 3 =$ ________ (Nein, keine ganze Zahl)</li>
+        <li>Ist $81$ ohne Rest durch $3$ teilbar? $81 : 3 =$ ________ $\implies \mathbf{d =}$ ________!</li>
+        <li>
+          <strong>Probe durchführen:</strong><br>
+          a) Multiplikation: $3 \cdot d = 3 \cdot \text{______} = \text{______}$<br>
+          b) Division mit Rest: $\text{______} : 40 = 2 \quad\text{Rest } \mathbf{1} \implies (\text{______} \bmod 40) = \mathbf{1}$ ✔
+        </li>
+      </ol>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 3 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p>
+            Wir testen Vielfache von $40$ plus $1$:<br>
+            • $k=1: 1 \cdot 40 + 1 = 41 \implies 41 : 3 = 13{,}66\dots$ (nicht ganzzahlig)<br>
+            • $k=2: 2 \cdot 40 + 1 = 81 \implies 81 : 3 = \mathbf{27}$ (ganzzahlig!)
+          </p>
+          <p style="margin-top:6px;">Damit ist das gesuchte multiplikative Inverse $\mathbf{d = 27}$.</p>
+          <p style="margin-top:6px;"><strong>Probe:</strong> $3 \cdot 27 = 81$. Und $81 : 40 = 2 \text{ Rest } \mathbf{1}$. Bedingung perfekt erfüllt!</p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         4. SATZ VON EULER
+         ===================================================================== -->
+    <h2 class="section-heading" id="euler">
+      <span class="icon">🎡</span> 4. Der Satz von Euler: Die Karussell-Analogie
+    </h2>
+
+    <div class="concept-card" style="margin-bottom:1.25rem;">
+      <h4 style="color:var(--primary-dark); font-size:1.05rem;">🎡 Reste drehen sich im Kreis!</h4>
+      <p>
+        Wenn man eine Zahl $a$ immer wieder mit sich selbst multipliziert ($a^1, a^2, a^3, \dots$), wachsen die Zahlen ins Unendliche. Rechnet man jedoch <strong>modulo $N$</strong>, gibt es nur endlich viele mögliche Reste. Die Reste müssen sich wie auf einem Karussell im Kreis drehen – und nach genau <strong>$\varphi(N)$ Schritten</strong> landet man garantiert wieder bei der <strong>1</strong>!
+      </p>
+    </div>
+
+    <div class="formula-box">
+      <strong>Der Satz von Leonhard Euler (1736):</strong>
+      <div style="font-size:1.15rem; margin:8px 0; text-align:center;">
+        $$a^{\varphi(N)} \equiv 1 \pmod N$$
+      </div>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin:0;">
+        Egal welche Zahl $a$ man wählt (solange $\operatorname{ggT}(a, N) = 1$): Potenzieren mit $\varphi(N)$ liefert im Restesystem immer exakt 1.
+      </p>
+    </div>
+
+    <!-- Warum rettet das RSA? -->
+    <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.75rem;">
+      <h4 style="color:#15803d; font-size:1.05rem; font-weight:800; margin-bottom:0.4rem;">
+        🔑 Warum ist das der Schlüssel-Trick für RSA?
+      </h4>
+      <p style="font-size:0.92rem; color:#166534; line-height:1.65; margin-bottom:0.5rem;">
+        Weil wir $e$ und $d$ so wählen, dass gilt: $e \cdot d \equiv 1 \pmod{\varphi(N)}$, also $e \cdot d = k \cdot \varphi(N) + 1$.<br>
+        Beim Verschlüsseln mit $e$ und Entschlüsseln mit $d$ geschieht folgendes:
+      </p>
+      <div style="text-align:center; font-size:1.05rem; font-weight:700; color:#15803d; margin:10px 0;">
+        $$C^d = (M^e)^d = M^{e \cdot d} = M^{k \cdot \varphi(N) + 1} = \underbrace{(M^{\varphi(N)})^k}_{\text{wird zu } 1} \cdot M^1 \equiv \mathbf{M} \pmod N$$
+      </div>
+      <p style="font-size:0.9rem; color:#166534; margin:0;">
+        Das Karussell dreht sich $k$ volle Runden (bleibt bei 1) und geht noch genau 1 Schritt weiter: <strong>Die originale Nachricht $M$ steht wieder unversehrt da!</strong>
+      </p>
+    </div>
+
+
+    <!-- =====================================================================
+         INTERAKTIVES MATHE-LABOR
+         ===================================================================== -->
+    <h2 class="section-heading" id="labor">
+      <span class="icon">🧪</span> Interaktives Mathe-Labor
+    </h2>
+
+    <div class="calc-box">
+      <!-- Rechner 1: Modulo -->
+      <h3 style="font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+        1. Modulo-Schnellrechner ($a \bmod m$)
+      </h3>
+      <div class="calc-controls">
+        <input type="number" id="calcA" class="calc-input" value="81" placeholder="Zahl a">
+        <span style="font-weight:700; font-family:'JetBrains Mono';">mod</span>
+        <input type="number" id="calcM" class="calc-input" value="40" placeholder="Modul m">
+        <button class="btn-calc-action" onclick="calcMod()">Rest berechnen</button>
+      </div>
+      <div id="resMod" class="calc-result-badge">
+        Ergebnis: 81 mod 40 = <strong>1</strong> (denn 81 = 2 · 40 + 1)
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:1.5rem 0;">
+
+      <!-- Rechner 2: Phi-Funktion -->
+      <h3 style="font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+        2. $\varphi(N)$-Rechner für zwei Primzahlen ($p, q$)
+      </h3>
+      <div class="calc-controls">
+        <input type="number" id="calcP" class="calc-input" value="5" placeholder="Primzahl p">
+        <input type="number" id="calcQ" class="calc-input" value="11" placeholder="Primzahl q">
+        <button class="btn-calc-action" onclick="calcPhi()">$\varphi(N)$ berechnen</button>
+      </div>
+      <div id="resPhi" class="calc-result-badge">
+        N = 5 · 11 = 55 &nbsp;|&nbsp; $\varphi(55) = (5-1) \cdot (11-1) =$ <strong>40</strong>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         INTERAKTIVER SELBSTTEST (10 ZUFALLSFRAGEN AUS 20ER POOL)
+         ===================================================================== -->
+    <h2 class="section-heading" id="selbsttest">
+      <span class="icon">⚡</span> Interaktiver Selbst-Check: Modulare Arithmetik
+    </h2>
+
+    <div class="quiz-card">
+
+      <!-- 1. START-ANSICHT -->
+      <div id="quiz-start-view">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
+          <span class="badge-pill badge-q1" style="margin-bottom:0;">Selbstdiagnose Q1</span>
+          <span class="timestamp-pill" style="margin-top:0;">20 Fragen im Pool</span>
+        </div>
+        <h3 style="font-size:1.45rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+          🎯 Bist du fit in Uhren-Arithmetik & Eulers Formeln?
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; max-width:820px;">
+          Teste dein Verständnis zu <strong>Restklassen</strong>, Kongruenzen, der <strong>Eulerschen $\varphi$-Funktion</strong>, multiplikativen Inversen und dem <strong>Satz von Euler</strong>. Bei jedem Durchlauf zieht das System <strong>10 zufällige Fragen</strong> aus unserem Fragenpool.
+        </p>
+
+        <div class="quiz-preview-grid">
+          <div class="quiz-preview-card">
+            <h4>⏰ Modulo & Reste</h4>
+            <p>Rechnen mit Resten, Kongruenz vs. Gleichheit.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>🔢 Eulersche Phi-Funktion</h4>
+            <p>Teilerfremdheit, Primzahlen und $\varphi(p \cdot q)$.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>🔄 Multiplikatives Inverses</h4>
+            <p>Inverse Zahlen $d$ modulo $m$ bestimmen.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>🎡 Satz von Euler</h4>
+            <p>Karussell-Analogie und der RSA-Schlüsseltrick.</p>
+          </div>
+        </div>
+
+        <button class="btn-quiz-primary" onclick="startQuiz()">
+          <span>🚀</span> Selbsttest jetzt starten (10 Fragen) →
+        </button>
+      </div>
+
+      <!-- 2. SPIEL-ANSICHT -->
+      <div id="quiz-play-view" style="display: none;">
+        <div class="quiz-progress-wrap">
+          <span id="quiz-progress-text">Frage 1 von 10</span>
+          <span id="quiz-score-live" style="color:var(--primary); font-weight:800;">Punkte: 0</span>
+        </div>
+        <div class="quiz-bar-bg">
+          <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+        </div>
+
+        <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+        <div id="quiz-question-text" class="quiz-question-title">Frage wird geladen...</div>
+
+        <div id="quiz-options-box" class="quiz-options">
+          <!-- Optionen dynamisch per JS -->
+        </div>
+
+        <div id="quiz-feedback-box" class="quiz-feedback" style="display: none;">
+          <div id="quiz-feedback-title" style="font-weight: 800; font-size:1.02rem; margin-bottom: 0.35rem;"></div>
+          <div id="quiz-feedback-desc"></div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button id="quiz-btn-next" class="btn-quiz-primary" style="display: none;" onclick="nextQuestion()">
+            Nächste Frage →
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. AUSWERTUNGS-ANSICHT -->
+      <div id="quiz-result-view" style="display: none;">
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem;">
+          🎉 Deine Auswertung
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.92rem;">Hier ist dein persönliches Ergebnis für diesen Durchlauf:</p>
+
+        <div style="text-align: center; padding: 1.75rem 0; background: var(--bg); border-radius: var(--radius-md); margin: 1.25rem 0; border:1px solid var(--border);">
+          <div id="quiz-final-score" style="font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1;">0 / 10</div>
+          <div id="quiz-final-badge" style="font-size: 1.15rem; font-weight: 800; margin-top: 0.6rem;">Auswertung</div>
+        </div>
+
+        <h4 style="font-size: 1.05rem; font-weight: 800; margin-top: 1.5rem; color:var(--text);">Ergebnis nach Themenbereichen:</h4>
+        <div class="diag-grid" id="quiz-cat-breakdown">
+          <!-- Kategorien-Kacheln per JS -->
+        </div>
+
+        <div class="formula-box" id="quiz-advice-box" style="margin-top: 1.5rem;">
+          <strong id="quiz-advice-title" style="color:var(--primary-dark);">💡 Empfehlung für deine Vorbereitung:</strong>
+          <p id="quiz-advice-text" style="margin-top:4px; color:#1e3a8a;">
+            Lerneffekt...
+          </p>
+        </div>
+
+        <div style="margin-top: 1.75rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn-quiz-primary" onclick="startQuiz()">
+            <span>🔄</span> Neuen Test mit 10 anderen Fragen starten
+          </button>
+          <a href="#modulo" class="nav-back-link" style="padding: 12px 18px;">
+            ↑ Nach oben zum Anfang
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Qualifikationsphase 1 (Q1)</strong> • Schuljahr 2026/2027 • Zentralabitur Informatik NRW</p>
+    </footer>
+
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT: LABORRECHNER & QUIZ ENGINE
+       ========================================================================= -->
+  <script>
+    /* 1. Labor-Rechner */
+    function calcMod() {
+      const a = parseInt(document.getElementById('calcA').value, 10);
+      const m = parseInt(document.getElementById('calcM').value, 10);
+      if (isNaN(a) || isNaN(m) || m === 0) return;
+
+      const rest = ((a % m) + m) % m;
+      const k = Math.floor(a / m);
+      document.getElementById('resMod').innerHTML = `Ergebnis: ${a} mod ${m} = <strong>${rest}</strong> (denn ${a} = ${k} · ${m} + ${rest})`;
+    }
+
+    function calcPhi() {
+      const p = parseInt(document.getElementById('calcP').value, 10);
+      const q = parseInt(document.getElementById('calcQ').value, 10);
+      if (isNaN(p) || isNaN(q) || p < 2 || q < 2) return;
+
+      const n = p * q;
+      const phi = (p - 1) * (q - 1);
+      document.getElementById('resPhi').innerHTML = `N = ${p} · ${q} = ${n} &nbsp;|&nbsp; $\\varphi(${n}) = (${p}-1) \\cdot (${q}-1) =$ <strong>${phi}</strong>`;
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.getElementById('resPhi'), {
+          delimiters: [{left: '$', right: '$', display: false}],
+          throwOnError: false
+        });
+      }
+    }
+
+    /* 2. Fragepool Modulare Arithmetik (20 Fragen) */
+    const QUESTION_POOL = [
+      {
+        cat: "Modulo & Reste",
+        q: "Was ist das Ergebnis von $43 \\pmod 7$?",
+        opts: ["1", "6", "0", "7"],
+        ans: 0,
+        exp: "$43 = 6 \\cdot 7 + 1$. Der ganzzahlige Rest bei Division durch 7 ist 1."
+      },
+      {
+        cat: "Modulo & Reste",
+        q: "Was bedeutet der Ausdruck $a \\equiv b \\pmod m$ mathematisch?",
+        opts: [
+          "a und b lassen bei Division durch m denselben Rest (a - b ist durch m teilbar).",
+          "a ist exakt gleich groß wie b.",
+          "a geteilt durch b ergibt genau m.",
+          "a und b sind Primzahlen."
+        ],
+        ans: 0,
+        exp: "Kongruenz bedeutet Restgleichheit: Beide Zahlen liegen im selben Restklassen-System modulo m."
+      },
+      {
+        cat: "Modulo & Reste",
+        q: "Berechne: $4^3 \\pmod{10}$.",
+        opts: ["4", "64", "6", "0"],
+        ans: 0,
+        exp: "$4^3 = 64$. Division durch 10: $64 = 6 \\cdot 10 + 4$. Der Rest ist 4."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Was gibt die Eulersche Phi-Funktion $\\varphi(N)$ für eine Zahl $N$ an?",
+        opts: [
+          "Die Anzahl aller Zahlen von 1 bis N-1, die teilerfremd zu N sind.",
+          "Die Anzahl aller Primteiler von N.",
+          "Die Summe aller Teiler von N.",
+          "Die Quadratwurzel aus N."
+        ],
+        ans: 0,
+        exp: "$\\varphi(N)$ zählt genau die Zahlen $a < N$, für die $\\operatorname{ggT}(a, N) = 1$ gilt."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Wenn $p$ eine Primzahl ist: Welcher Wert gilt für $\\varphi(p)$?",
+        opts: [
+          "$\\varphi(p) = p - 1$",
+          "$\\varphi(p) = p$",
+          "$\\varphi(p) = \\frac{p}{2}$",
+          "$\\varphi(p) = p + 1$"
+        ],
+        ans: 0,
+        exp: "Da eine Primzahl nur durch 1 und sich selbst teilbar ist, sind alle $p-1$ Zahlen kleiner als $p$ teilerfremd zu $p$."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Gegeben sind die Primzahlen $p = 5$ und $q = 11$. Wie groß ist $\\varphi(N)$ für $N = p \\cdot q = 55$?",
+        opts: ["40", "54", "50", "44"],
+        ans: 0,
+        exp: "$\\varphi(N) = (p - 1) \\cdot (q - 1) = (5 - 1) \\cdot (11 - 1) = 4 \\cdot 10 = 40$."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Gegeben: $p = 7$ und $q = 13$. Welchen Wert hat $\\varphi(91)$?",
+        opts: ["72", "90", "84", "65"],
+        ans: 0,
+        exp: "$\\varphi(91) = (7 - 1) \\cdot (13 - 1) = 6 \\cdot 12 = 72$."
+      },
+      {
+        cat: "Multiplikatives Inverses",
+        q: "Was bedeutet es, wenn $d$ das multiplikative Inverse zu $e$ modulo $m$ ist?",
+        opts: [
+          "Das Produkt $(e \\cdot d)$ ergibt bei Division durch m den Rest 1 ($(e \\cdot d) \\bmod m = 1$).",
+          "e + d = m",
+          "e * d = 0",
+          "d ist der Kehrwert 1/e als Kommazahl."
+        ],
+        ans: 0,
+        exp: "In der modularen Arithmetik ist das Inverse diejenige ganze Zahl, deren Produkt mit e den Rest 1 modulo m ergibt."
+      },
+      {
+        cat: "Multiplikatives Inverses",
+        q: "Unter welcher Bedingung existiert überhaupt ein multiplikatives Inverses zu $e$ modulo $m$?",
+        opts: [
+          "Nur wenn e und m teilerfremd sind ($\\operatorname{ggT}(e, m) = 1$).",
+          "Nur wenn e eine gerade Zahl ist.",
+          "Nur wenn m kleiner als 10 ist.",
+          "Es existiert immer für jede beliebige Zahl."
+        ],
+        ans: 0,
+        exp: "Haben e und m einen gemeinsamen Teiler > 1, kann kein Vielfaches von e den Rest 1 ergeben. Teilerfremdheit ist Voraussetzung!"
+      },
+      {
+        cat: "Multiplikatives Inverses",
+        q: "Gesucht ist das Inverse $d$ zu $e = 3$ modulo $m = 40$. Welcher Wert ist korrekt?",
+        opts: ["d = 27", "d = 13", "d = 3", "d = 39"],
+        ans: 0,
+        exp: "$3 \\cdot 27 = 81$. Division mit Rest: $81 = 2 \\cdot 40 + 1 \\implies (81 \\bmod 40) = 1$. Also $d = 27$!"
+      },
+      {
+        cat: "Satz von Euler",
+        q: "Was besagt der Satz von Euler ($a^{\\varphi(N)} \\equiv 1 \\pmod N$) anschaulich?",
+        opts: [
+          "Wenn man eine teilerfremde Zahl a genau $\\varphi(N)$-mal mit sich multipliziert, landet man im Restesystem immer wieder bei 1.",
+          "Dass man Potenzen modulo N nicht ausrechnen kann.",
+          "Dass jede Zahl nach 10 Schritten null wird.",
+          "Dass Potenzen grundsätzlich verboten sind."
+        ],
+        ans: 0,
+        exp: "Die Reste drehen sich im Kreis: Nach genau $\\varphi(N)$ Multiplikationen ist eine volle Runde gedreht und man steht wieder exakt bei 1."
+      },
+      {
+        cat: "Satz von Euler",
+        q: "Warum ist der Satz von Euler der Schlüssel zur RSA-Entschlüsselung ($C^d \\equiv M$)?",
+        opts: [
+          "Weil durch die Wahl von $e \\cdot d = k \\cdot \\varphi(N) + 1$ das Karussell volle Runden dreht und genau die Nachricht M rekonstruiert.",
+          "Weil Euler das RSA-Verfahren erfunden hat.",
+          "Weil Potenzen alle Buchstaben löschen.",
+          "Weil d immer gleich e sein muss."
+        ],
+        ans: 0,
+        exp: "Weil $M^{k \\cdot \\varphi(N) + 1} = (M^{\\varphi(N)})^k \\cdot M \\equiv 1^k \\cdot M = M \\pmod N$ ergibt!"
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Warum kann Angreiferin Eve $\\varphi(N)$ nicht einfach ausrechnen, obwohl $N$ öffentlich bekannt ist?",
+        opts: [
+          "Weil sie dafür die geheimen Primfaktoren p und q kennen müsste, deren Berechnung (Faktorisierung) bei großen Zahlen viel zu lange dauert.",
+          "Weil Taschenrechner keine Phi-Taste besitzen.",
+          "Weil N geheim gehalten wird.",
+          "Weil man Primzahlen nicht teilen darf."
+        ],
+        ans: 0,
+        exp: "Um $(p-1)(q-1)$ zu berechnen, muss man p und q kennen. Aus N die Faktoren zu berechnen (Primfaktorzerlegung), ist das ungelöste mathematische Kernproblem von RSA."
+      },
+      {
+        cat: "Modulo & Reste",
+        q: "Was ist der Wert von $(14 + 19) \\pmod{12}$?",
+        opts: ["9", "33", "7", "2"],
+        ans: 0,
+        exp: "$14 + 19 = 33$. $33 = 2 \\cdot 12 + 9$. Der Rest ist 9 (wie auf einer 12-Stunden-Uhr: 14 Uhr + 19 Stunden = 9 Uhr)."
+      },
+      {
+        cat: "Modulo & Reste",
+        q: "Was ist der Unterschied zwischen dem Dreifachstrich $\\equiv$ und dem Gleichheitszeichen $=$?",
+        opts: [
+          "$\\equiv$ bedeutet Kongruenz (gleicher Rest), $=$ bedeutet echte Gleichheit der Werte.",
+          "Es gibt keinen Unterschied.",
+          "$\\equiv$ darf nur in der Geometrie verwendet werden.",
+          "$\\equiv$ bedeutet, dass die Werte ungleich sind."
+        ],
+        ans: 0,
+        exp: "$81 \\neq 1$, aber $81 \\equiv 1 \\pmod{40}$, weil beide Zahlen bei Division durch 40 denselben Rest 1 haben."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Berechne $\\varphi(13)$.",
+        opts: ["12", "13", "14", "6"],
+        ans: 0,
+        exp: "13 ist eine Primzahl, also gilt $\\varphi(13) = 13 - 1 = 12$."
+      },
+      {
+        cat: "Multiplikatives Inverses",
+        q: "Prüfe: Ist $d = 5$ das multiplikative Inverse zu $e = 3$ modulo $7$?",
+        opts: [
+          "Ja, denn $3 \\cdot 5 = 15$ und $15 = 2 \\cdot 7 + 1 \\implies 15 \\equiv 1 \\pmod 7$.",
+          "Nein, denn 15 ist ungerade.",
+          "Nein, weil 5 größer als 3 ist.",
+          "Ja, weil 5 und 7 Primzahlen sind."
+        ],
+        ans: 0,
+        exp: "$3 \\cdot 5 = 15$. $15 \\bmod 7 = 1$. Da der Rest 1 ist, ist 5 tatsächlich das Inverse!"
+      },
+      {
+        cat: "Satz von Euler",
+        q: "Für $N = 10$ ist $\\varphi(10) = 4$. Welchen Rest ergibt $7^4 \\pmod{10}$?",
+        opts: ["1", "7", "9", "4"],
+        ans: 0,
+        exp: "Nach dem Satz von Euler ergibt $a^{\\varphi(N)} \\equiv 1 \\pmod N$. $7^4 = 2401$, und $2401 \\bmod 10 = 1$."
+      },
+      {
+        cat: "Modulo & Reste",
+        q: "Berechne $55 \\pmod{11}$.",
+        opts: ["0", "5", "1", "11"],
+        ans: 0,
+        exp: "55 ist ohne Rest durch 11 teilbar ($55 = 5 \\cdot 11 + 0$). Der Rest ist 0."
+      },
+      {
+        cat: "Eulersche Phi-Funktion",
+        q: "Warum ist $\\varphi(6) = 2$?",
+        opts: [
+          "Weil unter den Zahlen {1, 2, 3, 4, 5} nur 1 und 5 teilerfremd zu 6 sind.",
+          "Weil 6 durch 3 geteilt 2 ergibt.",
+          "Weil 6 zwei Teiler hat.",
+          "Weil 6 eine Primzahl ist."
+        ],
+        ans: 0,
+        exp: "Die Zahlen 2, 3 und 4 teilen mit 6 gemeinsame Faktoren. Nur 1 und 5 sind teilerfremd zu 6, daher $\\varphi(6) = 2$."
+      }
+    ];
+
+    /* 3. Quiz State */
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let catStats = {};
+
+    function startQuiz() {
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+      currentQuestions = poolCopy.slice(0, 10);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = (currentQIdx / 10) * 100;
+      
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von 10`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+      
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.getElementById('quiz-play-view'), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback is-correct';
+        fbTitle.innerText = "Richtig! ✔";
+      } else {
+        selectedBtn.classList.add('wrong');
+        fbBox.className = 'quiz-feedback is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+        
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(q.opts[q.ans].substring(0, 15))) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      fbDesc.innerHTML = q.exp;
+      fbBox.style.display = 'block';
+
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      const nextBtn = document.getElementById('quiz-btn-next');
+      nextBtn.style.display = 'inline-flex';
+
+      if (currentQIdx === 9) {
+        nextBtn.innerHTML = "Zur Gesamtauswertung ➔";
+      } else {
+        nextBtn.innerHTML = "Nächste Frage →";
+      }
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(fbBox, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < 10) {
+        renderCurrentQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / 10`;
+
+      let badgeText = "Solide Leistung!";
+      let badgeColor = "#4f46e5";
+      let adviceText = "Gute Arbeit! Die meisten Konzepte der modularen Arithmetik sind dir vertraut.";
+
+      if (quizScore >= 9) {
+        badgeText = "Hervorragend! Abitur-Niveau! 🌟";
+        badgeColor = "#059669";
+        adviceText = "Exzellent! Du beherrschst Restklassen, die Phi-Funktion, multiplikative Inverse und den Satz von Euler perfekt. Das RSA-Verfahren wird dir leicht fallen!";
+      } else if (quizScore >= 7) {
+        badgeText = "Gute Leistung! Die Grundlagen sitzen. 👍";
+        badgeColor = "#2563eb";
+        adviceText = "Sehr gut! Schau dir nochmals genau die Berechnung des multiplikativen Inversen und den Satz von Euler an.";
+      } else if (quizScore >= 5) {
+        badgeText = "Auf gutem Weg! Wiederhole noch gezielt Schwachstellen. 💡";
+        badgeColor = "#d97706";
+        adviceText = "Die Kernideen sind da. Gehe oben nochmals Aufgabe 2 (Phi-Funktion) und Aufgabe 3 (Inverses Probieren) durch.";
+      } else {
+        badgeText = "Hier solltest du noch etwas üben. 📚";
+        badgeColor = "#dc2626";
+        adviceText = "Lies dir oben in Ruhe die Abschnitte 1 bis 3 durch und nutze die aufklappbaren Lösungen und den Mathe-Rechner.";
+      }
+
+      const badgeEl = document.getElementById('quiz-final-badge');
+      badgeEl.innerText = badgeText;
+      badgeEl.style.color = badgeColor;
+      document.getElementById('quiz-advice-text').innerText = adviceText;
+
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [cat, data] of Object.entries(catStats)) {
+        const percent = Math.round((data.correct / data.total) * 100);
+        let statColor = percent >= 80 ? '#059669' : (percent >= 50 ? '#d97706' : '#dc2626');
+
+        const card = document.createElement('div');
+        card.className = 'diag-card';
+        card.innerHTML = `
+          <div>
+            <div class="diag-card-title">${cat}</div>
+            <div style="font-size:0.82rem; color:var(--text-muted);">${data.correct} von ${data.total} Fragen richtig</div>
+          </div>
+          <div class="diag-card-score" style="color:${statColor}; margin-top:0.5rem;">${percent}%</div>
+        `;
+        breakdownBox.appendChild(card);
+      }
+    }
+  </script>
+
+</body>
+</html>
