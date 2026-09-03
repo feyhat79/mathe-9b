@@ -40,26 +40,70 @@
       </div>
     </div>
 
-    <!-- Modules Grid -->
-    <h2 class="section-heading"><span>📚</span> Unterrichtsmodule & Themen</h2>
+    <!-- Sektion 1: Aktuelle Reihe -->
+    <h2 class="section-heading"><span>🔐</span> Reihe 1: Kryptographie & Informationssicherheit</h2>
     <div class="dashboard-grid">
-      <!-- Modul 1: Kryptographie & RSA (Aktiv) -->
+      
+      <!-- Baustein 1: Grundlagen & Schlüsseltausch (Aktiv) -->
       <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Thema</span>
-          <span class="class-card-icon">🔐</span>
+          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
+          <span class="class-card-icon">🛡️</span>
         </div>
-        <h3 class="class-card-title">Kryptographie & RSA-Verfahren</h3>
+        <h3 class="class-card-title">1. Grundlagen & Schlüsselaustausch</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Symmetrische vs. asymmetrische Verschlüsselung, Einwegfunktionen, modulare Arithmetik, digitale Signaturen & interaktives RSA-Labor.
+          CIA-Schutzziele, Kerckhoffs' Prinzip, symmetrische vs. asymmetrische Verschlüsselung, Vorhängeschloss-Modell, Schlüsselskalierungs-Labor & interaktiver Selbsttest.
         </p>
-        <a href="rsa.html" class="btn-open btn-oberstufe">Modul öffnen →</a>
+        <a href="kryptographie-grundlagen.html" class="btn-open btn-oberstufe">Praxismodul öffnen →</a>
       </div>
 
-      <!-- Modul 2: Lineare Datenstrukturen -->
+      <!-- Baustein 2: Modulare Arithmetik -->
       <div class="class-card theme-oberstufe">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
+          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Nächster Schritt</span>
+          <span class="class-card-icon">⏰</span>
+        </div>
+        <h3 class="class-card-title">2. Modulare Arithmetik & Werkzeuge</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Uhren-Arithmetik, Rechnen mit Resten, Teilerfremdheit, ggT und die Eulersche Phi-Funktion $\varphi(N) = (p-1)(q-1)$.
+        </p>
+        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Demnächst</span>
+      </div>
+
+      <!-- Baustein 3: RSA -->
+      <div class="class-card theme-oberstufe">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Bereits freigeschaltet</span>
+          <span class="class-card-icon">⚡</span>
+        </div>
+        <h3 class="class-card-title">3. Das RSA-Kryptosystem</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Schlüsselerzeugung ($p, q \to N, e, d$), Ver- und Entschlüsselung, interaktives RSA-Labor & Square-and-Multiply-Rechner.
+        </p>
+        <a href="rsa.html" class="btn-open btn-oberstufe">RSA-Labor öffnen →</a>
+      </div>
+
+      <!-- Baustein 4: Signaturen -->
+      <div class="class-card theme-oberstufe">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Im weiteren Verlauf</span>
+          <span class="class-card-icon">🪪</span>
+        </div>
+        <h3 class="class-card-title">4. Digitale Signaturen & PKI</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Authentizität und Integrität mit privaten Schlüsseln, Man-in-the-Middle-Angriff, Public-Key-Infrastruktur & Zertifikate.
+        </p>
+        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Demnächst</span>
+      </div>
+
+    </div>
+
+    <!-- Sektion 2: Ausblick Q1 -->
+    <h2 class="section-heading"><span>📚</span> Ausblick: Weitere Themen der Q1</h2>
+    <div class="dashboard-grid">
+      <div class="class-card">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Themenbereich 2</span>
           <span class="class-card-icon">🧱</span>
         </div>
         <h3 class="class-card-title">Lineare Datenstrukturen</h3>
@@ -67,21 +111,19 @@
         <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
       </div>
 
-      <!-- Modul 3: Nichtlineare Datenstrukturen -->
-      <div class="class-card theme-oberstufe">
+      <div class="class-card">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Im weiteren Verlauf</span>
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Themenbereich 3</span>
           <span class="class-card-icon">🌲</span>
         </div>
-        <h3 class="class-card-title">Nichtlineare Datenstrukturen (Bäume)</h3>
+        <h3 class="class-card-title">Nichtlineare Datenstrukturen</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Binärbäume, Traversierung, Suchbäume und Baum-Algorithmen.</p>
         <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
       </div>
 
-      <!-- Modul 4: Relationale Datenbanken -->
-      <div class="class-card theme-oberstufe">
+      <div class="class-card">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Im weiteren Verlauf</span>
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Themenbereich 4</span>
           <span class="class-card-icon">🗄️</span>
         </div>
         <h3 class="class-card-title">Relationale Datenbanken & SQL</h3>

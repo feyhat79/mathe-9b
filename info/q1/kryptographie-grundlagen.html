@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Grundlagen der Kryptographie | Informatik Q1</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      function initKaTeX() {
+        if (typeof renderMathInElement === "function") {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        } else {
+          setTimeout(initKaTeX, 50);
+        }
+      }
+      initKaTeX();
+    });
+  </script>
+  
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-light: #eef2ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    /* Portal Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-q1 { background: var(--primary-light); color: var(--primary); }
+    .badge-sym { background: var(--warning-light); color: var(--warning); }
+    .badge-asym { background: #eff6ff; color: #1d4ed8; }
+    .badge-sol { background: var(--success-light); color: var(--success); }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 840px;
+      line-height: 1.55;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    /* Quick Navigation */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 1rem 0 1.5rem 0;
+      padding: 10px 14px;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .quick-nav a {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      transition: all 0.2s ease;
+    }
+
+    .quick-nav a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Section Headings */
+    .section-heading {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 2.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-heading span.icon {
+      font-size: 1.4rem;
+    }
+
+    /* Grid Layouts */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .concept-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .concept-card h4 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-card p {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    /* Quote Box for Kerckhoffs */
+    .quote-box {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin: 1.25rem 0 1.5rem 0;
+    }
+
+    .quote-box strong {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .quote-box em {
+      font-size: 0.95rem;
+      color: #1e3a8a;
+      line-height: 1.6;
+      display: block;
+    }
+
+    /* Comparison Box (Symmetric vs Asymmetric) */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .compare-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.4rem;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    }
+
+    .compare-card.symmetric { border-top: 5px solid var(--warning); }
+    .compare-card.asymmetric { border-top: 5px solid var(--primary); }
+
+    .compare-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Task Box */
+    .task-box {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      gap: 12px;
+    }
+
+    .task-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .step-list {
+      margin-left: 1.35rem;
+      font-size: 0.94rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.85rem;
+      color: #334155;
+    }
+
+    .step-list li { margin-bottom: 6px; }
+
+    /* Collapsible Solution Box */
+    .solution-details {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: var(--radius-md);
+      margin-top: 1rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .solution-details[open] {
+      border-color: #22c55e;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.1);
+    }
+
+    .solution-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.15rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #15803d;
+      user-select: none;
+      background: #f0fdf4;
+      transition: background 0.2s ease;
+    }
+
+    .solution-summary:hover {
+      background: #dcfce7;
+    }
+
+    .solution-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-chevron {
+      font-size: 0.85rem;
+      transition: transform 0.2s ease;
+      color: #16a34a;
+    }
+
+    .solution-details[open] .summary-chevron {
+      transform: rotate(180deg);
+    }
+
+    .solution-content {
+      padding: 1.25rem;
+      border-top: 1px solid #bbf7d0;
+      background: #ffffff;
+      font-size: 0.93rem;
+      line-height: 1.65;
+    }
+
+    .solution-content strong {
+      color: #15803d;
+    }
+
+    /* Interactive Scaling Lab (Rechner) */
+    .calc-box {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.5rem 0 2rem 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+
+    .calc-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .calc-input {
+      padding: 10px 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      width: 160px;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .calc-input:focus {
+      border-color: var(--primary);
+    }
+
+    .preset-btn {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .calc-results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .calc-res-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+    }
+
+    .calc-res-card.sym { background: #fffbeb; border-color: #fde68a; }
+    .calc-res-card.asym { background: #eef2ff; border-color: #c7d2fe; }
+
+    .calc-big-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ==========================================================================
+       Quiz Engine Styling
+       ========================================================================== */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.75rem 0 2.5rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .quiz-question-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt-btn:disabled {
+      cursor: default;
+    }
+
+    .quiz-opt-btn .opt-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+    }
+
+    .quiz-opt-btn.correct .opt-badge {
+      background: #10b981;
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-opt-btn.wrong .opt-badge {
+      background: #ef4444;
+      color: white;
+    }
+
+    .quiz-feedback {
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius-md);
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .quiz-feedback.is-correct {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .quiz-feedback.is-wrong {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-quiz-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-quiz-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    }
+
+    .quiz-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem 0;
+    }
+
+    .quiz-preview-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .quiz-preview-card h4 {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .quiz-preview-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .diag-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .diag-card-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .diag-card-score {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q1-Übersicht
+      </a>
+      <span class="badge-pill badge-q1">Informatik Q1 • Modul 01</span>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-q1">Kryptographie • Grundlagen</div>
+      <h1>Sicherheit, Symmetrie & das Schlüsselaustauschproblem</h1>
+      <p class="subtitle">
+        Die Schutzziele der Informationssicherheit (CIA), Kerckhoffs' Prinzip, symmetrische vs. asymmetrische Verschlüsselung, die Vorhängeschloss-Analogie und das Schlüsselskalierungs-Labor – inklusive aller Musterlösungen.
+      </p>
+      <div class="timestamp-pill">
+        <span>🟢</span> Stand: Schuljahr 2026/27 • Abiturschwerpunkt NRW
+      </div>
+    </header>
+
+    <!-- Quick Navigation -->
+    <nav class="quick-nav">
+      <strong style="font-size:0.85rem; display:flex; align-items:center; margin-right:4px;">Direktsprung:</strong>
+      <a href="#schutzziele">1. Schutzziele (CIA)</a>
+      <a href="#kerckhoffs">2. Kerckhoffs' Prinzip</a>
+      <a href="#symmetrie">3. Symmetrisch vs. Asymmetrisch</a>
+      <a href="#aufgabe1">Aufgabe 1: Schlüsseltausch-Dilemma</a>
+      <a href="#aufgabe2">Aufgabe 2: Vorhängeschloss</a>
+      <a href="#aufgabe3">Aufgabe 3: Skalierung</a>
+      <a href="#rechner">Labor: Skalierungs-Rechner</a>
+      <a href="#selbsttest" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">⚡ Selbsttest (10 Fragen)</a>
+    </nav>
+
+
+    <!-- =====================================================================
+         1. SCHUTZZIELE DER INFORMATIONSSICHERHEIT (CIA)
+         ===================================================================== -->
+    <h2 class="section-heading" id="schutzziele">
+      <span class="icon">🛡️</span> 1. Die drei Säulen der Informationssicherheit (CIA-Triade)
+    </h2>
+    <p style="margin-bottom: 1rem; color: var(--text-muted);">
+      Bevor ein Verschlüsselungsverfahren bewertet werden kann, muss genau definiert sein, welches Schutzziel erreicht werden soll:
+    </p>
+
+    <div class="grid-3">
+      <!-- Vertraulichkeit -->
+      <div class="concept-card">
+        <h4>🔒 Vertraulichkeit (Confidentiality)</h4>
+        <p>
+          Nur autorisierte Personen dürfen den Klartext lesen. Unbefugte Dritte (wie die Angreiferin <em>Eve</em>) sehen bei der Übertragung ausschließlich unlesbaren Geheimtext (Chiffre).
+        </p>
+      </div>
+
+      <!-- Integrität -->
+      <div class="concept-card">
+        <h4>🧩 Integrität (Integrity)</h4>
+        <p>
+          Nachrichten können auf dem Übertragungsweg nicht unbemerkt verändert, verkürzt oder manipuliert werden. Eine geänderte Ziffer oder IBAN fällt sofort auf.
+        </p>
+      </div>
+
+      <!-- Authentizität -->
+      <div class="concept-card">
+        <h4>🪪 Authentizität (Authenticity)</h4>
+        <p>
+          Der Empfänger kann zweifelsfrei nachweisen, von wem die Nachricht verfasst wurde. Absender-Identitäten können nicht gefälscht oder vorgetäuscht werden.
+        </p>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         2. KERCKHOFFS' PRINZIP
+         ===================================================================== -->
+    <h2 class="section-heading" id="kerckhoffs">
+      <span class="icon">⚖️</span> 2. Das fundamentale Gesetz: Kerckhoffs' Prinzip (1883)
+    </h2>
+
+    <div class="quote-box">
+      <strong>Auguste Kerckhoffs formulierte den Grundsatz moderner Kryptographie:</strong>
+      <em>
+        „Die Sicherheit eines Kryptosystems darf nicht von der Geheimhaltung des Algorithmus abhängen. Das System muss auch dann vollkommen sicher sein, wenn der Angreifer das vollständige Verfahren im Detail kennt – solange allein der <strong>Schlüssel</strong> geheim bleibt.“
+      </em>
+    </div>
+
+    <div style="background:var(--card-bg); border:1.5px solid var(--border); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.5rem;">
+      <h4 style="color:#b91c1c; font-size:0.95rem; font-weight:800; margin-bottom:0.35rem;">
+        ⚠️ Das Gegenteil: „Security through Obscurity“
+      </h4>
+      <p style="font-size:0.9rem; color:#475569; margin:0;">
+        Wer versucht, Sicherheit dadurch zu erreichen, dass er seine Verschlüsselungsmethode verheimlicht, begeht einen fatalen Anfängerfehler. Sobald das Verfahren durch Reverse Engineering, Leaks oder Spionage bekannt wird, bricht das gesamte System zusammen. Moderne Algorithmen wie <strong>AES</strong> oder <strong>RSA</strong> sind vollständig öffentlich und weltweit von tausenden Mathematikern überprüft.
+      </p>
+    </div>
+
+
+    <!-- =====================================================================
+         3. SYMMETRISCH VS. ASYMMETRISCH
+         ===================================================================== -->
+    <h2 class="section-heading" id="symmetrie">
+      <span class="icon">🔄</span> 3. Symmetrisch vs. Asymmetrisch im Vergleich
+    </h2>
+
+    <div class="compare-grid">
+      <!-- Symmetrisch -->
+      <div class="compare-card symmetric">
+        <div class="compare-title">
+          <span>Symmetrische Verfahren</span>
+          <span class="badge-pill badge-sym" style="margin-bottom:0;">1 gemeinsamer Schlüssel</span>
+        </div>
+        <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:0.6rem;">
+          Beispiele: <em>Caesar, Vigenère, Enigma, AES, ChaCha20</em>
+        </p>
+        <p style="font-size:0.9rem; color:#334155; line-height:1.6;">
+          Sender und Empfänger nutzen <strong>denselben geheimen Schlüssel</strong> \(k\) zum Ver- und Entschlüsseln.<br>
+          🟢 <strong>Großer Vorteil:</strong> Extrem schnell, ressourcenschonend und für riesige Datenmengen geeignet.<br>
+          🔴 <strong>Kardinalproblem:</strong> Wie tauscht man den Schlüssel \(k\) über ein abhörbares Netz (Internet) sicher aus?
+        </p>
+      </div>
+
+      <!-- Asymmetrisch -->
+      <div class="compare-card asymmetric">
+        <div class="compare-title">
+          <span>Asymmetrische Verfahren</span>
+          <span class="badge-pill badge-asym" style="margin-bottom:0;">Schlüsselpaar (Pub/Priv)</span>
+        </div>
+        <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:0.6rem;">
+          Beispiele: <em>RSA, Diffie-Hellman, ElGamal, ECC</em>
+        </p>
+        <p style="font-size:0.9rem; color:#334155; line-height:1.6;">
+          Jeder Teilnehmer besitzt ein <strong>Schlüsselpaar</strong>: einen <strong>öffentlichen Schlüssel</strong> (für jeden sichtbar) und einen <strong>privaten Schlüssel</strong> (strikt geheim).<br>
+          🟢 <strong>Großer Vorteil:</strong> Kein vorheriger geheimer Schlüsselaustausch nötig!<br>
+          🔴 <strong>Nachteil:</strong> Hoher mathematischer Rechenaufwand (ca. 100- bis 1000-mal langsamer als AES).
+        </p>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         AUFGABE 1: DAS SCHLÜSSELAUSTAUSCH-DILEMMA
+         ===================================================================== -->
+    <div class="task-box" id="aufgabe1">
+      <div class="task-header">
+        <span>Aufgabe 1: Das Schlüsselaustausch-Dilemma von Alice und Bob</span>
+        <span class="task-badge">Analyse</span>
+      </div>
+      <p>
+        Alice möchte Bob über das Internet vertrauliche Daten senden. Sie einigen sich darauf, die Daten mit dem extrem sicheren symmetrischen Verfahren <strong>AES</strong> zu verschlüsseln.
+      </p>
+      <ol class="step-list">
+        <li>Erkläre präzise, vor welchem fundamentalen Paradoxon Alice und Bob stehen, wenn Angreiferin Eve die Verbindung abhört.</li>
+        <li>Warum löst das wiederholte Verschlüsseln des Schlüssels mit einem weiteren symmetrischen Verfahren das Problem nicht?</li>
+      </ol>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung & didaktische Erklärung anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p><strong>1. Das fundamentale Paradoxon:</strong></p>
+          <p>
+            Um mit einem symmetrischen Verfahren vertraulich zu kommunizieren, müssen beide denselben geheimen Schlüssel \(k\) besitzen. Wenn Alice den Schlüssel über das Internet an Bob sendet und Eve die Leitung abhört, liest Eve diesen Schlüssel im Klartext mit. Ab diesem Moment kann Eve jede folgende Nachricht mühelos dechiffrieren.
+            <br><br>
+            <em>Das Paradoxon lautet:</em> <strong>Man benötigt bereits einen sicheren Kanal, um den geheimen Schlüssel zu übertragen – hätte man aber bereits einen sicheren Kanal, bräuchte man gar keine Verschlüsselung mehr!</strong>
+          </p>
+          <p style="margin-top: 0.85rem;"><strong>2. Warum Mehrfach-Verschlüsselung scheitert:</strong></p>
+          <p>
+            Verschlüsselt Alice den Schlüssel \(k_1\) mit einem zweiten Schlüssel \(k_2\), muss sie nun \(k_2\) an Bob übermitteln. Damit verlagert sich das Problem lediglich um eine Stufe, ohne jemals gelöst zu werden (Zirkelschluss / infiniter Regress).
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         AUFGABE 2: DAS VORHÄNGESCHLOSS-MODELL
+         ===================================================================== -->
+    <div class="task-box" id="aufgabe2">
+      <div class="task-header">
+        <span>Aufgabe 2: Die Vorhängeschloss-Analogie (Public-Key-Prinzip)</span>
+        <span class="task-badge">Modellierung</span>
+      </div>
+      <p>
+        Um das Paradoxon ohne gemeinsame Geheimnisse zu lösen, erfanden Kryptographen das Prinzip der asymmetrischen Kryptographie. Anschaulich entspricht dies einem <strong>Vorhängeschloss</strong>:
+      </p>
+      
+      <div style="background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 16px; margin:0.75rem 0;">
+        <ol class="step-list" style="margin:0 0 0 1.25rem;">
+          <li>Bob besitzt eine Kiste, ein offenes Vorhängeschloss und den passenden Schlüssel.</li>
+          <li>Bob schickt Alice das <strong>geöffnete Vorhängeschloss</strong> ungesichert mit der Post. Den Schlüssel behält er sicher in seiner Hosentasche.</li>
+          <li>Alice legt ihren geheimen Brief in die Kiste, hängt Bobs Vorhängeschloss ein und <strong>drückt es zu</strong>.</li>
+          <li>Alice schickt die verschlossene Kiste an Bob zurück.</li>
+        </ol>
+      </div>
+
+      <p style="margin-top: 0.85rem;"><strong>Arbeitsauftrag:</strong></p>
+      <ol class="step-list" type="a">
+        <li>Was entspricht in dieser Analogie dem <em>öffentlichen Schlüssel (Public Key)</em> und was dem <em>privaten Schlüssel (Private Key)</em>?</li>
+        <li>Warum kann Eve die Kiste nicht öffnen, obwohl sie den Postboten abfangen und das offene Schloss auf dem Hinweg inspizieren konnte?</li>
+      </ol>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 2 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p><strong>a) Zuordnung der Schlüsselkomponenten:</strong></p>
+          <ul style="margin-left: 1.25rem; margin-top: 4px; margin-bottom: 0.75rem;">
+            <li><strong>Öffentlicher Schlüssel (Public Key):</strong> Das <em>geöffnete Vorhängeschloss</em>. Jeder darf es sehen, jeder darf es besitzen, und jeder kann damit eine Nachricht verschließen (zudrücken).</li>
+            <li><strong>Privater Schlüssel (Private Key):</strong> Der <em>Schlüssel</em> zum Schloss, den Bob sicher bei sich behält. Nur dieser Schlüssel kann das Schloss wieder aufsperren (Entschlüsseln).</li>
+          </ul>
+          <p><strong>b) Warum Eve scheitert (Die Einwegfunktion):</strong></p>
+          <p>
+            Das Schließen des Vorhängeschlosses ist eine <strong>Einwegfunktion (One-Way-Function)</strong>: Es zuzudrücken ist kinderleicht (jeder kann es ohne Schlüssel). Aber sobald es zugeschnappt ist, nützt das Wissen über das äußere Aussehen des Schlosses überhaupt nichts – ohne den physischen Schlüssel (die mathematische Falltür / Trapdoor) lässt es sich nicht öffnen.
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         AUFGABE 3: SCHLÜSSELSKALIERUNG
+         ===================================================================== -->
+    <div class="task-box" id="aufgabe3">
+      <div class="task-header">
+        <span>Aufgabe 3: Schlüsselskalierung in Rechnernetzen</span>
+        <span class="task-badge">Mathematik & Skalierung</span>
+      </div>
+      <p>
+        In einer Schulklasse mit \(n = 25\) Personen möchte jede Person mit jeder anderen Person abhörsicher kommunizieren können.
+      </p>
+      
+      <ol class="step-list">
+        <li>
+          <strong>Symmetrisch:</strong> Jedes Personenpaar benötigt einen eigenen individuellen Schlüssel. Formel:
+          $$K_{sym} = \frac{n \cdot (n - 1)}{2}$$
+          Berechne die Schlüsselanzahl für den Kurs (\(n = 25\)) und für eine Schule mit \(n = 1.000\) Personen.
+        </li>
+        <li>
+          <strong>Asymmetrisch:</strong> Jede Person erzeugt genau 1 eigenes Schlüsselpaar (Public/Private Key). Wie viele Schlüsselpaare müssen für \(n = 25\) bzw. \(n = 1.000\) erzeugt werden?
+        </li>
+        <li>
+          Welche fundamentale Konsequenz hat dieses Ergebnis für das weltweite Internet mit Milliarden von Nutzern?
+        </li>
+      </ol>
+
+      <!-- Aufklappbare Lösung -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 3 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p><strong>1. Symmetrische Schlüsselanzahl:</strong></p>
+          <ul style="margin-left: 1.25rem; margin-bottom: 0.75rem;">
+            <li>Für \(n = 25\): \(K_{sym} = \frac{25 \cdot 24}{2} = \mathbf{300}\) Schlüssel.</li>
+            <li>Für \(n = 1.000\): \(K_{sym} = \frac{1000 \cdot 999}{2} = \mathbf{499.500}\) Schlüssel!</li>
+          </ul>
+
+          <p><strong>2. Asymmetrische Schlüsselanzahl:</strong></p>
+          <ul style="margin-left: 1.25rem; margin-bottom: 0.75rem;">
+            <li>Für \(n = 25\): Exakt <strong>25 Schlüsselpaare</strong>.</li>
+            <li>Für \(n = 1.000\): Exakt <strong>1.000 Schlüsselpaare</strong>.</li>
+          </ul>
+
+          <p><strong>3. Konsequenz für das weltweite Internet:</strong></p>
+          <p>
+            Symmetrische Verschlüsselung allein ist für offene, weltweite Netzwerke völlig unbrauchbar. Der Aufwand wächst <strong>quadratisch (\(\mathcal{O}(n^2)\))</strong>. Bei 5 Milliarden Geräten bräuchte man Trillionen geheimer Schlüsselpaare vorab.
+            <br>
+            Asymmetrische Kryptographie skaliert <strong>linear (\(\mathcal{O}(n)\))</strong>: Jeder Teilnehmer publiziert einfach seinen Public Key in einem Verzeichnis.
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         INTERAKTIVER LIVE-RECHNER (SKALIERUNGS-LABOR)
+         ===================================================================== -->
+    <h2 class="section-heading" id="rechner">
+      <span class="icon">🧪</span> Interaktives Schlüsselskalierungs-Labor
+    </h2>
+
+    <div class="calc-box">
+      <h3 style="font-size:1.15rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+        Erlebe die quadratische Schlüssel-Explosion live
+      </h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.25rem;">
+        Gib eine beliebige Teilnehmerzahl \(n\) ein oder wähle eines der Szenarien:
+      </p>
+
+      <div class="calc-controls">
+        <input type="number" id="inputN" class="calc-input" value="25" min="2" max="10000000" oninput="calculateScaling()">
+        <button class="preset-btn" onclick="setPresetN(25)">Kurs (25)</button>
+        <button class="preset-btn" onclick="setPresetN(100)">Stufe (100)</button>
+        <button class="preset-btn" onclick="setPresetN(1000)">Schule (1.000)</button>
+        <button class="preset-btn" onclick="setPresetN(50000)">Kleinstadt (50.000)</button>
+        <button class="preset-btn" onclick="setPresetN(1000000)">Metropole (1 Mio)</button>
+      </div>
+
+      <div class="calc-results-grid">
+        <!-- Symmetrisch -->
+        <div class="calc-res-card sym">
+          <div style="font-size:0.85rem; font-weight:800; color:#b45309; text-transform:uppercase;">
+            Symmetrisch: \(K_{sym} = \frac{n(n-1)}{2}\)
+          </div>
+          <div id="resSym" class="calc-big-num" style="color:#d97706;">300</div>
+          <div style="font-size:0.84rem; color:#92400e;">
+            Geheime Schlüssel, die alle vorab über abhörsichere Kanäle ausgetauscht werden müssten!
+          </div>
+        </div>
+
+        <!-- Asymmetrisch -->
+        <div class="calc-res-card asym">
+          <div style="font-size:0.85rem; font-weight:800; color:#3730a3; text-transform:uppercase;">
+            Asymmetrisch: \(n\) Paare
+          </div>
+          <div id="resAsym" class="calc-big-num" style="color:#4f46e5;">25</div>
+          <div style="font-size:0.84rem; color:#3730a3;">
+            Schlüsselpaare insgesamt. Jeder Teilnehmer besitzt genau 1 Public Key und 1 Private Key.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         INTERAKTIVER SELBSTTEST (10 ZUFALLSFRAGEN AUS 20ER POOL)
+         ===================================================================== -->
+    <h2 class="section-heading" id="selbsttest">
+      <span class="icon">⚡</span> Interaktiver Selbst-Check: Grundlagen der Kryptographie
+    </h2>
+
+    <div class="quiz-card">
+
+      <!-- 1. START-ANSICHT -->
+      <div id="quiz-start-view">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
+          <span class="badge-pill badge-q1" style="margin-bottom:0;">Selbstdiagnose Q1</span>
+          <span class="timestamp-pill" style="margin-top:0;">20 Fragen im Pool</span>
+        </div>
+        <h3 style="font-size:1.45rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+          🎯 Teste dein Wissen zu Sicherheit & Symmetrie!
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; max-width:820px;">
+          Wie sicher sitzt die <strong>CIA-Triade</strong>? Warum ist <strong>Kerckhoffs' Prinzip</strong> das Fundament jeder Sicherheitsarchitektur? Und wie funktioniert das <strong>Vorhängeschloss-Prinzip</strong>? Bei jedem Durchlauf zieht das System <strong>10 zufällige Fragen</strong> aus unserem Fragenpool.
+        </p>
+
+        <div class="quiz-preview-grid">
+          <div class="quiz-preview-card">
+            <h4>🛡️ CIA-Schutzziele</h4>
+            <p>Vertraulichkeit, Integrität und Authentizität.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>⚖️ Kerckhoffs' Prinzip</h4>
+            <p>Warum Verheimlichung des Verfahrens scheitert.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>🔄 Symmetrie vs. Asymmetrie</h4>
+            <p>Schlüsselaustausch-Problem und Vorhängeschloss.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>📈 Netzwerkskalierung</h4>
+            <p>Quadratische Explosion vs. lineare Skalierung.</p>
+          </div>
+        </div>
+
+        <button class="btn-quiz-primary" onclick="startQuiz()">
+          <span>🚀</span> Selbsttest jetzt starten (10 Fragen) →
+        </button>
+      </div>
+
+      <!-- 2. SPIEL-ANSICHT -->
+      <div id="quiz-play-view" style="display: none;">
+        <div class="quiz-progress-wrap">
+          <span id="quiz-progress-text">Frage 1 von 10</span>
+          <span id="quiz-score-live" style="color:var(--primary); font-weight:800;">Punkte: 0</span>
+        </div>
+        <div class="quiz-bar-bg">
+          <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+        </div>
+
+        <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+        <div id="quiz-question-text" class="quiz-question-title">Frage wird geladen...</div>
+
+        <div id="quiz-options-box" class="quiz-options">
+          <!-- Optionen dynamisch per JS -->
+        </div>
+
+        <div id="quiz-feedback-box" class="quiz-feedback" style="display: none;">
+          <div id="quiz-feedback-title" style="font-weight: 800; font-size:1.02rem; margin-bottom: 0.35rem;"></div>
+          <div id="quiz-feedback-desc"></div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button id="quiz-btn-next" class="btn-quiz-primary" style="display: none;" onclick="nextQuestion()">
+            Nächste Frage →
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. AUSWERTUNGS-ANSICHT -->
+      <div id="quiz-result-view" style="display: none;">
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem;">
+          🎉 Deine Auswertung
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.92rem;">Hier ist dein persönliches Ergebnis für diesen Durchlauf:</p>
+
+        <div style="text-align: center; padding: 1.75rem 0; background: var(--bg); border-radius: var(--radius-md); margin: 1.25rem 0; border:1px solid var(--border);">
+          <div id="quiz-final-score" style="font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1;">0 / 10</div>
+          <div id="quiz-final-badge" style="font-size: 1.15rem; font-weight: 800; margin-top: 0.6rem;">Auswertung</div>
+        </div>
+
+        <h4 style="font-size: 1.05rem; font-weight: 800; margin-top: 1.5rem; color:var(--text);">Ergebnis nach Themenbereichen:</h4>
+        <div class="diag-grid" id="quiz-cat-breakdown">
+          <!-- Kategorien-Kacheln per JS -->
+        </div>
+
+        <div class="quote-box" id="quiz-advice-box" style="margin-top: 1.5rem;">
+          <strong id="quiz-advice-title">💡 Empfehlung für deine Klausurvorbereitung:</strong>
+          <em id="quiz-advice-text" style="font-style: normal; margin-top:4px;">
+            Lerneffekt...
+          </em>
+        </div>
+
+        <div style="margin-top: 1.75rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn-quiz-primary" onclick="startQuiz()">
+            <span>🔄</span> Neuen Test mit 10 anderen Fragen starten
+          </button>
+          <a href="#schutzziele" class="nav-back-link" style="padding: 12px 18px;">
+            ↑ Nach oben zum Anfang
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Qualifikationsphase 1 (Q1)</strong> • Schuljahr 2026/2027 • Zentralabitur Informatik NRW</p>
+    </footer>
+
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT: SKALIERUNGS-RECHNER & QUIZ-ENGINE
+       ========================================================================= -->
+  <script>
+    /* 1. Skalierungs-Rechner Logik */
+    function calculateScaling() {
+      const inputEl = document.getElementById('inputN');
+      let n = parseInt(inputEl.value, 10);
+      if (isNaN(n) || n < 2) n = 2;
+
+      const symKeys = Math.round((n * (n - 1)) / 2);
+      const asymKeys = n;
+
+      document.getElementById('resSym').innerText = symKeys.toLocaleString('de-DE');
+      document.getElementById('resAsym').innerText = asymKeys.toLocaleString('de-DE');
+    }
+
+    function setPresetN(val) {
+      document.getElementById('inputN').value = val;
+      calculateScaling();
+    }
+
+    /* 2. Fragepool für Kryptographie Grundlagen (20 Fragen) */
+    const QUESTION_POOL = [
+      {
+        cat: "Schutzziele (CIA)",
+        q: "Welches Schutzziel stellt sicher, dass eine Nachricht während der Übertragung nicht unbemerkt manipuliert oder verändert wurde?",
+        opts: [
+          "Integrität (Integrity)",
+          "Vertraulichkeit (Confidentiality)",
+          "Authentizität (Authenticity)",
+          "Verfügbarkeit (Availability)"
+        ],
+        ans: 0,
+        exp: "Integrität garantiert die Unversehrtheit und Vollständigkeit der Daten. Niemand darf ein Komma oder eine Kontonummer unbemerkt abändern."
+      },
+      {
+        cat: "Schutzziele (CIA)",
+        q: "Was bedeutet Vertraulichkeit (Confidentiality) im kryptographischen Sinne?",
+        opts: [
+          "Nur autorisierte Empfänger können den Klartext lesen; für Dritte ist er unlesbar.",
+          "Die Identität des Absenders ist immer zweifelsfrei bewiesen.",
+          "Das System stürzt auch bei hohen Zugriffszahlen nicht ab.",
+          "Der Algorithmus darf niemals veröffentlicht werden."
+        ],
+        ans: 0,
+        exp: "Vertraulichkeit verhindert unbefugte Kenntnisnahme: Unbefugte Dritte (Eve) sehen ausschließlich Chiffretext, aus dem ohne Schlüssel kein Klartext ableitbar ist."
+      },
+      {
+        cat: "Schutzziele (CIA)",
+        q: "Warum reicht reine Vertraulichkeit oft nicht aus, wenn Alice Bob eine Geldüberweisung sendet?",
+        opts: [
+          "Weil Bob auch sicher sein muss, dass die Nachricht wirklich von Alice stammt (Authentizität) und nicht manipuliert wurde (Integrität).",
+          "Weil vertrauliche Nachrichten langsamer übertragen werden.",
+          "Weil Banken nur Klartext-Nachrichten akzeptieren.",
+          "Weil Vertraulichkeit automatisch den Rechner ausschaltet."
+        ],
+        ans: 0,
+        exp: "Eine Überweisung muss alle drei Schutzziele erfüllen: Vertraulichkeit (Kontoauszug geheim), Integrität (Betrag nicht abgeändert) und Authentizität (Alice hat die Überweisung autorisiert, nicht ein Betrüger)."
+      },
+      {
+        cat: "Kerckhoffs' Prinzip",
+        q: "Was besagt das berühmte Kerckhoffs' Prinzip aus dem Jahr 1883?",
+        opts: [
+          "Die Sicherheit eines Kryptosystems darf nur von der Geheimhaltung des Schlüssels abhängen, nicht von der Geheimhaltung des Algorithmus.",
+          "Ein sicherer Schlüssel muss aus mindestens 2048 Zeichen bestehen.",
+          "Man darf Verschlüsselungsverfahren niemals im Internet veröffentlichen.",
+          "Symmetrische Verfahren sind grundsätzlich sicherer als asymmetrische Verfahren."
+        ],
+        ans: 0,
+        exp: "Auguste Kerckhoffs formulierte: Selbst wenn der Angreifer den kompletten Quelltext und das Verfahren kennt, muss das System sicher bleiben – solange allein der Schlüssel geheim ist."
+      },
+      {
+        cat: "Kerckhoffs' Prinzip",
+        q: "Was versteht man unter dem Begriff 'Security through Obscurity' (Sicherheit durch Verschleierung) und wie wird es heute bewertet?",
+        opts: [
+          "Der Glaube, ein System sei sicher, weil der Algorithmus geheim gehalten wird; gilt heute als grober Fehler.",
+          "Ein mathematisches Sicherheitszertifikat moderner Browser.",
+          "Die Verschlüsselung von Passwörtern mit Zufallszahlen.",
+          "Ein Verfahren zum automatischen Löschen von Logdateien."
+        ],
+        ans: 0,
+        exp: "Sobald ein geheimer Algorithmus durch Reverse Engineering oder Leaks bekannt wird, bricht das gesamte System zusammen. Moderne Standards (wie AES oder RSA) sind komplett öffentlich und überprüft."
+      },
+      {
+        cat: "Symmetrisch vs. Asymmetrisch",
+        q: "Was ist das wesentliche Kennzeichen eines symmetrischen Kryptoverfahrens (z. B. AES, Caesar)?",
+        opts: [
+          "Sender und Empfänger verwenden denselben gemeinsamen geheimen Schlüssel zum Ver- und Entschlüsseln.",
+          "Es gibt immer ein Paar aus öffentlichem und privatem Schlüssel.",
+          "Nachrichten können nur in eine einzige Richtung gesendet werden.",
+          "Es werden ausschließlich Primzahlen zur Verschlüsselung verwendet."
+        ],
+        ans: 0,
+        exp: "Symmetrisch bedeutet: 1 identischer Schlüssel für beide Richtungen (Chiffrieren und Dechiffrieren)."
+      },
+      {
+        cat: "Symmetrisch vs. Asymmetrisch",
+        q: "Was ist das fundamentale Schlüsselaustauschproblem symmetrischer Kryptosysteme?",
+        opts: [
+          "Man benötigt bereits einen sicheren Übertragungsweg, um den geheimen Schlüssel auszutauschen – hätte man diesen, bräuchte man gar keine Verschlüsselung.",
+          "Symmetrische Schlüssel sind zu lang, um sie über Netzwerkkabel zu senden.",
+          "Symmetrische Schlüssel verlieren nach 24 Stunden ihre Gültigkeit.",
+          "Symmetrische Algorithmen können nur Text, aber keine Bilder verschlüsseln."
+        ],
+        ans: 0,
+        exp: "Das Schlüsselaustausch-Paradoxon: Vor der vertraulichen Kommunikation müssen Alice und Bob den Schlüssel austauschen. Auf einem abgehörten Kanal (Internet) liest ein Angreifer diesen Schlüssel jedoch einfach mit."
+      },
+      {
+        cat: "Symmetrisch vs. Asymmetrisch",
+        q: "Welchen großen Vorteil bieten symmetrische Verfahren gegenüber asymmetrischen Verfahren?",
+        opts: [
+          "Sie sind dramatisch schneller und erfordern deutlich weniger Rechenleistung.",
+          "Sie benötigen überhaupt keinen Schlüssel.",
+          "Sie sind immun gegen Quantencomputer.",
+          "Sie garantieren automatisch Authentizität ohne Zertifikate."
+        ],
+        ans: 0,
+        exp: "Symmetrische Verfahren (wie AES) arbeiten mit schnellen Bit-Operationen und sind bis zu 1000-mal schneller als asymmetrische Verfahren mit großen Exponenten."
+      },
+      {
+        cat: "Asymmetrisch & Vorhängeschloss",
+        q: "Aus welchen zwei Komponenten besteht ein Schlüsselpaar in der asymmetrischen Kryptographie?",
+        opts: [
+          "Ein öffentlicher Schlüssel (Public Key) zum Verschlüsseln und ein privater Schlüssel (Private Key) zum Entschlüsseln.",
+          "Zwei identische geheime Passwörter.",
+          "Ein Schlüssel für gerade Zahlen und ein Schlüssel für ungerade Zahlen.",
+          "Ein Client-Zertifikat und eine IP-Adresse."
+        ],
+        ans: 0,
+        exp: "Public Key (für jeden sichtbar, zum Verschlüsseln oder Signatur prüfen) und Private Key (strikt geheim, zum Entschlüsseln oder Signieren)."
+      },
+      {
+        cat: "Asymmetrisch & Vorhängeschloss",
+        q: "In der Vorhängeschloss-Analogie: Was entspricht dem öffentlichen Schlüssel (Public Key) von Bob?",
+        opts: [
+          "Das geöffnete Vorhängeschloss, das Bob an Alice schickt (jeder kann es zudrücken).",
+          "Der Schlüssel zum Vorhängeschloss in Bobs Hosentasche.",
+          "Die hölzerne Kiste, in der der Brief liegt.",
+          "Der Postbote, der das Paket transportiert."
+        ],
+        ans: 0,
+        exp: "Das geöffnete Vorhängeschloss ist der Public Key: Jeder darf es sehen und besitzen. Jeder kann damit eine Kiste verschließen (zudrücken). Aber nur Bob mit seinem Private Key kann es aufsperren!"
+      },
+      {
+        cat: "Asymmetrisch & Vorhängeschloss",
+        q: "Warum kann Angreiferin Eve die Kiste nicht öffnen, obwohl sie das offene Vorhängeschloss auf dem Hinweg abgefangen und begutachtet hat?",
+        opts: [
+          "Weil das Schließen eine Einwegfunktion ist: Das Zudrücken ist kinderleicht, aber das Öffnen ohne Schlüssel unmöglich.",
+          "Weil Eve vergessen hat, das Schloss zu fotografieren.",
+          "Weil das Schloss mit einem Zeitschloss versehen ist.",
+          "Weil das Vorhängeschloss nach dem Schließen zerbricht."
+        ],
+        ans: 0,
+        exp: "Einwegfunktion mit Falltür (Trapdoor One-Way Function): In die eine Richtung (Zuschnappen) einfach für jeden, in die Gegenrichtung (Öffnen) ohne die Falltür (den Schlüssel) unlösbar schwer."
+      },
+      {
+        cat: "Schlüsselskalierung",
+        q: "Mit welcher Formel berechnet man die Anzahl benötigter symmetrischer Schlüsselpaare in einem Netz mit n Personen?",
+        opts: [
+          "K = n * (n - 1) / 2",
+          "K = 2 * n",
+          "K = n^2",
+          "K = n + 1"
+        ],
+        ans: 0,
+        exp: "Jede Person muss mit jeder der (n-1) anderen Personen einen Schlüssel teilen. Da die Beziehung ungerichtet ist, teilen wir durch 2: n*(n-1)/2."
+      },
+      {
+        cat: "Schlüsselskalierung",
+        q: "Wie viele Schlüssel müssen in einer Schulklasse mit n = 25 Personen bei rein symmetrischer Verschlüsselung verwaltet werden?",
+        opts: [
+          "300 Schlüssel",
+          "50 Schlüssel",
+          "25 Schlüssel",
+          "625 Schlüssel"
+        ],
+        ans: 0,
+        exp: "K = 25 * 24 / 2 = 600 / 2 = 300 Schlüssel!"
+      },
+      {
+        cat: "Schlüsselskalierung",
+        q: "Wie viele Schlüsselpaare müssen in derselben Klasse mit n = 25 Personen bei asymmetrischer Verschlüsselung erzeugt werden?",
+        opts: [
+          "Exakt 25 Schlüsselpaare (jede Person genau ein Paar)",
+          "300 Schlüsselpaare",
+          "625 Schlüsselpaare",
+          "5000 Schlüsselpaare"
+        ],
+        ans: 0,
+        exp: "Bei asymmetrischen Verfahren erzeugt jeder Teilnehmer genau 1 Schlüsselpaar: Public Key ins Verzeichnis, Private Key geheimhalten. Für n = 25 sind das genau 25 Paare!"
+      },
+      {
+        cat: "Schlüsselskalierung",
+        q: "Für eine Schule mit n = 1.000 Schülern: Wie vergleicht sich der Schlüsselaufwand?",
+        opts: [
+          "Symmetrisch: fast 500.000 Schlüssel; Asymmetrisch: genau 1.000 Schlüsselpaare.",
+          "Symmetrisch: 1.000; Asymmetrisch: 1.000.000.",
+          "Beide Verfahren benötigen genau gleich viele Schlüssel.",
+          "Symmetrisch: 2.000; Asymmetrisch: 50.000."
+        ],
+        ans: 0,
+        exp: "K_sym = 1000 * 999 / 2 = 499.500 Schlüssel! Bei asymmetrischer Verschlüsselung dagegen genau 1.000 Schlüsselpaare (quadratisches vs. lineares Wachstum)."
+      },
+      {
+        cat: "Symmetrisch vs. Asymmetrisch",
+        q: "Was ist ein 'hybrides Kryptosystem', wie es moderne Protokolle wie HTTPS (TLS) einsetzen?",
+        opts: [
+          "Asymmetrische Verschlüsselung wird nur zum sicheren Schlüsseltausch genutzt; die eigentlichen Daten werden schnell symmetrisch verschlüsselt.",
+          "Es werden zwei verschiedene Passwörter gleichzeitig eingegeben.",
+          "Das Verfahren funktioniert sowohl mit Strom als auch mechanisch.",
+          "Es verschlüsselt nur Bilder, aber keine Texte."
+        ],
+        ans: 0,
+        exp: "Best of both worlds: Die Asymmetrie löst das Schlüsselaustauschproblem elegant, und das symmetrische AES übernimmt danach die datenintensive Übertragung mit Höchstgeschwindigkeit."
+      },
+      {
+        cat: "Schutzziele (CIA)",
+        q: "Angreiferin Eve fängt eine E-Mail ab und ändert die Empfänger-IBAN. Welches Schutzziel wurde verletzt?",
+        opts: [
+          "Integrität",
+          "Verfügbarkeit",
+          "Anonymität",
+          "Skalierbarkeit"
+        ],
+        ans: 0,
+        exp: "Die Nachricht wurde unbefugt inhaltlich modifiziert – damit ist die Integrität der Daten verletzt."
+      },
+      {
+        cat: "Asymmetrisch & Vorhängeschloss",
+        q: "Alice möchte Bob eine vertrauliche Nachricht senden. Welchen Schlüssel muss Alice zum Verschlüsseln verwenden?",
+        opts: [
+          "Bobs öffentlichen Schlüssel (Public Key)",
+          "Alices eigenen privaten Schlüssel (Private Key)",
+          "Alices öffentlichen Schlüssel (Public Key)",
+          "Eves öffentlichen Schlüssel"
+        ],
+        ans: 0,
+        exp: "Alice möchte, dass NUR BOB die Nachricht lesen kann. Also verschlüsselt sie mit Bobs öffentlichem Vorhängeschloss (Bobs Public Key). Nur Bob kann es mit seinem Private Key aufsperren!"
+      },
+      {
+        cat: "Asymmetrisch & Vorhängeschloss",
+        q: "Was würde passieren, wenn Alice eine vertrauliche Nachricht mit ihrem eigenen privaten Schlüssel verschlüsseln würde?",
+        opts: [
+          "Jeder auf der Welt könnte die Nachricht mit Alices öffentlichem Schlüssel lesen (das ist eine digitale Signatur, keine Geheimhaltung).",
+          "Bob könnte die Nachricht niemals lesen.",
+          "Die Nachricht würde gelöscht werden.",
+          "Die Verschlüsselung wäre doppelt so sicher."
+        ],
+        ans: 0,
+        exp: "Weil Alices Public Key für alle öffentlich ist, kann jeder die Nachricht entschlüsseln! Das dient nicht der Vertraulichkeit, sondern beweist nur: 'Die Nachricht kommt garantiert von Alice' (Digitale Signatur)."
+      },
+      {
+        cat: "Schlüsselskalierung",
+        q: "Warum wäre das weltweite Internet mit Milliarden von Teilnehmern mit rein symmetrischer Verschlüsselung technisch unmöglich?",
+        opts: [
+          "Weil bei n Milliarden Teilnehmern Billiarden von geheimen Schlüsseln vorab sicher ausgetauscht werden müssten.",
+          "Weil symmetrische Verschlüsselung keine Zahlen über 100 verarbeiten kann.",
+          "Weil Server nur 256 Schlüssel speichern können.",
+          "Weil Glasfaserkabel keine symmetrischen Signale leiten."
+        ],
+        ans: 0,
+        exp: "Bei 5 Milliarden Internetnutzern bräuchte man symmetrisch Billiarden von Schlüsselpaaren. Asymmetrisch braucht jeder Teilnehmer einfach 1 einziges Schlüsselpaar!"
+      }
+    ];
+
+    /* 3. Quiz State */
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let catStats = {};
+
+    function startQuiz() {
+      // 10 Zufällige Fragen ziehen (Fisher-Yates)
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+      currentQuestions = poolCopy.slice(0, 10);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = (currentQIdx / 10) * 100;
+      
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von 10`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+      
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      // Optionen mischen
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+
+      // KaTeX nachrendern falls nötig
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.getElementById('quiz-play-view'), {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback is-correct';
+        fbTitle.innerText = "Richtig! ✔";
+      } else {
+        selectedBtn.classList.add('wrong');
+        fbBox.className = 'quiz-feedback is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+        
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(q.opts[q.ans].substring(0, 20))) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      fbDesc.innerHTML = q.exp;
+      fbBox.style.display = 'block';
+
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      const nextBtn = document.getElementById('quiz-btn-next');
+      nextBtn.style.display = 'inline-flex';
+
+      if (currentQIdx === 9) {
+        nextBtn.innerHTML = "Zur Gesamtauswertung ➔";
+      } else {
+        nextBtn.innerHTML = "Nächste Frage →";
+      }
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(fbBox, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < 10) {
+        renderCurrentQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / 10`;
+
+      let badgeText = "Solide Leistung!";
+      let badgeColor = "#4f46e5";
+      let adviceText = "Gute Arbeit! Die wesentlichen Konzepte der Informationssicherheit sind dir klar.";
+
+      if (quizScore >= 9) {
+        badgeText = "Hervorragend! Abitur-Niveau! 🌟";
+        badgeColor = "#059669";
+        adviceText = "Perfekt! Du beherrschst die Schutzziele (CIA), Kerckhoffs' Prinzip und das Vorhängeschloss-Prinzip fehlerfrei. Du bist bestens auf das RSA-Verfahren vorbereitet.";
+      } else if (quizScore >= 7) {
+        badgeText = "Gute Leistung! Die Grundlagen sitzen sicher. 👍";
+        badgeColor = "#2563eb";
+        adviceText = "Sehr gut! Schau dir nochmals genau die Schlüsselskalierungs-Formel und die Definition von Integrität vs. Authentizität an.";
+      } else if (quizScore >= 5) {
+        badgeText = "Auf gutem Weg! Wiederhole noch gezielt Schwachstellen. 💡";
+        badgeColor = "#d97706";
+        adviceText = "Die Kernideen sind da. Gehe oben nochmals die drei Aufgaben und das Vorhängeschloss-Modell in Ruhe durch.";
+      } else {
+        badgeText = "Hier solltest du noch etwas üben. 📚";
+        badgeColor = "#dc2626";
+        adviceText = "Lies dir oben in Ruhe die Abschnitte 1 bis 3 durch und nutze die aufklappbaren Lösungen, um dein Verständnis zu festigen.";
+      }
+
+      const badgeEl = document.getElementById('quiz-final-badge');
+      badgeEl.innerText = badgeText;
+      badgeEl.style.color = badgeColor;
+      document.getElementById('quiz-advice-text').innerText = adviceText;
+
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [cat, data] of Object.entries(catStats)) {
+        const percent = Math.round((data.correct / data.total) * 100);
+        let statColor = percent >= 80 ? '#059669' : (percent >= 50 ? '#d97706' : '#dc2626');
+
+        const card = document.createElement('div');
+        card.className = 'diag-card';
+        card.innerHTML = `
+          <div>
+            <div class="diag-card-title">${cat}</div>
+            <div style="font-size:0.82rem; color:var(--text-muted);">${data.correct} von ${data.total} Fragen richtig</div>
+          </div>
+          <div class="diag-card-score" style="color:${statColor}; margin-top:0.5rem;">${percent}%</div>
+        `;
+        breakdownBox.appendChild(card);
+      }
+    }
+  </script>
+
+</body>
+</html>
