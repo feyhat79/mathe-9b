@@ -1,0 +1,416 @@
+﻿/* ==========================================================================
+   Schulportal Design System (2026/27)
+   Modern, responsive, touch-optimiert für iPad & Smartphones
+   ========================================================================== */
+
+:root {
+  /* Basis-Farben */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --border-color: #e2e8f0;
+  
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  /* Fach-Themen & Akzente */
+  --theme-mathe: #2563eb;         /* Blau */
+  --theme-mathe-light: #eff6ff;
+  --theme-mathe-dark: #1d4ed8;
+
+  --theme-oberstufe: #7c3aed;     /* Lila/Indigo */
+  --theme-oberstufe-light: #f5f3ff;
+  --theme-oberstufe-dark: #6d28d9;
+
+  --theme-diff: #0d9488;          /* Teal/Grün */
+  --theme-diff-light: #f0fdfa;
+  --theme-diff-dark: #0f766e;
+
+  --theme-unterstufe: #ea580c;    /* Orange/Amber */
+  --theme-unterstufe-light: #fff7ed;
+  --theme-unterstufe-dark: #c2410c;
+
+  /* Statusfarben */
+  --status-success: #10b981;
+  --status-success-light: #ecfdf5;
+  --status-warning: #f59e0b;
+  --status-warning-light: #fef3c7;
+
+  /* Dimensionen & Schatten */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+  padding: 0 1rem 3.5rem 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* Header & Navigation Bar */
+.portal-header {
+  padding: 2.5rem 0 1.75rem 0;
+  text-align: center;
+}
+
+.portal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-back-link:hover {
+  color: var(--theme-mathe);
+  border-color: var(--theme-mathe);
+  transform: translateX(-2px);
+}
+
+/* Badge Pills */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+.badge-mathe {
+  background: var(--theme-mathe-light);
+  color: var(--theme-mathe);
+}
+
+.badge-oberstufe {
+  background: var(--theme-oberstufe-light);
+  color: var(--theme-oberstufe);
+}
+
+.badge-diff {
+  background: var(--theme-diff-light);
+  color: var(--theme-diff);
+}
+
+.badge-unterstufe {
+  background: var(--theme-unterstufe-light);
+  color: var(--theme-unterstufe);
+}
+
+.timestamp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.85rem;
+  padding: 5px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--status-success);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Headings */
+h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 2.5rem 0 1.25rem 0;
+  color: var(--text-main);
+}
+
+/* Dashboard Cards Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.class-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.class-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.class-card.theme-mathe:hover {
+  border-color: var(--theme-mathe);
+}
+
+.class-card.theme-oberstufe:hover {
+  border-color: var(--theme-oberstufe);
+}
+
+.class-card.theme-diff:hover {
+  border-color: var(--theme-diff);
+}
+
+.class-card.theme-unterstufe:hover {
+  border-color: var(--theme-unterstufe);
+}
+
+.class-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.class-card-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.class-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+}
+
+.class-card-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.class-card-topic {
+  background: var(--bg-main);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.class-card-topic strong {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.btn-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.7rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-mathe {
+  background: var(--theme-mathe);
+}
+.btn-mathe:hover {
+  background: var(--theme-mathe-dark);
+}
+
+.btn-oberstufe {
+  background: var(--theme-oberstufe);
+}
+.btn-oberstufe:hover {
+  background: var(--theme-oberstufe-dark);
+}
+
+.btn-diff {
+  background: var(--theme-diff);
+}
+.btn-diff:hover {
+  background: var(--theme-diff-dark);
+}
+
+.btn-unterstufe {
+  background: var(--theme-unterstufe);
+}
+.btn-unterstufe:hover {
+  background: var(--theme-unterstufe-dark);
+}
+
+/* Alert Boxes & Infocards */
+.alert-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.alert-content h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.alert-content p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* iPad Quick Guide Box */
+.ipad-guide {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin: 3rem 0 2rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.ipad-guide-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.step-item {
+  background-color: var(--bg-main);
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.step-number {
+  background: var(--theme-mathe);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.step-text strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 3rem;
+}
+
+footer strong {
+  color: var(--text-main);
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+  .alert-card {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,35 @@
+﻿# Private Arbeitsdateien und Office-Dokumente
+*.docx
+*.xlsx
+*.pptx
+*.doc
+*.xls
+*.ppt
+*.pages
+*.key
+*.numbers
+
+# Klassenarbeiten, Klausuren und interne Lösungen
+*[kK]lausur*
+*[kK]lassenarbeit*
+*[tT]est*
+*[aA]rbeit*
+*[lL]oesung*
+*[lL]ösung*
+*[nN]oten*
+*[sS]chueler*
+*[sS]chüler*
+*[eE]ntwurf*
+*[vV]erlaufsplan*
+
+# Temporäre System-Dateien
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+~$*
+
+# Lokale IDE / Editor Settings
+.vscode/
+.idea/

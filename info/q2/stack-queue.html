@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Lineare Datenstrukturen: Stack & Queue | Informatik Q2</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #f5f3ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    /* Portal Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-oberstufe { background: var(--primary-light); color: var(--primary); }
+    .badge-queue { background: var(--accent-light); color: var(--accent); }
+    .badge-stack { background: #fae8ff; color: #a21caf; }
+    .badge-sol { background: var(--success-light); color: var(--success); }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      line-height: 1.5;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    /* Section Headings */
+    .section-heading {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 2.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-heading span.icon {
+      font-size: 1.4rem;
+    }
+
+    /* Concept Grid */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .concept-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .concept-card h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-card p {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    /* Comparison Grid (Queue vs Stack) */
+    .ds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .ds-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    }
+
+    .ds-card.queue { border-top: 5px solid var(--accent); }
+    .ds-card.stack { border-top: 5px solid var(--primary); }
+
+    .ds-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .method-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.85rem;
+      font-size: 0.88rem;
+    }
+
+    .method-table th, .method-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .method-table th {
+      background: var(--bg);
+      font-weight: 700;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Task Box */
+    .task-box {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      gap: 12px;
+    }
+
+    .task-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .step-list {
+      margin-left: 1.35rem;
+      font-size: 0.94rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.85rem;
+      color: #334155;
+    }
+
+    .step-list li { margin-bottom: 6px; }
+
+    /* Code Highlighting */
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    code {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
+
+    pre {
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1.5px solid #e2e8f0;
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0.75rem 0 1.25rem 0;
+      line-height: 1.6;
+    }
+
+    pre code {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    .kwd { color: #7c3aed; font-weight: 700; }  /* public, void, if, while, return, new */
+    .typ { color: #0284c7; font-weight: 600; }  /* Patient, Queue, Stack, String, int */
+    .com { color: #64748b; font-style: italic; } /* Kommentare */
+    .str { color: #059669; }                    /* Strings */
+
+    /* Collapsible Solution Box (Details/Summary) */
+    .solution-details {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: var(--radius-md);
+      margin-top: 1rem;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .solution-details[open] {
+      border-color: #22c55e;
+      box-shadow: 0 4px 14px rgba(34, 197, 94, 0.1);
+    }
+
+    .solution-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.15rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #15803d;
+      user-select: none;
+      background: #f0fdf4;
+      transition: background 0.2s ease;
+    }
+
+    .solution-summary:hover {
+      background: #dcfce7;
+    }
+
+    .solution-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-chevron {
+      font-size: 0.85rem;
+      transition: transform 0.2s ease;
+      color: #16a34a;
+    }
+
+    .solution-details[open] .summary-chevron {
+      transform: rotate(180deg);
+    }
+
+    .solution-content {
+      padding: 1.15rem;
+      border-top: 1px solid #bbf7d0;
+      background: #ffffff;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    .solution-content pre {
+      border-left-color: var(--success);
+      background: #fafafa;
+    }
+
+    /* Scenario Callout */
+    .scenario-box {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-left: 5px solid #3b82f6;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .scenario-box h3 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #1e40af;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scenario-box p {
+      font-size: 0.93rem;
+      color: #1e3a8a;
+      line-height: 1.55;
+    }
+
+    /* Trace Table Visual */
+    .trace-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin: 0.75rem 0;
+    }
+
+    .trace-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.92rem;
+    }
+
+    .trace-item:last-child { border-bottom: none; }
+
+    .trace-step {
+      font-weight: 700;
+      min-width: 70px;
+      color: var(--primary);
+    }
+
+    /* ==========================================================================
+       Interaktiver Selbsttest (Quiz Engine)
+       ========================================================================== */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.75rem 0 2.5rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .quiz-question-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt-btn:disabled {
+      cursor: default;
+    }
+
+    .quiz-opt-btn .opt-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+    }
+
+    .quiz-opt-btn.correct .opt-badge {
+      background: #10b981;
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-opt-btn.wrong .opt-badge {
+      background: #ef4444;
+      color: white;
+    }
+
+    .quiz-feedback {
+      padding: 1.15rem 1.35rem;
+      border-radius: var(--radius-md);
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .quiz-feedback.is-correct {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .quiz-feedback.is-wrong {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-quiz-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-quiz-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+    }
+
+    .quiz-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem 0;
+    }
+
+    .quiz-preview-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .quiz-preview-card h4 {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .quiz-preview-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .diag-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .diag-card-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .diag-card-score {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    /* Inhaltsverzeichnis Quick Navigation */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 1rem 0 1.5rem 0;
+      padding: 10px 14px;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .quick-nav a {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      transition: all 0.2s ease;
+    }
+
+    .quick-nav a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q2-Übersicht
+      </a>
+      <span class="badge-pill badge-oberstufe">Q2 • Wiederholungsmodul 01</span>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-oberstufe">Interaktives Praxismodul</div>
+      <h1>Lineare Datenstrukturen: Stack & Queue</h1>
+      <p class="subtitle">
+        Java-Grundlagen, FIFO vs. LIFO, BlueJ-Hands-on, das Notaufnahme-Praxisprojekt und der Abitur-Algorithmus zur Traversierung mit Hilfs-Queue – inklusive aller aufklappbaren Musterlösungen.
+      </p>
+      <div class="timestamp-pill">
+        <span>🟢</span> Stand: Schuljahr 2026/27 • Abiturschwerpunkt
+      </div>
+    </header>
+
+    <!-- Quick Navigation -->
+    <nav class="quick-nav">
+      <strong style="font-size:0.85rem; display:flex; align-items:center; margin-right:4px;">Direktsprung:</strong>
+      <a href="#stufe0">Stufe 0: Basics</a>
+      <a href="#stufe1">Stufe 1: Warm-Up</a>
+      <a href="#stufe2">Stufe 2: Spickzettel</a>
+      <a href="#aufgabe1">Aufgabe 1: Trace-Tabelle</a>
+      <a href="#aufgabe2">Aufgabe 2: Queue</a>
+      <a href="#aufgabe3">Aufgabe 3: Stack</a>
+      <a href="#aufgabe4">Aufgabe 4: Hilfs-Queue</a>
+      <a href="#aufgabe5">Aufgabe 5: Triage</a>
+      <a href="#selbsttest" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">⚡ Selbsttest (10 Fragen)</a>
+    </nav>
+
+    <!-- Praxis-Szenario Box -->
+    <div class="scenario-box">
+      <h3>🏥 Das Praxis-Szenario: Die Notaufnahme im Klinikum</h3>
+      <p>
+        In einer Notaufnahme treffen zwei völlig unterschiedliche Arten von Patienten ein:
+        <br>
+        <strong>1. Reguläre Patienten (Wartezimmer):</strong> Wer zuerst kommt, wird zuerst aufgerufen. Das entspricht exakt einer <strong>Queue (Warteschlange - FIFO)</strong>.
+        <br>
+        <strong>2. Akute Notfälle (Rettungswagen):</strong> Notfälle können nicht warten. Der neueste, kritischste Notfall muss sofort behandelt werden. Das entspricht einem <strong>Stack (Stapel - LIFO)</strong>.
+      </p>
+    </div>
+
+    <!-- =====================================================================
+         STUFE 0: DAS JAVA-GEDÄCHTNIS AUFFRISCHEN
+         ===================================================================== -->
+    <h2 class="section-heading" id="stufe0">
+      <span class="icon">🧠</span> Stufe 0: Das Java-Gedächtnis auffrischen
+    </h2>
+    <p style="margin-bottom: 1rem; color: var(--text-muted);">
+      Vier fundamentale Konzepte, die im Abitur und bei der Klausurbearbeitung blind sitzen müssen:
+    </p>
+
+    <div class="concept-grid">
+      <!-- 1. Konstruktor -->
+      <div class="concept-card">
+        <h4>1. Konstruktor & <code>new</code></h4>
+        <p>
+          Der Konstruktor heißt <strong>exakt wie die Klasse</strong> (z. B. <code>public Patient(...)</code>).
+          Er erzeugt mit <code>new</code> ein echtes Objekt aus dem Bauplan und initialisiert die Attribute. Er besitzt <em>niemals</em> einen Rückgabetyp (auch kein <code>void</code>).
+        </p>
+      </div>
+
+      <!-- 2. void vs return -->
+      <div class="concept-card">
+        <h4>2. <code>void</code> vs. Rückgabewert</h4>
+        <p>
+          • <code>void tuEtwas()</code>: Führt eine <strong>Aktion</strong> aus (z. B. <code>drucken()</code>, <code>enqueue()</code>) und liefert keine Antwort.<br>
+          • <code>int gibWert()</code>: Liefert eine <strong>Antwort</strong> und <em>muss</em> mit <code>return ...;</code> enden (z. B. <code>isEmpty()</code>).
+        </p>
+      </div>
+
+      <!-- 3. Punktoperator -->
+      <div class="concept-card">
+        <h4>3. Der Punktoperator <code>.</code></h4>
+        <p>
+          Mit dem Punkt befehlen wir einem konkreten Objekt etwas:<br>
+          <code>patient.drucken();</code> ➔ <em>„Hey Patient, drucke deine Daten!“</em><br>
+          <code>wartezimmer.dequeue();</code> ➔ <em>„Wartezimmer, entferne den vordersten Patienten!“</em>
+        </p>
+      </div>
+
+      <!-- 4. Type-Casting -->
+      <div class="concept-card">
+        <h4>4. Type-Casting <code>(Patient)</code></h4>
+        <p>
+          Weil die Methoden <code>front()</code> und <code>peek()</code> allgemein den Typ <code>Object</code> liefern, müssen wir Java in runden Klammern mitteilen, was wirklich darin steckt:<br>
+          <code>Patient p = (Patient) wartezimmer.front();</code>
+        </p>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         STUFE 1: WARM-UP IN BLUEJ (OHNE CODE)
+         ===================================================================== -->
+    <h2 class="section-heading" id="stufe1">
+      <span class="icon">🖱️</span> Stufe 1: Warm-Up in BlueJ (Ganz ohne Tippen)
+    </h2>
+
+    <div class="task-box">
+      <div class="task-header">
+        <span>Aufgabe 0: Objekte auf der Object-Bench erzeugen & testen</span>
+        <span class="task-badge">Warm-Up</span>
+      </div>
+      <p>
+        Bevor wir programmieren, vergegenwärtigen wir uns die Interaktion der Objekte im BlueJ-Projekt <code>BlueJ_Notaufnahme</code>:
+      </p>
+      <ol class="step-list">
+        <li>Öffne das Projekt <code>BlueJ_Notaufnahme</code> in BlueJ.</li>
+        <li>Klicke mit der <strong>rechten Maustaste</strong> auf die rote Klasse <code>Patient</code> und wähle <code>new Patient(...)</code>.</li>
+        <li>Gib Testwerte ein, z. B.: <code>"Max Mustermann"</code>, <code>17</code>, <code>"Armbruch"</code>, <code>5</code>.</li>
+        <li>Klicke mit der rechten Maustaste auf das neue rote Objekt <code>patient1</code> auf der unteren Leiste und rufe <code>drucken()</code> auf. Beobachte die Ausgabe im Terminal!</li>
+      </ol>
+      <div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.88rem; color:#475569;">
+        💡 <strong>Erkenntnis:</strong> Die Klasse <code>Patient</code> ist ein reiner Datenträger. Sie speichert Informationen und kann sich selbst auf der Konsole ausgeben.
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         STUFE 2: METHODEN-SPICKZETTEL (QUEUE VS. STACK)
+         ===================================================================== -->
+    <h2 class="section-heading" id="stufe2">
+      <span class="icon">📌</span> Stufe 2: Methoden-Spickzettel (Queue vs. Stack)
+    </h2>
+
+    <div class="ds-grid">
+      <!-- QUEUE -->
+      <div class="ds-card queue">
+        <div class="ds-title">
+          <span>Queue (Warteschlange)</span>
+          <span class="badge-pill badge-queue" style="margin-bottom:0;">FIFO-Prinzip</span>
+        </div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          <strong>First In, First Out:</strong> Wer zuerst kommt, wird zuerst bedient (z. B. Wartezimmer, Drucker-Warteschlange).
+        </p>
+        <table class="method-table">
+          <thead>
+            <tr><th>Methode</th><th>Wirkung & Erklärung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>enqueue(Object o)</code></td><td>Fügt <code>o</code> <strong>hinten</strong> an die Schlange an.</td></tr>
+            <tr><td><code>dequeue()</code></td><td>Entfernt das <strong>vorderste</strong> Objekt.</td></tr>
+            <tr><td><code>front(): Object</code></td><td>Liefert das <strong>vorderste</strong> Objekt (ohne es zu löschen).</td></tr>
+            <tr><td><code>isEmpty(): boolean</code></td><td>Gibt <code>true</code> zurück, falls die Schlange leer ist.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- STACK -->
+      <div class="ds-card stack">
+        <div class="ds-title">
+          <span>Stack (Stapel)</span>
+          <span class="badge-pill badge-stack" style="margin-bottom:0;">LIFO-Prinzip</span>
+        </div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          <strong>Last In, First Out:</strong> Das zuletzt abgelegte Element liegt oben (z. B. Notfallstapel, Rückgängig-Funktion).
+        </p>
+        <table class="method-table">
+          <thead>
+            <tr><th>Methode</th><th>Wirkung & Erklärung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>push(Object o)</code></td><td>Legt <code>o</code> <strong>oben</strong> auf den Stapel.</td></tr>
+            <tr><td><code>pop()</code></td><td>Entfernt das <strong>oberste</strong> Objekt.</td></tr>
+            <tr><td><code>peek(): Object</code></td><td>Liefert das <strong>oberste</strong> Objekt (ohne es zu löschen).</td></tr>
+            <tr><td><code>isEmpty(): boolean</code></td><td>Gibt <code>true</code> zurück, falls der Stapel leer ist.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- =====================================================================
+         AUFGABE 1: TROCKENÜBUNG (TRACE-TABELLE)
+         ===================================================================== -->
+    <div class="task-box" id="aufgabe1">
+      <div class="task-header">
+        <span>Aufgabe 1: Trockenübung (Trace-Tabelle & Aufrufreihenfolge)</span>
+        <span class="task-badge">Verständnis</span>
+      </div>
+      <p>Folgende Aktionen finden nacheinander in der Notaufnahme statt:</p>
+      
+      <div class="trace-card">
+        <div class="trace-item">
+          <span class="trace-step">Schritt 1:</span>
+          <span>Patient <strong>Anna (A)</strong> und Patient <strong>Bernd (B)</strong> betreten das Wartezimmer (<code>Queue</code>).</span>
+        </div>
+        <div class="trace-item">
+          <span class="trace-step">Schritt 2:</span>
+          <span>Rettungswagen liefert Notfall <strong>Xaver (X)</strong> ein (<code>Stack</code>).</span>
+        </div>
+        <div class="trace-item">
+          <span class="trace-step">Schritt 3:</span>
+          <span>Patientin <strong>Clara (C)</strong> betritt das Wartezimmer (<code>Queue</code>).</span>
+        </div>
+        <div class="trace-item">
+          <span class="trace-step">Schritt 4:</span>
+          <span>Rettungswagen liefert Notfall <strong>Yvonne (Y)</strong> ein (<code>Stack</code>).</span>
+        </div>
+      </div>
+
+      <p style="margin-top: 0.85rem;">
+        <strong>Frage:</strong> In welcher Reihenfolge werden die Patienten behandelt, wenn das Ärzteteam nacheinander <strong>zuerst 2 Notfälle</strong> und direkt danach <strong>2 normale Patienten</strong> behandelt?
+      </p>
+
+      <!-- AUFKLAPPBARE LÖSUNG -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung & Schritt-für-Schritt-Erklärung anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p><strong>1. Zustand der beiden Datenstrukturen vor der Behandlung:</strong></p>
+          <ul style="margin-left: 1.25rem; margin-bottom: 0.75rem;">
+            <li><code>Queue (Wartezimmer)</code>: [Vorne] <strong>Anna</strong> ➔ <strong>Bernd</strong> ➔ <strong>Clara</strong> [Hinten]</li>
+            <li><code>Stack (Notfallstapel)</code>: [Oben] <strong>Yvonne</strong> ➔ <strong>Xaver</strong> [Unten]</li>
+          </ul>
+
+          <p><strong>2. Reihenfolge der Behandlung:</strong></p>
+          <ol style="margin-left: 1.5rem; font-weight: 700; color: #15803d; margin-bottom: 0.75rem;">
+            <li>1. Yvonne (LIFO: Yvonne kam zuletzt auf den Notfallstapel und liegt ganz oben!)</li>
+            <li>2. Xaver (LIFO: Nach dem Entfernen von Yvonne liegt Xaver oben auf dem Notfallstapel)</li>
+            <li>3. Anna (FIFO: Anna betrat als Erste das Wartezimmer und steht ganz vorne)</li>
+            <li>4. Bernd (FIFO: Bernd saß hinter Anna und rückt an die erste Position)</li>
+          </ol>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            <em>Hinweis: Clara bleibt vorerst im Wartezimmer sitzen, da nur zwei reguläre Patienten aufgerufen wurden.</em>
+          </p>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         STUFE 3: GEFÜHRTES PROGRAMMIEREN IN NOTAUFNAHME.JAVA
+         ===================================================================== -->
+    <h2 class="section-heading" id="stufe3">
+      <span class="icon">💻</span> Stufe 3: Geführte Programmierung in Notaufnahme.java
+    </h2>
+
+    <!-- AUFGABE 2: QUEUE -->
+    <div class="task-box" id="aufgabe2">
+      <div class="task-header">
+        <span>Aufgabe 2: Warteschlange abarbeiten (Queue - FIFO)</span>
+        <span class="task-badge">Programmierung</span>
+      </div>
+      <p>
+        Öffne in BlueJ den Quelltext der Klasse <code>Notaufnahme</code>. Implementiere die Methode <code>naechstenNormalenPatientenBehandeln()</code> anhand der folgenden 4 Schritte:
+      </p>
+      
+      <ol class="step-list">
+        <li><strong>Prüfen:</strong> Sitzt überhaupt jemand im Wartezimmer? (Nutze <code>!wartezimmer.isEmpty()</code>).</li>
+        <li><strong>Holen & Casten:</strong> Hole den vordersten Patienten mit <code>front()</code>, caste ihn auf <code>(Patient)</code> und rufe <code>p.drucken()</code> auf.</li>
+        <li><strong>Entfernen:</strong> Nimm den Patienten mit <code>wartezimmer.dequeue()</code> aus dem Wartezimmer heraus.</li>
+        <li><strong>Else-Zweig:</strong> Falls das Wartezimmer leer war, gib eine Meldung auf der Konsole aus.</li>
+      </ol>
+
+      <pre><code><span class="kwd">public void</span> naechstenNormalenPatientenBehandeln() {
+    <span class="com">// 1. Prüfe, ob das Wartezimmer NICHT leer ist:</span>
+    <span class="kwd">if</span> (!wartezimmer.isEmpty()) {
+        <span class="com">// 2. Vordersten Patienten holen, casten und drucken() aufrufen:</span>
+        <span class="typ">Patient</span> p = (<span class="typ">Patient</span>) wartezimmer.front();
+        ...
+        <span class="com">// 3. Patienten aus dem Wartezimmer entlassen (vorne entfernen):</span>
+        wartezimmer.dequeue();
+    } <span class="kwd">else</span> {
+        <span class="com">// 4. Meldung ausgeben, dass niemand wartet:</span>
+        System.out.println(<span class="str">"Das Wartezimmer ist leer!"</span>);
+    }
+}</code></pre>
+
+      <!-- AUFKLAPPBARE LÖSUNG -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 2 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <pre><code><span class="kwd">public void</span> naechstenNormalenPatientenBehandeln()
+{
+    <span class="kwd">if</span> (!wartezimmer.isEmpty())
+    {
+        <span class="typ">Patient</span> p = (<span class="typ">Patient</span>) wartezimmer.front();
+        System.out.print(<span class="str">"[BEHANDLUNG REGULÄR] "</span>);
+        p.drucken();
+        wartezimmer.dequeue();
+    }
+    <span class="kwd">else</span>
+    {
+        System.out.println(<span class="str">"Das Wartezimmer ist leer!"</span>);
+    }
+}</code></pre>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 3: STACK -->
+    <div class="task-box" id="aufgabe3">
+      <div class="task-header">
+        <span>Aufgabe 3: Notfallstapel programmieren (Stack - LIFO)</span>
+        <span class="task-badge">Programmierung</span>
+      </div>
+      <p>
+        Programmiere nun die beiden Notfall-Methoden in <code>Notaufnahme.java</code>:
+      </p>
+      <ol class="step-list">
+        <li>
+          <code>notfallEinliefern(name, alter, beschwerde, schmerzlevel)</code>:<br>
+          Erzeuge mit <code>new Patient(...)</code> ein neues Patientenobjekt und lege es mit <code>notfallStapel.push(p)</code> oben auf den Notfallstapel.
+        </li>
+        <li>
+          <code>naechstenNotfallBehandeln()</code>:<br>
+          Prüfe mit <code>!notfallStapel.isEmpty()</code>. Falls ein Notfall da ist: mit <code>peek()</code> ansehen, auf <code>(Patient)</code> casten, <code>drucken()</code> aufrufen und mit <code>pop()</code> oben vom Stapel entfernen.
+        </li>
+      </ol>
+
+      <!-- AUFKLAPPBARE LÖSUNG -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 3 anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <pre><code><span class="kwd">public void</span> notfallEinliefern(<span class="typ">String</span> pName, <span class="kwd">int</span> pAlter,
+                              <span class="typ">String</span> pBeschwerde, <span class="kwd">int</span> pSchmerzlevel)
+{
+    <span class="typ">Patient</span> p = <span class="kwd">new</span> <span class="typ">Patient</span>(pName, pAlter, pBeschwerde, pSchmerzlevel);
+    notfallStapel.push(p);
+    System.out.println(<span class="str">"🚨 NOTFALL EINGELIEFERT: "</span> + pName 
+                       + <span class="str">" (Schmerzlevel "</span> + pSchmerzlevel + <span class="str">")"</span>);
+}
+
+<span class="kwd">public void</span> naechstenNotfallBehandeln()
+{
+    <span class="kwd">if</span> (!notfallStapel.isEmpty())
+    {
+        <span class="typ">Patient</span> p = (<span class="typ">Patient</span>) notfallStapel.peek();
+        System.out.print(<span class="str">"🚨 [BEHANDLUNG NOTFALL] "</span>);
+        p.drucken();
+        notfallStapel.pop();
+    }
+    <span class="kwd">else</span>
+    {
+        System.out.println(<span class="str">"Keine akuten Notfälle vorhanden."</span>);
+    }
+}</code></pre>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         STUFE 4: ALGORITHMEN-CHALLENGE (ABITUR-KLASSIKER)
+         ===================================================================== -->
+    <h2 class="section-heading" id="stufe4">
+      <span class="icon">⭐</span> Stufe 4: Algorithmen-Challenge (Abitur-Muster)
+    </h2>
+
+    <!-- AUFGABE 4: HILFS-QUEUE -->
+    <div class="task-box" id="aufgabe4">
+      <div class="task-header">
+        <span>Aufgabe 4: Traversieren & Zählen mit Hilfs-Queue</span>
+        <span class="task-badge">Abitur-Muster</span>
+      </div>
+      <p>
+        <strong>Das Problem:</strong> Wir wollen alle Patienten im Wartezimmer auflisten (oder zählen), <em>ohne</em> dass das Wartezimmer danach leer ist! Weil eine Queue keinen Index-Zugriff (wie ein Array) erlaubt, müssen wir die Elemente über eine Hilfs-Queue umschaufeln.
+      </p>
+
+      <div style="background:#f8fafc; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 16px; margin: 0.85rem 0;">
+        <strong>Der 2-Schritte-Algorithmus:</strong>
+        <ol style="margin-left: 1.25rem; margin-top: 4px; font-size: 0.92rem;">
+          <li>Erzeuge eine temporäre Hilfs-Queue: <code>Queue hilfsQueue = new Queue();</code></li>
+          <li><strong>Schleife 1:</strong> Solange das Original nicht leer ist: vorderstes Element holen, verarbeiten (ausgeben/zählen), in <code>hilfsQueue.enqueue(...)</code> sichern und aus der Original-Queue per <code>dequeue()</code> entfernen.</li>
+          <li><strong>Schleife 2:</strong> Alle Elemente von <code>hilfsQueue</code> wieder zurück in die Original-Queue schaufeln!</li>
+        </ol>
+      </div>
+
+      <p style="margin-top: 0.75rem;">
+        <strong>Arbeitsauftrag:</strong> Implementiere die Methoden <code>wartezimmerAusgeben()</code> und <code>anzahlWartende(): int</code>.
+      </p>
+
+      <!-- AUFKLAPPBARE LÖSUNG -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 4 (Ausgeben & Zählen) anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <p><strong>1. Quelltext für <code>wartezimmerAusgeben()</code>:</strong></p>
+          <pre><code><span class="kwd">public void</span> wartezimmerAusgeben()
+{
+    <span class="typ">Queue</span> hilfsQueue = <span class="kwd">new</span> <span class="typ">Queue</span>();
+    System.out.println(<span class="str">"=== PATIENTEN IM WARTEZIMMER ===");
+
+    <span class="com">// 1. Ausgeben und auf Hilfs-Queue sichern</span>
+    <span class="kwd">while</span> (!wartezimmer.isEmpty())
+    {
+        <span class="typ">Patient</span> p = (<span class="typ">Patient</span>) wartezimmer.front();
+        p.drucken();
+        hilfsQueue.enqueue(p);
+        wartezimmer.dequeue();
+    }
+
+    <span class="com">// 2. Zurück in die Original-Queue schaufeln</span>
+    <span class="kwd">while</span> (!hilfsQueue.isEmpty())
+    {
+        wartezimmer.enqueue(hilfsQueue.front());
+        hilfsQueue.dequeue();
+    }
+    System.out.println(<span class="str">"================================"</span>);
+}</code></pre>
+
+          <p style="margin-top: 1rem;"><strong>2. Quelltext für <code>anzahlWartende(): int</code>:</strong></p>
+          <pre><code><span class="kwd">public int</span> anzahlWartende()
+{
+    <span class="typ">Queue</span> hilfsQueue = <span class="kwd">new</span> <span class="typ">Queue</span>();
+    <span class="kwd">int</span> anzahl = 0;
+
+    <span class="com">// 1. Durchzählen und umschaufeln</span>
+    <span class="kwd">while</span> (!wartezimmer.isEmpty())
+    {
+        anzahl++;
+        hilfsQueue.enqueue(wartezimmer.front());
+        wartezimmer.dequeue();
+    }
+
+    <span class="com">// 2. Zurück in die Original-Queue schaufeln</span>
+    <span class="kwd">while</span> (!hilfsQueue.isEmpty())
+    {
+        wartezimmer.enqueue(hilfsQueue.front());
+        hilfsQueue.dequeue();
+    }
+
+    <span class="kwd">return</span> anzahl;
+}</code></pre>
+        </div>
+      </details>
+    </div>
+
+    <!-- AUFGABE 5: TRIAGE -->
+    <div class="task-box" id="aufgabe5">
+      <div class="task-header">
+        <span>Aufgabe 5 (Zusatz): Triage-Prioritätssteuerung</span>
+        <span class="task-badge" style="background:#059669;">Experte</span>
+      </div>
+      <p>
+        In der Notfallmedizin gilt: <strong>Akute Notfälle haben immer absolute Priorität vor dem normalen Wartezimmer!</strong>
+      </p>
+      <p>
+        Implementiere die Methode <code>triageBehandlung()</code>:
+        <br>
+        • Falls mindestens ein Notfall auf dem <code>notfallStapel</code> liegt ➔ Behandle den nächsten Notfall.
+        <br>
+        • Sonst, falls Patienten im <code>wartezimmer</code> sitzen ➔ Behandle den nächsten normalen Patienten.
+        <br>
+        • Falls beide Datenstrukturen leer sind ➔ Kurze Entwarnungs-Meldung auf der Konsole ausgeben.
+      </p>
+
+      <!-- AUFKLAPPBARE LÖSUNG -->
+      <details class="solution-details">
+        <summary class="solution-summary">
+          <span class="summary-left">
+            <span>💡</span>
+            <span>Musterlösung für Aufgabe 5 (Triage-Steuerung) anzeigen</span>
+          </span>
+          <span class="summary-chevron">▼</span>
+        </summary>
+        <div class="solution-content">
+          <pre><code><span class="kwd">public void</span> triageBehandlung()
+{
+    <span class="kwd">if</span> (!notfallStapel.isEmpty())
+    {
+        naechstenNotfallBehandeln();
+    }
+    <span class="kwd">else if</span> (!wartezimmer.isEmpty())
+    {
+        naechstenNormalenPatientenBehandeln();
+    }
+    <span class="kwd">else</span>
+    {
+        System.out.println(<span class="str">"Weder Notfälle noch normale Patienten vorhanden. Ruhe im Klinikum!"</span>);
+    }
+}</code></pre>
+        </div>
+      </details>
+    </div>
+
+
+    <!-- =====================================================================
+         INTERAKTIVER SELBSTTEST (10 ZUFALLSFRAGEN AUS POOL)
+         ===================================================================== -->
+    <h2 class="section-heading" id="selbsttest">
+      <span class="icon">⚡</span> Interaktiver Selbst-Check: Queue & Stack
+    </h2>
+
+    <div class="quiz-card">
+
+      <!-- 1. START-ANSICHT -->
+      <div id="quiz-start-view">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.75rem;">
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Selbstdiagnose Q2</span>
+          <span class="timestamp-pill" style="margin-top:0;">22 Fragen im Pool</span>
+        </div>
+        <h3 style="font-size:1.45rem; font-weight:800; color:var(--text); margin-bottom:0.5rem;">
+          🎯 Bist du fit für Klausur & Abitur?
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; max-width:820px;">
+          Teste dein Wissen zu <strong>Queue (FIFO)</strong>, <strong>Stack (LIFO)</strong>, Typ-Casting, Trace-Tabellen und dem Umschaufel-Algorithmus mit Hilfs-Queue. Bei jedem Durchlauf zieht das System <strong>10 zufällige Fragen</strong> aus unserem Fragenpool. Nach jeder Frage erhältst du sofort eine ausführliche didaktische Erklärung.
+        </p>
+
+        <div class="quiz-preview-grid">
+          <div class="quiz-preview-card">
+            <h4>🚶 Queue (FIFO)</h4>
+            <p>Methoden, First-In-First-Out, Front vs. Dequeue.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>📚 Stack (LIFO)</h4>
+            <p>Push, Pop, Peek und reale Software-Beispiele.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>🧬 Java-OOP & Casting</h4>
+            <p>Typ-Casting (Patient), Konstruktoren, void vs. return.</p>
+          </div>
+          <div class="quiz-preview-card">
+            <h4>⭐ Algorithmen & Trace</h4>
+            <p>Hilfs-Queue-Traversierung, Zählen und Triage.</p>
+          </div>
+        </div>
+
+        <button class="btn-quiz-primary" onclick="startQuiz()">
+          <span>🚀</span> Selbsttest jetzt starten (10 Fragen) →
+        </button>
+      </div>
+
+      <!-- 2. SPIEL-ANSICHT (FRAGEN) -->
+      <div id="quiz-play-view" style="display: none;">
+        <div class="quiz-progress-wrap">
+          <span id="quiz-progress-text">Frage 1 von 10</span>
+          <span id="quiz-score-live" style="color:var(--primary); font-weight:800;">Punkte: 0</span>
+        </div>
+        <div class="quiz-bar-bg">
+          <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+        </div>
+
+        <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+        <div id="quiz-question-text" class="quiz-question-title">Frage wird geladen...</div>
+
+        <div id="quiz-options-box" class="quiz-options">
+          <!-- 4 Optionen werden per JS generiert -->
+        </div>
+
+        <div id="quiz-feedback-box" class="quiz-feedback" style="display: none;">
+          <div id="quiz-feedback-title" style="font-weight: 800; font-size:1.02rem; margin-bottom: 0.35rem;"></div>
+          <div id="quiz-feedback-desc"></div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+          <button id="quiz-btn-next" class="btn-quiz-primary" style="display: none;" onclick="nextQuestion()">
+            Nächste Frage →
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. AUSWERTUNGS-ANSICHT -->
+      <div id="quiz-result-view" style="display: none;">
+        <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem;">
+          🎉 Deine Auswertung
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.92rem;">Hier ist dein persönliches Ergebnis für diesen Durchlauf:</p>
+
+        <div style="text-align: center; padding: 1.75rem 0; background: var(--bg); border-radius: var(--radius-md); margin: 1.25rem 0; border:1px solid var(--border);">
+          <div id="quiz-final-score" style="font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1;">0 / 10</div>
+          <div id="quiz-final-badge" style="font-size: 1.15rem; font-weight: 800; margin-top: 0.6rem;">Auswertung</div>
+        </div>
+
+        <h4 style="font-size: 1.05rem; font-weight: 800; margin-top: 1.5rem; color:var(--text);">Ergebnis nach Themenbereichen:</h4>
+        <div class="diag-grid" id="quiz-cat-breakdown">
+          <!-- Kategorien-Kacheln per JS -->
+        </div>
+
+        <div class="scenario-box" id="quiz-advice-box" style="margin-top: 1.5rem;">
+          <h3 id="quiz-advice-title">💡 Empfehlung für deine Abiturvorbereitung:</h3>
+          <p id="quiz-advice-text" style="margin-top:4px;">
+            Lerneffekt...
+          </p>
+        </div>
+
+        <div style="margin-top: 1.75rem; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="btn-quiz-primary" onclick="startQuiz()">
+            <span>🔄</span> Neuen Test mit 10 anderen Fragen starten
+          </button>
+          <a href="#stufe0" class="nav-back-link" style="padding: 12px 18px;">
+            ↑ Nach oben zum Spickzettel
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Qualifikationsphase 2 (Q2)</strong> • Schuljahr 2026/2027 • Zentralabitur Informatik</p>
+    </footer>
+
+  </div>
+
+  <!-- =========================================================================
+       QUIZ ENGINE & QUESTION POOL (22 FRAGEN)
+       ========================================================================= -->
+  <script>
+    const QUESTION_POOL = [
+      {
+        cat: "Queue (FIFO)",
+        q: "Welches fundamentale Arbeitsprinzip liegt der Datenstruktur <code>Queue</code> (Warteschlange) zugrunde?",
+        opts: [
+          "FIFO (First In, First Out) – Wer zuerst ankommt, wird zuerst bedient",
+          "LIFO (Last In, First Out) – Das Neueste wird zuerst verarbeitet",
+          "Random Access – Beliebiger Indexzugriff auf alle Positionen",
+          "Key-Value – Direkte Zuordnung über eindeutige Schlüssel"
+        ],
+        ans: 0,
+        exp: "Eine Queue arbeitet strikt nach dem FIFO-Prinzip: Elemente werden hinten angefügt (<code>enqueue</code>) und vorne entnommen (<code>dequeue</code>), genau wie im Wartezimmer."
+      },
+      {
+        cat: "Stack (LIFO)",
+        q: "Welches Prinzip beschreibt das Verhalten eines <code>Stack</code> (Stapels)?",
+        opts: [
+          "LIFO (Last In, First Out) – Das zuletzt abgelegte Element liegt oben",
+          "FIFO (First In, First Out) – Das älteste Element wird zuerst entfernt",
+          "Round-Robin – Zyklischer Wechsel zwischen allen Elementen",
+          "Priority Access – Größte Werte steigen automatisch nach oben"
+        ],
+        ans: 0,
+        exp: "Ein Stack arbeitet nach dem LIFO-Prinzip: Was zuletzt per <code>push()</code> oben draufgelegt wurde, wird mit <code>pop()</code> als Erstes wieder heruntergenommen."
+      },
+      {
+        cat: "Queue (FIFO)",
+        q: "Was bewirkt der Methodenaufruf <code>wartezimmer.front()</code>?",
+        opts: [
+          "Liefert das vorderste Objekt als Referenz zurück, lässt es aber in der Schlange.",
+          "Entfernt das vorderste Objekt endgültig aus der Schlange.",
+          "Fügt ein neues Objekt ganz vorne in die Schlange ein.",
+          "Löscht alle Elemente in der gesamten Schlange."
+        ],
+        ans: 0,
+        exp: "<code>front()</code> ist eine reine Inspektionsmethode: Es gibt das Objekt an der Spitze zurück, ohne die Schlange zu verändern. Zum Entfernen muss danach <code>dequeue()</code> aufgerufen werden."
+      },
+      {
+        cat: "Stack (LIFO)",
+        q: "Welche Methode entfernt das oberste Element von einem <code>Stack</code>?",
+        opts: [
+          "pop()",
+          "peek()",
+          "dequeue()",
+          "removeTop()"
+        ],
+        ans: 0,
+        exp: "<code>pop()</code> nimmt das oberste Element vom Stack herunter. <code>peek()</code> schaut sich das oberste Element dagegen nur an, ohne es zu entfernen."
+      },
+      {
+        cat: "Java-OOP & Casting",
+        q: "Warum ist beim Abruf <code>Patient p = (Patient) wartezimmer.front();</code> der Cast <code>(Patient)</code> erforderlich?",
+        opts: [
+          "Weil front() allgemein ein Object liefert und Java erst durch den Type-Cast weiß, dass es sich um einen Patienten handelt.",
+          "Weil der Patient sonst fälschlicherweise als int-Zahl interpretiert werden würde.",
+          "Um das Objekt im Arbeitsspeicher zu klonen.",
+          "Weil Java Klassen ohne Cast nach wenigen Sekunden automatisch löscht."
+        ],
+        ans: 0,
+        exp: "Methoden linearer Standard-Datenstrukturen liefern den Basistyp <code>Object</code>. Da <code>Object</code> patientenspezifische Methoden wie <code>drucken()</code> nicht kennt, muss per Typ-Casting <code>(Patient)</code> explizit gecastet werden."
+      },
+      {
+        cat: "Algorithmen & Hilfs-Queue",
+        q: "Warum kann eine <code>Queue</code> nicht mit einer klassischen Zählschleife <code>for(int i=0; i&lt;q.size(); i++) q.get(i);</code> durchlaufen werden?",
+        opts: [
+          "Weil eine Queue streng gekapselt ist und keinen wahlfreien Index-Zugriff wie get(i) anbietet.",
+          "Weil Queues in Java technisch auf maximal 10 Elemente beschränkt sind.",
+          "Weil for-Schleifen in Datenstrukturen verboten sind.",
+          "Weil man eine Queue nur von hinten nach vorne durchlaufen darf."
+        ],
+        ans: 0,
+        exp: "Der Sinn abstrakter Datentypen ist die bewusste Zugriffsbeschränkung: Es gibt keine Indizes wie bei Arrays. Zugriff ist ausschließlich auf das vorderste Element über <code>front()</code> gestattet."
+      },
+      {
+        cat: "Algorithmen & Hilfs-Queue",
+        q: "Wie gelingt es, alle Patienten einer Queue auszugeben, ohne dass die Queue am Ende leer ist?",
+        opts: [
+          "Man schaufelt jedes Element während der Ausgabe in eine temporäre Hilfs-Queue um und kopiert am Ende alles zurück.",
+          "Man ruft die native Methode q.printAll() auf.",
+          "Man erzeugt eine Kopie des Wartezimmers mit new Queue(wartezimmer).",
+          "Man liest front() in einer Endlosschleife aus, ohne jemals dequeue() aufzurufen."
+        ],
+        ans: 0,
+        exp: "Das klassische Abitur-Muster: In Schleife 1 wird mit <code>front()</code> ausgegeben, per <code>enqueue()</code> in <code>hilfsQueue</code> gesichert und mit <code>dequeue()</code> aus dem Original entfernt. In Schleife 2 wird alles aus der <code>hilfsQueue</code> wieder zurückkopiert."
+      },
+      {
+        cat: "Stack (LIFO)",
+        q: "Ein leerer Stack wird bedient: <code>push('A')</code>, <code>push('B')</code>, <code>pop()</code>, <code>push('C')</code>. Welches Element liefert das abschließende <code>peek()</code>?",
+        opts: [
+          "Element 'C'",
+          "Element 'B'",
+          "Element 'A'",
+          "null (Stack ist leer)"
+        ],
+        ans: 0,
+        exp: "Schrittfolge: 1. ['A'] ➔ 2. ['B', 'A'] ➔ 3. <code>pop()</code> entfernt 'B' ➔ ['A'] ➔ 4. <code>push('C')</code> legt 'C' oben ab ➔ ['C', 'A']. Oben liegt 'C'!"
+      },
+      {
+        cat: "Queue (FIFO)",
+        q: "Eine leere Queue wird bedient: <code>enqueue('A')</code>, <code>enqueue('B')</code>, <code>dequeue()</code>, <code>enqueue('C')</code>. Welches Element liefert <code>front()</code>?",
+        opts: [
+          "Element 'B'",
+          "Element 'A'",
+          "Element 'C'",
+          "null"
+        ],
+        ans: 0,
+        exp: "Schrittfolge: 1. ['A'] ➔ 2. ['A', 'B'] ➔ 3. <code>dequeue()</code> entfernt das vorderste Element 'A' ➔ ['B'] ➔ 4. <code>enqueue('C')</code> stellt 'C' hinten an ➔ ['B', 'C']. Vorne steht 'B'!"
+      },
+      {
+        cat: "Java-OOP & Casting",
+        q: "Welche Eigenschaft besitzt der Konstruktor einer Klasse in Java?",
+        opts: [
+          "Er heißt exakt wie die Klasse und hat KEINEN Rückgabetyp (nicht einmal void).",
+          "Er muss immer void als Rückgabetyp deklarieren.",
+          "Er muss immer als private deklariert sein.",
+          "Er darf grundsätzlich keine Parameter entgegennehmen."
+        ],
+        ans: 0,
+        exp: "Ein Konstruktor (z. B. <code>public Patient(...)</code>) erzeugt aus der Klasse ein konkretes Objekt und initialisiert Attribute. Er deklariert niemals einen Rückgabetyp."
+      },
+      {
+        cat: "Trace-Tabelle & Ablauf",
+        q: "Ereignisse: 1. Patient Anna (Queue), 2. Notfall Xaver (Stack), 3. Patient Bernd (Queue), 4. Notfall Yvonne (Stack). Wer wird aufgerufen, wenn zuerst 1 Notfall und danach 1 regulärer Patient behandelt wird?",
+        opts: [
+          "Zuerst Yvonne, danach Anna",
+          "Zuerst Xaver, danach Anna",
+          "Zuerst Yvonne, danach Bernd",
+          "Zuerst Anna, danach Yvonne"
+        ],
+        ans: 0,
+        exp: "Notfallstapel (LIFO): Yvonne kam nach Xaver und liegt ganz oben! Wartezimmer (FIFO): Anna kam vor Bernd und steht ganz vorne! Also: Yvonne, danach Anna."
+      },
+      {
+        cat: "Java-OOP & Casting",
+        q: "Was bedeutet die Bedingung <code>if (!wartezimmer.isEmpty())</code>?",
+        opts: [
+          "Führe den Block aus, wenn sich mindestens ein Patient im Wartezimmer befindet.",
+          "Führe den Block aus, wenn das Wartezimmer komplett leer ist.",
+          "Lösche alle Patienten aus dem Wartezimmer.",
+          "Warte solange, bis ein neuer Patient eintrifft."
+        ],
+        ans: 0,
+        exp: "<code>isEmpty()</code> liefert <code>true</code>, wenn die Struktur leer ist. Das <code>!</code> negiert dies: 'nicht leer', also sind noch Elemente vorhanden."
+      },
+      {
+        cat: "Algorithmen & Hilfs-Queue",
+        q: "Was geschieht in der Regel, wenn man <code>dequeue()</code> auf einer leeren Queue aufruft?",
+        opts: [
+          "Es kann zu einem schwerwiegenden Laufzeitfehler (z. B. NullPointerException) kommen.",
+          "Java erzeugt automatisch einen Dummy-Patienten.",
+          "Die Queue kehrt ihre Reihenfolge automatisch um.",
+          "Es wird automatisch 10 Sekunden gewartet."
+        ],
+        ans: 0,
+        exp: "Auf leeren Datenstrukturen darf niemals ungeprüft <code>front()</code>, <code>dequeue()</code>, <code>peek()</code> oder <code>pop()</code> aufgerufen werden. Man muss immer vorher <code>isEmpty()</code> prüfen!"
+      },
+      {
+        cat: "Trace-Tabelle & Ablauf",
+        q: "Wie muss die Prioritäts-Verzweigung der Triage in Notaufnahme.java aufgebaut sein?",
+        opts: [
+          "if (!notfallStapel.isEmpty()) { behandleNotfall(); } else if (!wartezimmer.isEmpty()) { behandleNormal(); }",
+          "if (!wartezimmer.isEmpty()) { behandleNormal(); } else { behandleNotfall(); }",
+          "while (notfallStapel.isEmpty()) { behandleNormal(); }",
+          "notfallStapel.enqueue(wartezimmer.pop());"
+        ],
+        ans: 0,
+        exp: "Notfälle haben höchste Dringlichkeit: Zuerst wird <code>notfallStapel.isEmpty()</code> geprüft. Nur wenn dort kein Notfall vorliegt (<code>else if</code>), kommt das normale Wartezimmer an die Reihe."
+      },
+      {
+        cat: "Java-OOP & Casting",
+        q: "Was unterscheidet eine <code>void</code>-Methode von einer Methode mit Rückgabetyp (z. B. int)?",
+        opts: [
+          "void führt eine Aktion aus und liefert nichts zurück; Methoden mit Datentyp liefern einen Wert per return.",
+          "void darf nur in statischen Klassen verwendet werden.",
+          "void-Methoden sind generell langsamer.",
+          "void erfordert zwingend eine Hilfs-Queue."
+        ],
+        ans: 0,
+        exp: "<code>void</code> bedeutet 'kein Rückgabewert': Die Methode tut etwas (z. B. <code>p.drucken()</code>). Hat eine Methode einen Typ wie <code>int</code> oder <code>boolean</code>, muss am Ende ein <code>return ...;</code> stehen."
+      },
+      {
+        cat: "Queue (FIFO)",
+        q: "An welcher Position wird ein Element bei <code>wartezimmer.enqueue(p)</code> eingefügt?",
+        opts: [
+          "Immer ganz hinten am Ende der Warteschlange.",
+          "Immer an Position 0 (ganz vorne).",
+          "Alphabetisch sortiert nach dem Patientennamen.",
+          "Zufällig an einer freien Position."
+        ],
+        ans: 0,
+        exp: "<code>enqueue()</code> stellt das Element hinten an das Ende der Schlange an (Tail/Rear)."
+      },
+      {
+        cat: "Stack (LIFO)",
+        q: "Wo platziert der Aufruf <code>notfallStapel.push(p)</code> das übergebene Objekt?",
+        opts: [
+          "Ganz oben auf die Spitze des Stapels.",
+          "Ganz unten an den Boden des Stapels.",
+          "Immer an Position 1 unter dem aktuellen Notfall.",
+          "In eine alphabetisch sortierte Baumstruktur."
+        ],
+        ans: 0,
+        exp: "<code>push()</code> legt das neue Element oben auf den Stack (Top of Stack)."
+      },
+      {
+        cat: "Algorithmen & Hilfs-Queue",
+        q: "In der Methode <code>anzahlWartende(): int</code>: Wie wird die Anzahl der Patienten ermittelt?",
+        opts: [
+          "Ein int-Zähler wird in der ersten Schleife bei jedem Umschaufeln in die Hilfs-Queue um 1 erhöht.",
+          "Man ruft wartezimmer.countAll() auf.",
+          "Man liest die Größe des Stacks aus und subtrahiert 1.",
+          "Man teilt die Gesamtzeit durch das Schmerzlevel."
+        ],
+        ans: 0,
+        exp: "Da eine Abitur-Queue keine direkte <code>size()</code>-Methode hat, muss man die Elemente über eine Hilfs-Queue umschaufeln und dabei eine Zählvariable (<code>anzahl++</code>) hochzählen."
+      },
+      {
+        cat: "Trace-Tabelle & Ablauf",
+        q: "Drei Patienten stellen sich an: 1. Tim, 2. Lea, 3. Sam. Nun wird zweimal dequeue() und danach einmal enqueue('Mia') aufgerufen. Wer steht nun ganz vorne?",
+        opts: [
+          "Sam",
+          "Mia",
+          "Lea",
+          "Tim"
+        ],
+        ans: 0,
+        exp: "Ausgangszustand: [Vorne: Tim, Lea, Sam :Hinten]. 1. dequeue() entfernt Tim ➔ [Lea, Sam]. 2. dequeue() entfernt Lea ➔ [Sam]. 3. enqueue('Mia') hängt Mia hinten an ➔ [Vorne: Sam, Mia :Hinten]. Vorne steht Sam!"
+      },
+      {
+        cat: "Stack (LIFO)",
+        q: "Welche typische Software-Funktion basiert auf der Arbeitsweise eines Stacks (LIFO)?",
+        opts: [
+          "Die 'Rückgängig'-Funktion (Strg+Z) in Textverarbeitungen oder Editoren.",
+          "Die Warteschlange der Druckaufträge im Schulnetzwerk.",
+          "Das Laden von Webseiten in der Reihenfolge des Klickens.",
+          "Die Wiedergabeliste eines Musik-Players im Endlosmodus."
+        ],
+        ans: 0,
+        exp: "Die zuletzt durchgeführte Aktion liegt oben auf dem Undo-Stack und wird beim Klick auf 'Rückgängig' als Erstes rückgängig gemacht."
+      },
+      {
+        cat: "Java-OOP & Casting",
+        q: "Was geschieht beim Aufruf <code>patient.drucken();</code> technisch im Rechner?",
+        opts: [
+          "Über den Punktoperator wird die Methode drucken() für das spezifische Objekt patient ausgeführt.",
+          "Es wird ein neues Objekt mit dem Namen drucken erzeugt.",
+          "Der Quelltext wird an einen physischen Netzwerkdrucker übertragen.",
+          "Die Variable patient wird aus dem Speicher gelöscht."
+        ],
+        ans: 0,
+        exp: "Der Punktoperator ist der Zugriffsoperator in Java, um Methoden oder Attribute eines konkreten Objekts anzusprechen."
+      },
+      {
+        cat: "Trace-Tabelle & Ablauf",
+        q: "Eine Queue enthält [Vorne: A, B :Hinten]. Man entnimmt alles und legt es auf einen Stack. Danach entnimmt man alles vom Stack in eine neue Queue. Was ist passiert?",
+        opts: [
+          "Die Reihenfolge der Elemente wurde invertiert/umgekehrt: [Vorne: B, A :Hinten].",
+          "Alle Elemente wurden unwiderruflich gelöscht.",
+          "Die Reihenfolge ist exakt dieselbe geblieben.",
+          "Es entsteht zwingend ein Compilerfehler."
+        ],
+        ans: 0,
+        exp: "Ein Stack kehrt eine Reihenfolge um! Queue liefert zuerst A, dann B. Stack erhält A (unten) und B (oben). Beim pop() kommt B zuerst heraus und A als Zweites. Die Reihenfolge wurde also invertiert!"
+      }
+    ];
+
+    /* Quiz State */
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let catStats = {};
+
+    function startQuiz() {
+      // 10 Zufällige Fragen aus dem 22-Fragen-Pool ziehen (Fisher-Yates Shuffle)
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+      currentQuestions = poolCopy.slice(0, 10);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = (currentQIdx / 10) * 100;
+      
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von 10`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+      
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      // Optionen mischen
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      // Feedback und Weiter-Button verstecken
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      // Alle Optionen sperren & richtige hervorheben
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      // Statistik erfassen
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback is-correct';
+        fbTitle.innerText = "Richtig! ✔";
+      } else {
+        selectedBtn.classList.add('wrong');
+        fbBox.className = 'quiz-feedback is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+        
+        // Richtige Antwort ebenfalls grün markieren
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(q.opts[q.ans].substring(0, 20))) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      fbDesc.innerHTML = q.exp;
+      fbBox.style.display = 'block';
+
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      const nextBtn = document.getElementById('quiz-btn-next');
+      nextBtn.style.display = 'inline-flex';
+
+      if (currentQIdx === 9) {
+        nextBtn.innerHTML = "Zur Gesamtauswertung ➔";
+      } else {
+        nextBtn.innerHTML = "Nächste Frage →";
+      }
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < 10) {
+        renderCurrentQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / 10`;
+
+      let badgeText = "Solide Leistung!";
+      let badgeColor = "#7c3aed";
+      let adviceText = "Gute Arbeit! Die meisten Grundlagen sind dir vertraut.";
+
+      if (quizScore >= 9) {
+        badgeText = "Hervorragend! Abitur-Niveau! 🌟";
+        badgeColor = "#059669";
+        adviceText = "Exzellent! Du beherrschst sowohl die methodische Bedienung von Stack und Queue als auch das Umschaufeln mit Hilfs-Queue und Typ-Casting perfekt.";
+      } else if (quizScore >= 7) {
+        badgeText = "Gute Leistung! Die Konzepte sitzen. 👍";
+        badgeColor = "#2563eb";
+        adviceText = "Sehr gut! Achte bei Klausuraufgaben besonders auf die Null-Prüfung mit isEmpty() und die genaue Reihenfolge in Trace-Tabellen.";
+      } else if (quizScore >= 5) {
+        badgeText = "Auf gutem Weg! Wiederhole noch gezielt Schwachstellen. 💡";
+        badgeColor = "#d97706";
+        adviceText = "Die Kernideen sind da. Schau dir oben nochmals Stufe 2 (Methoden-Spickzettel) und Stufe 4 (Hilfs-Queue-Algorithmus) in Ruhe an.";
+      } else {
+        badgeText = "Hier solltest du noch etwas üben. 📚";
+        badgeColor = "#dc2626";
+        adviceText = "Keine Sorge: Gehe das Notaufnahme-Projekt oben noch einmal Schritt für Schritt durch und nutze die aufklappbaren Lösungen zur Selbstkontrolle.";
+      }
+
+      const badgeEl = document.getElementById('quiz-final-badge');
+      badgeEl.innerText = badgeText;
+      badgeEl.style.color = badgeColor;
+      document.getElementById('quiz-advice-text').innerText = adviceText;
+
+      // Bereichs-Breakdown
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [cat, data] of Object.entries(catStats)) {
+        const percent = Math.round((data.correct / data.total) * 100);
+        let statColor = percent >= 80 ? '#059669' : (percent >= 50 ? '#d97706' : '#dc2626');
+
+        const card = document.createElement('div');
+        card.className = 'diag-card';
+        card.innerHTML = `
+          <div>
+            <div class="diag-card-title">${cat}</div>
+            <div style="font-size:0.82rem; color:var(--text-muted);">${data.correct} von ${data.total} Fragen richtig</div>
+          </div>
+          <div class="diag-card-score" style="color:${statColor}; margin-top:0.5rem;">${percent}%</div>
+        `;
+        breakdownBox.appendChild(card);
+      }
+    }
+  </script>
+
+</body>
+</html>

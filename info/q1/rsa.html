@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>RSA-Verfahren & Kryptographie | Informatik Q1</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      function initKaTeX() {
+        if (typeof renderMathInElement === "function") {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        } else {
+          setTimeout(initKaTeX, 50);
+        }
+      }
+      initKaTeX();
+    });
+  </script>
+
+  <style>
+    /* Spezifische Ergänzungen für das RSA Modul */
+    .calc-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-group label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-group input, .input-group select {
+      padding: 0.65rem 0.85rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: var(--bg-main);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--theme-oberstufe);
+    }
+
+    .btn-calc {
+      background: var(--theme-oberstufe);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-calc:hover { opacity: 0.9; }
+
+    .result-display {
+      background: #f8fafc;
+      border-left: 4px solid var(--theme-oberstufe);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .key-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+    .badge-pub { background: #e0e7ff; color: #3730a3; }
+    .badge-priv { background: #fee2e2; color: #991b1b; }
+
+    /* Quiz-Styles */
+    .quiz-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-question {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-main);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-option:hover {
+      background: #ffffff;
+      border-color: var(--theme-oberstufe);
+    }
+
+    .quiz-option.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+      font-weight: 600;
+    }
+
+    .quiz-option.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    table.step-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+    }
+    table.step-table th, table.step-table td {
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      text-align: center;
+    }
+    table.step-table th { background: #f1f5f9; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Nav -->
+    <div style="padding: 1.25rem 0 0.5rem 0;">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q1-Übersicht
+      </a>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-oberstufe">Kryptographie • Modul 01</div>
+      <h1>Das RSA-Kryptosystem</h1>
+      <p class="subtitle">Asymmetrische Verschlüsselung, Einwegfunktionen, digitale Signaturen & interaktiver RSA-Laborrechner.</p>
+      <div class="timestamp-pill">
+        <span>🟢</span> Interaktives Lernmodul • Schuljahr 2026/27
+      </div>
+    </header>
+
+    <!-- INTRO-ALERT -->
+    <div class="alert-card">
+      <div class="alert-icon">🔐</div>
+      <div class="alert-content">
+        <h3>Wie funktioniert moderne Verschlüsselung?</h3>
+        <p>Jedes Mal, wenn du im Browser ein Schloss-Symbol (HTTPS) siehst oder WhatsApp nutzt, arbeiten asymmetrische Verfahren. Hier lernst du den mathematischen Kern von RSA kennen und kannst Schlüsselerzeugung, Ver- und Entschlüsselung live ausprobieren!</p>
+      </div>
+    </div>
+
+    <!-- 1. SPICKZETTEL -->
+    <h2 class="section-heading"><span>📌</span> Die RSA-Formeln auf einen Blick</h2>
+    <div class="dashboard-grid">
+      
+      <!-- Box 1: Schlüssel -->
+      <div class="class-card theme-oberstufe">
+        <div class="class-card-header">
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Schritt 1</span>
+          <span class="class-card-icon">🔑</span>
+        </div>
+        <h3 class="class-card-title">Schlüsselerzeugung</h3>
+        <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
+          1. Wähle Primzahlen $p$ und $q$.<br>
+          2. $N = p \cdot q$ (RSA-Modul)<br>
+          3. $\varphi(N) = (p-1)(q-1)$<br>
+          4. Wähle $e$ mit $\operatorname{ggT}(e, \varphi(N)) = 1$<br>
+          5. Berechne $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$<br>
+          <div style="margin-top:8px;">
+            <span class="key-badge badge-pub">Public: $(e, N)$</span>
+            <span class="key-badge badge-priv">Private: $(d, N)$</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box 2: Ver- und Entschlüsselung -->
+      <div class="class-card theme-mathe">
+        <div class="class-card-header">
+          <span class="badge-pill badge-mathe" style="margin-bottom:0;">Schritt 2 & 3</span>
+          <span class="class-card-icon">⚡</span>
+        </div>
+        <h3 class="class-card-title">Ver- & Entschlüsseln</h3>
+        <div style="font-size:0.9rem; line-height:1.8; color:var(--text-main);">
+          <strong>Verschlüsseln (mit Public Key $e$):</strong><br>
+          $$C = M^e \pmod N$$
+          <strong>Entschlüsseln (mit Private Key $d$):</strong><br>
+          $$M = C^d \pmod N$$
+          <strong>Digitale Signatur (mit Private Key $d$):</strong><br>
+          $$S = M^d \pmod N \implies \text{Prüfen: } M = S^e \pmod N$$
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. INTERAKTIVER RSA-LABORRECHNER -->
+    <h2 class="section-heading"><span>🧪</span> Interaktives RSA-Labor (Hands-On Rechner)</h2>
+    <div class="calc-box">
+      <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem; color:var(--text-main);">1. Schlüsselpaar generieren</h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Wähle zwei Primzahlen $p$ und $q$ oder tippe eigene kleine Primzahlen ein:</p>
+      
+      <div class="calc-grid">
+        <div class="input-group">
+          <label>Primzahl p</label>
+          <input type="number" id="primeP" value="5" min="2">
+        </div>
+        <div class="input-group">
+          <label>Primzahl q</label>
+          <input type="number" id="primeQ" value="11" min="2">
+        </div>
+        <div class="input-group">
+          <label>Vorlage wählen</label>
+          <select id="presetSelect" onchange="applyPreset()">
+            <option value="5,11">p = 5, q = 11 (Unterrichtsbeispiel)</option>
+            <option value="7,13">p = 7, q = 13</option>
+            <option value="11,17">p = 11, q = 17</option>
+            <option value="13,19">p = 13, q = 19</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-calc" onclick="generateKeys()">🔑 Schlüssel berechnen</button>
+
+      <div id="keyResults" class="result-display" style="display:none;"></div>
+
+      <hr style="border:0; border-top:1px solid var(--border-color); margin:1.5rem 0;">
+
+      <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem; color:var(--text-main);">2. Nachricht verschlüsseln & entschlüsseln</h3>
+      <div class="calc-grid">
+        <div class="input-group">
+          <label>Nachricht M (Zahl < N)</label>
+          <input type="number" id="msgM" value="9" min="1">
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn-calc" style="background:var(--accent);" onclick="encryptMessage()">🔒 Verschlüsseln</button>
+        <button class="btn-calc" style="background:var(--success);" onclick="decryptMessage()">🔓 Entschlüsseln</button>
+      </div>
+
+      <div id="cryptoResults" class="result-display" style="display:none;"></div>
+    </div>
+
+    <!-- 3. SQUARE AND MULTIPLY RECHNER -->
+    <h2 class="section-heading"><span>⚡</span> Square-and-Multiply Rechner</h2>
+    <div class="calc-box">
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">
+        Berechne $Basis^{Exponent} \pmod{Modul}$ schrittweise durch wiederholtes Quadrieren:
+      </p>
+      <div class="calc-grid">
+        <div class="input-group">
+          <label>Basis (z. B. C)</label>
+          <input type="number" id="smBase" value="14">
+        </div>
+        <div class="input-group">
+          <label>Exponent (z. B. d)</label>
+          <input type="number" id="smExp" value="27">
+        </div>
+        <div class="input-group">
+          <label>Modul N</label>
+          <input type="number" id="smMod" value="55">
+        </div>
+      </div>
+      <button class="btn-calc" onclick="calculateSquareAndMultiply()">🚀 Schritt für Schritt berechnen</button>
+      
+      <div id="smResults" class="result-display" style="display:none;"></div>
+    </div>
+
+    <!-- 4. SELBSTTEST QUIZ -->
+    <h2 class="section-heading"><span>🧠</span> Selbsttest: Teste dein RSA-Wissen!</h2>
+    
+    <!-- Frage 1 -->
+    <div class="quiz-card" id="q1">
+      <div class="quiz-question">
+        <span>1.</span>
+        <span>Warum ist das RSA-Verfahren asymmetrisch?</span>
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkQuiz(1, 0, false)">Weil Nachrichten unterschiedlich schnell verschlüsselt wie entschlüsselt werden.</div>
+        <div class="quiz-option" onclick="checkQuiz(1, 1, true)">Weil zum Verschlüsseln ein anderer Schlüssel (Public Key) genutzt wird als zum Entschlüsseln (Private Key).</div>
+        <div class="quiz-option" onclick="checkQuiz(1, 2, false)">Weil die beiden Primzahlen p und q niemals gleich groß sein dürfen.</div>
+      </div>
+      <div class="quiz-feedback" id="fb1"></div>
+    </div>
+
+    <!-- Frage 2 -->
+    <div class="quiz-card" id="q2">
+      <div class="quiz-question">
+        <span>2.</span>
+        <span>Wie berechnet man die Eulersche Phi-Funktion $\varphi(N)$ für $N = p \cdot q$, wenn $p$ und $q$ Primzahlen sind?</span>
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkQuiz(2, 0, false)">$\varphi(N) = p \cdot q - 1$</div>
+        <div class="quiz-option" onclick="checkQuiz(2, 1, true)">$\varphi(N) = (p - 1) \cdot (q - 1)$</div>
+        <div class="quiz-option" onclick="checkQuiz(2, 2, false)">$\varphi(N) = \frac{p+q}{2}$</div>
+      </div>
+      <div class="quiz-feedback" id="fb2"></div>
+    </div>
+
+    <!-- Frage 3 -->
+    <div class="quiz-card" id="q3">
+      <div class="quiz-question">
+        <span>3.</span>
+        <span>Wie erzeugt Alice eine digitale Signatur für eine Nachricht $M$?</span>
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkQuiz(3, 0, false)">Sie verschlüsselt die Nachricht mit Bobs öffentlichem Schlüssel $e_{Bob}$.</div>
+        <div class="quiz-option" onclick="checkQuiz(3, 1, false)">Sie schickt ihr handschriftliches Foto im Anhang mit.</div>
+        <div class="quiz-option" onclick="checkQuiz(3, 2, true)">Sie „verschlüsselt“ $M$ mit ihrem eigenen geheimen privaten Schlüssel $d_{Alice}$ ($S = M^{d_{Alice}} \pmod N$).</div>
+      </div>
+      <div class="quiz-feedback" id="fb3"></div>
+    </div>
+
+    <!-- Frage 4 -->
+    <div class="quiz-card" id="q4">
+      <div class="quiz-question">
+        <span>4.</span>
+        <span>Worauf beruht die mathematische Sicherheit von RSA im Kern?</span>
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="checkQuiz(4, 0, true)">Auf der Schwierigkeit, eine sehr große Zahl $N$ in ihre beiden Primfaktoren $p$ und $q$ zu zerlegen (Faktorisierungsproblem).</div>
+        <div class="quiz-option" onclick="checkQuiz(4, 1, false)">Darauf, dass der Verschlüsselungsalgorithmus streng geheim gehalten wird.</div>
+        <div class="quiz-option" onclick="checkQuiz(4, 2, false)">Auf der Unmöglichkeit, Reste mit Modulo zu berechnen.</div>
+      </div>
+      <div class="quiz-feedback" id="fb4"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Q1</strong> • Schulportal 2026/2027 • Kryptographie & RSA</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Hilfsfunktionen für Mathe
+    function isPrime(n) {
+      if (n < 2) return false;
+      for (let i = 2; i * i <= n; i++) {
+        if (n % i === 0) return false;
+      }
+      return true;
+    }
+
+    function gcd(a, b) {
+      while (b !== 0) {
+        let t = b;
+        b = a % b;
+        a = t;
+      }
+      return a;
+    }
+
+    function extGcd(a, b) {
+      if (b === 0) return { g: a, x: 1, y: 0 };
+      let res = extGcd(b, a % b);
+      let g = res.g;
+      let x = res.y;
+      let y = res.x - Math.floor(a / b) * res.y;
+      return { g, x, y };
+    }
+
+    function modInverse(e, phi) {
+      let res = extGcd(e, phi);
+      if (res.g !== 1) return null;
+      let d = res.x % phi;
+      if (d < 0) d += phi;
+      return d;
+    }
+
+    function modPow(base, exp, mod) {
+      let result = 1n;
+      let b = BigInt(base) % BigInt(mod);
+      let e = BigInt(exp);
+      let m = BigInt(mod);
+      while (e > 0n) {
+        if (e % 2n === 1n) result = (result * b) % m;
+        b = (b * b) % m;
+        e = e / 2n;
+      }
+      return Number(result);
+    }
+
+    function applyPreset() {
+      let val = document.getElementById('presetSelect').value.split(',');
+      document.getElementById('primeP').value = val[0];
+      document.getElementById('primeQ').value = val[1];
+      generateKeys();
+    }
+
+    let currentKeys = null;
+
+    function generateKeys() {
+      let p = parseInt(document.getElementById('primeP').value);
+      let q = parseInt(document.getElementById('primeQ').value);
+      let out = document.getElementById('keyResults');
+      out.style.display = 'block';
+
+      if (!isPrime(p) || !isPrime(q)) {
+        out.innerHTML = `<span style="color:#dc2626;">❌ Fehler: Sowohl p als auch q müssen Primzahlen sein!</span>`;
+        return;
+      }
+      if (p === q) {
+        out.innerHTML = `<span style="color:#dc2626;">❌ Fehler: p und q müssen unterschiedlich sein!</span>`;
+        return;
+      }
+
+      let N = p * q;
+      let phi = (p - 1) * (q - 1);
+
+      // Finde geeignete e
+      let possibleE = [];
+      for (let cand = 3; cand < phi; cand += 2) {
+        if (gcd(cand, phi) === 1) {
+          possibleE.push(cand);
+          if (possibleE.length >= 6) break;
+        }
+      }
+
+      let chosenE = possibleE[0] || 3;
+      let d = modInverse(chosenE, phi);
+
+      currentKeys = { p, q, N, phi, e: chosenE, d };
+
+      out.innerHTML = `
+        <div style="font-weight:700; margin-bottom:8px; color:#1e293b;">✅ Schlüssel erfolgreich berechnet:</div>
+        <div><strong>1. RSA-Modul:</strong> N = p × q = ${p} × ${q} = <strong>${N}</strong></div>
+        <div><strong>2. Phi-Funktion:</strong> φ(N) = (${p}-1) × (${q}-1) = <strong>${phi}</strong></div>
+        <div><strong>3. Öffentlicher Exponent e:</strong> gewählt: <strong>${chosenE}</strong> (Mögliche Teilerfremde: ${possibleE.join(', ')})</div>
+        <div><strong>4. Privater Exponent d:</strong> berechnet: <strong>${d}</strong> (da ${chosenE} × ${d} = ${chosenE * d} ≡ 1 mod ${phi})</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #cbd5e1;">
+          <span class="key-badge badge-pub">Öffentlicher Schlüssel (Public Key): (e = ${chosenE}, N = ${N})</span><br>
+          <span class="key-badge badge-priv">Privater Schlüssel (Private Key): (d = ${d}, N = ${N})</span>
+        </div>
+      `;
+    }
+
+    function encryptMessage() {
+      if (!currentKeys) generateKeys();
+      let M = parseInt(document.getElementById('msgM').value);
+      let out = document.getElementById('cryptoResults');
+      out.style.display = 'block';
+
+      if (M >= currentKeys.N) {
+        out.innerHTML = `<span style="color:#dc2626;">❌ Nachricht M (${M}) muss kleiner als das Modul N (${currentKeys.N}) sein!</span>`;
+        return;
+      }
+
+      let C = modPow(M, currentKeys.e, currentKeys.N);
+      out.innerHTML = `
+        <div style="color:#0284c7; font-weight:700; margin-bottom:4px;">🔒 Verschlüsselungsergebnis:</div>
+        <div>Formel: C = M^e mod N = ${M}^${currentKeys.e} mod ${currentKeys.N}</div>
+        <div style="font-size:1.1rem; margin-top:6px;"><strong>Geheimtext (Chiffre) C = ${C}</strong></div>
+      `;
+    }
+
+    function decryptMessage() {
+      if (!currentKeys) generateKeys();
+      let M = parseInt(document.getElementById('msgM').value);
+      let C = modPow(M, currentKeys.e, currentKeys.N);
+      let decrypted = modPow(C, currentKeys.d, currentKeys.N);
+      let out = document.getElementById('cryptoResults');
+      out.style.display = 'block';
+
+      out.innerHTML = `
+        <div style="color:#059669; font-weight:700; margin-bottom:4px;">🔓 Entschlüsselungsergebnis:</div>
+        <div>Empfangenes Chiffre C = ${C}</div>
+        <div>Formel: M = C^d mod N = ${C}^${currentKeys.d} mod ${currentKeys.N}</div>
+        <div style="font-size:1.1rem; margin-top:6px;"><strong>Wiederhergestellter Klartext M = ${decrypted}</strong> ${decrypted === M ? '✅ (Exakte Übereinstimmung!)' : '❌'}</div>
+      `;
+    }
+
+    function calculateSquareAndMultiply() {
+      let b = parseInt(document.getElementById('smBase').value);
+      let exp = parseInt(document.getElementById('smExp').value);
+      let mod = parseInt(document.getElementById('smMod').value);
+      let out = document.getElementById('smResults');
+      out.style.display = 'block';
+
+      let binStr = exp.toString(2);
+      let currentVal = 1n;
+      let baseBig = BigInt(b) % BigInt(mod);
+      let modBig = BigInt(mod);
+
+      let tableHtml = `
+        <div style="margin-bottom:8px;"><strong>Exponent binär:</strong> ${exp} = (${binStr})₂ (Länge: ${binStr.length} Bits)</div>
+        <table class="step-table">
+          <thead>
+            <tr>
+              <th>Bit</th>
+              <th>Aktion</th>
+              <th>Rechnung</th>
+              <th>Aktueller Wert mod ${mod}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (let i = 0; i < binStr.length; i++) {
+        let bit = binStr[i];
+        
+        // Quadrieren (außer vor erstem Bit)
+        if (i > 0) {
+          let prev = currentVal;
+          currentVal = (currentVal * currentVal) % modBig;
+          tableHtml += `
+            <tr>
+              <td>-</td>
+              <td><strong>Square</strong> (Quadrieren)</td>
+              <td>${prev}² mod ${mod}</td>
+              <td><strong>${currentVal}</strong></td>
+            </tr>
+          `;
+        } else {
+          currentVal = baseBig;
+          tableHtml += `
+            <tr>
+              <td>${bit}</td>
+              <td>Start (erstes Bit)</td>
+              <td>${b} mod ${mod}</td>
+              <td><strong>${currentVal}</strong></td>
+            </tr>
+          `;
+          continue;
+        }
+
+        // Multiplizieren falls Bit 1
+        if (bit === '1') {
+          let prev = currentVal;
+          currentVal = (currentVal * baseBig) % modBig;
+          tableHtml += `
+            <tr style="background:#f0f9ff;">
+              <td><strong>1</strong></td>
+              <td><strong>Multiply</strong> (Basis multiplizieren)</td>
+              <td>(${prev} × ${b}) mod ${mod}</td>
+              <td><strong>${currentVal}</strong></td>
+            </tr>
+          `;
+        }
+      }
+
+      tableHtml += `
+          </tbody>
+        </table>
+        <div style="margin-top:10px; font-weight:700; color:#059669; font-size:1.05rem;">
+          Endergebnis: ${b}^${exp} mod ${mod} = ${currentVal}
+        </div>
+      `;
+
+      out.innerHTML = tableHtml;
+    }
+
+    // Quiz Logik
+    function checkQuiz(qNum, optIdx, isCorrect) {
+      let card = document.getElementById('q' + qNum);
+      let options = card.querySelectorAll('.quiz-option');
+      let fb = document.getElementById('fb' + qNum);
+      fb.style.display = 'block';
+
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+      });
+
+      if (isCorrect) {
+        options[optIdx].classList.add('correct');
+        fb.innerHTML = `<span style="color:#059669;">✔ Richtig! Hervorragend verstanden.</span>`;
+      } else {
+        options[optIdx].classList.add('wrong');
+        fb.innerHTML = `<span style="color:#dc2626;">❌ Leider nicht ganz richtig. Schau dir die Spickzettel-Karten oben noch einmal an!</span>`;
+      }
+    }
+
+    // Initialer Aufruf
+    window.addEventListener('DOMContentLoaded', () => {
+      generateKeys();
+    });
+  </script>
+
+</body>
+</html>
