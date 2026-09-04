@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="if(window.renderMathInElement)renderMathInElement(document.body);"></script>
+
   
   <style>
     :root {
@@ -825,7 +829,7 @@
 
       <div style="background:#fffbeb; border:1px solid #fef3c7; border-left:4px solid #f59e0b; padding:12px 16px; border-radius:8px; margin:1rem 0;">
         <strong>⭐ Der Spezialfall bei 3 Einsen (wenn schon ein Übertrag vorliegt):</strong><br>
-        <code>1 + 1 + 1 = 11₂</code> $\rightarrow$ <strong>1 schreiben, 1 gemerkt (Übertrag)!</strong>
+        <code>1 + 1 + 1 = 11₂</code> &rarr; <strong>1 schreiben, 1 gemerkt (Übertrag)!</strong>
       </div>
 
       <h3 style="font-size:1.1rem; font-weight:700; margin-top:1.5rem; margin-bottom:0.5rem;">
@@ -846,8 +850,8 @@
         <span>🔌</span> Der Ausblick: Die Brücke zur Hardware
       </h2>
       <p>
-        Wenn wir zwei Bits ($A$ und $B$) auf einem Steckbrett mit Strom addieren möchten, stellen wir fest:
-        <strong>Ein einzelnes Lämpchen reicht nicht!</strong> Denn bei $1+1$ entsteht die zweistellige Zahl $10_2$.
+        Wenn wir zwei Bits (<em>A</em> und <em>B</em>) auf einem Steckbrett mit Strom addieren möchten, stellen wir fest:
+        <strong>Ein einzelnes Lämpchen reicht nicht!</strong> Denn bei 1 + 1 entsteht die zweistellige Zahl 10₂.
       </p>
 
       <div style="background:#f8fafc; border:1.5px solid var(--border); border-radius:12px; padding:1.25rem; margin-top:1rem;">
@@ -855,8 +859,8 @@
           Jede Addierer-Schaltung benötigt deshalb immer ZWEI Ausgänge:
         </h4>
         <ul style="margin-left:1.5rem; line-height:1.7;">
-          <li><strong>Summen-Ausgang ($S$):</strong> Zeigt das Ergebnis der aktuellen Stelle an ($0$ oder $1$).</li>
-          <li><strong>Übertrags-Ausgang ($C$, Carry):</strong> Reicht eine $1$ an die nächste Stelle weiter!</li>
+          <li><strong>Summen-Ausgang (<em>S</em>):</strong> Zeigt das Ergebnis der aktuellen Stelle an (0 oder 1).</li>
+          <li><strong>Übertrags-Ausgang (<em>C</em>, Carry):</strong> Reicht eine 1 an die nächste Stelle weiter!</li>
         </ul>
         <div style="margin-top:1rem; font-weight:600; color:#0d9488;">
           👉 In der nächsten Stunde bauen wir genau diese Logik mit echten IC-Bausteinen (AND- und XOR-Gatter) auf dem Steckbrett auf!
@@ -1069,7 +1073,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
             </tbody>
           </table>
           <p style="margin-top:8px; font-size:0.9rem; color:var(--text-muted);">
-            Merkregel für nächste Woche: <strong>Summe $S$</strong> verhält sich wie ein <strong>XOR-Gatter</strong>, <strong>Übertrag $C$</strong> wie ein <strong>AND-Gatter</strong>!
+            Merkregel für nächste Woche: <strong>Summe <em>S</em></strong> verhält sich wie ein <strong>XOR-Gatter</strong>, <strong>Übertrag <em>C</em></strong> wie ein <strong>AND-Gatter</strong>!
           </p>
         </div>
       </details>
@@ -1253,7 +1257,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
       },
       {
         cat: "Stellenwerte & Bits",
-        q: "Welche Stellenwerte haben die ersten 4 Bits von rechts nach links ($2^0, 2^1, 2^2, 2^3$)?",
+        q: "Welche Stellenwerte haben die ersten 4 Bits von rechts nach links (2⁰, 2¹, 2², 2³)?",
         opts: [
           "1, 2, 4, 8",
           "1, 2, 3, 4",
@@ -1261,11 +1265,11 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "1, 10, 100, 1000"
         ],
         ans: 0,
-        exp: "Da das Binärsystem die Basis 2 hat, verdoppeln sich die Stellenwerte nach links: $2^0=1$, $2^1=2$, $2^2=4$, $2^3=8$."
+        exp: "Da das Binärsystem die Basis 2 hat, verdoppeln sich die Stellenwerte nach links: 2⁰ = 1, 2¹ = 2, 2² = 4, 2³ = 8."
       },
       {
         cat: "Stellenwerte & Bits",
-        q: "Welcher Stellenwert gehört zur 6. Stelle von rechts ($2^5$)?",
+        q: "Welcher Stellenwert gehört zur 6. Stelle von rechts (2⁵)?",
         opts: [
           "16",
           "32",
@@ -1273,7 +1277,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "128"
         ],
         ans: 1,
-        exp: "Die Stellenwerte von rechts nach links lauten: 1, 2, 4, 8, 16 und die 6. Stelle ist $2^5 = \\mathbf{32}$."
+        exp: "Die Stellenwerte von rechts nach links lauten: 1, 2, 4, 8, 16 und die 6. Stelle ist 2⁵ = <strong>32</strong>."
       },
       {
         cat: "Stellenwerte & Bits",
@@ -1285,7 +1289,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "256 Werte (von 0 bis 255)"
         ],
         ans: 3,
-        exp: "Mit 8 Bits sind $2^8 = 256$ verschiedene Kombinationen möglich. Die darstellbaren Dezimalzahlen reichen von 0 bis 255."
+        exp: "Mit 8 Bits sind 2⁸ = 256 verschiedene Kombinationen möglich. Die darstellbaren Dezimalzahlen reichen von 0 bis 255."
       },
       {
         cat: "Stellenwerte & Bits",
@@ -1297,7 +1301,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "31"
         ],
         ans: 1,
-        exp: "Wenn alle 4 Bits auf 1 stehen ($1111_2$), ergibt sich $8 + 4 + 2 + 1 = \\mathbf{15}$ (bzw. $2^4 - 1 = 15$)."
+        exp: "Wenn alle 4 Bits auf 1 stehen (1111₂), ergibt sich 8 + 4 + 2 + 1 = <strong>15</strong> (bzw. 2⁴ − 1 = 15)."
       },
 
       // --- KATEGORIE 2: BINÄR -> DEZIMAL UMRECHNUNG (Fragen 7-12) ---
@@ -1311,7 +1315,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "7"
         ],
         ans: 1,
-        exp: "Stellenwerte addieren: $4 + 0 + 1 = \\mathbf{5}$."
+        exp: "Stellenwerte addieren: 4 + 0 + 1 = <strong>5</strong>."
       },
       {
         cat: "Binär ➔ Dezimal",
@@ -1323,7 +1327,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "14"
         ],
         ans: 0,
-        exp: "Stellenwerte addieren: $8 + 0 + 2 + 0 = \\mathbf{10}$."
+        exp: "Stellenwerte addieren: 8 + 0 + 2 + 0 = <strong>10</strong>."
       },
       {
         cat: "Binär ➔ Dezimal",
@@ -1335,7 +1339,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "9"
         ],
         ans: 1,
-        exp: "Stellenwerte addieren: $8 + 4 + 0 + 1 = \\mathbf{13}$."
+        exp: "Stellenwerte addieren: 8 + 4 + 0 + 1 = <strong>13</strong>."
       },
       {
         cat: "Binär ➔ Dezimal",
@@ -1347,7 +1351,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "33"
         ],
         ans: 1,
-        exp: "Die Stellenwerte von rechts sind 1, 2, 4, 8, 16. Also: $16 + 0 + 0 + 0 + 1 = \\mathbf{17}$."
+        exp: "Die Stellenwerte von rechts sind 1, 2, 4, 8, 16. Also: 16 + 0 + 0 + 0 + 1 = <strong>17</strong>."
       },
       {
         cat: "Binär ➔ Dezimal",
@@ -1359,7 +1363,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "26"
         ],
         ans: 0,
-        exp: "$16 + 8 + 4 + 2 + 0 = \\mathbf{30}$. (Tipp: $11111_2$ ist 31; da die Einerstelle 0 ist, ist es genau $31 - 1 = 30$)."
+        exp: "16 + 8 + 4 + 2 + 0 = <strong>30</strong>. (Tipp: 11111₂ ist 31; da die Einerstelle 0 ist, ist es genau 31 − 1 = 30)."
       },
       {
         cat: "Binär ➔ Dezimal",
@@ -1385,7 +1389,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "0111₂"
         ],
         ans: 0,
-        exp: "$9$ besteht aus $8 + 1$, also steht an der 8er- und der 1er-Stelle eine 1 $\\rightarrow \\mathbf{1001_2}$."
+        exp: "9 besteht aus 8 + 1, also steht an der 8er- und der 1er-Stelle eine 1 &rarr; <strong>1001₂</strong>."
       },
       {
         cat: "Divisionsalgorithmus",
@@ -1397,7 +1401,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "Rest 0.5"
         ],
         ans: 1,
-        exp: "$25 : 2 = 12$ mit **Rest 1**, da 25 eine ungerade Zahl ist ($12 \\cdot 2 = 24$)."
+        exp: "25 : 2 = 12 mit **Rest 1**, da 25 eine ungerade Zahl ist (12 · 2 = 24)."
       },
       {
         cat: "Divisionsalgorithmus",
@@ -1433,11 +1437,11 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "11000₂"
         ],
         ans: 0,
-        exp: "$18 = 16 + 2$. Die Stellenwerte 16 und 2 sind belegt: $\\mathbf{10010_2}$."
+        exp: "18 = 16 + 2. Die Stellenwerte 16 und 2 sind belegt: <strong>10010₂</strong>."
       },
       {
         cat: "Divisionsalgorithmus",
-        q: "Ein Schüler teilt <strong>7 durch 2</strong>: $7:2=3$ R 1, $3:2=1$ R 1, $1:2=0$ R 1. Wie lautet die Binärzahl?",
+        q: "Ein Schüler teilt <strong>7 durch 2</strong>: 7:2 = 3 R 1, 3:2 = 1 R 1, 1:2 = 0 R 1. Wie lautet die Binärzahl?",
         opts: [
           "111₂",
           "101₂",
@@ -1445,7 +1449,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "110₂"
         ],
         ans: 0,
-        exp: "Die Reste von unten nach oben lauten: $1, 1, 1 \\rightarrow \\mathbf{111_2}$ ($4 + 2 + 1 = 7$)."
+        exp: "Die Reste von unten nach oben lauten: 1, 1, 1 &rarr; <strong>111₂</strong> (4 + 2 + 1 = 7)."
       },
 
       // --- KATEGORIE 4: BINÄRE ADDITION & ÜBERTRAG (Fragen 19-25) ---
@@ -1459,7 +1463,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "11₂"
         ],
         ans: 1,
-        exp: "$0 + 1 = \\mathbf{1_2}$ (Summe 1, kein Übertrag)."
+        exp: "0 + 1 = <strong>1₂</strong> (Summe 1, kein Übertrag)."
       },
       {
         cat: "Binäre Addition",
@@ -1471,7 +1475,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "11₂"
         ],
         ans: 2,
-        exp: "Im Binärsystem gibt es keine Ziffer 2! $1 + 1$ ergibt die zweistellige Binärzahl $\\mathbf{10_2}$: 0 an die Summe schreiben und 1 als Übertrag (Carry) merken!"
+        exp: "Im Binärsystem gibt es keine Ziffer 2! 1 + 1 ergibt die zweistellige Binärzahl <strong>10₂</strong>: 0 an die Summe schreiben und 1 als Übertrag (Carry) merken!"
       },
       {
         cat: "Binäre Addition",
@@ -1495,7 +1499,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "Summe 1, Übertrag 1 (Ergebnis 11₂)"
         ],
         ans: 3,
-        exp: "$1 + 1 + 1 = 3_{10}$. Die Zahl 3 lautet binär $\\mathbf{11_2}$. Das bedeutet: **1 schreiben und 1 als Übertrag weitergeben**!"
+        exp: "1 + 1 + 1 = 3₁₀. Die Zahl 3 lautet binär <strong>11₂</strong>. Das bedeutet: **1 schreiben und 1 als Übertrag weitergeben**!"
       },
       {
         cat: "Binäre Addition",
@@ -1507,7 +1511,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "10₂ (dezimal 2)"
         ],
         ans: 0,
-        exp: "Rechte Spalte: $0 + 1 = 1$. Linke Spalte: $1 + 0 = 1$. Ergebnis: $\\mathbf{11_2}$ ($2 + 1 = 3$)."
+        exp: "Rechte Spalte: 0 + 1 = 1. Linke Spalte: 1 + 0 = 1. Ergebnis: <strong>11₂</strong> (2 + 1 = 3)."
       },
       {
         cat: "Binäre Addition",
@@ -1519,11 +1523,11 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "101₂"
         ],
         ans: 1,
-        exp: "Rechte Spalte: $1 + 1 = 0$ (Übertrag 1). Linke Spalte: $1 + 0 + 1 (\\text{Ü}) = 0$ (Übertrag 1). Dritte Spalte: $1$. Ergebnis: $\\mathbf{100_2}$ ($3 + 1 = 4$)."
+        exp: "Rechte Spalte: 1 + 1 = 0 (Übertrag 1). Linke Spalte: 1 + 0 + 1 (Ü) = 0 (Übertrag 1). Dritte Spalte: 1. Ergebnis: <strong>100₂</strong> (3 + 1 = 4)."
       },
       {
         cat: "Binäre Addition",
-        q: "Warum benötigt eine Schaltung, die zwei Bits $A$ und $B$ addiert (Halbaddierer), zwingend <strong>ZWEI Ausgangsleitungen</strong>?",
+        q: "Warum benötigt eine Schaltung, die zwei Bits <em>A</em> und <em>B</em> addiert (Halbaddierer), zwingend <strong>ZWEI Ausgangsleitungen</strong>?",
         opts: [
           "Als Sicherheits-Reserve gegen Wackelkontakte",
           "Weil das Rechenergebnis zweistellig sein kann: Ein Ausgang für die Summe (S) und einer für den Übertrag (C)",
@@ -1531,7 +1535,7 @@ A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
           "Damit immer zwei LEDs gleichzeitig leuchten"
         ],
         ans: 1,
-        exp: "Da $1 + 1 = 10_2$ ist, hat das Ergebnis zwei Stellen. Ein einzelnes Kabel/LED kann nur 0 oder 1 anzeigen. Man benötigt daher zwingend ein Kabel für das Summen-Bit ($S$) und ein Kabel für das Übertrags-Bit ($C$)!"
+        exp: "Da 1 + 1 = 10₂ ist, hat das Ergebnis zwei Stellen. Ein einzelnes Kabel/LED kann nur 0 oder 1 anzeigen. Man benötigt daher zwingend ein Kabel für das Summen-Bit (<em>S</em>) und ein Kabel für das Übertrags-Bit (<em>C</em>)!"
       }
     ];
 
