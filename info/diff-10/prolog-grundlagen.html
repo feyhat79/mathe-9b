@@ -361,6 +361,277 @@
       margin-bottom: 0.5rem;
     }
 
+    /* ==========================================================================
+       QUIZ ENGINE STYLES (Pool & Interaktiver Selbsttest)
+       ========================================================================== */
+    .quiz-container {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border);
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      margin-top: 1rem;
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d9488, #2563eb);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #99f6e4;
+      margin-bottom: 0.85rem;
+    }
+
+    .quiz-question-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.4;
+      margin-bottom: 1.4rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.5;
+    }
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .opt-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt-btn.correct {
+      background: var(--success-light) !important;
+      border-color: var(--success) !important;
+      color: #065f46 !important;
+      font-weight: 600;
+    }
+    .quiz-opt-btn.correct .opt-badge {
+      background: var(--success);
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: var(--danger-light) !important;
+      border-color: var(--danger) !important;
+      color: #991b1b !important;
+    }
+    .quiz-opt-btn.wrong .opt-badge {
+      background: var(--danger);
+      color: white;
+    }
+
+    .quiz-feedback {
+      display: none;
+      padding: 1.25rem 1.5rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      animation: fadeIn 0.25s ease;
+    }
+    .quiz-feedback.show {
+      display: block;
+    }
+    .quiz-feedback.is-correct {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      border-left: 5px solid #10b981;
+      color: #065f46;
+    }
+    .quiz-feedback.is-wrong {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-left: 5px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .btn-next-q {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 26px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.25rem;
+      transition: all 0.2s;
+    }
+    .btn-next-q:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .quiz-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 600px) {
+      .quiz-mode-grid { grid-template-columns: 1fr; }
+    }
+
+    .mode-card {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-card:hover {
+      border-color: var(--primary);
+      background: #f0fdfa;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(13,148,136,0.12);
+    }
+    .mode-card h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+    .mode-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .btn-mode-start {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .result-score-box {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1.5px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    .result-big-score {
+      font-size: 3.5rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .result-badge-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .result-desc-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .stat-cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 600px) {
+      .stat-cat-grid { grid-template-columns: 1fr; }
+    }
+    .stat-cat-item {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Footer */
     footer {
       margin-top: 3rem;
@@ -802,6 +1073,120 @@
       </details>
     </div>
 
+    <!-- ==========================================================================
+         INTERAKTIVER SELBSTTEST (QUIZ-ENGINE MIT 25 FRAGEN-POOL)
+         ========================================================================== -->
+    <div class="card" id="selbsttest" style="border: 2px solid var(--primary); margin-top: 2.5rem;">
+      <div class="task-header" style="color:var(--primary-dark); font-size:1.35rem; margin-bottom:0.5rem;">
+        <span>🎯</span> Interaktiver Selbsttest: Werde zum Prolog-Detektiv!
+      </div>
+      <p style="color:var(--text-muted); margin-bottom:1rem;">
+        Teste dein Wissen rund um Fakten, Atome, Variablen, Wissensbasen, Ja/Nein-Anfragen und die Closed World Assumption.
+        Unser Fragenpool umfasst <strong>25 didaktische Fragen</strong> mit sofortigen Lösungserklärungen.
+      </p>
+
+      <div class="quiz-container" style="border:none; padding:1rem 0 0 0; box-shadow:none;">
+        
+        <!-- 1. START-ANSICHT -->
+        <div id="quiz-start-view">
+          <div style="text-align:center; max-width:620px; margin:0 auto;">
+            <div style="font-size:2.8rem; margin-bottom:0.5rem;">🕵️‍♂️</div>
+            <h3 style="font-size:1.4rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">
+              Bist du bereit für das Detektiv-Quiz?
+            </h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">
+              Wähle deinen Übungsmodus. Bei jedem Durchgang werden die Fragen und Antwortmöglichkeiten zufällig neu gemischt:
+            </p>
+
+            <div class="quiz-mode-grid">
+              <div class="mode-card" onclick="startQuiz(10)">
+                <div style="font-size:1.8rem; margin-bottom:6px;">⚡</div>
+                <h3>Schnell-Check</h3>
+                <p><strong>10 zufällige Fragen</strong> aus allen 4 Themengebieten. Ideal für die schnelle Wiederholung!</p>
+                <button class="btn-mode-start">10 Fragen starten →</button>
+              </div>
+
+              <div class="mode-card" onclick="startQuiz(25)" style="border-color:#0d9488; background:#f0fdfa;">
+                <div style="font-size:1.8rem; margin-bottom:6px;">🏆</div>
+                <h3>Meister-Detektiv-Test</h3>
+                <p><strong>Alle 25 Fragen</strong> des gesamten Pools. Der ultimative Check für echte Logik-Profis!</p>
+                <button class="btn-mode-start" style="background:#0f766e;">Alle 25 Fragen starten →</button>
+              </div>
+            </div>
+
+            <div style="font-size:0.85rem; color:#64748b; background:#f1f5f9; padding:8px 14px; border-radius:8px; display:inline-block;">
+              💡 <em>Tipp: Zu jeder Frage erhältst du direkt die genaue Begründung und die richtige Prolog-Syntax.</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SPIEL-ANSICHT -->
+        <div id="quiz-play-view" style="display: none;">
+          <div class="quiz-progress-wrap">
+            <span id="quiz-progress-text">Frage 1 von 10</span>
+            <span id="quiz-score-live">Punkte: 0</span>
+          </div>
+
+          <div class="quiz-bar-bg">
+            <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+          </div>
+
+          <div>
+            <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+          </div>
+
+          <div id="quiz-question-text" class="quiz-question-title">
+            Lade Frage...
+          </div>
+
+          <div id="quiz-options-box" class="quiz-options">
+            <!-- 4 Antwort-Buttons per JS -->
+          </div>
+
+          <!-- Feedback Box -->
+          <div id="quiz-feedback-box" class="quiz-feedback">
+            <div id="quiz-feedback-title" style="font-weight: 800; font-size:1.05rem; margin-bottom: 0.35rem;"></div>
+            <div id="quiz-feedback-desc"></div>
+          </div>
+
+          <div style="text-align: right;">
+            <button id="quiz-btn-next" class="btn-next-q" style="display: none;" onclick="nextQuestion()">
+              Nächste Frage ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. ERGEBNIS-ANSICHT -->
+        <div id="quiz-result-view" style="display: none;">
+          <div class="result-score-box">
+            <div style="font-size:2.5rem; margin-bottom:0.25rem;">🕵️‍♂️</div>
+            <div id="quiz-final-score" class="result-big-score">8 / 10</div>
+            <div id="quiz-final-badge" class="result-badge-text">Sehr gute Ermittlungsarbeit!</div>
+            <p id="quiz-final-desc" class="result-desc-text">
+              Du hast die Prinzipien von Prolog und logischer Programmierung schon sehr gut verstanden.
+            </p>
+          </div>
+
+          <h4 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-top:1.5rem; margin-bottom:0.5rem;">
+            Deine Auswertung nach Themen:
+          </h4>
+          <div class="stat-cat-grid" id="quiz-cat-breakdown">
+            <!-- Kategorie-Statistiken -->
+          </div>
+
+          <div style="text-align: center; margin-top: 1.75rem; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <button class="btn-next-q" onclick="startQuiz(10)" style="margin-top:0;">
+              🔄 10 neue Zufallsfragen starten
+            </button>
+            <button class="btn-next-q" onclick="startQuiz(25)" style="background:#0f766e; margin-top:0;">
+              🏆 Alle 25 Fragen durchgehen
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer>
       <p><strong>Informatik Differenzierung 10 (Diff-10)</strong> • Schuljahr 2026/2027</p>
@@ -835,7 +1220,483 @@ hat(sophie, buch).`;
         }, 2000);
       });
     }
+
+    // ==========================================================================
+    // QUIZ ENGINE (PROLOG 25 FRAGEN-POOL)
+    // ==========================================================================
+    const QUESTION_POOL = [
+      // --- KATEGORIE 1: PARADIGMEN & GRUNDBEGRIFFE (Fragen 1-6) ---
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Welchem Programmierparadigma gehört Prolog an?",
+        opts: [
+          "Deklarative / Logische Programmierung",
+          "Imperative Programmierung",
+          "Objektorientierte Programmierung",
+          "Funktionale Programmierung"
+        ],
+        ans: 0,
+        exp: "Prolog gehört zur <strong>deklarativen bzw. logischen Programmierung</strong>: Man beschreibt <em>WAS</em> gilt (Fakten &amp; Regeln), anstatt wie in Java/Python schrittweise Befehle (<em>WIE</em>) vorzugeben."
+      },
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Was ist der fundamentale Unterschied zwischen imperativer Programmierung (Java/Python) und deklarativer Programmierung (Prolog)?",
+        opts: [
+          "Imperativ: Kochrezept (Schritt-für-Schritt-Anweisungen) vs. Deklarativ: Wissensbasis (Was ist wahr?)",
+          "Deklarativ kann nur Zahlen berechnen, imperativ nur Text verarbeiten",
+          "In Prolog darf man prinzipiell keine Variablen benutzen",
+          "Imperative Sprachen kennen keine Schleifen"
+        ],
+        ans: 0,
+        exp: "In imperativen Sprachen sagen wir dem Computer genau <em>WIE</em> er rechnen soll (wie ein Kochrezept). In Prolog deklarieren wir Fakten und Regeln über die Welt (<em>WAS</em>) und stellen Fragen."
+      },
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Was versteht man in Prolog unter einer <strong>„Wissensbasis“ (Knowledge Base)</strong>?",
+        opts: [
+          "Die Gesamtheit aller Fakten und Regeln, die dem System bekannt sind",
+          "Den gesamten Speicherplatz auf der Festplatte des Schulservers",
+          "Ein geheimes Administrator-Passwort für SWISH",
+          "Die Liste aller bisher aufgetretenen Fehlermeldungen"
+        ],
+        ans: 0,
+        exp: "Die <strong>Wissensbasis</strong> ist der linke Code-Bereich in SWISH. Sie enthält alle Fakten (z. B. <code>ort(leo, lehrerzimmer).</code>) und Regeln, auf deren Basis Prolog logische Schlüsse zieht."
+      },
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Was besagt die <strong>„Closed World Assumption“ (CWA, Weltabschlussannahme)</strong> in Prolog?",
+        opts: [
+          "Alles, was nicht in der Wissensbasis steht (oder daraus hergeleitet werden kann), gilt für Prolog automatisch als FALSCH (false.)",
+          "Die Wissensbasis darf nach dem Starten von SWISH nicht mehr editiert werden",
+          "Prolog kann ausschließlich auf geschlossenen Schul-Netzwerken ausgeführt werden",
+          "Prolog-Anfragen beenden sich nach 10 Sekunden automatisch"
+        ],
+        ans: 0,
+        exp: "Prolog nimmt an, dass die Wissensbasis die vollständige Welt beschreibt (Closed World). Kennt Prolog einen Fakt nicht, antwortet es konsequent mit <code>false.</code>!"
+      },
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Womit MUSS in Prolog jede Aussage, jeder Fakt und jede Regel zwingend beendet werden?",
+        opts: [
+          "Mit einem Punkt .",
+          "Mit einem Semikolon ;",
+          "Mit einem Ausrufezeichen !",
+          "Mit einem Doppelpunkt :"
+        ],
+        ans: 0,
+        exp: "Jeder Fakt und jede Regel endet zwingend mit einem <strong>Punkt <code>.</code></strong>. Fehlt dieser, meldet SWISH einen Syntaxfehler!"
+      },
+      {
+        cat: "Paradigmen & Grundlagen",
+        q: "Welches Zeichen leitet in Prolog einen Kommentar ein, der vom System ignoriert wird?",
+        opts: [
+          "Das Prozentzeichen %",
+          "Die Raute #",
+          "Zwei Schrägstriche //",
+          "Ein Ausrufezeichen !"
+        ],
+        ans: 0,
+        exp: "In Prolog werden einzeilige Kommentare mit dem <strong>Prozentzeichen <code>%</code></strong> eingeleitet (z. B. <code>% Orte der Verdächtigen</code>)."
+      },
+
+      // --- KATEGORIE 2: SYNTAX – ATOME VS. VARIABLEN (Fragen 7-12) ---
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Welche fundamentale Syntax-Regel gilt in Prolog für <strong>Atome</strong> (konkrete Namen von Personen, Gegenständen oder Orten)?",
+        opts: [
+          "Sie müssen zwingend mit einem KLEINBUCHSTABEN beginnen",
+          "Sie müssen immer in doppelten Anführungszeichen stehen",
+          "Sie müssen zwingend mit einem GROSSBUCHSTABEN beginnen",
+          "Sie müssen mit einer Ziffer enden"
+        ],
+        ans: 0,
+        exp: "Atome (feste Bezeichner wie <code>leo</code>, <code>turnhalle</code>, <code>dietrich</code>) beginnen in Prolog <strong>immer mit einem Kleinbuchstaben</strong>!"
+      },
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Woran erkennt Prolog eine <strong>Variable</strong> (einen Platzhalter für die Suche nach Unbekannten)?",
+        opts: [
+          "Am GROSSBUCHSTABEN am Wortanfang (z. B. Wer, Was, X) oder einem Unterstrich _",
+          "An einem vorangestellten Dollarzeichen $ (z. B. $name)",
+          "An spitzen Klammern wie &lt;variable&gt;",
+          "Daran, dass das Wort gelb unterstrichen ist"
+        ],
+        ans: 0,
+        exp: "Variablen beginnen zwingend mit einem <strong>Großbuchstaben</strong> (z. B. <code>Wer</code>, <code>Ort</code>, <code>X</code>) oder mit einem Unterstrich <code>_</code>."
+      },
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Was passiert, wenn ein Schüler versehentlich <code>ort(Leo, turnhalle).</code> mit großem 'L' in die Wissensbasis schreibt?",
+        opts: [
+          "Prolog interpretiert Leo als Variable (Platzhalter) statt als feste Person",
+          "Prolog stürzt sofort ab",
+          "Es ist egal, Prolog unterscheidet Groß- und Kleinschreibung nicht",
+          "Der Text wird automatisch rot unterstrichen und gelöscht"
+        ],
+        ans: 0,
+        exp: "Da <code>Leo</code> großgeschrieben ist, hält Prolog es für eine Variable! Die Aussage würde bedeuten: <em>„JEDER ist in der Turnhalle“</em> – ein klassischer Anfängerfehler!"
+      },
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Betrachte den Fakt: <code>ort(mia, kunstraum).</code> Was ist hier das Prädikat und was sind die Argumente?",
+        opts: [
+          "ort ist das Prädikat; mia und kunstraum sind die Argumente",
+          "mia ist das Prädikat; ort und kunstraum sind Argumente",
+          "kunstraum ist das Prädikat; ort und mia sind Argumente",
+          "Es gibt in Prolog keine Prädikate"
+        ],
+        ans: 0,
+        exp: "Das Wort vor der Klammer ist das <strong>Prädikat</strong> (beschreibt die Beziehung/Eigenschaft). In den Klammern stehen durch Kommas getrennt die <strong>Argumente</strong> (die Beteiligten)."
+      },
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Welche der folgenden Zeilen ist syntaktisch VOLLSTÄNDIG KORREKT in Prolog geschrieben?",
+        opts: [
+          "hat(mia, pinsel).",
+          "Hat(mia, Pinsel).",
+          "hat(Mia, pinsel)",
+          "hat mia pinsel."
+        ],
+        ans: 0,
+        exp: "Nur <code>hat(mia, pinsel).</code> erfüllt alle Regeln: Prädikat und Atome kleingeschrieben, Argumente in runden Klammern, abgeschlossen mit einem Punkt."
+      },
+      {
+        cat: "Syntax: Atome & Variablen",
+        q: "Welche Bedeutung hat ein einzelner Unterstrich <code>_</code> als sogenannte <strong>anonyme Variable</strong> in Prolog?",
+        opts: [
+          "Er dient als Wildcard / Platzhalter für einen Wert, dessen genauer Name uns egal ist",
+          "Er löscht die Wissensbasis",
+          "Er beendet das Prolog-Programm",
+          "Er steht für die Zahl 0"
+        ],
+        ans: 0,
+        exp: "Die <strong>anonyme Variable <code>_</code></strong> bedeutet: <em>„Es ist mir egal, wer oder was hier steht, Hauptsache es gibt überhaupt einen passenden Eintrag.“</em>"
+      },
+
+      // --- KATEGORIE 3: ANFRAGEN (QUERIES) IN SWISH (Fragen 13-18) ---
+      {
+        cat: "Anfragen & SWISH",
+        q: "Woran erkennt man in der SWISH-Konsole das Eingabefeld für eine <strong>Anfrage (Query)</strong>?",
+        opts: [
+          "Am vorangestellten Fragezeichen mit Bindestrich: ?-",
+          "An einem grünen Pfeil >>",
+          "Am Wort 'SELECT'",
+          "An einer blinkenden Sanduhr"
+        ],
+        ans: 0,
+        exp: "Jede Anfrage an Prolog wird hinter dem Prompt <strong><code>?- </code></strong> formuliert (z. B. <code>?- ort(tom, Wo).</code>)."
+      },
+      {
+        cat: "Anfragen & SWISH",
+        q: "In der Wissensbasis steht: <code>ort(leo, lehrerzimmer).</code> Was antwortet Prolog auf die Anfrage: <code>?- ort(leo, lehrerzimmer).</code>?",
+        opts: [
+          "true.",
+          "false.",
+          "leo = lehrerzimmer.",
+          "Error: Fact already known"
+        ],
+        ans: 0,
+        exp: "Da der Fakt exakt so in der Wissensbasis existiert, bestätigt Prolog die Anfrage mit <strong><code>true.</code></strong> (wahr)."
+      },
+      {
+        cat: "Anfragen & SWISH",
+        q: "In der Wissensbasis steht: <code>ort(tom, turnhalle).</code> Was antwortet Prolog auf die Anfrage: <code>?- ort(tom, lehrerzimmer).</code>?",
+        opts: [
+          "false.",
+          "true.",
+          "tom = lehrerzimmer.",
+          "unknown"
+        ],
+        ans: 0,
+        exp: "Prolog findet keinen Eintrag, der Tom im Lehrerzimmer verortet. Nach der Closed World Assumption lautet die Antwort: <strong><code>false.</code></strong>"
+      },
+      {
+        cat: "Anfragen & SWISH",
+        q: "Was bedeutet die Anfrage <code>?- ort(Wer, bibliothek).</code> auf Deutsch?",
+        opts: [
+          "Welche Person (Wer) befindet sich laut Wissensbasis in der Bibliothek?",
+          "War die Person Wer in der Bibliothek?",
+          "Ist die Bibliothek geöffnet?",
+          "Lösche alle Personen aus der Bibliothek"
+        ],
+        ans: 0,
+        exp: "Da <code>Wer</code> mit einem Großbuchstaben beginnt, ist es eine Variable. Prolog durchsucht die Wissensbasis nach passenden Belegungen für <code>Wer</code>."
+      },
+      {
+        cat: "Anfragen & SWISH",
+        q: "In der Wissensbasis steht: <code>ort(sophie, bibliothek).</code> Wie lautet die Antwort von Prolog auf <code>?- ort(Wer, bibliothek).</code>?",
+        opts: [
+          "Wer = sophie.",
+          "true.",
+          "sophie = bibliothek.",
+          "yes"
+        ],
+        ans: 0,
+        exp: "Prolog bindet die Variable <code>Wer</code> an das gefundene Atom: <strong><code>Wer = sophie.</code></strong> (Unifikation)."
+      },
+      {
+        cat: "Anfragen & SWISH",
+        q: "Was muss man in SWISH tun, um bei einer Variablen-Anfrage mit mehreren Lösungen die NÄCHSTE Lösung zu sehen?",
+        opts: [
+          "Die Leertaste oder das Semikolon ; drücken (bzw. auf 'Next' klicken)",
+          "Den Computer neu starten",
+          "Die Anfrage erneut abtippen",
+          "Die Escape-Taste drücken"
+        ],
+        ans: 0,
+        exp: "Mit der <strong>Leertaste</strong> oder dem <strong>Semikolon <code>;</code></strong> fordert man Prolog auf, per Backtracking nach weiteren passenden Lösungen zu suchen."
+      },
+
+      // --- KATEGORIE 4: LOGISCHE VERKNÜPFUNGEN, REGELN & DETEKTIV-FALL (Fragen 19-25) ---
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Welches Satzzeichen steht in Prolog für das logische <strong>UND (Konjunktion)</strong>?",
+        opts: [
+          "Das Komma ,",
+          "Das kaufmännische Und &",
+          "Das Wort 'AND'",
+          "Der Schrägstrich /"
+        ],
+        ans: 0,
+        exp: "In Prolog bedeutet ein <strong>Komma <code>,</code></strong> immer ein logisches <strong>UND</strong>. Beide Bedingungen müssen gleichzeitig erfüllt sein."
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Was bedeutet die kombinierte Anfrage: <code>?- ort(X, lehrerzimmer), hat(X, dietrich).</code>?",
+        opts: [
+          "Gibt es eine Person X, die im Lehrerzimmer war UND gleichzeitig einen Dietrich hat?",
+          "War Person X im Lehrerzimmer ODER hat sie einen Dietrich?",
+          "Leo war im Lehrerzimmer und hat einen Dietrich",
+          "Prüfe, ob Dietrich im Lehrerzimmer liegt"
+        ],
+        ans: 0,
+        exp: "Das Komma verknüpft beide Bedingungen mit UND. Es wird eine Person <code>X</code> gesucht, die beide Eigenschaften gleichzeitig erfüllt."
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Warum muss in <code>?- ort(X, lehrerzimmer), hat(X, dietrich).</code> in beiden Teilen der GLEICHE Variablenname X verwendet werden?",
+        opts: [
+          "Damit Prolog zwingend dieselbe Person für beide Bedingungen überprüft",
+          "Weil Prolog nur den Buchstaben X als Variable erlaubt",
+          "Das ist reiner Zufall und hat keine logische Auswirkung",
+          "Weil man Variablen in Prolog nicht unterschiedlich benennen darf"
+        ],
+        ans: 0,
+        exp: "Würde man <code>?- ort(X, lehrerzimmer), hat(Y, dietrich).</code> schreiben, könnte <code>X</code> Leo sein und <code>Y</code> Tom! Nur durch denselben Namen <code>X</code> weiß Prolog, dass es dieselbe Person sein muss."
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Welcher Operator leitet in einer Prolog-Regel die Bedingungen ein (bedeutet: „WENN“ bzw. $\\leftarrow$)?",
+        opts: [
+          ":- (Doppelpunkt gefolgt von Bindestrich)",
+          "-> (Pfeil nach rechts)",
+          "==",
+          "WENN"
+        ],
+        ans: 0,
+        exp: "Der Regel-Operator <strong><code>:-</code></strong> trennt den Kopf vom Rumpf und bedeutet: <em>„Gilt, WENN die folgenden Bedingungen erfüllt sind“</em>."
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Wie wird die Regel <code>taeter(X) :- ort(X, lehrerzimmer), hat(X, dietrich).</code> gelesen?",
+        opts: [
+          "X ist der Täter, WENN X im Lehrerzimmer war UND X einen Dietrich hat.",
+          "Wenn X der Täter ist, dann ist er im Lehrerzimmer.",
+          "Entweder ist X der Täter oder X hat einen Dietrich.",
+          "Leo ist der Täter im Lehrerzimmer."
+        ],
+        ans: 0,
+        exp: "Links vom <code>:-</code> steht die Schlussfolgerung (Kopf), rechts davon stehen die Voraussetzungen (Rumpf): <em>„X ist der Täter, WENN ...“</em>"
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Warum war im Fall des gestohlenen Schulpokals Leo zweifelsfrei der Täter?",
+        opts: [
+          "Weil er laut Wissensbasis als Einziger im Lehrerzimmer war UND als Einziger einen Dietrich hatte",
+          "Weil Tom ein Alibi für den Kunstraum hatte",
+          "Weil Sophie gestanden hat",
+          "Weil Herr Müller seinen Schlüssel verloren hatte"
+        ],
+        ans: 0,
+        exp: "Leo erfüllt als Einziger beide Kriterien: Er hielt sich zur Tatzeit im Lehrerzimmer (Tatort) auf und trug einen Dietrich bei sich, mit dem der Pokalschrank aufgebrochen wurde."
+      },
+      {
+        cat: "Logik, Regeln & Detektiv-Fall",
+        q: "Was liefert die Anfrage <code>?- hat(mueller, schluessel).</code>, wenn Herr Müller nirgendwo in der Wissensbasis vorkommt?",
+        opts: [
+          "false.",
+          "true.",
+          "mueller = schluessel.",
+          "SyntaxError: Unknown Person"
+        ],
+        ans: 0,
+        exp: "Da der Fakt nicht in der Wissensbasis existiert, schließt Prolog gemäß der Closed World Assumption auf <strong><code>false.</code></strong>."
+      }
+    ];
+
+    // Quiz State
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let totalQuestionsCount = 10;
+    let catStats = {};
+
+    function startQuiz(count) {
+      totalQuestionsCount = Math.min(count, QUESTION_POOL.length);
+      
+      // Shuffle pool (Fisher-Yates)
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+
+      currentQuestions = poolCopy.slice(0, totalQuestionsCount);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = (currentQIdx / totalQuestionsCount) * 100;
+
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von ${totalQuestionsCount}`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      // Optionen mischen
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      // Feedback und Weiter-Button verstecken
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      // Alle Optionen sperren
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      // Statistik festhalten
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback show is-correct';
+        fbTitle.innerText = "Richtig kombiniert! 🕵️‍♂️🎉";
+      } else {
+        selectedBtn.classList.add('wrong');
+        // Richtige Antwort grün hervorheben
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(q.opts[q.ans])) {
+            btn.classList.add('correct');
+          }
+        });
+        fbBox.className = 'quiz-feedback show is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+      }
+
+      fbDesc.innerHTML = q.exp;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-btn-next').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < totalQuestionsCount) {
+        renderCurrentQuestion();
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / ${totalQuestionsCount}`;
+      
+      const percent = (quizScore / totalQuestionsCount) * 100;
+      const badgeEl = document.getElementById('quiz-final-badge');
+      const descEl = document.getElementById('quiz-final-desc');
+
+      if (percent === 100) {
+        badgeEl.innerText = "🏆 Meister-Detektiv! Sherlock Holmes wäre stolz.";
+        badgeEl.style.color = "#059669";
+        descEl.innerText = "Perfekt! Du beherrschst Fakten, Atome, Variablen und logische Verknüpfungen in Prolog fehlerfrei.";
+      } else if (percent >= 80) {
+        badgeEl.innerText = "🌟 Erstklassige Ermittlungsarbeit!";
+        badgeEl.style.color = "#0d9488";
+        descEl.innerText = "Hervorragend! Du hast die Grundlagen der logischen Programmierung sicher im Griff.";
+      } else if (percent >= 60) {
+        badgeEl.innerText = "👍 Guter Ermittler!";
+        badgeEl.style.color = "#2563eb";
+        descEl.innerText = "Eine solide Leistung. Achte noch genauer auf die Syntax (Klein-/Großschreibung) und die Closed World Assumption.";
+      } else {
+        badgeEl.innerText = "💡 Weiter ermitteln – Übung macht den Meister!";
+        badgeEl.style.color = "#d97706";
+        descEl.innerText = "Lies dir die Merkregeln oben auf der Seite noch einmal durch und teste deine Anfragen direkt in SWISH!";
+      }
+
+      // Breakdown nach Kategorien
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [catName, stat] of Object.entries(catStats)) {
+        const catPercent = Math.round((stat.correct / stat.total) * 100);
+        let color = '#059669';
+        if (catPercent < 50) color = '#dc2626';
+        else if (catPercent < 80) color = '#d97706';
+
+        const item = document.createElement('div');
+        item.className = 'stat-cat-item';
+        item.innerHTML = `
+          <span style="font-weight:700; color:#0f172a;">${catName}</span>
+          <span style="font-weight:800; color:${color}; font-family:'JetBrains Mono', monospace;">
+            ${stat.correct} / ${stat.total} (${catPercent}%)
+          </span>
+        `;
+        breakdownBox.appendChild(item);
+      }
+    }
   </script>
 
 </body>
 </html>
+
