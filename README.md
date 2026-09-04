@@ -1,6 +1,26 @@
-﻿# Schulportal 2026/2027
+# Schulportal 2026/2027
+
+🌐 **Live-Webportal (URL):** [https://feyhat79.github.io/mathe-9b/](https://feyhat79.github.io/mathe-9b/)
 
 Zentrales Webportal für Mathematik- und Informatik-Unterrichtsinhalte (Gymnasium / Gesamtschule).
+
+---
+
+## 🔗 Schnellübersicht der Web-Adressen
+
+| Fach / Stufe | Direkt-URL |
+| :--- | :--- |
+| **🌐 Hauptportal (Dashboard)** | **[https://feyhat79.github.io/mathe-9b/](https://feyhat79.github.io/mathe-9b/)** |
+| **📐 Mathematik 9b** | [https://feyhat79.github.io/mathe-9b/mathe/9b/](https://feyhat79.github.io/mathe-9b/mathe/9b/) |
+| **💻 Informatik Stufe 5** (5b–5e) | [https://feyhat79.github.io/mathe-9b/info/5/](https://feyhat79.github.io/mathe-9b/info/5/) |
+| **💻 Informatik Stufe 6** (6a–6d) | [https://feyhat79.github.io/mathe-9b/info/6/](https://feyhat79.github.io/mathe-9b/info/6/) |
+| **💻 Informatik Diff 9** | [https://feyhat79.github.io/mathe-9b/info/diff-9/](https://feyhat79.github.io/mathe-9b/info/diff-9/) |
+| **💻 Informatik Diff 10** | [https://feyhat79.github.io/mathe-9b/info/diff-10/](https://feyhat79.github.io/mathe-9b/info/diff-10/) |
+| **💻 Informatik EF** | [https://feyhat79.github.io/mathe-9b/info/ef/](https://feyhat79.github.io/mathe-9b/info/ef/) |
+| **💻 Informatik Q1** | [https://feyhat79.github.io/mathe-9b/info/q1/](https://feyhat79.github.io/mathe-9b/info/q1/) |
+| **💻 Informatik Q2** | [https://feyhat79.github.io/mathe-9b/info/q2/](https://feyhat79.github.io/mathe-9b/info/q2/) |
+
+---
 
 ## Struktur
 
