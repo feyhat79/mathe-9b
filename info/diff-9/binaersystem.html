@@ -22,6 +22,8 @@
       --success-light: #ecfdf5;
       --warning: #d97706;
       --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -420,6 +422,278 @@
       overflow-x: auto;
     }
 
+    /* ==========================================================================
+       QUIZ ENGINE STYLES (Pool & Interaktiver Selbsttest)
+       ========================================================================== */
+    .quiz-container {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border);
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      margin-top: 1rem;
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .quiz-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .quiz-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0d9488, #2563eb);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #99f6e4;
+      margin-bottom: 0.85rem;
+    }
+
+    .quiz-question-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.4;
+      margin-bottom: 1.4rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.5;
+    }
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .opt-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt-btn.correct {
+      background: var(--success-light) !important;
+      border-color: var(--success) !important;
+      color: #065f46 !important;
+      font-weight: 600;
+    }
+    .quiz-opt-btn.correct .opt-badge {
+      background: var(--success);
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: var(--danger-light) !important;
+      border-color: var(--danger) !important;
+      color: #991b1b !important;
+    }
+    .quiz-opt-btn.wrong .opt-badge {
+      background: var(--danger);
+      color: white;
+    }
+
+    .quiz-feedback {
+      display: none;
+      padding: 1.25rem 1.5rem;
+      border-radius: 12px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      animation: fadeIn 0.25s ease;
+    }
+    .quiz-feedback.show {
+      display: block;
+    }
+    .quiz-feedback.is-correct {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      border-left: 5px solid #10b981;
+      color: #065f46;
+    }
+    .quiz-feedback.is-wrong {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-left: 5px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .btn-next-q {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 26px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1.25rem;
+      transition: all 0.2s;
+    }
+    .btn-next-q:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Start & Result view buttons */
+    .quiz-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 600px) {
+      .quiz-mode-grid { grid-template-columns: 1fr; }
+    }
+
+    .mode-card {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-card:hover {
+      border-color: var(--primary);
+      background: #f0fdfa;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(13,148,136,0.12);
+    }
+    .mode-card h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+    .mode-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .btn-mode-start {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .result-score-box {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1.5px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    .result-big-score {
+      font-size: 3.5rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .result-badge-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .result-desc-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .stat-cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 600px) {
+      .stat-cat-grid { grid-template-columns: 1fr; }
+    }
+    .stat-cat-item {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     footer {
       text-align: center;
       color: var(--text-muted);
@@ -497,7 +771,7 @@
         <span>➗</span> Der Divisionsalgorithmus (: 2 mit Rest)
       </h2>
       <p>
-        Wie wandelt man eine große Zahl wie <strong>53</strong> oder <strong>201</strong> systematisch in Binär um, ohne raten zu müssen?
+        Wie wandelt man eine Zahl wie <strong>25</strong> oder <strong>42</strong> systematisch in Binär um, ohne raten zu müssen?
         Ganz einfach: Wir teilen fortlaufend durch <strong>2 mit Rest</strong>, bis 0 herauskommt.
       </p>
 
@@ -590,39 +864,148 @@
       </div>
     </section>
 
-    <!-- INTERAKTIVE SELBSTTESTS MIT AUFKLAPPBAREN LÖSUNGEN -->
-    <section class="content-card">
+    <!-- ==========================================================================
+         INTERAKTIVER SELBSTTEST (QUIZ-ENGINE MIT 25 FRAGEN-POOL)
+         ========================================================================== -->
+    <section class="content-card" id="selbsttest">
       <h2 class="section-title">
-        <span>🧠</span> Übungsaufgaben &amp; Selbsttest (mit Musterlösungen)
+        <span>🎯</span> Interaktiver Selbsttest (Fragenpool)
       </h2>
-      <p style="margin-bottom:1rem; color:var(--text-muted);">
-        Rechne die Aufgaben zuerst auf einem Schmierblatt und klappe dann die Lösung auf:
+      <p style="color:var(--text-muted); margin-bottom:1rem;">
+        Teste dein Wissen rund um Stellenwerte, Umrechnung, den Divisionsalgorithmus und die Binäraddition.
+        Unser Fragenpool umfasst <strong>25 Fragen</strong> mit detaillierten Lösungserklärungen.
       </p>
 
-      <!-- Aufgabe 1 -->
+      <div class="quiz-container">
+        
+        <!-- 1. START-ANSICHT -->
+        <div id="quiz-start-view">
+          <div style="text-align:center; max-width:620px; margin:0 auto;">
+            <div style="font-size:2.8rem; margin-bottom:0.5rem;">🧠</div>
+            <h3 style="font-size:1.4rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">
+              Bereit für den Wissens-Check?
+            </h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">
+              Wähle aus, wie viele Fragen du bearbeiten möchtest. Bei jedem Durchgang werden die Fragen und Antwortmöglichkeiten zufällig neu gemischt:
+            </p>
+
+            <div class="quiz-mode-grid">
+              <div class="mode-card" onclick="startQuiz(10)">
+                <div style="font-size:1.8rem; margin-bottom:6px;">⚡</div>
+                <h3>Schnell-Check</h3>
+                <p><strong>10 zufällige Fragen</strong> aus allen 4 Themenbereichen. Ideal für zwischendurch!</p>
+                <button class="btn-mode-start">10 Fragen starten →</button>
+              </div>
+
+              <div class="mode-card" onclick="startQuiz(25)" style="border-color:#0d9488; background:#f0fdfa;">
+                <div style="font-size:1.8rem; margin-bottom:6px;">🏆</div>
+                <h3>Großer Meister-Test</h3>
+                <p><strong>Alle 25 Fragen</strong> des gesamten Pools. Der ultimative Test vor der nächsten Stunde!</p>
+                <button class="btn-mode-start" style="background:#0f766e;">Alle 25 Fragen starten →</button>
+              </div>
+            </div>
+
+            <div style="font-size:0.85rem; color:#64748b; background:#f1f5f9; padding:8px 14px; border-radius:8px; display:inline-block;">
+              💡 <em>Tipp: Nach jeder Frage erhältst du sofort die genaue Erklärung und den Rechenweg.</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SPIEL-ANSICHT -->
+        <div id="quiz-play-view" style="display: none;">
+          <div class="quiz-progress-wrap">
+            <span id="quiz-progress-text">Frage 1 von 10</span>
+            <span id="quiz-score-live">Punkte: 0</span>
+          </div>
+
+          <div class="quiz-bar-bg">
+            <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+          </div>
+
+          <div>
+            <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+          </div>
+
+          <div id="quiz-question-text" class="quiz-question-title">
+            Lade Frage...
+          </div>
+
+          <div id="quiz-options-box" class="quiz-options">
+            <!-- 4 Antwort-Buttons per JS -->
+          </div>
+
+          <!-- Feedback Box -->
+          <div id="quiz-feedback-box" class="quiz-feedback">
+            <div id="quiz-feedback-title" style="font-weight: 800; font-size:1.05rem; margin-bottom: 0.35rem;"></div>
+            <div id="quiz-feedback-desc"></div>
+          </div>
+
+          <div style="text-align: right;">
+            <button id="quiz-btn-next" class="btn-next-q" style="display: none;" onclick="nextQuestion()">
+              Nächste Frage ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. ERGEBNIS-ANSICHT -->
+        <div id="quiz-result-view" style="display: none;">
+          <div class="result-score-box">
+            <div style="font-size:2.5rem; margin-bottom:0.25rem;">🎉</div>
+            <div id="quiz-final-score" class="result-big-score">8 / 10</div>
+            <div id="quiz-final-badge" class="result-badge-text">Sehr gute Leistung!</div>
+            <p id="quiz-final-desc" class="result-desc-text">
+              Du hast das Binärsystem und die Addition schon sehr gut verstanden.
+            </p>
+          </div>
+
+          <h4 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-top:1.5rem; margin-bottom:0.5rem;">
+            Deine Auswertung nach Themen:
+          </h4>
+          <div class="stat-cat-grid" id="quiz-cat-breakdown">
+            <!-- Kategorie-Statistiken -->
+          </div>
+
+          <div style="text-align: center; margin-top: 1.75rem; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <button class="btn-next-q" onclick="startQuiz(10)" style="margin-top:0;">
+              🔄 10 neue Zufallsfragen starten
+            </button>
+            <button class="btn-next-q" onclick="startQuiz(25)" style="background:#0f766e; margin-top:0;">
+              🏆 Alle 25 Fragen durchgehen
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- AUFKLAPPBARE ARBEITSBLATT-ÜBUNGEN (ZUM VERGLEICHEN) -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span>📝</span> Übungsaufgaben vom Arbeitsblatt (zum Nachlesen)
+      </h2>
+      <p style="margin-bottom:1rem; color:var(--text-muted);">
+        Hier findest du die schriftlichen Aufgaben von Arbeitsblatt 1 mit vollständigen Lösungswegen:
+      </p>
+
       <details>
         <summary>
-          <span>Aufgabe 1: Binär &rightarrow; Dezimal (11010₂)</span>
+          <span>Aufgabe 1: Binär &rightarrow; Dezimal (11010₂ &amp; 100101₂)</span>
           <span>Lösung anzeigen ▼</span>
         </summary>
         <div class="details-body">
-          <p><strong>Rechnung:</strong></p>
-          <p style="font-family:'JetBrains Mono', monospace; font-size:1.05rem;">
-            16 + 8 + 0 + 2 + 0 = <strong>26</strong>
-          </p>
-          <p style="color:#059669; font-weight:700; margin-top:4px;">
-            Ergebnis: 11010₂ = 26₁₀
-          </p>
+          <p>• <strong>11010₂:</strong> 16 + 8 + 0 + 2 + 0 = <strong>26₁₀</strong></p>
+          <p>• <strong>100101₂:</strong> 32 + 0 + 0 + 4 + 0 + 1 = <strong>37₁₀</strong></p>
+          <p>• <strong>11111111₂ (1 Byte):</strong> 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = <strong>255₁₀</strong></p>
         </div>
       </details>
 
-      <!-- Aufgabe 2 -->
       <details>
         <summary>
-          <span>Aufgabe 2: Divisionsalgorithmus für die Zahl 19</span>
+          <span>Aufgabe 2: Divisionsalgorithmus für 19 und 42</span>
           <span>Lösung anzeigen ▼</span>
         </summary>
         <div class="details-body">
+          <p><strong>Zahl 19:</strong></p>
           <div class="code-block">
 19 : 2 = 9  Rest 1  ▲ (LSB)
  9 : 2 = 4  Rest 1  │
@@ -630,33 +1013,39 @@
  2 : 2 = 1  Rest 0  │
  1 : 2 = 0  Rest 1  │ (MSB)
 ----------------------------------------
-Ergebnis: 19 = 10011₂
-Probe: 16 + 2 + 1 = 19 ✓
+Ergebnis: 19₁₀ = 10011₂ (Probe: 16 + 2 + 1 = 19 ✓)
+          </div>
+          <p style="margin-top:10px;"><strong>Zahl 42:</strong></p>
+          <div class="code-block">
+42 : 2 = 21 Rest 0  ▲
+21 : 2 = 10 Rest 1  │
+10 : 2 =  5 Rest 0  │
+ 5 : 2 =  2 Rest 1  │
+ 2 : 2 =  1 Rest 0  │
+ 1 : 2 =  0 Rest 1  │
+----------------------------------------
+Ergebnis: 42₁₀ = 101010₂ (Probe: 32 + 8 + 2 = 42 ✓)
           </div>
         </div>
       </details>
 
-      <!-- Aufgabe 3 -->
       <details>
         <summary>
-          <span>Aufgabe 3: Schriftliche Addition (1011₂ + 0111₂)</span>
+          <span>Aufgabe 3: Schriftliche Addition mit Überträgen</span>
           <span>Lösung anzeigen ▼</span>
         </summary>
         <div class="details-body">
           <div class="code-block">
-    1 0 1 1₂   (11)
-  + 0 1 1 1₂   ( 7)
-Ü:  1 1 1 
-------------------
-  1 0 0 1 0₂   (18) -> Probe: 16 + 2 = 18 ✓
+A) Ohne Übertrag:       B) Mit Übertragskette:     C) Mit Spezialfall (1+1+1):
+    1 0 1 0₂  (10)          1 1 0 1₂  (13)             1 0 1 1₂  (11)
+  + 0 1 0 1₂  ( 5)        + 0 0 1 1₂  ( 3)           + 0 1 1 1₂  ( 7)
+Ü:  0 0 0 0             Ü:  1 1 1 1                Ü:  1 1 1 1
+--------------------    --------------------       --------------------
+  = 1 1 1 1₂  (15)        = 1 0 0 0 0₂  (16)         = 1 0 0 1 0₂  (18)
           </div>
-          <p style="margin-top:6px; color:#475569; font-size:0.9rem;">
-            <strong>Hinweis zur dritten Spalte von rechts:</strong> Dort treffen $0 + 1 + 1$ (aus Übertrag) aufeinander $\rightarrow$ ergibt wieder $10_2$, also $0$ hin und $1$ gemerkt.
-          </p>
         </div>
       </details>
 
-      <!-- Aufgabe 4 -->
       <details>
         <summary>
           <span>Aufgabe 4: Die 2-Bit-Addierer Wahrheitstabelle (Halbaddierer)</span>
@@ -695,7 +1084,9 @@ Probe: 16 + 2 + 1 = 19 ✓
   </div>
 
   <script>
-    // --- 8-BIT BOARD LOGIC ---
+    // ==========================================================================
+    // 1. 8-BIT BOARD LOGIC
+    // ==========================================================================
     const bitValues = [128, 64, 32, 16, 8, 4, 2, 1];
     let bitStates = [0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -765,7 +1156,9 @@ Probe: 16 + 2 + 1 = 19 ✓
       document.getElementById('resCalc').innerText = calcParts.length > 0 ? calcParts.join(' + ') : '0 (kein Bit aktiv)';
     }
 
-    // --- DIVISION ALGORITHM CALCULATOR ---
+    // ==========================================================================
+    // 2. DIVISION ALGORITHM CALCULATOR
+    // ==========================================================================
     function runDivision() {
       let val = parseInt(document.getElementById('divInput').value);
       if (isNaN(val) || val <= 0) val = 25;
@@ -827,6 +1220,481 @@ Probe: 16 + 2 + 1 = 19 ✓
       `;
 
       document.getElementById('divOutput').innerHTML = html;
+    }
+
+    // ==========================================================================
+    // 3. QUIZ ENGINE (25 FRAGEN-POOL)
+    // ==========================================================================
+    const QUESTION_POOL = [
+      // --- KATEGORIE 1: STELLENWERTE & BIT-GRUNDLAGEN (Fragen 1-6) ---
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Wofür steht die Abkürzung <strong>„Bit“</strong> in der Informatik?",
+        opts: [
+          "Binary Digit (Binäre Ziffer)",
+          "Binary Item (Binäres Element)",
+          "Basic Information Technology",
+          "Byte Integration Tool"
+        ],
+        ans: 0,
+        exp: "<strong>Bit</strong> ist ein Kofferwort aus <strong>Bi</strong>nary Digi<strong>t</strong> (binäre Ziffer) und bezeichnet die kleinste Informationseinheit im Computer (0 oder 1)."
+      },
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Warum arbeiten moderne Computer und Prozessoren intern mit dem Binärsystem (0 und 1)?",
+        opts: [
+          "Weil elektrische Schaltungen zuverlässig zwei Zustände (Strom an / Strom aus) unterscheiden können",
+          "Weil man mit Binärzahlen viel weniger Speicherplatz verbraucht",
+          "Weil das Dezimalsystem für Computerchips mathematisch zu kompliziert wäre",
+          "Weil Computer ursprünglich nur aus zwei Tasten bestanden"
+        ],
+        ans: 0,
+        exp: "Transistoren in Mikrochips wirken wie elektronische Schalter: Sie kennen nur zwei physikalisch stabile Zustände: Spannung liegt an (High = 1) oder keine Spannung (Low = 0)."
+      },
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Welche Stellenwerte haben die ersten 4 Bits von rechts nach links ($2^0, 2^1, 2^2, 2^3$)?",
+        opts: [
+          "1, 2, 4, 8",
+          "1, 2, 3, 4",
+          "2, 4, 6, 8",
+          "1, 10, 100, 1000"
+        ],
+        ans: 0,
+        exp: "Da das Binärsystem die Basis 2 hat, verdoppeln sich die Stellenwerte nach links: $2^0=1$, $2^1=2$, $2^2=4$, $2^3=8$."
+      },
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Welcher Stellenwert gehört zur 6. Stelle von rechts ($2^5$)?",
+        opts: [
+          "16",
+          "32",
+          "64",
+          "128"
+        ],
+        ans: 1,
+        exp: "Die Stellenwerte von rechts nach links lauten: 1, 2, 4, 8, 16 und die 6. Stelle ist $2^5 = \\mathbf{32}$."
+      },
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Wie viele verschiedene Zustände bzw. Zahlenwerte kann ein <strong>Byte (8 Bit)</strong> maximal annehmen?",
+        opts: [
+          "8 Werte",
+          "128 Werte",
+          "255 Werte",
+          "256 Werte (von 0 bis 255)"
+        ],
+        ans: 3,
+        exp: "Mit 8 Bits sind $2^8 = 256$ verschiedene Kombinationen möglich. Die darstellbaren Dezimalzahlen reichen von 0 bis 255."
+      },
+      {
+        cat: "Stellenwerte & Bits",
+        q: "Wie lautet die größte Dezimalzahl, die man mit genau <strong>4 Bits</strong> darstellen kann?",
+        opts: [
+          "4",
+          "15",
+          "16",
+          "31"
+        ],
+        ans: 1,
+        exp: "Wenn alle 4 Bits auf 1 stehen ($1111_2$), ergibt sich $8 + 4 + 2 + 1 = \\mathbf{15}$ (bzw. $2^4 - 1 = 15$)."
+      },
+
+      // --- KATEGORIE 2: BINÄR -> DEZIMAL UMRECHNUNG (Fragen 7-12) ---
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Welcher Dezimalzahl entspricht die Binärzahl <code>101₂</code>?",
+        opts: [
+          "3",
+          "5",
+          "6",
+          "7"
+        ],
+        ans: 1,
+        exp: "Stellenwerte addieren: $4 + 0 + 1 = \\mathbf{5}$."
+      },
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Welcher Dezimalzahl entspricht die Binärzahl <code>1010₂</code>?",
+        opts: [
+          "10",
+          "8",
+          "12",
+          "14"
+        ],
+        ans: 0,
+        exp: "Stellenwerte addieren: $8 + 0 + 2 + 0 = \\mathbf{10}$."
+      },
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Welcher Dezimalzahl entspricht die Binärzahl <code>1101₂</code>?",
+        opts: [
+          "11",
+          "13",
+          "15",
+          "9"
+        ],
+        ans: 1,
+        exp: "Stellenwerte addieren: $8 + 4 + 0 + 1 = \\mathbf{13}$."
+      },
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Welcher Dezimalzahl entspricht die Binärzahl <code>10001₂</code>?",
+        opts: [
+          "9",
+          "17",
+          "25",
+          "33"
+        ],
+        ans: 1,
+        exp: "Die Stellenwerte von rechts sind 1, 2, 4, 8, 16. Also: $16 + 0 + 0 + 0 + 1 = \\mathbf{17}$."
+      },
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Welche Dezimalzahl ergibt das Bitmuster <code>11110₂</code>?",
+        opts: [
+          "30",
+          "31",
+          "28",
+          "26"
+        ],
+        ans: 0,
+        exp: "$16 + 8 + 4 + 2 + 0 = \\mathbf{30}$. (Tipp: $11111_2$ ist 31; da die Einerstelle 0 ist, ist es genau $31 - 1 = 30$)."
+      },
+      {
+        cat: "Binär ➔ Dezimal",
+        q: "Woran erkennt man bei jeder Binärzahl sofort auf einen Blick, ob sie <strong>ungerade</strong> ist?",
+        opts: [
+          "Sie hat insgesamt mehr Einsen als Nullen",
+          "Das erste Bit ganz links ist eine 1",
+          "Das letzte Bit ganz rechts (Einerstelle / LSB) ist eine 1",
+          "Sie besteht aus einer ungeraden Anzahl an Stellen"
+        ],
+        ans: 2,
+        exp: "Alle höheren Stellenwerte (2, 4, 8, 16, 32...) sind immer gerade Zahlen. Nur die Einerstelle ganz rechts hat den Wert 1. Ist dieses Bit 1, ist die Zahl zwingend ungerade!"
+      },
+
+      // --- KATEGORIE 3: DEZIMAL -> BINÄR & DIVISIONSALGORITHMUS (Fragen 13-18) ---
+      {
+        cat: "Divisionsalgorithmus",
+        q: "Wie lautet die Dezimalzahl <strong>9</strong> als Binärzahl?",
+        opts: [
+          "1001₂",
+          "1010₂",
+          "1100₂",
+          "0111₂"
+        ],
+        ans: 0,
+        exp: "$9$ besteht aus $8 + 1$, also steht an der 8er- und der 1er-Stelle eine 1 $\\rightarrow \\mathbf{1001_2}$."
+      },
+      {
+        cat: "Divisionsalgorithmus",
+        q: "Welcher Rest entsteht im ersten Schritt, wenn man <strong>25 durch 2 mit Rest</strong> teilt?",
+        opts: [
+          "Rest 0",
+          "Rest 1",
+          "Rest 2",
+          "Rest 0.5"
+        ],
+        ans: 1,
+        exp: "$25 : 2 = 12$ mit **Rest 1**, da 25 eine ungerade Zahl ist ($12 \\cdot 2 = 24$)."
+      },
+      {
+        cat: "Divisionsalgorithmus",
+        q: "In welcher Richtung müssen die Reste beim Divisionsalgorithmus notiert werden, um die richtige Binärzahl zu erhalten?",
+        opts: [
+          "Von oben nach unten",
+          "Von unten nach oben",
+          "Von links nach rechts",
+          "Die Reihenfolge ist beliebig"
+        ],
+        ans: 1,
+        exp: "Die Reste müssen zwingend von **UNTEN nach OBEN** gelesen werden, damit das Ergebnis stimmt!"
+      },
+      {
+        cat: "Divisionsalgorithmus",
+        q: "Warum liest man die Reste beim Divisionsalgorithmus von unten nach oben?",
+        opts: [
+          "Weil der allererste Rest die kleinste Stelle (Einerstelle / LSB) und der letzte Rest die höchste Zweierpotenz (MSB) ist",
+          "Das ist reine Willkür und Konvention unter Informatikern",
+          "Weil der Prozessor immer rückwärts rechnet",
+          "Weil bei Computern oben immer negativ bedeutet"
+        ],
+        ans: 0,
+        exp: "Die erste Division durch 2 prüft, ob die Zahl gerade oder ungerade ist (Einerstelle). Die letzte Division bestimmt das Bit mit dem größten Wert (Most Significant Bit)."
+      },
+      {
+        cat: "Divisionsalgorithmus",
+        q: "Wie lautet die Dezimalzahl <strong>18</strong> im Binärsystem?",
+        opts: [
+          "10010₂",
+          "10100₂",
+          "01011₂",
+          "11000₂"
+        ],
+        ans: 0,
+        exp: "$18 = 16 + 2$. Die Stellenwerte 16 und 2 sind belegt: $\\mathbf{10010_2}$."
+      },
+      {
+        cat: "Divisionsalgorithmus",
+        q: "Ein Schüler teilt <strong>7 durch 2</strong>: $7:2=3$ R 1, $3:2=1$ R 1, $1:2=0$ R 1. Wie lautet die Binärzahl?",
+        opts: [
+          "111₂",
+          "101₂",
+          "011₂",
+          "110₂"
+        ],
+        ans: 0,
+        exp: "Die Reste von unten nach oben lauten: $1, 1, 1 \\rightarrow \\mathbf{111_2}$ ($4 + 2 + 1 = 7$)."
+      },
+
+      // --- KATEGORIE 4: BINÄRE ADDITION & ÜBERTRAG (Fragen 19-25) ---
+      {
+        cat: "Binäre Addition",
+        q: "Was ergibt die einfache 1-Bit-Addition <code>0₂ + 1₂</code>?",
+        opts: [
+          "0₂",
+          "1₂",
+          "10₂",
+          "11₂"
+        ],
+        ans: 1,
+        exp: "$0 + 1 = \\mathbf{1_2}$ (Summe 1, kein Übertrag)."
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Was ergibt die 1-Bit-Addition <code>1₂ + 1₂</code>?",
+        opts: [
+          "2₂ (Ziffer 2)",
+          "0₂",
+          "10₂ (Summe 0, Übertrag 1)",
+          "11₂"
+        ],
+        ans: 2,
+        exp: "Im Binärsystem gibt es keine Ziffer 2! $1 + 1$ ergibt die zweistellige Binärzahl $\\mathbf{10_2}$: 0 an die Summe schreiben und 1 als Übertrag (Carry) merken!"
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Was versteht man unter dem englischen Begriff <strong>„Carry-Bit“</strong>?",
+        opts: [
+          "Ein Bit, das wegen eines Fehlers gelöscht werden muss",
+          "Das Übertrags-Bit, das bei der Addition in die nächsthöhere Stelle weiterwandert",
+          "Das allererste Bit einer Festplatte",
+          "Ein Signal für den Ton der PC-Lautsprecher"
+        ],
+        ans: 1,
+        exp: "„Carry“ bedeutet wörtlich *Übertrag*. Es transportiert den Übertragswert 1 in die nächsthöhere Zweierpotenz (genau wie bei der schriftlichen Addition in der Grundschule)."
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Was passiert bei der schriftlichen Addition, wenn drei Einsen aufeinandertreffen: <code>1₂ + 1₂ + 1₂</code> (z. B. durch einen vorherigen Übertrag)?",
+        opts: [
+          "Summe 0, Übertrag 0",
+          "Summe 1, Übertrag 0",
+          "Summe 0, Übertrag 1",
+          "Summe 1, Übertrag 1 (Ergebnis 11₂)"
+        ],
+        ans: 3,
+        exp: "$1 + 1 + 1 = 3_{10}$. Die Zahl 3 lautet binär $\\mathbf{11_2}$. Das bedeutet: **1 schreiben und 1 als Übertrag weitergeben**!"
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Was ergibt die schriftliche Addition <code>10₂ + 01₂</code>?",
+        opts: [
+          "11₂ (dezimal 3)",
+          "100₂ (dezimal 4)",
+          "01₂ (dezimal 1)",
+          "10₂ (dezimal 2)"
+        ],
+        ans: 0,
+        exp: "Rechte Spalte: $0 + 1 = 1$. Linke Spalte: $1 + 0 = 1$. Ergebnis: $\\mathbf{11_2}$ ($2 + 1 = 3$)."
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Was ergibt die schriftliche Addition <code>11₂ + 01₂</code>?",
+        opts: [
+          "10₂",
+          "100₂ (dezimal 4)",
+          "111₂",
+          "101₂"
+        ],
+        ans: 1,
+        exp: "Rechte Spalte: $1 + 1 = 0$ (Übertrag 1). Linke Spalte: $1 + 0 + 1 (\\text{Ü}) = 0$ (Übertrag 1). Dritte Spalte: $1$. Ergebnis: $\\mathbf{100_2}$ ($3 + 1 = 4$)."
+      },
+      {
+        cat: "Binäre Addition",
+        q: "Warum benötigt eine Schaltung, die zwei Bits $A$ und $B$ addiert (Halbaddierer), zwingend <strong>ZWEI Ausgangsleitungen</strong>?",
+        opts: [
+          "Als Sicherheits-Reserve gegen Wackelkontakte",
+          "Weil das Rechenergebnis zweistellig sein kann: Ein Ausgang für die Summe (S) und einer für den Übertrag (C)",
+          "Ein Ausgang für Plus und ein Ausgang für Minus",
+          "Damit immer zwei LEDs gleichzeitig leuchten"
+        ],
+        ans: 1,
+        exp: "Da $1 + 1 = 10_2$ ist, hat das Ergebnis zwei Stellen. Ein einzelnes Kabel/LED kann nur 0 oder 1 anzeigen. Man benötigt daher zwingend ein Kabel für das Summen-Bit ($S$) und ein Kabel für das Übertrags-Bit ($C$)!"
+      }
+    ];
+
+    // Quiz State
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let totalQuestionsCount = 10;
+    let catStats = {};
+
+    function startQuiz(count) {
+      totalQuestionsCount = Math.min(count, QUESTION_POOL.length);
+      
+      // Shuffle pool (Fisher-Yates)
+      const poolCopy = [...QUESTION_POOL];
+      for (let i = poolCopy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
+      }
+
+      currentQuestions = poolCopy.slice(0, totalQuestionsCount);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-start-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'none';
+      document.getElementById('quiz-play-view').style.display = 'block';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      const progressPercent = (currentQIdx / totalQuestionsCount) * 100;
+
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von ${totalQuestionsCount}`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${progressPercent}%`;
+
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      // Optionen mischen
+      const optionsWithIndex = q.opts.map((opt, idx) => ({ text: opt, originalIdx: idx }));
+      for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+      }
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      optionsWithIndex.forEach((optObj, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span><span>${optObj.text}</span>`;
+        btn.onclick = () => selectOption(btn, optObj.originalIdx, q);
+        optionsBox.appendChild(btn);
+      });
+
+      // Feedback und Weiter-Button verstecken
+      const fbBox = document.getElementById('quiz-feedback-box');
+      fbBox.className = 'quiz-feedback';
+      fbBox.style.display = 'none';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+    }
+
+    function selectOption(selectedBtn, originalIdx, q) {
+      // Alle Optionen sperren
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+      allBtns.forEach(btn => btn.disabled = true);
+
+      // Statistik festhalten
+      if (!catStats[q.cat]) catStats[q.cat] = { total: 0, correct: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (originalIdx === q.ans);
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        quizScore++;
+        catStats[q.cat].correct++;
+        fbBox.className = 'quiz-feedback show is-correct';
+        fbTitle.innerText = "Richtig! 🎉";
+      } else {
+        selectedBtn.classList.add('wrong');
+        // Richtige Antwort grün hervorheben
+        allBtns.forEach(btn => {
+          if (btn.innerText.includes(q.opts[q.ans])) {
+            btn.classList.add('correct');
+          }
+        });
+        fbBox.className = 'quiz-feedback show is-wrong';
+        fbTitle.innerText = "Leider nicht ganz richtig! ✖";
+      }
+
+      fbDesc.innerHTML = q.exp;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-btn-next').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < totalQuestionsCount) {
+        renderCurrentQuestion();
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / ${totalQuestionsCount}`;
+      
+      const percent = (quizScore / totalQuestionsCount) * 100;
+      const badgeEl = document.getElementById('quiz-final-badge');
+      const descEl = document.getElementById('quiz-final-desc');
+
+      if (percent === 100) {
+        badgeEl.innerText = "🏆 Absoluter Bit-Meister!";
+        badgeEl.style.color = "#059669";
+        descEl.innerText = "Perfekt! Du hast alle Fragen fehlerfrei gemeistert und beherrschst das Binärsystem und die Addition im Schlaf.";
+      } else if (percent >= 80) {
+        badgeEl.innerText = "🌟 Sehr starke Leistung!";
+        badgeEl.style.color = "#0d9488";
+        descEl.innerText = "Klasse gemacht! Du hast eine solide Grundlage und bist bestens auf den Bau des Addierers mit Logikgattern vorbereitet.";
+      } else if (percent >= 60) {
+        badgeEl.innerText = "👍 Gute Basis!";
+        badgeEl.style.color = "#2563eb";
+        descEl.innerText = "Die Grundlagen sitzen schon. Sieh dir die Erklärungen bei den Fragen an, die noch nicht ganz geklappt haben.";
+      } else {
+        badgeEl.innerText = "💡 Weiter so – Übung macht den Meister!";
+        badgeEl.style.color = "#d97706";
+        descEl.innerText = "Nutze das 8-Bit-Board und den Divisionsrechner weiter oben auf der Seite, um noch etwas zu trainieren und probiere es gleich nochmal!";
+      }
+
+      // Breakdown nach Kategorien
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [catName, stat] of Object.entries(catStats)) {
+        const catPercent = Math.round((stat.correct / stat.total) * 100);
+        let color = '#059669';
+        if (catPercent < 50) color = '#dc2626';
+        else if (catPercent < 80) color = '#d97706';
+
+        const item = document.createElement('div');
+        item.className = 'stat-cat-item';
+        item.innerHTML = `
+          <span style="font-weight:700; color:#0f172a;">${catName}</span>
+          <span style="font-weight:800; color:${color}; font-family:'JetBrains Mono', monospace;">
+            ${stat.correct} / ${stat.total} (${catPercent}%)
+          </span>
+        `;
+        breakdownBox.appendChild(item);
+      }
     }
 
     // Init on page load
