@@ -1,4 +1,4 @@
-﻿# Private Arbeitsdateien und Office-Dokumente
+# Private Arbeitsdateien und Office-Dokumente
 *.docx
 *.xlsx
 *.pptx
@@ -12,8 +12,10 @@
 # Klassenarbeiten, Klausuren und interne Lösungen
 *[kK]lausur*
 *[kK]lassenarbeit*
+*[kK]ursarbeit*
 *[tT]est*
 *[aA]rbeit*
+!*[aA]rbeitsblatt*
 *[lL]oesung*
 *[lL]ösung*
 *[nN]oten*

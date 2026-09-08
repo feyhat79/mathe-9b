@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsblatt: Lineare Gleichungssysteme (LGS) – Graphische Lösung | Mathe 9b</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm 10mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      background: #e2e8f0;
+      line-height: 1.4;
+      font-size: 9.5pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================================
+       SCREEN TOOLBAR (WIRD BEIM DRUCKEN AUSGEBLENDET)
+       ========================================================= */
+    .top-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-family: inherit;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-nav-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+
+    .toolbar-nav-btn:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .teacher-badge-indicator {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    body.teacher-mode .teacher-badge-indicator {
+      display: inline-block;
+    }
+
+    /* =========================================================
+       PAGE WRAPPER & PRINT LAYOUT
+       ========================================================= */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 8mm 12mm 8mm 12mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 9pt;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: visible !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+
+    /* =========================================================
+       HEADER & METADATA
+       ========================================================= */
+    .sheet-header {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 5px;
+      margin-bottom: 7px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4px;
+    }
+
+    .header-course {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-title {
+      font-size: 14pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .sheet-subtitle {
+      font-size: 8.8pt;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .meta-fields {
+      display: flex;
+      gap: 20px;
+      font-size: 9pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 4px 10px;
+      margin-top: 5px;
+    }
+
+    .field-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .field-line {
+      border-bottom: 1px dotted #64748b;
+      min-width: 140px;
+      height: 14px;
+      display: inline-block;
+    }
+
+    /* =========================================================
+       SECTIONS & CARDS
+       ========================================================= */
+    .section-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 7px 9px;
+      margin-bottom: 7px;
+      background: #ffffff;
+    }
+
+    .section-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 3px;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 10pt;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-badge {
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Flashback Box */
+    .flashback-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 3.5px solid #16a34a;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 8.8pt;
+      line-height: 1.35;
+    }
+
+    .flashback-title {
+      font-weight: 800;
+      color: #15803d;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Two Columns Layout */
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .two-cols-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    /* SVG Koordinatensystem */
+    .grid-svg-container {
+      background: #ffffff;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px;
+    }
+
+    .grid-svg-container svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Ausfüllzeilen und Rechenkästchen */
+    .calc-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 3px 0;
+      font-size: 9pt;
+    }
+
+    .write-box {
+      border: 1px solid #94a3b8;
+      border-radius: 3px;
+      background: #ffffff;
+      min-height: 22px;
+      padding: 2px 6px;
+      display: inline-flex;
+      align-items: center;
+      font-family: inherit;
+    }
+
+    .dotted-box {
+      border: 1px dashed #64748b;
+      border-radius: 4px;
+      background: #f8fafc;
+      padding: 5px 8px;
+      margin-top: 4px;
+    }
+
+    .dotted-line {
+      border-bottom: 1px dotted #64748b;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Tabelle */
+    .compact-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin-top: 4px;
+    }
+
+    .compact-table th, .compact-table td {
+      border: 1px solid #94a3b8;
+      padding: 4px 6px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .compact-table th {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    /* =========================================================
+       LEHRERVERSION (LÖSUNGEN IN ROT)
+       ========================================================= */
+    .sol-val, .sol-text, .sol-step {
+      display: none;
+      color: #dc2626 !important;
+      font-weight: 700;
+    }
+
+    body.teacher-mode .sol-val,
+    body.teacher-mode .sol-text,
+    body.teacher-mode .sol-step {
+      display: inline !important;
+    }
+
+    body.teacher-mode .sol-block {
+      display: block !important;
+    }
+
+    /* In SVG */
+    .sol-graph {
+      display: none;
+    }
+
+    body.teacher-mode .sol-graph {
+      display: inline !important;
+    }
+
+    .footer-note {
+      font-size: 7.5pt;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 3px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       SCREEN TOOLBAR (Im Druck automatisch ausgeblendet)
+       ========================================================= -->
+  <div class="top-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="lgs.html" class="toolbar-nav-btn">← Zurück zur LGS-Übersicht</a>
+      <span class="toolbar-title">
+        <span>📄</span> Arbeitsblatt: Graphische Deutung von LGS
+      </span>
+      <span class="teacher-badge-indicator" id="teacherIndicator">Lehrerversion aktiv</span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" id="btnToggleTeacher" onclick="toggleTeacherMode()">
+        <span>🔴</span> Lehrerversion (Lösungen in Rot)
+      </button>
+      <button class="btn-action btn-print" onclick="window.print()">
+        <span>🖨️</span> Drucken (Strg+P)
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- =========================================================
+         SEITE 1: FLASHBACK & GELENKTES MUSTERBEISPIEL
+         ========================================================= -->
+    <div class="page" id="page-1">
+      <!-- Kopfzeile -->
+        <div class="sheet-header">
+          <div class="header-top">
+            <div>
+              <div class="header-course">Gymnasium • Klasse 9b • Mathematik</div>
+              <h1 class="sheet-title">Lineare Gleichungssysteme — Graphische Lösung</h1>
+              <div class="sheet-subtitle">Wiederholung linearer Funktionen ($y = mx + b$) und Bestimmung des Schnittpunkts</div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 7.8pt; font-weight: 700; color: #475569; background: #e2e8f0; padding: 2px 7px; border-radius: 4px;">AB 01 • Seite 1/2</span>
+            </div>
+          </div>
+          <div class="meta-fields">
+            <div class="field-item">
+              <span class="field-label">Name:</span>
+              <span class="field-line" style="min-width: 220px;"></span>
+            </div>
+            <div class="field-item">
+              <span class="field-label">Datum:</span>
+              <span class="field-line" style="min-width: 110px;"></span>
+            </div>
+            <div class="field-item">
+              <span class="field-label">Klasse:</span>
+              <span style="font-weight: 700; color: #1e293b;">9b</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEIL 1: FLASHBACK / WARM-UP -->
+        <div class="section-box">
+          <div class="section-title-bar">
+            <h2 class="section-title"><span>🔄</span> Teil 1: Flashback / Warm-up — Auffrischung zu $y = m \cdot x + b$</h2>
+            <span class="section-badge">Vorwissen aktivieren</span>
+          </div>
+
+          <div class="two-cols">
+            <!-- Linke Spalte: Erklärung & Aufgabenstellung -->
+            <div>
+              <div class="flashback-box" style="margin-bottom: 6px;">
+                <div class="flashback-title"><span>💡</span> So zeichnest du eine lineare Funktion $y = m \cdot x + b$:</div>
+                <ul style="margin-left: 15px; margin-top: 3px; font-size: 8.5pt;">
+                  <li><strong>$b$ = $y$-Achsenabschnitt:</strong> Startpunkt auf der $y$-Achse bei $P(0 \mid b)$ markieren.</li>
+                  <li><strong>$m$ = Steigung:</strong> Vom Startpunkt aus mit dem <em>Steigungsdreieck</em> weitergehen:
+                    <br>$m = \frac{\Delta y}{\Delta x} = \frac{\text{Schritt nach oben (+) / unten (-)}}{\text{Schritt nach rechts (+) („Nenner“)}}$.
+                  </li>
+                </ul>
+              </div>
+
+              <div style="font-size: 8.8pt; line-height: 1.4;">
+                <p><strong>Aufgabe:</strong> Zeichne die folgenden beiden Geraden mit Bleistift und Geodreieck in das Koordinatensystem rechts ein:</p>
+                <div style="margin-top: 4px; padding: 5px 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px;">
+                  <div><strong>$g_1: y = 2x - 1$</strong> 
+                    <span style="color: #64748b; font-size: 8pt;">$\rightarrow$ Start bei $(0 \mid -1)$; $1$ nach rechts, $2$ nach oben.</span>
+                    <span class="sol-val"> [eingezeichnet]</span>
+                  </div>
+                  <div style="margin-top: 3px;"><strong>$g_2: y = -\frac{1}{2}x + 4$</strong> 
+                    <span style="color: #64748b; font-size: 8pt;">$\rightarrow$ Start bei $(0 \mid 4)$; $2$ nach rechts, $1$ nach unten.</span>
+                    <span class="sol-val"> [eingezeichnet]</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rechte Spalte: SVG Koordinatensystem (5mm Karo = 2 Kästchen = 1 Einheit = 24px) -->
+            <div class="grid-svg-container">
+              <svg viewBox="0 0 240 216" style="width: 100%; max-width: 230px;">
+                <defs>
+                  <!-- 12px Karo-Gitter (5mm Papier-Kästchen) -->
+                  <pattern id="grid-p1-warmup" width="12" height="12" patternUnits="userSpaceOnUse" x="0" y="0">
+                    <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#cbd5e1" stroke-width="0.6"/>
+                  </pattern>
+                </defs>
+                <rect width="240" height="216" fill="#ffffff" />
+                <rect width="240" height="216" fill="url(#grid-p1-warmup)" />
+
+                <!-- Ursprung bei (72, 144) -> x: -2 bis +6, y: -2 bis +5 -->
+                <!-- X-Achse (y = 0 bei Y=144) -->
+                <line x1="12" y1="144" x2="232" y2="144" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="232,141 238,144 232,147" fill="#334155"/>
+                <text x="232" y="158" font-size="10" font-weight="700" fill="#334155">x</text>
+
+                <!-- Y-Achse (x = 0 bei X=72) -->
+                <line x1="72" y1="206" x2="72" y2="10" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="69,10 72,4 75,10" fill="#334155"/>
+                <text x="80" y="14" font-size="10" font-weight="700" fill="#334155">y</text>
+
+                <!-- Ticks X (Schritt 24 = 1 Einheit) -->
+                <line x1="48" y1="141" x2="48" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="43" y="156" font-size="8.5" fill="#64748b">-1</text>
+                <line x1="96" y1="141" x2="96" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="94" y="156" font-size="8.5" fill="#64748b">1</text>
+                <line x1="120" y1="141" x2="120" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="117" y="156" font-size="8.5" fill="#64748b">2</text>
+                <line x1="144" y1="141" x2="144" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="141" y="156" font-size="8.5" fill="#64748b">3</text>
+                <line x1="168" y1="141" x2="168" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="165" y="156" font-size="8.5" fill="#64748b">4</text>
+                <line x1="192" y1="141" x2="192" y2="147" stroke="#475569" stroke-width="1.2"/>
+                <text x="189" y="156" font-size="8.5" fill="#64748b">5</text>
+
+                <!-- Ticks Y (Schritt 24 = 1 Einheit) -->
+                <line x1="69" y1="168" x2="75" y2="168" stroke="#475569" stroke-width="1.2"/>
+                <text x="56" y="171" font-size="8.5" fill="#64748b">-1</text>
+                <line x1="69" y1="120" x2="75" y2="120" stroke="#475569" stroke-width="1.2"/>
+                <text x="59" y="123" font-size="8.5" fill="#64748b">1</text>
+                <line x1="69" y1="96" x2="75" y2="96" stroke="#475569" stroke-width="1.2"/>
+                <text x="59" y="99" font-size="8.5" fill="#64748b">2</text>
+                <line x1="69" y1="72" x2="75" y2="72" stroke="#475569" stroke-width="1.2"/>
+                <text x="59" y="75" font-size="8.5" fill="#64748b">3</text>
+                <line x1="69" y1="48" x2="75" y2="48" stroke="#475569" stroke-width="1.2"/>
+                <text x="59" y="51" font-size="8.5" fill="#64748b">4</text>
+
+                <!-- LÖSUNGEN (LEHRERVERSION) -->
+                <!-- g1: y = 2x - 1 (Punkte: (-0.5, -2) -> (60, 192), (0, -1) -> (72, 168), (1, 1) -> (96, 120), (2, 3) -> (120, 72), (3, 5) -> (144, 24)) -->
+                <g class="sol-graph">
+                  <line x1="56" y1="200" x2="152" y2="8" stroke="#dc2626" stroke-width="2"/>
+                  <text x="156" y="20" font-size="9" font-weight="700" fill="#dc2626">g₁</text>
+                  <!-- Steigungsdreieck g1 bei (72,168) nach (96,120) -->
+                  <polyline points="72,168 96,168 96,120" fill="none" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+                  <circle cx="72" cy="168" r="3" fill="#dc2626"/>
+                  <circle cx="96" cy="120" r="3" fill="#dc2626"/>
+                </g>
+
+                <!-- g2: y = -1/2 x + 4 (Punkte: (-2, 5) -> (24, 24), (0, 4) -> (72, 48), (2, 3) -> (120, 72), (4, 2) -> (168, 96), (6, 1) -> (216, 120)) -->
+                <g class="sol-graph">
+                  <line x1="16" y1="20" x2="228" y2="126" stroke="#b91c1c" stroke-width="2"/>
+                  <text x="220" y="140" font-size="9" font-weight="700" fill="#b91c1c">g₂</text>
+                  <circle cx="72" cy="48" r="3" fill="#b91c1c"/>
+                  <circle cx="120" cy="72" r="3" fill="#b91c1c"/>
+                  <!-- Steigungsdreieck g2 -->
+                  <polyline points="72,48 120,48 120,72" fill="none" stroke="#b91c1c" stroke-width="1" stroke-dasharray="2,2"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEIL 2: GELENKTES MUSTERBEISPIEL -->
+        <div class="section-box" style="margin-bottom: 0;">
+          <div class="section-title-bar">
+            <h2 class="section-title"><span>🎯</span> Teil 2: Gelenktes Musterbeispiel — LGS graphisch lösen</h2>
+            <span class="section-badge" style="background: #fef3c7; color: #b45309; border-color: #fde68a;">Schritt für Schritt</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 9pt;">
+            <div><strong>Gegebenes Gleichungssystem:</strong></div>
+            <div style="background: #f1f5f9; padding: 3px 14px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 700;">
+              $\text{I)} \quad x + y = 4 \qquad\qquad \text{II)} \quad 2x - y = -1$
+            </div>
+          </div>
+
+          <!-- 4 Schritte Layout -->
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+
+            <!-- Schritt 1: Umformen -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 5px 8px;">
+              <strong style="color: #2563eb;">Schritt 1:</strong> Forme beide Gleichungen nach $y$ um ($y = mx + b$):
+              <div class="two-cols-equal" style="margin-top: 4px; font-size: 8.8pt;">
+                <div>
+                  $\text{I)} \quad x + y = 4 \quad \mid - x$<br>
+                  $g_1: y = $ <span class="write-box" style="min-width: 90px;"><span class="sol-val">-x + 4</span></span>
+                  <span style="color: #64748b; font-size: 8pt; margin-left: 4px;">($m_1 = <span class="sol-val">-1</span>, \, b_1 = <span class="sol-val">4</span>$)</span>
+                </div>
+                <div>
+                  $\text{II)} \quad 2x - y = -1 \quad \mid - 2x \;\mid : (-1)$<br>
+                  $g_2: y = $ <span class="write-box" style="min-width: 90px;"><span class="sol-val">2x + 1</span></span>
+                  <span style="color: #64748b; font-size: 8pt; margin-left: 4px;">($m_2 = <span class="sol-val">2</span>, \, b_2 = <span class="sol-val">1</span>$)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schritt 2, 3 und 4 im 2-Spalten-Layout (Rechts SVG, Links Text/Rechnungen) -->
+            <div class="two-cols" style="align-items: stretch;">
+
+              <!-- Linke Seite: Schritt 3 (Ablesen) & Schritt 4 (Probe) -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between;">
+                
+                <!-- Schritt 3: Schnittpunkt -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 8px;">
+                  <strong style="color: #2563eb;">Schritt 2 & 3:</strong> Zeichnen & Schnittpunkt ablesen:
+                  <p style="font-size: 8.5pt; color: #475569; margin: 2px 0 5px 0;">Zeichne $g_1$ und $g_2$ in das Koordinatensystem rechts ein. Markiere den Schnittpunkt $S$.</p>
+                  
+                  <div style="background: #ffffff; border: 1.5px solid #2563eb; border-radius: 4px; padding: 4px 8px; font-size: 9pt;">
+                    Schnittpunkt: $S($ <span class="dotted-line" style="width: 24px; text-align: center;"><span class="sol-val">1</span></span> $\mid$ <span class="dotted-line" style="width: 24px; text-align: center;"><span class="sol-val">3</span></span> $)$<br>
+                    Lösungsmenge: $\mathbb{L} = \{ ($ <span class="dotted-line" style="width: 24px; text-align: center;"><span class="sol-val">1</span></span> $\mid$ <span class="dotted-line" style="width: 24px; text-align: center;"><span class="sol-val">3</span></span> $) \}$
+                  </div>
+                </div>
+
+                <!-- Schritt 4: Rechnerische Probe -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 8px; margin-top: 5px;">
+                  <strong style="color: #2563eb;">Schritt 4:</strong> Rechnerische Probe (Werte in $\text{I}$ und $\text{II}$ einsetzen):
+                  <div style="font-size: 8.5pt; line-height: 1.6; margin-top: 3px;">
+                    <div>In $\text{I}$: <span class="dotted-line" style="width: 170px;"><span class="sol-val">$1 + 3 = 4 \implies 4 = 4 \quad \checkmark$</span></span></div>
+                    <div>In $\text{II}$: <span class="dotted-line" style="width: 170px;"><span class="sol-val">$2 \cdot 1 - 3 = 2 - 3 = -1 \quad \checkmark$</span></span></div>
+                  </div>
+                </div>
+
+                <!-- Merksatz-Box -->
+                <div style="background: #ecfdf5; border-left: 3px solid #059669; padding: 4px 8px; border-radius: 3px; font-size: 8pt; color: #065f46; margin-top: 4px;">
+                  <strong>Merke:</strong> Die graphische Lösung eines LGS entspricht genau den Koordinaten des gemeinsamen Schnittpunkts beider Geraden: $S(x \mid y)$.
+                </div>
+
+              </div>
+
+              <!-- Rechte Seite: SVG Koordinatensystem für das Musterbeispiel -->
+              <div class="grid-svg-container" style="height: 100%; min-height: 205px;">
+                <svg viewBox="0 0 240 216" style="width: 100%; max-width: 230px;">
+                  <defs>
+                    <pattern id="grid-p1-muster" width="12" height="12" patternUnits="userSpaceOnUse" x="0" y="0">
+                      <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#cbd5e1" stroke-width="0.6"/>
+                    </pattern>
+                  </defs>
+                  <rect width="240" height="216" fill="#ffffff" />
+                  <rect width="240" height="216" fill="url(#grid-p1-muster)" />
+
+                  <!-- Ursprung bei (72, 168) -> x: -2 bis +6, y: -1 bis +6 -->
+                  <!-- X-Achse (y=0 bei Y=168) -->
+                  <line x1="12" y1="168" x2="232" y2="168" stroke="#334155" stroke-width="1.6"/>
+                  <polygon points="232,165 238,168 232,171" fill="#334155"/>
+                  <text x="232" y="180" font-size="10" font-weight="700" fill="#334155">x</text>
+
+                  <!-- Y-Achse (x=0 bei X=72) -->
+                  <line x1="72" y1="206" x2="72" y2="10" stroke="#334155" stroke-width="1.6"/>
+                  <polygon points="69,10 72,4 75,10" fill="#334155"/>
+                  <text x="80" y="14" font-size="10" font-weight="700" fill="#334155">y</text>
+
+                  <!-- Ticks X (24px pro Einheit) -->
+                  <line x1="48" y1="165" x2="48" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="43" y="180" font-size="8.5" fill="#64748b">-1</text>
+                  <line x1="96" y1="165" x2="96" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="94" y="180" font-size="8.5" fill="#64748b">1</text>
+                  <line x1="120" y1="165" x2="120" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="117" y="180" font-size="8.5" fill="#64748b">2</text>
+                  <line x1="144" y1="165" x2="144" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="141" y="180" font-size="8.5" fill="#64748b">3</text>
+                  <line x1="168" y1="165" x2="168" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="165" y="180" font-size="8.5" fill="#64748b">4</text>
+                  <line x1="192" y1="165" x2="192" y2="171" stroke="#475569" stroke-width="1.2"/>
+                  <text x="189" y="180" font-size="8.5" fill="#64748b">5</text>
+
+                  <!-- Ticks Y (24px pro Einheit) -->
+                  <line x1="69" y1="192" x2="75" y2="192" stroke="#475569" stroke-width="1.2"/>
+                  <text x="56" y="195" font-size="8.5" fill="#64748b">-1</text>
+                  <line x1="69" y1="144" x2="75" y2="144" stroke="#475569" stroke-width="1.2"/>
+                  <text x="59" y="147" font-size="8.5" fill="#64748b">1</text>
+                  <line x1="69" y1="120" x2="75" y2="120" stroke="#475569" stroke-width="1.2"/>
+                  <text x="59" y="123" font-size="8.5" fill="#64748b">2</text>
+                  <line x1="69" y1="96" x2="75" y2="96" stroke="#475569" stroke-width="1.2"/>
+                  <text x="59" y="99" font-size="8.5" fill="#64748b">3</text>
+                  <line x1="69" y1="72" x2="75" y2="72" stroke="#475569" stroke-width="1.2"/>
+                  <text x="59" y="75" font-size="8.5" fill="#64748b">4</text>
+                  <line x1="69" y1="48" x2="75" y2="48" stroke="#475569" stroke-width="1.2"/>
+                  <text x="59" y="51" font-size="8.5" fill="#64748b">5</text>
+
+                  <!-- LÖSUNG IN LEHRERVERSION -->
+                  <!-- g1: y = -x + 4 (Punkte: (-1, 5) -> (48, 48), (0, 4) -> (72, 72), (1, 3) -> (96, 96), (4, 0) -> (168, 168), (5, -1) -> (192, 192)) -->
+                  <g class="sol-graph">
+                    <line x1="36" y1="36" x2="204" y2="204" stroke="#dc2626" stroke-width="2"/>
+                    <text x="200" y="196" font-size="9" font-weight="700" fill="#dc2626">g₁</text>
+                  </g>
+
+                  <!-- g2: y = 2x + 1 (Punkte: (-1, -1) -> (48, 192), (0, 1) -> (72, 144), (1, 3) -> (96, 96), (2, 5) -> (120, 48)) -->
+                  <g class="sol-graph">
+                    <line x1="42" y1="204" x2="132" y2="24" stroke="#b91c1c" stroke-width="2"/>
+                    <text x="134" y="34" font-size="9" font-weight="700" fill="#b91c1c">g₂</text>
+
+                    <!-- Schnittpunkt S(1|3) bei X=96, Y=96 -->
+                    <line x1="96" y1="168" x2="96" y2="96" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+                    <line x1="72" y1="96" x2="96" y2="96" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+                    <circle cx="96" cy="96" r="4.5" fill="#dc2626"/>
+                    <text x="104" y="93" font-size="9.5" font-weight="800" fill="#dc2626">S(1|3)</text>
+                  </g>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    <!-- =========================================================
+         SEITE 2: ÜBUNGSAUFGABEN & SYSTEMATISIERUNG / REFLEXION
+         ========================================================= -->
+    <div class="page" id="page-2">
+      <!-- TEIL 3: ZWEI ÜBUNGSAUFGABEN -->
+      <div class="section-box">
+          <div class="section-title-bar">
+            <h2 class="section-title"><span>✏️</span> Teil 3: Übungsaufgaben — Zeichnen, Schnittpunkt ablesen & Probe</h2>
+            <span class="section-badge">Selbstständiges Arbeiten</span>
+          </div>
+
+          <div class="two-cols-equal">
+            
+            <!-- Aufgabe a -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 7px; background: #f8fafc;">
+              <div style="font-weight: 700; font-size: 9pt; margin-bottom: 2px; color: #1e293b;">
+                Aufgabe a) <span style="font-weight: normal; font-size: 8.5pt;">Direkt in Normalform</span>
+              </div>
+              <div style="font-size: 8.5pt; margin-bottom: 4px; background: #ffffff; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 3px;">
+                $\text{I)} \quad y = x - 1 \qquad\qquad \text{II)} \quad y = -2x + 5$
+              </div>
+              
+              <!-- SVG Karoraster für Aufgabe a -->
+              <div class="grid-svg-container" style="margin-bottom: 4px;">
+                <svg viewBox="0 0 216 168" style="width: 100%; max-width: 216px;">
+                  <defs>
+                    <pattern id="grid-p2-a" width="12" height="12" patternUnits="userSpaceOnUse" x="0" y="0">
+                      <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#cbd5e1" stroke-width="0.6"/>
+                    </pattern>
+                  </defs>
+                  <rect width="216" height="168" fill="#ffffff" />
+                  <rect width="216" height="168" fill="url(#grid-p2-a)" />
+
+                  <!-- Ursprung bei (60, 120) -> x: -2 bis +6, y: -2 bis +4 -->
+                  <line x1="12" y1="120" x2="208" y2="120" stroke="#334155" stroke-width="1.5"/>
+                  <polygon points="208,117 214,120 208,123" fill="#334155"/>
+                  <text x="206" y="132" font-size="9" font-weight="700" fill="#334155">x</text>
+
+                  <line x1="60" y1="160" x2="60" y2="10" stroke="#334155" stroke-width="1.5"/>
+                  <polygon points="57,10 60,4 63,10" fill="#334155"/>
+                  <text x="68" y="14" font-size="9" font-weight="700" fill="#334155">y</text>
+
+                  <!-- Ticks -->
+                  <line x1="84" y1="117" x2="84" y2="123" stroke="#475569" stroke-width="1"/>
+                  <text x="82" y="131" font-size="8" fill="#64748b">1</text>
+                  <line x1="108" y1="117" x2="108" y2="123" stroke="#475569" stroke-width="1"/>
+                  <text x="106" y="131" font-size="8" fill="#64748b">2</text>
+                  <line x1="132" y1="117" x2="132" y2="123" stroke="#475569" stroke-width="1"/>
+                  <text x="130" y="131" font-size="8" fill="#64748b">3</text>
+                  <line x1="156" y1="117" x2="156" y2="123" stroke="#475569" stroke-width="1"/>
+                  <text x="154" y="131" font-size="8" fill="#64748b">4</text>
+
+                  <line x1="57" y1="144" x2="63" y2="144" stroke="#475569" stroke-width="1"/>
+                  <text x="46" y="147" font-size="8" fill="#64748b">-1</text>
+                  <line x1="57" y1="96" x2="63" y2="96" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="99" font-size="8" fill="#64748b">1</text>
+                  <line x1="57" y1="72" x2="63" y2="72" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="75" font-size="8" fill="#64748b">2</text>
+                  <line x1="57" y1="48" x2="63" y2="48" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="51" font-size="8" fill="#64748b">3</text>
+
+                  <!-- LÖSUNG AUFGABE A (LEHRERVERSION) -->
+                  <!-- g1: y = x - 1 (Punkte: (0, -1) -> (60, 144), (1, 0) -> (84, 120), (2, 1) -> (108, 96), (3, 2) -> (132, 72)) -->
+                  <g class="sol-graph">
+                    <line x1="24" y1="180" x2="168" y2="36" stroke="#dc2626" stroke-width="1.8"/>
+                    <text x="170" y="44" font-size="8.5" font-weight="700" fill="#dc2626">g₁</text>
+                  </g>
+                  <!-- g2: y = -2x + 5 (Punkte: (1, 3) -> (84, 48), (2, 1) -> (108, 96), (3, -1) -> (132, 144)) -->
+                  <g class="sol-graph">
+                    <line x1="72" y1="24" x2="144" y2="168" stroke="#b91c1c" stroke-width="1.8"/>
+                    <text x="76" y="22" font-size="8.5" font-weight="700" fill="#b91c1c">g₂</text>
+                    <!-- Schnittpunkt S(2|1) bei X=108, Y=96 -->
+                    <line x1="108" y1="120" x2="108" y2="96" stroke="#dc2626" stroke-dasharray="2,2"/>
+                    <line x1="60" y1="96" x2="108" y2="96" stroke="#dc2626" stroke-dasharray="2,2"/>
+                    <circle cx="108" cy="96" r="3.5" fill="#dc2626"/>
+                    <text x="114" y="94" font-size="8.5" font-weight="800" fill="#dc2626">S(2|1)</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Lösungsfelder Aufgabe a -->
+              <div style="font-size: 8.5pt; line-height: 1.45;">
+                <div>Schnittpunkt: $S($ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">2</span></span> $\mid$ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">1</span></span> $) \implies \mathbb{L} = \{ ($ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">2</span></span> $\mid$ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">1</span></span> $) \}$</div>
+                <div style="margin-top: 3px;"><strong>Probe:</strong><br>
+                  $\text{I)} \;$ <span class="dotted-line" style="width: 150px;"><span class="sol-val">$1 = 2 - 1 \iff 1 = 1 \quad \checkmark$</span></span><br>
+                  $\text{II)} \;$ <span class="dotted-line" style="width: 150px;"><span class="sol-val">$1 = -2(2) + 5 = -4+5=1 \;\checkmark$</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Aufgabe b -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 7px; background: #f8fafc;">
+              <div style="font-weight: 700; font-size: 9pt; margin-bottom: 2px; color: #1e293b;">
+                Aufgabe b) <span style="font-weight: normal; font-size: 8.5pt;">Zuerst nach $y$ umformen</span>
+              </div>
+              <div style="font-size: 8.5pt; margin-bottom: 4px; background: #ffffff; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 3px;">
+                $\text{I)} \quad x + y = 3 \qquad\qquad \text{II)} \quad 2x - y = 0$
+              </div>
+
+              <div style="font-size: 8pt; margin-bottom: 3px;">
+                $g_1: y = $ <span class="dotted-line" style="width: 60px;"><span class="sol-val">-x + 3</span></span>
+                $\quad g_2: y = $ <span class="dotted-line" style="width: 60px;"><span class="sol-val">2x</span></span>
+              </div>
+
+              <!-- SVG Karoraster für Aufgabe b -->
+              <div class="grid-svg-container" style="margin-bottom: 4px;">
+                <svg viewBox="0 0 216 168" style="width: 100%; max-width: 216px;">
+                  <defs>
+                    <pattern id="grid-p2-b" width="12" height="12" patternUnits="userSpaceOnUse" x="0" y="0">
+                      <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#cbd5e1" stroke-width="0.6"/>
+                    </pattern>
+                  </defs>
+                  <rect width="216" height="168" fill="#ffffff" />
+                  <rect width="216" height="168" fill="url(#grid-p2-b)" />
+
+                  <!-- Ursprung bei (60, 132) -> x: -2 bis +6, y: -1 bis +5 -->
+                  <line x1="12" y1="132" x2="208" y2="132" stroke="#334155" stroke-width="1.5"/>
+                  <polygon points="208,129 214,132 208,135" fill="#334155"/>
+                  <text x="206" y="144" font-size="9" font-weight="700" fill="#334155">x</text>
+
+                  <line x1="60" y1="160" x2="60" y2="10" stroke="#334155" stroke-width="1.5"/>
+                  <polygon points="57,10 60,4 63,10" fill="#334155"/>
+                  <text x="68" y="14" font-size="9" font-weight="700" fill="#334155">y</text>
+
+                  <!-- Ticks -->
+                  <line x1="84" y1="129" x2="84" y2="135" stroke="#475569" stroke-width="1"/>
+                  <text x="82" y="143" font-size="8" fill="#64748b">1</text>
+                  <line x1="108" y1="129" x2="108" y2="135" stroke="#475569" stroke-width="1"/>
+                  <text x="106" y="143" font-size="8" fill="#64748b">2</text>
+                  <line x1="132" y1="129" x2="132" y2="135" stroke="#475569" stroke-width="1"/>
+                  <text x="130" y="143" font-size="8" fill="#64748b">3</text>
+                  <line x1="156" y1="129" x2="156" y2="135" stroke="#475569" stroke-width="1"/>
+                  <text x="154" y="143" font-size="8" fill="#64748b">4</text>
+
+                  <line x1="57" y1="108" x2="63" y2="108" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="111" font-size="8" fill="#64748b">1</text>
+                  <line x1="57" y1="84" x2="63" y2="84" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="87" font-size="8" fill="#64748b">2</text>
+                  <line x1="57" y1="60" x2="63" y2="60" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="63" font-size="8" fill="#64748b">3</text>
+                  <line x1="57" y1="36" x2="63" y2="36" stroke="#475569" stroke-width="1"/>
+                  <text x="48" y="39" font-size="8" fill="#64748b">4</text>
+
+                  <!-- LÖSUNG AUFGABE B (LEHRERVERSION) -->
+                  <!-- g1: y = -x + 3 (Punkte: (0, 3) -> (60, 60), (1, 2) -> (84, 84), (3, 0) -> (132, 132)) -->
+                  <g class="sol-graph">
+                    <line x1="24" y1="24" x2="156" y2="156" stroke="#dc2626" stroke-width="1.8"/>
+                    <text x="154" y="150" font-size="8.5" font-weight="700" fill="#dc2626">g₁</text>
+                  </g>
+                  <!-- g2: y = 2x (Punkte: (0, 0) -> (60, 132), (1, 2) -> (84, 84), (2, 4) -> (108, 36)) -->
+                  <g class="sol-graph">
+                    <line x1="48" y1="156" x2="114" y2="24" stroke="#b91c1c" stroke-width="1.8"/>
+                    <text x="116" y="32" font-size="8.5" font-weight="700" fill="#b91c1c">g₂</text>
+                    <!-- Schnittpunkt S(1|2) bei X=84, Y=84 -->
+                    <line x1="84" y1="132" x2="84" y2="84" stroke="#dc2626" stroke-dasharray="2,2"/>
+                    <line x1="60" y1="84" x2="84" y2="84" stroke="#dc2626" stroke-dasharray="2,2"/>
+                    <circle cx="84" cy="84" r="3.5" fill="#dc2626"/>
+                    <text x="90" y="82" font-size="8.5" font-weight="800" fill="#dc2626">S(1|2)</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Lösungsfelder Aufgabe b -->
+              <div style="font-size: 8.5pt; line-height: 1.45;">
+                <div>Schnittpunkt: $S($ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">1</span></span> $\mid$ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">2</span></span> $) \implies \mathbb{L} = \{ ($ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">1</span></span> $\mid$ <span class="dotted-line" style="width: 20px; text-align: center;"><span class="sol-val">2</span></span> $) \}$</div>
+                <div style="margin-top: 3px;"><strong>Probe:</strong><br>
+                  $\text{I)} \;$ <span class="dotted-line" style="width: 150px;"><span class="sol-val">$1 + 2 = 3 \iff 3 = 3 \quad \checkmark$</span></span><br>
+                  $\text{II)} \;$ <span class="dotted-line" style="width: 150px;"><span class="sol-val">$2(1) - 2 = 2 - 2 = 0 \quad \checkmark$</span></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TEIL 4: SYSTEMATISIERUNG & REFLEXION -->
+        <div class="section-box" style="margin-bottom: 0;">
+          <div class="section-title-bar">
+            <h2 class="section-title"><span>📊</span> Teil 4: Übersicht der 3 Lagebeziehungen & Reflexion</h2>
+            <span class="section-badge">Wissenssicherung</span>
+          </div>
+
+          <!-- Übersichtstabelle -->
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Lage der Geraden</th>
+                <th style="width: 26%;">Bedingung ($m$ und $b$)</th>
+                <th style="width: 24%;">Anzahl Schnittpunkte</th>
+                <th style="width: 28%;">Lösungsmenge $\mathbb{L}$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Schneidend</strong></td>
+                <td>Verschiedene Steigungen:<br>
+                  $m_1 \neq m_2$
+                </td>
+                <td>
+                  <strong>Genau 1</strong> Schnittpunkt<br>
+                  <span style="font-size: 7.5pt; color: #64748b;">$S(x \mid y)$</span>
+                </td>
+                <td>
+                  <strong>Genau eine Lösung</strong><br>
+                  $\mathbb{L} = \{ (x \mid y) \}$
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2. Echt parallel</strong></td>
+                <td>Gleiche Steigung, ungleicher Abschnitt:<br>
+                  $m_1 = m_2$, aber $b_1 \neq b_2$
+                </td>
+                <td>
+                  <strong>Kein</strong> Schnittpunkt<br>
+                  <span style="font-size: 7.5pt; color: #64748b;">(kein gemeinsamer Punkt)</span>
+                </td>
+                <td>
+                  <strong>Keine Lösung</strong><br>
+                  $\mathbb{L} = \{ \}$ bzw. $\mathbb{L} = \emptyset$
+                </td>
+              </tr>
+              <tr>
+                <td><strong>3. Identisch</strong></td>
+                <td>Gleiche Steigung & gleicher Abschnitt:<br>
+                  $m_1 = m_2$ und $b_1 = b_2$
+                </td>
+                <td>
+                  <strong>Unendlich viele</strong><br>
+                  <span style="font-size: 7.5pt; color: #64748b;">(aufeinanderliegende Geraden)</span>
+                </td>
+                <td>
+                  <strong>Unendlich viele Lösungen</strong><br>
+                  $\mathbb{L} = \{ (x \mid y) \mid y = mx + b \}$
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Reflexionsfrage -->
+          <div class="dotted-box" style="margin-top: 8px;">
+            <div style="font-weight: 800; font-size: 9pt; color: #0f172a; margin-bottom: 3px;">
+              <span>🤔</span> Reflexionsfrage: 
+              <em>„Warum rechnen wir überhaupt (Einsetzungs-, Additions-, Gleichsetzungsverfahren), wenn man die Lösung doch einfach zeichnen kann?“</em>
+            </div>
+
+            <!-- Schüler-Schreiblinien -->
+            <div style="margin-top: 5px; font-size: 8.5pt; line-height: 1.8;">
+              <div style="border-bottom: 1px dotted #94a3b8; height: 16px;">
+                <span class="sol-text">1. <strong>Zeichenungenauigkeiten:</strong> Bleistiftmine und Geodreieck führen unvermeidbar zu Abweichungen.</span>
+              </div>
+              <div style="border-bottom: 1px dotted #94a3b8; height: 16px;">
+                <span class="sol-text">2. <strong>Krumme Zahlen:</strong> Schnittpunkte mit Brüchen (z. B. $S(\frac{13}{19} \mid 2{,}78)$) kann man im Heft unmöglich exakt ablesen!</span>
+              </div>
+              <div style="border-bottom: 1px dotted #94a3b8; height: 16px;">
+                <span class="sol-text">3. <strong>Exaktheit:</strong> Rechnerische Verfahren liefern immer die 100 % exakte mathematische Lösung.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      const body = document.body;
+      const isTeacher = body.classList.toggle('teacher-mode');
+      const btn = document.getElementById('btnToggleTeacher');
+
+      if (isTeacher) {
+        btn.innerHTML = '<span>⚪</span> Schülerversion (Lösungen ausblenden)';
+      } else {
+        btn.innerHTML = '<span>🔴</span> Lehrerversion (Lösungen in Rot)';
+      }
+
+      // Falls KaTeX noch Formeln im Lehrerbereich rendern muss
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
