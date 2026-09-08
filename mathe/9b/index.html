@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -253,6 +253,18 @@
       background-color: var(--primary-dark);
     }
 
+    .btn-topic-secondary {
+      background-color: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+
+    .btn-topic-secondary:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
     .btn-disabled {
       background-color: #f1f5f9;
       color: #94a3b8;
@@ -357,7 +369,7 @@
       <h1>Mathematik Klasse 9b</h1>
       <p class="subtitle">Deine Übersicht für Unterrichtsinhalte, Übungen, Merkblätter und Infos zu Klassenarbeiten.</p>
       <div class="timestamp-pill">
-        <span>🟢</span> Letztes Update: 27. August 2026
+        <span>🟢</span> Letztes Update: 7. September 2026
       </div>
     </header>
 
@@ -365,8 +377,8 @@
     <div class="alert-card">
       <div class="alert-icon">📌</div>
       <div class="alert-content">
-        <h3>Aktuelle Information & Klassenarbeit</h3>
-        <p>Wir starten mit dem neuen Thema <strong>Lineare Gleichungssysteme (LGS)</strong>. Alle Regeln, Verfahren (Gleichsetzungs-, Einsetzungs- und Additionsverfahren) und interaktive Übungen werden hier laufend aktualisiert. Nutze die Seite insbesondere dann, wenn du krank warst oder Stoff nachholen möchtest!</p>
+        <h3>Aktuelle Information: Graphische Deutung &amp; Arbeitsblatt</h3>
+        <p>Nach den rechnerischen Lösungsverfahren (Einsetzen, Gleichsetzen, Addieren) vertiefen wir nun die <strong>graphische Interpretation von linearen Gleichungssystemen</strong> ($y = mx + b$ und Schnittpunkt). Für das Arbeiten mit Geodreieck und Stift (ohne Schüler-iPads) steht ab sofort ein druckfertiges <strong>2-seitiges DIN-A4-Arbeitsblatt mit Karorastern</strong> und Musterlösungen bereit!</p>
       </div>
     </div>
 
@@ -378,11 +390,14 @@
       <div class="topic-card active-topic">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
           <span class="topic-badge badge-current" style="margin-bottom: 0;">Aktuelles Thema</span>
-          <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">🟢 Update: 27.08.2026</span>
+          <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">🟢 Update: 07.09.2026</span>
         </div>
         <h3 class="topic-title">Lineare Gleichungssysteme (LGS)</h3>
-        <p class="topic-desc">Rechnerische Lösungsverfahren (Einsetzen, Gleichsetzen, Addieren), graphische Interpretation mit Schnittpunkt und interaktiver Selbst-Check.</p>
-        <a href="lgs.html" class="btn-topic">Modul öffnen →</a>
+        <p class="topic-desc">Rechnerische Lösungsverfahren (Einsetzen, Gleichsetzen, Addieren), graphische Deutung mit Schnittpunkt, druckfertiges Arbeitsblatt und interaktiver Selbst-Check.</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
+          <a href="lgs.html" class="btn-topic" style="flex: 1.2;">Modul öffnen →</a>
+          <a href="arbeitsblatt-lgs-graphisch.html" target="_blank" class="btn-topic btn-topic-secondary" style="flex: 1;">📄 Arbeitsblatt</a>
+        </div>
       </div>
 
       <!-- Modul: Quadratische Funktionen -->

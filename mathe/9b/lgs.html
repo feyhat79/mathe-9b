@@ -305,6 +305,160 @@
       border: 1px solid var(--border);
     }
 
+    /* Worksheet Promo Banner */
+    .worksheet-banner {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 1.5px solid #93c5fd;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .worksheet-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .worksheet-banner-icon {
+      font-size: 2.2rem;
+      background: #ffffff;
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+      flex-shrink: 0;
+    }
+
+    .worksheet-banner-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 2px;
+    }
+
+    .worksheet-banner-desc {
+      font-size: 0.9rem;
+      color: #1e40af;
+    }
+
+    .btn-worksheet {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-worksheet:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+
+    /* Flashback Box */
+    .box-flashback {
+      background-color: #f0fdf4;
+      border: 1px solid #86efac;
+      border-left: 4px solid #16a34a;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0 1.75rem 0;
+    }
+
+    .box-flashback-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #14532d;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .box-flashback-content {
+      color: #166534;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* 3 Cases Cards */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .case-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
+    }
+
+    .case-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .case-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.6rem;
+      width: fit-content;
+    }
+
+    .case-card h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    /* Reflection Box */
+    .box-reflection {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-left: 4px solid #a855f7;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.75rem 0;
+    }
+
+    .box-reflection-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #581c87;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     /* Quiz Styling */
     .quiz-progress-wrap {
       display: flex;
@@ -497,7 +651,7 @@
     <div class="top-nav">
       <a href="index.html" class="back-btn">← Zur Themenübersicht</a>
       <span style="font-size: 0.82rem; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 999px;">
-        🟢 Stand: 27. August 2026
+        🟢 Stand: 7. September 2026
       </span>
     </div>
 
@@ -725,104 +879,298 @@
     <!-- ========================================== -->
     <div id="tab-graphisch" class="tab-panel">
       <div class="card-section">
+
+        <!-- Banner zum Arbeitsblatt -->
+        <div class="worksheet-banner">
+          <div class="worksheet-banner-left">
+            <div class="worksheet-banner-icon">📄</div>
+            <div>
+              <div class="worksheet-banner-title">Arbeitsblatt für den Unterricht (Analog mit Karoraster)</div>
+              <div class="worksheet-banner-desc">2-seitiges DIN-A4-Arbeitsblatt mit Zeichenrastern für Bleistift &amp; Geodreieck sowie integrierter Lehrerversion (Lösungen in Rot).</div>
+            </div>
+          </div>
+          <a href="arbeitsblatt-lgs-graphisch.html" target="_blank" class="btn-worksheet">
+            <span>🖨️</span> Arbeitsblatt öffnen &amp; drucken →
+          </a>
+        </div>
+
         <h2 class="card-title">Geometrische Interpretation von Gleichungssystemen</h2>
 
         <!-- Merksatz in sanftem Rot, bündig ausgerichtet -->
         <div class="box-merksatz">
-          <div class="box-merksatz-title">Merksatz:</div>
+          <div class="box-merksatz-title">Zentraler Merksatz:</div>
           <div class="box-merksatz-content">
-            Bei einem linearen Gleichungssystem entspricht die Lösung (falls es eine gibt) geometrisch gesehen dem Schnittpunkt der entsprechenden Graphen.
+            Jede lineare Gleichung mit zwei Variablen ($x$ und $y$) beschreibt eine <strong>Gerade</strong> im Koordinatensystem.<br>
+            Die rechnerische Lösung eines linearen Gleichungssystems entspricht geometrisch genau dem <strong>Schnittpunkt $S(x \mid y)$</strong> beider Geraden!
           </div>
         </div>
 
-        <p style="margin-top: 1.5rem; margin-bottom: 0.5rem;"><strong>Beispiel:</strong></p>
-        <div class="calc-block">
-          $\text{I) } 2x - 6y = -22$<br>
-          $\text{II) } 4x + 4y = 4$
+        <!-- Grüner Flashback-Kasten -->
+        <div class="box-flashback">
+          <div class="box-flashback-title">
+            <span>🔄</span> Flashback: Wie zeichnet man $y = m \cdot x + b$ noch einmal?
+          </div>
+          <div class="box-flashback-content">
+            <p style="margin-bottom: 0.4rem;">Lineare Funktionen hast du im letzten Schuljahr kennengelernt. So bringst du eine Gerade schnell und sicher aufs Papier:</p>
+            <ul style="margin-left: 1.25rem; line-height: 1.6;">
+              <li><strong>$b$ = $y$-Achsenabschnitt:</strong> Das ist dein Startpunkt auf der senkrechten $y$-Achse: $P(0 \mid b)$.</li>
+              <li><strong>$m$ = Steigung:</strong> Gehe vom Startpunkt aus mit dem <em>Steigungsdreieck</em>:
+                $$m = \frac{\Delta y}{\Delta x} = \frac{\text{Schritt nach oben (+) / unten (-)}}{\text{Schritt nach rechts (+) („Nenner“)}}$$
+                <em>Beispiel:</em> Bei $m = 2 = \frac{2}{1}$ gehst du $1$ nach rechts und $2$ nach oben. Bei $m = -1 = \frac{-1}{1}$ gehst du $1$ nach rechts und $1$ nach unten.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Gelenktes Musterbeispiel mit ganzzahligen Werten -->
+        <h3 style="margin-top: 1.75rem; font-size: 1.15rem; font-weight: 800; color: var(--text);">
+          Musterbeispiel (Ganzzahlige Werte)
+        </h3>
+        <p style="margin-top: 0.25rem; margin-bottom: 0.75rem; color: var(--text-muted);">
+          Gegeben ist das lineare Gleichungssystem mit ganzzahligen Koeffizienten:
+        </p>
+
+        <div class="calc-block" style="font-weight: 700;">
+          $\text{I)} \quad x + y = 4$<br>
+          $\text{II)} \quad 2x - y = -1$
         </div>
 
         <div class="steps-container">
+
           <div class="step-card">
-            <div class="step-header">Schritt 1: Umformen in die Geradenform ($y = mx + b$)</div>
+            <div class="step-header">Schritt 1: Beide Gleichungen in die Geradenform ($y = mx + b$) umformen</div>
             <div class="step-body">
+              Damit wir die Geraden zeichnen können, lösen wir beide Gleichungen nach $y$ auf:
               <div class="calc-block">
-                $\text{I) } 2x - 6y = -22 \implies y_1 = \frac{1}{3}x + \frac{11}{3}$<br>
-                $\text{II) } 4x + 4y = 4 \implies y_2 = -x + 1$
+                $\text{I)} \quad x + y = 4 \quad \mid - x \implies \mathbf{y = -x + 4} \quad (m_1 = -1, \; b_1 = 4)$<br>
+                $\text{II)} \quad 2x - y = -1 \quad \mid - 2x \implies -y = -2x - 1 \quad \mid \cdot (-1) \implies \mathbf{y = 2x + 1} \quad (m_2 = 2, \; b_2 = 1)$
               </div>
             </div>
           </div>
 
           <div class="step-card">
-            <div class="step-header">Schritt 2: Schnittpunkt ablesen</div>
+            <div class="step-header">Schritt 2: Geraden zeichnen &amp; Schnittpunkt ablesen</div>
             <div class="step-body">
-              Beide Geraden schneiden sich im Punkt:
-              <div class="calc-block">
-                $S(-2 \mid 3) \implies x = -2, \quad y = 3$
+              Wir tragen die Startpunkte $(0 \mid 4)$ und $(0 \mid 1)$ ein und zeichnen mit Hilfe der Steigungsdreiecke die beiden Geraden $g_1$ und $g_2$.<br>
+              Beide Geraden schneiden sich exakt im Punkt:
+              <div class="calc-block" style="color: #dc2626; font-weight: 700;">
+                $\mathbf{S(1 \mid 3)} \implies x = 1, \quad y = 3$
               </div>
+              Damit lautet die Lösungsmenge: $\mathbb{L} = \{ (1 \mid 3) \}$.
             </div>
           </div>
+
+          <div class="step-card">
+            <div class="step-header">Schritt 3: Rechnerische Probe</div>
+            <div class="step-body">
+              Setze $x = 1$ und $y = 3$ zur Kontrolle in beide Ausgangsgleichungen ein:
+              <div class="calc-block">
+                $\text{In I)}: \quad 1 + 3 = 4 \iff 4 = 4 \quad \checkmark$<br>
+                $\text{In II)}: \quad 2 \cdot 1 - 3 = 2 - 3 = -1 \iff -1 = -1 \quad \checkmark$
+              </div>
+              Beide Aussagen sind wahr! Das Zahlenpaar $(1 \mid 3)$ löst das LGS exakt.
+            </div>
+          </div>
+
         </div>
 
-        <!-- Mathematisch exaktes SVG Koordinatensystem -->
+        <!-- Mathematisch exaktes SVG Koordinatensystem für S(1|3) -->
         <div class="graph-container">
-          <svg viewBox="0 0 440 320" width="100%" style="max-width: 460px; font-family: sans-serif; background: #ffffff;">
+          <svg viewBox="0 0 440 300" width="100%" style="max-width: 480px; font-family: sans-serif; background: #ffffff;">
             <defs>
-              <!-- 24px Karogitter, exakt am Ursprung (240, 170) ausgerichtet -->
-              <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse" x="0" y="2">
-                <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+              <!-- Karogitter mit 25px Raster -->
+              <pattern id="grid-lgs-tab" width="25" height="25" patternUnits="userSpaceOnUse" x="15" y="0">
+                <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e2e8f0" stroke-width="1"/>
               </pattern>
             </defs>
-            <rect width="440" height="320" fill="#ffffff" />
-            <rect width="440" height="320" fill="url(#grid)" />
+            <rect width="440" height="300" fill="#ffffff" />
+            <rect width="440" height="300" fill="url(#grid-lgs-tab)" />
 
-            <!-- X-Achse (Ursprung bei X=240, Y=170) -->
-            <line x1="20" y1="170" x2="420" y2="170" stroke="#475569" stroke-width="1.75"/>
-            <polygon points="420,166 430,170 420,174" fill="#475569"/>
-            <text x="425" y="190" font-size="13" font-weight="700" fill="#475569">x</text>
+            <!-- Ursprung bei (165, 175): 1 Einheit = 30px -->
+            <!-- X-Achse (y=0 bei Y=175) -->
+            <line x1="20" y1="175" x2="420" y2="175" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="420,171 430,175 420,179" fill="#475569"/>
+            <text x="424" y="193" font-size="13" font-weight="700" fill="#475569">x</text>
 
-            <!-- Y-Achse -->
-            <line x1="240" y1="300" x2="240" y2="20" stroke="#475569" stroke-width="1.75"/>
-            <polygon points="236,20 240,10 244,20" fill="#475569"/>
-            <text x="252" y="22" font-size="13" font-weight="700" fill="#475569">y</text>
+            <!-- Y-Achse (x=0 bei X=165) -->
+            <line x1="165" y1="285" x2="165" y2="15" stroke="#475569" stroke-width="1.8"/>
+            <polygon points="161,15 165,5 169,15" fill="#475569"/>
+            <text x="176" y="18" font-size="13" font-weight="700" fill="#475569">y</text>
 
-            <!-- Ticks X-Achse (je 24px Schritt = 1 Einheit) -->
-            <!-- x = -4 (144), -3 (168), -2 (192), -1 (216), 1 (264), 2 (288), 3 (312), 4 (336) -->
-            <line x1="192" y1="166" x2="192" y2="174" stroke="#475569" stroke-width="1.5"/>
-            <text x="187" y="188" font-size="11" font-weight="600" fill="#64748b">-2</text>
+            <!-- Ticks X-Achse (30px pro Einheit) -->
+            <line x1="105" y1="171" x2="105" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="98" y="193" font-size="11" font-weight="600" fill="#64748b">-2</text>
 
-            <line x1="216" y1="167" x2="216" y2="173" stroke="#94a3b8" stroke-width="1"/>
-            <line x1="264" y1="167" x2="264" y2="173" stroke="#94a3b8" stroke-width="1"/>
-            <text x="261" y="188" font-size="11" font-weight="600" fill="#64748b">1</text>
-            <line x1="288" y1="167" x2="288" y2="173" stroke="#94a3b8" stroke-width="1"/>
-            <text x="285" y="188" font-size="11" font-weight="600" fill="#64748b">2</text>
+            <line x1="135" y1="171" x2="135" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="129" y="193" font-size="11" font-weight="600" fill="#64748b">-1</text>
 
-            <!-- Ticks Y-Achse (y=1: 146, y=2: 122, y=3: 98, y=4: 74, y=5: 50) -->
-            <line x1="237" y1="146" x2="243" y2="146" stroke="#94a3b8" stroke-width="1"/>
-            <text x="248" y="150" font-size="11" font-weight="600" fill="#64748b">1</text>
-            <line x1="237" y1="122" x2="243" y2="122" stroke="#94a3b8" stroke-width="1"/>
-            <text x="248" y="126" font-size="11" font-weight="600" fill="#64748b">2</text>
-            <line x1="236" y1="98" x2="244" y2="98" stroke="#475569" stroke-width="1.5"/>
-            <text x="248" y="102" font-size="11" font-weight="700" fill="#475569">3</text>
+            <line x1="195" y1="171" x2="195" y2="179" stroke="#475569" stroke-width="1.5"/>
+            <text x="192" y="193" font-size="11" font-weight="700" fill="#1e293b">1</text>
 
-            <!-- Gestrichelte Hilfslinien zum Schnittpunkt (-2, 3) -> Pixel (192, 98) -->
-            <line x1="192" y1="170" x2="192" y2="98" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3"/>
-            <line x1="240" y1="98" x2="192" y2="98" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <line x1="225" y1="171" x2="225" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="222" y="193" font-size="11" font-weight="600" fill="#64748b">2</text>
 
-            <!-- Gerade g1: y = 1/3 x + 11/3 (Blau) -->
-            <!-- Punkte: (-8, 1) -> (48, 146) | (-5, 2) -> (120, 122) | (-2, 3) -> (192, 98) | (1, 4) -> (264, 74) | (4, 5) -> (336, 50) | (7, 6) -> (408, 26) -->
-            <line x1="30" y1="152" x2="415" y2="24" stroke="#2563eb" stroke-width="2.2"/>
-            <text x="390" y="44" font-size="12" font-weight="700" fill="#2563eb">g₁</text>
+            <line x1="255" y1="171" x2="255" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="252" y="193" font-size="11" font-weight="600" fill="#64748b">3</text>
 
-            <!-- Gerade g2: y = -x + 1 (Rot) -->
-            <!-- Punkte: (-4, 5) -> (144, 50) | (-3, 4) -> (168, 74) | (-2, 3) -> (192, 98) | (-1, 2) -> (216, 122) | (0, 1) -> (240, 146) | (1, 0) -> (264, 170) | (2, -1) -> (288, 194) | (3, -2) -> (312, 218) -->
-            <line x1="135" y1="41" x2="330" y2="236" stroke="#ef4444" stroke-width="2.2"/>
-            <text x="315" y="248" font-size="12" font-weight="700" fill="#ef4444">g₂</text>
+            <line x1="285" y1="171" x2="285" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="282" y="193" font-size="11" font-weight="600" fill="#64748b">4</text>
 
-            <!-- Exakter Schnittpunkt S(-2 | 3) bei (192, 98) -->
-            <circle cx="192" cy="98" r="4.5" fill="#dc2626"/>
-            <circle cx="192" cy="98" r="8" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="2,2"/>
-            <text x="120" y="93" font-size="12" font-weight="800" fill="#dc2626">S(-2 | 3)</text>
+            <line x1="315" y1="171" x2="315" y2="179" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="312" y="193" font-size="11" font-weight="600" fill="#64748b">5</text>
+
+            <!-- Ticks Y-Achse (30px pro Einheit) -->
+            <line x1="161" y1="205" x2="169" y2="205" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="146" y="209" font-size="11" font-weight="600" fill="#64748b">-1</text>
+
+            <line x1="161" y1="145" x2="169" y2="145" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="150" y="149" font-size="11" font-weight="600" fill="#64748b">1</text>
+
+            <line x1="161" y1="115" x2="169" y2="115" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="150" y="119" font-size="11" font-weight="600" fill="#64748b">2</text>
+
+            <line x1="161" y1="85" x2="169" y2="85" stroke="#475569" stroke-width="1.5"/>
+            <text x="148" y="89" font-size="11" font-weight="700" fill="#1e293b">3</text>
+
+            <line x1="161" y1="55" x2="169" y2="55" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="150" y="59" font-size="11" font-weight="600" fill="#64748b">4</text>
+
+            <!-- Gestrichelte Hilfslinien zum Schnittpunkt S(1|3) bei (195, 85) -->
+            <line x1="195" y1="175" x2="195" y2="85" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="3,3"/>
+            <line x1="165" y1="85" x2="195" y2="85" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="3,3"/>
+
+            <!-- Gerade g1: y = -x + 4 (Blau) -->
+            <line x1="120" y1="10" x2="370" y2="260" stroke="#2563eb" stroke-width="2.4"/>
+            <text x="345" y="275" font-size="12" font-weight="800" fill="#2563eb">g₁: y = -x + 4</text>
+
+            <!-- Gerade g2: y = 2x + 1 (Grün) -->
+            <line x1="120" y1="235" x2="235" y2="5" stroke="#059669" stroke-width="2.4"/>
+            <text x="210" y="20" font-size="12" font-weight="800" fill="#059669">g₂: y = 2x + 1</text>
+
+            <!-- Schnittpunkt S(1|3) -->
+            <circle cx="195" cy="85" r="5" fill="#dc2626"/>
+            <circle cx="195" cy="85" r="9" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <rect x="210" y="70" width="76" height="24" rx="4" fill="#fee2e2" stroke="#f87171" stroke-width="1"/>
+            <text x="216" y="86" font-size="12" font-weight="800" fill="#b91c1c">S(1 | 3)</text>
           </svg>
+        </div>
+
+        <!-- 3 Farbige Karten für die 3 Lagebeziehungen -->
+        <h3 style="margin-top: 2rem; font-size: 1.15rem; font-weight: 800; color: var(--text);">
+          Die 3 Fälle der Lagebeziehung zweier Geraden
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+          Wie viele Lösungen ein lineares Gleichungssystem besitzt, hängt direkt von der Steigung $m$ und dem Achsenabschnitt $b$ der Geraden ab:
+        </p>
+
+        <div class="case-grid">
+
+          <!-- Fall 1: 1 Schnittpunkt -->
+          <div class="case-card" style="border-top: 4px solid #2563eb;">
+            <span class="case-badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">Fall 1</span>
+            <h4>Genau 1 Lösung</h4>
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Die Geraden <strong>schneiden sich</strong> in genau einem Punkt $S(x \mid y)$.
+            </div>
+            <div style="background: var(--bg); padding: 0.6rem 0.75rem; border-radius: 6px; font-size: 0.88rem; margin-bottom: 0.75rem;">
+              <strong>Kriterium:</strong><br>
+              $m_1 \neq m_2$ (verschiedene Steigungen)
+            </div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #1d4ed8; margin-top: auto;">
+              $\mathbb{L} = \{ (x \mid y) \}$
+            </div>
+          </div>
+
+          <!-- Fall 2: Keine Lösung -->
+          <div class="case-card" style="border-top: 4px solid #d97706;">
+            <span class="case-badge" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">Fall 2</span>
+            <h4>Keine Lösung</h4>
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Die Geraden sind <strong>echt parallel</strong> und berühren sich an keiner Stelle.
+            </div>
+            <div style="background: var(--bg); padding: 0.6rem 0.75rem; border-radius: 6px; font-size: 0.88rem; margin-bottom: 0.75rem;">
+              <strong>Kriterium:</strong><br>
+              $m_1 = m_2$, aber $b_1 \neq b_2$
+            </div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #b45309; margin-top: auto;">
+              $\mathbb{L} = \{ \}$ bzw. $\mathbb{L} = \emptyset$
+            </div>
+          </div>
+
+          <!-- Fall 3: Unendlich viele Lösungen -->
+          <div class="case-card" style="border-top: 4px solid #8b5cf6;">
+            <span class="case-badge" style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe;">Fall 3</span>
+            <h4>Unendlich viele Lösungen</h4>
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Die Geraden sind <strong>identisch</strong> und liegen genau aufeinander.
+            </div>
+            <div style="background: var(--bg); padding: 0.6rem 0.75rem; border-radius: 6px; font-size: 0.88rem; margin-bottom: 0.75rem;">
+              <strong>Kriterium:</strong><br>
+              $m_1 = m_2$ und $b_1 = b_2$
+            </div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #6d28d9; margin-top: auto;">
+              $\mathbb{L} = \{ (x \mid y) \mid y = mx + b \}$
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Didaktische Reflexionsbox: Grenzen des Zeichnens -->
+        <div class="box-reflection">
+          <div class="box-reflection-title">
+            <span>🤔</span> Warum rechnen wir eigentlich, wenn man doch zeichnen kann?
+          </div>
+          <p style="color: #581c87; font-size: 0.95rem; line-height: 1.6;">
+            Das graphische Verfahren ist hervorragend geeignet, um Gleichungssysteme <strong>geometrisch zu verstehen</strong> und Lösungen anschaulich zu überprüfen. In der Praxis stößt das Zeichnen mit Bleistift und Geodreieck jedoch schnell an Grenzen:
+          </p>
+          <ul style="margin-left: 1.25rem; margin-top: 0.5rem; color: #581c87; font-size: 0.93rem; line-height: 1.6;">
+            <li><strong>Zeichenungenauigkeiten:</strong> Schon die Stiftbreite (0,5 mm) oder ein minimal verrutschtes Lineal verfälschen das Ergebnis.</li>
+            <li><strong>Krumme Dezimalzahlen und Brüche:</strong> Liegt der Schnittpunkt etwa bei $S(\frac{17}{29} \mid -\frac{8}{13}) \approx S(0{,}586 \mid -0{,}615)$, ist ein exaktes Ablesen auf Papier unmöglich.</li>
+            <li><strong>Sehr große oder kleine Zahlen:</strong> Ein Schnittpunkt wie $S(350 \mid 1200)$ passt auf kein normales Schulheft.</li>
+            <li><strong>Fazit:</strong> Nur rechnerische Verfahren (Einsetzen, Addieren, Gleichsetzen) liefern immer eine <em>100 % exakte und fehlerfreie Lösung</em>!</li>
+          </ul>
+        </div>
+
+        <!-- Interaktive Übungsaufgabe mit Aufklapplösung (toggleDrawer) -->
+        <div class="exercise-box">
+          <h3 style="font-weight: 700; margin-bottom: 0.5rem;">Interaktive Übung: Graphische Lösung ermitteln</h3>
+          <p style="margin-bottom: 0.75rem;">
+            Bestimme graphisch oder rechnerisch den Schnittpunkt des folgenden Systems und gib die Lösungsmenge an:
+          </p>
+          <div class="calc-block">
+            $\text{I)} \quad y = x - 2$<br>
+            $\text{II)} \quad y = -\frac{1}{2}x + 4$
+          </div>
+
+          <button class="btn-solution" onclick="toggleDrawer('sol-graph-uebung')">
+            <span>Lösung anzeigen</span>
+          </button>
+
+          <div class="solution-drawer" id="sol-graph-uebung">
+            <p><strong>Ausführlicher Lösungsweg:</strong></p>
+            <ul style="margin-left: 1.25rem; margin-top: 0.5rem; line-height: 1.7;">
+              <li><strong>1. Geradeneigenschaften ablesen:</strong><br>
+                $g_1$: $m_1 = 1, \; b_1 = -2 \implies$ Start bei $(0 \mid -2)$, dann $1$ nach rechts, $1$ nach oben.<br>
+                $g_2$: $m_2 = -\frac{1}{2}, \; b_2 = 4 \implies$ Start bei $(0 \mid 4)$, dann $2$ nach rechts, $1$ nach unten.
+              </li>
+              <li><strong>2. Schnittpunkt bestimmen (Gleichsetzen zur Kontrolle):</strong><br>
+                $x - 2 = -\frac{1}{2}x + 4 \quad \mid + \frac{1}{2}x + 2$<br>
+                $1{,}5x = 6 \quad \mid : 1{,}5$<br>
+                $\mathbf{x = 4}$
+              </li>
+              <li><strong>3. $y$-Wert berechnen:</strong><br>
+                $y = 4 - 2 = \mathbf{2}$
+              </li>
+              <li><strong>4. Ergebnis:</strong><br>
+                Schnittpunkt: $\mathbf{S(4 \mid 2)}$<br>
+                Lösungsmenge: $\mathbf{\mathbb{L} = \{ (4 \mid 2) \}}$
+              </li>
+              <li><strong>5. Probe:</strong><br>
+                $\text{In I)}: 2 = 4 - 2 \iff 2 = 2 \quad \checkmark$<br>
+                $\text{In II)}: 2 = -\frac{1}{2}(4) + 4 = -2 + 4 = 2 \quad \checkmark$
+              </li>
+            </ul>
+          </div>
         </div>
 
       </div>
