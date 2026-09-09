@@ -192,12 +192,18 @@
       user-select: none;
     }
 
-    .question-icon {
-      font-size: 1.75rem;
-      line-height: 1;
+    .question-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
       background: var(--primary-light);
-      padding: 0.75rem;
-      border-radius: var(--radius-md);
+      color: var(--primary);
+      border: 1.5px solid #ddd6fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
       flex-shrink: 0;
     }
 
@@ -480,20 +486,20 @@
       <!-- FRAGE 1 -->
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(1)">
-          <div class="question-icon">📱</div>
+          <div class="question-number">1</div>
           <div class="question-title-group">
-            <div class="question-tag">Rätsel 1 • Das Adressierungs-Problem</div>
+            <div class="question-tag">Frage 1 • Das Adressierungs-Problem</div>
             <div class="question-text">
               Wie findet ein WhatsApp-Foto ausgerechnet dieses EINE Smartphone deines Kumpels – unter mehr als 4 Milliarden Geräten weltweit?
             </div>
             <button class="btn-toggle-answer" id="btn-ans-1">
-              <span>👉</span> Antwort &amp; Erklärung aufdecken
+              Antwort &amp; Erklärung aufdecken
             </button>
           </div>
         </div>
         <div class="answer-body" id="ans-1">
           <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
-            💡 Die Auflösung: Die IP-Adresse (Postadresse des Internets)
+            Auflösung: Die IP-Adresse (Postadresse des Internets)
           </h4>
           <p style="margin-bottom: 8px;">
             Jedes internetfähige Gerät erhält beim Verbinden eine weltweit eindeutige logische Adresse: die <strong>IP-Adresse</strong> (z. B. <span class="code-pill">192.168.0.10</span>).
@@ -507,20 +513,20 @@
       <!-- FRAGE 2 -->
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(2)">
-          <div class="question-icon">🎮</div>
+          <div class="question-number">2</div>
           <div class="question-title-group">
-            <div class="question-tag">Rätsel 2 • Der Gamer-Check</div>
+            <div class="question-tag">Frage 2 • Der Gamer-Check</div>
             <div class="question-text">
               Was bedeutet es, wenn jemand beim Online-Gaming schreit: „Ich hab einen 200er Ping, es laggt!“? Was wird da physikalisch gemessen?
             </div>
             <button class="btn-toggle-answer" id="btn-ans-2">
-              <span>👉</span> Antwort &amp; Erklärung aufdecken
+              Antwort &amp; Erklärung aufdecken
             </button>
           </div>
         </div>
         <div class="answer-body" id="ans-2">
           <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
-            💡 Die Auflösung: Die Paketlaufzeit (Latenz / Ping)
+            Auflösung: Die Paketlaufzeit (Latenz / Ping)
           </h4>
           <p style="margin-bottom: 8px;">
             Ein <strong>Ping</strong> ist ein minimales Kontrollpaket (Echo Request), das dein PC an den Game-Server schickt: <em>„Bist du da?“</em>. Der Server antwortet sofort mit <em>„Ja, ich bin da!“</em> (Echo Reply).
@@ -534,20 +540,20 @@
       <!-- FRAGE 3 -->
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(3)">
-          <div class="question-icon">🌐</div>
+          <div class="question-number">3</div>
           <div class="question-title-group">
-            <div class="question-tag">Rätsel 3 • Das Telefonbuch des Netzes</div>
+            <div class="question-tag">Frage 3 • Das Telefonbuch des Netzes</div>
             <div class="question-text">
               Tippe <span class="code-pill">142.250.186.68</span> in deinen Browser – du landest bei Google! Warum tippt niemand Zahlen ein, sondern alle schreiben <span class="code-pill">google.de</span>?
             </div>
             <button class="btn-toggle-answer" id="btn-ans-3">
-              <span>👉</span> Antwort &amp; Erklärung aufdecken
+              Antwort &amp; Erklärung aufdecken
             </button>
           </div>
         </div>
         <div class="answer-body" id="ans-3">
           <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
-            💡 Die Auflösung: Das Domain Name System (DNS)
+            Auflösung: Das Domain Name System (DNS)
           </h4>
           <p style="margin-bottom: 8px;">
             Computer verstehen nur Zahlen (IP-Adressen). Menschen können sich aber Namen wie <em>google.de</em> oder <em>youtube.com</em> viel leichter merken.
@@ -631,18 +637,18 @@
       <div class="modes-comparison">
         <!-- Entwurfsmodus -->
         <div class="mode-card draft">
-          <div class="mode-badge draft">🔨 Entwurfsmodus (Hammer)</div>
+          <div class="mode-badge draft">Entwurfsmodus (Werkzeug)</div>
           <h4 style="font-weight: 700; margin-bottom: 0.4rem; color: #92400e;">Wir sind die Netzwerk-Architekten</h4>
           <ul style="font-size: 0.9rem; margin-left: 1.25rem; color: #78350f; line-height: 1.6;">
             <li>Geräte aus der linken Leiste auf die Fläche ziehen.</li>
-            <li>Rechner mit dem <strong>roten Kabel-Werkzeug</strong> verbinden.</li>
+            <li>Rechner mit dem <strong>Kabel-Werkzeug</strong> verbinden.</li>
             <li>Rechner anklicken, um <strong>IP-Adressen</strong> einzustellen.</li>
           </ul>
         </div>
 
         <!-- Aktionsmodus -->
         <div class="mode-card action">
-          <div class="mode-badge action">▶️ Aktionsmodus (Grüner Pfeil)</div>
+          <div class="mode-badge action">Aktionsmodus (Simulation)</div>
           <h4 style="font-weight: 700; margin-bottom: 0.4rem; color: #065f46;">Das Netzwerk wird lebendig!</h4>
           <ul style="font-size: 0.9rem; margin-left: 1.25rem; color: #064e3b; line-height: 1.6;">
             <li>Die Rechner „fahren hoch“ und sind betriebsbereit.</li>
@@ -655,7 +661,7 @@
       <div class="img-showcase">
         <img src="img/filius_uebersicht_netzwerk.png" alt="Filius Netzwerk-Übersicht">
         <div class="img-caption">
-          <span>📸</span> <strong>Unser Ziel-Szenario in Filius:</strong> Mehrere getrennte Netzwerke mit Laptops, Switches, Webserver, Mailserver und zentralem Vermittlungsrechner (Router).
+          <strong>Ziel-Szenario in Filius:</strong> Mehrere getrennte Netzwerke mit Laptops, Switches, Webserver, Mailserver und zentralem Vermittlungsrechner (Router).
         </div>
       </div>
     </section>
@@ -684,7 +690,7 @@
         <div class="step-content">
           <h4>Zwei Rechner auf die Arbeitsfläche ziehen</h4>
           <p>
-            Vergewissere dich, dass du im <strong>Entwurfsmodus (Hammer 🔨)</strong> bist. Klicke links in der Werkzeugleiste auf das Symbol <strong>Notebook</strong> und ziehe zwei Geräte nebeneinander auf das weiße Raster.
+            Vergewissere dich, dass du im <strong>Entwurfsmodus (Hammer-Symbol)</strong> bist. Klicke links in der Werkzeugleiste auf das Symbol <strong>Notebook</strong> und ziehe zwei Geräte nebeneinander auf das weiße Raster.
           </p>
         </div>
       </div>
@@ -695,7 +701,7 @@
         <div class="step-content">
           <h4>Rechner mit einem Kabel verbinden</h4>
           <p>
-            Wähle links ganz oben das Werkzeug <strong>Verbindung (rotes Kabel 🪢)</strong> aus. Klicke zuerst auf das linke Notebook und ziehe die Linie zum rechten Notebook. Ein schwarzes Kabel erscheint.
+            Wähle links ganz oben das Werkzeug <strong>Verbindung (Kabel-Symbol)</strong> aus. Klicke zuerst auf das linke Notebook und ziehe die Linie zum rechten Notebook. Ein schwarzes Kabel erscheint.
           </p>
         </div>
       </div>
@@ -719,7 +725,7 @@
           <div class="img-showcase" style="max-width: 650px; margin-top: 10px;">
             <img src="img/filius_ip_konfiguration.png" alt="IP-Konfiguration in Filius">
             <div class="img-caption">
-              <span>🔍</span> <strong>Hilfe:</strong> So sieht die IP-Eingabemaske in Filius aus.
+              <strong>Hilfe:</strong> So sieht die IP-Eingabemaske in Filius aus.
             </div>
           </div>
         </div>
@@ -731,7 +737,7 @@
         <div class="step-content">
           <h4>In den Aktionsmodus wechseln &amp; Konsole starten</h4>
           <p>
-            Klicke oben in der Menüleiste auf den <strong>grünen Play-Button (▶️)</strong>. Klicke anschließend mit einem Doppelklick auf das <strong>linke Notebook</strong>.
+            Klicke oben in der Menüleiste auf den <strong>grünen Play-Button</strong>. Klicke anschließend mit einem Doppelklick auf das <strong>linke Notebook</strong>.
           </p>
           <p style="margin-top: 6px;">
             Es öffnet sich der virtuelle Desktop. Gehe auf <strong>Software-Installation</strong>, wähle die <strong>Befehlszeile</strong> aus und klicke auf den Pfeil nach links, um sie zu installieren. Starte die Befehlszeile anschließend mit einem Doppelklick!
@@ -740,7 +746,7 @@
           <div class="img-showcase" style="max-width: 650px; margin-top: 10px;">
             <img src="img/filius_desktop_aktionsmodus.png" alt="Desktop und Befehlszeile">
             <div class="img-caption">
-              <span>💻</span> Der Desktop im Aktionsmodus mit der installierten Befehlszeile.
+              Der Desktop im Aktionsmodus mit der installierten Befehlszeile.
             </div>
           </div>
         </div>
@@ -759,14 +765,14 @@
           </div>
           
           <div class="callout-box tip">
-            <strong>🎯 Beobachtung:</strong> Du siehst 4 Zeilen: <em>„4 Pakete gesendet, 4 empfangen, 0% Verlust“</em>. Dein erstes Rechnernetz funktioniert!
+            <strong>Beobachtung:</strong> Du siehst 4 Zeilen: <em>„4 Pakete gesendet, 4 empfangen, 0% Verlust“</em>. Dein erstes Rechnernetz funktioniert!
           </div>
         </div>
       </div>
 
       <!-- Schritt 7: Mini Experiment -->
       <div class="mission-step">
-        <div class="step-marker">⚡</div>
+        <div class="step-marker" style="background: #d97706;">6</div>
         <div class="step-content">
           <h4>Forscher-Aufgabe (Den Fehler verstehen):</h4>
           <p>
@@ -845,9 +851,9 @@
           <span style="color: var(--text-muted); font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">Subnetzmaske:</span>
           <span style="font-weight: 700;"><span style="color: #4338ca;">255 . 255 . 255</span> . <span style="color: #b45309;"> 0</span></span>
         </div>
-        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; color: #475569;">
-          👉 <strong>Regel:</strong> Wo in der Maske <strong>255</strong> steht, ist die Ziffer für das gesamte Netz fixiert.<br>
-          👉 Wo in der Maske eine <strong>0</strong> steht, dürfen wir freie Hausnummern für Rechner vergeben!
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; color: #475569; line-height: 1.6;">
+          • <strong>Feste Vorgabe:</strong> Wo in der Maske <strong>255</strong> steht, ist die Ziffer für das gesamte Netz fixiert.<br>
+          • <strong>Freie Vergabe:</strong> Wo in der Maske eine <strong>0</strong> steht, dürfen wir freie Hausnummern für Rechner vergeben!
         </div>
       </div>
 
@@ -878,33 +884,33 @@
       </h3>
       <p style="margin-bottom: 0.75rem;">
         Im Block der Hausnummer (wo die 0 in der Maske steht) gibt es die Zahlen von <strong>0 bis 255</strong> (also 256 Möglichkeiten).<br>
-        ⚠️ <strong>Aber Achtung: Genau zwei Adressen sind streng reserviert und dürfen KEINEM Rechner gegeben werden!</strong>
+        <strong>Wichtig:</strong> Genau zwei Adressen sind streng reserviert und dürfen <em>keinem</em> Rechner gegeben werden:
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 1.25rem;">
         <!-- Reserviert .0 -->
         <div style="border: 1.5px solid #fca5a5; background: #fef2f2; border-radius: 8px; padding: 12px 14px;">
           <div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">
-            🚫 Die kleinste Adresse: .0 (z. B. 192.168.0.0)
+            Reserviert: .0 (Netzadresse)
           </div>
           <p style="color: #7f1d1d; font-size: 0.85rem; line-height: 1.4;">
-            <strong>Die Netzadresse:</strong> Das ist der offizielle Name des gesamten Netzwerks (der Straßenname). Sie steht für das Netz als Ganzes und darf keinem Endgerät gehören.
+            <strong>Die Netzadresse (z. B. 192.168.0.0):</strong> Das ist der offizielle Name des gesamten Netzwerks (der Straßenname). Sie steht für das Netz als Ganzes und darf keinem Endgerät gehören.
           </p>
         </div>
 
         <!-- Reserviert .255 -->
         <div style="border: 1.5px solid #fca5a5; background: #fef2f2; border-radius: 8px; padding: 12px 14px;">
           <div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">
-            🚫 Die höchste Adresse: .255 (z. B. 192.168.0.255)
+            Reserviert: .255 (Broadcast-Adresse)
           </div>
           <p style="color: #7f1d1d; font-size: 0.85rem; line-height: 1.4;">
-            <strong>Die Broadcast-Adresse:</strong> Das „Megafon“ des Netzes! Sendet ein Rechner an diese Adresse, empfangen <em>alle</em> Geräte im Raum gleichzeitig die Nachricht (Rundruf).
+            <strong>Die Broadcast-Adresse (z. B. 192.168.0.255):</strong> Das „Megafon“ des Netzes. Sendet ein Rechner an diese Adresse, empfangen <em>alle</em> Geräte im Teilnetz gleichzeitig die Nachricht (Rundruf).
           </p>
         </div>
       </div>
 
       <div class="callout-box tip" style="margin-top: 0;">
-        <strong style="font-size: 1rem;">✅ Die goldene Regel für nutzbare Rechner-IPs:</strong><br>
+        <strong style="font-size: 1rem;">Die Grundregel für nutzbare Rechner-IPs:</strong><br>
         In einem Subnetz mit der Maske <span class="code-pill">255.255.255.0</span> darfst du für PCs und Server genau die Endungen:<br>
         <div style="text-align: center; margin: 8px 0; font-size: 1.2rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #047857;">
           .1 &nbsp; bis &nbsp; .254
@@ -927,10 +933,10 @@
       const btn = document.getElementById('btn-ans-' + id);
       if (body.classList.contains('open')) {
         body.classList.remove('open');
-        btn.innerHTML = '<span>👉</span> Antwort &amp; Erklärung aufdecken';
+        btn.textContent = 'Antwort & Erklärung aufdecken';
       } else {
         body.classList.add('open');
-        btn.innerHTML = '<span>🙈</span> Antwort verbergen';
+        btn.textContent = 'Antwort verbergen';
       }
     }
   </script>
