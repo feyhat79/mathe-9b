@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zusammenfassung: Quadratwurzeln (Reelle Zahlen) | Mathe 9b</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematischen Formelsatz -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm 12mm 8mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #e2e8f0;
+      color: #0f172a;
+      line-height: 1.45;
+      font-size: 9pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR (WIRD BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .toolbar-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       PAGE WRAPPER (EXAKT 2 DIN-A4-SEITEN)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      height: 297mm;
+      padding: 10mm 13mm 10mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* ========================================================
+       HEADER
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-meta {
+      font-size: 7.5pt;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-title {
+      font-size: 15pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      line-height: 1.15;
+      margin-top: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 8.5pt;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* ========================================================
+       SECTIONS & KÄSTEN
+       ======================================================== */
+    .section-title {
+      font-size: 10.5pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 0 5px 0;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 2px;
+    }
+
+    .section-num {
+      background: #2563eb;
+      color: #ffffff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7.5pt;
+      font-weight: 800;
+    }
+
+    .card-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 7px 10px;
+      background: #f8fafc;
+      margin-bottom: 8px;
+    }
+
+    /* DEFINITIONSKASTEN */
+    .def-hero {
+      background: linear-gradient(135deg, #1e3a8a, #1e293b);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(30,58,138,0.15);
+    }
+
+    .def-formula {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      text-align: center;
+      margin: 6px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .vocab-pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 5px;
+      padding: 4px 8px;
+      font-size: 7.5pt;
+      line-height: 1.3;
+    }
+    .vocab-pill strong {
+      color: #93c5fd;
+      display: block;
+      font-size: 8.5pt;
+    }
+
+    /* WARNREGELN */
+    .warn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .warn-item {
+      border-left: 3.5px solid #dc2626;
+      background: #fef2f2;
+      padding: 6px 10px;
+      border-radius: 0 6px 6px 0;
+      font-size: 7.8pt;
+      color: #7f1d1d;
+      line-height: 1.35;
+    }
+    .warn-item.warning {
+      border-left-color: #d97706;
+      background: #fffbeb;
+      color: #78350f;
+    }
+    .warn-item strong {
+      font-size: 8.5pt;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* QUADRATZAHLEN TABELLE */
+    .squares-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      text-align: center;
+      margin: 5px 0;
+    }
+    .squares-table th {
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 3px 4px;
+      font-weight: 700;
+      font-size: 7.5pt;
+      border: 1px solid #1e3a8a;
+    }
+    .squares-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .squares-table tr:nth-child(even) td {
+      background: #f1f5f9;
+    }
+    .squares-table .sq-base {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .squares-table .sq-val {
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    /* MUSTERAUFGABEN GRID (SEITE 2) */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .rule-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .rule-header {
+      font-weight: 800;
+      font-size: 8.8pt;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .rule-body {
+      font-size: 8pt;
+      line-height: 1.35;
+      color: #334155;
+    }
+    .rule-example {
+      background: #f8fafc;
+      border-left: 2px solid #2563eb;
+      padding: 4px 8px;
+      margin-top: 5px;
+      font-size: 7.8pt;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* SELBSTTEST KASTEN */
+    .selftest-box {
+      border: 1.5px dashed #2563eb;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #eff6ff;
+      margin-bottom: 6px;
+    }
+
+    .selftest-title {
+      font-size: 8.5pt;
+      font-weight: 800;
+      color: #1d4ed8;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .selftest-tasks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 12px;
+      font-size: 7.8pt;
+    }
+
+    /* FOOTER */
+    .doc-footer {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 5px;
+      font-size: 7pt;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* UPSIDE DOWN SOLUTIONS FÜR DEN SELBSTTEST */
+    .upside-down {
+      transform: rotate(180deg);
+      font-size: 6.5pt;
+      color: #64748b;
+      text-align: center;
+      padding: 3px 0;
+      border-top: 1px dotted #cbd5e1;
+      margin-top: 4px;
+    }
+
+    /* ========================================================
+       PRINT MEDIA QUERY (100% EXAKT 2 SEITEN OHNE OVERFLOW)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 8.5pt;
+      }
+
+      .no-print, .screen-toolbar {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        height: 280mm !important;
+        min-height: 280mm !important;
+        max-height: 280mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP TOOLBAR
+       ======================================================== -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="wurzeln.html" class="toolbar-btn-nav">← Zum Beamer-Unterrichtsblatt</a>
+      <div class="toolbar-title">
+        <span>Mathe 9b: 2-seitiges DIN-A4-Merkblatt (Wurzeln)</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-print" onclick="window.print()">
+        <span>🖨️</span> Drucken / Als PDF speichern (Strg+P)
+      </button>
+      <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" download class="btn-action btn-download-pdf">
+        <span>📥</span> Fertige PDF herunterladen
+      </a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ========================================================
+         SEITE 1: DEFINITION, BEGRIFFE, REGELN & QUADRATZAHLEN
+         ======================================================== -->
+    <div class="page" id="page1">
+      <div>
+        <!-- HEADER -->
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Städtisches Gymnasium • Mathematik Klasse 9b • Schuljahr 2026/27</div>
+            <h1 class="doc-title">Zusammenfassung: Quadratwurzeln</h1>
+            <div class="doc-subtitle">Kapitel I: Reelle Zahlen (Lambacher Schweizer S. 8–11) • Merkblatt zum Unterricht</div>
+          </div>
+          <div class="badge-doc">
+            <strong>Kompaktübersicht</strong><br>
+            Stand: 09.09.2026
+          </div>
+        </header>
+
+        <!-- 1. GRUNDIDEE -->
+        <div class="section-title">
+          <span class="section-num">1</span>
+          <span>Grundidee: Die Umkehrung des Quadrierens</span>
+        </div>
+        <div class="card-box" style="display: flex; gap: 12px; align-items: center; justify-content: space-between;">
+          <div style="flex: 1.2;">
+            <p>
+              Beim <strong>Quadrieren</strong> berechnen wir aus einer Seitenlänge $a$ den Flächeninhalt $A = a^2$ eines Quadrats:<br>
+              $\bullet\quad a = 6\text{ cm} \implies A = 6 \cdot 6 = 36\text{ cm}^2$
+            </p>
+            <p style="margin-top: 4px;">
+              Beim <strong>Wurzelziehen</strong> kehren wir den Prozess um: Aus dem Flächeninhalt $A$ bestimmen wir die Seitenlänge $a = \sqrt{A}$:<br>
+              $\bullet\quad A = 25\text{ cm}^2 \implies a = 5\text{ cm}$, denn $5 \cdot 5 = 25$
+            </p>
+          </div>
+          <div style="flex: 0.9; background: #ffffff; border: 1.5px solid #2563eb; border-radius: 6px; padding: 6px 10px; text-align: center; font-size: 8pt;">
+            <strong style="color: #1e3a8a;">Die Problemstellung:</strong><br>
+            Bei $A = 50\text{ m}^2$ gibt es keine glatte ganze Zahl ($7^2=49$, $8^2=64$).<br>
+            $\implies$ Die exakte Lösung lautet: <strong>$a = \sqrt{50}\text{ m}$</strong>.
+          </div>
+        </div>
+
+        <!-- 2. DEFINITION & BEGRIFFE -->
+        <div class="section-title">
+          <span class="section-num">2</span>
+          <span>Mathematische Definition &amp; Fachbegriffe</span>
+        </div>
+        <div class="def-hero">
+          <p style="font-size: 8.5pt; opacity: 0.95;">
+            Für eine nicht-negative reelle Zahl $a$ heißt diejenige <strong>nicht-negative Zahl $b$</strong>, für die $b^2 = a$ gilt, <strong>Quadratwurzel aus $a$</strong>:
+          </p>
+          <div class="def-formula">
+            $$\sqrt{a} = b \quad \Longleftrightarrow \quad b^2 = a \quad (\text{wobei } a \ge 0 \text{ und } b \ge 0)$$
+          </div>
+          <div class="vocab-grid">
+            <div class="vocab-pill">
+              <strong>$\sqrt{\phantom{a}}$ Wurzelzeichen</strong>
+              Vom lateinischen <em>radix</em> (Wurzel).
+            </div>
+            <div class="vocab-pill">
+              <strong>$a$ Radikand</strong>
+              Die Zahl unter der Wurzel ($a \ge 0$).
+            </div>
+            <div class="vocab-pill">
+              <strong>$b$ Wurzelwert (Ergebnis)</strong>
+              Immer positiv oder null ($b \ge 0$).
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ZWEI GOLDENE WARNREGELN -->
+        <div class="section-title">
+          <span class="section-num">3</span>
+          <span>Zwei goldene Warnregeln (Klassenarbeits-Fallen!)</span>
+        </div>
+        <div class="warn-grid">
+          <div class="warn-item">
+            <strong>⚠️ 1. Keine Wurzel aus negativen Zahlen!</strong>
+            Was ergibt $\sqrt{-16}$? Es gibt keine reelle Zahl, die mit sich selbst multipliziert $-16$ ergibt, denn $(+4)^2 = +16$ und $(-4)^2 = +16$.<br>
+            👉 <strong>$\sqrt{-16}$ ist im Reellen nicht definiert!</strong> (Radikand muss $\ge 0$ sein).
+          </div>
+          <div class="warn-item warning">
+            <strong>⚠️ 2. Das Wurzelergebnis ist nie negativ!</strong>
+            Zwar ist $(+5)^2 = 25$ und $(-5)^2 = 25$. Das Zeichen $\sqrt{\phantom{x}}$ ist jedoch mathematisch als die <strong>positive Zahl</strong> definiert:<br>
+            👉 <strong>$\sqrt{25} = 5$</strong> (und <strong>NIEMALS</strong> $-5$!).
+          </div>
+        </div>
+
+        <!-- 4. DIE QUADRATZAHLEN 1 BIS 20 -->
+        <div class="section-title">
+          <span class="section-num">4</span>
+          <span>Der mentale Werkzeugkasten: Quadratzahlen von 1 bis 20</span>
+        </div>
+        <p style="font-size: 7.8pt; color: #475569; margin-bottom: 4px;">
+          Wer die Quadratzahlen bis $20^2$ sicher im Kopf hat, löst Wurzelaufgaben in Sekunden ohne Taschenrechner:
+        </p>
+
+        <table class="squares-table">
+          <thead>
+            <tr>
+              <th>$n$</th><th>$n^2$</th>
+              <th>$n$</th><th>$n^2$</th>
+              <th>$n$</th><th>$n^2$</th>
+              <th>$n$</th><th>$n^2$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sq-base">$1^2$</td><td class="sq-val">1</td>
+              <td class="sq-base">$6^2$</td><td class="sq-val">36</td>
+              <td class="sq-base">$11^2$</td><td class="sq-val">121</td>
+              <td class="sq-base">$16^2$</td><td class="sq-val">256</td>
+            </tr>
+            <tr>
+              <td class="sq-base">$2^2$</td><td class="sq-val">4</td>
+              <td class="sq-base">$7^2$</td><td class="sq-val">49</td>
+              <td class="sq-base">$12^2$</td><td class="sq-val">144</td>
+              <td class="sq-base">$17^2$</td><td class="sq-val">289</td>
+            </tr>
+            <tr>
+              <td class="sq-base">$3^2$</td><td class="sq-val">9</td>
+              <td class="sq-base">$8^2$</td><td class="sq-val">64</td>
+              <td class="sq-base">$13^2$</td><td class="sq-val">169</td>
+              <td class="sq-base">$18^2$</td><td class="sq-val">324</td>
+            </tr>
+            <tr>
+              <td class="sq-base">$4^2$</td><td class="sq-val">16</td>
+              <td class="sq-base">$9^2$</td><td class="sq-val">81</td>
+              <td class="sq-base">$14^2$</td><td class="sq-val">196</td>
+              <td class="sq-base">$19^2$</td><td class="sq-val">361</td>
+            </tr>
+            <tr>
+              <td class="sq-base">$5^2$</td><td class="sq-val">25</td>
+              <td class="sq-base">$10^2$</td><td class="sq-val">100</td>
+              <td class="sq-base">$15^2$</td><td class="sq-val">225</td>
+              <td class="sq-base">$20^2$</td><td class="sq-val">400</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- FOOTER SEITE 1 -->
+      <footer class="doc-footer">
+        <span>Mathe 9b • Zusammenfassung Quadratwurzeln • Bei Fragen bitte in Microsoft Teams melden!</span>
+        <span>Seite 1 von 2</span>
+      </footer>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 2: RECHENREGELN, MUSTERBEISPIELE & SELBSTTEST
+         ======================================================== -->
+    <div class="page" id="page2">
+      <div>
+        <!-- HEADER SEITE 2 -->
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Mathematik Klasse 9b • Kapitel I: Reelle Zahlen</div>
+            <h2 class="doc-title" style="font-size: 13pt;">Rechenmuster, Sonderfälle &amp; Selbsttest</h2>
+          </div>
+          <div class="badge-doc">
+            <strong>Seite 2: Praxis &amp; Training</strong>
+          </div>
+        </header>
+
+        <!-- 5. RECHENREGELN & MUSTERAUFGABEN -->
+        <div class="section-title">
+          <span class="section-num">5</span>
+          <span>Wichtige Rechenmuster &amp; typische Aufgaben</span>
+        </div>
+
+        <div class="rules-grid">
+          <!-- Teil A: Ganze Zahlen -->
+          <div class="rule-card">
+            <div class="rule-header">
+              <span>🔢 A. Ganze Zahlen &amp; Nullen</span>
+            </div>
+            <div class="rule-body">
+              Quadratwurzeln aus Quadratzahlen lassen sich sofort im Kopf bestimmen. Sonderfälle $\sqrt{0}=0$ und $\sqrt{1}=1$.
+              <div class="rule-example">
+                $\sqrt{49} = 7 \quad (\text{denn } 7^2 = 49)$<br>
+                $\sqrt{169} = 13 \quad (\text{denn } 13^2 = 169)$<br>
+                $\sqrt{400} = 20 \quad (\text{denn } 20^2 = 400)$
+              </div>
+            </div>
+          </div>
+
+          <!-- Teil B: Dezimalbrüche -->
+          <div class="rule-card">
+            <div class="rule-header">
+              <span>🎯 B. Dezimalzahlen (Kommastellen!)</span>
+            </div>
+            <div class="rule-body">
+              <strong>Goldene Regel:</strong> Beim Wurzelziehen <strong>halbiert</strong> sich die Anzahl der Nachkommastellen!
+              <div class="rule-example">
+                $\sqrt{0{,}25} = 0{,}5 \quad (2 \text{ Stellen } \to 1 \text{ Stelle})$<br>
+                $\sqrt{0{,}04} = 0{,}2 \quad (\text{Achtung: nicht } 0{,}02!)$<br>
+                $\sqrt{1{,}44} = 1{,}2 \quad (12^2 = 144 \implies 1{,}2^2 = 1{,}44)$<br>
+                $\sqrt{0{,}0081} = 0{,}09 \quad (4 \text{ Stellen } \to 2 \text{ Stellen})$
+              </div>
+            </div>
+          </div>
+
+          <!-- Teil C: Brüche -->
+          <div class="rule-card">
+            <div class="rule-header">
+              <span>🍰 C. Brüche &amp; gemischte Zahlen</span>
+            </div>
+            <div class="rule-body">
+              Ziehe die Wurzel aus Zähler und Nenner <strong>separat</strong>: $\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}}$.<br>
+              ⚠️ <strong>Gemischte Zahlen</strong> immer <em>zuerst in unechte Brüche</em> umwandeln!
+              <div class="rule-example">
+                $\sqrt{\frac{9}{16}} = \frac{\sqrt{9}}{\sqrt{16}} = \frac{3}{4}$<br>
+                $\sqrt{\frac{1}{100}} = \frac{1}{10} = 0{,}1$<br>
+                $\sqrt{1\frac{7}{9}} = \sqrt{\frac{16}{9}} = \frac{4}{3} = 1\frac{1}{3} \quad (\text{NICHT } 1\frac{\sqrt{7}}{3}!)$
+              </div>
+            </div>
+          </div>
+
+          <!-- Teil D: Eingrenzen ohne TR -->
+          <div class="rule-card">
+            <div class="rule-header">
+              <span>📐 D. Eingrenzen (ohne Taschenrechner)</span>
+            </div>
+            <div class="rule-body">
+              Liegt der Radikand zwischen zwei Quadratzahlen, lässt sich die Wurzel zwischen zwei ganze Zahlen einschließen.
+              <div class="rule-example">
+                <strong>Beispiel $\sqrt{50}$ eingrenzen:</strong><br>
+                1. Nachbar-Quadratzahlen: $49 < 50 < 64$<br>
+                2. Wurzeln ziehen: $\sqrt{49} < \sqrt{50} < \sqrt{64}$<br>
+                $\implies \mathbf{7 < \sqrt{50} < 8}$ (liegt extrem nah an 7, $\approx 7{,}07$)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. SELBSTTEST FÜR ZUHAUSE -->
+        <div class="section-title">
+          <span class="section-num">6</span>
+          <span>Selbsttest für zuhause: Teste dein Verständnis!</span>
+        </div>
+        <div class="selftest-box">
+          <div class="selftest-title">
+            <span>📝 5 Kontrollaufgaben (Löse die Aufgaben zuerst auf einem Schmierblatt!)</span>
+          </div>
+          <div class="selftest-tasks">
+            <div>
+              <strong>1. Kopfrechnen:</strong><br>
+              a) $\sqrt{81} = \quad$ b) $\sqrt{289} = \quad$ c) $\sqrt{0{,}64} =$
+            </div>
+            <div>
+              <strong>2. Brüche berechnen:</strong><br>
+              a) $\sqrt{\frac{25}{64}} = \quad$ b) $\sqrt{2\frac{1}{4}} =$
+            </div>
+            <div>
+              <strong>3. Nachkommastellen:</strong><br>
+              Berechne: $\sqrt{0{,}0009} =$
+            </div>
+            <div>
+              <strong>4. Eingrenzen ohne TR:</strong><br>
+              Zwischen welchen ganzen Zahlen liegt $\sqrt{30}$?
+            </div>
+          </div>
+          <div style="margin-top: 5px; font-size: 7.8pt;">
+            <strong>5. Sachaufgabe:</strong> Ein quadratisches Klassenzimmer hat eine Grundfläche von $A = 81\text{ m}^2$. Wie lang ist die Wandseite $a$ und wie groß ist der Umfang $U$ des Raumes?
+          </div>
+          <div class="upside-down">
+            <strong>Kopfüber-Lösungen zur Selbstkontrolle:</strong><br>
+            1a) 9, 1b) 17, 1c) 0,8 | 2a) 5/8, 2b) √(9/4) = 3/2 = 1,5 | 3) 0,03 (4 Stellen → 2 Stellen) | 4) 5 < √30 < 6 (da 25 < 30 < 36) | 5) a = √81 = 9 m; Umfang U = 4 · 9 m = 36 m
+          </div>
+        </div>
+
+        <!-- 7. AUSBLICK -->
+        <div class="section-title">
+          <span class="section-num">7</span>
+          <span>Ausblick auf die nächste Stunde: Reelle Zahlen</span>
+        </div>
+        <div class="card-box" style="background: #fdf4ff; border-color: #f0abfc; color: #701a75; font-size: 7.8pt; line-height: 1.35;">
+          <strong>💡 Schon gewusst? Die Entdeckung von $\sqrt{2}$ erschütterte die Antike!</strong><br>
+          Wurzeln wie $\sqrt{2}$, $\sqrt{3}$ oder $\sqrt{50}$ lassen sich <em>nicht</em> als Bruch zweier ganzer Zahlen darstellen. Ihre Dezimaldarstellung bricht niemals ab und ist <em>nicht periodisch</em> ($\sqrt{2} \approx 1{,}41421356\dots$). Man nennt sie <strong>irrationale Zahlen</strong>. Zusammen mit den rationalen Zahlen (Brüchen) bilden sie den Zahlenbereich der <strong>reellen Zahlen ($\mathbb{R}$)</strong>, den wir in der nächsten Stunde genauer erkunden!
+        </div>
+
+      </div>
+
+      <!-- FOOTER SEITE 2 -->
+      <footer class="doc-footer">
+        <span>Städtisches Gymnasium • Mathe 9b • Lehrkraft: Herr Cakar • Erstellt mit Antigravity</span>
+        <span>Seite 2 von 2</span>
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    // KaTeX beim Laden rendern
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+
+</body>
+</html>
