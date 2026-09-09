@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Filius EF">
+  <title>Einführung in Rechnernetze mit Filius | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #f5f3ff;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      transition: all 0.2s;
+    }
+    .nav-back-link:hover {
+      background: #ede9fe;
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .hero-header {
+      padding: 1.75rem 0 2rem 0;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+    .badge-ef {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border: 1px solid #ddd6fe;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      color: #1e1b4b;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Card System */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #1e1b4b;
+    }
+
+    .section-badge {
+      background: var(--primary);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    /* MOTIVATION QUESTIONS ACCORDION */
+    .question-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+    .question-card:hover {
+      border-color: var(--primary);
+    }
+
+    .question-header {
+      padding: 1.25rem 1.5rem;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      user-select: none;
+    }
+
+    .question-icon {
+      font-size: 1.75rem;
+      line-height: 1;
+      background: var(--primary-light);
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      flex-shrink: 0;
+    }
+
+    .question-title-group {
+      flex-grow: 1;
+    }
+
+    .question-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .btn-toggle-answer {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #ddd6fe;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-toggle-answer:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .answer-body {
+      display: none;
+      padding: 1.25rem 1.5rem;
+      background: #faf5ff;
+      border-top: 1.5px dashed #ddd6fe;
+      color: #3b0764;
+      font-size: 0.96rem;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .answer-body.open {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ROADMAP TIMELINE */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+
+    .timeline-step {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .timeline-step.active {
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+    }
+    .timeline-step-num {
+      background: var(--primary);
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+    .timeline-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* FILIUS INTRO */
+    .modes-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 680px) {
+      .modes-comparison { grid-template-columns: 1fr; }
+    }
+
+    .mode-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      background: #ffffff;
+    }
+    .mode-card.draft {
+      border-color: #f59e0b;
+    }
+    .mode-card.action {
+      border-color: #10b981;
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .mode-badge.draft {
+      background: #fef3c7;
+      color: #b45309;
+    }
+    .mode-badge.action {
+      background: #ecfdf5;
+      color: #059669;
+    }
+
+    /* IMAGE CONTAINERS */
+    .img-showcase {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 1.25rem 0;
+      box-shadow: var(--shadow-sm);
+      background: #ffffff;
+    }
+    .img-showcase img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .img-caption {
+      padding: 8px 14px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MISSION STEPS */
+    .mission-step {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .mission-step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-marker {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+    .step-content h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 0.4rem;
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+
+    .callout-box {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-light);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 10px 0;
+      font-size: 0.92rem;
+      color: #1e3a8a;
+    }
+
+    .callout-box.tip {
+      border-left-color: var(--success);
+      background: var(--success-light);
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <nav class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur EF-Übersicht
+      </a>
+      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+        Informatik EF • Thema 1
+      </span>
+    </nav>
+
+    <!-- Header -->
+    <header class="hero-header">
+      <div class="badge-pill badge-ef">Informatik EF • Rechnernetze (Startmodul)</div>
+      <h1>Rechnernetze &amp; Netzwerk-Simulation</h1>
+      <p class="subtitle">
+        Wie kommunizieren Computer weltweit? Von der ersten direkten Verbindung bis zum weltweiten Internet mit Filius.
+      </p>
+    </header>
+
+    <!-- ========================================================
+         TEIL 1: DIE 3 EINSTIEGSFRAGEN (AKTIVIERUNG)
+         ======================================================== -->
+    <section class="card">
+      <div class="card-header">
+        <div class="section-title">
+          <span class="section-badge">1</span>
+          <span>Drei Rätsel unseres Alltags</span>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Unterrichtsgespräch</span>
+      </div>
+
+      <p style="margin-bottom: 1.25rem; font-size: 1.05rem;">
+        Für die meisten Menschen ist das Internet eine magische <strong>Blackbox</strong>: Man tippt auf den Bildschirm, und wie von Zauberhand funktioniert es. Als Informatiker lüften wir heute dieses Geheimnis:
+      </p>
+
+      <!-- FRAGE 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(1)">
+          <div class="question-icon">📱</div>
+          <div class="question-title-group">
+            <div class="question-tag">Rätsel 1 • Das Adressierungs-Problem</div>
+            <div class="question-text">
+              Wie findet ein WhatsApp-Foto ausgerechnet dieses EINE Smartphone deines Kumpels – unter mehr als 4 Milliarden Geräten weltweit?
+            </div>
+            <button class="btn-toggle-answer" id="btn-ans-1">
+              <span>👉</span> Antwort &amp; Erklärung aufdecken
+            </button>
+          </div>
+        </div>
+        <div class="answer-body" id="ans-1">
+          <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
+            💡 Die Auflösung: Die IP-Adresse (Postadresse des Internets)
+          </h4>
+          <p style="margin-bottom: 8px;">
+            Jedes internetfähige Gerät erhält beim Verbinden eine weltweit eindeutige logische Adresse: die <strong>IP-Adresse</strong> (z. B. <span class="code-pill">192.168.0.10</span>).
+          </p>
+          <p>
+            Ähnlich wie ein Brief mit <em>Stadt, Straße und Hausnummer</em> versehen ist, weiß das Netzwerk durch die IP-Adresse exakt, wohin die Datenpakete vermittelt werden müssen.
+          </p>
+        </div>
+      </div>
+
+      <!-- FRAGE 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(2)">
+          <div class="question-icon">🎮</div>
+          <div class="question-title-group">
+            <div class="question-tag">Rätsel 2 • Der Gamer-Check</div>
+            <div class="question-text">
+              Was bedeutet es, wenn jemand beim Online-Gaming schreit: „Ich hab einen 200er Ping, es laggt!“? Was wird da physikalisch gemessen?
+            </div>
+            <button class="btn-toggle-answer" id="btn-ans-2">
+              <span>👉</span> Antwort &amp; Erklärung aufdecken
+            </button>
+          </div>
+        </div>
+        <div class="answer-body" id="ans-2">
+          <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
+            💡 Die Auflösung: Die Paketlaufzeit (Latenz / Ping)
+          </h4>
+          <p style="margin-bottom: 8px;">
+            Ein <strong>Ping</strong> ist ein minimales Kontrollpaket (Echo Request), das dein PC an den Game-Server schickt: <em>„Bist du da?“</em>. Der Server antwortet sofort mit <em>„Ja, ich bin da!“</em> (Echo Reply).
+          </p>
+          <p>
+            Gemessen wird die Zeit für den Hin- und Rückweg in <strong>Millisekunden (ms)</strong>. Ein Ping von 20 ms fühlt sich blitzschnell an – bei 200 ms reist das Signal spürbar verzögert durch die Leitungen.
+          </p>
+        </div>
+      </div>
+
+      <!-- FRAGE 3 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(3)">
+          <div class="question-icon">🌐</div>
+          <div class="question-title-group">
+            <div class="question-tag">Rätsel 3 • Das Telefonbuch des Netzes</div>
+            <div class="question-text">
+              Tippe <span class="code-pill">142.250.186.68</span> in deinen Browser – du landest bei Google! Warum tippt niemand Zahlen ein, sondern alle schreiben <span class="code-pill">google.de</span>?
+            </div>
+            <button class="btn-toggle-answer" id="btn-ans-3">
+              <span>👉</span> Antwort &amp; Erklärung aufdecken
+            </button>
+          </div>
+        </div>
+        <div class="answer-body" id="ans-3">
+          <h4 style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 800; color: #581c87;">
+            💡 Die Auflösung: Das Domain Name System (DNS)
+          </h4>
+          <p style="margin-bottom: 8px;">
+            Computer verstehen nur Zahlen (IP-Adressen). Menschen können sich aber Namen wie <em>google.de</em> oder <em>youtube.com</em> viel leichter merken.
+          </p>
+          <p>
+            Ein weltweites Netz von <strong>DNS-Servern</strong> fungiert als automatisches Telefonbuch: Bevor dein Browser eine Seite aufruft, fragt er blitzschnell den DNS-Server: <em>„Welche IP gehört zu google.de?“</em> – und bekommt die Ziffernfolge zurück.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TEIL 2: DER FAHRPLAN DER UNTERRICHTSREIHE
+         ======================================================== -->
+    <section class="card">
+      <div class="card-header">
+        <div class="section-title">
+          <span class="section-badge">2</span>
+          <span>Unser Fahrplan in der EF</span>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Reihenüberblick</span>
+      </div>
+
+      <p style="font-size: 0.95rem; color: var(--text-muted);">
+        Wir bauen das Internet Schritt für Schritt im Simulator von der Basis bis zur weltweiten Vernetzung auf:
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-step active">
+          <div class="timeline-step-num">1</div>
+          <div class="timeline-title">Peer-to-Peer</div>
+          <div class="timeline-desc">2 Rechner direkt mit Kabel verbinden, IPs vergeben &amp; erster Ping.</div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="timeline-step-num">2</div>
+          <div class="timeline-title">Das LAN &amp; Switch</div>
+          <div class="timeline-desc">Mehrere Rechner im lokalen Netz per Switch zusammenschließen.</div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="timeline-step-num">3</div>
+          <div class="timeline-title">Client &amp; Server</div>
+          <div class="timeline-desc">Eigenen Webserver aufsetzen und HTML-Seiten im Browser abrufen.</div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="timeline-step-num">4</div>
+          <div class="timeline-title">DNS-Server</div>
+          <div class="timeline-desc">Aus IP-Zahlen werden lesbare Web-Adressen (Namensauflösung).</div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="timeline-step-num">5</div>
+          <div class="timeline-title">Routing &amp; Weltnetz</div>
+          <div class="timeline-desc">Getrennte Netzwerke über Router und Gateways verbinden.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TEIL 3: EINFÜHRUNG IN FILIUS
+         ======================================================== -->
+    <section class="card">
+      <div class="card-header">
+        <div class="section-title">
+          <span class="section-badge">3</span>
+          <span>Unser Simulations-Labor: Filius</span>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Werkzeug-Vorstellung</span>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Im echten Schulnetzwerk können wir keine Kabel kappen oder Router verstellen. <strong>Filius</strong> ist unser virtueller Experimentierkasten: Wir können gefahrlos Netze entwerfen und – das Beste – <strong>in die Datenleitungen hineinsehen</strong>!
+      </p>
+
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin: 1.5rem 0 0.5rem 0;">
+        Die zwei Modi in Filius (Oben in der Menüleiste):
+      </h3>
+
+      <div class="modes-comparison">
+        <!-- Entwurfsmodus -->
+        <div class="mode-card draft">
+          <div class="mode-badge draft">🔨 Entwurfsmodus (Hammer)</div>
+          <h4 style="font-weight: 700; margin-bottom: 0.4rem; color: #92400e;">Wir sind die Netzwerk-Architekten</h4>
+          <ul style="font-size: 0.9rem; margin-left: 1.25rem; color: #78350f; line-height: 1.6;">
+            <li>Geräte aus der linken Leiste auf die Fläche ziehen.</li>
+            <li>Rechner mit dem <strong>roten Kabel-Werkzeug</strong> verbinden.</li>
+            <li>Rechner anklicken, um <strong>IP-Adressen</strong> einzustellen.</li>
+          </ul>
+        </div>
+
+        <!-- Aktionsmodus -->
+        <div class="mode-card action">
+          <div class="mode-badge action">▶️ Aktionsmodus (Grüner Pfeil)</div>
+          <h4 style="font-weight: 700; margin-bottom: 0.4rem; color: #065f46;">Das Netzwerk wird lebendig!</h4>
+          <ul style="font-size: 0.9rem; margin-left: 1.25rem; color: #064e3b; line-height: 1.6;">
+            <li>Die Rechner „fahren hoch“ und sind betriebsbereit.</li>
+            <li>Klick auf einen Rechner öffnet den <strong>virtuellen Desktop</strong>.</li>
+            <li>Software installieren (Befehlszeile, Webbrowser, Webserver) und ausführen!</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="img-showcase">
+        <img src="img/filius_uebersicht_netzwerk.png" alt="Filius Netzwerk-Übersicht">
+        <div class="img-caption">
+          <span>📸</span> <strong>Unser Ziel-Szenario in Filius:</strong> Mehrere getrennte Netzwerke mit Laptops, Switches, Webserver, Mailserver und zentralem Vermittlungsrechner (Router).
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TEIL 4: GELEITETE KURSAUFGABE (MISSION 1)
+         ======================================================== -->
+    <section class="card" style="border: 2px solid var(--accent);">
+      <div class="card-header">
+        <div class="section-title" style="color: #1e3a8a;">
+          <span class="section-badge" style="background: var(--accent);">4</span>
+          <span>Kursaufgabe: Dein erstes Netzwerk (Peer-to-Peer)</span>
+        </div>
+        <span style="font-size: 0.85rem; background: #eff6ff; color: #1d4ed8; font-weight: 800; padding: 4px 10px; border-radius: 6px;">
+          Praxis am Rechner
+        </span>
+      </div>
+
+      <p style="margin-bottom: 1.5rem; font-size: 1rem;">
+        Starte jetzt <strong>Filius</strong> auf deinem PC. Folge der Anleitung Schritt für Schritt:
+      </p>
+
+      <!-- Schritt 1 -->
+      <div class="mission-step">
+        <div class="step-marker">1</div>
+        <div class="step-content">
+          <h4>Zwei Rechner auf die Arbeitsfläche ziehen</h4>
+          <p>
+            Vergewissere dich, dass du im <strong>Entwurfsmodus (Hammer 🔨)</strong> bist. Klicke links in der Werkzeugleiste auf das Symbol <strong>Notebook</strong> und ziehe zwei Geräte nebeneinander auf das weiße Raster.
+          </p>
+        </div>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="mission-step">
+        <div class="step-marker">2</div>
+        <div class="step-content">
+          <h4>Rechner mit einem Kabel verbinden</h4>
+          <p>
+            Wähle links ganz oben das Werkzeug <strong>Verbindung (rotes Kabel 🪢)</strong> aus. Klicke zuerst auf das linke Notebook und ziehe die Linie zum rechten Notebook. Ein schwarzes Kabel erscheint.
+          </p>
+        </div>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="mission-step">
+        <div class="step-marker">3</div>
+        <div class="step-content">
+          <h4>IP-Adressen vergeben (Konfiguration)</h4>
+          <p>
+            Klicke auf das <strong>linke Notebook</strong>, um die Einstellungen zu öffnen. Trage folgende Werte ein:
+          </p>
+          <ul style="margin: 0.5rem 0 0.5rem 1.5rem; font-size: 0.95rem;">
+            <li><strong>IP-Adresse:</strong> <span class="code-pill">192.168.0.10</span></li>
+            <li><strong>Netzmaske:</strong> <span class="code-pill">255.255.255.0</span></li>
+          </ul>
+          <p>
+            Wiederhole das für das <strong>rechte Notebook</strong> mit der IP <span class="code-pill">192.168.0.11</span> (gleiche Netzmaske).
+          </p>
+
+          <div class="img-showcase" style="max-width: 650px; margin-top: 10px;">
+            <img src="img/filius_ip_konfiguration.png" alt="IP-Konfiguration in Filius">
+            <div class="img-caption">
+              <span>🔍</span> <strong>Hilfe:</strong> So sieht die IP-Eingabemaske in Filius aus.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 4 & 5 -->
+      <div class="mission-step">
+        <div class="step-marker">4</div>
+        <div class="step-content">
+          <h4>In den Aktionsmodus wechseln &amp; Konsole starten</h4>
+          <p>
+            Klicke oben in der Menüleiste auf den <strong>grünen Play-Button (▶️)</strong>. Klicke anschließend mit einem Doppelklick auf das <strong>linke Notebook</strong>.
+          </p>
+          <p style="margin-top: 6px;">
+            Es öffnet sich der virtuelle Desktop. Gehe auf <strong>Software-Installation</strong>, wähle die <strong>Befehlszeile</strong> aus und klicke auf den Pfeil nach links, um sie zu installieren. Starte die Befehlszeile anschließend mit einem Doppelklick!
+          </p>
+
+          <div class="img-showcase" style="max-width: 650px; margin-top: 10px;">
+            <img src="img/filius_desktop_aktionsmodus.png" alt="Desktop und Befehlszeile">
+            <div class="img-caption">
+              <span>💻</span> Der Desktop im Aktionsmodus mit der installierten Befehlszeile.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 6 -->
+      <div class="mission-step">
+        <div class="step-marker">5</div>
+        <div class="step-content">
+          <h4>Der große Moment: Schicke deinen ersten Ping ab!</h4>
+          <p>
+            Tippe in die schwarze Befehlszeile folgenden Befehl ein und drücke <strong>Enter</strong>:
+          </p>
+          <div style="background: #0f172a; color: #38bdf8; font-family: 'JetBrains Mono', monospace; padding: 10px 16px; border-radius: 8px; margin: 8px 0; font-size: 1.05rem;">
+            ping 192.168.0.11
+          </div>
+          
+          <div class="callout-box tip">
+            <strong>🎯 Beobachtung:</strong> Du siehst 4 Zeilen: <em>„4 Pakete gesendet, 4 empfangen, 0% Verlust“</em>. Dein erstes Rechnernetz funktioniert!
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt 7: Mini Experiment -->
+      <div class="mission-step">
+        <div class="step-marker">⚡</div>
+        <div class="step-content">
+          <h4>Forscher-Aufgabe (Den Fehler verstehen):</h4>
+          <p>
+            Was passiert, wenn du in die Befehlszeile <span class="code-pill">ping 192.168.0.99</span> eingibst? Warum schlägt dieser Ping fehl?
+          </p>
+          <p style="margin-top: 6px;">
+            Und was passiert, wenn du zurück in den Entwurfsmodus wechselst und bei Notebook B die IP auf <span class="code-pill">192.168.1.11</span> abänderst? Probiere es aus!
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.88rem;">
+      <p><strong>Informatik Einführungsphase (EF)</strong> • Städtisches Gymnasium</p>
+      <p style="margin-top: 4px;">Unterrichtsmodul: Rechnernetze &amp; Simulation mit Filius</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleAnswer(id) {
+      const body = document.getElementById('ans-' + id);
+      const btn = document.getElementById('btn-ans-' + id);
+      if (body.classList.contains('open')) {
+        body.classList.remove('open');
+        btn.innerHTML = '<span>👉</span> Antwort &amp; Erklärung aufdecken';
+      } else {
+        body.classList.add('open');
+        btn.innerHTML = '<span>🙈</span> Antwort verbergen';
+      }
+    }
+  </script>
+
+</body>
+</html>
