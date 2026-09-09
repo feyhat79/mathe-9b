@@ -780,6 +780,139 @@
 
     </section>
 
+    <!-- ========================================================
+         TEIL 5: THEORIE & SICHERUNG (IP-ADRESSEN & SUBMETZMASKE)
+         ======================================================== -->
+    <section class="card" style="border: 2px solid var(--primary);">
+      <div class="card-header">
+        <div class="section-title" style="color: var(--primary);">
+          <span class="section-badge" style="background: var(--primary);">5</span>
+          <span>Theorie &amp; Sicherung: Anatomie einer IP-Adresse</span>
+        </div>
+        <span style="font-size: 0.85rem; background: var(--primary-light); color: var(--primary); font-weight: 800; padding: 4px 10px; border-radius: 6px;">
+          Für dein Merkheft
+        </span>
+      </div>
+
+      <p style="margin-bottom: 1.25rem;">
+        Nach unserem Experiment mit dem gescheiterten Ping (<span class="code-pill">192.168.1.11</span>) halten wir die Spielregeln fest, nach denen Computer adressiert werden:
+      </p>
+
+      <!-- 1. DIE STRASSEN-ANALOGIE -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #1e1b4b; margin: 1.25rem 0 0.5rem 0;">
+        1. Die Post-Analogie: Straße &amp; Hausnummer
+      </h3>
+      <p style="margin-bottom: 0.75rem;">
+        Eine IPv4-Adresse besteht immer aus zwei Hälften:
+      </p>
+
+      <div style="background: #f8fafc; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 800; text-align: center;">
+          <div style="background: #e0e7ff; color: #3730a3; padding: 8px 14px; border-radius: 6px; border: 1px solid #c7d2fe;">
+            192 . 168 . 0
+            <div style="font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #4338ca; margin-top: 2px;">
+              Netzwerkteil (Die Straße)
+            </div>
+          </div>
+          <span style="font-size: 1.4rem; color: #94a3b8;">.</span>
+          <div style="background: #fef3c7; color: #92400e; padding: 8px 14px; border-radius: 6px; border: 1px solid #fde68a;">
+            10
+            <div style="font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #b45309; margin-top: 2px;">
+              Geräteteil (Die Hausnummer)
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1rem; font-size: 0.92rem; color: #334155; line-height: 1.5;">
+          • <strong>Netzwerkteil:</strong> Bestimmt, in welchem Netzwerk sich das Gerät befindet. Alle Rechner im selben Raum/Netz müssen hier <em>exakt dieselben Ziffern</em> haben.<br>
+          • <strong>Geräteteil (Host-ID):</strong> Die individuelle Kennung des Rechners innerhalb dieser Straße. Jede Hausnummer darf <em>nur einmal</em> vorkommen!
+        </div>
+      </div>
+
+      <!-- 2. DIE SUBMETZMASKE -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #1e1b4b; margin: 1.5rem 0 0.5rem 0;">
+        2. Was macht die Subnetzmaske (<span class="code-pill">255.255.255.0</span>)?
+      </h3>
+      <p style="margin-bottom: 0.75rem;">
+        Computer haben keine Augen – sie wissen nicht von Natur aus, wo die Straße aufhört. Die <strong>Subnetzmaske</strong> dient als mathematische Schablone:
+      </p>
+
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 1rem 1.25rem; font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; margin-bottom: 1.5rem;">
+        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: center;">
+          <span style="color: var(--text-muted); font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">IP-Adresse:</span>
+          <span style="font-weight: 700;"><span style="color: #4338ca;">192 . 168 .   0</span> . <span style="color: #b45309;">10</span></span>
+
+          <span style="color: var(--text-muted); font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">Subnetzmaske:</span>
+          <span style="font-weight: 700;"><span style="color: #4338ca;">255 . 255 . 255</span> . <span style="color: #b45309;"> 0</span></span>
+        </div>
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; color: #475569;">
+          👉 <strong>Regel:</strong> Wo in der Maske <strong>255</strong> steht, ist die Ziffer für das gesamte Netz fixiert.<br>
+          👉 Wo in der Maske eine <strong>0</strong> steht, dürfen wir freie Hausnummern für Rechner vergeben!
+        </div>
+      </div>
+
+      <!-- 3. WARUM AUSGERECHNET 255? -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #1e1b4b; margin: 1.5rem 0 0.5rem 0;">
+        3. Schülerfrage: „Warum steht da ausgerechnet 255 und nicht 100 oder 1000?“
+      </h3>
+      <div style="background: #fdf4ff; border-left: 4px solid #c084fc; padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem;">
+        <p style="color: #581c87; font-size: 0.95rem; margin-bottom: 6px;">
+          <strong>Der Blick hinter die Kulissen: Das Binärsystem!</strong>
+        </p>
+        <p style="color: #4c1d95; font-size: 0.9rem; line-height: 1.5;">
+          Computer rechnen nicht im Zehnersystem, sondern in <strong>Bits (0 und 1)</strong>. Eine IPv4-Adresse besteht aus 4 Blöcken à <strong>8 Bits (= 1 Byte)</strong>.
+        </p>
+        <div style="margin: 8px 0; padding: 8px 12px; background: rgba(255,255,255,0.7); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: #3b0764;">
+          1 Byte = 8 Bits = $2^8 = 256$ mögliche Kombinationen ($0$ bis $255$).<br>
+          Wenn alle 8 Bits auf <strong>1</strong> geschaltet sind:<br>
+          $11111111_2 = 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = \mathbf{255}$!
+        </div>
+        <p style="color: #4c1d95; font-size: 0.88rem;">
+          <span class="code-pill">255</span> ist schlichtweg die <strong>größte Zahl, die man mit 8 Bits darstellen kann</strong>. In der Maske bedeutet 255: <em>„Alle 8 Bits dieses Blocks gehören komplett zum Netzwerkteil!“</em>
+        </p>
+      </div>
+
+      <!-- 4. WELCHE ADRESSEN DARF MAN VERGEBEN? -->
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #1e1b4b; margin: 1.5rem 0 0.5rem 0;">
+        4. Schülerfrage: „Welche Adressen darf ich nun vergeben? Gibt es verbotene Nummern?“
+      </h3>
+      <p style="margin-bottom: 0.75rem;">
+        Im Block der Hausnummer (wo die 0 in der Maske steht) gibt es die Zahlen von <strong>0 bis 255</strong> (also 256 Möglichkeiten).<br>
+        ⚠️ <strong>Aber Achtung: Genau zwei Adressen sind streng reserviert und dürfen KEINEM Rechner gegeben werden!</strong>
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 1.25rem;">
+        <!-- Reserviert .0 -->
+        <div style="border: 1.5px solid #fca5a5; background: #fef2f2; border-radius: 8px; padding: 12px 14px;">
+          <div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">
+            🚫 Die kleinste Adresse: .0 (z. B. 192.168.0.0)
+          </div>
+          <p style="color: #7f1d1d; font-size: 0.85rem; line-height: 1.4;">
+            <strong>Die Netzadresse:</strong> Das ist der offizielle Name des gesamten Netzwerks (der Straßenname). Sie steht für das Netz als Ganzes und darf keinem Endgerät gehören.
+          </p>
+        </div>
+
+        <!-- Reserviert .255 -->
+        <div style="border: 1.5px solid #fca5a5; background: #fef2f2; border-radius: 8px; padding: 12px 14px;">
+          <div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">
+            🚫 Die höchste Adresse: .255 (z. B. 192.168.0.255)
+          </div>
+          <p style="color: #7f1d1d; font-size: 0.85rem; line-height: 1.4;">
+            <strong>Die Broadcast-Adresse:</strong> Das „Megafon“ des Netzes! Sendet ein Rechner an diese Adresse, empfangen <em>alle</em> Geräte im Raum gleichzeitig die Nachricht (Rundruf).
+          </p>
+        </div>
+      </div>
+
+      <div class="callout-box tip" style="margin-top: 0;">
+        <strong style="font-size: 1rem;">✅ Die goldene Regel für nutzbare Rechner-IPs:</strong><br>
+        In einem Subnetz mit der Maske <span class="code-pill">255.255.255.0</span> darfst du für PCs und Server genau die Endungen:<br>
+        <div style="text-align: center; margin: 8px 0; font-size: 1.2rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #047857;">
+          .1 &nbsp; bis &nbsp; .254
+        </div>
+        vergeben! Das sind exakt $256 - 2 = \mathbf{254}$ nutzbare Computeradressen pro Subnetz.
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer style="text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.88rem;">
       <p><strong>Informatik Einführungsphase (EF)</strong> • Städtisches Gymnasium</p>
