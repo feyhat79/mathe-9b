@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Farben Info 6">
+  <title>Farbmodelle & Additive Farbmischung (RGB) | Informatik Klasse 6</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #ea580c;
+      --primary-dark: #c2410c;
+      --primary-light: #fff7ed;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+    .portal-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      border: 1px solid #fed7aa;
+      transition: all 0.2s;
+    }
+
+    .nav-back-link:hover {
+      background: #ffedd5;
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .module-header {
+      padding: 1.75rem 0 2rem 0;
+      text-align: center;
+    }
+
+    .module-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0.5rem 0;
+      letter-spacing: -0.02em;
+    }
+
+    .module-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+      margin: 0 auto 1.25rem auto;
+    }
+
+    /* Section Cards */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-orange {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+
+    .badge-blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .badge-green {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-purple {
+      background: #faf5ff;
+      color: #7e22ce;
+      border: 1px solid #e9d5ff;
+    }
+
+    h2.card-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    /* Info Callout */
+    .callout-box {
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border-left: 4px solid;
+    }
+
+    .callout-phenomenon {
+      background: #f0fdf4;
+      border-color: #10b981;
+    }
+
+    .callout-phenomenon h4 {
+      color: #065f46;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .callout-contrast {
+      background: #fefce8;
+      border-color: #f59e0b;
+    }
+
+    .callout-contrast h4 {
+      color: #92400e;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    /* Farbmischer Layout */
+    .mixer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (max-width: 820px) {
+      .mixer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .slider-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .channel-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .channel-pill {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .pill-red { background: #ef4444; }
+    .pill-green { background: #10b981; }
+    .pill-blue { background: #3b82f6; }
+
+    .slider-val-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+    }
+
+    .range-input {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      outline: none;
+      -webkit-appearance: none;
+      background: #e2e8f0;
+      cursor: pointer;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    .range-red::-webkit-slider-thumb { background: #ef4444; }
+    .range-green::-webkit-slider-thumb { background: #10b981; }
+    .range-blue::-webkit-slider-thumb { background: #3b82f6; }
+
+    /* Color Preview Box */
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 140px;
+      border-radius: var(--radius-md);
+      border: 2px solid #cbd5e1;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .preview-label {
+      background: rgba(15, 23, 42, 0.85);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+    }
+
+    .code-display {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .code-line:last-child {
+      border-bottom: none;
+    }
+
+    .code-key {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .code-val {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #38bdf8;
+    }
+
+    /* Presets Buttons */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+      gap: 8px;
+      margin-top: 1rem;
+    }
+
+    .preset-btn {
+      padding: 8px 6px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .preset-indicator {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* Venn-Diagramm / Scheinwerfer Bühne */
+    .stage-container {
+      background: #090d16;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 1rem;
+      border: 1px solid #1e293b;
+    }
+
+    .venn-svg {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+    }
+
+    .stage-toggles {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stage-toggle-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .stage-toggle-btn.active-red {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #dc2626;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .stage-toggle-btn.active-green {
+      background: #10b981;
+      color: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .stage-toggle-btn.active-blue {
+      background: #3b82f6;
+      color: #ffffff;
+      border-color: #2563eb;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Vergleichstabelle Additiv vs Subtraktiv */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .comparison-table th, .comparison-table td {
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    .comparison-table th {
+      background: #f1f5f9;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #0f172a;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .comparison-table td {
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Tafelbild Bereich */
+    .tafelbild-container {
+      background: #ffffff;
+      border: 3px solid #0f172a;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .tafelbild-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tafelbild-title-box h3 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .tafelbild-title-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .tafelbild-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-tafelbild {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #0f172a;
+      transition: all 0.2s;
+    }
+
+    .btn-tafelbild:hover {
+      background: #e2e8f0;
+    }
+
+    .tafel-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .tafel-section-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tafel-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .rule-pill-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .rule-pill {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rule-pill strong {
+      color: #0f172a;
+    }
+
+    .rule-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Tafelbild Vollbild-Modus */
+    body.fullscreen-tafel {
+      background: #ffffff;
+      padding: 1rem;
+    }
+
+    body.fullscreen-tafel .container > *:not(#tafelbild-card) {
+      display: none !important;
+    }
+
+    body.fullscreen-tafel #tafelbild-card {
+      border: none;
+      box-shadow: none;
+      padding: 1rem;
+      margin: 0;
+      max-width: 100%;
+    }
+
+    /* Q&A Accordion */
+    .qa-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .qa-question {
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      transition: background 0.2s;
+    }
+
+    .qa-question:hover {
+      background: #f1f5f9;
+    }
+
+    .qa-answer {
+      display: none;
+      padding: 1.25rem;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      font-size: 0.92rem;
+      color: #334155;
+    }
+
+    .qa-item.open .qa-answer {
+      display: block;
+    }
+
+    .qa-btn {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="portal-nav">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Übersicht Klasse 6
+      </a>
+      <span class="badge-pill badge-diff" style="margin: 0;">Informatik 6 • Modul 1</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="module-header">
+      <div class="section-badge badge-orange">Schritt 1 der HTML- &amp; Web-Reihe</div>
+      <h1>Farbmodelle &amp; Additiver RGB-Farbkreis</h1>
+      <p class="module-subtitle">
+        Wie erzeugen Bildschirme aus nur drei leuchtenden Lämpchen Millionen Farben?
+        Interaktiver Scheinwerfer-Farbmischer, Farbmodelle und fertiges Tafelbild.
+      </p>
+      <div class="timestamp-pill" style="display:inline-flex; align-items:center; gap:6px; padding:4px 12px; background:#ffffff; border:1px solid #e2e8f0; border-radius:9999px; font-size:0.82rem; font-weight:600; color:var(--text-muted);">
+        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+        Stand: Schuljahr 2026/27 • Doppelstunde
+      </div>
+    </header>
+
+    <!-- Phase 1: Motivation & Alltagsaktivierung -->
+    <section class="content-card">
+      <div class="section-badge badge-blue">Phase 1: Alltags-Rätsel</div>
+      <h2 class="card-title">
+        <span class="step-marker">1</span>
+        Das Rätsel der Bildschirme (Subpixel &amp; iPad-Lupe)
+      </h2>
+      <p>
+        Wenn du auf deinem iPad oder Smartphone ein Foto anschaust, siehst du strahlendes Sonnengelb, sattes Violett, Orange oder Türkis.
+        Aber wusstest du, dass dein Bildschirm in Wahrheit <strong>nur drei einzige Farben</strong> besitzt?
+      </p>
+
+      <div class="callout-box callout-phenomenon">
+        <div style="font-size: 1.5rem; line-height: 1; flex-shrink: 0; font-weight: 800; color: #059669;">•</div>
+        <div>
+          <h4>Das Wassertropfen-Experiment auf dem iPad</h4>
+          <p style="font-size: 0.92rem; color: #065f46;">
+            Gibt man mit dem Zeigefinger ganz vorsichtig einen winzigen Tropfen Wasser auf eine weiße Stelle des iPad-Bildschirms,
+            wirkt der Tropfen wie eine starke Lupe. Man erkennt sofort: Jedes Bildpünktchen (<strong>Pixel</strong>) besteht aus
+            drei winzigen Leuchtstreifen – <strong>Rot, Grün und Blau</strong> (den sogenannten <em>Subpixeln</em>).
+          </p>
+        </div>
+      </div>
+
+      <p style="margin-top: 0.75rem;">
+        <strong>Fachbegriff Grundfarben:</strong> Farben, aus denen man alle anderen Farben mischen kann.
+        Weil Bildschirme mit eigenem Licht leuchten, heißen die drei Grundfarben der digitalen Welt:
+        <strong>Rot</strong>, <strong>Grün</strong> und <strong>Blau</strong> (kurz: <strong>RGB</strong>).
+      </p>
+    </section>
+
+    <!-- Phase 2: Interaktiver Farbmischer & Scheinwerfer-Bühne -->
+    <section class="content-card">
+      <div class="section-badge badge-orange">Phase 2: Experimentier-Labor</div>
+      <h2 class="card-title">
+        <span class="step-marker">2</span>
+        Der additive RGB-Farbmischer &amp; Scheinwerfer-Bühne
+      </h2>
+      <p>
+        Bewege die Schieberegler oder klicke auf die Scheinwerfer-Tasten. Beobachte, welche Mischfarben entstehen, wenn sich die Lichtstrahlen überlagern!
+      </p>
+
+      <div class="mixer-grid">
+        <!-- Linke Spalte: Schieberegler -->
+        <div>
+          <!-- Rot -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="channel-title">
+                <span class="channel-pill pill-red"></span>
+                Kanal Rot (R)
+              </span>
+              <span class="slider-val-badge" id="badge-r">255</span>
+            </div>
+            <input type="range" min="0" max="255" value="255" class="range-input range-red" id="range-r">
+          </div>
+
+          <!-- Grün -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="channel-title">
+                <span class="channel-pill pill-green"></span>
+                Kanal Grün (G)
+              </span>
+              <span class="slider-val-badge" id="badge-g">0</span>
+            </div>
+            <input type="range" min="0" max="255" value="0" class="range-input range-green" id="range-g">
+          </div>
+
+          <!-- Blau -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="channel-title">
+                <span class="channel-pill pill-blue"></span>
+                Kanal Blau (B)
+              </span>
+              <span class="slider-val-badge" id="badge-b">0</span>
+            </div>
+            <input type="range" min="0" max="255" value="0" class="range-input range-blue" id="range-b">
+          </div>
+
+          <!-- Schnellauswahl (Presets) -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">
+              Schnellauswahl für die Klasse:
+            </div>
+            <div class="preset-grid">
+              <button class="preset-btn" onclick="setRGB(255, 0, 0)">
+                <span class="preset-indicator" style="background:#ff0000;"></span>
+                Rot
+              </button>
+              <button class="preset-btn" onclick="setRGB(0, 255, 0)">
+                <span class="preset-indicator" style="background:#00ff00;"></span>
+                Grün
+              </button>
+              <button class="preset-btn" onclick="setRGB(0, 0, 255)">
+                <span class="preset-indicator" style="background:#0000ff;"></span>
+                Blau
+              </button>
+              <button class="preset-btn" onclick="setRGB(255, 255, 0)">
+                <span class="preset-indicator" style="background:#ffff00;"></span>
+                Gelb
+              </button>
+              <button class="preset-btn" onclick="setRGB(0, 255, 255)">
+                <span class="preset-indicator" style="background:#00ffff;"></span>
+                Cyan
+              </button>
+              <button class="preset-btn" onclick="setRGB(255, 0, 255)">
+                <span class="preset-indicator" style="background:#ff00ff;"></span>
+                Magenta
+              </button>
+              <button class="preset-btn" onclick="setRGB(255, 255, 255)">
+                <span class="preset-indicator" style="background:#ffffff;"></span>
+                Weiß
+              </button>
+              <button class="preset-btn" onclick="setRGB(0, 0, 0)">
+                <span class="preset-indicator" style="background:#000000;"></span>
+                Schwarz
+              </button>
+              <button class="preset-btn" onclick="setRGB(128, 128, 128)">
+                <span class="preset-indicator" style="background:#808080;"></span>
+                Grau
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rechte Spalte: Vorschau & Scheinwerfer-Bühne -->
+        <div class="preview-container">
+          <!-- Live Farbfeld -->
+          <div class="preview-box" id="preview-color-box">
+            <span class="preview-label" id="color-name-label">Rot</span>
+          </div>
+
+          <!-- Live Code Werte -->
+          <div class="code-display">
+            <div class="code-line">
+              <span class="code-key">RGB-Dezimalwerte:</span>
+              <span class="code-val" id="val-rgb-code">rgb(255, 0, 0)</span>
+            </div>
+            <div class="code-line">
+              <span class="code-key">Hex-Code (Webcode):</span>
+              <span class="code-val" id="val-hex-code">#FF0000</span>
+            </div>
+            <div class="code-line">
+              <span class="code-key">Licht-Intensität:</span>
+              <span class="code-val" id="val-brightness-percent">33 % Gesamtlicht</span>
+            </div>
+          </div>
+
+          <!-- Scheinwerfer Venn-Diagramm -->
+          <div class="stage-container">
+            <div style="color:#94a3b8; font-size:0.8rem; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">
+              Lichtbühne: Additiver Farbkreis (Venn-Diagramm)
+            </div>
+            
+            <svg class="venn-svg" viewBox="0 0 320 300">
+              <!-- 3 Scheinwerferkreise mit mix-blend-mode: screen -->
+              <g style="isolation: isolate;">
+                <!-- Kreis Rot (oben links) -->
+                <circle id="spot-red" cx="120" cy="115" r="75" fill="rgb(255,0,0)" style="mix-blend-mode: screen; transition: fill 0.1s ease;"></circle>
+                <!-- Kreis Grün (oben rechts) -->
+                <circle id="spot-green" cx="200" cy="115" r="75" fill="rgb(0,0,0)" style="mix-blend-mode: screen; transition: fill 0.1s ease;"></circle>
+                <!-- Kreis Blau (unten Mitte) -->
+                <circle id="spot-blue" cx="160" cy="180" r="75" fill="rgb(0,0,0)" style="mix-blend-mode: screen; transition: fill 0.1s ease;"></circle>
+              </g>
+
+              <!-- Beschriftungen der Scheinwerfer -->
+              <text x="75" y="80" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Rot</text>
+              <text x="245" y="80" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Grün</text>
+              <text x="160" y="275" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Blau</text>
+              
+              <!-- Schnittmengen-Labels -->
+              <text x="160" y="100" fill="#0f172a" font-size="11" font-weight="800" text-anchor="middle" id="label-gelb" style="display:none;">Gelb</text>
+              <text x="110" y="170" fill="#ffffff" font-size="11" font-weight="800" text-anchor="middle" id="label-magenta" style="display:none;">Magenta</text>
+              <text x="210" y="170" fill="#0f172a" font-size="11" font-weight="800" text-anchor="middle" id="label-cyan" style="display:none;">Cyan</text>
+              <text x="160" y="145" fill="#0f172a" font-size="11" font-weight="900" text-anchor="middle" id="label-weiss" style="display:none;">Weiß</text>
+            </svg>
+
+            <!-- Scheinwerfer Schnelltasten (An / Aus) -->
+            <div class="stage-toggles">
+              <button class="stage-toggle-btn active-red" id="btn-toggle-red" onclick="toggleChannel('r')">Scheinwerfer Rot</button>
+              <button class="stage-toggle-btn" id="btn-toggle-green" onclick="toggleChannel('g')">Scheinwerfer Grün</button>
+              <button class="stage-toggle-btn" id="btn-toggle-blue" onclick="toggleChannel('b')">Scheinwerfer Blau</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 3: Additiv vs. Subtraktiv (Der entscheidende Unterschied) -->
+    <section class="content-card">
+      <div class="section-badge badge-purple">Phase 3: Der Aha-Effekt</div>
+      <h2 class="card-title">
+        <span class="step-marker">3</span>
+        Licht (Additiv) vs. Malkasten (Subtraktiv)
+      </h2>
+      <p>
+        Warum ergibt Rot und Grün beim Licht plötzlich <strong>Gelb</strong>, während es im Malkasten schmutziges Braun ergibt?
+        Hier liegt der grundlegende Unterschied zwischen Physik &amp; Informatik (Licht) und Kunstunterricht (Farbpigmente):
+      </p>
+
+      <div class="table-responsive">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Kriterium</th>
+              <th style="width: 39%;">Additives Modell (Licht / Bildschirme)</th>
+              <th style="width: 39%;">Subtraktives Modell (Malkasten / Druck)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Ausgangspunkt</strong></td>
+              <td>Dunkelheit: Schwarz (Bildschirm ist aus)</td>
+              <td>Helligkeit: Weiß (weißes Blatt Papier)</td>
+            </tr>
+            <tr>
+              <td><strong>Grundfarben</strong></td>
+              <td><strong>Rot, Grün, Blau (RGB)</strong></td>
+              <td>Cyan, Magenta, Gelb (CMY / Malkasten)</td>
+            </tr>
+            <tr>
+              <td><strong>Mischprinzip</strong></td>
+              <td>
+                <strong>Licht wird hinzugefügt (+)</strong><br>
+                Je mehr Lämpchen leuchten, desto <em>heller</em> wird die Fläche.
+              </td>
+              <td>
+                <strong>Licht wird weggenommen (−)</strong><br>
+                Farbpigmente schlucken Licht. Je mehr Farbe, desto <em>dunkler</em>.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Alle 3 Grundfarben voll</strong></td>
+              <td><span style="display:inline-block; width:12px; height:12px; background:#fff; border:1px solid #999; border-radius:3px; vertical-align:middle;"></span> <strong>Strahlendes Weiß</strong></td>
+              <td><span style="display:inline-block; width:12px; height:12px; background:#1e1b18; border-radius:3px; vertical-align:middle;"></span> <strong>Dunkelbraun / Schwarz</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Keine Farbe vorhanden</strong></td>
+              <td><span style="display:inline-block; width:12px; height:12px; background:#000; border-radius:3px; vertical-align:middle;"></span> <strong>Schwarz (kein Licht)</strong></td>
+              <td><span style="display:inline-block; width:12px; height:12px; background:#fff; border:1px solid #999; border-radius:3px; vertical-align:middle;"></span> <strong>Weiß (Papierfarbe)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Phase 4: Das fertige Tafelbild (Merkheftsicherung) -->
+    <section class="tafelbild-container" id="tafelbild-card">
+      <div class="tafelbild-header">
+        <div class="tafelbild-title-box">
+          <div class="section-badge badge-orange" style="margin-bottom:4px;">Heftaufschrieb • Merkheftsicherung</div>
+          <h3>Farbmodelle &amp; Additive Farbmischung (RGB)</h3>
+          <p>Unterrichtsfach Informatik • Klasse 6 • Thema: Grundlagen digitaler Bilder &amp; Webfarben</p>
+        </div>
+        <div class="tafelbild-actions">
+          <button class="btn-tafelbild" id="btn-fullscreen-toggle" onclick="toggleFullscreenTafel()">
+            Vollbild für Beamer
+          </button>
+          <button class="btn-tafelbild" onclick="window.print()">
+            Drucken / PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Tafelbild Inhalt -->
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">1</span>
+          Grundfarben
+        </div>
+        <p style="padding-left: 32px; font-size: 0.95rem;">
+          Farben, aus denen man alle anderen Farben mischen kann.
+          Es gibt verschiedene Farbmodelle mit unterschiedlichen Grundfarben.
+        </p>
+      </div>
+
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">2</span>
+          Das RGB-Modell (Additives Farbmodell – Farben als Licht)
+        </div>
+        <ul style="padding-left: 52px; font-size: 0.95rem; margin-top: 4px;">
+          <li><strong>Grundfarben:</strong> Rot – Grün – Blau</li>
+          <li><strong>Anwendung:</strong> Bildschirme, Fernseher, Computermonitore, iPad- und Smartphone-Displays.</li>
+          <li><strong>Pixel-Aufbau:</strong> Jeder Bildpunkt (Pixel) besteht aus drei winzigen Leuchtelementen (Subpixeln) in Rot, Grün und Blau.</li>
+        </ul>
+      </div>
+
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">3</span>
+          Die Mischregeln des additiven Farbkreises
+        </div>
+        <div class="rule-pill-list" style="padding-left: 32px;">
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#ffff00; border:1px solid #d4d400;"></span>
+            <span>Rot + Grün = <strong>Gelb</strong></span>
+          </div>
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#00ffff; border:1px solid #00b4b4;"></span>
+            <span>Grün + Blau = <strong>Cyan</strong> (Türkis)</span>
+          </div>
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#ff00ff; border:1px solid #c800c8;"></span>
+            <span>Rot + Blau = <strong>Magenta</strong> (Purpur / Pink)</span>
+          </div>
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#ffffff; border:1px solid #94a3b8;"></span>
+            <span>Alle 3 mit <strong>voller Kraft</strong> = <strong>Weiß</strong></span>
+          </div>
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#000000;"></span>
+            <span>Gar kein Licht (Intensität 0) = <strong>Schwarz</strong></span>
+          </div>
+          <div class="rule-pill">
+            <span class="rule-dot" style="background:#808080;"></span>
+            <span>Alle 3 mit <strong>halber Kraft</strong> = <strong>Grautöne</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">4</span>
+          Der Additive Farbkreis (Venn-Diagramm zum Abzeichnen ins Heft)
+        </div>
+        <div style="text-align: center; margin: 1.5rem 0; padding: 1.25rem; background:#f8fafc; border-radius:12px; border:1px dashed #cbd5e1;">
+          <svg style="max-width: 320px; width: 100%; height: auto;" viewBox="0 0 320 280">
+            <!-- Kreis 1 Rot -->
+            <circle cx="120" cy="110" r="70" fill="#ef4444" opacity="0.85"></circle>
+            <!-- Kreis 2 Grün -->
+            <circle cx="200" cy="110" r="70" fill="#10b981" opacity="0.85"></circle>
+            <!-- Kreis 3 Blau -->
+            <circle cx="160" cy="170" r="70" fill="#3b82f6" opacity="0.85"></circle>
+            
+            <!-- Beschriftungen der 7 Zonen -->
+            <text x="80" y="85" fill="#ffffff" font-size="12" font-weight="800">Rot</text>
+            <text x="220" y="85" fill="#ffffff" font-size="12" font-weight="800">Grün</text>
+            <text x="160" y="225" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">Blau</text>
+            
+            <rect x="142" y="90" width="36" height="18" rx="4" fill="#ffffff" opacity="0.95"></rect>
+            <text x="160" y="103" fill="#0f172a" font-size="10" font-weight="800" text-anchor="middle">Gelb</text>
+
+            <rect x="100" y="150" width="48" height="18" rx="4" fill="#ffffff" opacity="0.95"></rect>
+            <text x="124" y="163" fill="#0f172a" font-size="10" font-weight="800" text-anchor="middle">Magenta</text>
+
+            <rect x="175" y="150" width="36" height="18" rx="4" fill="#ffffff" opacity="0.95"></rect>
+            <text x="193" y="163" fill="#0f172a" font-size="10" font-weight="800" text-anchor="middle">Cyan</text>
+
+            <circle cx="160" cy="135" r="14" fill="#ffffff"></circle>
+            <text x="160" y="139" fill="#0f172a" font-size="9" font-weight="900" text-anchor="middle">Weiß</text>
+          </svg>
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 6px;">
+            Venn-Diagramm der additiven Farbmischung (3 Grundfarben, 3 Mischfarben, 1 Schnittzentrum)
+          </div>
+        </div>
+      </div>
+
+      <div class="tafel-section" style="margin-bottom:0;">
+        <div class="tafel-section-title">
+          <span class="tafel-num">5</span>
+          Hausaufgabe &amp; Denkaufgabe
+        </div>
+        <ol style="padding-left: 52px; font-size: 0.95rem; line-height: 1.7;">
+          <li><strong>Zeichne</strong> das Venn-Diagramm des additiven Farbkreises mit Zirkel und Buntstiften sauber in dein Heft und beschrifte alle 7 Bereiche.</li>
+          <li><strong>Rätselfrage:</strong> Welche beiden Lämpchen (Subpixel) müssen in deinem Smartphone leuchten, damit der Bildschirm ein leuchtendes <strong>Türkis (Cyan)</strong> anzeigt?</li>
+          <li><strong>Ausblick:</strong> In der nächsten Stunde erforschen wir, warum die Zahlenregler von <strong>0 bis 255</strong> gehen und was das mit dem Binärsystem zu tun hat!</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Phase 5: Mini-Check am Smartboard -->
+    <section class="content-card">
+      <div class="section-badge badge-green">Phase 5: Verständnis-Check</div>
+      <h2 class="card-title">
+        <span class="step-marker">4</span>
+        Schnell-Check für die Klasse (Aufdecken &amp; Prüfen)
+      </h2>
+      <p style="margin-bottom: 1.25rem;">
+        Teste dein Wissen am Smartboard oder auf deinem iPad. Tippe auf eine Frage, um die Musterlösung einzublenden:
+      </p>
+
+      <!-- Frage 1 -->
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 1: Warum heißt das Farbmodell von Bildschirmen „additiv“?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> Weil Bildschirme mit eigenem Licht arbeiten. Jeder Farbkanal (Rot, Grün, Blau) schickt Lichtstrahlen aus, die <strong>hinzugefügt (addiert)</strong> werden. Je mehr Licht eingeschaltet wird, desto heller wird das Ergebnis – bis hin zu strahlendem Weiß.
+        </div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 2: Welche Grundfarben müssen leuchten, um Gelb zu erzeugen?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> <strong>Rot und Grün</strong>! Bei Lichtfarben addieren sich die Wellenlängen von rotem und grünem Licht im menschlichen Auge exakt so, dass unser Gehirn Gelb wahrnimmt.
+        </div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 3: Was sieht man, wenn alle drei Kanäle auf halbe Intensität (z. B. 128) gestellt werden?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> Ein neutrales <strong>Grau</strong>! Gleiche Anteile aller drei Farben heben die Buntheit auf. Wenn alle voll leuchten, ist es Weiß. Wenn alle halbe Kraft leuchten, ist es Grau. Wenn alle 0 sind, ist es Schwarz.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Klasse 6</strong> • Modul 1: Farbmodelle &amp; Additiver Farbkreis</p>
+      <p style="margin-top: 4px;">Schulportal 2026/2027 • Erstellt für das gymnasiale Unterrichtsmanagement</p>
+    </footer>
+  </div>
+
+  <script>
+    // State
+    let currentR = 255;
+    let currentG = 0;
+    let currentB = 0;
+
+    const rangeR = document.getElementById('range-r');
+    const rangeG = document.getElementById('range-g');
+    const rangeB = document.getElementById('range-b');
+
+    const badgeR = document.getElementById('badge-r');
+    const badgeG = document.getElementById('badge-g');
+    const badgeB = document.getElementById('badge-b');
+
+    const previewBox = document.getElementById('preview-color-box');
+    const colorNameLabel = document.getElementById('color-name-label');
+    const valRgbCode = document.getElementById('val-rgb-code');
+    const valHexCode = document.getElementById('val-hex-code');
+    const valBrightnessPercent = document.getElementById('val-brightness-percent');
+
+    const spotRed = document.getElementById('spot-red');
+    const spotGreen = document.getElementById('spot-green');
+    const spotBlue = document.getElementById('spot-blue');
+
+    const btnToggleRed = document.getElementById('btn-toggle-red');
+    const btnToggleGreen = document.getElementById('btn-toggle-green');
+    const btnToggleBlue = document.getElementById('btn-toggle-blue');
+
+    const labelGelb = document.getElementById('label-gelb');
+    const labelCyan = document.getElementById('label-cyan');
+    const labelMagenta = document.getElementById('label-magenta');
+    const labelWeiss = document.getElementById('label-weiss');
+
+    function toHex(n) {
+      const hex = Number(n).toString(16).toUpperCase();
+      return hex.length === 1 ? '0' + hex : hex;
+    }
+
+    function updateMixer() {
+      // Werte ablesen
+      currentR = parseInt(rangeR.value);
+      currentG = parseInt(rangeG.value);
+      currentB = parseInt(rangeB.value);
+
+      // Badges
+      badgeR.textContent = currentR;
+      badgeG.textContent = currentG;
+      badgeB.textContent = currentB;
+
+      // Farbfeld aktualisieren
+      const colorStr = `rgb(${currentR}, ${currentG}, ${currentB})`;
+      previewBox.style.backgroundColor = colorStr;
+
+      // Codes
+      const hexStr = `#${toHex(currentR)}${toHex(currentG)}${toHex(currentB)}`;
+      valRgbCode.textContent = colorStr;
+      valHexCode.textContent = hexStr;
+
+      // Helligkeit
+      const brightness = Math.round(((currentR + currentG + currentB) / (255 * 3)) * 100);
+      valBrightnessPercent.textContent = `${brightness} % Gesamtlicht`;
+
+      // Farbname erkennen
+      colorNameLabel.textContent = detectColorName(currentR, currentG, currentB);
+
+      // Scheinwerfer im SVG anpassen
+      spotRed.setAttribute('fill', `rgb(${currentR}, 0, 0)`);
+      spotGreen.setAttribute('fill', `rgb(0, ${currentG}, 0)`);
+      spotBlue.setAttribute('fill', `rgb(0, 0, ${currentB})`);
+
+      // Tasten-Zustände anpassen
+      btnToggleRed.className = currentR > 0 ? 'stage-toggle-btn active-red' : 'stage-toggle-btn';
+      btnToggleGreen.className = currentG > 0 ? 'stage-toggle-btn active-green' : 'stage-toggle-btn';
+      btnToggleBlue.className = currentB > 0 ? 'stage-toggle-btn active-blue' : 'stage-toggle-btn';
+
+      // Schnittmengen-Labels anzeigen, wenn entsprechende Lichter an sind
+      labelGelb.style.display = (currentR > 100 && currentG > 100) ? 'block' : 'none';
+      labelCyan.style.display = (currentG > 100 && currentB > 100) ? 'block' : 'none';
+      labelMagenta.style.display = (currentR > 100 && currentB > 100) ? 'block' : 'none';
+      labelWeiss.style.display = (currentR > 150 && currentG > 150 && currentB > 150) ? 'block' : 'none';
+    }
+
+    function detectColorName(r, g, b) {
+      if (r === 0 && g === 0 && b === 0) return 'Schwarz (kein Licht)';
+      if (r === 255 && g === 255 && b === 255) return 'Weiß (volle Kraft aller 3 Farben)';
+      if (r === g && g === b) return `Grau (${Math.round(r/2.55)}% Helligkeit)`;
+      if (r === 255 && g === 0 && b === 0) return 'Reines Rot';
+      if (r === 0 && g === 255 && b === 0) return 'Reines Grün';
+      if (r === 0 && g === 0 && b === 255) return 'Reines Blau';
+      if (r === 255 && g === 255 && b === 0) return 'Gelb (Rot + Grün)';
+      if (r === 0 && g === 255 && b === 255) return 'Cyan (Grün + Blau)';
+      if (r === 255 && g === 0 && b === 255) return 'Magenta (Rot + Blau)';
+      if (r > 200 && g > 100 && b < 50) return 'Orange / Goldton';
+      if (r > 150 && g < 100 && b > 150) return 'Violett / Lila';
+      return `Mischfarbe (#${toHex(r)}${toHex(g)}${toHex(b)})`;
+    }
+
+    function setRGB(r, g, b) {
+      rangeR.value = r;
+      rangeG.value = g;
+      rangeB.value = b;
+      updateMixer();
+    }
+
+    function toggleChannel(ch) {
+      if (ch === 'r') rangeR.value = rangeR.value > 0 ? 0 : 255;
+      if (ch === 'g') rangeG.value = rangeG.value > 0 ? 0 : 255;
+      if (ch === 'b') rangeB.value = rangeB.value > 0 ? 0 : 255;
+      updateMixer();
+    }
+
+    rangeR.addEventListener('input', updateMixer);
+    rangeG.addEventListener('input', updateMixer);
+    rangeB.addEventListener('input', updateMixer);
+
+    // Initialisierung
+    updateMixer();
+
+    // Tafelbild Vollbild
+    function toggleFullscreenTafel() {
+      document.body.classList.toggle('fullscreen-tafel');
+      const btn = document.getElementById('btn-fullscreen-toggle');
+      if (document.body.classList.contains('fullscreen-tafel')) {
+        btn.textContent = 'Vollbild beenden';
+      } else {
+        btn.textContent = 'Vollbild für Beamer';
+      }
+    }
+
+    // QA Accordion
+    function toggleQA(item) {
+      item.classList.toggle('open');
+      const btn = item.querySelector('.qa-btn');
+      if (item.classList.contains('open')) {
+        btn.textContent = 'Antwort verbergen';
+      } else {
+        btn.textContent = 'Antwort aufdecken';
+      }
+    }
+  </script>
+</body>
+</html>

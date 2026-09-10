@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -23,54 +23,82 @@
 
     <!-- Header -->
     <header class="portal-header">
-      <div class="badge-pill badge-diff">Informatik Stufe 6 (6a, 6b, 6c, 6d)</div>
+      <div class="badge-pill badge-unterstufe">Informatik Stufe 6 (6a, 6b, 6c, 6d)</div>
       <h1>Informatik Klasse 6</h1>
-      <p class="subtitle">Gemeinsames Lernportal für alle 6er-Klassen: Algorithmen, Calliope mini und Mini-Games.</p>
+      <p class="subtitle">Gemeinsames Lernportal für alle 6er-Klassen: Webentwicklung, Farbmodelle, Codierung und eigene Projekte.</p>
       <div class="timestamp-pill">
-        <span>🟢</span> Stand: Schuljahr 2026/27
+        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span> Stand: Schuljahr 2026/27
       </div>
     </header>
 
     <!-- Alert / Important Info -->
     <div class="alert-card">
-      <div class="alert-icon">📌</div>
+      <div class="alert-icon" style="font-weight: 800; color: var(--theme-unterstufe);">•</div>
       <div class="alert-content">
-        <h3>Hallo Klasse 6!</h3>
-        <p>Willkommen zurück in Informatik! Dieses Jahr programmieren wir kleine Roboter und knifflige Rätsel.</p>
+        <h3>Aktuelle Unterrichtsreihe: Farbmodelle &amp; Vorbereitung auf HTML</h3>
+        <p>Wir starten mit den Grundlagen digitaler Bilder: Wie entstehen Bildschirmfarben aus rotem, grünem und blauem Licht? Auf dieser Basis lernen wir anschließend Binär- und Hexadezimalzahlen kennen und bauen unsere ersten HTML-Webseiten.</p>
       </div>
     </div>
 
     <!-- Modules Grid -->
-    <h2 class="section-heading"><span>📚</span> Unterrichtsmodule & Themen</h2>
+    <h2 class="section-heading">Unterrichtsmodule &amp; Themen</h2>
     <div class="dashboard-grid">
-      <div class="class-card" style="border: 2px solid var(--theme-mathe);">
+      
+      <!-- Modul 1: Farbmodelle & Additiver Farbkreis (Aktiv) -->
+      <div class="class-card" style="border: 2px solid var(--theme-unterstufe);">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
+          <span style="font-size:0.75rem; color:#059669; font-weight:700;">Neu: 10.09.2026</span>
         </div>
-        <h3 class="class-card-title">Einführung Calliope mini / Micro:bit</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">LED-Matrix, Tasten, Sensoren und eigene Mini-Programme.</p>
-        <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
-      </div>      <div class="class-card" style="">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
-        </div>
-        <h3 class="class-card-title">Algorithmen & Logik</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Schleifen, Wenn-Dann-Entscheidungen und Verzweigungen.</p>
-        <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
-      </div>      <div class="class-card" style="">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
-        </div>
-        <h3 class="class-card-title">Mein eigenes Spiel in Scratch</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Figuren steuern, Punkte zählen und Spielregeln programmieren.</p>
-        <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
+        <h3 class="class-card-title">Farbmodelle &amp; Additiver RGB-Farbkreis</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Subpixel, iPad-Lupe, interaktiver Scheinwerfer-Farbmischer, Mischregeln (Gelb, Cyan, Magenta) und Tafelbild.
+        </p>
+        <a href="farben.html" class="btn-open" style="background:var(--theme-unterstufe); color:#ffffff; text-align:center; text-decoration:none; font-weight:700;">Modul öffnen →</a>
       </div>
+
+      <!-- Modul 2: Binärzahlen & Farbtiefe (Demnächst) -->
+      <div class="class-card">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
+        </div>
+        <h3 class="class-card-title">Wiederholung: Binärzahlen (0 bis 255)</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Stellenwerte von 1 bis 128, 8-Bit-Schalter und der Grund, warum jeder Farbkanal genau Werte von 0 bis 255 besitzt.
+        </p>
+        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Noch nicht freigeschaltet</span>
+      </div>
+
+      <!-- Modul 3: Hexadezimalsystem (Demnächst) -->
+      <div class="class-card">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Im weiteren Verlauf</span>
+        </div>
+        <h3 class="class-card-title">Hexadezimalzahlen &amp; Web-Farbcodes</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Die Web-Abkürzung mit 0–9 und A–F: Wie man aus 2 Hex-Ziffern den Farbcode #RRGGBB zusammensetzt.
+        </p>
+        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Noch nicht freigeschaltet</span>
+      </div>
+
+      <!-- Modul 4: Erste Schritte mit HTML (Demnächst) -->
+      <div class="class-card">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Im weiteren Verlauf</span>
+        </div>
+        <h3 class="class-card-title">Erste Schritte in HTML &amp; Webgestaltung</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Überschriften, Absätze, Textfarben und Styling der ersten eigenen HTML-Seiten im Browser.
+        </p>
+        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Noch nicht freigeschaltet</span>
+      </div>
+
     </div>
 
     <!-- iPad Quick Guide -->
     <div class="ipad-guide">
       <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-        📲 Tipp für dein iPad: Als App auf den Startbildschirm
+        Tipp für dein iPad: Als App auf den Startbildschirm
       </h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;">Füge diese Seite deinem iPad-Home-Bildschirm hinzu, um jederzeit schnell darauf zuzugreifen:</p>
       <div class="ipad-guide-steps">
