@@ -1,0 +1,496 @@
+/* ==========================================================================
+   Schulblatt- & Arbeitsblatt-Designsystem (Füller-, Tafel- & Merke-Stil)
+   Gültig für alle Fächer (Mathe, Informatik, Differenzierung) 2026/27
+   Optimiert für Microsoft OneNote (Dateiausdruck) & DIN-A4-Druck
+   ========================================================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 10mm 13mm 10mm 13mm;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+  background: #e2e8f0;
+  color: #111827; /* Füllertiefes Schwarz */
+  line-height: 1.4;
+  font-size: 11pt;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========================================================
+   TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+   ======================================================== */
+.screen-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 9px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-btn-nav {
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  transition: all 0.2s;
+}
+.toolbar-btn-nav:hover {
+  color: #ffffff;
+  background: rgba(255,255,255,0.2);
+}
+
+.toolbar-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-teacher-active {
+  display: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+body.teacher-mode .badge-teacher-active {
+  display: inline-block;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-action {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 7px 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-toggle-teacher {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+.btn-toggle-teacher:hover {
+  background: #e2e8f0;
+}
+body.teacher-mode .btn-toggle-teacher {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #b91c1c;
+}
+
+.btn-print {
+  background: #2563eb;
+  color: #ffffff;
+}
+.btn-print:hover {
+  background: #1d4ed8;
+}
+
+.btn-download-pdf {
+  background: #059669;
+  color: #ffffff;
+}
+.btn-download-pdf:hover {
+  background: #047857;
+}
+
+/* ========================================================
+   SEITENAUFBAU (EXAKTE DIN-A4-SEITEN OHNE FUSSZEILEN)
+   ======================================================== */
+.sheet-wrapper {
+  max-width: 210mm;
+  margin: 20px auto 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.page {
+  background: #ffffff;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10mm 13mm 9mm 13mm;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* ========================================================
+   HEADER & METADATEN
+   ======================================================== */
+.doc-header {
+  border-bottom: 2px solid #1e3a8a;
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+}
+
+.doc-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.doc-course {
+  font-size: 8pt;
+  color: #1e3a8a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.badge-sheet {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border: 1.5px solid #bfdbfe;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+.doc-title {
+  font-size: 14pt;
+  font-weight: 700;
+  color: #1e3a8a; /* Füller-Königsblau */
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.doc-subtitle {
+  font-size: 9.5pt;
+  color: #334155;
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.meta-bar {
+  display: flex;
+  gap: 16px;
+  font-size: 8.5pt;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 3px 10px;
+  margin-top: 5px;
+  align-items: center;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-label {
+  font-weight: 700;
+  color: #475569;
+}
+
+/* ========================================================
+   AUFGABEN-KÄSTEN & TYPOGRAFIE (12pt / 11pt)
+   ======================================================== */
+.task-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 7px 11px;
+  margin-bottom: 8px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
+}
+
+.task-title {
+  font-size: 12pt;
+  font-weight: 700;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.task-num {
+  background: #1e3a8a;
+  color: #ffffff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8.5pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.task-points {
+  font-size: 8pt;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.task-desc {
+  font-size: 11pt;
+  color: #111827;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+/* ========================================================
+   DER ROTE MERKSATZ-KASTEN
+   ======================================================== */
+.merke-box {
+  border: 2.5px solid #dc2626; /* Roter Rahmen */
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 9px 13px;
+  margin: 9px 0 7px 0;
+  position: relative;
+}
+
+.merke-tag {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 8.5pt;
+  font-weight: 700;
+  padding: 1px 9px;
+  border-radius: 3px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.merke-content {
+  color: #111827; /* Zwingend schwarz/dunkel */
+  font-size: 11pt;
+  line-height: 1.45;
+}
+
+.merke-formula-box {
+  background: #f8fafc;
+  border: 1.5px solid #2563eb;
+  border-radius: 5px;
+  padding: 5px 12px;
+  text-align: center;
+  margin: 6px 0;
+  font-size: 11pt;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+/* Grids & Cards */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
+}
+
+.grid-2-asym {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 9px;
+}
+
+.sub-card {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  padding: 6px 9px;
+  font-size: 10.5pt;
+}
+
+/* Linien und Lücken */
+.blank-line {
+  display: inline-block;
+  border-bottom: 1.2px dotted #475569;
+  min-width: 45px;
+  height: 14px;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+.blank-box {
+  border: 1px dashed #94a3b8;
+  border-radius: 4px;
+  padding: 5px 8px;
+  background: #fbfcfe;
+  min-height: 28px;
+  margin-top: 4px;
+}
+
+.dotted-lines {
+  background-image: linear-gradient(to bottom, transparent 22px, #cbd5e1 23px);
+  background-size: 100% 23px;
+  line-height: 23px;
+  min-height: 46px;
+  margin-top: 4px;
+}
+
+/* ========================================================
+   TABELLEN (10pt)
+   ======================================================== */
+.calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10pt;
+  margin-top: 4px;
+}
+
+.calc-table th {
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 9.5pt;
+  border: 1px solid #cbd5e1;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.calc-table td {
+  border: 1px solid #cbd5e1;
+  padding: 4px 6px;
+  vertical-align: middle;
+  font-size: 10pt;
+}
+
+.calc-table td.center {
+  text-align: center;
+}
+
+/* ========================================================
+   MUSTERLÖSUNG (LEHRER-ROT)
+   ======================================================== */
+.sol-val, .sol-text, .sol-step, .sol-inline {
+  display: none;
+  color: #dc2626 !important;
+  font-weight: 700;
+}
+
+body.teacher-mode .sol-val {
+  display: inline !important;
+}
+
+body.teacher-mode .sol-text {
+  display: inline !important;
+}
+
+body.teacher-mode .sol-step {
+  display: block !important;
+}
+
+body.teacher-mode .sol-inline {
+  display: inline !important;
+}
+
+body.teacher-mode .blank-line {
+  display: none !important;
+}
+
+body.teacher-mode .dotted-lines {
+  background-image: none !important;
+}
+
+/* ========================================================
+   PRINT MEDIA QUERIES (A4 OHNE FUSSZEILEN)
+   ======================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    font-size: 11pt;
+    color: #111827 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .sheet-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .page {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: 275mm !important;
+    max-height: 277mm !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    overflow: hidden !important;
+  }
+
+  .page:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+}
