@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsblatt: Quadratwurzeln – Einführung & Training | Mathe 9b</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm 12mm 8mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #0f172a;
+      background: #e2e8f0;
+      line-height: 1.35;
+      font-size: 8.8pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================================
+       SCREEN TOOLBAR (WIRD BEIM DRUCKEN AUSGEBLENDET)
+       ========================================================= */
+    .top-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      font-family: inherit;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-nav-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+
+    .toolbar-nav-btn:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+
+    body.teacher-mode .btn-toggle-teacher {
+      background: #b91c1c;
+      color: #ffffff;
+      border-color: #991b1b;
+    }
+
+    .teacher-badge-indicator {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-weight: 800;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    body.teacher-mode .teacher-badge-indicator {
+      display: inline-block;
+    }
+
+    /* =========================================================
+       PAGE WRAPPER & PRINT LAYOUT (EXAKT 2 SEITEN)
+       ========================================================= */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 18px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 7mm 12mm 7mm 12mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 8.5pt;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: 280mm !important;
+        max-height: 280mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+
+    /* =========================================================
+       HEADER & METADATA
+       ========================================================= */
+    .sheet-header {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3px;
+    }
+
+    .header-course {
+      font-size: 8.2pt;
+      font-weight: 700;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-title {
+      font-size: 13.5pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .sheet-subtitle {
+      font-size: 8.2pt;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .meta-fields {
+      display: flex;
+      gap: 16px;
+      font-size: 8.5pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin-top: 4px;
+    }
+
+    .field-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .field-label {
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .field-line {
+      border-bottom: 1px dotted #64748b;
+      min-width: 120px;
+      height: 12px;
+      display: inline-block;
+    }
+
+    /* =========================================================
+       SECTIONS & BOXES
+       ========================================================= */
+    .task-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 9px;
+      margin-bottom: 6px;
+      background: #ffffff;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 3px;
+      margin-bottom: 4px;
+    }
+
+    .task-title {
+      font-size: 9.3pt;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .task-num {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7.5pt;
+      font-weight: 800;
+    }
+
+    .task-points {
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .task-desc {
+      font-size: 8.3pt;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+
+    /* Grids & Columns */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .grid-2-asym {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 8px;
+    }
+
+    /* Mini Info Box / Merkkasten */
+    .info-rule-box {
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      padding: 4px 8px;
+      border-radius: 0 4px 4px 0;
+      font-size: 8pt;
+      color: #1e293b;
+      margin: 4px 0;
+    }
+
+    /* Write Lines & Placeholders */
+    .blank-line {
+      display: inline-block;
+      border-bottom: 1px dotted #64748b;
+      min-width: 45px;
+      height: 13px;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    .blank-box {
+      border: 1px dashed #94a3b8;
+      border-radius: 4px;
+      padding: 4px 6px;
+      background: #fbfcfe;
+      min-height: 28px;
+      margin-top: 3px;
+    }
+
+    .dotted-lines {
+      background-image: linear-gradient(to bottom, transparent 20px, #cbd5e1 21px);
+      background-size: 100% 21px;
+      line-height: 21px;
+      min-height: 42px;
+      margin-top: 3px;
+    }
+
+    /* =========================================================
+       TABELLEN & BERECHNUNGEN
+       ========================================================= */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.2pt;
+      margin-top: 3px;
+    }
+
+    .calc-table th, .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 5px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      font-size: 7.8pt;
+    }
+
+    .calc-table td.center {
+      text-align: center;
+    }
+
+    /* Quadratkasten (Geometrie) */
+    .geo-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 5px 7px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* =========================================================
+       LEHRERVERSION / MUSTERLÖSUNG (IN ROT)
+       ========================================================= */
+    .sol-val, .sol-text, .sol-step {
+      display: none;
+      color: #b91c1c !important;
+      font-weight: 700;
+    }
+
+    body.teacher-mode .sol-val {
+      display: inline !important;
+    }
+
+    body.teacher-mode .sol-text {
+      display: inline !important;
+    }
+
+    body.teacher-mode .sol-step {
+      display: block !important;
+    }
+
+    body.teacher-mode .sol-block {
+      display: block !important;
+    }
+
+    body.teacher-mode .blank-line {
+      display: none !important;
+    }
+
+    body.teacher-mode .dotted-lines {
+      background-image: none !important;
+    }
+
+    /* Footer */
+    .footer-bar {
+      margin-top: auto;
+      border-top: 1px solid #cbd5e1;
+      padding-top: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.2pt;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       SCREEN TOOLBAR (WIRD BEIM DRUCKEN AUSGEBLENDET)
+       ========================================================= -->
+  <div class="top-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="wurzeln.html" class="toolbar-nav-btn">← Zurück zur Unterrichtsansicht</a>
+      <a href="index.html" class="toolbar-nav-btn">Portal-Übersicht</a>
+      <span class="toolbar-title">
+        Arbeitsblatt: Quadratwurzeln (Einführung &amp; Training)
+      </span>
+      <span class="teacher-badge-indicator" id="teacherIndicator">Musterlösung aktiv</span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" id="btnToggleTeacher" onclick="toggleTeacherMode()">
+        Musterlösung einblenden
+      </button>
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / Als PDF speichern (Strg+P)
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       ARBEITSBLATT (2 DIN-A4-SEITEN)
+       ========================================================= -->
+  <div class="sheet-wrapper">
+
+    <!-- =======================================================
+         SEITE 1: GRUNDLAGEN, GEOMETRIE & BEGRIFFSBILDUNG
+         ======================================================= -->
+    <div class="page" id="page1">
+      
+      <header class="sheet-header">
+        <div class="header-top">
+          <span class="header-course">Mathematik 9b • Kapitel I: Reelle Zahlen</span>
+          <span style="font-size: 7.8pt; color: #64748b; font-weight: 600;">Arbeitsblatt 01</span>
+        </div>
+        <h1 class="sheet-title">Quadratwurzeln – Geometrische Deutung &amp; Kopfrechnen</h1>
+        <p class="sheet-subtitle">Die Umkehrung des Quadrierens: Vom Flächeninhalt zur Seitenlänge eines Quadrats</p>
+        
+        <div class="meta-fields">
+          <div class="field-item">
+            <span class="field-label">Name:</span>
+            <span class="field-line" style="min-width: 140px;"></span>
+          </div>
+          <div class="field-item">
+            <span class="field-label">Datum:</span>
+            <span class="field-line" style="min-width: 90px;"></span>
+          </div>
+          <div class="field-item">
+            <span class="field-label">Klasse:</span>
+            <span style="font-weight: 700; color: #1e293b;">9b</span>
+          </div>
+          <div class="field-item" style="margin-left: auto;">
+            <span class="field-label">Punkte:</span>
+            <span class="field-line" style="min-width: 45px; text-align: center;"></span>
+            <span style="font-size: 7.5pt; color: #64748b;">/ 30</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- AUFGABE 1: GEOMETRISCHE DEUTUNG -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">1</span>
+            Das Quadratflächen-Rätsel: Vom Flächeninhalt zur Seitenlänge
+          </h2>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Gegeben ist jeweils der Flächeninhalt $A$ eines Quadrats ($A = s \cdot s = s^2$). Wie lang ist die Seitenlänge $s$?
+        </p>
+
+        <div class="grid-3" style="margin-bottom: 5px;">
+          <div class="geo-card">
+            <div>
+              <strong>a) Quadrat 1:</strong> $A_1 = 36\text{ cm}^2$<br>
+              Rechnung: $s_1^2 = 36$<br>
+              Seitenlänge: $s_1 = $<span class="blank-line" style="min-width: 35px;"></span><span class="sol-val">6</span> $\text{cm}$
+            </div>
+            <div style="font-size: 7.5pt; color: #64748b; margin-top: 3px;">
+              Begründung: <span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">6</span>$^2 = 36$
+            </div>
+          </div>
+
+          <div class="geo-card">
+            <div>
+              <strong>b) Quadrat 2:</strong> $A_2 = 81\text{ cm}^2$<br>
+              Rechnung: $s_2^2 = 81$<br>
+              Seitenlänge: $s_2 = $<span class="blank-line" style="min-width: 35px;"></span><span class="sol-val">9</span> $\text{cm}$
+            </div>
+            <div style="font-size: 7.5pt; color: #64748b; margin-top: 3px;">
+              Begründung: <span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">9</span>$^2 = 81$
+            </div>
+          </div>
+
+          <div class="geo-card">
+            <div>
+              <strong>c) Quadrat 3:</strong> $A_3 = 144\text{ dm}^2$<br>
+              Rechnung: $s_3^2 = 144$<br>
+              Seitenlänge: $s_3 = $<span class="blank-line" style="min-width: 35px;"></span><span class="sol-val">12</span> $\text{dm}$
+            </div>
+            <div style="font-size: 7.5pt; color: #64748b; margin-top: 3px;">
+              Begründung: <span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">12</span>$^2 = 144$
+            </div>
+          </div>
+        </div>
+
+        <div class="info-rule-box">
+          <strong>d) Fachlicher Merksatz (Lückentext):</strong><br>
+          Das Bestimmen der Seitenlänge aus dem Flächeninhalt heißt <strong>Wurzelziehen</strong> (Radizieren). 
+          Es ist die <span class="blank-line" style="min-width: 110px;"></span><span class="sol-val">Umkehroperation</span> zum Quadrieren ($s \mapsto s^2$). 
+          Für $s \ge 0$ gilt: $s^2 = A \iff s = \sqrt{A}$.
+        </div>
+      </section>
+
+      <!-- AUFGABE 2: BEGRIFFE & DEFINITION -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">2</span>
+            Fachbegriffe, mathematische Definition &amp; Denksport
+          </h2>
+          <span class="task-points">6 Punkte</span>
+        </div>
+
+        <div class="grid-2-asym" style="margin-bottom: 5px;">
+          <div>
+            <p class="task-desc"><strong>a) Fachbegriffe zuordnen:</strong></p>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 8px; font-size: 8.2pt;">
+              Im Term $\sqrt{a} = b$ nennt man:<br>
+              • $\sqrt{\phantom{a}}$ das <span class="blank-line" style="min-width: 90px;"></span><span class="sol-val">Wurzelzeichen</span><br>
+              • $a$ den <span class="blank-line" style="min-width: 100px;"></span><span class="sol-val">Radikanden</span> (die Zahl unter der Wurzel)<br>
+              • $b$ den <span class="blank-line" style="min-width: 90px;"></span><span class="sol-val">Wurzelwert</span> (Ergebnis)
+            </div>
+          </div>
+
+          <div>
+            <p class="task-desc"><strong>Definition der Quadratwurzel:</strong></p>
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 5px 8px; font-size: 8pt; color: #1e3a8a;">
+              Für eine reelle Zahl $a \ge 0$ ist $\sqrt{a}$ diejenige <strong>nicht-negative</strong> Zahl $b \ge 0$, für die gilt:
+              <div style="text-align: center; font-weight: 700; margin-top: 2px;">$b^2 = a$</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 4px;">
+          <p class="task-desc"><strong>b) Verständnisfrage zu negativen Radikanden:</strong> Warum ist $\sqrt{-25}$ in den reellen Zahlen $\mathbb{R}$ nicht definiert? Begründe rechnerisch.</p>
+          <div class="blank-box" style="min-height: 24px;">
+            <span class="sol-step">
+              Begründung: Es gibt keine reelle Zahl $b$, deren Quadrat $-25$ ergibt, da für jede reelle Zahl $b^2 \ge 0$ gilt (z. B. $(+5)^2 = 25$ und $(-5)^2 = +25$). Der Radikand darf daher niemals negativ sein!
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <p class="task-desc"><strong>c) Wichtiger Unterschied zwischen Gleichung und Wurzelterm:</strong></p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 8pt;">
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 6px; border-radius: 4px;">
+              <strong>Gleichung:</strong> $x^2 = 49$<br>
+              Lösungen: $x_1 = $<span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">+7</span>, $x_2 = $<span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">-7</span><br>
+              <span style="font-size: 7.2pt; color: #64748b;">(Zwei Zahlen haben quadriert den Wert 49)</span>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 6px; border-radius: 4px;">
+              <strong>Wurzelterm:</strong> $\sqrt{49}$<br>
+              Ergebnis: $\sqrt{49} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">7</span><br>
+              <span style="font-size: 7.2pt; color: #64748b;">(Die Wurzel ist per Definition stets $\ge 0$)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 3: WERKZEUGKASTEN QUADRATZAHLEN 1-20 -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">3</span>
+            Kopfrechen-Werkzeugkasten: Quadratzahlen von 1 bis 20
+          </h2>
+          <span class="task-points">5 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Die Quadratzahlen bis $20^2$ gehören zum festen Handwerkszeug. Berechne die Wurzeln sicher im Kopf:
+        </p>
+
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th>Aufgabe</th>
+              <th>Ergebnis</th>
+              <th>Aufgabe</th>
+              <th>Ergebnis</th>
+              <th>Aufgabe</th>
+              <th>Ergebnis</th>
+              <th>Aufgabe</th>
+              <th>Ergebnis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$\sqrt{4}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">2</span></td>
+              <td>$\sqrt{49}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">7</span></td>
+              <td>$\sqrt{144}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">12</span></td>
+              <td>$\sqrt{289}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">17</span></td>
+            </tr>
+            <tr>
+              <td>$\sqrt{9}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">3</span></td>
+              <td>$\sqrt{64}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">8</span></td>
+              <td>$\sqrt{169}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">13</span></td>
+              <td>$\sqrt{324}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">18</span></td>
+            </tr>
+            <tr>
+              <td>$\sqrt{16}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">4</span></td>
+              <td>$\sqrt{81}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">9</span></td>
+              <td>$\sqrt{196}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">14</span></td>
+              <td>$\sqrt{361}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">19</span></td>
+            </tr>
+            <tr>
+              <td>$\sqrt{25}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">5</span></td>
+              <td>$\sqrt{100}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">10</span></td>
+              <td>$\sqrt{225}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">15</span></td>
+              <td>$\sqrt{400}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">20</span></td>
+            </tr>
+            <tr>
+              <td>$\sqrt{36}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">6</span></td>
+              <td>$\sqrt{121}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">11</span></td>
+              <td>$\sqrt{256}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">16</span></td>
+              <td>$\sqrt{1}$</td>
+              <td class="center"><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">1</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer class="footer-bar">
+        <span>Mathematik Klasse 9b • Arbeitsblatt 01: Quadratwurzeln</span>
+        <span>Seite 1 von 2</span>
+      </footer>
+
+    </div>
+
+    <!-- =======================================================
+         SEITE 2: ERWEITERUNG, SCHÄTZEN & ANWENDUNGEN
+         ======================================================= -->
+    <div class="page" id="page2">
+      
+      <header class="sheet-header">
+        <div class="header-top">
+          <span class="header-course">Mathematik 9b • Kapitel I: Reelle Zahlen</span>
+          <span style="font-size: 7.8pt; color: #64748b; font-weight: 600;">Arbeitsblatt 01 (Fortsetzung)</span>
+        </div>
+        <h1 class="sheet-title" style="font-size: 12pt;">Erweiterung: Zehnerpotenzen, Dezimalzahlen, Schätzen &amp; Sachkontext</h1>
+      </header>
+
+      <!-- AUFGABE 4: ZEHNERPOTENZEN, DEZIMALZAHLEN, BRÜCHE -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">4</span>
+            Zehnerpotenzen, Dezimalzahlen &amp; Brüche im Kopf ziehen
+          </h2>
+          <span class="task-points">6 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Wende die Komma- und Nullstellenregeln an, um die Wurzeln im Kopf zu bestimmen:
+        </p>
+
+        <div class="grid-3">
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 7px;">
+            <strong style="color: #1e3a8a; font-size: 8pt;">a) Stufenzahlen (Nullen halbieren)</strong>
+            <div style="font-size: 8pt; margin-top: 3px; line-height: 1.6;">
+              $\sqrt{900} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">30</span><br>
+              $\sqrt{4900} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">70</span><br>
+              $\sqrt{10\,000} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">100</span><br>
+              $\sqrt{640\,000} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">800</span>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 7px;">
+            <strong style="color: #1e3a8a; font-size: 8pt;">b) Dezimalzahlen (Kommastellen halbiert)</strong>
+            <div style="font-size: 8pt; margin-top: 3px; line-height: 1.6;">
+              $\sqrt{0{,}04} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">0{,}2</span><br>
+              $\sqrt{0{,}25} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">0{,}5</span><br>
+              $\sqrt{1{,}44} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">1{,}2</span><br>
+              $\sqrt{0{,}0081} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">0{,}09</span>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 7px;">
+            <strong style="color: #1e3a8a; font-size: 8pt;">c) Gewöhnliche Brüche</strong>
+            <div style="font-size: 8pt; margin-top: 3px; line-height: 1.6;">
+              $\sqrt{\frac{4}{25}} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">\frac{2}{5}</span><br>
+              $\sqrt{\frac{49}{100}} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">\frac{7}{10} = 0{,}7</span><br>
+              $\sqrt{\frac{121}{169}} = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">\frac{11}{13}</span><br>
+              $\sqrt{1\frac{9}{16}} = \sqrt{\frac{25}{16}} = $<span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">\frac{5}{4} = 1{,}25</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 5: SCHÄTZEN & EINGRENZEN -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">5</span>
+            Irrationale Wurzeln eingrenzen &amp; ohne Taschenrechner schätzen
+          </h2>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Ist der Radikand keine Quadratzahl, ist die Wurzel <em>irrational</em> (unendlich viele Nachkommastellen ohne Periode).
+        </p>
+
+        <div style="margin-bottom: 5px;">
+          <p style="font-size: 8pt; font-weight: 700; color: #1e3a8a;">
+            a) Zwischen welchen zwei aufeinanderfolgenden ganzen Zahlen liegt die Wurzel?
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 8pt; margin-top: 2px;">
+            <div style="background: #f1f5f9; padding: 4px 6px; border-radius: 4px;">
+              <strong>Beispiel:</strong><br>
+              $4 < \sqrt{20} < 5$,<br>
+              da $16 < 20 < 25$
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 6px; border-radius: 4px;">
+              <strong>Aufgabe 1:</strong><br>
+              <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">7</span> $< \sqrt{50} < $ <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">8</span>,<br>
+              da <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">49</span> $< 50 < $ <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">64</span>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 6px; border-radius: 4px;">
+              <strong>Aufgabe 2:</strong><br>
+              <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">8</span> $< \sqrt{80} < $ <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">9</span>,<br>
+              da <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">64</span> $< 80 < $ <span class="blank-line" style="min-width: 15px;"></span><span class="sol-val">81</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p style="font-size: 8pt; font-weight: 700; color: #1e3a8a;">
+            b) Schätzen auf eine Nachkommastelle mit mathematischer Begründung:
+          </p>
+          <div style="font-size: 8pt; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 7px; margin-top: 2px;">
+            Schätze den Wert von $\sqrt{50}$ auf eine Nachkommastelle: $\sqrt{50} \approx $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">7{,}1</span><br>
+            <span style="font-size: 7.5pt; color: #475569;">Deine Begründung:</span>
+            <div class="dotted-lines" style="min-height: 20px;">
+              <span class="sol-text">
+                50 liegt extrem nah an der Quadratzahl 49 ($7^2 = 49$). Daher ist $\sqrt{50}$ nur minimal größer als 7, also ungefähr 7,07 bzw. gerundet 7,1. Probe: $7{,}1^2 = 50{,}41$.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 6: SACHAUFGABE ALLTAG -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">6</span>
+            Anwendung aus der Praxis: Das quadratische Schulgarten-Hochbeet
+          </h2>
+          <span class="task-points">5 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Die Garten-AG der Schule plant ein neues, exakt quadratisches Hochbeet mit einem Flächeninhalt von $A = 28\text{ m}^2$.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 8.2pt;">
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 8px;">
+            <strong>a) Seitenlänge bestimmen:</strong><br>
+            Berechne die Seitenlänge $s$ des Hochbeets auf eine Nachkommastelle gerundet ($\sqrt{28}$).
+            <div class="dotted-lines" style="min-height: 38px;">
+              <span class="sol-step">
+                $s = \sqrt{28}\text{ m}$<br>
+                Eingrenzung: $25 < 28 < 36 \implies 5 < \sqrt{28} < 6$.<br>
+                Probe: $5{,}3^2 = 28{,}09 \implies s \approx 5{,}3\text{ m}$.
+              </span>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 5px 8px;">
+            <strong>b) Randeinfassung (Holzleisten):</strong><br>
+            Zur Abgrenzung soll eine umlaufende Holzleiste angebracht werden. Wie viele laufende Meter Holz müssen besorgt werden? ($U = 4 \cdot s$)
+            <div class="dotted-lines" style="min-height: 38px;">
+              <span class="sol-step">
+                $U = 4 \cdot s \approx 4 \cdot 5{,}3\text{ m} = 21{,}2\text{ m}$.<br>
+                Antwort: Es müssen mindestens $21{,}2$ Meter (bzw. aufgerundet $22\text{ m}$) Holzleisten besorgt werden.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 7: MATHE-DETEKTIV FEHLERANALYSE -->
+      <section class="task-box">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">7</span>
+            Mathe-Detektiv: Typische Denkfallen entlarven
+          </h2>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Zwei Schüler machen bei den Hausaufgaben typische Fehler. Finde den Fehler und stelle ihn mathematisch richtig:
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 8.1pt;">
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 4px; padding: 5px 7px;">
+            <strong style="color: #9f1239;">Fall A: Jonas behauptet:</strong><br>
+            <em>„$\sqrt{64} = 32$, denn Wurzelziehen kehrt das Verdoppeln um, also teilt man durch 2.“</em>
+            <div class="dotted-lines" style="min-height: 42px;">
+              <span class="sol-step">
+                Korrektur: Falsch! Durch 2 teilen ist die Umkehrung von Verdoppeln ($2 \cdot x$). Wurzelziehen ist aber die Umkehrung des Quadrierens ($x \cdot x$).<br>
+                Richtig: $\sqrt{64} = 8$, da $8 \cdot 8 = 64$.
+              </span>
+            </div>
+          </div>
+
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 4px; padding: 5px 7px;">
+            <strong style="color: #9f1239;">Fall B: Sophie rechnet:</strong><br>
+            <em>„$\sqrt{16 + 9} = \sqrt{16} + \sqrt{9} = 4 + 3 = 7$.“</em>
+            <div class="dotted-lines" style="min-height: 42px;">
+              <span class="sol-step">
+                Korrektur: Großer Rechenfehler! Wurzeln dürfen <u>niemals</u> über eine Summe aufgeteilt werden!<br>
+                Zuerst zusammenrechnen: $\sqrt{16 + 9} = \sqrt{25} = 5$. Da $5 \ne 7$, ist Sophies Rechnung mathematisch falsch.
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BEWERTUNG / FEEDBACK -->
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; font-size: 7.8pt;">
+        <div>
+          <strong>Selbsteinschätzung / Feedback der Schülerin in der Kur:</strong><br>
+          <span style="color: #475569;">Ich habe das Thema verstanden: [ ] super sicher &nbsp; [ ] meistens klar &nbsp; [ ] Fragen bei Aufgabe: _____</span>
+        </div>
+        <div style="text-align: right;">
+          <strong>Gesamt: _____ / 30 Punkten</strong>
+        </div>
+      </div>
+
+      <footer class="footer-bar">
+        <span>Mathematik Klasse 9b • Arbeitsblatt 01: Quadratwurzeln</span>
+        <span>Seite 2 von 2</span>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      const isTeacher = document.body.classList.toggle('teacher-mode');
+      const btn = document.getElementById('btnToggleTeacher');
+      if (isTeacher) {
+        btn.textContent = 'Schülerversion anzeigen (Lösungen verbergen)';
+      } else {
+        btn.textContent = 'Musterlösung einblenden';
+      }
+      triggerKaTeX();
+    }
+  </script>
+
+</body>
+</html>
