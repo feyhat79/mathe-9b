@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Substitution | Mathe LK Q1</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    body { padding-bottom: 4rem; }
+    .page-container { max-width: 820px; margin: 0 auto; }
+
+    .page-title { font-size: 2rem; font-weight: 800; color: #111827; margin: 0 0 0.3rem 0; line-height: 1.2; }
+    .page-subtitle { font-size: 0.95rem; color: #64748b; margin: 0 0 1.5rem 0; }
+    .page-divider { border: none; border-top: 2px solid #2563eb; margin: 0 0 2.5rem 0; opacity: 0.25; }
+
+    /* Abschnitts-Badges */
+    .section-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 4px 14px 4px 4px; border-radius: 999px;
+      font-size: 0.72rem; font-weight: 800; letter-spacing: 0.6px;
+      text-transform: uppercase; margin-bottom: 1.1rem;
+    }
+    .section-badge .badge-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800; color: #fff;
+    }
+    .badge-erklaerung  { background: #eff6ff; color: #1d4ed8; }
+    .badge-erklaerung  .badge-num { background: #2563eb; }
+    .badge-beispiel    { background: #fff7ed; color: #c2410c; }
+    .badge-beispiel    .badge-num { background: #f59e0b; }
+    .badge-interaktiv  { background: #f5f3ff; color: #6d28d9; }
+    .badge-interaktiv  .badge-num { background: #7c3aed; }
+    .badge-uebungen    { background: #f0fdf4; color: #15803d; }
+    .badge-uebungen    .badge-num { background: #10b981; }
+
+    .content-block { margin-bottom: 3.5rem; }
+    .erklaer-text { font-size: 0.975rem; color: #111827; line-height: 1.75; margin-bottom: 1rem; }
+
+    /* Lösungsschema */
+    .schema-box {
+      background: #f8fafc; border: 1.5px solid #e2e8f0;
+      border-radius: 14px; padding: 1.3rem 1.5rem; margin: 1.25rem 0;
+    }
+    .schema-box h4 {
+      font-size: 0.85rem; font-weight: 700; color: #1e3a8a;
+      text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 1rem 0;
+    }
+    .step-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.85rem; }
+    .step-list li { display: flex; gap: 0.9rem; align-items: flex-start; }
+    .step-circle {
+      width: 26px; height: 26px; border-radius: 50%; background: #1e3a8a; color: #fff;
+      font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-content strong { display: block; font-size: 0.9rem; color: #111827; font-weight: 700; margin-bottom: 2px; }
+    .step-content span { font-size: 0.875rem; color: #475569; line-height: 1.55; }
+
+    /* MERKE */
+    .merke-box {
+      border: 2px solid #dc2626; border-radius: 10px;
+      padding: 1.1rem 1.3rem; margin: 1.5rem 0; position: relative; background: #fff;
+    }
+    .merke-tag {
+      position: absolute; top: -11px; left: 14px;
+      background: #dc2626; color: #fff; font-size: 0.65rem; font-weight: 800;
+      letter-spacing: 0.8px; text-transform: uppercase; padding: 2px 9px; border-radius: 4px;
+    }
+    .merke-box p { font-size: 0.95rem; font-weight: 600; color: #111827; margin: 0; line-height: 1.65; }
+    .merke-box p + p { margin-top: 0.5rem; font-weight: 400; font-size: 0.875rem; color: #374151; }
+
+    /* Beispiel-Karte */
+    .beispiel-card { border: 1.5px solid #fed7aa; border-radius: 14px; overflow: hidden; margin-bottom: 1.5rem; }
+    .beispiel-header {
+      background: #fff7ed; padding: 0.9rem 1.3rem;
+      display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
+    }
+    .beispiel-header h3 { font-size: 1.05rem; font-weight: 700; color: #92400e; margin: 0; }
+    .beispiel-header span { font-size: 0.8rem; color: #b45309; }
+    .beispiel-body { padding: 1.25rem 1.3rem; background: #fff; }
+    .beispiel-body p { font-size: 0.925rem; color: #111827; line-height: 1.7; margin: 0 0 1rem 0; }
+
+    /* Skizzen Container */
+    .skizze-wrap {
+      text-align: center;
+      margin: 1.25rem 0 1.5rem 0;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.25rem 1rem 0.9rem 1rem;
+    }
+    .skizze-wrap svg {
+      display: inline-block;
+      max-width: 100%;
+      height: auto;
+    }
+    .skizze-caption {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.65rem;
+      font-style: italic;
+    }
+
+    /* Accordion (Aufklappbare Lösung) */
+    .accordion-btn {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 0.85rem 1.1rem; background: #fff; border: 1.5px solid #e2e8f0;
+      border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+      color: #1d4ed8; transition: all 0.2s ease; margin-top: 0.75rem; text-align: left;
+    }
+    .accordion-btn:hover { background: #eff6ff; border-color: #bfdbfe; }
+    .accordion-btn.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: transparent; }
+    .accordion-arrow { font-size: 0.75rem; transition: transform 0.25s ease; color: #2563eb; }
+    .accordion-btn.open .accordion-arrow { transform: rotate(180deg); }
+    .accordion-body {
+      display: none; background: #f8fafc; border: 1.5px solid #e2e8f0;
+      border-top: none; border-radius: 0 0 10px 10px; padding: 1.3rem 1.4rem;
+    }
+    .accordion-body.open { display: block; }
+
+    .solution-step { display: flex; gap: 0.85rem; margin-bottom: 1.1rem; align-items: flex-start; }
+    .step-label {
+      background: #1e3a8a; color: #fff; font-size: 0.68rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.4px; padding: 3px 9px;
+      border-radius: 4px; flex-shrink: 0; margin-top: 3px; white-space: nowrap;
+    }
+    .step-text { font-size: 0.9rem; color: #111827; line-height: 1.7; flex: 1; }
+
+    .result-highlight {
+      background: #ecfdf5; border-left: 3px solid #10b981;
+      border-radius: 0 8px 8px 0; padding: 0.75rem 1.1rem;
+      margin-top: 0.85rem; font-size: 0.9rem; font-weight: 600; color: #065f46;
+    }
+
+    /* Formel-Block */
+    .formula-block {
+      background: #f1f5f9; border-radius: 10px;
+      padding: 0.85rem 1.2rem; margin: 0.75rem 0; text-align: center; overflow-x: auto;
+    }
+    .accordion-body .formula-block { background: #eef2f8; }
+
+    /* Interaktiver Gleichungslöser */
+    .calc-card {
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .calc-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #5b21b6;
+      margin: 0 0 0.5rem 0;
+    }
+    .calc-desc {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.55;
+      margin-bottom: 1.2rem;
+    }
+    .calc-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 1.2rem;
+    }
+    .calc-input {
+      width: 70px;
+      padding: 0.45rem 0.6rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      color: #1e3a8a;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+    .calc-input:focus {
+      outline: none;
+      border-color: #7c3aed;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+    .btn-calc {
+      padding: 0.6rem 1.3rem;
+      background: #7c3aed;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-calc:hover {
+      background: #6d28d9;
+    }
+    .calc-output {
+      margin-top: 1.25rem;
+      padding: 1.1rem 1.2rem;
+      background: #fdf4ff;
+      border: 1px solid #f0abfc;
+      border-radius: 10px;
+      display: none;
+    }
+    .calc-output.active {
+      display: block;
+    }
+    .calc-step-row {
+      margin-bottom: 0.75rem;
+      font-size: 0.885rem;
+      line-height: 1.65;
+      color: #111827;
+    }
+    .calc-step-row strong {
+      color: #5b21b6;
+    }
+
+    /* Übungs-Karten */
+    .uebung-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+      background: #fff;
+    }
+    .uebung-header {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 1.15rem 1.3rem 0.75rem 1.3rem; background: #fff;
+    }
+    .uebung-num {
+      width: 30px; height: 30px; border-radius: 50%; border: 2px solid #10b981;
+      color: #065f46; font-size: 0.85rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+    }
+    .uebung-text { font-size: 0.935rem; color: #111827; line-height: 1.65; flex: 1; }
+    .uebung-text strong { display: block; font-weight: 700; margin-bottom: 3px; font-size: 1rem; }
+    .uebung-tag {
+      display: inline-block; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.4px;
+      text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px;
+    }
+    .tag-biquadratisch { background: #dcfce7; color: #15803d; }
+    .tag-negativ       { background: #fef3c7; color: #92400e; }
+    .tag-grad6         { background: #eff6ff; color: #1e40af; }
+    .tag-klammer       { background: #f5f3ff; color: #6d28d9; }
+
+    .uebung-btn {
+      width: calc(100% - 2.6rem); margin: 0 1.3rem 1.15rem 1.3rem;
+      padding: 0.65rem 1rem; background: #fff; border: 1.5px solid #d1d5db;
+      border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+      color: #374151; display: flex; justify-content: space-between; align-items: center;
+      transition: all 0.2s ease; text-align: left;
+    }
+    .uebung-btn:hover { background: #f0fdf4; border-color: #86efac; color: #065f46; }
+    .uebung-solution { display: none; background: #f0fdf4; border-top: 1.5px solid #d1fae5; padding: 1.25rem 1.4rem; }
+    .uebung-solution.open { display: block; }
+    .uebung-solution p { font-size: 0.885rem; color: #111827; line-height: 1.75; margin: 0 0 0.5rem 0; }
+    .uebung-solution .formula-block { background: #dcfce7; }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; gap: 1rem;
+    }
+    .btn-nav-prev {
+      padding: 0.65rem 1.2rem; border: 1.5px solid #d1d5db; border-radius: 9px;
+      background: #fff; color: #374151; font-size: 0.875rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-nav-prev:hover { border-color: #2563eb; color: #2563eb; }
+    .btn-nav-next {
+      padding: 0.65rem 1.4rem; border-radius: 9px; background: #1e3a8a; color: #fff;
+      font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-nav-next:hover { background: #1d4ed8; }
+
+    @media (max-width: 640px) {
+      .page-title { font-size: 1.65rem; }
+      .bottom-nav { flex-direction: column; align-items: stretch; text-align: center; }
+      .uebung-btn { width: calc(100% - 1.8rem); margin-left: 0.9rem; margin-right: 0.9rem; }
+      .uebung-header { padding: 1rem 0.9rem; }
+      .calc-inputs { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container page-container">
+
+  <!-- Navigation -->
+  <nav class="portal-nav">
+    <a href="index.html" class="nav-back-link">&#8592; Mathe LK Q1</a>
+    <span class="badge-pill badge-mathe">Thema 1</span>
+  </nav>
+
+  <!-- Seitenüberschrift -->
+  <h1 class="page-title">Gleichungen lösen durch Substitution</h1>
+  <p class="page-subtitle">Lösungsstrategie für Gleichungen höheren Grades &middot; Qualifikationsphase 1</p>
+  <hr class="page-divider">
+
+
+  <!-- ══════════════════════════════════════════════════════
+       BLOCK 1 — ERKLÄRUNG & LÖSUNGSSCHEMA
+  ═══════════════════════════════════════════════════════ -->
+  <div class="content-block">
+    <div class="section-badge badge-erklaerung">
+      <span class="badge-num">1</span> Erklärung &amp; Lösungsschema
+    </div>
+
+    <p class="erklaer-text">
+      Das Wort <strong>Substitution</strong> stammt vom lateinischen <em>substituere</em> ab und bedeutet schlicht
+      <strong>„ersetzen“</strong> oder <strong>„austauschen“</strong>.
+      In der Analysis ist die Substitution eine elementare algebraische Lösungsstrategie: Eine auf den ersten Blick
+      komplizierte Gleichung höheren Grades wird durch das Einführen einer passenden Hilfsvariablen $u$ auf eine
+      einfache, wohlbekannte Standardform (in der Regel eine <strong>quadratische Gleichung</strong>) zurückgeführt.
+    </p>
+    <p class="erklaer-text">
+      <strong>Wann ist das Substitutionsverfahren anwendbar?</strong><br>
+      Das Verfahren lässt sich immer dann erfolgreich ansetzen, wenn in der Gleichung eine strukturelle Verdopplung
+      der Potenzen vorliegt &ndash; das sogenannte <strong>$2:1$-Exponentenverhältnis</strong>:
+    </p>
+    <ul style="font-size: 0.925rem; color: #111827; line-height: 1.7; margin: 0 0 1.25rem 1.2rem;">
+      <li><strong>Biquadratische Gleichungen:</strong> Es treten nur $x^4$ und $x^2$ auf ($4 = 2 \cdot 2$). Ansatz: $u = x^2 \;\Longrightarrow\; u^2 = x^4$.</li>
+      <li><strong>Potenzen 6. und 3. Grades:</strong> Es treten nur $x^6$ und $x^3$ auf ($6 = 2 \cdot 3$). Ansatz: $u = x^3 \;\Longrightarrow\; u^2 = x^6$.</li>
+      <li><strong>Allgemeine Potenzen:</strong> Terme der Form $x^{2n}$ und $x^n$. Ansatz: $u = x^n \;\Longrightarrow\; u^2 = x^{2n}$.</li>
+      <li><strong>Klammer- und Funktionsterme:</strong> Ganze Ausdrücke $[g(x)]^2$ und $g(x)$ (z. B. $(x^2-3)^2$ und $(x^2-3)$ oder $e^{2x}$ und $e^x$).</li>
+    </ul>
+
+    <!-- Schul-Schema -->
+    <div class="schema-box">
+      <h4>Standardisiertes 4-Schritte-Lösungsschema der Oberstufe</h4>
+      <ol class="step-list">
+        <li>
+          <div class="step-circle">1</div>
+          <div class="step-content">
+            <strong>Substitution ansetzen &amp; Hilfsvariable definieren</strong>
+            <span>
+              Ersetze den inneren Term durch eine neue Hilfsvariable, z. B. $u = x^2$ (mit der Nebenbedingung $u \ge 0$ für reelle Lösungen).
+              Damit wird $x^4 = u^2$.
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="step-circle">2</div>
+          <div class="step-content">
+            <strong>Hilfsgleichung lösen (quadratische Gleichung)</strong>
+            <span>
+              Löse die entstandene quadratische Gleichung $a u^2 + b u + c = 0$ bzw. $u^2 + pu + q = 0$ mit der
+              $p$-$q$-Formel oder Faktorisierung. Man erhält die Zwischenlösungen $u_1$ und $u_2$.
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="step-circle">3</div>
+          <div class="step-content">
+            <strong>Rücksubstitution durchführen (Zentraler Schritt!)</strong>
+            <span>
+              Ersetze die Hilfsvariable $u$ wieder durch den ursprünglichen Term:
+              $x^2 = u_1$ sowie $x^2 = u_2$.
+            </span>
+          </div>
+        </li>
+        <li>
+          <div class="step-circle">4</div>
+          <div class="step-content">
+            <strong>Nach der Ausgangsvariablen $x$ auflösen &amp; Lösungsmenge $L$ angeben</strong>
+            <span>
+              Wurzel ziehen unter Beachtung beider Vorzeichen ($\pm$). Ist ein Zwischenwert $u_i < 0$,
+              so besitzt dieser Zweig in $\mathbb{R}$ <strong>keine Lösung</strong>. Notiere abschließend die formale Lösungsmenge $L$.
+            </span>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- MERKE-Box -->
+    <div class="merke-box">
+      <span class="merke-tag">MERKE</span>
+      <p>Die Rücksubstitution darf unter keinen Umständen vergessen werden!</p>
+      <p>
+        Die Zwischenergebnisse $u_1$ und $u_2$ sind lediglich Werte der Hilfsvariablen und <strong>nicht</strong> die gesuchten
+        Lösungen der Gleichung.<br>
+        <strong>Achtung bei negativen $u$-Werten:</strong> Da im Reellen für jede Zahl $x^2 \ge 0$ gilt, liefert eine
+        Gleichung $x^2 = \text{negativ}$ keine reelle Lösung. Ein negatives $u$ entfällt daher bei der Rücksubstitution vollständig!
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       BLOCK 2 — AUSFÜHRLICHES LEITBEISPIEL
+  ═══════════════════════════════════════════════════════ -->
+  <div class="content-block">
+    <div class="section-badge badge-beispiel">
+      <span class="badge-num">2</span> Ausführliches Leitbeispiel
+    </div>
+
+    <div class="beispiel-card">
+      <div class="beispiel-header">
+        <h3>Biquadratische Gleichung 4. Grades</h3>
+        <span>Leitbeispiel &middot; 4 reelle Schnittstellen</span>
+      </div>
+      <div class="beispiel-body">
+        <p>
+          Bestimme die vollständige Lösungsmenge der biquadratischen Gleichung:
+        </p>
+        <div class="formula-block">
+          $$x^4 - 5x^2 + 4 = 0$$
+        </div>
+        <p>
+          <strong>Didaktische Analyse:</strong> Die Gleichung enthält nur die geraden Potenzen $x^4$ und $x^2$ sowie ein
+          Absolutglied. Es handelt sich um den Prototyp einer biquadratischen Gleichung mit dem Exponentenverhältnis $4:2 = 2:1$.
+        </p>
+
+        <!-- PRÄZISE VEKTORSKIZZE: TRANSFORMATIONS-FLUSSDIAGRAMM -->
+        <div class="skizze-wrap">
+          <svg viewBox="0 0 680 170" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="sub-arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+
+            <!-- Kasten 1: Ausgangsgleichung -->
+            <g transform="translate(10, 25)">
+              <rect x="0" y="0" width="135" height="110" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+              <text x="67" y="24" text-anchor="middle" font-size="10.5" font-weight="800" fill="#1e3a8a" font-family="'Plus Jakarta Sans', sans-serif">1. AUSGANGSFORM</text>
+              <text x="67" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#111827" font-family="'Plus Jakarta Sans', sans-serif">x⁴ − 5x² + 4 = 0</text>
+              <text x="67" y="86" text-anchor="middle" font-size="10" fill="#64748b" font-family="'Plus Jakarta Sans', sans-serif">Grad 4 &middot; in x</text>
+            </g>
+
+            <!-- Pfeil 1: Substitution -->
+            <g transform="translate(150, 70)">
+              <line x1="0" y1="10" x2="32" y2="10" stroke="#1e3a8a" stroke-width="2" marker-end="url(#sub-arrow)"/>
+              <text x="16" y="-2" text-anchor="middle" font-size="10" font-weight="800" fill="#2563eb" font-family="'Plus Jakarta Sans', sans-serif">u = x²</text>
+            </g>
+
+            <!-- Kasten 2: Hilfsgleichung -->
+            <g transform="translate(188, 25)">
+              <rect x="0" y="0" width="135" height="110" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1.6"/>
+              <text x="67" y="24" text-anchor="middle" font-size="10.5" font-weight="800" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif">2. HILFSGLEICHUNG</text>
+              <text x="67" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#111827" font-family="'Plus Jakarta Sans', sans-serif">u² − 5u + 4 = 0</text>
+              <text x="67" y="86" text-anchor="middle" font-size="10" fill="#64748b" font-family="'Plus Jakarta Sans', sans-serif">Grad 2 &middot; pq-Formel</text>
+            </g>
+
+            <!-- Pfeil 2: u-Lösungen -->
+            <g transform="translate(328, 70)">
+              <line x1="0" y1="10" x2="32" y2="10" stroke="#1e3a8a" stroke-width="2" marker-end="url(#sub-arrow)"/>
+              <text x="16" y="-2" text-anchor="middle" font-size="10" font-weight="800" fill="#059669" font-family="'Plus Jakarta Sans', sans-serif">Lösen</text>
+            </g>
+
+            <!-- Kasten 3: Zwischenwerte u -->
+            <g transform="translate(366, 25)">
+              <rect x="0" y="0" width="130" height="110" rx="10" fill="#f0fdf4" stroke="#10b981" stroke-width="1.6"/>
+              <text x="65" y="24" text-anchor="middle" font-size="10.5" font-weight="800" fill="#065f46" font-family="'Plus Jakarta Sans', sans-serif">3. ZWISCHENWERTE</text>
+              <text x="65" y="54" text-anchor="middle" font-size="12" font-weight="700" fill="#047857" font-family="'Plus Jakarta Sans', sans-serif">u₁ = 4</text>
+              <text x="65" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="#047857" font-family="'Plus Jakarta Sans', sans-serif">u₂ = 1</text>
+              <text x="65" y="96" text-anchor="middle" font-size="9.5" font-weight="600" fill="#16a34a" font-family="'Plus Jakarta Sans', sans-serif">beide &ge; 0 &#10003;</text>
+            </g>
+
+            <!-- Pfeil 3: Rücksubstitution -->
+            <g transform="translate(501, 70)">
+              <line x1="0" y1="10" x2="32" y2="10" stroke="#dc2626" stroke-width="2" marker-end="url(#sub-arrow)"/>
+              <text x="16" y="-2" text-anchor="middle" font-size="9.5" font-weight="800" fill="#dc2626" font-family="'Plus Jakarta Sans', sans-serif">x² = u</text>
+            </g>
+
+            <!-- Kasten 4: Finale Lösungsmenge -->
+            <g transform="translate(539, 25)">
+              <rect x="0" y="0" width="131" height="110" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="1.6"/>
+              <text x="65" y="24" text-anchor="middle" font-size="10.5" font-weight="800" fill="#991b1b" font-family="'Plus Jakarta Sans', sans-serif">4. LÖSUNGSMENGE</text>
+              <text x="65" y="54" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b91c1c" font-family="'Plus Jakarta Sans', sans-serif">x = &plusmn;2</text>
+              <text x="65" y="74" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b91c1c" font-family="'Plus Jakarta Sans', sans-serif">x = &plusmn;1</text>
+              <text x="65" y="96" text-anchor="middle" font-size="9.5" font-weight="700" fill="#dc2626" font-family="'Plus Jakarta Sans', sans-serif">L = {&minus;2, &minus;1, 1, 2}</text>
+            </g>
+          </svg>
+          <p class="skizze-caption">Flussdiagramm des Substitutionsverfahrens: Von der Gleichung 4. Grades zur Lösungsmenge über die quadratische Hilfsgleichung.</p>
+        </div>
+
+        <!-- Aufklappbare Musterlösung nach Schulschema -->
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Musterlösung nach 4-Schritte-Schema anzeigen
+          <span class="accordion-arrow">&#9660;</span>
+        </button>
+        <div class="accordion-body">
+
+          <div class="solution-step">
+            <span class="step-label">Schritt 1 &middot; Substitution ansetzen</span>
+            <div class="step-text">
+              Wir wählen als Hilfsvariable $u = x^2$ (mit $u \ge 0$). Dann folgt durch Quadrieren $x^4 = (x^2)^2 = u^2$.
+            </div>
+          </div>
+
+          <div class="solution-step">
+            <span class="step-label">Schritt 2 &middot; Hilfsgleichung lösen</span>
+            <div class="step-text">
+              Einsetzen in die Ausgangsgleichung führt auf die quadratische Hilfsgleichung:
+              <div class="formula-block">
+                $$u^2 - 5u + 4 = 0$$
+              </div>
+              Anwendung der $p$-$q$-Formel mit $p = -5$ und $q = 4$:
+              <div class="formula-block">
+                $$u_{1/2} = -\frac{-5}{2} \pm \sqrt{\left(\frac{-5}{2}\right)^2 - 4} = 2{,}5 \pm \sqrt{6{,}25 - 4} = 2{,}5 \pm \sqrt{2{,}25} = 2{,}5 \pm 1{,}5$$
+                $$u_1 = 2{,}5 + 1{,}5 = 4 \qquad u_2 = 2{,}5 - 1{,}5 = 1$$
+              </div>
+              Beide Werte sind reell und größer als null ($u_1, u_2 > 0$).
+            </div>
+          </div>
+
+          <div class="solution-step">
+            <span class="step-label">Schritt 3 &middot; Rücksubstitution</span>
+            <div class="step-text">
+              Wir setzen den ursprünglichen Zusammenhang $x^2 = u$ für beide Zwischenlösungen wieder ein:
+              <div class="formula-block">
+                $$\text{Fall 1: } x^2 = 4 \qquad\qquad \text{Fall 2: } x^2 = 1$$
+              </div>
+            </div>
+          </div>
+
+          <div class="solution-step">
+            <span class="step-label">Schritt 4 &middot; Nach x auflösen &amp; L</span>
+            <div class="step-text">
+              Radizieren (Wurzelziehen) auf beiden Seiten:
+              <div class="formula-block">
+                $$x_{1/2} = \pm\sqrt{4} \;\Longrightarrow\; x_1 = 2, \quad x_2 = -2$$
+                $$x_{3/4} = \pm\sqrt{1} \;\Longrightarrow\; x_3 = 1, \quad x_4 = -1$$
+              </div>
+            </div>
+          </div>
+
+          <div class="result-highlight">
+            <strong>Ergebnis &amp; Lösungsmenge:</strong> Die Gleichung besitzt genau vier reelle Lösungen:
+            <div class="formula-block" style="background: transparent; padding: 0.2rem 0; margin: 0.3rem 0;">
+              $$L = \{-2;\, -1;\, 1;\, 2\}$$
+            </div>
+            <strong>Geometrische Deutung:</strong> Der Graph der ganzrationalen Funktion $f(x) = x^4 - 5x^2 + 4$ ist achsensymmetrisch zur $y$-Achse und schneidet die $x$-Achse an vier Stellen symmetrisch zum Ursprung.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       BLOCK 3 — INTERAKTIVER GLEICHUNGSLÖSER
+  ═══════════════════════════════════════════════════════ -->
+  <div class="content-block">
+    <div class="section-badge badge-interaktiv">
+      <span class="badge-num">3</span> Interaktives Werkzeug
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-title">Biquadratischer Gleichungslöser: $a \cdot x^4 + b \cdot x^2 + c = 0$</div>
+      <div class="calc-desc">
+        Gib beliebige Koeffizienten $a$, $b$ und $c$ ein, um die schrittweise Lösung über die Hilfsvariable $u = x^2$
+        sowie die Fallunterscheidungen für die reelle Lösungsmenge live nachzuvollziehen.
+      </div>
+
+      <div class="calc-inputs">
+        <input type="number" id="coeff-a" class="calc-input" value="1" step="any">
+        <span>$\cdot x^4 \;+$</span>
+        <input type="number" id="coeff-b" class="calc-input" value="-5" step="any">
+        <span>$\cdot x^2 \;+$</span>
+        <input type="number" id="coeff-c" class="calc-input" value="4" step="any">
+        <span>$= 0$</span>
+        <button class="btn-calc" onclick="solveBiquadratic()">Berechnen</button>
+      </div>
+
+      <div id="calc-result" class="calc-output">
+        <!-- Dynamischer Inhalt via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       BLOCK 4 — ÜBUNGSAUFGABEN MIT MUSTERLÖSUNGEN
+  ═══════════════════════════════════════════════════════ -->
+  <div class="content-block">
+    <div class="section-badge badge-uebungen">
+      <span class="badge-num">4</span> Übungsaufgaben mit Musterlösungen
+    </div>
+
+    <!-- AUFGABE 1 -->
+    <div class="uebung-card">
+      <div class="uebung-header">
+        <div class="uebung-num">1</div>
+        <div class="uebung-text">
+          <span class="uebung-tag tag-biquadratisch">Biquadratisch &middot; 4 Lösungen</span>
+          <strong>Klassische biquadratische Gleichung mit ganzzahligen Wurzeln</strong>
+          Bestimme alle reellen Lösungen der Gleichung:
+          <div class="formula-block" style="background: #f8fafc; margin: 0.5rem 0;">
+            $$x^4 - 13x^2 + 36 = 0$$
+          </div>
+        </div>
+      </div>
+
+      <button class="uebung-btn" onclick="toggleUebung(this)">
+        Musterlösung nach 4-Schritte-Schema aufklappen <span>&#9660;</span>
+      </button>
+      <div class="uebung-solution">
+        <p><strong>Schritt 1 &middot; Substitution:</strong> Ansatz $u = x^2$ mit $u \ge 0$. Daraus folgt $x^4 = u^2$.</p>
+
+        <p><strong>Schritt 2 &middot; Hilfsgleichung:</strong></p>
+        <div class="formula-block">
+          $$u^2 - 13u + 36 = 0$$
+          $$u_{1/2} = \frac{13}{2} \pm \sqrt{\frac{169}{4} - \frac{144}{4}} = 6{,}5 \pm \sqrt{\frac{25}{4}} = 6{,}5 \pm 2{,}5$$
+          $$u_1 = 9 \qquad u_2 = 4$$
+        </div>
+
+        <p><strong>Schritt 3 &middot; Rücksubstitution:</strong></p>
+        <div class="formula-block">
+          $$x^2 = 9 \qquad \text{und} \qquad x^2 = 4$$
+        </div>
+
+        <p><strong>Schritt 4 &middot; Auflösen nach x:</strong></p>
+        <div class="formula-block">
+          $$x_{1/2} = \pm\sqrt{9} = \pm 3 \qquad\qquad x_{3/4} = \pm\sqrt{4} = \pm 2$$
+        </div>
+
+        <div class="result-highlight">
+          <strong>Lösungsmenge:</strong> $L = \{-3;\, -2;\, 2;\, 3\}$. Die Gleichung besitzt vier ganzzahlige Lösungen.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- AUFGABE 2 -->
+    <div class="uebung-card">
+      <div class="uebung-header">
+        <div class="uebung-num">2</div>
+        <div class="uebung-text">
+          <span class="uebung-tag tag-negativ">Fallunterscheidung &middot; Negatives u</span>
+          <strong>Biquadratische Gleichung mit negativem Hilfswert</strong>
+          Bestimme alle reellen Lösungen der Gleichung:
+          <div class="formula-block" style="background: #f8fafc; margin: 0.5rem 0;">
+            $$x^4 - 3x^2 - 4 = 0$$
+          </div>
+        </div>
+      </div>
+
+      <button class="uebung-btn" onclick="toggleUebung(this)">
+        Musterlösung nach 4-Schritte-Schema aufklappen <span>&#9660;</span>
+      </button>
+      <div class="uebung-solution">
+        <p><strong>Schritt 1 &middot; Substitution:</strong> Ansatz $u = x^2$ mit $u \ge 0$.</p>
+
+        <p><strong>Schritt 2 &middot; Hilfsgleichung:</strong></p>
+        <div class="formula-block">
+          $$u^2 - 3u - 4 = 0$$
+          $$u_{1/2} = 1{,}5 \pm \sqrt{2{,}25 - (-4)} = 1{,}5 \pm \sqrt{6{,}25} = 1{,}5 \pm 2{,}5$$
+          $$u_1 = 4 \qquad u_2 = -1$$
+        </div>
+
+        <p><strong>Schritt 3 &middot; Rücksubstitution &amp; Fallunterscheidung:</strong></p>
+        <ul style="margin: 0.3rem 0 0.5rem 1.2rem; font-size: 0.885rem;">
+          <li><strong>Zweig 1:</strong> $x^2 = 4 \;\Longrightarrow\; x = \pm 2$.</li>
+          <li><strong>Zweig 2:</strong> $x^2 = -1$. Da $x^2 \ge 0$ für alle $x \in \mathbb{R}$, besitzt diese Gleichung <strong>keine reelle Lösung</strong>!</li>
+        </ul>
+
+        <div class="result-highlight">
+          <strong>Lösungsmenge:</strong> $L = \{-2;\, 2\}$. Trotz des Grades 4 besitzt die Gleichung genau zwei reelle Schnittpunkte, da der negative Hilfswert $u_2 = -1$ bei der Rücksubstitution entfällt.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- AUFGABE 3 -->
+    <div class="uebung-card">
+      <div class="uebung-header">
+        <div class="uebung-num">3</div>
+        <div class="uebung-text">
+          <span class="uebung-tag tag-grad6">Grad 6 &middot; Ungerade Rücksubstitution</span>
+          <strong>Gleichung 6. Grades mit 3. Wurzel</strong>
+          Bestimme alle reellen Lösungen der Gleichung:
+          <div class="formula-block" style="background: #f8fafc; margin: 0.5rem 0;">
+            $$x^6 - 7x^3 - 8 = 0$$
+          </div>
+        </div>
+      </div>
+
+      <button class="uebung-btn" onclick="toggleUebung(this)">
+        Musterlösung nach 4-Schritte-Schema aufklappen <span>&#9660;</span>
+      </button>
+      <div class="uebung-solution">
+        <p><strong>Schritt 1 &middot; Substitution:</strong> Das Verhältnis der Exponenten ist $6:3 = 2:1$. Wir setzen daher an:
+          $$u = x^3 \;\Longrightarrow\; u^2 = (x^3)^2 = x^6$$
+          <em>Wichtiger didaktischer Unterschied:</em> Da es sich um eine <strong>ungerade</strong> Potenz handelt, darf $u$ hier auch negativ sein, denn die dritte Wurzel aus einer negativen Zahl ist in $\mathbb{R}$ wohldefiniert!
+        </p>
+
+        <p><strong>Schritt 2 &middot; Hilfsgleichung:</strong></p>
+        <div class="formula-block">
+          $$u^2 - 7u - 8 = 0$$
+          $$u_{1/2} = 3{,}5 \pm \sqrt{12{,}25 - (-8)} = 3{,}5 \pm \sqrt{20{,}25} = 3{,}5 \pm 4{,}5$$
+          $$u_1 = 8 \qquad u_2 = -1$$
+        </div>
+
+        <p><strong>Schritt 3 &middot; Rücksubstitution:</strong></p>
+        <div class="formula-block">
+          $$x^3 = 8 \qquad \text{und} \qquad x^3 = -1$$
+        </div>
+
+        <p><strong>Schritt 4 &middot; Nach x auflösen:</strong></p>
+        <div class="formula-block">
+          $$x_1 = \sqrt[3]{8} = 2$$
+          $$x_2 = \sqrt[3]{-1} = -1 \quad (\text{denn } (-1)^3 = -1)$$
+        </div>
+
+        <div class="result-highlight">
+          <strong>Lösungsmenge:</strong> $L = \{-1;\, 2\}$. Bei ungeraden Potenzen entfällt kein negativer Hilfswert &ndash; es gibt für jedes $u \in \mathbb{R}$ genau eine reelle ungerade Wurzel.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- AUFGABE 4 -->
+    <div class="uebung-card">
+      <div class="uebung-header">
+        <div class="uebung-num">4</div>
+        <div class="uebung-text">
+          <span class="uebung-tag tag-klammer">Leistungskurs &middot; Klammersubstitution</span>
+          <strong>Substitution eines zusammengesetzten Terms</strong>
+          Bestimme alle reellen Lösungen der Gleichung:
+          <div class="formula-block" style="background: #f8fafc; margin: 0.5rem 0;">
+            $$(x^2 - 3)^2 - 5(x^2 - 3) + 6 = 0$$
+          </div>
+        </div>
+      </div>
+
+      <button class="uebung-btn" onclick="toggleUebung(this)">
+        Musterlösung nach 4-Schritte-Schema aufklappen <span>&#9660;</span>
+      </button>
+      <div class="uebung-solution">
+        <p>
+          <strong>Strategischer Hinweis:</strong> Ein Ausmultiplizieren der Klammern führt auf eine unübersichtliche
+          Gleichung 4. Grades mit hohem Rechenaufwand. Wesentlich eleganter ist die <strong>Klammersubstitution</strong>.
+        </p>
+
+        <p><strong>Schritt 1 &middot; Substitution:</strong> Ersetze den wiederkehrenden Klammerausdruck:
+          $$u = x^2 - 3$$
+        </p>
+
+        <p><strong>Schritt 2 &middot; Hilfsgleichung:</strong></p>
+        <div class="formula-block">
+          $$u^2 - 5u + 6 = 0$$
+          $$u_{1/2} = 2{,}5 \pm \sqrt{6{,}25 - 6} = 2{,}5 \pm 0{,}5$$
+          $$u_1 = 3 \qquad u_2 = 2$$
+        </div>
+
+        <p><strong>Schritt 3 &middot; Rücksubstitution:</strong></p>
+        <div class="formula-block">
+          $$x^2 - 3 = 3 \qquad \text{und} \qquad x^2 - 3 = 2$$
+        </div>
+
+        <p><strong>Schritt 4 &middot; Nach x auflösen:</strong></p>
+        <div class="formula-block">
+          $$x^2 = 6 \;\Longrightarrow\; x_{1/2} = \pm\sqrt{6} \approx \pm 2{,}45$$
+          $$x^2 = 5 \;\Longrightarrow\; x_{3/4} = \pm\sqrt{5} \approx \pm 2{,}24$$
+        </div>
+
+        <div class="result-highlight">
+          <strong>Lösungsmenge:</strong> $L = \{-\sqrt{6};\, -\sqrt{5};\, \sqrt{5};\, \sqrt{6}\}$. Die Substitution des gesamten Klammerterms spart langwieriges Ausmultiplizieren und liefert direkt die vier exakten Wurzel-Lösungen.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="index.html" class="btn-nav-prev">&#8592; Zur Themenübersicht</a>
+    <a href="extremwertaufgaben.html" class="btn-nav-next">Thema 2: Extremwertaufgaben &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+  /* ── Accordion für Musterlösung ───────────────────────── */
+  function toggleAccordion(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = btn.classList.toggle('open');
+    body.classList.toggle('open', isOpen);
+    if (isOpen) setTimeout(triggerKaTeX, 50);
+  }
+
+  /* ── Übungsaufgaben aufklappen ─────────────────────────── */
+  function toggleUebung(btn) {
+    const solution = btn.nextElementSibling;
+    const arrow = btn.querySelector('span');
+    const isOpen = solution.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    arrow.innerHTML = isOpen ? '&#9650;' : '&#9660;';
+    if (isOpen) setTimeout(triggerKaTeX, 50);
+  }
+
+  /* ── Interaktiver Biquadratischer Rechner ──────────────── */
+  function solveBiquadratic() {
+    const a = parseFloat(document.getElementById('coeff-a').value);
+    const b = parseFloat(document.getElementById('coeff-b').value);
+    const c = parseFloat(document.getElementById('coeff-c').value);
+    const out = document.getElementById('calc-result');
+
+    if (isNaN(a) || isNaN(b) || isNaN(c)) {
+      out.style.display = 'block';
+      out.innerHTML = '<p style="color: #dc2626; margin: 0;">Bitte alle drei Koeffizienten als gültige Zahlen eingeben.</p>';
+      return;
+    }
+
+    if (a === 0) {
+      out.style.display = 'block';
+      out.innerHTML = '<p style="color: #dc2626; margin: 0;">Für $a = 0$ ist die Gleichung nicht biquadratisch (Grad 4), sondern rein quadratisch in $x$.</p>';
+      setTimeout(triggerKaTeX, 50);
+      return;
+    }
+
+    // Normalform: u^2 + p*u + q = 0
+    const p = b / a;
+    const q = c / a;
+    const D = (p / 2) * (p / 2) - q;
+
+    let html = '';
+    html += '<div class="calc-step-row"><strong>1. Hilfsgleichung mit $u = x^2$:</strong><br>';
+    html += '$$' + (a !== 1 ? a + 'u^2 ' + (b >= 0 ? '+ ' + b : '- ' + Math.abs(b)) + 'u ' + (c >= 0 ? '+ ' + c : '- ' + Math.abs(c)) + ' = 0 \\iff ' : '') + 'u^2 ' + (p >= 0 ? '+ ' + formatNum(p) : '- ' + formatNum(Math.abs(p))) + 'u ' + (q >= 0 ? '+ ' + formatNum(q) : '- ' + formatNum(Math.abs(q))) + ' = 0$$</div>';
+
+    html += '<div class="calc-step-row"><strong>2. Diskriminante der Hilfsgleichung:</strong><br>';
+    html += '$$D = \\left(\\frac{p}{2}\\right)^2 - q = ' + formatNum((p/2)*(p/2)) + ' - (' + formatNum(q) + ') = ' + formatNum(D) + '$$</div>';
+
+    if (D < 0) {
+      html += '<div class="calc-step-row" style="color: #b91c1c;">Da $D < 0$ ist, besitzt bereits die quadratische Hilfsgleichung keine reelle Lösung ($u_{1/2} \\notin \\mathbb{R}$).<br><strong>Ergebnis:</strong> Die Gleichung hat <strong>keine reelle Lösung</strong>: $L = \\emptyset$.</div>';
+    } else {
+      const sqrtD = Math.sqrt(D);
+      const u1 = -(p / 2) + sqrtD;
+      const u2 = -(p / 2) - sqrtD;
+
+      html += '<div class="calc-step-row"><strong>3. Zwischenwerte für $u$:</strong><br>';
+      html += '$$u_1 = ' + formatNum(u1) + ' \\qquad u_2 = ' + formatNum(u2) + '$$</div>';
+
+      html += '<div class="calc-step-row"><strong>4. Rücksubstitution ($x^2 = u$) &amp; reelle Lösungen:</strong><br>';
+
+      let xSolutions = [];
+
+      // Check u1
+      if (Math.abs(u1) < 1e-9) {
+        xSolutions.push(0);
+        html += '&bull; Aus $x^2 = 0$ folgt: $x = 0$.<br>';
+      } else if (u1 > 0) {
+        const xA = Math.sqrt(u1);
+        xSolutions.push(-xA, xA);
+        html += '&bull; Aus $x^2 = ' + formatNum(u1) + '$ folgt: $x = \\pm' + formatNum(xA) + '$.<br>';
+      } else {
+        html += '&bull; Aus $x^2 = ' + formatNum(u1) + '$ folgt: <em>keine reelle Lösung</em> (da negativ).<br>';
+      }
+
+      // Check u2 (if distinct)
+      if (Math.abs(u1 - u2) > 1e-9) {
+        if (Math.abs(u2) < 1e-9) {
+          if (!xSolutions.includes(0)) xSolutions.push(0);
+          html += '&bull; Aus $x^2 = 0$ folgt: $x = 0$.<br>';
+        } else if (u2 > 0) {
+          const xB = Math.sqrt(u2);
+          xSolutions.push(-xB, xB);
+          html += '&bull; Aus $x^2 = ' + formatNum(u2) + '$ folgt: $x = \\pm' + formatNum(xB) + '$.<br>';
+        } else {
+          html += '&bull; Aus $x^2 = ' + formatNum(u2) + '$ folgt: <em>keine reelle Lösung</em> (da negativ).<br>';
+        }
+      }
+
+      html += '</div>';
+
+      // Sort unique solutions
+      xSolutions = Array.from(new Set(xSolutions.map(v => Math.round(v * 10000) / 10000))).sort((a, b) => a - b);
+
+      html += '<div class="result-highlight" style="margin-top: 0.8rem;">';
+      if (xSolutions.length === 0) {
+        html += '<strong>Lösungsmenge:</strong> Keine reellen Lösungen ($L = \\emptyset$).';
+      } else {
+        const solStr = xSolutions.map(formatNum).join(';\\; ');
+        html += '<strong>Lösungsmenge:</strong> $$L = \\{' + solStr + '\\}$$ (Insgesamt ' + xSolutions.length + ' reelle Lösung' + (xSolutions.length > 1 ? 'en' : '') + ')';
+      }
+      html += '</div>';
+    }
+
+    out.innerHTML = html;
+    out.style.display = 'block';
+    setTimeout(triggerKaTeX, 50);
+  }
+
+  function formatNum(n) {
+    if (Math.abs(n - Math.round(n)) < 1e-6) return String(Math.round(n));
+    return Number(n.toFixed(4)).toString().replace('.', ',');
+  }
+</script>
+
+</body>
+</html>
