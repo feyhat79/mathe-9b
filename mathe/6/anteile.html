@@ -223,6 +223,74 @@
       margin: 0 auto 1.5rem auto;
       line-height: 1.6;
     }
+    /* Quiz Intro & Start */
+    .quiz-intro-view {
+      text-align: center;
+      padding: 1.75rem 1rem;
+    }
+    .quiz-intro-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #fef3c7;
+      color: #92400e;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      margin-bottom: 0.75rem;
+    }
+    .quiz-intro-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #111827;
+      margin: 0 0 0.5rem 0;
+    }
+    .quiz-intro-desc {
+      font-size: 0.95rem;
+      color: #475569;
+      max-width: 520px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.6;
+    }
+    .btn-quiz-start {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: #f59e0b;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-quiz-start:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
+    }
+    .quick-jump-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #fef3c7;
+      border: 1.5px solid #fde68a;
+      border-radius: 8px;
+      color: #92400e;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .quick-jump-btn:hover {
+      background: #fde68a;
+      border-color: #f59e0b;
+      color: #78350f;
+    }
 
     .content-block { margin-bottom: 3.5rem; }
     .erklaer-text { font-size: 0.975rem; color: #111827; line-height: 1.75; margin-bottom: 1rem; }
@@ -548,6 +616,9 @@
   <!-- Seitenüberschrift -->
   <h1 class="page-title">Brüche: Anteile &amp; Größen</h1>
   <p class="page-subtitle">Vom Ganzen zum Bruch &middot; Schritt für Schritt veranschaulicht &middot; Klasse 6 Gymnasium</p>
+  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+    <a href="#selbsttest" class="quick-jump-btn">Direkt zum Selbsttest (10 Fragen) &darr;</a>
+  </div>
   <hr class="page-divider">
 
 
@@ -854,11 +925,11 @@
       </div>
 
       <div class="calc-groessen-grid">
-        <button class="groessen-preset-btn active" onclick="setPreset(3, 4, '1 m', 100, 'cm')">$\frac{3}{4}$ von $1\,\text{m}$</button>
-        <button class="groessen-preset-btn" onclick="setPreset(2, 5, '1 m', 100, 'cm')">$\frac{2}{5}$ von $1\,\text{m}$</button>
-        <button class="groessen-preset-btn" onclick="setPreset(3, 4, '1 h', 60, 'min')">$\frac{3}{4}$ von $1\,\text{h}$</button>
-        <button class="groessen-preset-btn" onclick="setPreset(1, 4, '1 kg', 1000, 'g')">$\frac{1}{4}$ von $1\,\text{kg}$</button>
-        <button class="groessen-preset-btn" onclick="setPreset(5, 8, '1 km', 1000, 'm')">$\frac{5}{8}$ von $1\,\text{km}$</button>
+        <button class="groessen-preset-btn active" onclick="setPreset(3, 4, '1 m', 100, 'cm', this)">$\frac{3}{4}$ von $1\,\text{m}$</button>
+        <button class="groessen-preset-btn" onclick="setPreset(2, 5, '1 m', 100, 'cm', this)">$\frac{2}{5}$ von $1\,\text{m}$</button>
+        <button class="groessen-preset-btn" onclick="setPreset(3, 4, '1 h', 60, 'min', this)">$\frac{3}{4}$ von $1\,\text{h}$</button>
+        <button class="groessen-preset-btn" onclick="setPreset(1, 4, '1 kg', 1000, 'g', this)">$\frac{1}{4}$ von $1\,\text{kg}$</button>
+        <button class="groessen-preset-btn" onclick="setPreset(5, 8, '1 km', 1000, 'm', this)">$\frac{5}{8}$ von $1\,\text{km}$</button>
       </div>
 
       <div id="groesse-output" class="groesse-result-card">
@@ -998,7 +1069,7 @@
   <!-- ══════════════════════════════════════════════════════
        BLOCK 6 — INTERAKTIVER SELBSTTEST (10 ZUFALLSFRAGEN)
   ═══════════════════════════════════════════════════════ -->
-  <div class="content-block">
+  <div id="selbsttest" class="content-block">
     <div class="section-badge badge-selbsttest">
       <span class="badge-num">6</span> Interaktiver Selbsttest (10 Zufallsfragen)
     </div>
@@ -1010,19 +1081,32 @@
     </p>
 
     <div class="quiz-card">
-      <!-- Status Leiste -->
-      <div class="quiz-status-bar">
+      <!-- Start-Bildschirm mit Startbutton -->
+      <div id="quiz-intro-area" class="quiz-intro-view">
+        <span class="quiz-intro-badge">Pool aus 30 Fragen &middot; 10 Zufallsfragen</span>
+        <h4 class="quiz-intro-title">Bist du bereit für die Bruch-Challenge?</h4>
+        <p class="quiz-intro-desc">
+          Teste dein Wissen zu Zähler, Nenner, echten Brüchen, Bildmodellen und dem Einheiten-Trick!
+          Klicke auf den Button, um die ersten 10 zufälligen Fragen zu starten.
+        </p>
+        <button class="btn-quiz-start" onclick="startQuiz()">
+          Selbsttest jetzt starten &rarr;
+        </button>
+      </div>
+
+      <!-- Status Leiste (während des Tests) -->
+      <div id="quiz-status-bar" class="quiz-status-bar" style="display: none;">
         <span id="quiz-progress-text">Frage 1 von 10</span>
         <span id="quiz-score-text">Punkte: 0 / 10</span>
       </div>
 
       <!-- Fortschrittsbalken -->
-      <div class="quiz-progress-track">
+      <div id="quiz-progress-track" class="quiz-progress-track" style="display: none;">
         <div id="quiz-progress-bar" class="quiz-progress-fill" style="width: 10%;"></div>
       </div>
 
       <!-- Fragen-Container -->
-      <div id="quiz-active-area">
+      <div id="quiz-active-area" style="display: none;">
         <div id="quiz-question" class="quiz-q-title"></div>
         <div id="quiz-options" class="quiz-options-list"></div>
         <div id="quiz-explanation" class="quiz-explanation-box"></div>
@@ -1036,7 +1120,7 @@
         <div id="quiz-final-score" class="quiz-score-badge"></div>
         <div id="quiz-final-title" class="quiz-score-text"></div>
         <div id="quiz-final-desc" class="quiz-score-feedback"></div>
-        <button class="btn-quiz-next" onclick="restartQuiz()">10 neue Zufallsfragen starten &circlearrowright;</button>
+        <button class="btn-quiz-start" onclick="startQuiz()">10 neue Zufallsfragen starten &circlearrowright;</button>
       </div>
     </div>
   </div>
@@ -1128,10 +1212,15 @@
   }
 
   /* ── 2. Interaktive Größen-Rechenmaschine ──────────────── */
-  function setPreset(z, n, name, totalVal, unit) {
+  function setPreset(z, n, name, totalVal, unit, btnEl) {
     // Active class auf Buttons
     document.querySelectorAll('.groessen-preset-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    if (btnEl && btnEl.classList) {
+      btnEl.classList.add('active');
+    } else {
+      const firstBtn = document.querySelector('.groessen-preset-btn');
+      if (firstBtn) firstBtn.classList.add('active');
+    }
 
     const onePart = totalVal / n;
     const finalVal = onePart * z;
@@ -1540,6 +1629,15 @@
   }
 
   function startQuiz() {
+    // Startbildschirm ausblenden, Quiz-UI einblenden
+    const intro = document.getElementById('quiz-intro-area');
+    if (intro) intro.style.display = 'none';
+
+    document.getElementById('quiz-status-bar').style.display = 'flex';
+    document.getElementById('quiz-progress-track').style.display = 'block';
+    document.getElementById('quiz-active-area').style.display = 'block';
+    document.getElementById('quiz-results').style.display = 'none';
+
     // 10 Zufallsfragen aus 30
     const shuffledPool = shuffle(quizPool);
     currentQuizSet = shuffledPool.slice(0, 10).map(item => {
@@ -1557,8 +1655,6 @@
 
     currentQIdx = 0;
     quizScore = 0;
-    document.getElementById('quiz-active-area').style.display = 'block';
-    document.getElementById('quiz-results').style.display = 'none';
     renderQuizQuestion();
   }
 
@@ -1630,6 +1726,8 @@
   }
 
   function showQuizResults() {
+    document.getElementById('quiz-status-bar').style.display = 'none';
+    document.getElementById('quiz-progress-track').style.display = 'none';
     document.getElementById('quiz-active-area').style.display = 'none';
     const res = document.getElementById('quiz-results');
     res.style.display = 'block';
@@ -1663,8 +1761,8 @@
   // Initialisierung beim Laden
   document.addEventListener('DOMContentLoaded', () => {
     updateVisuals();
-    setPreset(3, 4, '1 m', 100, 'cm');
-    startQuiz();
+    const firstPreset = document.querySelector('.groessen-preset-btn');
+    setPreset(3, 4, '1 m', 100, 'cm', firstPreset);
   });
 </script>
 
