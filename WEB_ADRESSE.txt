@@ -6,6 +6,15 @@ DIREKTLINKS ZU DEN KLASSEN & KURSEN:
 Mathematik 9b:
 https://feyhat79.github.io/mathe-9b/mathe/9b/
 
+Mathematik LK Q1 (Übersicht):
+https://feyhat79.github.io/mathe-9b/mathe/q1-lk/
+
+Mathematik LK Q1 - Extremwertaufgaben:
+https://feyhat79.github.io/mathe-9b/mathe/q1-lk/extremwertaufgaben.html
+
+Mathematik LK Q1 - Substitution (folgt):
+https://feyhat79.github.io/mathe-9b/mathe/q1-lk/substitution.html
+
 Informatik Stufe 5 (5b, 5c, 5d, 5e):
 https://feyhat79.github.io/mathe-9b/info/5/
 
