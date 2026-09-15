@@ -183,8 +183,8 @@
     /* Topics Grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
       margin-bottom: 3rem;
     }
 
@@ -204,9 +204,9 @@
     }
 
     .topic-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-hover);
-      border-color: var(--primary);
+      border-color: #cbd5e1;
     }
 
     .topic-card.active-topic {
@@ -258,8 +258,8 @@
     .topic-desc {
       color: var(--text-muted);
       font-size: 0.92rem;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
     }
 
     .btn-topic {
@@ -269,16 +269,17 @@
       gap: 6px;
       background-color: var(--primary);
       color: white;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.8rem 1.25rem;
       border-radius: var(--radius-md);
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.15s;
     }
 
     .btn-topic:hover {
       background-color: var(--primary-dark);
+      color: white;
     }
 
     .btn-topic-secondary {
@@ -297,6 +298,122 @@
       background-color: #f1f5f9;
       color: #94a3b8;
       cursor: not-allowed;
+      border: 1px solid var(--border);
+    }
+
+    /* Strukturierte Materialliste in der Karte */
+    .card-materials {
+      margin-top: 1.25rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .materials-header {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .material-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .material-item:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+
+    .material-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .mat-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .mat-badge-ab {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .mat-badge-mb {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .material-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .material-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-mat-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-mat-pill:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-mat-pdf {
+      color: #b91c1c;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .btn-mat-pdf:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
     }
 
     /* iPad Guide Box */
@@ -414,19 +531,66 @@
     <h2 class="section-title"><span style="font-weight: 800; font-size: 0.9rem;">I</span> Unterrichtsmodule</h2>
     <div class="grid">
 
-      <!-- Modul: Quadratwurzeln (Active) -->
+      <!-- Modul: Kapitel I Reelle Zahlen & Wurzeln (Active) -->
       <div class="topic-card active-topic">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <span class="topic-badge badge-current" style="margin-bottom: 0;">Aktuelles Thema</span>
-          <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">Stand: 12.09.2026</span>
+          <span class="topic-badge badge-current" style="margin-bottom: 0;">Aktuelles Kapitel</span>
+          <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">Stand: 15.09.2026</span>
         </div>
-        <h3 class="topic-title">1. Quadratwurzeln</h3>
-        <p class="topic-desc">Umkehrung des Quadrierens (Quadrat-Rätsel), Definition ($\sqrt{a} = b \iff b^2 = a$), Radikand, Quadratzahlen-Werkzeugkasten (1–20), druckfertiges Arbeitsblatt (inkl. Musterlösung) und Zusammenfassung für Teams.</p>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
-          <a href="wurzeln.html" class="btn-topic" style="flex: 1.1;">Unterrichtseinheit</a>
-          <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-topic btn-topic-secondary" style="flex: 1;">Arbeitsblatt (Web)</a>
-          <a href="Arbeitsblatt_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-topic btn-topic-secondary" style="flex: 1;">Arbeitsblatt (PDF)</a>
-          <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-topic btn-topic-secondary" style="flex: 1;">Zusammenfassung (PDF)</a>
+        <h3 class="topic-title">Kapitel I • Reelle Zahlen &amp; Wurzeln</h3>
+        <p class="topic-desc">Zahlbereichserweiterung ($\mathbb{N} \to \mathbb{R}$), Quadratwurzeln, Radikand, Quadratzahlen (1–20), Wurzelgesetze und Diagnose-Quiz.</p>
+        
+        <div style="margin-top: auto; margin-bottom: 1.25rem;">
+          <a href="wurzeln.html" class="btn-topic" style="width: 100%; justify-content: center; box-shadow: var(--shadow-sm);">
+            Kapitel-Modul öffnen (Tabs 1–4)
+          </a>
+        </div>
+
+        <div class="card-materials">
+          <div class="materials-header">Begleitende Materialien &amp; Arbeitsblätter</div>
+
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-ab">AB 1.1</span>
+              <span class="material-title" title="Zahlbereichserweiterung (ℕ bis ℝ)">Zahlbereiche (ℕ bis ℝ)</span>
+            </div>
+            <div class="material-actions">
+              <a href="arbeitsblatt-zahlbereiche.html" target="_blank" class="btn-mat-pill">Web / Druck</a>
+              <a href="AB_1.1_Zahlbereiche_Mathe_9b.pdf" target="_blank" class="btn-mat-pill btn-mat-pdf">PDF</a>
+            </div>
+          </div>
+          
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-ab">AB 1.2</span>
+              <span class="material-title" title="Quadratwurzeln &amp; Quadratzahlen (1–20)">Quadratwurzeln &amp; Quadratzahlen</span>
+            </div>
+            <div class="material-actions">
+              <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-mat-pill">Web / Druck</a>
+              <a href="Arbeitsblatt_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-mat-pill btn-mat-pdf">PDF</a>
+            </div>
+          </div>
+
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge" style="background: #f1f5f9; color: #64748b;">AB 1.3</span>
+              <span class="material-title" title="Wurzelgesetze &amp; Termumformungen">Wurzelgesetze &amp; Terme</span>
+            </div>
+            <div class="material-actions">
+              <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; padding: 2px 6px;">Demnächst</span>
+            </div>
+          </div>
+
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-mb">Merkblatt</span>
+              <span class="material-title" title="Zusammenfassung Reelle Zahlen">Zusammenfassung Reelle Zahlen</span>
+            </div>
+            <div class="material-actions">
+              <a href="zusammenfassung-wurzeln.html" target="_blank" class="btn-mat-pill">Web</a>
+              <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-mat-pill btn-mat-pdf">PDF</a>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -437,27 +601,52 @@
           <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Stand: 07.09.2026</span>
         </div>
         <h3 class="topic-title">Lineare Gleichungssysteme (LGS)</h3>
-        <p class="topic-desc">Rechnerische Lösungsverfahren (Einsetzen, Gleichsetzen, Addieren), graphische Deutung mit Schnittpunkt, druckfertiges DIN-A4-Arbeitsblatt und Selbst-Check.</p>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
-          <a href="lgs.html" class="btn-topic btn-topic-secondary" style="flex: 1.2;">Modul öffnen</a>
-          <a href="arbeitsblatt-lgs-graphisch.html" target="_blank" class="btn-topic btn-topic-secondary" style="flex: 1;">Arbeitsblatt (Druck/PDF)</a>
+        <p class="topic-desc">Rechnerische Lösungsverfahren (Einsetzen, Gleichsetzen, Addieren) und graphische Deutung mit Schnittpunkt.</p>
+        
+        <div style="margin-top: auto; margin-bottom: 1.25rem;">
+          <a href="lgs.html" class="btn-topic btn-topic-secondary" style="width: 100%; justify-content: center;">
+            Wiederholungs-Modul öffnen
+          </a>
+        </div>
+
+        <div class="card-materials">
+          <div class="materials-header">Begleitende Materialien &amp; Arbeitsblätter</div>
+          
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-ab">AB LGS</span>
+              <span class="material-title" title="Graphische Lösung &amp; Verfahren">Graphische Lösung &amp; Verfahren</span>
+            </div>
+            <div class="material-actions">
+              <a href="arbeitsblatt-lgs-graphisch.html" target="_blank" class="btn-mat-pill">Web / Druck</a>
+              <a href="LGS.pdf" target="_blank" class="btn-mat-pill btn-mat-pdf">PDF</a>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Modul: Quadratische Funktionen -->
       <div class="topic-card">
-        <span class="topic-badge badge-upcoming">Demnächst</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="topic-badge badge-upcoming" style="margin-bottom: 0;">Demnächst</span>
+        </div>
         <h3 class="topic-title">Quadratische Funktionen</h3>
         <p class="topic-desc">Parabeln, Scheitelpunktform, Normalform, Nullstellen und die quadratische Ergänzung bzw. p-q-Formel verstehen und anwenden.</p>
-        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
+        <div style="margin-top: auto;">
+          <span class="btn-topic btn-disabled" style="width: 100%; justify-content: center;">Noch nicht freigeschaltet</span>
+        </div>
       </div>
 
       <!-- Modul: Satz des Pythagoras -->
       <div class="topic-card">
-        <span class="topic-badge badge-upcoming">Im weiteren Verlauf</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="topic-badge badge-upcoming" style="margin-bottom: 0;">Im weiteren Verlauf</span>
+        </div>
         <h3 class="topic-title">Satz des Pythagoras</h3>
         <p class="topic-desc">Rechtwinklige Dreiecke, Katheten- und Höhensatz sowie praktische Anwendungen und geometrische Berechnungen im Raum.</p>
-        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
+        <div style="margin-top: auto;">
+          <span class="btn-topic btn-disabled" style="width: 100%; justify-content: center;">Noch nicht freigeschaltet</span>
+        </div>
       </div>
 
     </div>

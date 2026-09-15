@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Wurzeln 9b">
-  <title>Quadratwurzeln – Einführung & Unterrichtsgespräch | Mathe 9b</title>
+  <title>Kapitel I: Reelle Zahlen &amp; Quadratwurzeln | Mathe 9b</title>
 
-  <!-- Google Fonts -->
+  <!-- Modern System Font & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -62,18 +59,17 @@
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
       --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
       --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
-      
-      /* Basis Schriftgröße (standard) */
       --font-scale: 1;
     }
 
-    /* BEAMER-MODUS (High Contrast, große Schrift für die letzte Reihe) */
+    /* BEAMER-MODUS */
     body.beamer-mode {
-      --font-scale: 1.18;
+      --font-scale: 1.15;
       background-color: #0f172a;
       color: #f8fafc;
     }
-    body.beamer-mode .card {
+    body.beamer-mode .card,
+    body.beamer-mode .card-section {
       background-color: #1e293b;
       border-color: #334155;
       color: #f8fafc;
@@ -95,10 +91,27 @@
       background-color: #1e3a8a;
       border-color: #60a5fa;
     }
-    body.beamer-mode .solution-box {
-      background-color: #064e3b;
-      border-color: #059669;
-      color: #ecfdf5;
+    body.beamer-mode .tab-btn {
+      background: #1e293b;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+    body.beamer-mode .tab-btn.active {
+      background: #2563eb;
+      color: white;
+      border-color: #60a5fa;
+    }
+    body.beamer-mode .sub-card,
+    body.beamer-mode .conflict-box,
+    body.beamer-mode .material-download-box {
+      background-color: #162032;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body.beamer-mode .diag-card {
+      background-color: #162032;
+      border-color: #334155;
+      color: #f8fafc;
     }
 
     * {
@@ -118,7 +131,7 @@
       transition: background-color 0.2s, color 0.2s;
     }
 
-    /* PRESENTATION CONTROL BAR (STICKY) */
+    /* PRÄSENTATIONS-LEISTE */
     .presenter-bar {
       position: sticky;
       top: 0;
@@ -209,63 +222,118 @@
 
     /* CONTAINER */
     .container {
-      max-width: 980px;
-      margin: 1.5rem auto;
-      padding: 0 1.25rem;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
     }
 
-    /* HEADER */
+    /* HERO HEADER */
     .hero-header {
       text-align: center;
-      padding: 1.5rem 0 2rem 0;
+      padding: 1.5rem 0 1rem 0;
+      margin-bottom: 1rem;
     }
 
     .badge-chapter {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: inline-block;
       padding: 5px 14px;
       background: var(--primary-light);
       color: var(--primary-dark);
-      border-radius: 999px;
-      font-size: 0.85rem;
       font-weight: 700;
-      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.3px;
     }
 
     h1 {
-      font-size: calc(2.2rem * var(--font-scale));
+      font-size: calc(2.1rem * var(--font-scale));
       font-weight: 800;
+      color: inherit;
+      line-height: 1.25;
       letter-spacing: -0.5px;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
+      margin-bottom: 0.4rem;
     }
 
     .lead-subtitle {
+      font-size: calc(1.05rem * var(--font-scale));
       color: var(--text-muted);
-      font-size: calc(1.1rem * var(--font-scale));
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
     }
 
-    /* CARD SYSTEM */
+    /* ========================================================
+       TAB BAR (ANALOG ZU LGS)
+       ======================================================== */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin: 1.5rem 0 2rem 0;
+      border-bottom: 2px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 11px 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KARTEN & ABSCHNITTE */
     .card {
-      background-color: var(--card-bg);
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
       box-shadow: var(--shadow-sm);
-      transition: all 0.2s;
     }
 
     .card-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.25rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 0.75rem;
     }
 
     .step-tag {
@@ -280,59 +348,122 @@
     .step-number {
       background: var(--primary);
       color: white;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 800;
+      flex-shrink: 0;
     }
 
-    /* INTERAKTIVES QUADRAT-PROBLEM (EINSTIEG) */
-    .quadrat-grid {
+    /* GRID & SPALTEN */
+    .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 1.25rem;
-      margin: 1.5rem 0;
+      margin: 1.25rem 0;
     }
 
-    .quadrat-box {
-      border: 2px solid var(--border);
+    .sub-card {
+      background: rgba(0,0,0,0.02);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       padding: 1.25rem;
-      background: rgba(0,0,0,0.02);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
     }
 
-    .quadrat-visual {
-      width: 110px;
-      height: 110px;
-      border: 3px solid var(--primary);
-      background: rgba(37, 99, 235, 0.08);
-      border-radius: 8px;
+    .highlight-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    /* KOGNITIVER KONFLIKT BOX */
+    .conflict-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--danger);
+      border-radius: var(--radius-md);
+      padding: 1.1rem 1.35rem;
+      margin: 1.25rem 0;
+      color: #991b1b;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .conflict-title {
+      font-weight: 800;
+      margin-bottom: 0.35rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin: 1rem 0;
+      gap: 6px;
+    }
+
+    /* VENN-DIAGRAMM CONTAINER */
+    .svg-container {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin: 1.25rem 0;
+      overflow-x: auto;
+    }
+
+    .diagram-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .btn-layer {
+      font-size: 0.82rem;
       font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--primary-dark);
-      position: relative;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
 
-    .quadrat-visual.unknown {
-      border-color: var(--accent);
-      background: rgba(217, 119, 6, 0.08);
-      color: var(--accent);
-      border-style: dashed;
+    .btn-layer:hover {
+      border-color: var(--primary);
+      color: var(--primary);
     }
 
-    /* REVEAL SYSTEM (SCHRITT-FÜR-SCHRITT AUFDECKEN) */
+    .btn-layer.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .zone-shape {
+      transition: opacity 0.25s ease, stroke-width 0.25s ease;
+      cursor: pointer;
+    }
+
+    .zone-r { fill: #f5f3ff; stroke: #8b5cf6; stroke-width: 2; }
+    .zone-q { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .zone-z { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+    .zone-n { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; }
+    .zone-i { fill: #fee2e2; stroke: #dc2626; stroke-width: 2; }
+
+    .zone-text {
+      font-family: inherit;
+      font-weight: 600;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* AUFDECK-BOXEN */
     .reveal-box {
       margin-top: 1rem;
       width: 100%;
@@ -342,11 +473,11 @@
       width: 100%;
       background: var(--primary-light);
       color: var(--primary-dark);
-      border: 2px dashed var(--primary);
+      border: 1.5px dashed var(--primary);
       padding: 10px 16px;
       border-radius: var(--radius-md);
       font-weight: 700;
-      font-size: calc(0.95rem * var(--font-scale));
+      font-size: calc(0.92rem * var(--font-scale));
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -354,6 +485,7 @@
       gap: 8px;
       transition: all 0.2s;
     }
+
     .btn-reveal:hover {
       background: var(--primary);
       color: #ffffff;
@@ -362,24 +494,19 @@
 
     .revealed-content {
       display: none;
-      margin-top: 0.75rem;
-      padding: 1.25rem;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
-      background: var(--success-light);
-      border: 2px solid var(--success);
-      color: #065f46;
-      animation: fadeIn 0.3s ease-out;
+      padding: 1.25rem;
+      margin-top: 0.75rem;
+      animation: fadeIn 0.2s ease;
     }
+
     .revealed-content.show {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* DEFINITION & MERKKASTEN */
+    /* DEFINITIONSKASTEN */
     .definition-box {
       background: linear-gradient(135deg, #1e3a8a, #1e293b);
       color: #ffffff;
@@ -399,47 +526,43 @@
       letter-spacing: 0.5px;
     }
 
-    .anatomy-diagram {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 1.5rem 0;
-      flex-wrap: wrap;
-    }
-
-    .anatomy-item {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
+    /* MERKE-BOX (ROTER STANDARD GEMINI.MD) */
+    .merke-box {
+      border: 2.5px solid #dc2626;
       border-radius: var(--radius-md);
-      padding: 0.75rem 1.25rem;
-      text-align: center;
-    }
-    .anatomy-item strong {
-      display: block;
-      color: #93c5fd;
-      font-size: 1.1rem;
-    }
-
-    /* WARNBOXEN */
-    .warn-card {
-      border-left: 5px solid var(--danger);
-      background: var(--danger-light);
+      background: #ffffff;
       padding: 1.25rem 1.5rem;
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      margin: 1rem 0;
-      color: #991b1b;
+      margin: 1.5rem 0;
+      position: relative;
     }
 
-    .warn-card h4 {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: calc(1.1rem * var(--font-scale));
-      margin-bottom: 0.5rem;
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
       font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.6px;
     }
 
-    /* QUADRATZAHLEN MATRIX (SPICKZETTEL) */
+    .merke-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 0.4rem;
+    }
+
+    .merke-content {
+      color: #111827 !important; /* Füllertiefes Schwarz */
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    /* QUADRATZAHLEN MATRIX */
     .quadrat-matrix {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -458,56 +581,27 @@
       transition: all 0.2s;
     }
     .sq-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
       border-color: var(--primary);
-    }
-    .sq-card .sq-question {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-    }
-    .sq-card .sq-ans {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-top: 4px;
-      display: none;
+      transform: translateY(-2px);
     }
     .sq-card.revealed {
-      background: var(--primary-light);
-      border-color: var(--primary);
+      background: #eff6ff;
+      border-color: #2563eb;
     }
-    .sq-card.revealed .sq-ans {
+    .sq-task {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .sq-res {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-top: 4px;
+      color: #059669;
+      display: none;
+    }
+    .sq-card.revealed .sq-res {
       display: block;
-    }
-
-    /* AUFGABEN REIHEN */
-    .task-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin: 1.25rem 0;
-    }
-
-    .task-card {
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      background: rgba(0,0,0,0.015);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .task-prompt {
-      font-size: calc(1.2rem * var(--font-scale));
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     /* HEFTEINTRAG KASTEN */
@@ -515,8 +609,8 @@
       border: 3px solid #2563eb;
       background: #ffffff;
       border-radius: var(--radius-lg);
-      padding: 2.25rem;
-      box-shadow: var(--shadow-lg);
+      padding: 2rem;
+      margin: 1.5rem 0;
       position: relative;
     }
 
@@ -529,62 +623,248 @@
       font-weight: 800;
       padding: 4px 16px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.35);
     }
 
-    .hefteintrag-title {
-      font-size: calc(1.5rem * var(--font-scale));
+    /* MATERIAL DOWNLOAD BOX (AM ENDE JEDES TABS) */
+    .material-download-box {
+      background: #ffffff;
+      border: 1.5px solid #bfdbfe;
+      border-left: 5px solid #2563eb;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .mat-dl-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mat-badge-ab {
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .mat-badge-mb {
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .mat-dl-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* QUIZ STYLES (ANALOG ZU LGS) */
+    .quiz-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-progress-wrap {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: #2563eb;
+      width: 10%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-category-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-weight: 700;
+      font-size: 0.78rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .quiz-question-title {
+      font-size: 1.25rem;
       font-weight: 800;
       margin-bottom: 1.25rem;
-      color: #1e3a8a;
+      line-height: 1.4;
     }
 
-    /* PRINT */
-    @media print {
-      .presenter-bar, .btn-reveal {
-        display: none !important;
-      }
-      .revealed-content {
-        display: block !important;
-        background: transparent !important;
-        color: #000 !important;
-        border: 1px solid #000 !important;
-      }
-      body {
-        background: white !important;
-        color: black !important;
-        font-size: 10pt;
-      }
-      .card, .hefteintrag-box {
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-        page-break-inside: avoid;
-      }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt-btn .opt-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #059669 !important;
+      color: #065f46 !important;
+    }
+    .quiz-opt-btn.correct .opt-badge {
+      background: #059669;
+      color: white;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
+    }
+    .quiz-opt-btn.wrong .opt-badge {
+      background: #dc2626;
+      color: white;
+    }
+
+    .quiz-feedback {
+      display: none;
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.is-correct { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+    .quiz-feedback.is-wrong { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+    .btn-next-q {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-next-q:hover { background: var(--primary-dark); }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .diag-card {
+      background: rgba(0,0,0,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+    }
+
+    .diag-card h4 {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .diag-card .score-stat {
+      font-size: 1.3rem;
+      font-weight: 800;
     }
   </style>
 </head>
 <body>
 
   <!-- ========================================================
-       PRÄSENTATIONS-LEISTE (FÜR DIE LEHRKRAFT AM PULT / BEAMER)
+       PRÄSENTATIONS-LEISTE (FÜR LEHRKRAFT AM BEAMER)
        ======================================================== -->
   <nav class="presenter-bar">
     <div class="presenter-left">
       <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
       <div class="presenter-title">
-        <span>Klasse 9b • 1. Quadratwurzeln</span>
+        <span>Klasse 9b • Kapitel I: Reelle Zahlen</span>
         <span class="presenter-badge">Unterrichts-Modus</span>
       </div>
     </div>
     <div class="presenter-actions">
-      <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
-        Arbeitsblatt (Web / Druck)
+      <a href="arbeitsblatt-zahlbereiche.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
+        AB 1.1 (Zahlbereiche)
       </a>
-      <a href="Arbeitsblatt_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #1d4ed8; text-decoration: none;">
-        Arbeitsblatt (PDF)
+      <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-action" style="background: #1d4ed8; text-decoration: none;">
+        AB 1.2 (Wurzeln)
       </a>
       <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #059669; text-decoration: none;">
         Zusammenfassung (PDF)
@@ -606,489 +886,857 @@
     <!-- HERO HEADER -->
     <header class="hero-header">
       <div class="badge-chapter">Kapitel I • Reelle Zahlen (Lambacher Schweizer S. 8)</div>
-      <h1>1. Quadratwurzeln</h1>
+      <h1>Reelle Zahlen &amp; Quadratwurzeln</h1>
       <p class="lead-subtitle">
-        Die Umkehrung des Quadrierens: Wie bestimmen wir die Seitenlänge eines Quadrats, wenn nur der Flächeninhalt bekannt ist?
+        Von den Lücken auf dem Zahlenstrahl und der Entdeckung der Irrationalen Zahlen über die Quadratwurzel bis zu den Wurzelgesetzen und der Eigendiagnose.
       </p>
-      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-        <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-action" style="background: #2563eb; padding: 8px 18px; border-radius: 999px; text-decoration: none; font-size: 0.9rem; font-weight: 700;">
-          Arbeitsblatt (Web / Druck)
-        </a>
-        <a href="Arbeitsblatt_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #1d4ed8; padding: 8px 18px; border-radius: 999px; text-decoration: none; font-size: 0.9rem; font-weight: 700;">
-          Arbeitsblatt (PDF)
-        </a>
-        <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #059669; padding: 8px 18px; border-radius: 999px; text-decoration: none; font-size: 0.9rem; font-weight: 700;">
-          Zusammenfassung (PDF)
-        </a>
-      </div>
     </header>
 
     <!-- ========================================================
-         PHASE 1: PROBLEMORIENTIERTER EINSTIEG (DAS QUADRAT-RÄTSEL)
+         TAB BAR (KAPITEL-GLIEDERUNG ANALOG ZU LGS)
          ======================================================== -->
-    <section class="card">
-      <div class="card-header">
-        <div class="step-tag">
-          <span class="step-number">1</span>
-          <span>Problemstellung: Das Quadrat-Rätsel</span>
-        </div>
-        <span class="text-muted" style="font-size: 0.9rem;">Unterrichtsgespräch (ca. 7 Min.)</span>
-      </div>
-
-      <p style="font-size: calc(1.05rem * var(--font-scale)); margin-bottom: 1rem;">
-        <strong>Ausgangsfrage:</strong> Wir kennen die Berechnung des Flächeninhalts beim Quadrat ($A = a \cdot a = a^2$). Was passiert, wenn wir den Prozess <strong>umkehren</strong>?
-      </p>
-
-      <div class="quadrat-grid">
-        <!-- Fall 1: Einfach (A=25) -->
-        <div class="quadrat-box">
-          <h4 style="font-weight: 700; color: var(--primary);">Fall 1: $A = 25\text{ cm}^2$</h4>
-          <div class="quadrat-visual">
-            $A = 25\text{ cm}^2$
-          </div>
-          <p class="text-muted">Welche Zahl mit sich selbst multipliziert ergibt 25?</p>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">
-              <span>👉</span> Lösung einblenden
-            </button>
-            <div class="revealed-content">
-              <strong>Seitenlänge: $a = 5\text{ cm}$</strong><br>
-              <span style="font-size: 0.9rem;">Begründung: $5 \cdot 5 = 5^2 = 25$.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fall 2: Einfach (A=64) -->
-        <div class="quadrat-box">
-          <h4 style="font-weight: 700; color: var(--primary);">Fall 2: $A = 64\text{ m}^2$</h4>
-          <div class="quadrat-visual">
-            $A = 64\text{ m}^2$
-          </div>
-          <p class="text-muted">Welche Zahl mit sich selbst multipliziert ergibt 64?</p>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">
-              <span>👉</span> Lösung einblenden
-            </button>
-            <div class="revealed-content">
-              <strong>Seitenlänge: $a = 8\text{ m}$</strong><br>
-              <span style="font-size: 0.9rem;">Begründung: $8 \cdot 8 = 8^2 = 64$.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fall 3: Der Konflikt (A=50) -->
-        <div class="quadrat-box" style="border-color: var(--accent);">
-          <h4 style="font-weight: 700; color: var(--accent);">Fall 3: $A = 50\text{ m}^2$ 🔥</h4>
-          <div class="quadrat-visual unknown">
-            $A = 50\text{ m}^2$
-          </div>
-          <p class="text-muted">Welche Zahl mit sich selbst multipliziert ergibt exakt 50?</p>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)" style="background: var(--accent-light); border-color: var(--accent); color: #92400e;">
-              <span>🔍</span> Den kognitiven Konflikt aufdecken
-            </button>
-            <div class="revealed-content" style="background: #fffbeb; border-color: #f59e0b; color: #92400e;">
-              <strong>Suche durch Probieren:</strong><br>
-              • $7^2 = 49$ (knapp zu klein)<br>
-              • $8^2 = 64$ (viel zu groß)<br>
-              • $7{,}07^2 = 49{,}9849 \dots$<br>
-              <strong>Erkenntnis:</strong> Mit den bisherigen Grundrechenarten ($+$, $-$, $\cdot$, $:$) lässt sich die exakte Zahl nicht aufschreiben. Wir benötigen eine neue Rechenoperation: <strong>Das Wurzelziehen ($\sqrt{\phantom{x}}$)</strong>!
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab-zahlbereiche')">
+        1. Zahlbereiche (ℕ → ℝ)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-wurzeln')">
+        2. Quadratwurzeln &amp; Definition
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-gesetze')">
+        3. Wurzelgesetze &amp; Terme
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-quiz')" style="border-color: #2563eb; color: #2563eb; font-weight: 800;">
+        4. Selbst-Check (Quiz)
+      </button>
+    </div>
 
     <!-- ========================================================
-         PHASE 2: DIE DEFINITION DER QUADRATWURZEL
+         TAB 1: ZAHLBEREICHE (N -> Z -> Q -> R)
          ======================================================== -->
-    <section class="card">
-      <div class="card-header">
-        <div class="step-tag">
-          <span class="step-number">2</span>
-          <span>Definition & Fachbegriffe</span>
-        </div>
-        <span class="text-muted" style="font-size: 0.9rem;">Sicherung & Begriffsbildung</span>
-      </div>
-
-      <div class="definition-box">
-        <h3 style="font-size: calc(1.3rem * var(--font-scale)); font-weight: 700; margin-bottom: 0.5rem;">
-          Definition der Quadratwurzel
-        </h3>
-        <p style="opacity: 0.9; max-width: 700px; margin: 0 auto;">
-          Die Quadratwurzel aus einer nicht-negativen Zahl $a$ ist diejenige <strong>nicht-negative Zahl $b$</strong>, deren Quadrat genau gleich $a$ ist.
-        </p>
-
-        <div class="definition-formula">
-          $$\sqrt{a} = b \quad \Longleftrightarrow \quad b^2 = a \quad (\text{für } a \ge 0 \text{ und } b \ge 0)$$
-        </div>
-
-        <!-- Anatomie Diagramm -->
-        <div class="anatomy-diagram">
-          <div class="anatomy-item">
-            <strong>$\sqrt{\phantom{a}}$</strong>
-            <span>Wurzelzeichen (von lat. <em>radix</em>)</span>
-          </div>
-          <div class="anatomy-item">
-            <strong>$a$</strong>
-            <span>Radikand (die Zahl unter der Wurzel)</span>
-          </div>
-          <div class="anatomy-item">
-            <strong>$b$</strong>
-            <span>Wurzelwert (Ergebnis $\ge 0$)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2 Wichtige Warnhinweise -->
-      <h3 style="font-size: calc(1.15rem * var(--font-scale)); font-weight: 700; margin: 1.5rem 0 0.75rem 0;">
-        ⚠️ Zwei goldene Regeln für die Klassenarbeit:
-      </h3>
-
-      <div class="warn-card">
-        <h4>1. Keine Wurzel aus negativen Zahlen!</h4>
-        <p>
-          Was ergibt $\sqrt{-16}$? Es gibt <strong>keine reelle Zahl</strong>, die mit sich selbst multipliziert $-16$ ergibt, denn:
-          $(+4)^2 = +16$ und $(-4)^2 = +16$.<br>
-          👉 <strong>Merke:</strong> Der Radikand unter der Wurzel darf <strong>niemals negativ</strong> sein! $\sqrt{-16}$ ist nicht definiert.
-        </p>
-      </div>
-
-      <div class="warn-card" style="border-left-color: #f59e0b; background: #fffbeb; color: #92400e;">
-        <h4 style="color: #b45309;">2. Das Wurzelergebnis ist per Definition immer positiv (oder 0)!</h4>
-        <p>
-          Zwar gilt sowohl $(+5)^2 = 25$ als auch $(-5)^2 = 25$. Dennoch ist:
-          $$\sqrt{25} = 5 \quad \text{und NIEMALS } -5!$$
-          👉 <strong>Merke:</strong> Eine Quadratwurzel liefert immer genau <strong>ein eindeutiges, nicht-negatives Ergebnis</strong>.
-        </p>
-      </div>
-    </section>
-
-    <!-- ========================================================
-         PHASE 3: DER MENTALE WERKZEUGKASTEN (QUADRATZAHLEN 1-20)
-         ======================================================== -->
-    <section class="card">
-      <div class="card-header">
-        <div class="step-tag">
-          <span class="step-number">3</span>
-          <span>Der mentale Werkzeugkasten: Quadratzahlen 1 bis 20</span>
-        </div>
-        <button class="btn-action" style="color: var(--primary); background: var(--primary-light); border-color: var(--primary);" onclick="revealAllSquares()">
-          Alle Zahlen aufdecken
-        </button>
-      </div>
-
-      <p class="text-muted" style="margin-bottom: 1rem;">
-        Tipp für das Unterrichtsgespräch: Frage Schüler ab und tippe auf das jeweilige Kärtchen, um das Ergebnis zu enthüllen.
-      </p>
-
-      <div class="quadrat-matrix" id="sqMatrix">
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$1^2$</div><div class="sq-ans">1</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$2^2$</div><div class="sq-ans">4</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$3^2$</div><div class="sq-ans">9</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$4^2$</div><div class="sq-ans">16</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$5^2$</div><div class="sq-ans">25</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$6^2$</div><div class="sq-ans">36</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$7^2$</div><div class="sq-ans">49</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$8^2$</div><div class="sq-ans">64</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$9^2$</div><div class="sq-ans">81</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$10^2$</div><div class="sq-ans">100</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$11^2$</div><div class="sq-ans">121</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$12^2$</div><div class="sq-ans">144</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$13^2$</div><div class="sq-ans">169</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$14^2$</div><div class="sq-ans">196</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$15^2$</div><div class="sq-ans">225</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$16^2$</div><div class="sq-ans">256</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$17^2$</div><div class="sq-ans">289</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$18^2$</div><div class="sq-ans">324</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$19^2$</div><div class="sq-ans">361</div></div>
-        <div class="sq-card" onclick="this.classList.toggle('revealed')"><div class="sq-question">$20^2$</div><div class="sq-ans">400</div></div>
-      </div>
-    </section>
-
-    <!-- ========================================================
-         PHASE 4: GELENKTES RECHNEN IM UNTERRICHTSGESPRÄCH
-         ======================================================== -->
-    <section class="card">
-      <div class="card-header">
-        <div class="step-tag">
-          <span class="step-number">4</span>
-          <span>Gemeinsame Übungsphase (Schritt für Schritt)</span>
-        </div>
-        <span class="text-muted" style="font-size: 0.9rem;">Erarbeitung am Smartboard / Beamer</span>
-      </div>
-
-      <!-- Station A: Kopfrechnen Basic -->
-      <h3 style="font-size: calc(1.15rem * var(--font-scale)); font-weight: 700; margin-bottom: 0.75rem; color: var(--primary);">
-        A. Grundaufgaben (Direkte Quadratzahlen)
-      </h3>
-      <div class="task-row">
-        <div class="task-card">
-          <div class="task-prompt">a) $\sqrt{49} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content"><strong>$7$</strong>, denn $7^2 = 49$</div>
-          </div>
-        </div>
-        <div class="task-card">
-          <div class="task-prompt">b) $\sqrt{121} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content"><strong>$11$</strong>, denn $11^2 = 121$</div>
-          </div>
-        </div>
-        <div class="task-card">
-          <div class="task-prompt">c) $\sqrt{400} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content"><strong>$20$</strong>, denn $20^2 = 400$</div>
-          </div>
-        </div>
-        <div class="task-card">
-          <div class="task-prompt">d) $\sqrt{0} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content"><strong>$0$</strong>, denn $0^2 = 0$</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Station B: Dezimalbrüche (Stolperfalle Nachkommastellen) -->
-      <h3 style="font-size: calc(1.15rem * var(--font-scale)); font-weight: 700; margin: 2rem 0 0.75rem 0; color: #d97706;">
-        B. Dezimalzahlen (Vorsicht Kommafalle!)
-      </h3>
-      <p class="text-muted" style="margin-bottom: 0.75rem;">
-        <strong>Faustregel für Kommastellen:</strong> Beim Quadrieren verdoppelt sich die Anzahl der Nachkommastellen $\implies$ beim Wurzelziehen <strong>halbiert</strong> sie sich!
-      </p>
-
-      <div class="task-row">
-        <div class="task-card">
-          <div class="task-prompt">a) $\sqrt{0{,}25} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$0{,}5$</strong><br>
-              <small>Begründung: $0{,}5 \cdot 0{,}5 = 0{,}25$ (2 Nachkommastellen $\rightarrow$ 1 Stelle).</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card">
-          <div class="task-prompt">b) $\sqrt{0{,}04} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$0{,}2$</strong> (Achtung: nicht $0{,}02$!)<br>
-              <small>Denn $0{,}2 \cdot 0{,}2 = 0{,}04$.</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card">
-          <div class="task-prompt">c) $\sqrt{1{,}44} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$1{,}2$</strong><br>
-              <small>Denn $12^2 = 144 \implies 1{,}2^2 = 1{,}44$.</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card">
-          <div class="task-prompt">d) $\sqrt{0{,}0081} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$0{,}09$</strong><br>
-              <small>4 Nachkommastellen $\implies$ halbiert auf 2 Nachkommastellen.</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Station C: Brüche -->
-      <h3 style="font-size: calc(1.15rem * var(--font-scale)); font-weight: 700; margin: 2rem 0 0.75rem 0; color: #7c3aed;">
-        C. Brüche (Zähler &amp; Nenner separat)
-      </h3>
-      <div class="task-row">
-        <div class="task-card">
-          <div class="task-prompt">a) $\sqrt{\frac{9}{16}} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$\frac{3}{4}$</strong><br>
-              <small>Wurzel aus Zähler ($3$) und Wurzel aus Nenner ($4$).</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card">
-          <div class="task-prompt">b) $\sqrt{\frac{1}{100}} = \text{?}$</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$\frac{1}{10} = 0{,}1$</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card">
-          <div class="task-prompt">c) $\sqrt{1 \frac{7}{9}} = \text{?}$ 🔥</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
-            <div class="revealed-content">
-              <strong>$\frac{4}{3} = 1 \frac{1}{3}$</strong><br>
-              <small>⚠️ <strong>Falle vermeiden:</strong> Immer zuerst in einen unechten Bruch umwandeln: $1 \frac{7}{9} = \frac{16}{9} \implies \sqrt{\frac{16}{9}} = \frac{4}{3}$!</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Station D: Eingrenzen ohne Taschenrechner -->
-      <h3 style="font-size: calc(1.15rem * var(--font-scale)); font-weight: 700; margin: 2rem 0 0.75rem 0; color: #059669;">
-        D. Wurzeln näherungsweise eingrenzen (Ohne Taschenrechner)
-      </h3>
-      <div class="task-row">
-        <div class="task-card" style="grid-column: 1 / -1;">
-          <div class="task-prompt">Frage: Zwischen welchen zwei ganzen aufeinanderfolgenden Zahlen liegt $\sqrt{50}$?</div>
-          <div class="reveal-box">
-            <button class="btn-reveal" onclick="toggleSection(this)">Schrittweise Lösung aufdecken</button>
-            <div class="revealed-content">
-              1. Suche Nachbar-Quadratzahlen von $50$: <br>
-              $$49 < 50 < 64$$
-              2. Ziehe auf allen Seiten die Wurzel: <br>
-              $$\sqrt{49} < \sqrt{50} < \sqrt{64}$$
-              $$7 < \sqrt{50} < 8$$
-              👉 <strong>Antwort:</strong> $\sqrt{50}$ liegt zwischen <strong>$7$ und $8$</strong> (und zwar extrem nah an 7, da $7{,}07^2 \approx 50$).
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ========================================================
-         PHASE 5: TAFELBILD / HEFTEINTRAG (ZUM ABSCHREIBEN)
-         ======================================================== -->
-    <section class="hefteintrag-box">
-      <div class="hefteintrag-ribbon">✏️ Tafelbild / Für dein Matheheft</div>
-      <h2 class="hefteintrag-title">1. Quadratwurzeln</h2>
+    <div id="tab-zahlbereiche" class="tab-panel active">
       
-      <p style="margin-bottom: 1rem; font-size: calc(1.05rem * var(--font-scale));">
-        <strong>1. Begriff &amp; Definition:</strong><br>
-        Das Ziehen der Quadratwurzel ist die <strong>Umkehroperation</strong> zum Quadrieren.
-      </p>
+      <!-- INTERAKTIVES SCHACHTELMODELL -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">V</span>
+            <span>Visuelles Schachtelmodell: Wie die Zahlenbereiche ineinanderliegen</span>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 0.75rem;">
+          Klicke auf einen Zahlenbereich, um ihn im Schaubild hervorzuheben:
+        </p>
 
-      <div style="border-left: 4px solid #2563eb; background: #f8fafc; padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <p style="font-weight: 700; margin-bottom: 0.5rem; color: #1e3a8a;">
-          Merksatz:
+        <div class="diagram-controls">
+          <button class="btn-layer active" onclick="highlightSet('all')">Alle anzeigen (Gesamtübersicht)</button>
+          <button class="btn-layer" onclick="highlightSet('n')">1. ℕ (Natürliche Zahlen)</button>
+          <button class="btn-layer" onclick="highlightSet('z')">2. ℤ (Ganze Zahlen)</button>
+          <button class="btn-layer" onclick="highlightSet('q')">3. ℚ (Rationale Zahlen)</button>
+          <button class="btn-layer" onclick="highlightSet('i')">4. 𝕀 (Irrationale Zahlen)</button>
+          <button class="btn-layer" onclick="highlightSet('r')">5. ℝ (Reelle Zahlen)</button>
+        </div>
+
+        <div class="svg-container">
+          <svg class="venn-diagram" viewBox="0 0 760 450" width="100%" height="auto">
+            <!-- HINTERGRUND REELLE ZAHLEN R -->
+            <rect id="zone-r" class="zone-shape zone-r" x="15" y="15" width="730" height="420" rx="20" ry="20" onclick="highlightSet('r')" />
+            <text x="40" y="52" class="zone-text" font-size="20" fill="#6d28d9">Reelle Zahlen ℝ (Der gesamte lückenlose Zahlenstrahl)</text>
+            
+            <!-- LINKE HAUPTHÄLFTE: RATIONALE ZAHLEN Q (MIT N UND Z) -->
+            <ellipse id="zone-q" class="zone-shape zone-q" cx="300" cy="240" rx="265" ry="170" onclick="highlightSet('q')" />
+            <text x="75" y="112" class="zone-text" font-size="19" fill="#b45309">ℚ Rationale Zahlen (Brüche p/q)</text>
+            
+            <!-- Beispiele in Q ohne Z -->
+            <g id="examples-q">
+              <text x="90" y="160" class="zone-text" font-size="15" fill="#78350f">¾</text>
+              <text x="145" y="195" class="zone-text" font-size="15" fill="#78350f">-0,75</text>
+              <text x="85" y="325" class="zone-text" font-size="15" fill="#78350f">0,333... = ⅓</text>
+              <text x="440" y="165" class="zone-text" font-size="15" fill="#78350f">22/7</text>
+              <text x="455" y="320" class="zone-text" font-size="15" fill="#78350f">-1,25</text>
+            </g>
+
+            <!-- MITTLERE ELLIPSE: GANZE ZAHLEN Z -->
+            <ellipse id="zone-z" class="zone-shape zone-z" cx="300" cy="260" rx="180" ry="120" onclick="highlightSet('z')" />
+            <text x="175" y="175" class="zone-text" font-size="18" fill="#047857">ℤ Ganze Zahlen</text>
+
+            <!-- Beispiele in Z -->
+            <g id="examples-z">
+              <text x="180" y="225" class="zone-text" font-size="15" fill="#064e3b">-1</text>
+              <text x="160" y="295" class="zone-text" font-size="15" fill="#064e3b">-7</text>
+              <text x="390" y="235" class="zone-text" font-size="15" fill="#064e3b">-42</text>
+              <text x="380" y="315" class="zone-text" font-size="15" fill="#064e3b">-100</text>
+            </g>
+
+            <!-- INNERER KREIS: NATÜRLICHE ZAHLEN N -->
+            <ellipse id="zone-n" class="zone-shape zone-n" cx="295" cy="275" rx="90" ry="60" onclick="highlightSet('n')" />
+            <text x="280" y="248" class="zone-text" font-size="18" fill="#1d4ed8">ℕ</text>
+
+            <!-- Beispiele in N -->
+            <g id="examples-n">
+              <text x="250" y="280" class="zone-text" font-size="15" fill="#1e3a8a">1</text>
+              <text x="285" y="285" class="zone-text" font-size="15" fill="#1e3a8a">2</text>
+              <text x="325" y="280" class="zone-text" font-size="15" fill="#1e3a8a">7</text>
+              <text x="260" y="310" class="zone-text" font-size="15" fill="#1e3a8a">24</text>
+              <text x="305" y="310" class="zone-text" font-size="15" fill="#1e3a8a">√9 = 3</text>
+            </g>
+
+            <!-- RECHTE SEITE: IRRATIONALE ZAHLEN I -->
+            <rect id="zone-i" class="zone-shape zone-i" x="585" y="80" width="145" height="340" rx="14" ry="14" onclick="highlightSet('i')" />
+            <text x="595" y="115" class="zone-text" font-size="17" fill="#991b1b">𝕀 Irrationale</text>
+            <text x="595" y="137" class="zone-text" font-size="13" fill="#b91c1c">Zahlen (ℝ \ ℚ)</text>
+            <text x="595" y="155" class="zone-text" font-size="11" fill="#7f1d1d">Nicht als Bruch darstellbar</text>
+
+            <g id="examples-i">
+              <text x="615" y="200" class="zone-text" font-size="16" font-weight="bold" fill="#991b1b">√2</text>
+              <text x="660" y="235" class="zone-text" font-size="15" fill="#991b1b">√3</text>
+              <text x="610" y="270" class="zone-text" font-size="16" font-weight="bold" fill="#991b1b">π</text>
+              <text x="665" y="305" class="zone-text" font-size="15" fill="#991b1b">√5</text>
+              <text x="610" y="345" class="zone-text" font-size="15" fill="#991b1b">√7</text>
+            </g>
+          </svg>
+        </div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+          <strong>Hierarchie:</strong> $\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}$ &nbsp;•&nbsp; <strong>Vollständigkeit:</strong> $\mathbb{R} = \mathbb{Q} \cup \mathbb{I}$
+        </div>
+      </section>
+
+      <!-- DIE 4 SCHRITTE -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">1</span>
+            <span>Schrittweise Erweiterung &amp; Kognitive Konflikte</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">1. Natürliche Zahlen: ℕ</span>
+            $$\mathbb{N} = \{1, 2, 3, 4, 5, \dots\}$$
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+              Entstanden aus dem Abzählen. Nimmt man die Null hinzu, schreibt man $\mathbb{N}_0 = \{0, 1, 2, \dots\}$.
+            </p>
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">2. Ganze Zahlen: ℤ</span>
+            $$\mathbb{Z} = \{\dots, -2, -1, 0, 1, 2, \dots\}$$
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+              Erlaubt uneingeschränkte Subtraktion: $3 - 5 = -2 \in \mathbb{Z}$. Es gilt: $\mathbb{N} \subset \mathbb{Z}$.
+            </p>
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">3. Rationale Zahlen: ℚ</span>
+            $$\mathbb{Q} = \left\{ \frac{p}{q} \;\middle|\; p \in \mathbb{Z}, q \in \mathbb{N} \right\}$$
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+              Erlaubt uneingeschränkte Division: $3 : 4 = \frac{3}{4} = 0{,}75$. Brüche liegen unendlich dicht auf dem Zahlenstrahl.
+            </p>
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">4. Reelle Zahlen: ℝ</span>
+            $$\mathbb{R} = \mathbb{Q} \cup \mathbb{I}$$
+            <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+              Schließt die letzten Lücken auf der Zahlengeraden. Erlaubt das uneingeschränkte Wurzelziehen aus positiven Zahlen: $x^2 = 2 \implies x = \sqrt{2}$.
+            </p>
+          </div>
+        </div>
+
+        <div class="conflict-box">
+          <div class="conflict-title">Das Geheimnis von $\sqrt{2}$ (Warum ℚ nicht ausreicht):</div>
+          Ein Quadrat mit dem Flächeninhalt $A = 2\text{ cm}^2$ hat eine real messbare Diagonale mit Seitenlänge $s = \sqrt{2}\text{ cm}$.<br>
+          Durch schrittweises Quadrieren von Zehnteln und Hundertsteln ($1{,}4^2 = 1{,}96$ und $1{,}41^2 = 1{,}9881$) nähert man sich der Zahl zwar an, <strong>aber sie bricht niemals ab und wird niemals periodisch</strong>. Es lässt sich beweisen, dass es keinen Bruch $\frac{p}{q}$ mit $\left(\frac{p}{q}\right)^2 = 2$ gibt. Diese Zahl erzwingt den Schritt zu den Reellen Zahlen $\mathbb{R}$!
+        </div>
+      </section>
+
+      <!-- MERKKASTEN -->
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-title">Hierarchie der Zahlenbereiche &amp; Irrationale Zahlen</div>
+        <div class="merke-content">
+          • Es gilt die exakte Kette der Teilmengen: $$\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}$$
+          • <strong>Rationale Zahlen ($\mathbb{Q}$):</strong> Können stets als Bruch $\frac{p}{q}$ dargestellt werden. Als Dezimalzahl sind sie entweder <em>abbrechend</em> ($0{,}75$) oder <em>periodisch</em> ($0{,}\overline{3}$).<br>
+          • <strong>Irrationale Zahlen ($\mathbb{I}$):</strong> Zahlen mit unendlich vielen Nachkommastellen, die <strong>nicht abbrechen und nicht periodisch</strong> sind (z. B. $\sqrt{2}, \sqrt{3}, \pi$). Sie lassen sich nicht als Bruch darstellen.<br>
+          • <strong>Reelle Zahlen ($\mathbb{R}$):</strong> Bilden zusammen den gesamten, lückenlosen Zahlenstrahl.
+        </div>
+      </div>
+
+      <!-- MATERIAL-BOX AM ENDE VON TAB 1 -->
+      <div class="material-download-box">
+        <div class="mat-dl-info">
+          <span class="mat-badge-ab">AB 1.1</span>
+          <div>
+            <strong style="font-size: 1rem;">Arbeitsblatt zu dieser Einheit:</strong>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">AB 1.1 Zahlbereichserweiterung: Von ℕ bis ℝ (Zuordnungstabelle, Lückenbeweis &amp; Schachtelmodell)</p>
+          </div>
+        </div>
+        <div class="mat-dl-actions">
+          <a href="arbeitsblatt-zahlbereiche.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
+            Arbeitsblatt (Web / Druck)
+          </a>
+          <a href="AB_1.1_Zahlbereiche_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #dc2626; text-decoration: none;">
+            Arbeitsblatt (PDF)
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 2: QUADRATWURZELN & DEFINITION
+         ======================================================== -->
+    <div id="tab-wurzeln" class="tab-panel">
+      
+      <!-- PHASE 1: PROBLEMORIENTIERTER EINSTIEG -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">1</span>
+            <span>Problemstellung: Das Quadrat-Rätsel</span>
+          </div>
+          <span class="text-muted" style="font-size: 0.9rem;">Einstieg (ca. 7 Min.)</span>
+        </div>
+
+        <p style="font-size: calc(1.05rem * var(--font-scale)); margin-bottom: 1rem;">
+          <strong>Ausgangsfrage:</strong> Wir kennen die Berechnung des Flächeninhalts beim Quadrat ($A = a \cdot a = a^2$). Was passiert, wenn wir den Prozess <strong>umkehren</strong>?
+        </p>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <h4 style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Fall 1: $A = 25\text{ cm}^2$</h4>
+            <p class="text-muted">Welche Zahl mit sich selbst multipliziert ergibt 25?</p>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">
+                Antwort aufdecken
+              </button>
+              <div class="revealed-content">
+                <strong>Seitenlänge: $a = 5\text{ cm}$</strong><br>
+                <span style="font-size: 0.9rem;">Begründung: $5 \cdot 5 = 5^2 = 25$.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <h4 style="font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Fall 2: $A = 49\text{ cm}^2$</h4>
+            <p class="text-muted">Welche Zahl mit sich selbst multipliziert ergibt 49?</p>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">
+                Antwort aufdecken
+              </button>
+              <div class="revealed-content">
+                <strong>Seitenlänge: $a = 7\text{ cm}$</strong><br>
+                <span style="font-size: 0.9rem;">Begründung: $7 \cdot 7 = 7^2 = 49$.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conflict-box">
+          <div class="conflict-title">Fall 3: Das unvollständige Quadrat ($A = 50\text{ cm}^2$)</div>
+          Welche Seitenlänge hat ein Quadrat mit dem Flächeninhalt $A = 50\text{ cm}^2$?<br>
+          $7 \cdot 7 = 49$ ist zu klein. $8 \cdot 8 = 64$ ist zu groß. Die Zahl muss irgendwo zwischen $7$ und $8$ liegen: $a \approx 7{,}071\dots\text{ cm}$.<br>
+          <strong>Mathematische Erkenntnis:</strong> Wir brauchen ein neues mathematisches Werkzeug zur Umkehrung des Quadrierens: die <strong>Quadratwurzel</strong>!
+        </div>
+      </section>
+
+      <!-- PHASE 2: DEFINITION -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">2</span>
+            <span>Definition der Quadratwurzel</span>
+          </div>
+        </div>
+
+        <div class="definition-box">
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Die mathematische Definition</h3>
+          <p style="opacity: 0.9;">Für jede Zahl $a \ge 0$ ist die Quadratwurzel $\sqrt{a}$ diejenige <strong>nicht-negative</strong> Zahl $b$, deren Quadrat gleich $a$ ist:</p>
+          <div class="definition-formula">
+            $$\sqrt{a} = b \iff b^2 = a \quad (\text{wobei } a \ge 0 \text{ und } b \ge 0)$$
+          </div>
+          <div style="font-size: 1.05rem; margin-top: 0.75rem;">
+            Sprechweise: <em>„Die Quadratwurzel aus $a$ ist gleich $b$ genau dann, wenn $b$ hoch zwei gleich $a$ ist.“</em>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Begrifflichkeit: Der Radikand</span>
+            Die Zahl unter dem Wurzelzeichen heißt <strong>Radikand</strong> (von lat. <em>radix</em> = Wurzel).<br>
+            $$\sqrt{\underbrace{a}_{\text{Radikand}}}$$
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">Wichtige Festlegung</span>
+            Obwohl auch $(-5)^2 = 25$ ist, gilt per Definition:
+            $$\sqrt{25} = +5 \quad (\text{und niemals } -5)$$
+            Die Quadratwurzel ist als Funktionswert immer <strong>eindeutig und nie negativ</strong>!
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 3: QUADRATZAHLEN MATRIX -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">3</span>
+            <span>Quadratzahlen-Werkzeugkasten (1 bis 20)</span>
+          </div>
+          <span class="text-muted" style="font-size: 0.85rem;">Klicke auf eine Kachel zum Aufdecken</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0.75rem;">
+          Das sichere Beherrschen der Quadratzahlen von $1^2$ bis $20^2$ ist die Grundvoraussetzung für das Rechnen mit Wurzeln:
+        </p>
+
+        <div class="quadrat-matrix">
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{1}$</div><div class="sq-res">1</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{4}$</div><div class="sq-res">2</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{9}$</div><div class="sq-res">3</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{16}$</div><div class="sq-res">4</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{25}$</div><div class="sq-res">5</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{36}$</div><div class="sq-res">6</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{49}$</div><div class="sq-res">7</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{64}$</div><div class="sq-res">8</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{81}$</div><div class="sq-res">9</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{100}$</div><div class="sq-res">10</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{121}$</div><div class="sq-res">11</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{144}$</div><div class="sq-res">12</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{169}$</div><div class="sq-res">13</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{196}$</div><div class="sq-res">14</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{225}$</div><div class="sq-res">15</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{256}$</div><div class="sq-res">16</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{289}$</div><div class="sq-res">17</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{324}$</div><div class="sq-res">18</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{361}$</div><div class="sq-res">19</div></div>
+          <div class="sq-card" onclick="toggleSq(this)"><div class="sq-task">$\sqrt{400}$</div><div class="sq-res">20</div></div>
+        </div>
+      </section>
+
+      <!-- PHASE 4: HEFTEINTRAG -->
+      <div class="hefteintrag-box">
+        <span class="hefteintrag-ribbon">Merkeintrag für das Regelheft</span>
+        <h3 style="font-size: 1.3rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.75rem;">
+          Quadratwurzeln – Das Wichtigste auf einen Blick
+        </h3>
+        <p style="margin-bottom: 0.5rem;">
+          1. <strong>Umkehroperation:</strong> Das Wurzelziehen (Radizieren) ist die Umkehrung des Quadrierens:
+          $$\sqrt{a} = b \iff b^2 = a \quad (a \ge 0, b \ge 0)$$
+        </p>
+        <p style="margin-bottom: 0.5rem;">
+          2. <strong>Wichtige Sonderfälle:</strong>
+          $$\sqrt{0} = 0 \quad \text{und} \quad \sqrt{1} = 1$$
         </p>
         <p>
-          Für eine nicht-negative Zahl $a$ heißt diejenige nicht-negative Zahl $b$, für die $b^2 = a$ gilt, <strong>Quadratwurzel aus $a$</strong>.
-        </p>
-        <div style="font-size: 1.3rem; margin: 0.75rem 0; font-weight: 700; text-align: center; color: #1e3a8a;">
-          $$\sqrt{a} = b \quad \Longleftrightarrow \quad b^2 = a \quad (a \ge 0, b \ge 0)$$
-        </div>
-        <p style="font-size: 0.95rem; color: #475569;">
-          • $\sqrt{\phantom{a}}$ heißt <strong>Wurzelzeichen</strong><br>
-          • Die Zahl $a$ unter dem Wurzelzeichen heißt <strong>Radikand</strong><br>
-          • Das Ergebnis $b$ ist immer <strong>größer oder gleich null</strong> ($b \ge 0$)
+          3. <strong>Definitionsbereich:</strong> Aus negativen Zahlen kann man in $\mathbb{R}$ keine Quadratwurzel ziehen:
+          $$\sqrt{-16} \text{ ist in } \mathbb{R} \text{ nicht definiert!}$$
         </p>
       </div>
 
-      <p style="margin-bottom: 0.75rem; font-size: calc(1.05rem * var(--font-scale));">
-        <strong>2. Wichtige Regeln &amp; Besonderheiten:</strong>
-      </p>
-      <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8;">
-        <li>Aus <strong>negativen Zahlen</strong> kann man keine Wurzel ziehen (z. B. $\sqrt{-9}$ ist <em>nicht definiert</em>).</li>
-        <li>Das Ergebnis einer Wurzel ist <strong>eindeutig</strong> und nie negativ: $\sqrt{25} = 5$ (nicht $-5$).</li>
-        <li>$\sqrt{0} = 0$ und $\sqrt{1} = 1$.</li>
-      </ul>
-
-      <p style="margin-bottom: 0.75rem; font-size: calc(1.05rem * var(--font-scale));">
-        <strong>3. Musterbeispiele:</strong>
-      </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: #f1f5f9; padding: 1.25rem; border-radius: 8px;">
-        <div>
-          <strong>Ganze Zahlen:</strong><br>
-          $\sqrt{64} = 8$<br>
-          $\sqrt{144} = 12$
+      <!-- MATERIAL-BOX AM ENDE VON TAB 2 -->
+      <div class="material-download-box">
+        <div class="mat-dl-info">
+          <span class="mat-badge-ab">AB 1.2</span>
+          <div>
+            <strong style="font-size: 1rem;">Arbeitsblatt zu dieser Einheit:</strong>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">AB 1.2 Quadratwurzeln &amp; Quadratzahlen (Einführung, Kopfrechentraining &amp; Anwendungsaufgaben)</p>
+          </div>
         </div>
-        <div>
-          <strong>Dezimalzahlen:</strong><br>
-          $\sqrt{0{,}36} = 0{,}6$<br>
-          $\sqrt{0{,}01} = 0{,}1$
-        </div>
-        <div>
-          <strong>Brüche:</strong><br>
-          $\sqrt{\frac{4}{25}} = \frac{2}{5}$<br>
-          $\sqrt{1\frac{9}{16}} = \sqrt{\frac{25}{16}} = \frac{5}{4}$
+        <div class="mat-dl-actions">
+          <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
+            Arbeitsblatt (Web / Druck)
+          </a>
+          <a href="Arbeitsblatt_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #dc2626; text-decoration: none;">
+            Arbeitsblatt (PDF)
+          </a>
         </div>
       </div>
-    </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 3: WURZELGESETZE & TERME
+         ======================================================== -->
+    <div id="tab-gesetze" class="tab-panel">
+      
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">1</span>
+            <span>Das Multiplikationsgesetz für Quadratwurzeln</span>
+          </div>
+        </div>
+        <p style="margin-bottom: 0.75rem;">
+          Beim Multiplizieren von Wurzeln darf man die Radikanden unter einer gemeinsamen Wurzel zusammenfassen:
+        </p>
+        <div class="definition-box" style="padding: 1.25rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;">
+            $$\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b} \quad (\text{für } a, b \ge 0)$$
+          </div>
+        </div>
+        
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel 1: Gemeinsam vereinfachen</span>
+            $$\sqrt{2} \cdot \sqrt{8} = \sqrt{2 \cdot 8} = \sqrt{16} = 4$$
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+              Erstaunlich: Zwei irrationale Faktoren ergeben ein ganzzahliges Produkt!
+            </p>
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel 2: Teilweises Wurzelziehen</span>
+            $$\sqrt{50} = \sqrt{25 \cdot 2} = \sqrt{25} \cdot \sqrt{2} = 5\sqrt{2}$$
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+              Zerlege den Radikanden in eine möglichst große Quadratzahl und einen Restfaktor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">2</span>
+            <span>Das Divisionsgesetz für Quadratwurzeln</span>
+          </div>
+        </div>
+        <p style="margin-bottom: 0.75rem;">
+          Beim Dividieren von Wurzeln bzw. bei Brüchen gilt dieselbe Regel:
+        </p>
+        <div class="definition-box" style="padding: 1.25rem;">
+          <div style="font-size: 1.5rem; font-weight: 800;">
+            $$\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}} \quad (\text{für } a \ge 0, b > 0)$$
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel: Bruch radizieren</span>
+            $$\sqrt{\frac{25}{49}} = \frac{\sqrt{25}}{\sqrt{49}} = \frac{5}{7}$$
+          </div>
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel: Unter eine Wurzel ziehen</span>
+            $$\frac{\sqrt{72}}{\sqrt{2}} = \sqrt{\frac{72}{2}} = \sqrt{36} = 6$$
+          </div>
+        </div>
+      </section>
+
+      <!-- VORSICHT FALLE -->
+      <div class="conflict-box">
+        <div class="conflict-title">Die häufigste mathematische Falle (Vorsicht bei Summen!):</div>
+        Für Summen und Differenzen gilt das Wurzelgesetz <strong>niemals</strong>:<br>
+        $$\sqrt{a + b} \neq \sqrt{a} + \sqrt{b} \quad \text{und} \quad \sqrt{a - b} \neq \sqrt{a} - \sqrt{b}$$
+        <strong>Gegenbeispiel:</strong> $\sqrt{9 + 16} = \sqrt{25} = 5$. Aber $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$. Da $5 \neq 7$, darf man bei Plus/Minus die Wurzel niemals trennen!
+      </div>
+
+      <!-- MATERIAL-BOX AM ENDE VON TAB 3 -->
+      <div class="material-download-box">
+        <div class="mat-dl-info">
+          <span class="mat-badge-ab" style="background: #f1f5f9; color: #64748b;">AB 1.3</span>
+          <div>
+            <strong style="font-size: 1rem;">Arbeitsblatt zu dieser Einheit:</strong>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">AB 1.3 Wurzelgesetze, teilweises Wurzelziehen &amp; Termumformungen</p>
+          </div>
+        </div>
+        <div class="mat-dl-actions">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #b45309; background: #fef3c7; border: 1px solid #fde68a; padding: 6px 14px; border-radius: 6px;">
+            Folgt in der nächsten Stunde
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 4: SELBST-CHECK (QUIZ)
+         ======================================================== -->
+    <div id="tab-quiz" class="tab-panel">
+      
+      <div class="quiz-card">
+        <!-- Spielfeld-Ansicht -->
+        <div id="quiz-play-view">
+          <div class="quiz-progress-wrap">
+            <span id="quiz-progress-text">Frage 1 von 10</span>
+            <span id="quiz-score-live">Punkte: 0</span>
+          </div>
+          <div class="quiz-bar-bg">
+            <div id="quiz-bar-fill" class="quiz-bar-fill"></div>
+          </div>
+
+          <span id="quiz-cat-badge" class="quiz-category-tag">Kategorie</span>
+          <div id="quiz-question-text" class="quiz-question-title">Frage...</div>
+
+          <div id="quiz-options-box" class="quiz-options">
+            <!-- 4 Optionen per JS -->
+          </div>
+
+          <div id="quiz-feedback-box" class="quiz-feedback">
+            <div id="quiz-feedback-title" style="font-weight: 800; margin-bottom: 0.35rem;"></div>
+            <div id="quiz-feedback-desc"></div>
+          </div>
+
+          <button id="quiz-btn-next" class="btn-next-q" style="display: none;" onclick="nextQuestion()">
+            Nächste Frage →
+          </button>
+        </div>
+
+        <!-- Auswertungs-Ansicht -->
+        <div id="quiz-result-view" style="display: none;">
+          <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem;">Deine Eigendiagnose zu Kapitel I</h2>
+          
+          <div style="text-align: center; padding: 1.5rem 0;">
+            <div id="quiz-final-score" style="font-size: 3rem; font-weight: 800; color: var(--primary);">8 / 10</div>
+            <div id="quiz-final-badge" style="font-size: 1.1rem; font-weight: 700; color: var(--text); margin-top: 0.25rem;">Sehr gute Leistung!</div>
+          </div>
+
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-top: 1rem;">Ergebnis nach Themengebieten:</h3>
+          <div class="diag-grid" id="quiz-cat-breakdown">
+            <!-- Kategorien per JS -->
+          </div>
+
+          <div class="merke-box" style="margin-top: 1.5rem;">
+            <span class="merke-tag">EMPFEHLUNG</span>
+            <div class="merke-title">Lernhinweis für deine Vorbereitung:</div>
+            <div class="merke-content" id="quiz-advice-text">
+              ...
+            </div>
+          </div>
+
+          <button class="btn-next-q" onclick="startQuiz()" style="margin-top: 1.5rem;">
+            Test mit neuen Fragen wiederholen
+          </button>
+        </div>
+      </div>
+
+      <!-- MATERIAL-BOX AM ENDE VON TAB 4 -->
+      <div class="material-download-box">
+        <div class="mat-dl-info">
+          <span class="mat-badge-mb">Merkblatt</span>
+          <div>
+            <strong style="font-size: 1rem;">Kapitel-Zusammenfassung (2-seitig):</strong>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Kompaktes Merkblatt mit allen Definitionen, Sätzen und Quadratzahlen für dein Notizbuch</p>
+          </div>
+        </div>
+        <div class="mat-dl-actions">
+          <a href="zusammenfassung-wurzeln.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
+            Web-Ansicht
+          </a>
+          <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #059669; text-decoration: none;">
+            PDF Herunterladen
+          </a>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 
-  <!-- SCRIPT FÜR INTERAKTIVITÄT & BEAMER-STEUERUNG -->
+  <!-- SCRIPT FÜR TABS, VENN-DIAGRAMM, AUFDECKEN & QUIZ -->
   <script>
-    // Einzelne Sektion ein- / ausblenden
-    function toggleSection(btn) {
-      const content = btn.nextElementSibling;
-      if (content.classList.contains('show')) {
-        content.classList.remove('show');
-        btn.innerHTML = '<span>👉</span> Lösung einblenden';
-      } else {
-        content.classList.add('show');
-        btn.innerHTML = '<span>🙈</span> Lösung verbergen';
+    /* ===================================================
+       TAB-NAVIGATION MIT HASH-UNTERSTÜTZUNG
+       =================================================== */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+
+      window.location.hash = tabId;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(targetPanel, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
       }
     }
 
-    // Alle Lösungen aufdecken
-    function revealAll() {
-      document.querySelectorAll('.revealed-content').forEach(box => {
-        box.classList.add('show');
-      });
-      document.querySelectorAll('.btn-reveal').forEach(btn => {
-        btn.innerHTML = '<span>🙈</span> Lösung verbergen';
-      });
-      revealAllSquares();
-    }
+    // Beim Laden prüfen, ob Hash existiert
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById(hash)) {
+        switchTab(hash);
+      }
+      startQuiz();
+    });
 
-    // Alle Lösungen verbergen
-    function hideAll() {
-      document.querySelectorAll('.revealed-content').forEach(box => {
-        box.classList.remove('show');
-      });
-      document.querySelectorAll('.btn-reveal').forEach(btn => {
-        btn.innerHTML = '<span>👉</span> Lösung einblenden';
-      });
-      document.querySelectorAll('.sq-card').forEach(card => {
-        card.classList.remove('revealed');
-      });
-    }
-
-    // Quadratzahlen Spickzettel aufdecken
-    function revealAllSquares() {
-      document.querySelectorAll('.sq-card').forEach(card => {
-        card.classList.add('revealed');
-      });
-    }
-
-    // Beamer-Modus Toggle (vergrößert Schrift & Schärfe)
+    /* ===================================================
+       BEAMER-MODUS & AUFDECK-FUNKTIONEN
+       =================================================== */
     function toggleBeamerMode() {
-      const body = document.body;
-      const btnText = document.getElementById('beamerBtnText');
-      const btn = document.getElementById('btnBeamerToggle');
+      document.body.classList.toggle('beamer-mode');
+      const isBeamer = document.body.classList.contains('beamer-mode');
+      document.getElementById('btnBeamerToggle').classList.toggle('active', isBeamer);
+      document.getElementById('beamerBtnText').innerText = isBeamer ? "Beamer AN" : "Beamer-Modus";
+    }
 
-      if (body.classList.contains('beamer-mode')) {
-        body.classList.remove('beamer-mode');
-        btnText.innerText = 'Beamer-Modus (Groß)';
-        btn.classList.remove('active');
+    function toggleSection(button) {
+      const parent = button.closest('.reveal-box');
+      const content = parent.querySelector('.revealed-content');
+      content.classList.toggle('show');
+      button.innerText = content.classList.contains('show') ? "Antwort verbergen" : "Antwort aufdecken";
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.revealed-content').forEach(c => c.classList.add('show'));
+      document.querySelectorAll('.btn-reveal').forEach(b => b.innerText = "Antwort verbergen");
+      document.querySelectorAll('.sq-card').forEach(s => s.classList.add('revealed'));
+    }
+
+    function hideAll() {
+      document.querySelectorAll('.revealed-content').forEach(c => c.classList.remove('show'));
+      document.querySelectorAll('.btn-reveal').forEach(b => b.innerText = "Antwort aufdecken");
+      document.querySelectorAll('.sq-card').forEach(s => s.classList.remove('revealed'));
+    }
+
+    function toggleSq(card) {
+      card.classList.toggle('revealed');
+    }
+
+    /* ===================================================
+       VENN-DIAGRAMM INTERAKTIV
+       =================================================== */
+    function highlightSet(setId) {
+      document.querySelectorAll('.diagram-controls .btn-layer').forEach(b => b.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.diagram-controls .btn-layer')).find(b => b.getAttribute('onclick')?.includes(setId));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const zones = {
+        'n': document.getElementById('zone-n'),
+        'z': document.getElementById('zone-z'),
+        'q': document.getElementById('zone-q'),
+        'i': document.getElementById('zone-i'),
+        'r': document.getElementById('zone-r')
+      };
+
+      if (setId === 'all') {
+        Object.values(zones).forEach(z => { if(z) z.style.opacity = '1'; });
       } else {
-        body.classList.add('beamer-mode');
-        btnText.innerText = 'Standard-Modus';
-        btn.classList.add('active');
+        Object.keys(zones).forEach(key => {
+          if (zones[key]) {
+            zones[key].style.opacity = (key === setId) ? '1' : '0.22';
+          }
+        });
+      }
+    }
+
+    /* ===================================================
+       DIAGNOSE-QUIZ (10 DYNAMISCHE FRAGEN)
+       =================================================== */
+    const QUIZ_POOL = [
+      {
+        cat: "Zahlbereiche",
+        q: "Zu welchem kleinstmöglichen Zahlenbereich gehört die Zahl 0?",
+        opts: ["ℕ (Natürliche Zahlen)", "ℤ (Ganze Zahlen)", "ℚ (Nur rational)", "𝕀 (Irrational)"],
+        correct: 1,
+        desc: "0 ist keine natürliche Zählzahl (in ℕ = {1, 2, ...}), sondern die neutrale Mitte der ganzen Zahlen ℤ."
+      },
+      {
+        cat: "Zahlbereiche",
+        q: "Was ist das entscheidende Merkmal einer irrationalen Zahl?",
+        opts: ["Sie ist negativ", "Sie lässt sich als Bruch p/q schreiben", "Sie bricht nie ab und ist nicht-periodisch", "Sie hat keine Nachkommastellen"],
+        correct: 2,
+        desc: "Irrationale Zahlen (wie √2 oder π) haben unendlich viele Nachkommastellen ohne periodisches Muster."
+      },
+      {
+        cat: "Definition & Radikand",
+        q: "Welchen Wert hat die Quadratwurzel $\\sqrt{49}$?",
+        opts: ["+7 und -7", "+7", "-7", "49"],
+        correct: 1,
+        desc: "Per Definition ist die Quadratwurzel immer die nicht-negative Zahl: √49 = +7."
+      },
+      {
+        cat: "Definition & Radikand",
+        q: "Welche Aussage über $\\sqrt{-25}$ in den reellen Zahlen ℝ ist korrekt?",
+        opts: ["Ergibt -5", "Ergibt +5", "Ist in ℝ nicht definiert", "Ergibt 0"],
+        correct: 2,
+        desc: "Ein Quadrat reeller Zahlen ist nie negativ ($b^2 \\ge 0$). Daher kann man in ℝ keine Wurzel aus Minuswerten ziehen."
+      },
+      {
+        cat: "Quadratzahlen",
+        q: "Welchen Wert hat $14^2$?",
+        opts: ["169", "184", "196", "225"],
+        correct: 2,
+        desc: "14 · 14 = 196. (13² = 169, 15² = 225)."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Welcher Term ist das Ergebnis von $\\sqrt{2} \\cdot \\sqrt{18}$?",
+        opts: ["√20", "6", "√36 = 18", "9"],
+        correct: 1,
+        desc: "√2 · √18 = √(2 · 18) = √36 = 6."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Was ergibt das teilweise Wurzelziehen von $\\sqrt{75}$?",
+        opts: ["3√5", "5√3", "25√3", "15√5"],
+        correct: 1,
+        desc: "√75 = √(25 · 3) = √25 · √3 = 5√3."
+      },
+      {
+        cat: "Wahr oder Falsch",
+        q: "Stimmt die Gleichung: $\\sqrt{9 + 16} = \\sqrt{9} + \\sqrt{16}$?",
+        opts: ["Ja, das ist das Additionsgesetz", "Nein, links steht 5 und rechts 7", "Ja, beide Seiten ergeben 25", "Nur bei geraden Zahlen"],
+        correct: 1,
+        desc: "√(9+16) = √25 = 5. Rechts: 3 + 4 = 7. Das Wurzelziehen darf niemals über Summen aufgeteilt werden!"
+      },
+      {
+        cat: "Zahlbereiche",
+        q: "Gehört die Zahl $\\sqrt{9}$ zu den rationalen Zahlen ℚ?",
+        opts: ["Nein, jede Wurzel ist irrational", "Ja, denn √9 = 3 = 3/1", "Nur gerundet", "Nein, sie ist rein natürlich"],
+        correct: 1,
+        desc: "Da √9 exakt 3 ist und jede ganze Zahl ein Bruch (3/1) ist, gehört sie zu ℕ, ℤ, ℚ und ℝ."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Vereinfache den Bruch $\\frac{\\sqrt{50}}{\\sqrt{2}}$:",
+        opts: ["√48", "25", "5", "√25 = 25"],
+        correct: 2,
+        desc: "√(50 / 2) = √25 = 5."
+      }
+    ];
+
+    let currentQuestions = [];
+    let currentQIdx = 0;
+    let quizScore = 0;
+    let catStats = {};
+
+    function startQuiz() {
+      currentQuestions = [...QUIZ_POOL].sort(() => 0.5 - Math.random()).slice(0, 10);
+      currentQIdx = 0;
+      quizScore = 0;
+      catStats = {};
+
+      document.getElementById('quiz-play-view').style.display = 'block';
+      document.getElementById('quiz-result-view').style.display = 'none';
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = currentQuestions[currentQIdx];
+      document.getElementById('quiz-progress-text').innerText = `Frage ${currentQIdx + 1} von ${currentQuestions.length}`;
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+      document.getElementById('quiz-bar-fill').style.width = `${((currentQIdx + 1) / currentQuestions.length) * 100}%`;
+
+      document.getElementById('quiz-cat-badge').innerText = q.cat;
+      document.getElementById('quiz-question-text').innerHTML = q.q;
+
+      const optsBox = document.getElementById('quiz-options-box');
+      optsBox.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt-btn';
+        btn.innerHTML = `<span class="opt-badge">${letters[idx]}</span> <span>${optText}</span>`;
+        btn.onclick = () => chooseAnswer(idx);
+        optsBox.appendChild(btn);
+      });
+
+      document.getElementById('quiz-feedback-box').className = 'quiz-feedback';
+      document.getElementById('quiz-btn-next').style.display = 'none';
+
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById('quiz-question-text'), {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+        renderMathInElement(optsBox, {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+      }
+    }
+
+    function chooseAnswer(selectedIdx) {
+      const q = currentQuestions[currentQIdx];
+      const optButtons = document.querySelectorAll('.quiz-opt-btn');
+      optButtons.forEach(btn => btn.disabled = true);
+
+      if (!catStats[q.cat]) catStats[q.cat] = { correct: 0, total: 0 };
+      catStats[q.cat].total++;
+
+      const isCorrect = (selectedIdx === q.correct);
+      if (isCorrect) {
+        quizScore++;
+        catStats[q.cat].correct++;
+        optButtons[selectedIdx].classList.add('correct');
+      } else {
+        optButtons[selectedIdx].classList.add('wrong');
+        optButtons[q.correct].classList.add('correct');
+      }
+
+      document.getElementById('quiz-score-live').innerText = `Punkte: ${quizScore}`;
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      feedbackBox.className = `quiz-feedback show ${isCorrect ? 'is-correct' : 'is-wrong'}`;
+      document.getElementById('quiz-feedback-title').innerText = isCorrect ? "Richtig gelöst!" : "Leider nicht ganz richtig.";
+      document.getElementById('quiz-feedback-desc').innerHTML = q.desc;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(feedbackBox, {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+      }
+
+      document.getElementById('quiz-btn-next').style.display = 'inline-flex';
+    }
+
+    function nextQuestion() {
+      currentQIdx++;
+      if (currentQIdx < currentQuestions.length) {
+        renderCurrentQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-play-view').style.display = 'none';
+      document.getElementById('quiz-result-view').style.display = 'block';
+
+      document.getElementById('quiz-final-score').innerText = `${quizScore} / ${currentQuestions.length}`;
+
+      let badgeText = "Solide Leistung!";
+      let badgeColor = "#2563eb";
+      if (quizScore >= 9) {
+        badgeText = "Hervorragend! Du bist exzellent vorbereitet!";
+        badgeColor = "#059669";
+      } else if (quizScore >= 7) {
+        badgeText = "Gute Leistung! Die Grundlagen sitzen sicher.";
+        badgeColor = "#2563eb";
+      } else if (quizScore >= 5) {
+        badgeText = "Auf gutem Weg! Wiederhole noch gezielt deine Schwachstellen.";
+        badgeColor = "#d97706";
+      } else {
+        badgeText = "Hier solltest du noch etwas üben. Schau dir die Tabs 1 bis 3 nochmals an.";
+        badgeColor = "#dc2626";
+      }
+
+      const badgeEl = document.getElementById('quiz-final-badge');
+      badgeEl.innerText = badgeText;
+      badgeEl.style.color = badgeColor;
+
+      const breakdownBox = document.getElementById('quiz-cat-breakdown');
+      breakdownBox.innerHTML = '';
+
+      for (const [cat, data] of Object.entries(catStats)) {
+        const card = document.createElement('div');
+        card.className = 'diag-card';
+        card.innerHTML = `
+          <h4>${cat}</h4>
+          <div class="score-stat">${data.correct} / ${data.total} richtig</div>
+        `;
+        breakdownBox.appendChild(card);
+      }
+
+      const adviceEl = document.getElementById('quiz-advice-text');
+      if (quizScore >= 9) {
+        adviceEl.innerHTML = "Du beherrschst sowohl die Einordnung in die Zahlenbereiche als auch die Rechengesetze und Definitionen souverän. Mit diesem Kenntnisstand bist du optimal für die nächste Klassenarbeit aufgestellt!";
+      } else {
+        adviceEl.innerHTML = "Nutze die Tabs 1 bis 3 oben, um dir die Schachteldiagramme und die Rechenregeln noch einmal in Ruhe anzuschauen. Bearbeite danach die Arbeitsblätter <strong>AB 1.1</strong> und <strong>AB 1.2</strong> zur Vertiefung.";
       }
     }
   </script>

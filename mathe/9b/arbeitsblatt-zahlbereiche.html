@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AB 1.1: Zahlbereichserweiterung – Von ℕ bis ℝ | Mathe 9b</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.38;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-teacher-active {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    body.teacher-mode .badge-teacher-active {
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       PAGE WRAPPER & SEITENAUFBAU (2 DIN-A4-SEITEN)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm 9mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* ========================================================
+       HEADER
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 5px;
+      margin-bottom: 8px;
+    }
+
+    .doc-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-course {
+      font-size: 8pt;
+      color: #1e3a8a;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .badge-sheet {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+    }
+
+    .doc-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e3a8a; /* Königsblau */
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #334155;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .meta-bar {
+      display: flex;
+      gap: 16px;
+      font-size: 8.5pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 3px 10px;
+      margin-top: 5px;
+      align-items: center;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .meta-label {
+      font-weight: 700;
+      color: #475569;
+    }
+
+    /* ========================================================
+       AUFGABEN-KÄSTEN & TYPOGRAFIE
+       ======================================================== */
+    .task-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 7px 11px;
+      margin-bottom: 8px;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 3px;
+      margin-bottom: 5px;
+    }
+
+    .task-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e3a8a; /* Füller-Königsblau */
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .task-num {
+      background: #1e3a8a;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 800;
+    }
+
+    .task-points {
+      font-size: 8pt;
+      color: #475569;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .task-desc {
+      font-size: 11pt;
+      color: #111827;
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+
+    /* ========================================================
+       DER ROTE MERKSATZ-KASTEN (GEMINI.md Standard)
+       ======================================================== */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 7px 12px;
+      margin-bottom: 9px;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -9px;
+      left: 12px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+    }
+
+    .merke-title {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-top: 1px;
+      margin-bottom: 3px;
+    }
+
+    .merke-content {
+      font-size: 10pt;
+      color: #111827 !important; /* Zwingend füllertiefes Schwarz! */
+      line-height: 1.35;
+    }
+
+    /* ========================================================
+       TABELLEN & LÜCKEN
+       ======================================================== */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin: 4px 0 6px 0;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1px solid #93c5fd;
+      padding: 4px 6px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 4px 6px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .blank-line {
+      display: inline-block;
+      border-bottom: 1.5px solid #64748b;
+      min-width: 65px;
+      height: 14px;
+      margin: 0 3px;
+      vertical-align: baseline;
+    }
+
+    .dotted-lines {
+      background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+      background-size: 5mm 5mm;
+      border: 1px dashed #cbd5e1;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    /* ========================================================
+       MUSTERLÖSUNG (LEHRER-ROT)
+       ======================================================== */
+    .sol-text {
+      display: none;
+      color: #dc2626; /* Lehrer-Rot */
+      font-weight: 700;
+    }
+
+    body.teacher-mode .sol-text {
+      display: inline;
+    }
+
+    body.teacher-mode .blank-line {
+      border-bottom-color: #dc2626;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      .screen-toolbar {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .sheet-wrapper {
+        margin: 0 !important;
+        gap: 0 !important;
+      }
+      .page {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        padding: 0mm 0mm 0mm 0mm !important;
+        width: 100% !important;
+        min-height: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       SCREEN TOOLBAR (OBEN AM BILDSCHIRM)
+       ======================================================== -->
+  <div class="screen-toolbar">
+    <div class="toolbar-left">
+      <a href="wurzeln.html" class="toolbar-btn-nav">← Zum Kapitel I</a>
+      <div class="toolbar-title">
+        <span>Klasse 9b • AB 1.1 Zahlbereiche</span>
+        <span class="badge-teacher-active">MUSTERLÖSUNG AKTIV</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" onclick="toggleTeacherMode()">
+        <span id="teacherBtnLabel">Musterlösung einblenden</span>
+      </button>
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken
+      </button>
+      <a href="AB_1.1_Zahlbereiche_Mathe_9b.pdf" target="_blank" class="btn-action btn-download-pdf">
+        PDF Download
+      </a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ========================================================
+         SEITE 1 VON 2
+         ======================================================== -->
+    <div class="page">
+      
+      <!-- HEADER -->
+      <div class="doc-header">
+        <div class="doc-header-top">
+          <span class="doc-course">Mathematik Klasse 9b • Kapitel I: Reelle Zahlen</span>
+          <span class="badge-sheet">AB 1.1 • Schulblatt</span>
+        </div>
+        <h1 class="doc-title">Zahlbereichserweiterung: Von ℕ bis ℝ</h1>
+        <p class="doc-subtitle">Die Zahlenbereiche ℕ, ℤ, ℚ und ℝ – Mengenhierarchie und die Schließung der Lücken auf dem Zahlenstrahl</p>
+        
+        <div class="meta-bar">
+          <div class="meta-item">
+            <span class="meta-label">Name:</span>
+            <span class="blank-line" style="min-width: 160px;"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Datum:</span>
+            <span class="blank-line" style="min-width: 85px;"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Klasse:</span>
+            <strong>9b</strong>
+          </div>
+          <div class="meta-item" style="margin-left: auto;">
+            <span class="meta-label">Punkte:</span>
+            <span class="blank-line" style="min-width: 35px;"></span> / 22 P.
+          </div>
+        </div>
+      </div>
+
+      <!-- MERKE-BOX (STANDARD) -->
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-title">Hierarchie der Zahlenbereiche &amp; Das Schachtelmodell</div>
+        <div class="merke-content">
+          • <strong>Natürliche Zahlen:</strong> $\mathbb{N} = \{1, 2, 3, \dots\}$ &nbsp;(mit Null: $\mathbb{N}_0 = \{0, 1, 2, \dots\}$)<br>
+          • <strong>Ganze Zahlen:</strong> $\mathbb{Z} = \{\dots, -2, -1, 0, 1, 2, \dots\}$ &nbsp;$\implies \mathbb{N} \subset \mathbb{Z}$<br>
+          • <strong>Rationale Zahlen:</strong> $\mathbb{Q} = \left\{\frac{p}{q} \;\middle|\; p \in \mathbb{Z}, q \in \mathbb{N}\right\}$ (Abbrechende und periodische Dezimalzahlen) &nbsp;$\implies \mathbb{Z} \subset \mathbb{Q}$<br>
+          • <strong>Reelle Zahlen:</strong> $\mathbb{R} = \mathbb{Q} \cup \mathbb{I}$. Vereinigung aus rationalen und <strong>irrationalen Zahlen $\mathbb{I}$</strong> (nicht abbrechende, nicht-periodische Dezimalzahlen wie $\sqrt{2}, \sqrt{3}, \pi$). Es gilt: $\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}$.
+        </div>
+      </div>
+
+      <!-- AUFGABE 1: ZUORDNUNG -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">1</span>
+            <span>Zahlenbereiche exakt zuordnen</span>
+          </div>
+          <span class="task-points">8 Punkte</span>
+        </div>
+        <div class="task-desc">
+          Kreuze in jeder Zeile <strong>alle</strong> Zahlenbereiche an, zu denen die Zahl gehört:
+        </div>
+
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">Zahl</th>
+              <th style="width: 16%;">$\mathbb{N}$ (Natürlich)</th>
+              <th style="width: 16%;">$\mathbb{Z}$ (Ganz)</th>
+              <th style="width: 16%;">$\mathbb{Q}$ (Rational)</th>
+              <th style="width: 16%;">$\mathbb{I}$ (Irrational)</th>
+              <th style="width: 18%;">$\mathbb{R}$ (Reell)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>$-7$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$\frac{3}{4}$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$\sqrt{9} = 3$</strong></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$0$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$\sqrt{2}$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$-1{,}75$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$0{,}\overline{3} = \frac{1}{3}$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+            <tr>
+              <td><strong>$\pi$</strong></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AUFGABE 2: KOGNITIVE GRENZEN -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">2</span>
+            <span>Rechenoperationen und Zahlbereichsgrenzen</span>
+          </div>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <div class="task-desc">
+          Warum waren Erweiterungen der Zahlenbereiche in der Geschichte zwingend notwendig?
+        </div>
+
+        <p style="font-size: 10pt; margin-bottom: 2px;">
+          <strong>a)</strong> Gib eine Rechenaufgabe an, die in $\mathbb{N}$ unlösbar ist, aber in $\mathbb{Z}$ lösbar wird:
+        </p>
+        <div style="font-size: 10pt; margin-bottom: 4px; padding-left: 8px;">
+          Beispiel: <span class="blank-line" style="min-width: 110px;"></span> 
+          <span class="sol-text">$3 - 7 = -4 \notin \mathbb{N}$, aber $-4 \in \mathbb{Z}$</span>
+        </div>
+
+        <p style="font-size: 10pt; margin-bottom: 2px;">
+          <strong>b)</strong> Gib eine Rechenaufgabe an, die in $\mathbb{Z}$ unlösbar ist, aber in $\mathbb{Q}$ lösbar wird:
+        </p>
+        <div style="font-size: 10pt; margin-bottom: 4px; padding-left: 8px;">
+          Beispiel: <span class="blank-line" style="min-width: 110px;"></span> 
+          <span class="sol-text">$5 : 2 = 2{,}5 = \frac{5}{2} \notin \mathbb{Z}$, aber $\frac{5}{2} \in \mathbb{Q}$</span>
+        </div>
+
+        <p style="font-size: 10pt; margin-bottom: 2px;">
+          <strong>c)</strong> Welche Rechenoperation erzwingt schließlich den Schritt von $\mathbb{Q}$ zu den Reellen Zahlen $\mathbb{R}$?
+        </p>
+        <div style="font-size: 10pt; padding-left: 8px;">
+          Antwort: <span class="blank-line" style="min-width: 280px;"></span>
+          <span class="sol-text">Das Radizieren (Wurzelziehen), z. B. $x^2 = 2 \implies x = \sqrt{2} \notin \mathbb{Q}$.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         SEITE 2 VON 2
+         ======================================================== -->
+    <div class="page">
+      
+      <!-- HEADER SEITE 2 (KOMPAKT) -->
+      <div class="doc-header" style="margin-bottom: 6px;">
+        <div class="doc-header-top">
+          <span class="doc-course">Mathematik 9b • Kapitel I: Reelle Zahlen</span>
+          <span class="badge-sheet">AB 1.1 • Seite 2</span>
+        </div>
+        <div style="font-size: 11pt; font-weight: 700; color: #1e3a8a;">
+          Aufgaben zu irrationalen Zahlen &amp; Mengenhierarchie
+        </div>
+      </div>
+
+      <!-- AUFGABE 3: DAS GEHEIMNIS VON WURZEL 2 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">3</span>
+            <span>Geometrische Existenz und Annäherung an $\sqrt{2}$</span>
+          </div>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <div class="task-desc">
+          Ein Quadrat mit dem Flächeninhalt $A = 2\text{ cm}^2$ besitzt die exakte Seitenlänge $s = \sqrt{2}\text{ cm}$.
+        </div>
+
+        <p style="font-size: 10pt; margin-bottom: 3px;">
+          <strong>a)</strong> Bestimme durch Quadrieren, zwischen welchen beiden Zehnteln und Hundertsteln $\sqrt{2}$ liegt:
+        </p>
+        <table class="calc-table" style="max-width: 95%; margin: 3px auto 6px auto;">
+          <thead>
+            <tr>
+              <th>Probe 1 ($1{,}4^2$)</th>
+              <th>Probe 2 ($1{,}5^2$)</th>
+              <th>Ergebnis für Zehntel</th>
+              <th>Probe 3 ($1{,}41^2$)</th>
+              <th>Probe 4 ($1{,}42^2$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="sol-text">$1{,}96$</span></td>
+              <td><span class="sol-text">$2{,}25$</span></td>
+              <td>$1{,}4 < \sqrt{2} < 1{,}5$</td>
+              <td><span class="sol-text">$1{,}9881$</span></td>
+              <td><span class="sol-text">$2{,}0164$</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="font-size: 10pt; margin-bottom: 2px;">
+          <strong>b)</strong> Begründe kurz, warum die Zahl $\sqrt{2}$ als Dezimalzahl <em>niemals abbricht</em> und <em>niemals periodisch</em> wird:
+        </p>
+        <div class="dotted-lines" style="height: 18mm; padding: 4px 8px; font-size: 10pt;">
+          <span class="sol-text">
+            Würde die Zahl abbrechen oder periodisch sein, ließe sie sich als Bruch $\frac{p}{q}$ schreiben. Mathematisch lässt sich aber beweisen (Beweis durch Widerspruch), dass es keine zwei ganzen Zahlen $p, q$ gibt mit $\left(\frac{p}{q}\right)^2 = 2$. Daher ist $\sqrt{2}$ irrational.
+          </span>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4: VENN-DIAGRAMM ZUORDNEN -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">4</span>
+            <span>Zahlen im Schachtelmodell eintragen</span>
+          </div>
+          <span class="task-points">3 Punkte</span>
+        </div>
+        <div class="task-desc">
+          Trage die folgenden Zahlen an der <strong>äußerst passenden</strong> Stelle in das Schachtelmodell ein:<br>
+          Zahlen: $19, \quad -5, \quad \frac{2}{5}, \quad \sqrt{16}, \quad \sqrt{5}, \quad -\frac{12}{3}, \quad \pi, \quad 0{,}\overline{7}$
+        </div>
+
+        <div style="display: flex; justify-content: center; margin: 4px 0;">
+          <svg viewBox="0 0 540 220" width="100%" height="auto" style="max-width: 490px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fafafa;">
+            <!-- R -->
+            <rect x="10" y="10" width="520" height="200" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5" />
+            <text x="22" y="32" font-size="13" font-weight="bold" fill="#6d28d9">ℝ (Reelle Zahlen)</text>
+
+            <!-- Q -->
+            <ellipse cx="210" cy="120" rx="190" ry="85" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
+            <text x="35" y="68" font-size="12" font-weight="bold" fill="#b45309">ℚ (Rationale Zahlen)</text>
+            <text x="50" y="125" font-size="11" fill="#dc2626" class="sol-text">2/5, 0,777...</text>
+
+            <!-- Z -->
+            <ellipse cx="220" cy="130" rx="125" ry="60" fill="#ecfdf5" stroke="#059669" stroke-width="1.5" />
+            <text x="110" y="98" font-size="12" font-weight="bold" fill="#047857">ℤ (Ganze Zahlen)</text>
+            <text x="115" y="145" font-size="11" fill="#dc2626" class="sol-text">-5, -12/3 = -4</text>
+
+            <!-- N -->
+            <ellipse cx="230" cy="142" rx="60" ry="36" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" />
+            <text x="218" y="132" font-size="12" font-weight="bold" fill="#1d4ed8">ℕ</text>
+            <text x="200" y="155" font-size="11" fill="#dc2626" class="sol-text">19, √16 = 4</text>
+
+            <!-- I -->
+            <rect x="420" y="45" width="95" height="150" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" />
+            <text x="430" y="68" font-size="12" font-weight="bold" fill="#b91c1c">𝕀 (Irrational)</text>
+            <text x="440" y="115" font-size="11" fill="#dc2626" class="sol-text">√5, π</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- AUFGABE 5: WAHR ODER FALSCH -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">5</span>
+            <span>Aussagen-Check: Wahr oder Falsch?</span>
+          </div>
+          <span class="task-points">3 Punkte</span>
+        </div>
+
+        <table class="calc-table" style="font-size: 9.5pt;">
+          <thead>
+            <tr>
+              <th style="width: 62%; text-align: left; padding-left: 8px;">Aussage</th>
+              <th style="width: 14%;">Wahr</th>
+              <th style="width: 14%;">Falsch</th>
+              <th style="width: 10%;">Begründung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; padding-left: 8px;">1. Jede ganze Zahl ist auch eine rationale Zahl.</td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">$z = \frac{z}{1}$</span></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding-left: 8px;">2. Die Quadratwurzel aus jeder natürlichen Zahl ist irrational.</td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">$\sqrt{4} = 2 \in \mathbb{N}$</span></td>
+            </tr>
+            <tr>
+              <td style="text-align: left; padding-left: 8px;">3. Zwischen zwei rationalen Zahlen gibt es unendlich viele reelle Zahlen.</td>
+              <td><span class="sol-text">✓</span></td>
+              <td><span class="sol-text">–</span></td>
+              <td><span class="sol-text">$\mathbb{R}$ ist lückenlos dicht</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      document.body.classList.toggle('teacher-mode');
+      const isTeacher = document.body.classList.contains('teacher-mode');
+      const label = document.getElementById('teacherBtnLabel');
+      if (label) {
+        label.innerText = isTeacher ? "Musterlösung ausblenden" : "Musterlösung einblenden";
+      }
+    }
+  </script>
+
+</body>
+</html>
