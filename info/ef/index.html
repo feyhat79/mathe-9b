@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -21,51 +21,84 @@
       <h1>Informatik Einführungsphase (EF)</h1>
       <p class="subtitle">Einführung in die Programmierung, algorithmische Grundstrukturen und Objektorientierung.</p>
       <div class="timestamp-pill">
-        <span>🟢</span> Stand: Schuljahr 2026/27
+        Stand: September 2026
       </div>
     </header>
 
     <!-- Alert / Important Info -->
     <div class="alert-card">
-      <div class="alert-icon">🌐</div>
+      <div class="alert-icon" style="font-weight: 800; font-size: 1.1rem; color: #60a5fa;">AKTUELL</div>
       <div class="alert-content">
-        <h3>Aktuelles Thema: Rechnernetze &amp; Simulation mit Filius</h3>
-        <p>Wir starten in der EF mit der Funktionsweise von Netzwerken: Wie finden sich Rechner weltweit? Was ist ein Ping? Für die Stunde steht das interaktive Einführungsmodul mit geführter Kursaufgabe bereit!</p>
+        <h3>Thema 1: Rechnernetze &amp; Simulation mit Filius</h3>
+        <p>Wir erweitern unsere Rechnernetze: Nach dem Binärexkurs zu IP-Adressen und Stellenwerttafeln vernetzen wir mehrere Rechner über einen <strong>Switch</strong> in einer Sterntopologie und analysieren die MAC-Adresstabelle.</p>
       </div>
     </div>
 
     <!-- Modules Grid -->
-    <h2 class="section-heading"><span>📚</span> Unterrichtsmodule & Themen</h2>
+    <h2 class="section-heading"><span style="font-weight: 800;">1</span> Unterrichtsmodule &amp; Themen</h2>
     <div class="dashboard-grid">
-      <!-- Modul 1: Rechnernetze mit Filius (Aktiv) -->
-      <div class="class-card" style="border: 2px solid var(--theme-oberstufe);">
+
+      <!-- Modul 1: Rechnernetze Einstieg (Peer-to-Peer & Ping) -->
+      <div class="class-card">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
-          <span style="font-size:0.75rem; color:#059669; font-weight:700;">🟢 Neu: 09.09.2026</span>
+          <span class="badge-pill" style="background:#f1f5f9; color:#475569; margin-bottom:0;">Stufe 1 • Grundlagen</span>
+          <span style="font-size:0.75rem; color:#64748b; font-weight:700;">Start</span>
         </div>
-        <h3 class="class-card-title">Rechnernetze &amp; Filius</h3>
+        <h3 class="class-card-title">1. Rechnernetze &amp; Filius-Einstieg</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
           Einstiegsfragen aus dem Alltag, 5-Stufen-Fahrplan, Filius-Werkzeuge (Entwurf vs. Aktion) und geführte Kursaufgabe (Peer-to-Peer &amp; Ping).
         </p>
         <a href="rechnernetze-filius.html" class="btn-open" style="background:var(--theme-oberstufe); color:#ffffff; text-align:center; text-decoration:none; font-weight:700;">Modul öffnen →</a>
       </div>
 
-      <!-- Modul 2: Grundlagen der Algorithmen -->
+      <!-- Exkurs: Binärzahlen & Stellenwerttafel -->
+      <div class="class-card" style="border: 2px solid #2563eb;">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#eff6ff; color:#1d4ed8; margin-bottom:0;">Exkurs • Methodenblatt</span>
+          <span style="font-size:0.75rem; color:#2563eb; font-weight:700;">Wichtig</span>
+        </div>
+        <h3 class="class-card-title">Exkurs: Binärzahlen &amp; IPv4</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          8-Bit-Stellenwerttafel, Divisionsalgorithmus mit Rest, Herleitung von 255 und die bitweise Trennung von Netz- und Geräteteil.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="merkblatt-binaersystem.html" class="btn-open" style="background:#2563eb; color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1;">Web-Ansicht →</a>
+          <a href="Merkblatt_Binaersystem_IPv4_Informatik_EF.pdf" target="_blank" class="btn-open" style="background:#f1f5f9; color:#1e3a8a; border: 1px solid #cbd5e1; text-align:center; text-decoration:none; font-weight:700; flex: 1;">PDF-Download</a>
+        </div>
+      </div>
+
+      <!-- Modul 2: Lokale Netze mit Switch (Aktuell) -->
+      <div class="class-card" style="border: 2px solid var(--theme-oberstufe);">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Stufe 2 • Neu</span>
+          <span style="font-size:0.75rem; color:#059669; font-weight:700;">Aktuelle Einheit</span>
+        </div>
+        <h3 class="class-card-title">2. Lokale Netze mit Switch</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Sterntopologie, Flooding, selbstlernende MAC-Adresstabelle (SAT), Filius-Praxisaufgabe mit 3 Rechnern und Detektiv-Check.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="switch-lokale-netze.html" class="btn-open" style="background:var(--theme-oberstufe); color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1;">Modul öffnen →</a>
+          <a href="Unterrichtsmodul_Switch_Lokale_Netze_EF.pdf" target="_blank" class="btn-open" style="background:#f1f5f9; color:#1e3a8a; border: 1px solid #cbd5e1; text-align:center; text-decoration:none; font-weight:700; flex: 1;">PDF-Download</a>
+        </div>
+      </div>
+
+      <!-- Modul 3: Grundlagen der Algorithmen -->
       <div class="class-card">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
         </div>
-        <h3 class="class-card-title">Grundlagen der Algorithmen</h3>
+        <h3 class="class-card-title">3. Grundlagen der Algorithmen</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Sequenz, Verzweigung, Schleifen, Variablen und Datentypen.</p>
         <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
       </div>
 
-      <!-- Modul 3: Einführung in Java -->
+      <!-- Modul 4: Einführung in Java -->
       <div class="class-card">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Im weiteren Verlauf</span>
         </div>
-        <h3 class="class-card-title">Einführung in Java &amp; OOM</h3>
+        <h3 class="class-card-title">4. Einführung in Java &amp; OOM</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Objektorientierte Modellierung, Klassen, Methoden, Syntax und BlueJ.</p>
         <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
       </div>
@@ -74,7 +107,7 @@
     <!-- iPad Quick Guide -->
     <div class="ipad-guide">
       <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-        📲 Tipp für dein iPad: Als App auf den Startbildschirm
+        Tipp für dein iPad: Als Verknüpfung auf den Startbildschirm
       </h3>
       <p style="color: var(--text-muted); font-size: 0.9rem;">Füge diese Seite deinem iPad-Home-Bildschirm hinzu, um jederzeit schnell darauf zuzugreifen:</p>
       <div class="ipad-guide-steps">
