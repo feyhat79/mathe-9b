@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Netzwerke verbinden mit Router & Gateway | Informatik EF</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Füller-Königsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;        /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Füllertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --font-scale: 1;
+    }
+
+    /* BEAMER-MODUS */
+    body.beamer-mode {
+      --font-scale: 1.15;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    body.beamer-mode .card {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body.beamer-mode .sub-card {
+      background-color: #27354a;
+      border-color: #475569;
+      color: #f8fafc;
+    }
+    body.beamer-mode .merke-box {
+      background-color: #1a2234;
+      border-color: #ef4444;
+    }
+    body.beamer-mode .merke-content {
+      color: #f8fafc !important;
+    }
+    body.beamer-mode .code-pill {
+      background: #0f172a;
+      border-color: #475569;
+      color: #93c5fd;
+    }
+    body.beamer-mode .sim-diagram {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: calc(11pt * var(--font-scale));
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* PRESENTER TOOLBAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary-focus);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-action:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .btn-action.active {
+      background: var(--primary-focus);
+      border-color: #60a5fa;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: calc(2rem * var(--font-scale));
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+      line-height: 1.25;
+    }
+    body.beamer-mode h1 {
+      color: #93c5fd;
+    }
+
+    .lead-subtitle {
+      color: var(--text-muted);
+      font-size: calc(1.05rem * var(--font-scale));
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-badge {
+      background: var(--primary);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: calc(1.25rem * var(--font-scale));
+      font-weight: 700;
+      color: var(--text);
+    }
+    body.beamer-mode .step-title {
+      color: #f8fafc;
+    }
+
+    /* SUB-CARDS & GRIDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 760px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+
+    .highlight-label {
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 3px;
+    }
+    body.beamer-mode .highlight-label {
+      color: #60a5fa;
+    }
+
+    /* PROBLEM BOX */
+    .conflict-box {
+      background: #fffbeb;
+      border-left: 4px solid var(--warning);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 0.85rem 1.1rem;
+      margin: 0.9rem 0;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+    body.beamer-mode .conflict-box {
+      background: #292518;
+      border-color: #f59e0b;
+      color: #fef3c7;
+    }
+
+    .conflict-title {
+      font-weight: 700;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    body.beamer-mode .conflict-title {
+      color: #fbbf24;
+    }
+
+    /* CODE PILL */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+
+    /* FILIUS SCHRITTE */
+    .filius-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .filius-step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .step-marker {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-focus);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+    .step-content h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    body.beamer-mode .step-content h4 {
+      color: #93c5fd;
+    }
+
+    /* DIAGRAMM CONTAINER */
+    .sim-diagram {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    /* TABELLE */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(10pt * var(--font-scale));
+      margin-top: 6px;
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .calc-table td {
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      vertical-align: middle;
+    }
+
+    /* DER ROTE MERKSATZ-KASTEN (ORIGINAL GEMINI STANDARD) */
+    .merke-box {
+      border: 2.5px solid var(--danger); /* Roter Rahmen */
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 12px 16px;
+      margin: 1.25rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -11px;
+      left: 14px;
+      background: var(--danger);
+      color: #ffffff;
+      font-size: 8.5pt;
+      font-weight: 800;
+      padding: 1px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-content {
+      color: #111827; /* SCHWARZE/DUNKLE SCHRIFT IM KASTEN */
+      font-size: calc(11pt * var(--font-scale));
+      line-height: 1.5;
+    }
+
+    /* INTERAKTIVES QUIZ / ZUORDNUNG */
+    .quiz-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .quiz-card {
+      background: #1e293b;
+      border-color: #475569;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .btn-reveal {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+
+    .quiz-answer {
+      display: none;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.95rem;
+      color: #166534;
+      font-weight: 600;
+    }
+    .quiz-answer.show {
+      display: block;
+    }
+
+    /* DRUCKFORMAT */
+    @media print {
+      .presenter-bar, .btn-reveal {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+        font-size: 10pt !important;
+        padding: 0 !important;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .quiz-answer {
+        display: block !important;
+        color: #b91c1c !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER TOOLBAR
+       ======================================================== -->
+  <div class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
+      <span style="font-weight: 700; font-size: 0.92rem;">
+        Informatik EF • Stufe 3: Zwei Netze verbinden &amp; Routing
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="toggleAllAnswers()">Alle Lösungen aufdecken</button>
+      <button class="btn-action" id="btnBeamer" onclick="toggleBeamer()">Beamer-Modus</button>
+      <button class="btn-action" onclick="window.print()">Drucken / PDF</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Thema 1: Rechnernetze (Stufe 3)</div>
+      <h1>Zwei Netzwerke verbinden: Der Router &amp; das Gateway</h1>
+      <p class="lead-subtitle">
+        Wenn der Switch an seine Grenze stößt: Wie ein Router (Vermittlungsrechner) Datenpakete über Subnetzgrenzen hinweg transportiert und warum jedes Gerät ein Standard-Gateway braucht.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         TEIL 1: DAS PROBLEM: DIE GRENZE DES SWITCHES
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Das Problem: Wenn ein Switch nicht mehr ausreicht</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        In der letzten Stunde haben wir gelernt, dass ein <strong>Switch</strong> Rechner innerhalb <em>desselben</em> Subnetzes (z. B. <span class="code-pill">192.168.0.0 / 24</span>) zuverlässig miteinander verbindet.
+      </p>
+
+      <div class="conflict-box">
+        <div class="conflict-title">Das Szenario an unserer Schule:</div>
+        Wir haben zwei getrennte Abteilungen mit jeweils eigenem Netzwerk:
+        <br>• <strong>Netz A (Informatikraum):</strong> Netzadresse <span class="code-pill">192.168.0.0 / 24</span> (PCs haben IPs wie <span class="code-pill">192.168.0.10</span>)
+        <br>• <strong>Netz B (Schulverwaltung):</strong> Netzadresse <span class="code-pill">192.168.1.0 / 24</span> (PCs haben IPs wie <span class="code-pill">192.168.1.10</span>)
+        <br><br>
+        <strong>Die intuitive Idee:</strong> <em>„Wir stecken einfach ein langes Netzwerkkabel zwischen Switch A und Switch B!“</em>
+        <br>
+        <strong>Das ernüchternde Ergebnis:</strong> Der Ping schlägt sofort fehl (<em>„Zielhost nicht erreichbar“</em>)!
+        <br>
+        <strong>Warum?</strong> PC A prüft die Subnetzmaske (<span class="code-pill">255.255.255.0</span>) und stellt fest: <em>„192.168.1.10 liegt gar nicht in meinem Straßennetz (192.168.0)!“</em>. Ein Switch arbeitet nur auf Schicht 2 (Hardware/MAC) und versteht keine IP-Netzwerkgrenzen!
+      </div>
+
+      <div class="grid-2">
+        <div class="sub-card" style="border-left: 3px solid var(--danger);">
+          <strong style="color: var(--danger);">Der Switch (Schicht 2 - Data Link):</strong><br>
+          Kennt nur <strong>MAC-Adressen</strong>. Leitet Pakete nur innerhalb <em>eines einzigen</em> lokalen Netzes weiter.
+        </div>
+        <div class="sub-card" style="border-left: 3px solid var(--success);">
+          <strong style="color: var(--success);">Der Router (Schicht 3 - Network / IP):</strong><br>
+          Versteht <strong>IP-Adressen</strong>. Verbindet <em>zwei oder mehr getrennte Netzwerke</em> und vermittelt Pakete zwischen ihnen!
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 2: DIE TOPOLOGIE: WIE DER ROUTER VERBINDET
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Die Topologie: Der Router als Brücke zwischen den Welten</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Ein <strong>Router</strong> (in Filius: <em>Vermittlungsrechner</em>) besitzt <strong>mindestens zwei Netzwerkkarten (Schnittstellen)</strong>. Jede Schnittstelle steckt in einem anderen Subnetz und besitzt dort eine eigene, passende IP-Adresse:
+      </p>
+
+      <!-- SVG TOPOLOGIE 2 NETZE MIT ROUTER -->
+      <div class="sim-diagram">
+        <svg viewBox="0 0 760 280" width="100%" height="auto">
+          <!-- HINTERGRUND NETZ A (BLAU) -->
+          <rect x="15" y="15" width="280" height="250" rx="12" ry="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" stroke-dasharray="6 3" />
+          <text x="35" y="40" font-size="13" font-weight="bold" fill="#1e3a8a">Netz A: Informatikraum</text>
+          <text x="35" y="56" font-size="10" fill="#2563eb">192.168.0.0 / 255.255.255.0</text>
+
+          <!-- PC A1 -->
+          <rect x="30" y="80" width="85" height="55" rx="6" ry="6" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+          <text x="72" y="103" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">PC A1</text>
+          <text x="72" y="117" font-size="8.5" fill="#059669" text-anchor="middle">192.168.0.10</text>
+          <text x="72" y="128" font-size="7.5" fill="#64748b" text-anchor="middle">GW: 192.168.0.1</text>
+
+          <!-- PC A2 -->
+          <rect x="30" y="160" width="85" height="55" rx="6" ry="6" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" />
+          <text x="72" y="183" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">PC A2</text>
+          <text x="72" y="197" font-size="8.5" fill="#059669" text-anchor="middle">192.168.0.20</text>
+          <text x="72" y="208" font-size="7.5" fill="#64748b" text-anchor="middle">GW: 192.168.0.1</text>
+
+          <!-- SWITCH A -->
+          <rect x="175" y="115" width="100" height="65" rx="6" ry="6" fill="#ffffff" stroke="#1e3a8a" stroke-width="2" />
+          <text x="225" y="145" font-size="12" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Switch A</text>
+          <text x="225" y="162" font-size="9" fill="#64748b" text-anchor="middle">Netz 0</text>
+
+          <!-- KABEL IN NETZ A -->
+          <line x1="115" y1="107" x2="175" y2="135" stroke="#475569" stroke-width="2" />
+          <line x1="115" y1="187" x2="175" y2="155" stroke="#475569" stroke-width="2" />
+
+          <!-- DER ZENTRALE ROUTER -->
+          <rect x="330" y="90" width="100" height="115" rx="10" ry="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5" />
+          <text x="380" y="125" font-size="13" font-weight="bold" fill="#7c3aed" text-anchor="middle">ROUTER</text>
+          <text x="380" y="142" font-size="9" fill="#6b21a8" text-anchor="middle">(Vermittler)</text>
+
+          <!-- SCHNITTSTELLE 1 (LINKS) -->
+          <circle cx="330" cy="155" r="5" fill="#dc2626" />
+          <text x="355" y="172" font-size="8" font-weight="bold" fill="#dc2626" text-anchor="middle">IP: 192.168.0.1</text>
+          <text x="355" y="183" font-size="7" fill="#64748b" text-anchor="middle">(Gateway Netz A)</text>
+
+          <!-- SCHNITTSTELLE 2 (RECHTS) -->
+          <circle cx="430" cy="155" r="5" fill="#dc2626" />
+          <text x="405" y="172" font-size="8" font-weight="bold" fill="#dc2626" text-anchor="middle">IP: 192.168.1.1</text>
+          <text x="405" y="183" font-size="7" fill="#64748b" text-anchor="middle">(Gateway Netz B)</text>
+
+          <!-- KABEL ZUM ROUTER -->
+          <line x1="275" y1="150" x2="330" y2="155" stroke="#dc2626" stroke-width="2.5" />
+          <line x1="430" y1="155" x2="485" y2="150" stroke="#dc2626" stroke-width="2.5" />
+
+          <!-- HINTERGRUND NETZ B (GRÜN) -->
+          <rect x="465" y="15" width="280" height="250" rx="12" ry="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5" stroke-dasharray="6 3" />
+          <text x="485" y="40" font-size="13" font-weight="bold" fill="#065f46">Netz B: Verwaltung</text>
+          <text x="485" y="56" font-size="10" fill="#059669">192.168.1.0 / 255.255.255.0</text>
+
+          <!-- SWITCH B -->
+          <rect x="485" y="115" width="100" height="65" rx="6" ry="6" fill="#ffffff" stroke="#065f46" stroke-width="2" />
+          <text x="535" y="145" font-size="12" font-weight="bold" fill="#065f46" text-anchor="middle">Switch B</text>
+          <text x="535" y="162" font-size="9" fill="#64748b" text-anchor="middle">Netz 1</text>
+
+          <!-- PC B1 -->
+          <rect x="645" y="80" width="85" height="55" rx="6" ry="6" fill="#ffffff" stroke="#059669" stroke-width="1.5" />
+          <text x="687" y="103" font-size="11" font-weight="bold" fill="#065f46" text-anchor="middle">PC B1</text>
+          <text x="687" y="117" font-size="8.5" fill="#059669" text-anchor="middle">192.168.1.10</text>
+          <text x="687" y="128" font-size="7.5" fill="#64748b" text-anchor="middle">GW: 192.168.1.1</text>
+
+          <!-- PC B2 -->
+          <rect x="645" y="160" width="85" height="55" rx="6" ry="6" fill="#ffffff" stroke="#059669" stroke-width="1.5" />
+          <text x="687" y="183" font-size="11" font-weight="bold" fill="#065f46" text-anchor="middle">PC B2</text>
+          <text x="687" y="197" font-size="8.5" fill="#059669" text-anchor="middle">192.168.1.20</text>
+          <text x="687" y="208" font-size="7.5" fill="#64748b" text-anchor="middle">GW: 192.168.1.1</text>
+
+          <!-- KABEL IN NETZ B -->
+          <line x1="585" y1="135" x2="645" y2="107" stroke="#475569" stroke-width="2" />
+          <line x1="585" y1="155" x2="645" y2="187" stroke="#475569" stroke-width="2" />
+        </svg>
+      </div>
+
+      <!-- DER SCHLÜSSELBEGRIFF: STANDARD-GATEWAY -->
+      <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin: 10px 0;">
+        <h3 style="color: #1e3a8a; font-size: 1.05rem; margin-bottom: 4px;">
+          Der Schlüsselbegriff: Das Standard-Gateway (Default Gateway)
+        </h3>
+        <p style="font-size: 0.95rem; color: #111827; line-height: 1.5;">
+          Das Gateway ist die <strong>Ausfahrt aus dem eigenen Netzwerk</strong>.
+          <br>Wenn ein Rechner ein Paket verschicken will, prüft er:
+          <br>1. <em>Liegt das Ziel in meinem Netz?</em> $\rightarrow$ Sende direkt über den Switch an die Ziel-MAC.
+          <br>2. <em>Liegt das Ziel in einem fremden Netz?</em> $\rightarrow$ <strong>Sende das Paket an das Standard-Gateway (die Router-IP im eigenen Netz)!</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 3: WIE FUNKTIONIERT DAS ROUTING?
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--accent);">3</span>
+          <h2 class="step-title" style="color: var(--accent);">Wie arbeitet der Router? (Die Routing-Tabelle)</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Genau wie der Switch eine MAC-Tabelle führt, besitzt der Router eine <strong>Routing-Tabelle</strong>. Darin steht, über welche Schnittstelle welches gesamte IP-Netzwerk erreicht werden kann:
+      </p>
+
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th>Ziel-Netzwerk</th>
+            <th>Subnetzmaske</th>
+            <th>Schnittstelle / Next Hop</th>
+            <th>Bedeutung / Weg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="code-pill">192.168.0.0</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td>Schnittstelle 1 (<span class="code-pill">192.168.0.1</span>)</td>
+            <td>Direkt verbunden: Alle Rechner im Informatikraum</td>
+          </tr>
+          <tr>
+            <td><span class="code-pill">192.168.1.0</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td>Schnittstelle 2 (<span class="code-pill">192.168.1.1</span>)</td>
+            <td>Direkt verbunden: Alle Rechner in der Verwaltung</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sub-card" style="margin-top: 10px; line-height: 1.6;">
+        <strong style="color: var(--primary);">Der Weg eines Datenpakets von PC A1 zu PC B1:</strong>
+        <br>1. <strong>PC A1</strong> stellt fest: Ziel <span class="code-pill">192.168.1.10</span> ist fremd $\rightarrow$ schickt Paket an Gateway <span class="code-pill">192.168.0.1</span>.
+        <br>2. <strong>Router</strong> empfängt das Paket an Schnittstelle 1, liest die Ziel-IP <span class="code-pill">192.168.1.10</span> und schlägt in seiner Routing-Tabelle nach.
+        <br>3. <strong>Router</strong> leitet das Paket über Schnittstelle 2 in Netz B weiter.
+        <br>4. <strong>Switch B</strong> leitet das Paket zielgerichtet an <strong>PC B1</strong> weiter.
+        <br>5. <strong>PC B1 antwortet:</strong> Ziel <span class="code-pill">192.168.0.10</span> ist fremd $\rightarrow$ schickt Antwort an sein Gateway <span class="code-pill">192.168.1.1</span> $\rightarrow$ Router leitet zurück an PC A1!
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 4: GEFÜHRTE KURS-MISSION IN FILIUS
+         ====================================================== -->
+    <section class="card" style="border: 2px solid var(--primary-focus);">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--success);">4</span>
+          <h2 class="step-title">Geführte Kursaufgabe: Zwei Netze in Filius koppeln</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 1.25rem;">
+        Baue nun das 2-Netze-Szenario schrittweise in <strong>Filius</strong> auf:
+      </p>
+
+      <!-- SCHRITT 1 -->
+      <div class="filius-step">
+        <div class="step-marker">1</div>
+        <div class="step-content">
+          <h4>Geräte aufbauen (Entwurfsmodus)</h4>
+          <p style="font-size: 0.95rem;">
+            Platziere auf der Arbeitsfläche:
+            <br>• Links: 2 Notebooks + 1 Switch (Netz A)
+            <br>• Rechts: 2 Notebooks + 1 Switch (Netz B)
+            <br>• In der Mitte: Einen <strong>Vermittlungsrechner (Router)</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- SCHRITT 2 -->
+      <div class="filius-step">
+        <div class="step-marker">2</div>
+        <div class="step-content">
+          <h4>Verkabelung herstellen</h4>
+          <p style="font-size: 0.95rem;">
+            Verbinde mit dem Kabelwerkzeug:
+            <br>• Die linken Notebooks mit Switch A
+            <br>• Switch A mit dem Router (Schnittstelle 1)
+            <br>• Den Router (Schnittstelle 2) mit Switch B
+            <br>• Switch B mit den rechten Notebooks
+          </p>
+        </div>
+      </div>
+
+      <!-- SCHRITT 3 -->
+      <div class="filius-step">
+        <div class="step-marker">3</div>
+        <div class="step-content">
+          <h4>Den Router konfigurieren (2 Schnittstellen!)</h4>
+          <p style="font-size: 0.95rem; margin-bottom: 6px;">
+            Klicke doppelt auf den <strong>Router (Vermittlungsrechner)</strong>:
+          </p>
+          <ul style="margin-left: 20px; font-size: 0.92rem; line-height: 1.6;">
+            <li>Gehe auf den Reiter <strong>Schnittstellen</strong>.</li>
+            <li>Stelle sicher, dass <strong>zwei Schnittstellen</strong> vorhanden sind (ggf. über <em>„Hinzufügen“</em>).</li>
+            <li>Schnittstelle 1: IP <span class="code-pill">192.168.0.1</span>, Maske <span class="code-pill">255.255.255.0</span></li>
+            <li>Schnittstelle 2: IP <span class="code-pill">192.168.1.1</span>, Maske <span class="code-pill">255.255.255.0</span></li>
+            <li>Stelle sicher, dass unter <em>„Allgemein“</em> das Häkchen bei <strong>„Automatische Routingtabelle“</strong> gesetzt ist!</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SCHRITT 4 -->
+      <div class="filius-step">
+        <div class="step-marker">4</div>
+        <div class="step-content">
+          <h4>Die Endgeräte konfigurieren (Achtung: Gateway zwingend erforderlich!)</h4>
+          <p style="font-size: 0.95rem; margin-bottom: 6px;">
+            Trage an jedem Notebook die IP, Subnetzmaske und das <strong>Standard-Gateway</strong> ein:
+          </p>
+          <table class="calc-table">
+            <thead>
+              <tr><th>Gerät</th><th>IP-Adresse</th><th>Subnetzmaske</th><th>Gateway</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: #eff6ff;">
+                <td><strong>PC A1</strong></td>
+                <td><span class="code-pill">192.168.0.10</span></td>
+                <td><span class="code-pill">255.255.255.0</span></td>
+                <td><strong style="color: #dc2626;"><span class="code-pill">192.168.0.1</span></strong></td>
+              </tr>
+              <tr style="background: #eff6ff;">
+                <td><strong>PC A2</strong></td>
+                <td><span class="code-pill">192.168.0.20</span></td>
+                <td><span class="code-pill">255.255.255.0</span></td>
+                <td><strong style="color: #dc2626;"><span class="code-pill">192.168.0.1</span></strong></td>
+              </tr>
+              <tr style="background: #ecfdf5;">
+                <td><strong>PC B1</strong></td>
+                <td><span class="code-pill">192.168.1.10</span></td>
+                <td><span class="code-pill">255.255.255.0</span></td>
+                <td><strong style="color: #dc2626;"><span class="code-pill">192.168.1.1</span></strong></td>
+              </tr>
+              <tr style="background: #ecfdf5;">
+                <td><strong>PC B2</strong></td>
+                <td><span class="code-pill">192.168.1.20</span></td>
+                <td><span class="code-pill">255.255.255.0</span></td>
+                <td><strong style="color: #dc2626;"><span class="code-pill">192.168.1.1</span></strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SCHRITT 5 -->
+      <div class="filius-step">
+        <div class="step-marker">5</div>
+        <div class="step-content">
+          <h4>Aktionsmodus &amp; Der Ping über Netzgrenzen</h4>
+          <p style="font-size: 0.95rem;">
+            1. Schalte oben rechts auf den <strong>grünen Play-Button (Aktionsmodus)</strong>.<br>
+            2. Installiere auf <strong>PC A1</strong> die <strong>Befehlszeile</strong>.<br>
+            3. Führe den Ping zu PC B1 aus:
+            <br><span class="code-pill">ping 192.168.1.10</span>
+            <br>$\rightarrow$ Beobachte, wie das grüne Datenpaket über Switch A $\rightarrow$ Router $\rightarrow$ Switch B $\rightarrow$ PC B1 wandert und die Antwort zurückkommt!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 5: DER ROTE MERKSATZ-KASTEN (GEMINI-STANDARD)
+         ====================================================== -->
+    <div class="merke-box">
+      <span class="merke-tag">MERKE • HEFTEINTRAG</span>
+      <div class="merke-content">
+        <h3 style="color: #1e3a8a; font-size: 1.15rem; margin-bottom: 6px;">
+          Netzwerke verbinden: Router &amp; Standard-Gateway
+        </h3>
+        <ul style="margin-left: 20px; line-height: 1.6;">
+          <li><strong>Der Router (Schicht 3):</strong> Verbindet zwei oder mehr <strong>unterschiedliche IP-Netzwerke</strong> miteinander. Er besitzt für jedes verbundene Netz eine eigene Schnittstelle mit passender IP-Adresse.</li>
+          <li><strong>Standard-Gateway:</strong> Die IP-Adresse der Router-Schnittstelle im lokalen Netz. Rechner senden alle Pakete für fremde Netze automatisch an dieses Gateway.</li>
+          <li><strong>Routing-Tabelle:</strong> Verzeichnis im Router, in dem steht, über welche Schnittstelle welches IP-Netz erreichbar ist.</li>
+          <li><strong>Unterschied Switch vs. Router:</strong>
+            <br>• <strong>Switch:</strong> Vermittelt <em>innerhalb</em> eines Netzes anhand von <strong>MAC-Adressen</strong> (Schicht 2).
+            <br>• <strong>Router:</strong> Vermittelt <em>zwischen</em> verschiedenen Netzen anhand von <strong>IP-Adressen</strong> (Schicht 3).
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TEIL 6: DETEKTIV-FRAGEN & FEHLERANALYSE
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--warning);">5</span>
+          <h2 class="step-title">Mathe- &amp; Informatik-Detektiv: Typische Denkfallen</h2>
+        </div>
+      </div>
+
+      <!-- FRAGE 1 -->
+      <div class="quiz-card">
+        <div class="quiz-header" onclick="toggleAnswer('ans1')">
+          <span><strong>Detektiv-Fall 1:</strong> Ein Schüler vergisst an PC B1 das Gateway einzutragen. PC A1 pingt PC B1 an. Was passiert und warum schlägt der Ping fehl?</span>
+          <button class="btn-reveal" id="btn-ans1">Erklärung aufdecken</button>
+        </div>
+        <div class="quiz-answer" id="ans1">
+          <strong>Hinweg klappt, aber Rückweg scheitert!</strong><br>
+          Das Paket von PC A1 erreicht PC B1 problemlos (da PC A1 sein Gateway kennt und der Router den Weg weiß).<br>
+          <strong>Aber:</strong> Wenn PC B1 die Antwort (Echo Reply) an PC A1 (<span class="code-pill">192.168.0.10</span>) zurücksenden will, weiß PC B1 nicht, wie er das fremde Netz erreichen soll, weil sein Gateway-Feld leer ist! Das Antwortpaket wird verworfen $\rightarrow$ PC A1 meldet einen Time-Out!
+        </div>
+      </div>
+
+      <!-- FRAGE 2 -->
+      <div class="quiz-card">
+        <div class="quiz-header" onclick="toggleAnswer('ans2')">
+          <span><strong>Detektiv-Fall 2:</strong> Warum darf der Router an seinen beiden Schnittstellen nicht dieselbe IP-Adresse oder IPs aus demselben Subnetz haben?</span>
+          <button class="btn-reveal" id="btn-ans2">Erklärung aufdecken</button>
+        </div>
+        <div class="quiz-answer" id="ans2">
+          <strong>Weil ein Router zwischen verschiedenen Netzen vermittelt!</strong><br>
+          Hätten beide Schnittstellen dieselbe Netzadresse, wüsste der Router nicht, über welches Kabel er ein Paket weiterleiten soll (Routing-Konflikt). Jede Schnittstelle muss zwingend in einem eigenen, eindeutigen Subnetz liegen.
+        </div>
+      </div>
+
+      <!-- FRAGE 3 -->
+      <div class="quiz-card">
+        <div class="quiz-header" onclick="toggleAnswer('ans3')">
+          <span><strong>Detektiv-Fall 3:</strong> Warum kann man das weltweite Internet nicht mit einem riesigen weltweiten Switch aufbauen, sondern braucht Millionen von Routern?</span>
+          <button class="btn-reveal" id="btn-ans3">Erklärung aufdecken</button>
+        </div>
+        <div class="quiz-answer" id="ans3">
+          <strong>Wegen Broadcast-Stürmen und Tabellengrößen!</strong><br>
+          1. In einem Switch-Netzwerk breitet sich jeder Broadcast (z. B. Flooding oder ARP-Anfragen) an ausnahmslos alle Ports aus. Bei 4 Milliarden Geräten würde das weltweite Netz innerhalb von Millisekunden durch Broadcast-Müll zusammenbrechen.<br>
+          2. Ein Switch müsste alle 4 Milliarden MAC-Adressen der Welt in seiner Tabelle speichern (technisch unmöglich). Router teilen die Welt in logische Teilnetze auf und blockieren lokale Broadcasts!
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    function toggleBeamer() {
+      const isBeamer = document.body.classList.toggle('beamer-mode');
+      const btn = document.getElementById('btnBeamer');
+      if (isBeamer) {
+        btn.textContent = 'Standard-Ansicht';
+        btn.classList.add('active');
+      } else {
+        btn.textContent = 'Beamer-Modus';
+        btn.classList.remove('active');
+      }
+    }
+
+    function toggleAnswer(id) {
+      const el = document.getElementById(id);
+      const btn = document.getElementById('btn-' + id);
+      if (el.classList.contains('show')) {
+        el.classList.remove('show');
+        if (btn) btn.textContent = 'Erklärung aufdecken';
+      } else {
+        el.classList.add('show');
+        if (btn) btn.textContent = 'Verbergen';
+      }
+      triggerKaTeX();
+    }
+
+    let allRevealed = false;
+    function toggleAllAnswers() {
+      allRevealed = !allRevealed;
+      const answers = document.querySelectorAll('.quiz-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      answers.forEach(a => {
+        if (allRevealed) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+      buttons.forEach(b => {
+        b.textContent = allRevealed ? 'Verbergen' : 'Erklärung aufdecken';
+      });
+      triggerKaTeX();
+    }
+  </script>
+
+</body>
+</html>
