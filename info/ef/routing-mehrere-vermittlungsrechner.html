@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Mehrere Vermittlungsrechner &amp; Statisches Routing | Informatik EF</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Füller-Königsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;        /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Füllertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --font-scale: 1;
+    }
+
+    /* BEAMER-MODUS */
+    body.beamer-mode {
+      --font-scale: 1.15;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    body.beamer-mode .card {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body.beamer-mode .sub-card {
+      background-color: #27354a;
+      border-color: #475569;
+      color: #f8fafc;
+    }
+    body.beamer-mode .merke-box {
+      background-color: #1a2234;
+      border-color: #ef4444;
+    }
+    body.beamer-mode .merke-content {
+      color: #f8fafc !important;
+    }
+    body.beamer-mode .code-pill {
+      background: #0f172a;
+      border-color: #475569;
+      color: #93c5fd;
+    }
+    body.beamer-mode .sim-diagram {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: calc(11pt * var(--font-scale));
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* PRESENTER TOOLBAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary-focus);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-action:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .btn-action.active {
+      background: var(--primary-focus);
+      border-color: #60a5fa;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: calc(2rem * var(--font-scale));
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+      line-height: 1.25;
+    }
+    body.beamer-mode h1 {
+      color: #93c5fd;
+    }
+
+    .lead-subtitle {
+      color: var(--text-muted);
+      font-size: calc(1.05rem * var(--font-scale));
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-badge {
+      background: var(--primary);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: calc(1.25rem * var(--font-scale));
+      font-weight: 700;
+      color: var(--text);
+    }
+    body.beamer-mode .step-title {
+      color: #f8fafc;
+    }
+
+    /* SUB-CARDS & GRIDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 760px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+
+    .highlight-label {
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 3px;
+    }
+    body.beamer-mode .highlight-label {
+      color: #60a5fa;
+    }
+
+    /* PROBLEM BOX */
+    .conflict-box {
+      background: #fffbeb;
+      border-left: 4px solid var(--warning);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1rem 0;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+    body.beamer-mode .conflict-box {
+      background: #27272a;
+      border-left-color: #f59e0b;
+    }
+
+    .conflict-title {
+      font-weight: 800;
+      color: #b45309;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    body.beamer-mode .conflict-title {
+      color: #fbbf24;
+    }
+
+    /* CODE PILL */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      border: 1px solid #bfdbfe;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* INSTRUCTION STEPS */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1rem 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    body.beamer-mode .step-item {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .step-marker {
+      width: 30px;
+      height: 30px;
+      background: var(--primary-focus);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+    .step-content h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    body.beamer-mode .step-content h4 {
+      color: #93c5fd;
+    }
+
+    /* DIAGRAMM CONTAINER */
+    .sim-diagram {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    /* TABELLE */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(10pt * var(--font-scale));
+      margin-top: 8px;
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    body.beamer-mode .calc-table th {
+      background: #1e293b;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+    .calc-table td {
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      vertical-align: middle;
+    }
+    body.beamer-mode .calc-table td {
+      border-color: #334155;
+    }
+
+    /* DER ROTE MERKSATZ-KASTEN (ORIGINAL GEMINI STANDARD) */
+    .merke-box {
+      border: 2.5px solid var(--danger);
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 14px 18px;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -11px;
+      left: 14px;
+      background: var(--danger);
+      color: #ffffff;
+      font-size: 8.5pt;
+      font-weight: 800;
+      padding: 1px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-content {
+      color: #111827; /* Zwingend schwarz/dunkel */
+      font-size: calc(11pt * var(--font-scale));
+      line-height: 1.55;
+    }
+
+    /* INTERAKTIVE FRAGEN / DETEKTIV */
+    .question-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .question-card {
+      background: #1e293b;
+      border-color: #475569;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    body.beamer-mode .question-title {
+      color: #f8fafc;
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    body.beamer-mode .btn-reveal {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+
+    .question-answer {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.95rem;
+      color: #166534;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    body.beamer-mode .question-answer {
+      color: #86efac;
+    }
+    .question-answer.show {
+      display: block;
+    }
+
+    /* DRUCKFORMAT */
+    @media print {
+      .presenter-bar, .btn-reveal {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+        font-size: 10pt !important;
+        padding: 0 !important;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin-bottom: 1.5rem !important;
+      }
+      .question-answer {
+        display: block !important;
+        color: #b91c1c !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER TOOLBAR
+       ======================================================== -->
+  <div class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
+      <span style="font-weight: 700; font-size: 0.92rem;">
+        Informatik EF • Stufe 4: Mehrere Vermittlungsrechner &amp; Routing
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="toggleAllAnswers()">Alle Lösungen aufdecken</button>
+      <button class="btn-action" id="btnBeamer" onclick="toggleBeamer()">Beamer-Modus</button>
+      <button class="btn-action" onclick="window.print()">Drucken / PDF</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Thema 1: Rechnernetze (Stufe 4)</div>
+      <h1>Mehrere Vermittlungsrechner vernetzen: Routing-Tabellen</h1>
+      <p class="lead-subtitle">
+        Wie eigenständige Standorte über Zwischenstationen Daten austauschen, wie Datenpakete ihren Weg durch mehrere Vermittlungsrechner (Hops) finden – und warum ohne Gegenroute kein Signal ankommt.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         TEIL 1: DAS PROBLEM: DER BLINDE FLECK DER ROUTER
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Die Problemstellung: Zwei Gebäude, zwei Router</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        In der letzten Einheit hat ein einzelner Vermittlungsrechner zwei Netze direkt verbunden. In der Realität besitzt aber jeder Standort (z. B. Schulgebäude A und Firmenzentrale B) seinen <strong>eigenen Vermittlungsrechner</strong> (wie den Hausanschluss-Router / die FritzBox).
+      </p>
+
+      <div class="conflict-box">
+        <div class="conflict-title">Das Problem mit dem Verbindungskabel:</div>
+        Wir stecken ein langes Netzwerkkabel direkt zwischen den linken Vermittlungsrechner (Standort 0) und den rechten Vermittlungsrechner (Standort 1).
+        <br><br>
+        <strong>Die zentrale Frage:</strong> <em>Welche IP-Adressen erhalten die beiden Schnittstellen an diesem Verbindungskabel?</em>
+        <br>
+        • Schnittstelle links gehört <strong>nicht</strong> zu Netzwerk 0 (<span class="code-pill">192.168.0.x</span>), sonst hätte der Router zwei konkurrierende Anschlüsse im selben Netz.
+        <br>
+        • Schnittstelle rechts gehört <strong>nicht</strong> zu Netzwerk 1 (<span class="code-pill">192.168.1.x</span>).
+        <br><br>
+        <strong>Die fundamentale Erkenntnis:</strong>
+        Das Kabel zwischen den beiden Vermittlungsrechnern bildet ein <strong>eigenständiges, drittes Netzwerk</strong> – das sogenannte <strong>Transfer- bzw. Verbindungsnetz</strong> (z. B. <span class="code-pill">192.168.2.0 / 24</span>)!
+      </div>
+
+      <div class="grid-2">
+        <div class="sub-card" style="border-left: 3px solid var(--danger);">
+          <strong style="color: var(--danger);">Der „blinde Fleck“ von Router 0:</strong><br>
+          Vermittlungsrechner 0 berührt physisch nur <strong>Netzwerk 0</strong> und das <strong>Transfernetz</strong>. Vom entfernten <strong>Netzwerk 1</strong> hat er noch nie etwas gehört! Er wirft Pakete für Netzwerk 1 standardmäßig einfach weg.
+        </div>
+        <div class="sub-card" style="border-left: 3px solid var(--success);">
+          <strong style="color: var(--success);">Die Lösung: Statisches Routing:</strong><br>
+          Wir bringen Vermittlungsrechner 0 eine feste Wegweiser-Regel bei: <em>„Wenn du ein Paket für Netzwerk 1 hast, gib es an die Schnittstelle des Nachbar-Routers weiter!“</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 2: NETZWERKTOPOLOGIE & ADRESSPLAN
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Netzwerktopologie in Filius &amp; Adressierungsplan</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Nachfolgend siehst du die exakte Struktur aus unserem Filius-Entwurf mit den drei getrennten Teilnetzen:
+      </p>
+
+      <!-- SVG TOPOLOGY DIAGRAM -->
+      <div class="sim-diagram">
+        <svg viewBox="0 0 880 340" style="width: 100%; height: auto; font-family: 'Calibri', sans-serif;">
+          <!-- HINTERGRÜNDE DER NETZE -->
+          <!-- Netz 0 (gelb) -->
+          <rect x="15" y="15" width="265" height="310" rx="10" fill="#fef9c3" stroke="#eab308" stroke-width="2" />
+          <text x="30" y="42" fill="#854d0e" font-size="16" font-weight="bold">NETZWERK 0 (192.168.0.0 / 24)</text>
+
+          <!-- Transfernetz (blau gestrichelt) -->
+          <rect x="300" y="90" width="280" height="155" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-width="2" stroke-dasharray="6,4" />
+          <text x="320" y="115" fill="#0369a1" font-size="13" font-weight="bold">TRANSFER-NETZ (192.168.2.0 / 24)</text>
+
+          <!-- Netz 1 (grün) -->
+          <rect x="600" y="15" width="265" height="310" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2" />
+          <text x="615" y="42" fill="#166534" font-size="16" font-weight="bold">NETZWERK 1 (192.168.1.0 / 24)</text>
+
+          <!-- VERBINDUNGSLINIEN -->
+          <!-- Netz 0 Geräte zu Switch 0 -->
+          <line x1="85" y1="90" x2="195" y2="165" stroke="#64748b" stroke-width="2" />
+          <line x1="85" y1="165" x2="195" y2="165" stroke="#64748b" stroke-width="2" />
+          <line x1="85" y1="240" x2="195" y2="165" stroke="#64748b" stroke-width="2" />
+
+          <!-- Switch 0 zu Vermittlungsrechner 0 -->
+          <line x1="225" y1="165" x2="320" y2="162" stroke="#1e3a8a" stroke-width="3" />
+
+          <!-- Transferkabel Vermittlungsrechner 0 zu Vermittlungsrechner 1 -->
+          <line x1="400" y1="162" x2="480" y2="162" stroke="#0284c7" stroke-width="4" />
+          <circle cx="440" cy="162" r="4" fill="#0284c7" />
+          <text x="440" y="152" text-anchor="middle" fill="#0369a1" font-size="11" font-weight="bold">Kabel / WAN</text>
+
+          <!-- Vermittlungsrechner 1 zu Switch 1 -->
+          <line x1="560" y1="162" x2="650" y2="165" stroke="#1e3a8a" stroke-width="3" />
+
+          <!-- Switch 1 zu Netz 1 Geräten -->
+          <line x1="685" y1="165" x2="795" y2="90" stroke="#64748b" stroke-width="2" />
+          <line x1="685" y1="165" x2="795" y2="165" stroke="#64748b" stroke-width="2" />
+          <line x1="685" y1="165" x2="795" y2="240" stroke="#64748b" stroke-width="2" />
+
+          <!-- GERÄTE-BOXEN NETZ 0 -->
+          <!-- Laptop 0.10 -->
+          <rect x="35" y="65" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="45" y="85" fill="#111827" font-size="11" font-weight="bold">Laptop 0.10</text>
+          <text x="45" y="102" fill="#475569" font-size="10">192.168.0.10</text>
+
+          <!-- Laptop 0.20 -->
+          <rect x="35" y="140" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="45" y="160" fill="#111827" font-size="11" font-weight="bold">Laptop 0.20</text>
+          <text x="45" y="177" fill="#475569" font-size="10">192.168.0.20</text>
+
+          <!-- Laptop 0.30 -->
+          <rect x="35" y="215" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="45" y="235" fill="#111827" font-size="11" font-weight="bold">Laptop 0.30</text>
+          <text x="45" y="252" fill="#475569" font-size="10">192.168.0.30</text>
+
+          <!-- Switch 0 -->
+          <rect x="185" y="145" width="45" height="40" rx="4" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+          <text x="192" y="169" fill="#f8fafc" font-size="9" font-weight="bold">SW 0</text>
+
+          <!-- VERMITTLUNGSRECHNER 0 -->
+          <rect x="320" y="130" width="80" height="65" rx="8" fill="#1e3a8a" stroke="#172554" stroke-width="2" />
+          <text x="360" y="153" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">Vermittlungs-</text>
+          <text x="360" y="168" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">rechner 0</text>
+          <!-- Schnittstellen Vermittlungsrechner 0 -->
+          <text x="275" y="210" fill="#1e3a8a" font-size="9" font-weight="bold">Schnittstelle 0: .0.1</text>
+          <text x="345" y="225" fill="#0369a1" font-size="9" font-weight="bold">Schnittstelle 1: .2.1</text>
+
+          <!-- VERMITTLUNGSRECHNER 1 -->
+          <rect x="480" y="130" width="80" height="65" rx="8" fill="#1e3a8a" stroke="#172554" stroke-width="2" />
+          <text x="520" y="153" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">Vermittlungs-</text>
+          <text x="520" y="168" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="bold">rechner 1</text>
+          <!-- Schnittstellen Vermittlungsrechner 1 -->
+          <text x="445" y="210" fill="#0369a1" font-size="9" font-weight="bold">Schnittstelle 0: .2.2</text>
+          <text x="515" y="225" fill="#166534" font-size="9" font-weight="bold">Schnittstelle 1: .1.1</text>
+
+          <!-- Switch 1 -->
+          <rect x="650" y="145" width="45" height="40" rx="4" fill="#334155" stroke="#0f172a" stroke-width="1.5" />
+          <text x="657" y="169" fill="#f8fafc" font-size="9" font-weight="bold">SW 1</text>
+
+          <!-- GERÄTE-BOXEN NETZ 1 -->
+          <!-- Laptop 1.10 -->
+          <rect x="740" y="65" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="750" y="85" fill="#111827" font-size="11" font-weight="bold">Laptop 1.10</text>
+          <text x="750" y="102" fill="#475569" font-size="10">192.168.1.10</text>
+
+          <!-- Laptop 1.20 -->
+          <rect x="740" y="140" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="750" y="160" fill="#111827" font-size="11" font-weight="bold">Laptop 1.20</text>
+          <text x="750" y="177" fill="#475569" font-size="10">192.168.1.20</text>
+
+          <!-- Laptop 1.30 -->
+          <rect x="740" y="215" width="105" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="750" y="235" fill="#111827" font-size="11" font-weight="bold">Laptop 1.30</text>
+          <text x="750" y="252" fill="#475569" font-size="10">192.168.1.30</text>
+        </svg>
+      </div>
+
+      <!-- ADRESSIERUNGSTABELLE -->
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th>Netzwerkbereich</th>
+            <th>Gerät / Schnittstelle</th>
+            <th>IP-Adresse</th>
+            <th>Subnetzmaske</th>
+            <th>Standard-Gateway</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Netzwerk 0 (gelb)</strong></td>
+            <td>Laptops (.10, .20, .30)</td>
+            <td><span class="code-pill">192.168.0.x</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><span class="code-pill">192.168.0.1</span> (Vermittlungsrechner 0, Schnittstelle 0)</td>
+          </tr>
+          <tr>
+            <td>Netzwerk 0</td>
+            <td>Vermittlungsrechner 0: Schnittstelle 0</td>
+            <td><span class="code-pill">192.168.0.1</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><em>keines</em></td>
+          </tr>
+          <tr style="background: #f0f9ff;">
+            <td><strong>Transfernetz</strong></td>
+            <td>Vermittlungsrechner 0: Schnittstelle 1</td>
+            <td><span class="code-pill">192.168.2.1</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><em>keines</em></td>
+          </tr>
+          <tr style="background: #f0f9ff;">
+            <td><strong>Transfernetz</strong></td>
+            <td>Vermittlungsrechner 1: Schnittstelle 0</td>
+            <td><span class="code-pill">192.168.2.2</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><em>keines</em></td>
+          </tr>
+          <tr>
+            <td><strong>Netzwerk 1 (grün)</strong></td>
+            <td>Vermittlungsrechner 1: Schnittstelle 1</td>
+            <td><span class="code-pill">192.168.1.1</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><em>keines</em></td>
+          </tr>
+          <tr>
+            <td>Netzwerk 1</td>
+            <td>Laptops (.10, .20, .30)</td>
+            <td><span class="code-pill">192.168.1.x</span></td>
+            <td><span class="code-pill">255.255.255.0</span></td>
+            <td><em>(Ermittlungsaufgabe)</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ======================================================
+         TEIL 3: GEFÜHRTE ANLEITUNG: DER HINWEG (NETZ 0 -> NETZ 1)
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Geführte Anleitung: Den Hinweg einrichten</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Wir richten nun Schritt für Schritt den Weg von <strong>Laptop 0.10</strong> zum entfernten <strong>Laptop 1.10</strong> ein. Folge diesen Handlungsanweisungen in Filius:
+      </p>
+
+      <div class="step-list">
+        <!-- Schritt 1 -->
+        <div class="step-item">
+          <div class="step-marker">1</div>
+          <div class="step-content">
+            <h4>Vermittlungsrechner konfigurieren (Entwurfsmodus)</h4>
+            Öffne durch Doppelklick die beiden Vermittlungsrechner und stelle sicher, dass beide jeweils <strong>zwei Schnittstellen</strong> besitzen:
+            <ul style="margin: 6px 0 0 18px;">
+              <li><strong>Router 0:</strong> Schnittstelle 0 = <span class="code-pill">192.168.0.1</span> | Schnittstelle 1 = <span class="code-pill">192.168.2.1</span> (Maske je: <span class="code-pill">255.255.255.0</span>).</li>
+              <li><strong>Router 1:</strong> Schnittstelle 0 = <span class="code-pill">192.168.2.2</span> | Schnittstelle 1 = <span class="code-pill">192.168.1.1</span> (Maske je: <span class="code-pill">255.255.255.0</span>).</li>
+              <li>Aktiviere bei beiden zwingend das Häkchen bei: <strong>„Automatisches Routing“</strong> bzw. <strong>„Paketweiterleitung aktivieren“</strong>!</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Schritt 2 -->
+        <div class="step-item">
+          <div class="step-marker">2</div>
+          <div class="step-content">
+            <h4>Standard-Gateway auf Laptop 0.10 eintragen</h4>
+            Öffne <strong>Laptop 0.10</strong>. Trage als <strong>Standard-Gateway</strong> die lokale IP von Router 0 ein:
+            <br><span class="code-pill">Standard-Gateway: 192.168.0.1</span>
+            <br><small style="color: var(--text-muted);">Damit weiß Laptop 0.10: Alle Datenpakete, die nicht in 192.168.0 liegen, gehen an den eigenen Haus-Router.</small>
+          </div>
+        </div>
+
+        <!-- Schritt 3 -->
+        <div class="step-item">
+          <div class="step-marker">3</div>
+          <div class="step-content">
+            <h4>Der erste Testversuch: Was passiert jetzt?</h4>
+            Wechsle in den <strong>Aktionsmodus</strong> (grüner Pfeil). Öffne auf Laptop 0.10 die Befehlszeile und tippe:
+            <br><span class="code-pill">ping 192.168.1.10</span>
+            <br>
+            <strong>Beobachtung:</strong> Sofortige Fehlermeldung: <em>„Host nicht erreichbar“</em> oder <em>„Zeitüberschreitung“</em>!
+            <br>
+            <strong>Warum?</strong> Router 0 nimmt das Paket an, schaut in seine Schnittstellen (er kennt nur 0 und 2) und stellt fest: <em>„192.168.1.10 kenne ich nicht!“</em>. Er wirft das Paket weg.
+          </div>
+        </div>
+
+        <!-- Schritt 4 -->
+        <div class="step-item">
+          <div class="step-marker">4</div>
+          <div class="step-content">
+            <h4>Die statische Route auf Router 0 eintragen (Der Wegweiser)</h4>
+            Wechsle zurück in den Entwurfsmodus. Doppelklicke auf <strong>Router 0</strong> und öffne den Reiter <strong>Weiterleitungstabelle</strong> (Routing-Tabelle).
+            <br>Klicke auf <strong>„Zeile hinzufügen“</strong> und trage die Wegweiser-Regel ein:
+            <table class="calc-table" style="max-width: 580px; margin-top: 6px;">
+              <thead>
+                <tr>
+                  <th>Zielnetz-Adresse</th>
+                  <th>Subnetzmaske</th>
+                  <th>Nächster Hop / Gateway</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: #ecfdf5;">
+                  <td><span class="code-pill">192.168.1.0</span></td>
+                  <td><span class="code-pill">255.255.255.0</span></td>
+                  <td><span class="code-pill">192.168.2.2</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p style="margin-top: 6px; font-size: 0.95rem;">
+              <strong>Bedeutung dieser Zeile:</strong> <em>„Wenn ein Paket in das Netzwerk 192.168.1.0 will, leite es über das Transferkabel direkt an den Nachbar-Router mit der IP 192.168.2.2 weiter!“</em>
+            </p>
+          </div>
+        </div>
+
+        <!-- Schritt 5 -->
+        <div class="step-item">
+          <div class="step-marker">5</div>
+          <div class="step-content">
+            <h4>Überprüfung im Datenaustausch-Modus</h4>
+            Starte den Aktionsmodus. Mache einen Rechtsklick auf <strong>Laptop 1.10</strong> und wähle <strong>„Datenaustausch anzeigen“</strong>.
+            <br>Sende nun von <strong>Laptop 0.10</strong> erneut:
+            <br><span class="code-pill">ping 192.168.1.10</span>
+            <br>
+            <strong>Erfolg des Hinwegs:</strong> Im Datenaustausch-Fenster von Laptop 1.10 taucht tatsächlich ein grünes <em>Echo-Request-Paket</em> auf! Das Paket hat die weite Reise über beide Router erfolgreich geschafft!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 4: DER DETEKTIV-AUFTRAG: DAS RÄTSEL DES RÜCKWEGS
+         ====================================================== -->
+    <section class="card" style="border: 2px solid var(--warning);">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--warning);">4</span>
+          <h2 class="step-title">Forscher- &amp; Detektiv-Auftrag: Das Rätsel des Rückwegs</h2>
+        </div>
+      </div>
+
+      <div class="conflict-box">
+        <div class="conflict-title">Die große Überraschung auf Laptop 0.10:</div>
+        Obwohl wir im Datenaustausch-Fenster mit eigenen Augen gesehen haben, dass das Paket bei Laptop 1.10 angekommen ist, meldet die Konsole von Laptop 0.10 weiterhin stur:
+        <br>
+        <span class="code-pill" style="color: var(--danger); font-weight: 700;">Zeitüberschreitung der Anforderung. (Request timed out)</span>
+        <br><br>
+        <strong>Warum scheitert der Ping, obwohl das Paket sein Ziel erreicht hat?</strong>
+        <br>Erarbeite die Ursache anhand der folgenden Leitfragen!
+      </div>
+
+      <!-- FRAGE 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q1')">
+          <div class="question-title">
+            <strong>Frage 1:</strong> Was genau ist ein <code>ping</code> technisch gesehen? Handelt es sich um eine Einbahnstraße oder um einen zweiseitigen Dialog?
+          </div>
+          <button class="btn-reveal" id="btn-q1">Antwort aufdecken</button>
+        </div>
+        <div class="question-answer" id="q1">
+          Ein Ping ist <strong>immer ein wechselseitiger Dialog</strong> (ICMP-Protokoll).
+          <br>1. Der Sender schickt eine Anfrage (<em>Echo Request</em>): <em>„Bist du da?“</em>
+          <br>2. Der Empfänger muss mit einer Bestätigung (<em>Echo Reply</em>) antworten: <em>„Ja, ich bin da!“</em>
+          <br>Solange der Sender die Antwort nicht rechtzeitig erhält, meldet er einen Time-Out!
+        </div>
+      </div>
+
+      <!-- FRAGE 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q2')">
+          <div class="question-title">
+            <strong>Frage 2:</strong> Laptop 1.10 hat den Echo Request erhalten und will nun das Antwortpaket abschicken. Wer ist Absender, wer Empfänger – und welches Hindernis steht dem Laptop 1.10 sofort im Weg?
+          </div>
+          <button class="btn-reveal" id="btn-q2">Antwort aufdecken</button>
+        </div>
+        <div class="question-answer" id="q2">
+          • <strong>Absender:</strong> <span class="code-pill">192.168.1.10</span> (Laptop 1.10)<br>
+          • <strong>Ziel:</strong> <span class="code-pill">192.168.0.10</span> (Laptop 0.10)<br>
+          <strong>Das Hindernis:</strong> Laptop 1.10 vergleicht die Ziel-IP mit seiner eigenen Netzmaske (<span class="code-pill">255.255.255.0</span>) und erkennt sofort: <em>„192.168.0.10 liegt in einem fremden Subnetz!“</em>. Um das Paket nach draußen zu schicken, braucht er zwingend die Adresse seines <strong>Standard-Gateways</strong>. Wenn dieses Feld auf Laptop 1.10 noch leer ist, kann er das Paket nicht einmal absenden!
+        </div>
+      </div>
+
+      <!-- FRAGE 3 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q3')">
+          <div class="question-title">
+            <strong>Frage 3:</strong> Angenommen, Laptop 1.10 schickt das Antwortpaket an seinen Vermittlungsrechner 1. Was passiert nun im Inneren von Vermittlungsrechner 1?
+          </div>
+          <button class="btn-reveal" id="btn-q3">Antwort aufdecken</button>
+        </div>
+        <div class="question-answer" id="q3">
+          Vermittlungsrechner 1 nimmt das Paket entgegen und liest die Ziel-IP: <span class="code-pill">192.168.0.10</span>.
+          <br>Er schaut in seine Schnittstellen: Er kennt nur Schnittstelle 0 (<span class="code-pill">192.168.2.0</span>) und Schnittstelle 1 (<span class="code-pill">192.168.1.0</span>).
+          <br><strong>Das Problem:</strong> Auch Vermittlungsrechner 1 ist auf dem linken Auge „blind“! Er hat keine Weiterleitungsregel für das Netzwerk <span class="code-pill">192.168.0.0</span>. Folglich muss er das Antwortpaket vernichten (droppen). Das Signal kommt niemals zurück!
+        </div>
+      </div>
+
+      <!-- FRAGE 4: HANDLUNGSAUFTRAG -->
+      <div class="question-card" style="border: 2px solid var(--primary-focus);">
+        <div class="question-header" onclick="toggleAnswer('q4')">
+          <div class="question-title" style="color: var(--primary);">
+            <strong>Auftrag für die Schülerpraxis:</strong> Welche <u>zwei konkreten Konfigurationsschritte</u> musst du jetzt auf der rechten Seite selbstständig vornehmen, damit der Ping-Kreislauf fehlerfrei funktioniert?
+          </div>
+          <button class="btn-reveal" id="btn-q4">Lösung &amp; Parameter aufdecken</button>
+        </div>
+        <div class="question-answer" id="q4">
+          <strong>Schritt A (Endgeräte):</strong><br>
+          Trage auf <strong>allen Laptops in Netzwerk 1</strong> (z. B. Laptop 1.10, 1.20, 1.30) das eigene <strong>Standard-Gateway</strong> ein:
+          <br><span class="code-pill">Standard-Gateway: 192.168.1.1</span> (die lokale IP von Router 1).
+          <br><br>
+          <strong>Schritt B (Vermittlungsrechner 1):</strong><br>
+          Füge in der <strong>Weiterleitungstabelle von Router 1</strong> die statische Gegenroute hinzu:
+          <br>• <strong>Zielnetz:</strong> <span class="code-pill">192.168.0.0</span>
+          <br>• <strong>Subnetzmaske:</strong> <span class="code-pill">255.255.255.0</span>
+          <br>• <strong>Nächster Hop / Gateway:</strong> <span class="code-pill">192.168.2.1</span> (die Schnittstelle von Router 0 im Transfernetz!).
+        </div>
+      </div>
+
+      <div class="sub-card" style="margin-top: 12px; background: #ecfdf5; border-color: #a7f3d0;">
+        <strong style="color: #065f46;">Der abschließende Erfolgstest:</strong>
+        <br>Sobald du Schritt A und B eingerichtet hast, starte erneut den Aktionsmodus und sende auf Laptop 0.10:
+        <br><span class="code-pill">ping 192.168.1.10</span>
+        <br>$\rightarrow$ Jetzt antwortet die Gegenstelle in $0\,\text{ms}$ – der Datenkreislauf durch alle 3 Teilnetze steht!
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 5: ANALYSE-WERKZEUG: DER BEFEHL TRACEROUTE
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--accent);">5</span>
+          <h2 class="step-title">Den Pfad sichtbar machen: Der Befehl traceroute</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Ein normaler <code>ping</code> zeigt uns nur, <em>ob</em> das Ziel geantwortet hat. Aber welchen genauen Pfad hat das Paket durch die verschiedenen Router genommen? Hierfür gibt es ein mächtiges Diagnose-Werkzeug.
+      </p>
+
+      <div class="step-item" style="border-left: 3px solid var(--accent);">
+        <div class="step-content">
+          <h4>Befehl auf Laptop 0.10 ausführen:</h4>
+          Öffne die Befehlszeile auf <strong>Laptop 0.10</strong> und tippe ein:
+          <br><span class="code-pill">traceroute 192.168.1.10</span>
+          <br><br>
+          <strong>Die Ausgabe im Filius-Terminal:</strong>
+          <pre style="background: #0f172a; color: #f8fafc; padding: 10px 14px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin-top: 6px;">
+1  192.168.0.1   (0 ms)   <- Hop 1: Eigener Haus-Vermittlungsrechner 0
+2  192.168.2.2   (0 ms)   <- Hop 2: Nächster Vermittlungsrechner 1
+3  192.168.1.10  (0 ms)   <- Hop 3: Das eigentliche Zielgerät</pre>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 12px;">
+        <div class="sub-card">
+          <span class="highlight-label">Was ist ein „Hop“?</span>
+          Jeder Übergang von einem Netzwerk zum nächsten über einen Vermittlungsrechner wird in der Netzwerktechnik als <strong>Hop</strong> (Sprung) bezeichnet.
+        </div>
+        <div class="sub-card">
+          <span class="highlight-label">Der Schutzmechanismus: Time to Live (TTL)</span>
+          Jedes IP-Paket trägt einen Lebenszeit-Zähler (TTL, z. B. 64). Bei jedem Hop zieht ein Router den Zähler um 1 ab. Erreicht der Zähler 0, wird das Paket gelöscht. Dies verhindert, dass fehlgeleitete Pakete in Endlosschleifen das Netz verstopfen.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 6: DER ROTE MERKSATZ-KASTEN (ORIGINAL GEMINI-STANDARD)
+         ====================================================== -->
+    <div class="merke-box">
+      <span class="merke-tag">MERKE • HEFTEINTRAG</span>
+      <div class="merke-content">
+        <h3 style="color: #1e3a8a; font-size: 1.15rem; margin-bottom: 6px;">
+          Routing über mehrere Vermittlungsrechner &amp; Transfernetze
+        </h3>
+        <ul style="margin-left: 20px; line-height: 1.6;">
+          <li><strong>Transfernetz (Verbindungsnetz):</strong> Die direkte Kabelverbindung zwischen zwei Vermittlungsrechnern bildet immer ein eigenständiges IP-Subnetz (z. B. $192.168.2.0/24$). Es verhindert Schnittstellenkonflikte.</li>
+          <li><strong>Statisches Routing:</strong> Vermittlungsrechner kennen standardmäßig nur direkt angeschlossene Nachbarnetze. Um entfernte Netze zu erreichen, benötigt jeder Router eine Routing-Tabelle mit:
+            <br>• <strong>Zielnetz:</strong> Die IP-Netzadresse des entfernten Netzes.
+            <br>• <strong>Subnetzmaske:</strong> Gibt die Größe des Zielnetzes an.
+            <br>• <strong>Nächster Hop (Gateway):</strong> Die IP-Adresse der nächsten Router-Schnittstelle auf dem Weg.
+          </li>
+          <li><strong>Symmetrie-Regel (Hin- und Rückweg):</strong> Netzwerkverkehr ist stets bidirektional. Ohne eine korrekt konfigurierte Gegenroute auf den entfernten Routern scheitert jede Verbindung (Time-Out beim Antwortpaket).</li>
+          <li><strong>Traceroute &amp; Hops:</strong> Mit dem Befehl <code>traceroute</code> lässt sich die Kette der Vermittlungsrechner (Hops) von der Quelle bis zum Ziel transparent nachverfolgen.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TEIL 7: DETEKTIV-FÄLLE ZUM VERSTÄNDNIS
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge" style="background: var(--primary);">6</span>
+          <h2 class="step-title">Vertiefende Detektiv-Fälle</h2>
+        </div>
+      </div>
+
+      <!-- DETEKTIV 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('d1')">
+          <div class="question-title">
+            <strong>Detektiv-Fall 1:</strong> Ein Schüler trägt in Router 0 als nächsten Hop versehentlich die Ziel-IP <span class="code-pill">192.168.1.10</span> ein statt <span class="code-pill">192.168.2.2</span>. Warum kann dieser Eintrag technisch niemals funktionieren?
+          </div>
+          <button class="btn-reveal" id="btn-d1">Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer" id="d1">
+          Der „Nächste Hop“ muss immer ein <strong>direkter Nachbar im selben Subnetz</strong> sein!
+          <br>Router 0 kann Pakete nur an IP-Adressen weiterreichen, die er auf Schicht 2 (per MAC-Adresse im lokalen Transfernetz <span class="code-pill">192.168.2.0</span>) direkt ansprechen kann. Da <span class="code-pill">192.168.1.10</span> hinter Router 1 liegt, kann Router 0 diese IP niemals direkt per Kabel anfunken.
+        </div>
+      </div>
+
+      <!-- DETEKTIV 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('d2')">
+          <div class="question-title">
+            <strong>Detektiv-Fall 2:</strong> Warum trägt man in einer Routing-Tabelle immer die <u>Netzadresse</u> (z. B. <span class="code-pill">192.168.1.0</span>) ein und nicht die IP-Adresse eines einzelnen Laptops (<span class="code-pill">192.168.1.10</span>)?
+          </div>
+          <button class="btn-reveal" id="btn-d2">Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer" id="d2">
+          <strong>Aus Gründen der Effizienz und Skalierbarkeit!</strong>
+          <br>Hätte man 200 Rechner in Netzwerk 1, müsste man sonst 200 einzelne Zeilen in die Routing-Tabelle tippen. Durch die Netzadresse <span class="code-pill">192.168.1.0</span> mit der Maske <span class="code-pill">255.255.255.0</span> gilt eine einzige Regel automatisch für alle 254 Geräte an diesem Standort!
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- JAVASCRIPT LOGIK -->
+  <script>
+    function toggleBeamer() {
+      const isBeamer = document.body.classList.toggle('beamer-mode');
+      const btn = document.getElementById('btnBeamer');
+      if (isBeamer) {
+        btn.textContent = 'Standard-Ansicht';
+        btn.classList.add('active');
+      } else {
+        btn.textContent = 'Beamer-Modus';
+        btn.classList.remove('active');
+      }
+    }
+
+    function toggleAnswer(id) {
+      const el = document.getElementById(id);
+      const btn = document.getElementById('btn-' + id);
+      if (el.classList.contains('show')) {
+        el.classList.remove('show');
+        if (btn) btn.textContent = 'Antwort aufdecken';
+      } else {
+        el.classList.add('show');
+        if (btn) btn.textContent = 'Verbergen';
+      }
+      triggerKaTeX();
+    }
+
+    let allRevealed = false;
+    function toggleAllAnswers() {
+      allRevealed = !allRevealed;
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      answers.forEach(a => {
+        if (allRevealed) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+      buttons.forEach(b => {
+        b.textContent = allRevealed ? 'Verbergen' : 'Antwort aufdecken';
+      });
+      triggerKaTeX();
+    }
+  </script>
+
+</body>
+</html>
