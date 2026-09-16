@@ -983,6 +983,102 @@
 }</code></pre>
         </div>
       </div>
+
+      <!-- Aufgabe 6 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">6</span>
+            <span>Aufgabe 6: Zahlensysteme – Dezimal zu Binär umwandeln</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol6', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Die Umwandlung einer Dezimalzahl in das Binärsystem erfolgt durch wiederholte Division durch 2 mit Rest. Entwickle <code>public String dezimalZuBinaer(int n)</code> rein rekursiv.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-top:4px;"><strong>Beispiel:</strong> $13_{10} = 1101_2$, $6_{10} = 110_2$. Laufzeit: $O(\log_2 n)$.</p>
+        <p style="font-size:0.85rem; color:#475569; margin-top:6px;"><strong>Tipp:</strong> Die letzte Binärziffer (niederwertigstes Bit) ergibt sich aus <code>n % 2</code>. Der verbleibende vordere Binärwert wird durch <code>n / 2</code> rekursiv bestimmt.</p>
+
+        <div class="solution-content" id="sol6">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public String</span> <span class="fn">dezimalZuBinaer</span>(<span class="type">int</span> n) {
+    <span class="comment">// 1. Anker: Wenn n &lt;= 1 ist, entspricht der Binärwert direkt der Ziffer ("0" oder "1")</span>
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> String.<span class="fn">valueOf</span>(n);
+    }
+    <span class="comment">// 2. Schritt: Binärwert des halbierten Werts + Divisionsrest hinten anfügen</span>
+    <span class="kw">return</span> <span class="fn">dezimalZuBinaer</span>(n / <span class="num">2</span>) + (n % <span class="num">2</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 7 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">7</span>
+            <span>Aufgabe 7: Euklidischer Algorithmus (Größter gemeinsamer Teiler)</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol7', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Der größte gemeinsame Teiler zweier ganzer Zahlen $a$ und $b$ ($b \le a$) lässt sich nach Euklid berechnen: Ist $b = 0$, so ist $a$ der Teiler. Andernfalls gilt $ggT(a, b) = ggT(b, a \pmod b)$.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-top:4px;"><strong>Beispiel:</strong> $ggT(48, 18) = ggT(18, 12) = ggT(12, 6) = ggT(6, 0) = 6$.</p>
+        <p style="font-size:0.85rem; color:#475569; margin-top:6px;"><strong>Tipp:</strong> In Java liefert der Modulo-Operator <code>a % b</code> den Divisionsrest.</p>
+
+        <div class="solution-content" id="sol7">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public int</span> <span class="fn">ggt</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="comment">// 1. Anker: Wenn der Rest b gleich 0 ist, ist a der gesuchte Teiler</span>
+    <span class="kw">if</span> (b == <span class="num">0</span>) {
+        <span class="kw">return</span> a;
+    }
+    <span class="comment">// 2. Schritt: Neuer Aufruf mit b und dem Divisionsrest (a % b)</span>
+    <span class="kw">return</span> <span class="fn">ggt</span>(b, a % b);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 8 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">8</span>
+            <span>Aufgabe 8: Der Klassiker – Türme von Hanoi</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol8', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Gegeben sind drei Stäbe (<code>start</code>, <code>ziel</code>, <code>hilf</code>) und $n$ Scheiben. Ziel: Alle Scheiben nach den Spielregeln von <code>start</code> nach <code>ziel</code> bewegen (immer nur eine Scheibe, nie eine größere auf einer kleineren).</p>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-top:4px;"><strong>Teile-und-herrsche-Prinzip:</strong></p>
+        <ol style="font-size:0.88rem; color:var(--text); margin-left:1.5rem; margin-top:4px; line-height:1.5;">
+          <li>Verschiebe $n - 1$ Scheiben von <code>start</code> nach <code>hilf</code> (über <code>ziel</code>).</li>
+          <li>Verschiebe die größte verbliebene Scheibe direkt von <code>start</code> nach <code>ziel</code>.</li>
+          <li>Verschiebe die $n - 1$ Scheiben von <code>hilf</code> nach <code>ziel</code> (über <code>start</code>).</li>
+        </ol>
+        <p style="font-size:0.85rem; color:#475569; margin-top:6px;"><strong>Komplexität:</strong> Für $n$ Scheiben werden exakt $2^n - 1$ Züge benötigt (exponentieller Aufwand $O(2^n)$).</p>
+
+        <div class="solution-content" id="sol8">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public int</span> <span class="fn">hanoi</span>(<span class="type">int</span> n, <span class="type">char</span> start, <span class="type">char</span> ziel, <span class="type">char</span> hilf) {
+    <span class="comment">// 1. Anker: Keine Scheiben -> 0 Züge; 1 Scheibe -> direkter Zug</span>
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) <span class="kw">return</span> <span class="num">0</span>;
+    <span class="kw">if</span> (n == <span class="num">1</span>) {
+        System.out.println(<span class="str">"Verschiebe Scheibe von "</span> + start + <span class="str">" nach "</span> + ziel);
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+    
+    <span class="type">int</span> zuege = <span class="num">0</span>;
+    <span class="comment">// 2. Schritt 1: n-1 Scheiben auf den Hilfsstab auslagern</span>
+    zuege += <span class="fn">hanoi</span>(n - <span class="num">1</span>, start, hilf, ziel);
+    
+    <span class="comment">// Schritt 2: Größte Scheibe direkt ins Ziel</span>
+    System.out.println(<span class="str">"Verschiebe Scheibe von "</span> + start + <span class="str">" nach "</span> + ziel);
+    zuege += <span class="num">1</span>;
+    
+    <span class="comment">// Schritt 3: n-1 Scheiben vom Hilfsstab ins Ziel nachholen</span>
+    zuege += <span class="fn">hanoi</span>(n - <span class="num">1</span>, hilf, ziel, start);
+    
+    <span class="kw">return</span> zuege;
+}</code></pre>
+        </div>
+      </div>
     </section>
 
     <!-- Sektion 5: Selbsttest-Quiz -->
