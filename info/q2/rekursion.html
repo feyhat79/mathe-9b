@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Rekursion & Call-Stack | Informatik Q2</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX fuer mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+  
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #f5f3ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-oberstufe { background: var(--primary-light); color: var(--primary); }
+    .badge-step { background: var(--accent-light); color: var(--accent); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-success { background: var(--success-light); color: var(--success); }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      line-height: 1.5;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Säulen-Grid */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .pillar-grid { grid-template-columns: 1fr; }
+    }
+
+    .pillar-card {
+      background: #fafafa;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .pillar-card.pillar-anker {
+      border-color: #93c5fd;
+      background: #f0f9ff;
+    }
+
+    .pillar-card.pillar-schritt {
+      border-color: #ddd6fe;
+      background: #f5f3ff;
+    }
+
+    .pillar-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .pillar-anker .pillar-badge { background: #dbeafe; color: #1e40af; }
+    .pillar-schritt .pillar-badge { background: #ede9fe; color: #5b21b6; }
+
+    .pillar-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Merkkasten */
+    .merke-box {
+      border: 2px solid #dc2626;
+      border-radius: var(--radius-md);
+      background: #fff;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: #dc2626;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+
+    .merke-content {
+      color: #111827;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    p code, li code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #f472b6; font-weight: 600; }
+    .type { color: #38bdf8; }
+    .fn { color: #a78bfa; font-weight: 600; }
+    .num { color: #f59e0b; }
+    .str { color: #34d399; }
+    .comment { color: #94a3b8; font-style: italic; }
+
+    /* Interactive Call-Stack Simulator */
+    .sim-wrapper {
+      background: #0f172a;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      color: #f8fafc;
+      margin: 1.5rem 0;
+    }
+
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: gap;
+      gap: 10px;
+    }
+
+    .sim-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sim-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .sim-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sim-btn:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .sim-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .sim-body {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .sim-body { grid-template-columns: 1fr; }
+    }
+
+    /* Stack Container (Vertical) */
+    .stack-visual {
+      background: #1e293b;
+      border: 2px dashed #475569;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column-reverse;
+      padding: 10px;
+      gap: 8px;
+      position: relative;
+    }
+
+    .stack-label {
+      position: absolute;
+      top: -24px;
+      left: 0;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .stack-frame {
+      background: #334155;
+      border: 1.5px solid #64748b;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      animation: framePop 0.25s ease-out;
+    }
+
+    .stack-frame.active {
+      border-color: #38bdf8;
+      background: #1e3a8a;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .stack-frame.returning {
+      border-color: #34d399;
+      background: #064e3b;
+    }
+
+    .frame-title {
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .frame-detail {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+    }
+
+    @keyframes framePop {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Sim Status Box */
+    .sim-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sim-step-text {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      flex-grow: 1;
+    }
+
+    .sim-step-title {
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sim-result-box {
+      background: #064e3b;
+      border: 1px solid #10b981;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: #ecfdf5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Trace Table */
+    .trace-table-wrap {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    table.trace-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background: #ffffff;
+      text-align: left;
+    }
+
+    table.trace-table th {
+      background: #f8fafc;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+    }
+
+    table.trace-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: #334155;
+    }
+
+    table.trace-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.trace-table tr.anker-row {
+      background: #eff6ff;
+      font-weight: 600;
+    }
+
+    /* Tasks Accordion */
+    .task-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      transition: border-color 0.2s;
+    }
+
+    .task-card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .task-num-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .task-num-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .btn-solution-toggle {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-solution-toggle:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1.5px dashed var(--border);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .solution-content.open {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Self Check Quiz */
+    .quiz-card {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-question {
+      font-weight: 700;
+      font-size: 0.98rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+    }
+
+    .quiz-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f5f3ff;
+    }
+
+    .quiz-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+      font-weight: 600;
+    }
+
+    .quiz-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <nav class="nav-bar">
+      <a href="index.html" class="nav-back-link">← Zurück zur Kursübersicht</a>
+      <span class="badge-pill badge-oberstufe">Abiturjahrgang Q2</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-oberstufe">Informatik Q2 • Wiederholungsmodul 2</div>
+      <h1>Rekursion & Aufrufstapel (Call-Stack)</h1>
+      <p class="subtitle">Grundprinzipien der Rekursion, Ablaufverfolgung mit Trace-Tabellen, das LIFO-Prinzip auf dem Aufrufstapel der JVM und geführte Programmierübungen.</p>
+      <div class="timestamp-pill">
+        Stand: Schuljahr 2026/27 • BlueJ-Labor: <code>BlueJ_Rekursion_Praxis</code>
+      </div>
+    </header>
+
+    <!-- Sektion 1: Die Idee & die zwei Säulen -->
+    <section class="section-card">
+      <div class="section-title">
+        <span class="section-number">1</span>
+        <span>Das Grundprinzip der Rekursion</span>
+      </div>
+
+      <p>In der Informatik bezeichnet <strong>Rekursion</strong> ein Lösungsverfahren, bei dem sich eine Methode <em>selbst aufruft</em>, um ein komplexes Problem auf ein kleineres, strukturell identisches Teilproblem zurückzuführen.</p>
+
+      <div class="pillar-grid">
+        <!-- Säule 1 -->
+        <div class="pillar-card pillar-anker">
+          <span class="pillar-badge">1. Säule</span>
+          <h3 class="pillar-title">Der Rekursionsanker (Basisfall)</h3>
+          <p style="font-size:0.92rem; color:#334155; margin-bottom:0.75rem;">Die zwingende Abbruchbedingung. Sie löst den kleinsten, trivialen Fall <strong>ohne weiteren Selbstaufruf</strong> direkt auf.</p>
+          <p style="font-size:0.85rem; color:#64748b;"><strong>Typischer Fehler:</strong> Fehlt der Anker oder ist er unerreichbar, ruft sich die Methode unendlich oft auf $\rightarrow$ <code>StackOverflowError</code>.</p>
+        </div>
+
+        <!-- Säule 2 -->
+        <div class="pillar-card pillar-schritt">
+          <span class="pillar-badge">2. Säule</span>
+          <h3 class="pillar-title">Der Rekursionsschritt</h3>
+          <p style="font-size:0.92rem; color:#334155; margin-bottom:0.75rem;">Verkleinert das Problem echt in Richtung des Ankers und ruft sich selbst mit dem reduzierten Parameter auf. Das Teilergebnis wird verarbeitet.</p>
+          <p style="font-size:0.85rem; color:#64748b;"><strong>Formel:</strong> Lösung des Gesamtproblems = Eigene Operation + Selbstaufruf(kleineres Problem).</p>
+        </div>
+      </div>
+
+      <div class="merke-box">
+        <div class="merke-tag">MERKE</div>
+        <div class="merke-content">
+          <strong>Die zwei goldenen Prüffragen für jeden rekursiven Algorithmus:</strong><br>
+          1. <em>Gibt es einen Basisfall, der garantiert ohne Selbstaufruf terminiert?</em><br>
+          2. <em>Wird bei jedem Rekursionsschritt das Argument so verändert, dass es dem Basisfall unweigerlich näher kommt?</em>
+        </div>
+      </div>
+
+      <h3 style="font-size:1.1rem; font-weight:700; margin:1.5rem 0 0.5rem 0;">Klassisches Lehrbuch-Beispiel: Die Fakultät</h3>
+      <p style="font-size:0.92rem; color:var(--text-muted);">Mathematische Definition: $0! = 1$ und $n! = n \cdot (n - 1)!$ für $n > 0$.</p>
+
+      <pre><code><span class="kw">public long</span> <span class="fn">fakultaet</span>(<span class="type">int</span> n) {
+    <span class="comment">// 1. Rekursionsanker: Basisfall direkt beantworten</span>
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+    
+    <span class="comment">// 2. Rekursionsschritt: Verkleinerung (n - 1) und Verknüpfung (n * ...)</span>
+    <span class="kw">return</span> n * <span class="fn">fakultaet</span>(n - <span class="num">1</span>);
+}</code></pre>
+    </section>
+
+    <!-- Sektion 2: Call-Stack & LIFO-Prinzip -->
+    <section class="section-card">
+      <div class="section-title">
+        <span class="section-number">2</span>
+        <span>Der Call-Stack der JVM: Die Brücke zum ADT Stack</span>
+      </div>
+
+      <p>Warum haben wir vor der Rekursion den ADT Stack wiederholt? Weil die Java Virtual Machine (JVM) im Hintergrund genau so arbeitet!</p>
+      <p style="margin-top:0.5rem;">Jedes Mal, wenn eine Methode aufgerufen wird, legt die JVM einen neuen <strong>Stack-Frame</strong> (Speicherbereich mit Parametern und Rücksprungadresse) oben auf den Methodenaufrufstapel (<em>LIFO: Last In – First Out</em>).</p>
+
+      <!-- Interaktiver Simulator -->
+      <div class="sim-wrapper">
+        <div class="sim-header">
+          <div class="sim-title">
+            <span>Interaktive Ablaufverfolgung: Call-Stack bei <code>fakultaet(3)</code></span>
+          </div>
+          <div class="sim-controls">
+            <button class="sim-btn" id="simPrevBtn" onclick="simStep(-1)" disabled>← Schritt zurück</button>
+            <button class="sim-btn" id="simNextBtn" onclick="simStep(1)">Nächster Schritt →</button>
+            <button class="sim-btn" onclick="simReset()">Zurücksetzen</button>
+          </div>
+        </div>
+
+        <div class="sim-body">
+          <!-- Stack Visual -->
+          <div>
+            <div style="position:relative; margin-top:24px;">
+              <span class="stack-label">JVM Call-Stack (wächst nach oben)</span>
+              <div class="stack-visual" id="stackBox">
+                <!-- Dynamische Frames via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Text -->
+          <div class="sim-info">
+            <div class="sim-step-text" id="simExplainer">
+              <div class="sim-step-title" id="simPhaseLabel">Startzustand</div>
+              <div id="simText">Klicke auf „Nächster Schritt“, um den ersten Methodenaufruf auf den Stapel zu legen.</div>
+            </div>
+
+            <div class="sim-result-box">
+              <span>Aktueller Rückgabewert:</span>
+              <strong id="simCurrentVal" style="font-family:'JetBrains Mono'; font-size:1.05rem;">noch nicht berechnet</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="merke-box" style="border-color:#0284c7;">
+        <div class="merke-tag" style="background:#0284c7;">ERKENNTNIS</div>
+        <div class="merke-content">
+          <strong>Hinweg (Expansion):</strong> Die Aufrufe stapeln sich, solange der Anker nicht erreicht ist. Jeder Aufruf muss pausieren und warten.<br>
+          <strong>Rückweg (Unwinding):</strong> Erst wenn der Basisfall einen konkreten Wert liefert, rechnet die JVM von oben nach unten zurück und leert den Stapel.
+        </div>
+      </div>
+    </section>
+
+    <!-- Sektion 3: Trace-Tabelle -->
+    <section class="section-card">
+      <div class="section-title">
+        <span class="section-number">3</span>
+        <span>Ablaufanalyse mit der Trace-Tabelle</span>
+      </div>
+
+      <p>In Klausuren und Abiturprüfungen ist die <strong>Trace-Tabelle</strong> das Standardwerkzeug, um rekursive Algorithmen per Hand präzise nachzuvollziehen.</p>
+
+      <div class="trace-table-wrap">
+        <table class="trace-table">
+          <thead>
+            <tr>
+              <th>Aufrufebene</th>
+              <th>Aufruf</th>
+              <th>Parameter <code>n</code></th>
+              <th>Anker erfüllt?</th>
+              <th>Wartet auf</th>
+              <th>Rückgabewert</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1 (Initial)</strong></td>
+              <td><code>fakultaet(3)</code></td>
+              <td><code>3</code></td>
+              <td>Nein (<code>3 &gt; 1</code>)</td>
+              <td><code>3 * fakultaet(2)</code></td>
+              <td><code>3 * 2 = 6</code></td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td><code>fakultaet(2)</code></td>
+              <td><code>2</code></td>
+              <td>Nein (<code>2 &gt; 1</code>)</td>
+              <td><code>2 * fakultaet(1)</code></td>
+              <td><code>2 * 1 = 2</code></td>
+            </tr>
+            <tr class="anker-row">
+              <td><strong>3 (Anker)</strong></td>
+              <td><code>fakultaet(1)</code></td>
+              <td><code>1</code></td>
+              <td><strong>Ja (<code>1 &lt;= 1</code>)</strong></td>
+              <td><em>kein weiterer Aufruf</em></td>
+              <td><strong><code>1</code></strong> (direkt)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.88rem; color:var(--text-muted);">Lese-Richtung bei der Berechnung: Zuerst von oben nach unten (Spalten 1 bis 5 ausfüllen), am Anker umkehren und die Rückgabewerte von unten nach oben hochreichen!</p>
+    </section>
+
+    <!-- Sektion 4: Schüleraufgaben & BlueJ-Labor -->
+    <section class="section-card">
+      <div class="section-title">
+        <span class="section-number">4</span>
+        <span>Praxis-Aufgaben: BlueJ-Labor <code>BlueJ_Rekursion_Praxis</code></span>
+      </div>
+
+      <p style="margin-bottom:1.5rem;">Öffne das Projekt <strong><code>BlueJ_Rekursion_Praxis</code></strong>. In der Klasse <code>RekursionsLabor.java</code> findest du die folgenden Aufgaben. Nutze <code>RekursionsTest.java</code> zur Selbstkontrolle.</p>
+
+      <!-- Aufgabe 1 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">1</span>
+            <span>Aufgabe 1: Quersumme einer Zahl berechnen</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol1', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Die Quersumme ist die Summe aller Ziffern einer Zahl. Entwickle die Methode <code>public int quersumme(int n)</code> rein rekursiv.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted);"><strong>Beispiel:</strong> <code>quersumme(1234)</code> $\rightarrow 4 + 3 + 2 + 1 = 10$.</p>
+        <p style="font-size:0.85rem; color:#475569; margin-top:6px;"><strong>Tipp:</strong> Die letzte Ziffer liefert <code>n % 10</code>. Die Zahl ohne die letzte Ziffer liefert <code>n / 10</code>.</p>
+
+        <div class="solution-content" id="sol1">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public int</span> <span class="fn">quersumme</span>(<span class="type">int</span> n) {
+    <span class="comment">// 1. Anker: Einstellige Zahl liefert sich selbst</span>
+    <span class="kw">if</span> (n &lt; <span class="num">10</span>) {
+        <span class="kw">return</span> n;
+    }
+    <span class="comment">// 2. Schritt: Letzte Ziffer + Quersumme der restlichen Ziffern</span>
+    <span class="kw">return</span> (n % <span class="num">10</span>) + <span class="fn">quersumme</span>(n / <span class="num">10</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">2</span>
+            <span>Aufgabe 2: Anzahl der Ziffern zählen</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol2', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Entwickle die Methode <code>public int anzahlZiffern(int n)</code>, die rekursiv ermittelt, wie viele Stellen eine positive Zahl hat.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted);"><strong>Beispiel:</strong> <code>anzahlZiffern(7) = 1</code>, <code>anzahlZiffern(4096) = 4</code>.</p>
+
+        <div class="solution-content" id="sol2">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public int</span> <span class="fn">anzahlZiffern</span>(<span class="type">int</span> n) {
+    <span class="comment">// 1. Anker: Wenn n einteilig ist (&lt; 10), hat es genau 1 Ziffer</span>
+    <span class="kw">if</span> (n &lt; <span class="num">10</span>) {
+        <span class="kw">return</span> <span class="num">1</span>;
+    }
+    <span class="comment">// 2. Schritt: 1 gezählte Stelle + Ziffern des verbleibenden Teils</span>
+    <span class="kw">return</span> <span class="num">1</span> + <span class="fn">anzahlZiffern</span>(n / <span class="num">10</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 3 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">3</span>
+            <span>Aufgabe 3: String rekursiv spiegeln (umkehren)</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol3', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Entwickle die Methode <code>public String spiegeln(String s)</code>, die eine Zeichenkette umdreht.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted);"><strong>Beispiel:</strong> <code>spiegeln("INFORMATIK")</code> $\rightarrow$ <code>"KITAMROFNI"</code>.</p>
+        <p style="font-size:0.85rem; color:#475569; margin-top:6px;"><strong>Tipp:</strong> Erstes Zeichen: <code>s.charAt(0)</code>. Rest-String ab Index 1: <code>s.substring(1)</code>.</p>
+
+        <div class="solution-content" id="sol3">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public String</span> <span class="fn">spiegeln</span>(<span class="type">String</span> s) {
+    <span class="comment">// 1. Anker: Leerer String oder 1 Buchstabe ist bereits gespiegelt</span>
+    <span class="kw">if</span> (s == <span class="kw">null</span> || s.length() &lt;= <span class="num">1</span>) {
+        <span class="kw">return</span> s;
+    }
+    <span class="comment">// 2. Schritt: Rest spiegeln + erstes Zeichen hinten anfügen</span>
+    <span class="kw">return</span> <span class="fn">spiegeln</span>(s.substring(<span class="num">1</span>)) + s.charAt(<span class="num">0</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 4 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">4</span>
+            <span>Aufgabe 4: Palindromprüfung</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol4', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Ein Palindrom liest sich vorwärts und rückwärts gleich. Entwickle <code>public boolean istPalindrom(String s)</code>.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted);"><strong>Beispiel:</strong> <code>istPalindrom("OTTO")</code> $\rightarrow$ <code>true</code>, <code>istPalindrom("INFORMATIK")</code> $\rightarrow$ <code>false</code>.</p>
+
+        <div class="solution-content" id="sol4">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public boolean</span> <span class="fn">istPalindrom</span>(<span class="type">String</span> s) {
+    <span class="kw">if</span> (s == <span class="kw">null</span>) <span class="kw">return false</span>;
+    <span class="type">String</span> w = s.toUpperCase();
+    
+    <span class="comment">// 1. Anker: Länge 0 oder 1 ist stets ein Palindrom</span>
+    <span class="kw">if</span> (w.length() &lt;= <span class="num">1</span>) {
+        <span class="kw">return true</span>;
+    }
+    <span class="comment">// Prüfe Außenbuchstaben</span>
+    <span class="kw">if</span> (w.charAt(<span class="num">0</span>) != w.charAt(w.length() - <span class="num">1</span>)) {
+        <span class="kw">return false</span>;
+    }
+    <span class="comment">// 2. Schritt: Inneren Teilstring weiterprüfen</span>
+    <span class="kw">return</span> <span class="fn">istPalindrom</span>(w.substring(<span class="num">1</span>, w.length() - <span class="num">1</span>));
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 5 -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-num-badge">
+            <span class="task-num-circle">5</span>
+            <span>Aufgabe 5: Verzweigte Rekursion (Fibonacci-Zahlen)</span>
+          </div>
+          <button class="btn-solution-toggle" onclick="toggleTask('sol5', this)">Musterlösung anzeigen</button>
+        </div>
+        <p>Im Gegensatz zur linearen Rekursion ruft sich die Methode hier <strong>zweimal</strong> selbst auf. Es entsteht ein Aufrufbaum.</p>
+        <p style="font-size:0.88rem; color:var(--text-muted);">Mathematische Definition: $fib(0)=0$, $fib(1)=1$ und $fib(n) = fib(n-1) + fib(n-2)$.</p>
+
+        <div class="solution-content" id="sol5">
+          <div class="badge-pill badge-success">Musterlösung</div>
+          <pre><code><span class="kw">public int</span> <span class="fn">fibonacci</span>(<span class="type">int</span> n) {
+    <span class="comment">// 1. Anker: Zwei Basisfälle</span>
+    <span class="kw">if</span> (n &lt;= <span class="num">0</span>) <span class="kw">return</span> <span class="num">0</span>;
+    <span class="kw">if</span> (n == <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;
+    
+    <span class="comment">// 2. Schritt: Verzweigter Doppelaufruf</span>
+    <span class="kw">return</span> <span class="fn">fibonacci</span>(n - <span class="num">1</span>) + <span class="fn">fibonacci</span>(n - <span class="num">2</span>);
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sektion 5: Selbsttest-Quiz -->
+    <section class="section-card">
+      <div class="section-title">
+        <span class="section-number">5</span>
+        <span>Kurz-Check: Konzeptverständnis</span>
+      </div>
+
+      <!-- Quiz 1 -->
+      <div class="quiz-card" id="qcard1">
+        <div class="quiz-question">Frage 1: Was geschieht zur Laufzeit, wenn in einer rekursiven Methode der Rekursionsanker fehlt?</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(1, 0, this)">A) Die Methode liefert standardmäßig den Wert 0 zurück.</button>
+          <button class="quiz-btn" onclick="checkQuiz(1, 1, this)">B) Der Compiler verweigert die Übersetzung mit einem Syntaxfehler.</button>
+          <button class="quiz-btn" onclick="checkQuiz(1, 2, this)">C) Es kommt zur Laufzeit zu einem java.lang.StackOverflowError.</button>
+        </div>
+        <div class="quiz-feedback" id="qf1"></div>
+      </div>
+
+      <!-- Quiz 2 -->
+      <div class="quiz-card" id="qcard2">
+        <div class="quiz-question">Frage 2: Nach welchem Speicherprinzip verwaltet die JVM die Methodenaufrufe auf dem Call-Stack?</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(2, 0, this)">A) LIFO (Last In – First Out): Der zuletzt aufgerufene Frame wird als erster aufgelöst.</button>
+          <button class="quiz-btn" onclick="checkQuiz(2, 1, this)">B) FIFO (First In – First Out): Der erste Aufruf terminiert vor allen nachfolgenden.</button>
+          <button class="quiz-btn" onclick="checkQuiz(2, 2, this)">C) Random Access: Die JVM springt beliebig zwischen aktiven Frames.</button>
+        </div>
+        <div class="quiz-feedback" id="qf2"></div>
+      </div>
+
+      <!-- Quiz 3 -->
+      <div class="quiz-card" id="qcard3">
+        <div class="quiz-question">Frage 3: Wie viele Aufrufe von <code>fakultaet(...)</code> befinden sich bei <code>fakultaet(4)</code> maximal gleichzeitig auf dem Call-Stack?</div>
+        <div class="quiz-options">
+          <button class="quiz-btn" onclick="checkQuiz(3, 0, this)">A) 1 Aufruf</button>
+          <button class="quiz-btn" onclick="checkQuiz(3, 1, this)">B) 4 Aufrufe (für n=4, n=3, n=2, n=1)</button>
+          <button class="quiz-btn" onclick="checkQuiz(3, 2, this)">C) 16 Aufrufe (quadratisch)</button>
+        </div>
+        <div class="quiz-feedback" id="qf3"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ==========================================
+    // INTERAKTIVER CALL-STACK SIMULATOR
+    // ==========================================
+    const simSteps = [
+      {
+        phase: "Initialisierung",
+        title: "Aufruf der Methode",
+        text: "Ein Programm ruft <code>fakultaet(3)</code> auf. Die JVM reserviert einen Frame auf dem Call-Stack.",
+        frames: [
+          { name: "fakultaet(3)", detail: "Parameter n = 3. Prüft n <= 1 (false). Wartet auf 3 * fakultaet(2).", state: "active" }
+        ],
+        val: "wartet..."
+      },
+      {
+        phase: "Hinweg (Push 1)",
+        title: "1. Rekursiver Aufruf",
+        text: "<code>fakultaet(3)</code> ruft <code>fakultaet(2)</code> auf. Der neue Frame wird oben auf den Stapel gelegt.",
+        frames: [
+          { name: "fakultaet(3)", detail: "pausiert • wartet auf Rückgabe", state: "waiting" },
+          { name: "fakultaet(2)", detail: "Parameter n = 2. Prüft n <= 1 (false). Wartet auf 2 * fakultaet(1).", state: "active" }
+        ],
+        val: "wartet..."
+      },
+      {
+        phase: "Hinweg (Push 2)",
+        title: "2. Rekursiver Aufruf (Anker)",
+        text: "<code>fakultaet(2)</code> ruft <code>fakultaet(1)</code> auf. Der Anker <code>n &lt;= 1</code> ist ERFÜLLT! Kein weiterer Aufruf!",
+        frames: [
+          { name: "fakultaet(3)", detail: "pausiert • wartet auf Rückgabe", state: "waiting" },
+          { name: "fakultaet(2)", detail: "pausiert • wartet auf Rückgabe", state: "waiting" },
+          { name: "fakultaet(1)", detail: "ANKER ERREICHT (n = 1)! Liefert direkt 1 zurück.", state: "active" }
+        ],
+        val: "1 (Basisfall)"
+      },
+      {
+        phase: "Rückweg (Pop 1)",
+        title: "Unwinding: fakultaet(1) schließt ab",
+        text: "<code>fakultaet(1)</code> gibt 1 an <code>fakultaet(2)</code> zurück und wird vom Stapel entfernt. <code>fakultaet(2)</code> rechnet: <code>2 * 1 = 2</code>.",
+        frames: [
+          { name: "fakultaet(3)", detail: "pausiert • wartet auf Rückgabe", state: "waiting" },
+          { name: "fakultaet(2)", detail: "Rechnet: 2 * 1 = 2. Liefert 2 zurück.", state: "returning" }
+        ],
+        val: "2"
+      },
+      {
+        phase: "Rückweg (Pop 2)",
+        title: "Unwinding: fakultaet(2) schließt ab",
+        text: "<code>fakultaet(2)</code> gibt 2 an <code>fakultaet(3)</code> zurück. <code>fakultaet(3)</code> rechnet: <code>3 * 2 = 6</code>.",
+        frames: [
+          { name: "fakultaet(3)", detail: "Rechnet: 3 * 2 = 6. Liefert Endergebnis 6 zurück.", state: "returning" }
+        ],
+        val: "6 (Endergebnis)"
+      },
+      {
+        phase: "Abschluss",
+        title: "Stapel vollständig abgebaut",
+        text: "Alle Frames sind abgebaut (Call-Stack ist leer). Das Gesamtergebnis <strong>6</strong> wird an den Aufrufer übergeben.",
+        frames: [],
+        val: "6 (Fertig!)"
+      }
+    ];
+
+    let currentSimIndex = -1;
+
+    function renderSim() {
+      const box = document.getElementById("stackBox");
+      const explTitle = document.getElementById("simPhaseLabel");
+      const explText = document.getElementById("simText");
+      const currentVal = document.getElementById("simCurrentVal");
+      const prevBtn = document.getElementById("simPrevBtn");
+      const nextBtn = document.getElementById("simNextBtn");
+
+      if (currentSimIndex < 0) {
+        box.innerHTML = '<div style="color:#64748b; font-size:0.85rem; text-align:center; margin:auto;">Stapel leer (Bereit zum Start)</div>';
+        explTitle.textContent = "Startzustand";
+        explText.innerHTML = "Klicke auf „Nächster Schritt“, um den ersten Methodenaufruf auf den Stapel zu legen.";
+        currentVal.textContent = "noch nicht berechnet";
+        prevBtn.disabled = true;
+        nextBtn.disabled = false;
+        return;
+      }
+
+      const step = simSteps[currentSimIndex];
+      explTitle.textContent = `${step.phase}: ${step.title}`;
+      explText.innerHTML = step.text;
+      currentVal.textContent = step.val;
+
+      // Render frames
+      if (step.frames.length === 0) {
+        box.innerHTML = '<div style="color:#10b981; font-weight:700; font-size:0.9rem; text-align:center; margin:auto;">Stapel geleert • Ergebnis zurückgegeben</div>';
+      } else {
+        box.innerHTML = step.frames.map(f => `
+          <div class="stack-frame ${f.state}">
+            <div class="frame-title">${f.name}</div>
+            <div class="frame-detail">${f.detail}</div>
+          </div>
+        `).join("");
+      }
+
+      prevBtn.disabled = (currentSimIndex === 0);
+      nextBtn.disabled = (currentSimIndex === simSteps.length - 1);
+
+      if (window.renderMathInElement) {
+        triggerKaTeX();
+      }
+    }
+
+    function simStep(delta) {
+      currentSimIndex += delta;
+      if (currentSimIndex < 0) currentSimIndex = 0;
+      if (currentSimIndex >= simSteps.length) currentSimIndex = simSteps.length - 1;
+      renderSim();
+    }
+
+    function simReset() {
+      currentSimIndex = -1;
+      renderSim();
+    }
+
+    // ==========================================
+    // TASK TOGGLES
+    // ==========================================
+    function toggleTask(id, btn) {
+      const el = document.getElementById(id);
+      if (el.classList.contains("open")) {
+        el.classList.remove("open");
+        btn.textContent = "Musterlösung anzeigen";
+      } else {
+        el.classList.add("open");
+        btn.textContent = "Musterlösung verbergen";
+      }
+    }
+
+    // ==========================================
+    // QUIZ CHECKER
+    // ==========================================
+    const quizSolutions = {
+      1: {
+        correct: 2,
+        feedback: "Richtig! Ohne Anker legt jeder Aufruf einen weiteren Frame an, bis der begrenzte Stack-Speicher der JVM voll ist (StackOverflowError)."
+      },
+      2: {
+        correct: 0,
+        feedback: "Richtig! Die JVM arbeitet nach dem LIFO-Prinzip: Der letzte Aufruf (der Basisfall) wird als erster beendet und liefert seinen Wert an den vorigen Aufruf."
+      },
+      3: {
+        correct: 1,
+        feedback: "Richtig! Maximal befinden sich fakultaet(4), fakultaet(3), fakultaet(2) und fakultaet(1) gleichzeitig auf dem Stapel (4 Frames tiefe Rekursion)."
+      }
+    };
+
+    function checkQuiz(qNum, selectedIdx, btn) {
+      const card = document.getElementById(`qcard${qNum}`);
+      const feedbackEl = document.getElementById(`qf${qNum}`);
+      const buttons = card.querySelectorAll(".quiz-btn");
+      const sol = quizSolutions[qNum];
+
+      buttons.forEach(b => b.disabled = true);
+
+      if (selectedIdx === sol.correct) {
+        btn.classList.add("correct");
+        feedbackEl.style.display = "block";
+        feedbackEl.style.background = "#ecfdf5";
+        feedbackEl.style.color = "#065f46";
+        feedbackEl.style.border = "1px solid #a7f3d0";
+        feedbackEl.innerHTML = "<strong>Korrekt:</strong> " + sol.feedback;
+      } else {
+        btn.classList.add("wrong");
+        buttons[sol.correct].classList.add("correct");
+        feedbackEl.style.display = "block";
+        feedbackEl.style.background = "#fef2f2";
+        feedbackEl.style.color = "#991b1b";
+        feedbackEl.style.border = "1px solid #fecaca";
+        feedbackEl.innerHTML = "<strong>Leider nicht richtig:</strong> " + sol.feedback;
+      }
+    }
+
+    // Initialisierung
+    document.addEventListener("DOMContentLoaded", () => {
+      renderSim();
+    });
+  </script>
+</body>
+</html>
