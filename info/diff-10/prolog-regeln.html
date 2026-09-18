@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Regeln &amp; Inferenz in Prolog | Informatik Diff-10</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+  
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #1e293b;
+      --primary-light: #eff6ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --radius-sm: 5px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    .btn-swish-ext {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #ffffff;
+      background: var(--primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-swish-ext:hover {
+      background: #172554;
+      transform: translateY(-1px);
+    }
+
+    /* Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-diff {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1px solid #bfdbfe;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 820px;
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 0.6rem;
+    }
+
+    .step-marker {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Tree Card */
+    .tree-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin: 1rem 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    /* Code Editor & Copy */
+    .code-wrapper {
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .code-toolbar {
+      background: #0f172a;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-top-left-radius: var(--radius-md);
+      border-top-right-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-copy-code {
+      background: #334155;
+      color: #ffffff;
+      border: none;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #2563eb;
+    }
+
+    pre.code-block {
+      background: #1e293b;
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.9rem;
+      padding: 1rem 1.25rem;
+      border-bottom-left-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+      overflow-x: auto;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #38bdf8; font-weight: 600; }
+    .code-atom { color: #86efac; }
+    .code-var { color: #f472b6; font-weight: 700; }
+    .code-op { color: #fbbf24; font-weight: 800; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    /* Callout & Merke */
+    .callout-box {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1.25rem 0;
+    }
+
+    .callout-title {
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-box p {
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Anatomy Grid */
+    .anatomy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 1rem 0;
+    }
+
+    .anatomy-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .anatomy-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+    }
+
+    /* Interactive Reveal Card */
+    .reveal-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .reveal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .reveal-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 0.98rem;
+    }
+
+    .btn-reveal {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-reveal:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .reveal-content {
+      display: none;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .reveal-content.active {
+      display: block;
+    }
+
+    /* Practice Table */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .practice-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    .practice-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+    }
+
+    .practice-table td {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      vertical-align: middle;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <nav class="nav-bar">
+      <a href="index.html" class="nav-back-link">← Zur Kursübersicht (Diff-10)</a>
+      <a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener" class="btn-swish-ext">
+        SWISH-Editor öffnen ↗
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-diff">Thema 2 • Logische Programmierung</div>
+      <h1>Regeln &amp; Inferenz in Prolog</h1>
+      <p class="subtitle">
+        Wie wir den Computer dazu bringen, aus bekannten Fakten selbstständig logische Schlüsse zu ziehen – erklärt am Stammbaum der olympischen Götter.
+      </p>
+    </header>
+
+    <!-- SECTION 1: DER STAMMBAUM -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">1</span>
+        <span>Das Szenario: Der Stammbaum des Olymp</span>
+      </h2>
+      <p>
+        In der ersten Stunde haben wir Fakten deklariert (z. B. wer an welchem Ort war). Bei großen Systemen reicht das Aufzählen einzelner Fakten jedoch nicht aus: Wir wollen, dass Prolog <strong>selbstständig Verwandtschaftsverhältnisse erkennt</strong>.
+      </p>
+
+      <!-- SVG Stammbaum -->
+      <div class="tree-box">
+        <svg viewBox="0 0 740 160" width="100%" height="auto" style="max-width: 740px;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <style>
+              .node-titan { fill: #eff6ff; stroke: #1e3a8a; stroke-width: 1.5; rx: 4; }
+              .node-olymp1 { fill: #f0fdf4; stroke: #166534; stroke-width: 1.5; rx: 4; }
+              .node-olymp2 { fill: #fffbeb; stroke: #b45309; stroke-width: 1.5; rx: 4; }
+              .node-neu { fill: #fdf2f8; stroke: #9d174d; stroke-width: 1.5; stroke-dasharray: 4 2; rx: 4; }
+              .tree-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; fill: #111827; text-anchor: middle; font-weight: bold; }
+              .tree-sub { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 9px; fill: #475569; text-anchor: middle; }
+              .tree-line { stroke: #64748b; stroke-width: 1.3; fill: none; }
+              .tree-line-neu { stroke: #9d174d; stroke-width: 1.3; stroke-dasharray: 3 2; fill: none; }
+              .tree-heart { font-size: 10px; fill: #dc2626; text-anchor: middle; }
+            </style>
+          </defs>
+
+          <!-- Gen 1: Titanen -->
+          <rect x="250" y="8" width="105" height="30" class="node-titan" />
+          <text x="302" y="23" class="tree-text">Kronos [m]</text>
+          <text x="302" y="34" class="tree-sub">Titanenvater</text>
+
+          <text x="365" y="27" class="tree-heart">♥</text>
+
+          <rect x="375" y="8" width="105" height="30" class="node-titan" />
+          <text x="427" y="23" class="tree-text">Rhea [w]</text>
+          <text x="427" y="34" class="tree-sub">Titanenmutter</text>
+
+          <!-- Linien Gen 1 -> Gen 2 -->
+          <path d="M 365,30 L 365,48" class="tree-line" />
+          <path d="M 50,48 L 685,48" class="tree-line" />
+          <path d="M 50,48 L 50,60" class="tree-line" />
+          <path d="M 175,48 L 175,60" class="tree-line" />
+          <path d="M 300,48 L 300,60" class="tree-line" />
+          <path d="M 425,48 L 425,60" class="tree-line" />
+          <path d="M 550,48 L 550,60" class="tree-line" />
+          <path d="M 685,48 L 685,60" class="tree-line" />
+
+          <!-- Gen 2: Olympier -->
+          <rect x="10" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="50" y="74" class="tree-text">Hades [m]</text>
+          <text x="50" y="84" class="tree-sub">Unterwelt</text>
+
+          <rect x="135" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="175" y="74" class="tree-text">Poseidon [m]</text>
+          <text x="175" y="84" class="tree-sub">Meere</text>
+
+          <rect x="260" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="300" y="74" class="tree-text">Hestia [w]</text>
+          <text x="300" y="84" class="tree-sub">Herdfeuer</text>
+
+          <rect x="385" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="425" y="74" class="tree-text">Demeter [w]</text>
+          <text x="425" y="84" class="tree-sub">Ackerbau</text>
+
+          <rect x="510" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="550" y="74" class="tree-text">Hera [w]</text>
+          <text x="550" y="84" class="tree-sub">Göttermutter</text>
+
+          <text x="600" y="76" class="tree-heart">♥</text>
+
+          <rect x="610" y="60" width="80" height="28" class="node-olymp1" />
+          <text x="650" y="74" class="tree-text">Zeus [m]</text>
+          <text x="650" y="84" class="tree-sub">Göttervater</text>
+
+          <!-- Gen 2 -> Gen 3: Kinder von Zeus & Hera -->
+          <path d="M 600,79 L 600,105" class="tree-line" />
+          <path d="M 525,105 L 615,105" class="tree-line" />
+          <path d="M 525,105 L 525,118" class="tree-line" />
+          <path d="M 615,105 L 615,118" class="tree-line" />
+
+          <rect x="480" y="118" width="90" height="28" class="node-olymp2" />
+          <text x="525" y="132" class="tree-text">Ares [m]</text>
+          <text x="525" y="142" class="tree-sub">Krieg</text>
+
+          <rect x="575" y="118" width="95" height="28" class="node-olymp2" />
+          <text x="622" y="132" class="tree-text">Hephaistos [m]</text>
+          <text x="622" y="142" class="tree-sub">Schmiede</text>
+
+          <!-- Ergänzung: Leto + Zwillinge -->
+          <rect x="670" y="78" width="65" height="22" class="node-neu" />
+          <text x="702" y="93" class="tree-text" style="fill:#9d174d; font-size:10px;">Leto [w]</text>
+
+          <path d="M 670,89 L 660,89" class="tree-line-neu" />
+          <path d="M 665,89 L 665,110 L 710,110" class="tree-line-neu" />
+          <path d="M 680,110 L 680,118" class="tree-line-neu" />
+          <path d="M 725,110 L 725,118" class="tree-line-neu" />
+
+          <rect x="672" y="118" width="30" height="28" class="node-neu" />
+          <text x="687" y="132" class="tree-text" style="font-size:9px;">Apollo</text>
+          <text x="687" y="142" class="tree-sub">[m]</text>
+
+          <rect x="705" y="118" width="32" height="28" class="node-neu" />
+          <text x="721" y="132" class="tree-text" style="font-size:9px;">Artemis</text>
+          <text x="721" y="142" class="tree-sub">[w]</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- SECTION 2: WISSENSBASIS FÜR SWISH -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">2</span>
+        <span>Die Basis für SWISH (Kopieren &amp; Einfügen)</span>
+      </h2>
+      <p>
+        Kopiere den folgenden Code mit einem Klick und füge ihn auf <strong><a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener" style="color:var(--primary); font-weight:700;">swish.swi-prolog.org</a></strong> in das <strong>linke Editorfenster</strong> ein:
+      </p>
+
+      <div class="code-wrapper">
+        <div class="code-toolbar">
+          <span>stammbaum_olymp.pl</span>
+          <button class="btn-copy-code" onclick="copyKnowledgeBase()">Code kopieren</button>
+        </div>
+        <pre class="code-block" id="prolog-code"><code><span class="code-comment">% --- 1. Generation: Titanen &amp; Kinder ---</span>
+vater(kronos, zeus).
+vater(kronos, poseidon).
+vater(kronos, hades).
+vater(kronos, hera).
+vater(kronos, demeter).
+vater(kronos, hestia).
+
+mutter(rhea, zeus).
+mutter(rhea, poseidon).
+mutter(rhea, hades).
+mutter(rhea, hera).
+mutter(rhea, demeter).
+mutter(rhea, hestia).
+
+<span class="code-comment">% --- 2. Generation: Kinder von Zeus und Hera ---</span>
+vater(zeus, ares).
+mutter(hera, ares).
+vater(zeus, hephaistos).
+mutter(hera, hephaistos).
+
+<span class="code-comment">% --- Geschlechter ---</span>
+maennlich(kronos).
+maennlich(zeus).
+maennlich(poseidon).
+maennlich(hades).
+maennlich(ares).
+maennlich(hephaistos).
+
+weiblich(rhea).
+weiblich(hera).
+weiblich(demeter).
+weiblich(hestia).</code></pre>
+      </div>
+
+      <!-- Warm-Up Aufgabe -->
+      <div class="callout-box">
+        <div class="callout-title">Übungsaufgabe 1 (Warm-Up): Wissensbasis erweitern</div>
+        <p>
+          Zeus zeugte mit <strong>Leto</strong> (weiblich) die Zwillinge <strong>Apollo</strong> (männlich) und <strong>Artemis</strong> (weiblich). Ergänze diese Fakten in deinem SWISH-Editor!
+        </p>
+        <div class="reveal-card">
+          <div class="reveal-header" onclick="toggleReveal('sol-warmup')">
+            <span class="reveal-title">Lösung anzeigen (nach eigenem Versuch)</span>
+            <button class="btn-reveal">Aufdecken</button>
+          </div>
+          <div class="reveal-content" id="sol-warmup">
+            <pre class="code-block" style="border-radius:4px; padding:0.5rem 0.75rem;"><code>vater(zeus, apollo).
+mutter(leto, apollo).
+vater(zeus, artemis).
+mutter(leto, artemis).
+
+weiblich(leto).
+maennlich(apollo).
+weiblich(artemis).</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: DIE ANATOMIE EINER REGEL -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">3</span>
+        <span>Die Anatomie einer Regel (Inferenz &amp; ODER)</span>
+      </h2>
+      <p>
+        Bisher mussten wir getrennt nach <span class="code-pill">vater/2</span> oder <span class="code-pill">mutter/2</span> fragen. Jetzt bringen wir Prolog den Oberbegriff <strong>Elternteil</strong> bei!
+      </p>
+
+      <!-- MERKE-BOX -->
+      <div class="merke-box">
+        <div class="merke-tag">MERKE</div>
+        <p style="font-weight:700; font-size:1.05rem;">Aufbau einer Prolog-Regel:</p>
+        <div style="background:#f8fafc; border:1.5px solid #1e3a8a; border-radius:6px; padding:8px 14px; font-family:'JetBrains Mono',monospace; font-weight:700; color:#1e3a8a; margin: 8px 0;">
+          elternteil(E, K) :- vater(E, K). &nbsp;&nbsp; <span style="font-weight:normal; color:#64748b;">% Regel 1</span><br>
+          elternteil(E, K) :- mutter(E, K). &nbsp;&nbsp; <span style="font-weight:normal; color:#64748b;">% Regel 2</span>
+        </div>
+        <p>
+          Eine Regel besteht immer aus drei Bestandteilen:
+        </p>
+        <div class="anatomy-grid">
+          <div class="anatomy-card">
+            <h4>1. Regelkopf (Head)</h4>
+            <p style="font-size:0.88rem; color:#475569;"><span class="code-pill">elternteil(E, K)</span></p>
+            <p style="font-size:0.85rem;">Was soll bewiesen werden? (Die neue Schlussfolgerung).</p>
+          </div>
+          <div class="anatomy-card">
+            <h4>2. Operator (Neck)</h4>
+            <p style="font-size:0.88rem; color:#475569;"><span class="code-pill">:-</span></p>
+            <p style="font-size:0.85rem;">Gelesen als <strong>„WENN“</strong> (leitet die Bedingungen ein).</p>
+          </div>
+          <div class="anatomy-card">
+            <h4>3. Regelkörper (Body)</h4>
+            <p style="font-size:0.88rem; color:#475569;"><span class="code-pill">vater(E, K).</span></p>
+            <p style="font-size:0.85rem;">Die Voraussetzung, die wahr sein muss. Endet mit Punkt!</p>
+          </div>
+        </div>
+        <p style="font-size:0.92rem; margin-top:6px;">
+          <strong>Das ODER-Prinzip:</strong> Zwei oder mehr Regeln mit <strong>demselben Kopf</strong> bedeuten ein <strong>logisches ODER</strong>. E ist ein Elternteil von K, wenn E der Vater ist <em>ODER</em> wenn E die Mutter ist!
+        </p>
+      </div>
+
+      <p>
+        <strong>Ausprobieren in SWISH:</strong> Sobald du die beiden Regeln in deine Wissensbasis eingefügt hast, kannst du folgende Fragen stellen:
+      </p>
+      <ul style="margin: 0.5rem 0 1rem 1.5rem; font-size:0.95rem;">
+        <li><span class="code-pill">?- elternteil(zeus, ares).</span> &rarr; liefert <span class="code-pill" style="background:#ecfdf5; color:#059669;">true.</span></li>
+        <li><span class="code-pill">?- elternteil(Wer, ares).</span> &rarr; drücke Taste <code>;</code> und du erhältst nacheinander <span class="code-pill">Wer = zeus</span> und <span class="code-pill">Wer = hera</span>!</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 4: ZWISCHENVARIABLEN & UND -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">4</span>
+        <span>Logisches UND (,) &amp; Zwischenvariablen</span>
+      </h2>
+      <p>
+        Wie wird jemand zum <strong>Großvater</strong>? Ein Großvater ist der <em>Vater des eigenen Elternteils</em>. In Prolog verknüpfen wir diese beiden Bedingungen mit einem <strong>Komma (UND)</strong>:
+      </p>
+
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; border-left:4px solid #1e3a8a; border-radius:6px; padding:12px 16px; margin: 12px 0;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:1.05rem; font-weight:700; color:#1e3a8a;">
+          grossvater(G, K) :- vater(G, E), elternteil(E, K).
+        </div>
+        <p style="margin-top: 6px; font-size:0.92rem; color:#1e293b;">
+          <strong>Warum steht hier die Variable <code>E</code>?</strong><br>
+          Die Variable <span class="code-pill">E</span> ist die <strong>Zwischenvariable</strong> (das Bindeglied). Prolog sucht eine Person <span class="code-pill">E</span>, deren Vater G ist, und prüft gleichzeitig, ob genau dasselbe <span class="code-pill">E</span> ein Elternteil von K ist!
+        </p>
+      </div>
+
+      <p>
+        Test in SWISH: <span class="code-pill">?- grossvater(kronos, ares).</span> &rarr; liefert <span class="code-pill" style="background:#ecfdf5; color:#059669;">true.</span>, da Kronos Vater von Zeus ist und Zeus Elternteil von Ares!
+      </p>
+    </section>
+
+    <!-- SECTION 5: ÜBUNGEN -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">5</span>
+        <span>Übungsaufgaben: Eigene Regeln formulieren</span>
+      </h2>
+      <p>
+        Formuliere nun selbstständig Regeln für folgende Verwandtschaftsbeziehungen. Achte strikt darauf, dass <strong>Variablen groß</strong> und <strong>Prädikate klein</strong> geschrieben werden:
+      </p>
+
+      <div class="table-responsive">
+        <table class="practice-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Beziehung</th>
+              <th>Bedingung in Worten</th>
+              <th style="width: 20%;">Lösungsprüfung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>grossmutter(G, K)</strong></td>
+              <td>G ist Mutter von E <strong>UND</strong> E ist Elternteil von K.</td>
+              <td>
+                <button class="btn-reveal" onclick="toggleReveal('sol-reg-1')">Lösung</button>
+              </td>
+            </tr>
+            <tr id="sol-reg-1" style="display:none; background:#f8fafc;">
+              <td colspan="3">
+                <code class="code-pill">grossmutter(G, K) :- mutter(G, E), elternteil(E, K).</code>
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>sohn(S, E)</strong></td>
+              <td>S ist männlich <strong>UND</strong> E ist Elternteil von S.</td>
+              <td>
+                <button class="btn-reveal" onclick="toggleReveal('sol-reg-2')">Lösung</button>
+              </td>
+            </tr>
+            <tr id="sol-reg-2" style="display:none; background:#f8fafc;">
+              <td colspan="3">
+                <code class="code-pill">sohn(S, E) :- maennlich(S), elternteil(E, S).</code>
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>tochter(T, E)</strong></td>
+              <td>T ist weiblich <strong>UND</strong> E ist Elternteil von T.</td>
+              <td>
+                <button class="btn-reveal" onclick="toggleReveal('sol-reg-3')">Lösung</button>
+              </td>
+            </tr>
+            <tr id="sol-reg-3" style="display:none; background:#f8fafc;">
+              <td colspan="3">
+                <code class="code-pill">tochter(T, E) :- weiblich(T), elternteil(E, T).</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 6: SPEZIALOPERATOREN \= UND _ -->
+    <section class="content-card">
+      <h2 class="section-title">
+        <span class="step-marker">6</span>
+        <span>Die Profi-Operatoren: Ungleich (\=) &amp; Anonyme Variable (_)</span>
+      </h2>
+
+      <!-- Das Geschwisterproblem -->
+      <h3 style="font-size:1.1rem; font-weight:700; color:#1e3a8a; margin: 1rem 0 0.5rem 0;">
+        A. Das Geschwister-Problem &amp; der Ungleichheits-Operator (\=)
+      </h3>
+      <p>
+        Wann sind X und Y Geschwister? Erste naive Idee: <em>„Wenn beide denselben Elternteil E haben.“</em>
+      </p>
+      <div style="background:#fef2f2; border:1px solid #fecaca; padding:8px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.9rem; margin:8px 0; color:#991b1b;">
+        geschwister(X, Y) :- elternteil(E, X), elternteil(E, Y). &nbsp; % FEHLERHAFT!
+      </div>
+      <p>
+        <strong>Der Test in SWISH:</strong> Frage <span class="code-pill">?- geschwister(ares, Wer).</span> ab. Als erstes Ergebnis spuckt Prolog aus: <span class="code-pill">Wer = ares.</span>! Ares wäre demnach sein eigenes Geschwisterkind!
+      </p>
+      <p>
+        <strong>Warum passiert das?</strong> Da X und Y verschiedene Variablen sind, verbietet ihnen niemand, denselben Wert (ares) anzunehmen.<br>
+        <strong>Die Rettung mit <span class="code-pill">\=</span> (ungleich):</strong>
+      </p>
+      <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:8px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.92rem; margin:8px 0; color:#065f46; font-weight:700;">
+        geschwister(X, Y) :- elternteil(E, X), elternteil(E, Y), X \= Y.
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin: 1.5rem 0;">
+
+      <!-- Die anonyme Variable -->
+      <h3 style="font-size:1.1rem; font-weight:700; color:#1e3a8a; margin: 1rem 0 0.5rem 0;">
+        B. Wer hat Nachwuchs? – Die anonyme Variable (_)
+      </h3>
+      <p>
+        Wir wollen abfragen: <em>„Welche Götter haben überhaupt Kinder?“</em> Uns ist in diesem Moment völlig egal, wie die Kinder heißen.
+      </p>
+      <p>
+        Hierfür hat Prolog den <strong>Unterstrich <span class="code-pill">_</span></strong> (die anonyme Variable):
+      </p>
+      <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:8px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.92rem; margin:8px 0; color:#1e3a8a; font-weight:700;">
+        hat_kinder(X) :- elternteil(X, _).
+      </div>
+      <p style="font-size:0.9rem; color:#475569;">
+        Der Unterstrich sagt Prolog: <em>„Es muss an dieser Stelle einen passenden Wert geben, aber speichere ihn in keiner Variablen – sein Name interessiert uns nicht.“</em>
+      </p>
+    </section>
+
+    <!-- SECTION 7: CHECKLISTE -->
+    <section class="content-card" style="background:#f8fafc; border: 1.5px solid #cbd5e1;">
+      <h2 class="section-title">
+        <span class="step-marker">7</span>
+        <span>Checkliste für die Stunde</span>
+      </h2>
+      <ul style="margin-left: 1.5rem; line-height:1.8; font-size:0.95rem;">
+        <li>Hast du die Zwillinge von Leto in deine Wissensbasis eingetragen?</li>
+        <li>Funktioniert deine Abfrage <span class="code-pill">?- elternteil(Wer, ares).</span> mit Taste <code>;</code> für beide Eltern?</li>
+        <li>Gibt deine Regel <span class="code-pill">?- grossvater(kronos, ares).</span> ein klares <span class="code-pill" style="background:#ecfdf5; color:#059669;">true.</span> zurück?</li>
+        <li>Verhindert dein <span class="code-pill">X \= Y</span> bei <span class="code-pill">geschwister/2</span>, dass Götter als eigene Geschwister auftauchen?</li>
+      </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Differenzierung 10 (Diff-10)</strong> • Schuljahr 2026/2027</p>
+      <p style="margin-top:4px;">Erstellt für den Unterrichtseinsatz mit dem SWISH-Editor von SWI-Prolog.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Wissensbasis in die Zwischenablage kopieren
+    function copyKnowledgeBase() {
+      const code = document.getElementById('prolog-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.btn-copy-code');
+        const oldText = btn.innerText;
+        btn.innerText = "Kopiert!";
+        btn.style.background = "#059669";
+        setTimeout(() => {
+          btn.innerText = oldText;
+          btn.style.background = "#334155";
+        }, 2000);
+      }).catch(err => {
+        alert("Kopieren nicht unterstützt. Bitte markiere den Code manuell.");
+      });
+    }
+
+    // Toggle für Lösungen
+    function toggleReveal(id) {
+      const el = document.getElementById(id);
+      if (el.tagName === 'TR') {
+        el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row' : 'none';
+      } else {
+        el.classList.toggle('active');
+      }
+    }
+  </script>
+
+</body>
+</html>
