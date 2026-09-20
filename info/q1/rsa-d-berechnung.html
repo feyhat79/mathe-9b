@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>RSA: Reste-Zyklus & Berechnung des Schlüssels d | Informatik Q1</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Fach- und Modulspezifische Komponenten */
+    .section-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header-compact {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .step-marker {
+      width: 32px;
+      height: 32px;
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .step-marker.mathe {
+      background: var(--theme-mathe);
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0;
+    }
+
+    .info-callout {
+      background: var(--bg-subtle);
+      border-left: 4px solid var(--theme-oberstufe);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .info-callout.alert {
+      border-left-color: #b91c1c;
+      background: #fef2f2;
+    }
+
+    .info-callout.success {
+      border-left-color: #059669;
+      background: #f0fdf4;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card-subtle {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .card-subtle h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Tabellen-Design */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    table.data-table td.center, table.data-table th.center {
+      text-align: center;
+    }
+
+    table.data-table tr.highlight {
+      background: var(--theme-oberstufe-light);
+      font-weight: 700;
+    }
+
+    /* Interaktiver Rechner */
+    .calc-panel {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input, .form-group select {
+      padding: 0.65rem 0.85rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: var(--bg-main);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--theme-oberstufe);
+    }
+
+    .btn-action {
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--theme-oberstufe-dark);
+    }
+
+    .btn-secondary {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-color);
+    }
+
+    .output-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--theme-oberstufe);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-top: 1.25rem;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    /* Aufklappbare Lösungskarten */
+    .task-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #ffffff;
+    }
+
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .task-badge {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+      background: #fcfdfe;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-toggle-solution {
+      margin-top: 0.75rem;
+      background: #ffffff;
+      border: 1.5px solid var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-solution:hover {
+      background: var(--theme-oberstufe-light);
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Navigationsleiste -->
+    <div class="portal-nav">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q1-Übersicht
+      </a>
+      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Informatik Q1 • Kryptographie</span>
+    </div>
+
+    <!-- Modul-Kopf -->
+    <header class="portal-header" style="text-align: left; padding-top: 1rem;">
+      <div class="badge-pill badge-oberstufe">Kryptographie • Vertiefung Modul 03</div>
+      <h1>Das RSA-Kryptosystem: Vom Reste-Zyklus zur Berechnung von d</h1>
+      <p class="subtitle">
+        Rekapitulation des Unterrichtsbeispiels, mathematische Begründung der Entschlüsselung durch den Satz von Euler und systematische Schlüsselberechnung über den Erweiterten Euklidischen Algorithmus (EEA).
+      </p>
+      <div class="timestamp-pill">
+        Stand: Schuljahr 2026/27 • Gymnasiale Oberstufe
+      </div>
+    </header>
+
+    <!-- 1. ZUSAMMENFASSUNG DES UNTERRICHTSBEISPIELS -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">1</span>
+        <h2 class="section-title">Das Unterrichtsbeispiel in der Zusammenfassung</h2>
+      </div>
+      
+      <p>
+        Im Unterricht haben wir das RSA-Verfahren an handhabbaren Primzahlen Schritt für Schritt durchgerechnet. Hier sind die exakten Kenndaten unseres Beispiels:
+      </p>
+
+      <div class="grid-two">
+        <div class="card-subtle">
+          <h4>Ausgangswerte & Modul</h4>
+          <ul style="margin-left: 1.2rem; font-size: 0.92rem; line-height: 1.7;">
+            <li>Wahl zweier Primzahlen: $p = 5$ und $q = 11$</li>
+            <li>RSA-Modul: $N = p \cdot q = 5 \cdot 11 = \mathbf{55}$</li>
+            <li>Eulersche $\varphi$-Funktion: $\varphi(N) = (p-1)(q-1) = 4 \cdot 10 = \mathbf{40}$</li>
+            <li>Öffentlicher Exponent: $e = 3$ mit $\operatorname{ggT}(3, 40) = 1$</li>
+          </ul>
+        </div>
+        <div class="card-subtle">
+          <h4>Die resultierenden Schlüssel</h4>
+          <ul style="margin-left: 1.2rem; font-size: 0.92rem; line-height: 1.7;">
+            <li><strong>Öffentlicher Schlüssel (Public Key):</strong> $(e = 3, N = 55)$</li>
+            <li><strong>Privater Schlüssel (Private Key):</strong> $(d = 27, N = 55)$</li>
+            <li>Zu verschlüsselnde Nachricht: $M = 9$</li>
+            <li>Erzeugter Geheimtext: $C = 14$</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Bisheriger Rechenweg: Ermittlung von d durch Ausprobieren</h3>
+      <p>
+        Der private Schlüssel $d$ ist das multiplikative Inverse zu $e$ bezüglich des Moduls $\varphi(N)$. Die mathematische Bedingung lautet:
+      </p>
+      <div style="text-align: center; margin: 0.75rem 0; font-size: 1.1rem;">
+        $$e \cdot d \equiv 1 \pmod{\varphi(N)} \quad\iff\quad e \cdot d = k \cdot \varphi(N) + 1 \quad (k \in \mathbb{N})$$
+      </div>
+      <p>
+        Für unsere konkreten Werte $e = 3$ und $\varphi(N) = 40$ bedeutet dies: Das Produkt $3 \cdot d$ muss um $1$ größer sein als ein Vielfaches von $40$. Wir haben die Vielfachen $k$ schrittweise durchgetestet:
+      </p>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="center" style="width: 80px;">Runde k</th>
+            <th>Prüf-Term: $k \cdot \varphi(N) + 1$</th>
+            <th>Teilbarkeit durch $e = 3$</th>
+            <th>Ergebnis für d</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">k = 1</td>
+            <td>$1 \cdot 40 + 1 = 41$</td>
+            <td>$41 : 3 = 13{,}66\dots$ (nicht ganzzahlig)</td>
+            <td>Keine Lösung in $\mathbb{Z}$</td>
+          </tr>
+          <tr class="highlight">
+            <td class="center">k = 2</td>
+            <td>$2 \cdot 40 + 1 = 81$</td>
+            <td>$81 : 3 = \mathbf{27}$ (ohne Rest teilbar!)</td>
+            <td><strong>d = 27</strong> gefunden</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Der praktische Ablauf mit Nachricht M = 9</h3>
+      <div class="grid-two">
+        <div class="card-subtle">
+          <span class="task-badge" style="background: var(--theme-oberstufe-light); color: var(--theme-oberstufe);">Schritt 1: Verschlüsselung (Bob)</span>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Bob nimmt den Klartext $M = 9$ und Alices öffentlichen Schlüssel $(e = 3, N = 55)$:
+          </p>
+          <div style="font-size: 0.95rem; margin: 0.5rem 0;">
+            $$C = M^e \bmod N = 9^3 \bmod 55$$
+            $$9^3 = 729$$
+            $$729 = 13 \cdot 55 + \mathbf{14} \implies \mathbf{C = 14}$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Bob sendet den Geheimtext $C = 14$ über den ungesicherten Kanal.
+          </p>
+        </div>
+        <div class="card-subtle">
+          <span class="task-badge" style="background: #ecfdf5; color: #059669;">Schritt 2: Entschlüsselung (Alice)</span>
+          <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Alice nimmt das Chiffrat $C = 14$ und ihren privaten Schlüssel $(d = 27, N = 55)$:
+          </p>
+          <div style="font-size: 0.95rem; margin: 0.5rem 0;">
+            $$M = C^d \bmod N = 14^{27} \bmod 55$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Mit dem Square-and-Multiply-Verfahren berechnet Alice schrittweise Zwischenreste und erhält exakt: $\mathbf{M = 9}$.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DER MATHEMATISCHE KERN: ZYKLUS DER RESTE & SATZ VON EULER -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">2</span>
+        <h2 class="section-title">Der mathematische Kern: Der Zyklus der Reste & Satz von Euler</h2>
+      </div>
+
+      <p>
+        Warum verwandelt die Entschlüsselung $C^d = (M^e)^d$ den Chiffretext wieder exakt in den Klartext $M$ zurück? Die Antwort liegt im <strong>periodischen Reste-Zyklus</strong> der modularen Multiplikation.
+      </p>
+
+      <div class="info-callout">
+        <strong>Beobachtung am Zahlenbeispiel:</strong><br>
+        Potenziert man eine Zahl $a$ fortlaufend modulo $N$, so können nicht unendlich viele neue Werte entstehen, da es modulo $N$ nur die Reste $\{0, 1, 2, \dots, N-1\}$ gibt. Sobald $a$ teilerfremd zu $N$ ist, wiederholen sich die Reste in einer geschlossenen Schleife. Sie kehren nach einer festen Periodenlänge stets zur neutralen Zahl <strong>1</strong> zurück.
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Der Satz von Leonhard Euler (1736)</h3>
+      <p>
+        Euler bewies die exakte Periodenlänge dieses Karussells: Für jede Zahl $M$, die teilerfremd zu $N$ ist ($\operatorname{ggT}(M, N) = 1$), gilt:
+      </p>
+      <div style="text-align: center; margin: 1rem 0; font-size: 1.2rem; color: var(--theme-oberstufe-dark);">
+        $$M^{\varphi(N)} \equiv 1 \pmod N$$
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Vollzug am Unterrichtsbeispiel</h3>
+      <p>
+        In unserem Fall ist $N = 55$ und $\varphi(55) = 40$. Das bedeutet:
+      </p>
+      <ul style="margin-left: 1.2rem; font-size: 0.92rem; line-height: 1.7;">
+        <li>Eine volle Runde auf dem Reste-Karussell benötigt genau 40 Multiplikationen: $9^{40} \equiv 1 \pmod{55}$.</li>
+        <li>Egal wie viele volle Runden $k$ gedreht werden, man bleibt stets bei 1 stehen:
+          $$(9^{40})^k \equiv 1^k = 1 \pmod{55}$$
+        </li>
+        <li>Geht man nach $k$ vollen Runden noch <strong>genau 1 Schritt weiter</strong> ($+1$), so landet man wieder beim ursprünglichen Startwert $M = 9$:
+          $$9^{k \cdot 40 + 1} = \underbrace{(9^{40})^k}_{\equiv 1} \cdot 9^1 \equiv 1 \cdot 9 = \mathbf{9} \pmod{55}$$
+        </li>
+      </ul>
+
+      <div class="card-subtle" style="margin-top: 1rem; border-left: 4px solid var(--theme-oberstufe);">
+        <h4 style="margin-bottom: 0.35rem;">Der RSA-Schlüsseltrick:</h4>
+        <p style="font-size: 0.92rem; line-height: 1.65;">
+          Genau deshalb verlangen wir bei der Schlüsselerzeugung die Gleichung:
+          $$e \cdot d = k \cdot \varphi(N) + 1 \quad (\text{hier mit } k = 2: 3 \cdot 27 = 81 = 2 \cdot 40 + 1)$$
+          Beim Ver- und Entschlüsseln passiert folgendes:
+          $$(M^e)^d = M^{e \cdot d} = M^{2 \cdot 40 + 1} = (M^{40})^2 \cdot M^1 \equiv 1^2 \cdot M \equiv \mathbf{M} \pmod{55}$$
+          Das Chiffrieren mit $e$ bringt die Nachricht scheinbar chaotisch durcheinander. Das Dechiffrieren mit $d$ setzt die Drehung exakt so lange fort, bis zwei volle Runden vollendet sind und die Nachricht um genau einen Schritt wieder am Ausgangspunkt ankommt.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem 0;">Allgemeine mathematische Formulierung</h3>
+      <p>
+        Das RSA-Prinzip gilt universell für beliebige Primzahlen $p$ und $q$:
+      </p>
+      <div style="background: var(--bg-subtle); padding: 1.25rem; border-radius: var(--radius-sm); font-size: 0.92rem; line-height: 1.8;">
+        1. Seien $p, q$ zwei Primzahlen mit $N = p \cdot q$ und $\varphi(N) = (p-1)(q-1)$.<br>
+        2. Wähle einen öffentlichen Exponenten $e$ mit $1 < e < \varphi(N)$ und $\operatorname{ggT}(e, \varphi(N)) = 1$.<br>
+        3. Wähle einen geheimen Exponenten $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;$\implies$ Es existiert eine ganze Zahl $k \in \mathbb{N}$ mit $e \cdot d = k \cdot \varphi(N) + 1$.<br>
+        4. Für jede Nachricht $M \in \{0, 1, \dots, N-1\}$ mit $\operatorname{ggT}(M, N) = 1$ gilt:<br>
+        $$C^d \equiv (M^e)^d \equiv M^{e \cdot d} \equiv M^{k \cdot \varphi(N) + 1} \equiv (M^{\varphi(N)})^k \cdot M \equiv 1^k \cdot M \equiv \mathbf{M} \pmod N$$
+      </div>
+    </section>
+
+    <!-- 3. WARUM AUSPROBIEREN IN DER PRAXIS SCHEITERT -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">3</span>
+        <h2 class="section-title">Warum Ausprobieren in der Praxis scheitert</h2>
+      </div>
+
+      <p>
+        Im Unterrichtsbeispiel war das Ausprobieren mit $k = 1, 2$ nach zwei Versuchen beendet. In realen Kryptosystemen ist dieser Weg jedoch technisch ausgeschlossen:
+      </p>
+
+      <div class="info-callout alert">
+        <strong>Die Dimensionen der Realität:</strong><br>
+        Heutige RSA-Schlüssel (z. B. RSA-2048) nutzen Zahlen mit über 600 Dezimalstellen. Der Wert $\varphi(N)$ besitzt ebenfalls über 600 Stellen. Ein einfaches Ausprobieren von $k = 1, 2, 3, \dots$ würde selbst auf den stärksten Rechenclustern der Welt Billionen von Jahren dauern.
+      </div>
+
+      <p>
+        Wir benötigen ein Rechenverfahren, das $d$ <strong>systematisch, deterministisch und in Millisekunden</strong> berechnet, ohne auf Raten oder Ausprobieren angewiesen zu sein. Dieses Werkzeug ist der <strong>Erweiterte Euklidische Algorithmus (EEA)</strong>.
+      </p>
+    </section>
+
+    <!-- 4. DER ERWEITERTE EUKLIDISCHE ALGORITHMUS (EEA) -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">4</span>
+        <h2 class="section-title">Der Erweiterte Euklidische Algorithmus (EEA)</h2>
+      </div>
+
+      <p>
+        Der klassische Euklidische Algorithmus ermittelt den größten gemeinsamen Teiler $\operatorname{ggT}(a, b)$ zweier Zahlen durch wiederholte Division mit Rest. Der <strong>Erweiterte Euklidische Algorithmus</strong> leistet mehr: Er liefert zusätzlich zwei ganze Zahlen $x$ und $y$, welche den $\operatorname{ggT}$ als sogenannte Linearkombination darstellen (Lemma von Bézout).
+      </p>
+
+      <div style="text-align: center; margin: 1rem 0; font-size: 1.15rem;">
+        $$\operatorname{ggT}(a, b) = x \cdot a + y \cdot b \quad (x, y \in \mathbb{Z})$$
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Die Brücke zum privaten RSA-Schlüssel d</h3>
+      <p>
+        Wir setzen in die Bézout-Gleichung unsere Werte $a = e$ und $b = \varphi(N)$ ein. Da $e$ teilerfremd zu $\varphi(N)$ gewählt wurde, ist $\operatorname{ggT}(e, \varphi(N)) = 1$:
+      </p>
+      <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem;">
+        $$1 = x \cdot e + y \cdot \varphi(N)$$
+      </div>
+      <p>
+        Betrachten wir diese Gleichung nun <strong>modulo $\varphi(N)$</strong>:
+      </p>
+      <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem;">
+        $$1 \equiv x \cdot e + \underbrace{y \cdot \varphi(N)}_{\equiv 0 \pmod{\varphi(N)}} \equiv x \cdot e \pmod{\varphi(N)}$$
+      </div>
+
+      <div class="info-callout success">
+        <strong>Kerneinsicht:</strong><br>
+        Der Bézout-Koeffizient $x$ vor dem Exponenten $e$ ist <strong>direkt unser gesuchter privater Exponent $d$</strong>!
+        <br><br>
+        <strong>Sonderfall negatives x:</strong> Liefert der Algorithmus ein negatives $x$ (z. B. $x = -13$), so addieren wir einfach den Modul $\varphi(N)$ hinzu, um den kleinsten positiven Rest zu erhalten:
+        $$d = x + \varphi(N)$$
+      </div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Schritt-für-Schritt-Anleitung an unserem Unterrichtsbeispiel</h3>
+      <p>
+        Wir berechnen $d$ für $e = 3$ und $\varphi(N) = 40$.
+      </p>
+
+      <div class="grid-two">
+        <div class="card-subtle">
+          <h4>Methode A: Rückwärts-Einsetzen</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            1. Euklidischer Algorithmus (Hinweg):
+          </p>
+          <div style="font-size: 0.9rem; line-height: 1.8;">
+            (Zeile 1) $40 = \mathbf{13} \cdot 3 + \mathbf{1}$<br>
+            (Zeile 2) $3 = 3 \cdot 1 + 0$ (Abbruch!)<br>
+            $\implies \operatorname{ggT}(40, 3) = 1$.
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0.75rem 0 0.5rem 0;">
+            2. Rückwärts nach dem Rest 1 umstellen:
+          </p>
+          <div style="font-size: 0.9rem; line-height: 1.8;">
+            $1 = 40 - 13 \cdot 3$<br>
+            $1 = 1 \cdot 40 + (\mathbf{-13}) \cdot 3$
+          </div>
+          <p style="font-size: 0.88rem; margin-top: 0.5rem;">
+            Der Faktor vor $e = 3$ ist $x = -13$.<br>
+            Da $x < 0$: $d = -13 + 40 = \mathbf{27}$!
+          </p>
+        </div>
+
+        <div class="card-subtle">
+          <h4>Methode B: Das EEA-Tabellenschema</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            Der Standard für Klausuren (fehlerfrei und schnell):
+          </p>
+          <table class="data-table" style="font-size: 0.85rem; margin-top: 0.25rem;">
+            <thead>
+              <tr>
+                <th class="center">Schritt</th>
+                <th class="center">Quotient $q$</th>
+                <th class="center">Rest $r$</th>
+                <th class="center">Koeffizient $x$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="center">Start 1</td>
+                <td class="center">-</td>
+                <td class="center">40</td>
+                <td class="center">0</td>
+              </tr>
+              <tr>
+                <td class="center">Start 2</td>
+                <td class="center">13</td>
+                <td class="center">3</td>
+                <td class="center">1</td>
+              </tr>
+              <tr class="highlight">
+                <td class="center">Ziel</td>
+                <td class="center">3</td>
+                <td class="center">1</td>
+                <td class="center"><strong>-13</strong></td>
+              </tr>
+              <tr>
+                <td class="center">Ende</td>
+                <td class="center">-</td>
+                <td class="center">0</td>
+                <td class="center">-</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
+            Rekursion für $x$: $x_{\text{neu}} = x_{\text{vor-vor}} - q \cdot x_{\text{vor}}$<br>
+            $0 - 13 \cdot 1 = \mathbf{-13} \implies d = -13 + 40 = \mathbf{27}$.
+          </p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Ein zweites ausführliches Beispiel zum Nachvollziehen</h3>
+      <p>
+        Gegeben seien die Primzahlen $p = 7$ und $q = 13$.<br>
+        $\implies N = 7 \cdot 13 = 91$ und $\varphi(N) = 6 \cdot 12 = \mathbf{72}$.<br>
+        Als öffentlicher Exponent wird $e = 5$ gewählt (da $\operatorname{ggT}(5, 72) = 1$). Gesucht ist $d$.
+      </p>
+
+      <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color);">
+        <p><strong>1. Schritt (Hinweg – Euklidischer Algorithmus):</strong></p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          $72 = \mathbf{14} \cdot 5 + \mathbf{2}$<br>
+          $5 = \mathbf{2} \cdot 2 + \mathbf{1}$<br>
+          $2 = 2 \cdot 1 + 0 \implies \operatorname{ggT}(72, 5) = 1$.
+        </div>
+
+        <p style="margin-top: 0.75rem;"><strong>2. Schritt (Rückweg – Linearkombination bilden):</strong></p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          Stelle die vorletzte Zeile nach dem Rest 1 um:
+          $$1 = 5 - 2 \cdot 2$$
+          Ersetze nun den Rest 2 durch die erste Zeile ($2 = 72 - 14 \cdot 5$):
+          $$1 = 5 - 2 \cdot (72 - 14 \cdot 5)$$
+          Fasse die Vielfachen von 5 zusammen:
+          $$1 = 1 \cdot 5 - 2 \cdot 72 + 28 \cdot 5$$
+          $$1 = \mathbf{29} \cdot 5 - 2 \cdot 72$$
+        </div>
+
+        <p style="margin-top: 0.75rem;"><strong>3. Schritt (Ergebnis ablesen & Probe):</strong></p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          Der Faktor vor $e = 5$ ist $x = 29$. Da $x > 0$ ist, gilt unmittelbar:
+          $$\mathbf{d = 29}$$
+          <strong>Probe:</strong> $5 \cdot 29 = 145 = 2 \cdot 72 + 1 \equiv 1 \pmod{72}$ (Bestätigt)
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. INTERAKTIVES EEA-LABOR -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">5</span>
+        <h2 class="section-title">Interaktiver EEA-Laborrechner</h2>
+      </div>
+
+      <p>
+        Gib hier beliebige Werte für $e$ und $\varphi(N)$ ein, um die schrittweise Berechnung von $d$ mit allen Zwischenschritten und Tabellenzeilen durchzurechnen:
+      </p>
+
+      <div class="calc-panel">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Öffentlicher Exponent e</label>
+            <input type="number" id="inputE" value="3" min="2">
+          </div>
+          <div class="form-group">
+            <label>Eulersche Phi-Funktion φ(N)</label>
+            <input type="number" id="inputPhi" value="40" min="2">
+          </div>
+          <div class="form-group">
+            <label>Voreinstellung wählen</label>
+            <select id="presetSelect" onchange="applyEeaPreset()">
+              <option value="3,40">Unterrichtsbeispiel: e = 3, φ(N) = 40</option>
+              <option value="5,72">Beispiel 2: e = 5, φ(N) = 72</option>
+              <option value="7,26">Aufgabe: e = 7, φ(N) = 26</option>
+              <option value="11,60">Aufgabe: e = 11, φ(N) = 60</option>
+              <option value="17,120">Aufgabe: e = 17, φ(N) = 120</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-action" onclick="runInteractiveEea()">EEA Schritt für Schritt berechnen</button>
+        </div>
+
+        <div id="eeaOutput" class="output-box" style="display: none;"></div>
+      </div>
+    </section>
+
+    <!-- 6. SELBSTLERN-AUFGABEN MIT MUSTERLÖSUNGEN -->
+    <section class="section-block">
+      <div class="section-header-compact">
+        <span class="step-marker">6</span>
+        <h2 class="section-title">Übungsaufgaben zur Klausurvorbereitung</h2>
+      </div>
+
+      <p>
+        Bearbeite die folgenden typischen Aufgaben zunächst eigenständig auf Papier und überprüfe deine Rechnung anschließend mit der Musterlösung:
+      </p>
+
+      <!-- Aufgabe 1 -->
+      <div class="task-card">
+        <div class="task-meta">
+          <span class="task-title">Aufgabe 1: Multiplikatives Inverses mit dem EEA</span>
+          <span class="task-badge">Standardaufgabe</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Gegeben sind $e = 7$ und $\varphi(N) = 26$. Berechne den privaten Schlüssel $d$ mit dem Erweiterten Euklidischen Algorithmus.
+        </p>
+        <button class="btn-toggle-solution" onclick="toggleSolution(1)">Lösung & Rechenweg aufdecken</button>
+        <div id="sol1" class="solution-content">
+          <p><strong>1. Hinweg (Divisionen mit Rest):</strong></p>
+          <div style="font-size: 0.9rem; line-height: 1.7; margin-left: 0.5rem;">
+            $26 = 3 \cdot 7 + 5$<br>
+            $7 = 1 \cdot 5 + 2$<br>
+            $5 = 2 \cdot 2 + 1$<br>
+            $2 = 2 \cdot 1 + 0 \implies \operatorname{ggT}(26, 7) = 1$.
+          </div>
+          <p style="margin-top: 0.5rem;"><strong>2. Rückweg (Linearkombination):</strong></p>
+          <div style="font-size: 0.9rem; line-height: 1.7; margin-left: 0.5rem;">
+            $1 = 5 - 2 \cdot 2$<br>
+            $1 = 5 - 2 \cdot (7 - 1 \cdot 5) = 3 \cdot 5 - 2 \cdot 7$<br>
+            $1 = 3 \cdot (26 - 3 \cdot 7) - 2 \cdot 7 = 3 \cdot 26 - 11 \cdot 7$
+          </div>
+          <p style="margin-top: 0.5rem;"><strong>3. Koeffizient und Anpassung:</strong></p>
+          <div style="font-size: 0.9rem; line-height: 1.7; margin-left: 0.5rem;">
+            Der Faktor vor $7$ ist $x = -11$.<br>
+            Da $x < 0$ ist: $d = -11 + 26 = \mathbf{15}$.<br>
+            <strong>Probe:</strong> $7 \cdot 15 = 105 = 4 \cdot 26 + 1 \equiv 1 \pmod{26}$ (Bestätigt)
+          </div>
+        </div>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="task-card">
+        <div class="task-meta">
+          <span class="task-title">Aufgabe 2: Vollständige Schlüsselerzeugung</span>
+          <span class="task-badge">Komplexaufgabe</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Gegeben sind die Primzahlen $p = 3$ und $q = 11$. Bestimme das RSA-Modul $N$, die Eulersche Phi-Funktion $\varphi(N)$ und berechne für $e = 3$ den privaten Schlüssel $d$ mit dem EEA.
+        </p>
+        <button class="btn-toggle-solution" onclick="toggleSolution(2)">Lösung & Rechenweg aufdecken</button>
+        <div id="sol2" class="solution-content">
+          <div style="font-size: 0.9rem; line-height: 1.7;">
+            • $N = p \cdot q = 3 \cdot 11 = \mathbf{33}$<br>
+            • $\varphi(N) = (3 - 1) \cdot (11 - 1) = 2 \cdot 10 = \mathbf{20}$<br>
+            • Prüfe $e = 3$: $\operatorname{ggT}(3, 20) = 1$ (Erfüllt)<br><br>
+            <strong>EEA-Berechnung für d:</strong><br>
+            $20 = 6 \cdot 3 + 2$<br>
+            $3 = 1 \cdot 2 + 1$<br>
+            $2 = 2 \cdot 1 + 0$<br><br>
+            Rückweg:<br>
+            $1 = 3 - 1 \cdot 2$<br>
+            $1 = 3 - 1 \cdot (20 - 6 \cdot 3) = 7 \cdot 3 - 1 \cdot 20$<br>
+            Koeffizient vor 3 ist $x = 7 \implies \mathbf{d = 7}$.<br>
+            <strong>Probe:</strong> $3 \cdot 7 = 21 = 1 \cdot 20 + 1 \equiv 1 \pmod{20}$ (Bestätigt)
+          </div>
+        </div>
+      </div>
+
+      <!-- Aufgabe 3 -->
+      <div class="task-card">
+        <div class="task-meta">
+          <span class="task-title">Aufgabe 3: EEA mit Modulo-Korrektur</span>
+          <span class="task-badge">Vertiefung</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Für $N = 55$ ($\varphi(N) = 40$) wird der öffentliche Exponent $e = 7$ gewählt. Berechne $d$ mit dem EEA.
+        </p>
+        <button class="btn-toggle-solution" onclick="toggleSolution(3)">Lösung & Rechenweg aufdecken</button>
+        <div id="sol3" class="solution-content">
+          <div style="font-size: 0.9rem; line-height: 1.7;">
+            <strong>1. Hinweg:</strong><br>
+            $40 = 5 \cdot 7 + 5$<br>
+            $7 = 1 \cdot 5 + 2$<br>
+            $5 = 2 \cdot 2 + 1$<br>
+            $2 = 2 \cdot 1 + 0$<br><br>
+            <strong>2. Rückweg:</strong><br>
+            $1 = 5 - 2 \cdot 2$<br>
+            $1 = 5 - 2 \cdot (7 - 1 \cdot 5) = 3 \cdot 5 - 2 \cdot 7$<br>
+            $1 = 3 \cdot (40 - 5 \cdot 7) - 2 \cdot 7 = 3 \cdot 40 - 17 \cdot 7$<br><br>
+            <strong>3. Ergebnis:</strong><br>
+            Koeffizient ist $x = -17$.<br>
+            Da negativ: $d = -17 + 40 = \mathbf{23}$.<br>
+            <strong>Probe:</strong> $7 \cdot 23 = 161 = 4 \cdot 40 + 1 \equiv 1 \pmod{40}$ (Bestätigt)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Q1</strong> • Schulportal 2026/2027 • Das RSA-Kryptosystem</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Presets
+    function applyEeaPreset() {
+      let val = document.getElementById('presetSelect').value.split(',');
+      document.getElementById('inputE').value = val[0];
+      document.getElementById('inputPhi').value = val[1];
+      runInteractiveEea();
+    }
+
+    // Lösung ein-/ausblenden
+    function toggleSolution(num) {
+      let box = document.getElementById('sol' + num);
+      let btn = event.target;
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+        btn.textContent = 'Lösung & Rechenweg aufdecken';
+      } else {
+        box.style.display = 'block';
+        btn.textContent = 'Lösung verbergen';
+        if (window.renderMathInElement) {
+          renderMathInElement(box, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false}
+            ],
+            throwOnError: false
+          });
+        }
+      }
+    }
+
+    // Interaktiver EEA
+    function runInteractiveEea() {
+      let e = parseInt(document.getElementById('inputE').value);
+      let phi = parseInt(document.getElementById('inputPhi').value);
+      let out = document.getElementById('eeaOutput');
+      out.style.display = 'block';
+
+      if (isNaN(e) || isNaN(phi) || e < 2 || phi < 2) {
+        out.innerHTML = `<span style="color:#b91c1c; font-weight:700;">Bitte gültige ganze Zahlen größer als 1 eingeben.</span>`;
+        return;
+      }
+
+      // 1. Hinweg
+      let steps = [];
+      let a = phi;
+      let b = e;
+
+      while (b !== 0) {
+        let q = Math.floor(a / b);
+        let r = a % b;
+        steps.push({ a, b, q, r });
+        a = b;
+        b = r;
+      }
+
+      let gcdVal = a;
+      if (gcdVal !== 1) {
+        out.innerHTML = `
+          <div style="color:#b91c1c; font-weight:700; margin-bottom:6px;">Fehler: ggT(e, φ(N)) = ${gcdVal} ≠ 1!</div>
+          <div>Die Zahlen ${e} und ${phi} sind nicht teilerfremd. Ein modularer Inverser existiert daher nicht. Bitte wähle ein anderes e.</div>
+        `;
+        return;
+      }
+
+      // 2. Tabellenschema / Koeffizienten rückwärts
+      // Tabellen-Arrays
+      let rows = [];
+      // Initialzeilen: r0 = phi, x0 = 0, y0 = 1; r1 = e, x1 = 1, y1 = -q...
+      // Wir verwenden das klassische Schema:
+      // s_i = s_{i-2} - q_i * s_{i-1}
+      let rArr = [phi, e];
+      let qArr = [null, null];
+      let xArr = [0, 1]; // x ist Koeffizient von e
+
+      for (let i = 0; i < steps.length; i++) {
+        let st = steps[i];
+        if (st.r === 0) break;
+        let q = st.q;
+        let nextX = xArr[i] - q * xArr[i + 1];
+        xArr.push(nextX);
+        rArr.push(st.r);
+        qArr.push(q);
+      }
+
+      let rawX = xArr[xArr.length - 1];
+      let finalD = ((rawX % phi) + phi) % phi;
+
+      // HTML zusammenbauen
+      let html = `
+        <div style="font-weight:800; color:var(--text-main); font-size:1.05rem; margin-bottom:8px;">
+          Berechnungsergebnis: d = ${finalD}
+        </div>
+        <p style="margin-bottom:12px;">
+          Da $\\operatorname{ggT}(${e}, ${phi}) = 1$ ist, existiert der private Schlüssel $d$.
+        </p>
+
+        <h4 style="font-size:0.95rem; font-weight:700; margin:12px 0 6px 0;">1. Euklidischer Algorithmus (Hinweg):</h4>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.9rem; line-height:1.7;">
+      `;
+
+      for (let i = 0; i < steps.length; i++) {
+        let st = steps[i];
+        html += `<div>${st.a} = ${st.q} × ${st.b} + ${st.r}</div>`;
+      }
+
+      html += `
+        </div>
+        <h4 style="font-size:0.95rem; font-weight:700; margin:16px 0 6px 0;">2. EEA-Tabellenschema:</h4>
+        <table class="data-table" style="background:#ffffff;">
+          <thead>
+            <tr>
+              <th class="center">Index i</th>
+              <th class="center">Quotient q</th>
+              <th class="center">Rest r</th>
+              <th class="center">Koeffizient von e (x)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="center">0</td>
+              <td class="center">-</td>
+              <td class="center">${phi}</td>
+              <td class="center">0</td>
+            </tr>
+            <tr>
+              <td class="center">1</td>
+              <td class="center">${steps[0].q}</td>
+              <td class="center">${e}</td>
+              <td class="center">1</td>
+            </tr>
+      `;
+
+      for (let i = 2; i < xArr.length; i++) {
+        let isFinal = (i === xArr.length - 1);
+        html += `
+          <tr ${isFinal ? 'class="highlight"' : ''}>
+            <td class="center">${i}</td>
+            <td class="center">${steps[i - 1] ? steps[i - 1].q : '-'}</td>
+            <td class="center">${rArr[i]}</td>
+            <td class="center"><strong>${xArr[i]}</strong></td>
+          </tr>
+        `;
+      }
+
+      html += `
+          </tbody>
+        </table>
+
+        <h4 style="font-size:0.95rem; font-weight:700; margin:16px 0 6px 0;">3. Auswertung:</h4>
+        <div style="font-size:0.92rem; line-height:1.7;">
+          • Ermittelter Bézout-Koeffizient: $x = ${rawX}$<br>
+      `;
+
+      if (rawX < 0) {
+        html += `
+          • Da $x < 0$ ist, addieren wir $\\varphi(N) = ${phi}$: $d = ${rawX} + ${phi} = \\mathbf{${finalD}}$<br>
+        `;
+      } else {
+        html += `
+          • Da $x > 0$ ist, gilt unmittelbar: $d = \\mathbf{${finalD}}$<br>
+        `;
+      }
+
+      html += `
+          • <strong>Probe:</strong> $(${e} \\cdot ${finalD}) \\bmod ${phi} = ${e * finalD} \\bmod ${phi} = ${(e * finalD) % phi}$ (Bestätigt)
+        </div>
+      `;
+
+      out.innerHTML = html;
+      triggerKaTeX();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      runInteractiveEea();
+    });
+  </script>
+
+</body>
+</html>

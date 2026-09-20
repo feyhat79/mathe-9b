@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -70,7 +70,7 @@
       <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
-          <span class="class-card-icon">🛡️</span>
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 1</span>
         </div>
         <h3 class="class-card-title">1. Grundlagen & Schlüsselaustausch</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
@@ -83,7 +83,7 @@
       <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Thema</span>
-          <span class="class-card-icon">⏰</span>
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 2</span>
         </div>
         <h3 class="class-card-title">2. Modulare Arithmetik & Werkzeuge</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
@@ -92,26 +92,39 @@
         <a href="modulare-arithmetik.html" class="btn-open btn-oberstufe">Praxismodul öffnen →</a>
       </div>
 
-      <!-- Baustein 3: RSA (Vorerst deaktiviert) -->
-      <div class="class-card theme-oberstufe">
+      <!-- Baustein 3: RSA Schlüssel & EEA -->
+      <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
         <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
-          <span class="class-card-icon">⚡</span>
+          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Thema</span>
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 3</span>
         </div>
-        <h3 class="class-card-title">3. Das RSA-Kryptosystem</h3>
+        <h3 class="class-card-title">3. RSA: Reste-Zyklus & Berechnung von d</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Schlüsselerzeugung ($p, q \to N, e, d$), Ver- und Entschlüsselung, interaktives RSA-Labor & Square-and-Multiply-Rechner.
+          Zusammenfassung des Unterrichtsbeispiels, mathematischer Reste-Zyklus (Satz von Euler), Berechnung von d mit dem Erweiterten Euklidischen Algorithmus (EEA) & interaktiver Laborrechner.
         </p>
-        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Demnächst</span>
+        <a href="rsa-d-berechnung.html" class="btn-open btn-oberstufe">Praxismodul öffnen →</a>
       </div>
 
-      <!-- Baustein 4: Signaturen -->
+      <!-- Baustein 4: RSA Laborrechner -->
+      <div class="class-card theme-oberstufe">
+        <div class="class-card-header">
+          <span class="badge-pill" style="background:var(--theme-oberstufe-light); color:var(--theme-oberstufe); margin-bottom:0;">Begleitmodul</span>
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 4</span>
+        </div>
+        <h3 class="class-card-title">4. RSA-Labor & Square-and-Multiply</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
+          Interaktives RSA-Schlüssellabor, Ver- und Entschlüsselung von Nachrichten und Square-and-Multiply-Rechner.
+        </p>
+        <a href="rsa.html" class="btn-open btn-oberstufe">Laborrechner öffnen →</a>
+      </div>
+
+      <!-- Baustein 5: Signaturen -->
       <div class="class-card theme-oberstufe">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Im weiteren Verlauf</span>
-          <span class="class-card-icon">🪪</span>
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Teil 5</span>
         </div>
-        <h3 class="class-card-title">4. Digitale Signaturen & PKI</h3>
+        <h3 class="class-card-title">5. Digitale Signaturen & PKI</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
           Authentizität und Integrität mit privaten Schlüsseln, Man-in-the-Middle-Angriff, Public-Key-Infrastruktur & Zertifikate.
         </p>
