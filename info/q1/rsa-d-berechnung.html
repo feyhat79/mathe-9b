@@ -559,8 +559,58 @@
         <strong>Kerneinsicht:</strong><br>
         Der Bézout-Koeffizient $x$ vor dem Exponenten $e$ ist <strong>direkt unser gesuchter privater Exponent $d$</strong>!
         <br><br>
-        <strong>Sonderfall negatives x:</strong> Liefert der Algorithmus ein negatives $x$ (z. B. $x = -13$), so addieren wir einfach den Modul $\varphi(N)$ hinzu, um den kleinsten positiven Rest zu erhalten:
+        <strong>Sonderfall negatives x:</strong> Liefert das Rückwärts-Einsetzen ein negatives $x$ (wie in unserem Unterrichtsbeispiel $x = -13$), so addieren wir einfach den Modul $\varphi(N)$ hinzu, um die kleinste positive Zahl zu erhalten:
         $$d = x + \varphi(N)$$
+      </div>
+
+      <!-- Vertiefungs-Box: Warum d = x + phi(N)? -->
+      <div class="card-subtle" style="background:#fcfdfe; border: 1.5px solid var(--border-color); border-left: 4px solid var(--theme-oberstufe); margin: 1.25rem 0 1.75rem 0;">
+        <h4 style="color:var(--theme-oberstufe-dark); font-size: 1.05rem; margin-bottom: 0.75rem;">
+          Vertiefung: Warum darf man einfach $+\varphi(N)$ addieren?
+        </h4>
+        <p style="font-size: 0.92rem; margin-bottom: 0.75rem;">
+          Schülerinnen und Schüler fragen hier zu Recht: <em>„Darf man zu einem Schlüssel einfach so $\varphi(N)$ dazuzählen, ohne dass die Rechnung kaputt geht?“</em><br>
+          Drei mathematische Perspektiven machen diesen Schritt vollkommen einleuchtend:
+        </p>
+
+        <div style="font-size: 0.9rem; line-height: 1.75; margin-left: 0.25rem;">
+          <p style="margin-bottom: 0.65rem;">
+            <strong>1. Warum brauchen wir überhaupt ein positives d?</strong><br>
+            Ein negativer Exponent wie $d = -13$ würde beim Entschlüsseln die Potenz $C^{-13} \pmod N$ erfordern. Das bedeutet $C^{-13} = \frac{1}{C^{13}}$, also Division bzw. Brüche im Restesystem. Computer können beim RSA-Verfahren Potenzen im Modul nur mit positiven, ganzen Exponenten $d \in \{1, 2, \dots, \varphi(N)-1\}$ effizient berechnen.
+          </p>
+
+          <p style="margin-bottom: 0.65rem;">
+            <strong>2. Die Uhren-Analogie (Kongruenz modulo $\varphi(N)$):</strong><br>
+            Wir suchen ein $d$, für das gilt: $e \cdot d \equiv 1 \pmod{\varphi(N)}$. Im Restesystem modulo $\varphi(N)$ sind zwei Zahlen, die sich um genau ein volles Vielfaches von $\varphi(N)$ unterscheiden, <strong>haargenau derselbe Zeigerstand</strong>!<br>
+            • Vergleich 12-Stunden-Uhr: „3 Stunden vor 12 Uhr“ ($-3$) ist derselbe Zeigerstand wie „9 Uhr“ ($-3 + 12 = 9$).<br>
+            • Modulo $40$: $-13$ und $-13 + 40 = 27$ sind modulo $40$ absolut gleichwertig. Beide ergeben mit $e = 3$ multipliziert denselben Rest 1:<br>
+            &nbsp;&nbsp;↳ $3 \cdot (-13) = -39 = -1 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$<br>
+            &nbsp;&nbsp;↳ $3 \cdot 27 = 81 = 2 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$
+          </p>
+
+          <p style="margin-bottom: 0.65rem;">
+            <strong>3. Der algebraische Beweis (Die „Null-Addition“ in Bézout):</strong><br>
+            Aus dem Rückwärts-Einsetzen wissen wir, dass gilt:
+            $$1 = x \cdot e + y \cdot \varphi(N)$$
+            Wir addieren und subtrahieren nun denselben Term $e \cdot \varphi(N)$ (wir addieren also effektiv eine Null):
+            $$1 = x \cdot e + e \cdot \varphi(N) + y \cdot \varphi(N) - e \cdot \varphi(N)$$
+            Klammert man nun $e$ beim ersten Teil und $\varphi(N)$ beim zweiten Teil aus, entsteht:
+            $$1 = \mathbf{(x + \varphi(N))} \cdot e + (y - e) \cdot \varphi(N)$$
+            Der Wert der Gleichung ist weiterhin exakt 1! Der Koeffizient vor $e$ lautet nun $(x + \varphi(N))$.<br>
+            Am Unterrichtsbeispiel ($x = -13, y = 1, e = 3, \varphi(N) = 40$):
+            $$1 = (-13) \cdot 3 + 1 \cdot 40$$
+            $$1 = (-13 + 40) \cdot 3 + (1 - 3) \cdot 40$$
+            $$1 = \mathbf{27} \cdot 3 + (-2) \cdot 40 \quad (\text{denn } 81 - 80 = 1)$$
+            Der neue Exponent $d = 27$ löst die Gleichung somit absolut exakt.
+          </p>
+
+          <p style="margin-bottom: 0;">
+            <strong>4. Wirkung auf die Entschlüsselung (Euler-Zyklus):</strong><br>
+            Beim Entschlüsseln gilt nach dem Satz von Euler ($C^{\varphi(N)} \equiv 1 \pmod N$):
+            $$C^d = C^{x + \varphi(N)} = C^x \cdot \underbrace{C^{\varphi(N)}}_{\equiv 1} \equiv C^x \pmod N$$
+            Das Addieren von $\varphi(N)$ im Exponenten entspricht beim Potenzieren modulo $N$ also lediglich einer Multiplikation mit 1. Das Entschlüsselungsergebnis bleibt völlig unberührt!
+          </p>
+        </div>
       </div>
 
       <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Schritt-für-Schritt-Anleitung durch Rückwärts-Einsetzen am Unterrichtsbeispiel</h3>
