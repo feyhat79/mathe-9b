@@ -65,52 +65,29 @@
     <h2 class="section-heading">Reihe 1: Kryptographie & Informationssicherheit</h2>
     <div class="dashboard-grid">
       
-      <!-- Baustein 1: Grundlagen & Schlüsseltausch (Aktiv) -->
+      <!-- Zentrales Lernmodul: RSA-Kryptosystem (Alles unter einer Kachel mit Reitern) -->
       <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
-          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 1</span>
+          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Zentrales Lernportal</span>
         </div>
-        <h3 class="class-card-title">1. Grundlagen & Schlüsselaustausch</h3>
+        <h3 class="class-card-title">Das RSA-Kryptosystem</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          CIA-Schutzziele, Kerckhoffs' Prinzip, symmetrische vs. asymmetrische Verschlüsselung, Vorhängeschloss-Modell, Schlüsselskalierungs-Labor & interaktiver Selbsttest.
+          Vollständiges Lernmodul mit Reitern (nach 9b-Vorbild): Einführung & wichtige mathematische Sätze (Euler, Fermat, Bézout), modulares Rechnen, Kongruenz (≡), Reste-Multiplikation & Potenzregeln, unser Unterrichtsbeispiel & Reste-Zyklus (p=5, q=11, M=20), Berechnung von d durch Rückwärts-Einsetzen, interaktives RSA-Labor, Modulo-Potenzrechner & Klausurtraining.
         </p>
-        <a href="kryptographie-grundlagen.html" class="btn-open btn-oberstufe">Praxismodul öffnen →</a>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <a href="rsa.html" class="btn-open btn-oberstufe">RSA-Lernmodul öffnen →</a>
+          <a href="kryptographie-grundlagen.html" style="font-size:0.82rem; color:var(--text-muted); text-align:center; text-decoration:underline;">Zusatzmaterial: Grundlagen & Schlüsselaustausch</a>
+        </div>
       </div>
 
-      <!-- Baustein 2: Modulare Arithmetik (Scharf geschaltet) -->
-      <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Thema</span>
-          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 2</span>
-        </div>
-        <h3 class="class-card-title">2. Modulare Arithmetik & Werkzeuge</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Uhren-Arithmetik, Rechnen mit Resten, Teilerfremdheit, ggT, Eulersche Phi-Funktion φ(N), multiplikative Inverse & interaktives Mathe-Labor.
-        </p>
-        <a href="modulare-arithmetik.html" class="btn-open btn-oberstufe">Praxismodul öffnen →</a>
-      </div>
-
-      <!-- Baustein 3: RSA Kryptosystem (Vollständiges Lernmodul mit Reitern) -->
-      <div class="class-card theme-oberstufe" style="border: 2px solid var(--theme-oberstufe);">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Thema</span>
-          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Teil 3</span>
-        </div>
-        <h3 class="class-card-title">3. Das RSA-Kryptosystem</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Vollständiges Lernmodul mit Reitern: Einführung & wichtige Sätze (Euler, Fermat, Bézout), Unterrichtsbeispiel, Reste-Zyklus, Berechnung von d (Rückwärts-Einsetzen), RSA-Labor, Modulo-Potenzrechner & Klausurtraining.
-        </p>
-        <a href="rsa.html" class="btn-open btn-oberstufe">RSA-Lernmodul öffnen →</a>
-      </div>
-
-      <!-- Baustein 4: Signaturen -->
+      <!-- Baustein 2: Signaturen (Ausblick) -->
       <div class="class-card theme-oberstufe">
         <div class="class-card-header">
           <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Im weiteren Verlauf</span>
-          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Teil 4</span>
+          <span class="badge-pill" style="background:#f1f5f9; color:#64748b; margin-bottom:0;">Teil 2</span>
         </div>
-        <h3 class="class-card-title">4. Digitale Signaturen & PKI</h3>
+        <h3 class="class-card-title">Digitale Signaturen & PKI</h3>
         <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
           Authentizität und Integrität mit privaten Schlüsseln, Man-in-the-Middle-Angriff, Public-Key-Infrastruktur & Zertifikate.
         </p>
