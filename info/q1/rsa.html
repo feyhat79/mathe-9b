@@ -148,8 +148,53 @@
       margin: 1.25rem 0;
     }
 
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 860px) {
+      .grid-three { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       .grid-two { grid-template-columns: 1fr; }
+    }
+
+    .theorem-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-left: 4.5px solid var(--theme-oberstufe);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .theorem-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .theorem-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--theme-oberstufe-dark);
+    }
+
+    .theorem-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--theme-oberstufe-light);
+      color: var(--theme-oberstufe);
+      padding: 3px 8px;
+      border-radius: 4px;
     }
 
     .card-subtle {
@@ -416,7 +461,7 @@
       <div class="badge-pill badge-oberstufe">Kryptographie • Baustein 3</div>
       <h1>Das RSA-Kryptosystem</h1>
       <p class="subtitle">
-        Zentrales Oberstufenportal: Unterrichtsbeispiel, Reste-Zyklus nach Euler, Rückwärts-Einsetzen, interaktives Schlüssellabor, Square-and-Multiply & Klausurtraining.
+        Zentrales Oberstufenportal: Einführung & mathematische Sätze, Unterrichtsbeispiel & Reste-Zyklus, Rückwärts-Einsetzen, interaktives RSA-Labor, Modulo-Potenzrechner & Klausurtraining.
       </p>
       <div class="timestamp-pill">
         Stand: Schuljahr 2026/27 • Gymnasiale Oberstufe
@@ -425,21 +470,198 @@
 
     <!-- Reiter-Navigation (Vorbild: Mathe 9b) -->
     <nav class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('tab-uebersicht')">1. Unterrichtsbeispiel & Zyklus</button>
-      <button class="tab-btn" onclick="switchTab('tab-d-berechnung')">2. Berechnung von d (Rückwärts-Einsetzen)</button>
-      <button class="tab-btn" onclick="switchTab('tab-labor')">3. Interaktives RSA-Labor</button>
-      <button class="tab-btn" onclick="switchTab('tab-square-multiply')">4. Square-and-Multiply</button>
-      <button class="tab-btn" onclick="switchTab('tab-training')">5. Klausurtraining & Selbst-Check</button>
+      <button class="tab-btn active" onclick="switchTab('tab-einstieg')">1. Einführung & Wichtige Sätze</button>
+      <button class="tab-btn" onclick="switchTab('tab-uebersicht')">2. Unterrichtsbeispiel & Zyklus</button>
+      <button class="tab-btn" onclick="switchTab('tab-d-berechnung')">3. Berechnung von d (Rückwärts-Einsetzen)</button>
+      <button class="tab-btn" onclick="switchTab('tab-labor')">4. Interaktives RSA-Labor</button>
+      <button class="tab-btn" onclick="switchTab('tab-potenzrechner')">5. Modulo-Potenzrechner</button>
+      <button class="tab-btn" onclick="switchTab('tab-training')">6. Klausurtraining & Selbst-Check</button>
     </nav>
 
     <!-- ========================================== -->
-    <!-- REITER 1: UNTERRICHTSBEISPIEL & ZYKLUS     -->
+    <!-- REITER 1: EINFÜHRUNG & WICHTIGE SÄTZE      -->
     <!-- ========================================== -->
-    <section id="tab-uebersicht" class="tab-panel active">
+    <section id="tab-einstieg" class="tab-panel active">
       <div class="card-section">
         <h2 class="card-title">
           <span class="step-marker">1</span>
-          Das Unterrichtsbeispiel in der Zusammenfassung
+          Einführung in das RSA-Verfahren & zentrale mathematische Sätze
+        </h2>
+
+        <p>
+          Das 1977 von Ron <strong>R</strong>ivest, Adi <strong>S</strong>hamir und Leonard <strong>A</strong>dleman am MIT entwickelte RSA-Kryptosystem ist das weltweit erste und bis heute bedeutendste asymmetrische Public-Key-Verfahren. Es bildet das mathematische Fundament moderner Internet-Sicherheit (HTTPS, SSH, digitale Signaturen).
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 1.5rem 0 0.5rem 0; color: var(--text-main);">
+          1. Das asymmetrische Prinzip: Getrennte Schlüssel
+        </h3>
+        <p>
+          Im Gegensatz zu klassischen (symmetrischen) Chiffren müssen Sender und Empfänger bei RSA <strong>niemals ein gemeinsames Geheimnis über das unsichere Netz austauschen</strong> (Lösung des Schlüsselaustausch-Problems):
+        </p>
+
+        <div class="grid-two">
+          <div class="card-subtle" style="border-top: 3px solid #0284c7;">
+            <h4 style="color: #0369a1;">Öffentlicher Schlüssel (Public Key)</h4>
+            <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+              Besteht aus dem Zahlenpaar <strong>$(e, N)$</strong>.<br>
+              Er wird weltweit öffentlich bekannt gegeben. Jeder darf diesen Schlüssel nutzen, um Nachrichten an Alice zu verschlüsseln (vergleichbar mit einem geöffneten Vorhängeschloss oder einem Briefkastenschlitz).
+            </p>
+          </div>
+          <div class="card-subtle" style="border-top: 3px solid #dc2626;">
+            <h4 style="color: #b91c1c;">Privater Schlüssel (Private Key)</h4>
+            <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+              Besteht aus dem geheimen Zahlenpaar <strong>$(d, N)$</strong>.<br>
+              Er verbleibt streng geheim auf Alices Rechner. Nur wer im Besitz von $d$ ist, kann das mathematische Schloss wieder aufsperren und die Nachricht entschlüsseln.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0; color: var(--text-main);">
+          2. Der RSA-Ablauf in drei Phasen
+        </h3>
+
+        <div class="grid-three">
+          <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); border-top: 4px solid var(--theme-oberstufe);">
+            <div style="font-size: 0.78rem; font-weight: 800; color: var(--theme-oberstufe); text-transform: uppercase; margin-bottom: 4px;">Phase 1 (Alice)</div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Schlüsselerzeugung</h4>
+            <div style="font-size: 0.88rem; line-height: 1.7;">
+              1. Wähle Primzahlen $p$ und $q$ ($p \neq q$).<br>
+              2. RSA-Modul: $N = p \cdot q$<br>
+              3. Phi-Funktion: $\varphi(N) = (p-1)(q-1)$<br>
+              4. Wähle $e$ mit $\operatorname{ggT}(e, \varphi(N)) = 1$.<br>
+              5. Berechne $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$.
+            </div>
+          </div>
+
+          <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); border-top: 4px solid #0284c7;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 4px;">Phase 2 (Bob)</div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Verschlüsselung</h4>
+            <div style="font-size: 0.88rem; line-height: 1.7;">
+              Bob nimmt Alices Public Key $(e, N)$.<br>
+              Klartext als Zahl $M < N$.<br><br>
+              <strong>Geheimtext (Chiffrat) C:</strong>
+              <div style="text-align:center; font-weight:700; margin: 6px 0; font-size: 1rem; color: #0369a1;">
+                $$C = M^e \pmod N$$
+              </div>
+            </div>
+          </div>
+
+          <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); border-top: 4px solid #059669;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: #059669; text-transform: uppercase; margin-bottom: 4px;">Phase 3 (Alice)</div>
+            <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Entschlüsselung</h4>
+            <div style="font-size: 0.88rem; line-height: 1.7;">
+              Alice nutzt ihren Private Key $(d, N)$ und das empfangene Chiffrat $C$.<br><br>
+              <strong>Wiederhergestellter Klartext M:</strong>
+              <div style="text-align:center; font-weight:700; margin: 6px 0; font-size: 1rem; color: #047857;">
+                $$M = C^d \pmod N$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.75rem 0; color: var(--text-main);">
+          3. Die mathematischen Sätze: Warum funktioniert RSA?
+        </h3>
+
+        <!-- Satz 1: Euler -->
+        <div class="theorem-card">
+          <div class="theorem-header">
+            <span class="theorem-title">Satz 1: Der Satz von Leonhard Euler (1736)</span>
+            <span class="theorem-badge">Kernsatz von RSA</span>
+          </div>
+          <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+            Für jede natürliche Zahl $N$ und jede Zahl $M$, die teilerfremd zu $N$ ist ($\operatorname{ggT}(M, N) = 1$), gilt:
+          </p>
+          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+            $$M^{\varphi(N)} \equiv 1 \pmod N$$
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+            <strong>Mathematische Begründung der RSA-Entschlüsselung:</strong><br>
+            Da $e \cdot d \equiv 1 \pmod{\varphi(N)}$ gewählt wurde, gibt es eine ganze Zahl $k \in \mathbb{N}$ mit $e \cdot d = k \cdot \varphi(N) + 1$. Beim Entschlüsseln wird das Chiffrat $C = M^e \pmod N$ potenziert:
+            $$C^d \equiv (M^e)^d = M^{e \cdot d} = M^{k \cdot \varphi(N) + 1} = \left(M^{\varphi(N)}\right)^k \cdot M^1 \equiv 1^k \cdot M \equiv \mathbf{M} \pmod N$$
+            Der Satz von Euler garantiert exakt, dass der Reste-Zyklus nach $\varphi(N)$ Schritten wieder auf 1 springt und der eine zusätzliche Schritt (+1) exakt die ursprüngliche Nachricht $M$ liefert.
+          </p>
+        </div>
+
+        <!-- Satz 2: Fermat -->
+        <div class="theorem-card">
+          <div class="theorem-header">
+            <span class="theorem-title">Satz 2: Der Kleine Satz von Fermat (1640)</span>
+            <span class="theorem-badge">Historische Grundlage</span>
+          </div>
+          <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+            Ist $p$ eine Primzahl und teilt die Zahl $a$ nicht ($\operatorname{ggT}(a, p) = 1$), so gilt:
+          </p>
+          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+            $$a^{p-1} \equiv 1 \pmod p$$
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+            <strong>Zusammenhang mit Euler:</strong><br>
+            Der Satz von Euler ist die direkte Verallgemeinerung des Kleinen Fermat. Für eine Primzahl $p$ sind alle Zahlen $1, 2, \dots, p-1$ teilerfremd zu $p$, sodass $\varphi(p) = p - 1$ gilt. Für ein RSA-Modul $N = p \cdot q$ gilt entsprechend $\varphi(N) = (p-1)(q-1)$.
+          </p>
+        </div>
+
+        <!-- Satz 3: Fundamentalsatz & Faktorisierungsproblem -->
+        <div class="theorem-card">
+          <div class="theorem-header">
+            <span class="theorem-title">Satz 3: Fundamentalsatz der Arithmetik & das Faktorisierungsproblem</span>
+            <span class="theorem-badge">Sicherheitsgarantie</span>
+          </div>
+          <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+            Jede natürliche Zahl $n > 1$ lässt sich eindeutig (bis auf die Reihenfolge) als Produkt von Primzahlen darstellen.
+          </p>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+            <strong>Die asymmetrische Einwegfunktion (Falltürfunktion):</strong><br>
+            • <strong>Einfache Richtung (Multiplikation):</strong> Zwei große Primzahlen $p$ und $q$ miteinander zu multiplizieren ($N = p \cdot q$), dauert auf jedem Rechner weniger als eine Millisekunde ($O(n^2)$).<br>
+            • <strong>Schwere Richtung (Faktorisierung):</strong> Kennt ein Angreifer nur das Produkt $N$, ist es nach heutigem mathematischen Kenntnisstand unmöglich, $p$ und $q$ in vertretbarer Zeit zu berechnen.<br>
+            • <strong>Konsequenz für den Angreifer:</strong> Wer $p$ und $q$ nicht kennt, kann $\varphi(N) = (p-1)(q-1)$ nicht berechnen. Ohne $\varphi(N)$ kann der Angreifer die Gleichung $e \cdot d \equiv 1 \pmod{\varphi(N)}$ nicht nach dem geheimen privaten Schlüssel $d$ auflösen!
+          </p>
+        </div>
+
+        <!-- Satz 4: Bézout -->
+        <div class="theorem-card">
+          <div class="theorem-header">
+            <span class="theorem-title">Satz 4: Lemma von Bézout & Multiplikatives Inverses</span>
+            <span class="theorem-badge">Existenz von d</span>
+          </div>
+          <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+            Für zwei ganze Zahlen $a$ und $b$ existieren stets ganzzahlige Koeffizienten $x, y \in \mathbb{Z}$, sodass gilt:
+          </p>
+          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+            $$\operatorname{ggT}(a, b) = x \cdot a + y \cdot b$$
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+            <strong>Bedeutung für die Schlüsselerzeugung:</strong><br>
+            Da wir $e$ so wählen, dass $\operatorname{ggT}(e, \varphi(N)) = 1$ ist, garantiert das Lemma von Bézout:
+            $$1 = x \cdot e + y \cdot \varphi(N) \implies 1 \equiv x \cdot e \pmod{\varphi(N)}$$
+            Es existiert also garantiert ein multiplikatives Inverses $d$, das wir mit dem Erweiterten Euklidischen Algorithmus (Rückwärts-Einsetzen) effizient berechnen können.
+          </p>
+        </div>
+
+        <!-- Spickzettel-Kompaktkarte -->
+        <div class="info-callout" style="margin-top: 1.5rem;">
+          <h4 style="color: var(--theme-oberstufe-dark); margin-bottom: 0.4rem;">Die RSA-Formeln auf einen Blick:</h4>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; line-height: 1.8;">
+            1. Modul: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; N = p × q<br>
+            2. Phi-Funktion: &nbsp;&nbsp; φ(N) = (p - 1) × (q - 1)<br>
+            3. Öffentlicher Exp: ggT(e, φ(N)) = 1 &nbsp;&nbsp;(1 < e < φ(N))<br>
+            4. Privater Exp: &nbsp;&nbsp;&nbsp; e × d ≡ 1 mod φ(N)<br>
+            5. Verschlüsseln: &nbsp; C = M^e mod N<br>
+            6. Entschlüsseln: &nbsp; M = C^d mod N
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 2: UNTERRICHTSBEISPIEL & ZYKLUS     -->
+    <!-- ========================================== -->
+    <section id="tab-uebersicht" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">2</span>
+          Unser Unterrichtsbeispiel & der mathematische Reste-Zyklus
         </h2>
 
         <p>
@@ -505,12 +727,12 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- REITER 2: BERECHNUNG VON D (RÜCKWÄRTS)     -->
+    <!-- REITER 3: BERECHNUNG VON D (RÜCKWÄRTS)     -->
     <!-- ========================================== -->
     <section id="tab-d-berechnung" class="tab-panel">
       <div class="card-section">
         <h2 class="card-title">
-          <span class="step-marker">2</span>
+          <span class="step-marker">3</span>
           Systematische Berechnung von d durch Rückwärts-Einsetzen
         </h2>
 
@@ -607,12 +829,12 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- REITER 3: INTERAKTIVES RSA-LABOR           -->
+    <!-- REITER 4: INTERAKTIVES RSA-LABOR           -->
     <!-- ========================================== -->
     <section id="tab-labor" class="tab-panel">
       <div class="card-section">
         <h2 class="card-title">
-          <span class="step-marker">3</span>
+          <span class="step-marker">4</span>
           Interaktives RSA- & Rückwärts-Rechnerlabor
         </h2>
 
@@ -662,62 +884,61 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- REITER 4: SQUARE-AND-MULTIPLY              -->
+    <!-- REITER 5: MODULO-POTENZRECHNER             -->
     <!-- ========================================== -->
-    <section id="tab-square-multiply" class="tab-panel">
+    <section id="tab-potenzrechner" class="tab-panel">
       <div class="card-section">
         <h2 class="card-title">
-          <span class="step-marker">4</span>
-          Square-and-Multiply (Potenzierungs-Algorithmus)
+          <span class="step-marker">5</span>
+          Modulo-Potenzrechner & Zyklus-Analyse
         </h2>
 
         <p>
-          Wie berechnen Computer $20^{13} \bmod 55$ oder $25^{37} \bmod 55$, ohne dass Zahlen mit hunderten Stellen entstehen?  
-          Durch <strong>wiederholtes Quadrieren (Square)</strong> und bedarfsweises <strong>Multiplizieren (Multiply)</strong>:
+          Berechne beliebige modulare Potenzen $a^b \bmod m$ exakt mit großen Zahlen und visualisiere bei Bedarf den vollständigen Verlauf der Reste-Zyklen.
         </p>
 
-        <div class="info-callout">
-          <strong>Prinzip am Unterrichtsbeispiel $20^{13} \bmod 55$:</strong><br>
-          1. Zerlege den Exponenten binär: $13 = 8 + 4 + 1 = (1101)_2$.<br>
-          2. Berechne fortlaufend die Quadrate modulo 55:<br>
-          &nbsp;&nbsp;• $20^1 = \mathbf{20}$<br>
-          &nbsp;&nbsp;• $20^2 = 400 \equiv \mathbf{15} \pmod{55}$<br>
-          &nbsp;&nbsp;• $20^4 = 15^2 = 225 \equiv \mathbf{5} \pmod{55}$<br>
-          &nbsp;&nbsp;• $20^8 = 5^2 = \mathbf{25} \pmod{55}$<br>
-          3. Multipliziere nur die relevanten Potenzen ($8 + 4 + 1$):<br>
-          &nbsp;&nbsp;$$20^{13} \equiv 25 \cdot 5 \cdot 20 = 125 \cdot 20 \equiv 15 \cdot 20 = 300 \equiv \mathbf{25} \pmod{55}$$
-        </div>
-
         <div class="calc-panel">
-          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.75rem;">Interaktiver Square-and-Multiply Rechner</h3>
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.75rem;">Potenzberechnung: a^b mod m</h3>
           <div class="form-row">
             <div class="form-group">
-              <label>Basis (z. B. M oder C)</label>
-              <input type="number" id="smBase" value="20">
+              <label>Basis a (z. B. Nachricht M oder Basis)</label>
+              <input type="number" id="mpBase" value="20">
             </div>
             <div class="form-group">
-              <label>Exponent (z. B. e oder d)</label>
-              <input type="number" id="smExp" value="13">
+              <label>Exponent b (z. B. e, d oder 40)</label>
+              <input type="number" id="mpExp" value="40">
             </div>
             <div class="form-group">
-              <label>Modul N</label>
-              <input type="number" id="smMod" value="55">
+              <label>Modul m (z. B. N = 55)</label>
+              <input type="number" id="mpMod" value="55" min="2">
             </div>
           </div>
-          <button class="btn-action" onclick="calculateSquareAndMultiply()">Schritt für Schritt berechnen</button>
 
-          <div id="smResults" class="output-box" style="display: none;"></div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem;">
+            <button class="btn-action" onclick="calculateModularPower()">Potenz berechnen: a^b mod m</button>
+            <button class="btn-action" style="background:#0284c7;" onclick="calculateModularCycle()">Potenz-Zyklus anzeigen (a^1, a^2, ...)</button>
+          </div>
+
+          <div style="font-size:0.85rem; color:var(--text-muted); display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding-top:8px; border-top:1px dashed var(--border-color);">
+            <strong style="color:var(--text-main);">Schnellauswahl:</strong>
+            <button class="btn-toggle-solution" style="margin-top:0;" onclick="loadMpPreset(20, 40, 55)">Unterrichtszyklus: 20^40 mod 55</button>
+            <button class="btn-toggle-solution" style="margin-top:0;" onclick="loadMpPreset(20, 13, 55)">Verschlüsselung: 20^13 mod 55</button>
+            <button class="btn-toggle-solution" style="margin-top:0;" onclick="loadMpPreset(25, 37, 55)">Entschlüsselung: 25^37 mod 55</button>
+            <button class="btn-toggle-solution" style="margin-top:0;" onclick="loadMpPreset(3, 40, 55)">Euler-Test: 3^40 mod 55</button>
+          </div>
+
+          <div id="mpResults" class="output-box" style="display: none;"></div>
         </div>
       </div>
     </section>
 
     <!-- ========================================== -->
-    <!-- REITER 5: KLAUSURTRAINING & SELBST-CHECK   -->
+    <!-- REITER 6: KLAUSURTRAINING & SELBST-CHECK   -->
     <!-- ========================================== -->
     <section id="tab-training" class="tab-panel">
       <div class="card-section">
         <h2 class="card-title">
-          <span class="step-marker">5</span>
+          <span class="step-marker">6</span>
           Klausurtraining & Selbst-Check
         </h2>
 
@@ -1084,81 +1305,150 @@
       `;
     }
 
-    function calculateSquareAndMultiply() {
-      let b = parseInt(document.getElementById('smBase').value);
-      let exp = parseInt(document.getElementById('smExp').value);
-      let mod = parseInt(document.getElementById('smMod').value);
-      let out = document.getElementById('smResults');
+    function calculateModularPower() {
+      let bVal = document.getElementById('mpBase').value.trim();
+      let expVal = document.getElementById('mpExp').value.trim();
+      let mVal = document.getElementById('mpMod').value.trim();
+      let out = document.getElementById('mpResults');
       out.style.display = 'block';
 
-      let binStr = exp.toString(2);
-      let currentVal = 1n;
-      let baseBig = BigInt(b) % BigInt(mod);
-      let modBig = BigInt(mod);
+      if (!bVal || !expVal || !mVal) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Bitte alle drei Werte (Basis, Exponent, Modul) ausfüllen!</span>`;
+        return;
+      }
 
-      let tableHtml = `
-        <div style="margin-bottom:8px;"><strong>Exponent binär:</strong> ${exp} = (${binStr})₂ (Länge: ${binStr.length} Bits)</div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th class="center">Bit</th>
-              <th>Aktion</th>
-              <th>Rechnung</th>
-              <th class="center">Aktueller Wert mod ${mod}</th>
-            </tr>
-          </thead>
-          <tbody>
+      let b = BigInt(bVal);
+      let exp = BigInt(expVal);
+      let m = BigInt(mVal);
+
+      if (m <= 1n) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Der Modul m muss größer als 1 sein!</span>`;
+        return;
+      }
+      if (exp < 0n) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Negative Exponenten sind im Modulo-Restesystem nicht direkt zulässig.</span>`;
+        return;
+      }
+
+      let res = 1n;
+      let base = ((b % m) + m) % m;
+      let e = exp;
+      while (e > 0n) {
+        if (e % 2n === 1n) res = (res * base) % m;
+        base = (base * base) % m;
+        e = e / 2n;
+      }
+
+      let g = gcd(Number(base), Number(m));
+      let explanation = "";
+      if (exp > 0n && g !== 1) {
+        explanation = `
+          <div style="margin-top: 10px; font-size: 0.88rem; color: #475569; background: #ffffff; padding: 10px 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <strong>Beobachtung wie im Unterricht:</strong> $\\operatorname{ggT}(${b}, ${m}) = ${g} \\neq 1$. Die Basis ist <em>nicht teilerfremd</em> zum Modul. Sie durchläuft eine Teiler-Unterschleife modulo ${m}.
+          </div>
+        `;
+      } else if (exp > 0n && g === 1) {
+        explanation = `
+          <div style="margin-top: 10px; font-size: 0.88rem; color: #059669; background: #ffffff; padding: 10px 12px; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <strong>Teilerfremd:</strong> $\\operatorname{ggT}(${b}, ${m}) = 1$. Die Basis ist teilerfremd zum Modul.
+          </div>
+        `;
+      }
+
+      out.innerHTML = `
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;">Berechnungsergebnis:</div>
+        <div style="font-size: 1.3rem; font-weight: 800; color: var(--theme-oberstufe-dark);">
+          ${b}<sup>${exp}</sup> mod ${m} = <span style="color: #059669;">${res}</span>
+        </div>
+        ${explanation}
       `;
+      triggerKaTeX();
+    }
 
-      for (let i = 0; i < binStr.length; i++) {
-        let bit = binStr[i];
-        if (i > 0) {
-          let prev = currentVal;
-          currentVal = (currentVal * currentVal) % modBig;
-          tableHtml += `
-            <tr>
-              <td class="center">-</td>
-              <td><strong>Square</strong> (Quadrieren)</td>
-              <td>${prev}² mod ${mod}</td>
-              <td class="center"><strong>${currentVal}</strong></td>
-            </tr>
-          `;
+    function calculateModularCycle() {
+      let bVal = document.getElementById('mpBase').value.trim();
+      let mVal = document.getElementById('mpMod').value.trim();
+      let out = document.getElementById('mpResults');
+      out.style.display = 'block';
+
+      if (!bVal || !mVal) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Bitte Basis und Modul angeben!</span>`;
+        return;
+      }
+
+      let b = BigInt(bVal);
+      let m = BigInt(mVal);
+
+      if (m <= 1n) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Der Modul m muss größer als 1 sein!</span>`;
+        return;
+      }
+
+      let seen = new Map();
+      let history = [];
+      let current = 1n;
+      let cycleStart = -1;
+      let period = 0;
+      let maxSteps = 30;
+
+      for (let k = 1; k <= maxSteps; k++) {
+        current = (current * (((b % m) + m) % m)) % m;
+        let valNum = Number(current);
+        if (seen.has(valNum) && cycleStart === -1) {
+          cycleStart = seen.get(valNum);
+          period = k - cycleStart;
+          history.push({ k, val: valNum, isRepeat: true });
+          break;
         } else {
-          currentVal = baseBig;
-          tableHtml += `
-            <tr>
-              <td class="center">${bit}</td>
-              <td>Startwert</td>
-              <td>${b} mod ${mod}</td>
-              <td class="center"><strong>${currentVal}</strong></td>
-            </tr>
-          `;
-          continue;
-        }
-
-        if (bit === '1') {
-          let prev = currentVal;
-          currentVal = (currentVal * baseBig) % modBig;
-          tableHtml += `
-            <tr style="background:#f0f9ff;">
-              <td class="center"><strong>1</strong></td>
-              <td><strong>Multiply</strong> (Basis multiplizieren)</td>
-              <td>(${prev} × ${b}) mod ${mod}</td>
-              <td class="center"><strong>${currentVal}</strong></td>
-            </tr>
-          `;
+          seen.set(valNum, k);
+          history.push({ k, val: valNum, isRepeat: false });
         }
       }
 
-      tableHtml += `
+      let rowsHtml = "";
+      for (let row of history) {
+        let isRep = row.isRepeat;
+        rowsHtml += `
+          <tr style="${isRep ? 'background:#ecfdf5; font-weight:700;' : ''}">
+            <td class="center">${row.k}</td>
+            <td>${b}<sup>${row.k}</sup> mod ${m}</td>
+            <td class="center" style="font-weight:700; ${isRep ? 'color:#059669;' : ''}">${row.val}</td>
+            <td>${isRep ? `Wiederholung von Schritt ${cycleStart} (Periode = ${period})` : 'Neu'}</td>
+          </tr>
+        `;
+      }
+
+      let summaryHtml = period > 0
+        ? `<div style="margin-top:10px; font-weight:700; color:#059669;">Zyklus erkannt: Periodenlänge = ${period} (Reste wiederholen sich nach Exponent ${cycleStart}).</div>`
+        : `<div style="margin-top:10px; color:var(--text-muted);">Erste ${maxSteps} Schritte berechnet (noch keine Wiederholung in den ersten ${maxSteps} Potenzen).</div>`;
+
+      out.innerHTML = `
+        <div style="font-size:0.92rem; font-weight:700; margin-bottom:8px; color:var(--text-main);">
+          Potenz-Folge für Basis ${b} modulo ${m}:
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="center">k (Exponent)</th>
+              <th>Potenz</th>
+              <th class="center">Rest mod ${m}</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
           </tbody>
         </table>
-        <div style="margin-top:10px; font-weight:700; color:#059669; font-size:1.05rem;">
-          Endergebnis: ${b}^${exp} mod ${mod} = ${currentVal}
-        </div>
+        ${summaryHtml}
       `;
+      triggerKaTeX();
+    }
 
-      out.innerHTML = tableHtml;
+    function loadMpPreset(base, exp, mod) {
+      document.getElementById('mpBase').value = base;
+      document.getElementById('mpExp').value = exp;
+      document.getElementById('mpMod').value = mod;
+      calculateModularPower();
     }
 
     function toggleSolution(num) {
