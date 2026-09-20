@@ -563,72 +563,134 @@
           3. Modulares Rechnen: Kongruenz ($\equiv$) & Rechenregeln für Reste
         </h3>
         <p>
-          Das gesamte RSA-Verfahren basiert auf der sogenannten <strong>Uhren-Arithmetik (Modulare Arithmetik)</strong>. Bevor wir die großen Sätze betrachten, halten wir die grundlegenden Schreibweisen und Rechenregeln fest:
+          Das gesamte RSA-Verfahren basiert auf der sogenannten <strong>Uhren-Arithmetik (Modulare Arithmetik)</strong>. Bevor wir die großen kryptographischen Sätze betrachten, halten wir die grundlegenden Schreibweisen, Bedeutungen und Rechenregeln mit leicht verständlichen Beispielen fest:
         </p>
 
         <!-- Box 1: Modulo und Dreifachgleichheitszeichen -->
         <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.25rem;">
-          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.02rem; margin-bottom: 0.5rem;">
-            Der Modulo-Operator ($\bmod$) & das Dreifachgleichheitszeichen ($\equiv$)
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.05rem; margin-bottom: 0.6rem;">
+            Der Modulo-Operator ($\bmod$) vs. das Dreifachgleichheitszeichen ($\equiv$)
           </h4>
-          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.6rem;">
-            • <strong>Der Operator $\bmod N$:</strong> Liefert den ganzzahligen Divisionsrest bei Teilung durch $N$.<br>
-            &nbsp;&nbsp;↳ <em>Beispiel:</em> $23 \bmod 5 = \mathbf{3}$, da $23 = 4 \cdot 5 + 3$.<br><br>
-            • <strong>Das Kongruenzzeichen $\equiv$ (Dreifachgleichheitszeichen):</strong><br>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.75rem;">
+            Warum genügt beim Rechnen mit Resten nicht einfach das gewohnte Gleichheitszeichen $=$?<br>
+            Die Zahl $17$ ist natürlich <em>nicht</em> gleich $2$ ($17 \neq 2$). Aber bezüglich des Teilers $5$ besitzen beide Zahlen exakt denselben Rest ($17 = 3 \cdot 5 + 2$ und $2 = 0 \cdot 5 + 2$). Um diese Gleichwertigkeit bezüglich des Restes zu beschreiben, führte Carl Friedrich Gauß das dreistrichige <strong>Kongruenzzeichen ($\equiv$)</strong> ein.
+          </p>
+
+          <div style="background: var(--bg-subtle); padding: 12px 16px; border-radius: var(--radius-sm); margin: 0.75rem 0; font-size: 0.92rem; line-height: 1.8;">
+            <p><strong>Die beiden Schreibweisen im direkten Vergleich:</strong></p>
+            • <strong>Der Modulo-Operator ($\bmod N$ als Rechenoperation):</strong><br>
+            &nbsp;&nbsp;Er berechnet den eindeutigen Divisionsrest $r \in \{0, 1, \dots, N-1\}$. Das Ergebnis ist eine <em>einzige feste Zahl</em>:<br>
+            &nbsp;&nbsp;$$17 \bmod 5 = \mathbf{2}, \quad \text{denn } 17 = 3 \cdot 5 + 2$$
+            • <strong>Die Kongruenz-Relation ($\equiv$ als mathematische Beziehung):</strong><br>
             &nbsp;&nbsp;Man liest $a \equiv b \pmod N$ als: <em>„$a$ ist kongruent zu $b$ modulo $N$“</em>.<br>
-            &nbsp;&nbsp;<strong>Mathematische Definition:</strong> Zwei Zahlen sind kongruent modulo $N$, wenn ihre Differenz $(a - b)$ ohne Rest durch $N$ teilbar ist – oder gleichbedeutend: wenn beide bei Division durch $N$ denselben Rest ergeben:
-          </p>
-          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
-            $$a \equiv b \pmod N \quad\iff\quad N \text{ teilt } (a - b) \quad\iff\quad (a \bmod N) = (b \bmod N)$$
+            &nbsp;&nbsp;Es ist eine Aussage (wie eine Waage), die wahr oder falsch sein kann:<br>
+            &nbsp;&nbsp;$$17 \equiv 2 \pmod 5 \quad \text{und ebenso} \quad 17 \equiv 22 \equiv 32 \equiv -3 \pmod 5$$
           </div>
-          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
-            <strong>Anschauliches Uhren-Beispiel ($N = 12$):</strong><br>
-            Auf einer 12-Stunden-Uhr entsprechen 15 Uhr und 3 Uhr derselben Zeigerstellung:<br>
-            $$15 \equiv 3 \pmod{12}, \quad \text{denn } 15 - 3 = 12 \text{ ist durch 12 teilbar.}$$
-            Genauso entsprechen „3 Stunden zurück“ ($-3$) exakt 9 Uhr:<br>
-            $$-3 \equiv 9 \pmod{12}, \quad \text{denn } -3 - 9 = -12 \text{ ist durch 12 teilbar.}$$
+
+          <p style="font-size: 0.92rem; line-height: 1.7; margin: 0.75rem 0 0.4rem 0;">
+            <strong>Drei gleichwertige Kriterien für die Kongruenz $a \equiv b \pmod N$:</strong>
           </p>
+          <div style="font-size: 0.9rem; line-height: 1.75; margin-left: 0.5rem;">
+            1. <strong>Gleicher Divisionsrest:</strong> $(a \bmod N) = (b \bmod N)$.<br>
+            2. <strong>Teilbarkeit der Differenz:</strong> $(a - b)$ ist ohne Rest durch $N$ teilbar, in Symbolen: $N \mid (a - b)$.<br>
+            &nbsp;&nbsp;&nbsp;↳ <em>Beispiel:</em> $17 - 2 = 15$, und 15 ist glatt durch 5 teilbar ($15 : 5 = 3$).<br>
+            3. <strong>Die Uhren-Analogie (Zeigerstellung bei $N = 12$):</strong><br>
+            &nbsp;&nbsp;&nbsp;Auf einer 12-Stunden-Uhr stehen 15 Uhr, 27 Uhr und 3 Uhr alle auf exakt derselben Ziffer:<br>
+            &nbsp;&nbsp;&nbsp;$$15 \equiv 3 \pmod{12} \quad (\text{denn } 15 - 3 = 12 = 1 \cdot 12)$$
+            &nbsp;&nbsp;&nbsp;$$27 \equiv 3 \pmod{12} \quad (\text{denn } 27 - 3 = 24 = 2 \cdot 12)$$
+            &nbsp;&nbsp;&nbsp;Genauso entsprechen „3 Stunden zurück“ ($-3$) exakt 9 Uhr:<br>
+            &nbsp;&nbsp;&nbsp;$$-3 \equiv 9 \pmod{12} \quad (\text{denn } -3 - 9 = -12 = -1 \cdot 12)$$
+          </div>
         </div>
 
         <!-- Box 2: Modulare Rechenregeln -->
         <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.5rem;">
-          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.02rem; margin-bottom: 0.5rem;">
-            Die fundamentalen Rechenregeln der modularen Arithmetik
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.05rem; margin-bottom: 0.5rem;">
+            Die fundamentalen Rechenregeln beim Resterechnen
           </h4>
           <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.75rem;">
-            Die wichtigste Erkenntnis für die Informatik: <strong>Man darf Zwischenergebnisse jederzeit modulo $N$ vereinfachen!</strong> Große Zahlen müssen nicht erst komplett ausmultipliziert werden:
+            Die entscheidende Stärke der modularen Arithmetik für die Informatik lautet: <strong>Man darf Zwischenergebnisse jederzeit modulo $N$ reduzieren!</strong> Man muss niemals riesige Zahlen ausmultiplizieren.
           </p>
 
           <div style="font-size: 0.92rem; line-height: 1.8;">
-            <p><strong>1. Multiplikationsregel beim Resterechnen:</strong></p>
+            <!-- 1. Multiplikation -->
+            <p style="font-weight: 700; color: var(--theme-oberstufe-dark); margin-top: 1rem; margin-bottom: 0.3rem;">
+              1. Multiplikationsregel beim Resterechnen:
+            </p>
             <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
               $$(a \cdot b) \bmod N = \big((a \bmod N) \cdot (b \bmod N)\big) \bmod N$$
               $$\text{bzw. in Kongruenz: } a \equiv a' \land b \equiv b' \pmod N \implies a \cdot b \equiv a' \cdot b' \pmod N$$
             </div>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.75rem;">
-              <em>Beispiel:</em> $(14 \cdot 16) \bmod 5 = ((14 \bmod 5) \cdot (16 \bmod 5)) \bmod 5 = (4 \cdot 1) \bmod 5 = \mathbf{4}$.<br>
-              (Man muss nicht erst mühsam $14 \cdot 16 = 224$ rechnen, denn $224 \bmod 5 = 4$).
-            </p>
 
-            <p><strong>2. Additionsregel beim Resterechnen:</strong></p>
+            <div style="background: #f8fafc; border-left: 3px solid var(--theme-oberstufe); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.75;">
+              <strong>Anschaulicher Vergleich zweier Rechenwege für $(14 \cdot 16) \bmod 5$:</strong><br>
+              • <strong>Weg A (Mühsam, klassisch ohne Regel):</strong><br>
+              &nbsp;&nbsp;Erst multiplizieren: $14 \cdot 16 = 224$.<br>
+              &nbsp;&nbsp;Dann schriftliche Division: $224 : 5 = 44 \text{ Rest } \mathbf{4}$.<br>
+              • <strong>Weg B (Modular, mit Resten im Kopf):</strong><br>
+              &nbsp;&nbsp;Vorab Reste bilden: $14 \bmod 5 = \mathbf{4}$ und $16 \bmod 5 = \mathbf{1}$.<br>
+              &nbsp;&nbsp;Nur noch Reste multiplizieren: $(4 \cdot 1) \bmod 5 = \mathbf{4}$.<br>
+              &nbsp;&nbsp;<em>Ergebnis:</em> Sofort im Kopf ohne Taschenrechner gelöst!<br><br>
+              • <strong>Weiteres Beispiel: $(38 \cdot 41) \bmod 7$</strong><br>
+              &nbsp;&nbsp;Statt mühsam $38 \cdot 41 = 1558$ schriftlich durch 7 zu teilen:<br>
+              &nbsp;&nbsp;$38 \equiv 3 \pmod 7$ (da $38 = 5 \cdot 7 + 3$) und $41 \equiv 6 \pmod 7$ (da $41 = 5 \cdot 7 + 6$).<br>
+              &nbsp;&nbsp;$\implies (3 \cdot 6) \bmod 7 = 18 \bmod 7 = \mathbf{4}$.
+            </div>
+
+            <!-- 2. Addition -->
+            <p style="font-weight: 700; color: var(--theme-oberstufe-dark); margin-top: 1rem; margin-bottom: 0.3rem;">
+              2. Additionsregel beim Resterechnen:
+            </p>
             <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
               $$(a + b) \bmod N = \big((a \bmod N) + (b \bmod N)\big) \bmod N$$
             </div>
-
-            <p><strong>3. Potenzregel beim Resterechnen:</strong></p>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.3rem;">
-              Da eine Potenz $a^b$ lediglich eine wiederholte Multiplikation $a \cdot a \cdot \dots \cdot a$ ist, darf die <strong>Basis $a$ vor und während der Potenzierung jederzeit modulo $N$ reduziert werden</strong>:
-            </p>
-            <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
-              $$(a^b) \bmod N = \big((a \bmod N)^b\big) \bmod N$$
-              $$(a^{x + y}) \bmod N = \big((a^x \bmod N) \cdot (a^y \bmod N)\big) \bmod N$$
-              $$(a^{x \cdot y}) \bmod N = \big((a^x)^y\big) \bmod N$$
+            <div style="background: #f8fafc; border-left: 3px solid var(--theme-oberstufe); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.75;">
+              <strong>Beispiel: $(29 + 33) \bmod 7$</strong><br>
+              • Reste vorab bestimmen: $29 \bmod 7 = \mathbf{1}$ &nbsp;und&nbsp; $33 \bmod 7 = \mathbf{5}$.<br>
+              • Reste addieren: $(1 + 5) \bmod 7 = 6 \bmod 7 = \mathbf{6}$.<br>
+              • <em>Probe:</em> $29 + 33 = 62 = 8 \cdot 7 + \mathbf{6}$ (Bestätigt).
             </div>
-            <p style="color: var(--text-muted); font-size: 0.88rem;">
-              <em>Beispiel:</em> $16^3 \bmod 5 = (16 \bmod 5)^3 \bmod 5 = 1^3 \bmod 5 = \mathbf{1}$.<br>
-              <em>Bedeutung für RSA:</em> Computer können $C = M^e \bmod N$ und $M = C^d \bmod N$ selbst bei riesigen Schlüsseln blitzschnell berechnen, da man nach jeder Multiplikation sofort wieder $\bmod N$ rechnet und Zahlen niemals explodieren.<br>
-              <strong>Wichtige Warnung (Merksatz):</strong> Die Reduktionsregel gilt <strong>nur für die Basis</strong> modulo $N$. Der Exponent darf <em>nicht</em> einfach modulo $N$ reduziert werden, sondern folgt dem Satz von Euler modulo $\varphi(N)$!
+
+            <!-- 3. Potenzregeln -->
+            <p style="font-weight: 700; color: var(--theme-oberstufe-dark); margin-top: 1rem; margin-bottom: 0.3rem;">
+              3. Potenzregeln beim Resterechnen:
             </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+              Da eine Potenz $a^b$ lediglich eine wiederholte Multiplikation $a \cdot a \cdot \dots \cdot a$ ist, gelten folgende Gesetze:
+            </p>
+
+            <div style="text-align:center; font-size:1.02rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.75rem; border-radius: var(--radius-sm); line-height: 1.9;">
+              $$\textbf{Regel 1 (Basis vorab reduzieren): } (a^b) \bmod N = \big((a \bmod N)^b\big) \bmod N$$
+              $$\textbf{Regel 2 (Potenzen aufspalten): } (a^{x + y}) \bmod N = \big((a^x \bmod N) \cdot (a^y \bmod N)\big) \bmod N$$
+              $$\textbf{Regel 3 (Wiederholtes Quadrieren): } (a^{2k}) \bmod N = \big((a^2 \bmod N)^k\big) \bmod N$$
+            </div>
+
+            <div style="background: #f8fafc; border-left: 3px solid var(--theme-oberstufe); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.75;">
+              <strong>Beispiel 1 (Basis reduzieren): Berechne $23^4 \bmod 5$</strong><br>
+              • Normaler Weg: $23^4 = 279.841$ (ohne Taschenrechner kaum lösbar).<br>
+              • Modularer Weg: Erst die Basis modulo 5 vereinfachen: $23 \bmod 5 = \mathbf{3}$.<br>
+              &nbsp;&nbsp;Nun rechnen wir lediglich: $3^4 \bmod 5 = 81 \bmod 5 = \mathbf{1}$.<br><br>
+
+              <strong>Beispiel 2 (Sukzessives Quadrieren): Berechne $3^8 \bmod 7$ im Kopf!</strong><br>
+              • Normaler Weg: $3^8 = 6561$ (extrem unhandlich).<br>
+              • Mit der Potenzregel zerlegen wir $3^8$ in wiederholtes Quadrieren:<br>
+              &nbsp;&nbsp;1. $3^2 = 9 \equiv \mathbf{2} \pmod 7$<br>
+              &nbsp;&nbsp;2. $3^4 = (3^2)^2 \equiv 2^2 = \mathbf{4} \pmod 7$<br>
+              &nbsp;&nbsp;3. $3^8 = (3^4)^2 \equiv 4^2 = 16 \equiv \mathbf{2} \pmod 7$<br>
+              &nbsp;&nbsp;$\implies 3^8 \bmod 7 = \mathbf{2}$. Vollständig im Kopf in wenigen Sekunden gelöst!<br><br>
+              <em>Bedeutung für RSA:</em> Rechner nutzen exakt dieses Verfahren (*Square-and-Multiply* / Schnelle Exponentiation). Selbst bei riesigen 2048-Bit-Zahlen wachsen Zwischenwerte niemals unkontrolliert an, weil nach jedem Schritt sofort wieder modulo gerechnet wird.
+            </div>
+
+            <!-- Warnkasten: Merke Exponent -->
+            <div style="background: #fef2f2; border: 1.5px solid #f87171; border-left: 4.5px solid #dc2626; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.7;">
+              <strong style="color: #991b1b;">Wichtige Warnung (Häufiger Klausurfehler):</strong><br>
+              Die Modulo-Reduktion gilt <strong>ausschließlich für die Basis</strong> modulo $N$.<br>
+              Der <strong>Exponent darf NIEMALS einfach modulo $N$</strong> gerechnet werden!<br>
+              • <em>Gegenbeispiel:</em> $2^4 \bmod 3 = 16 \bmod 3 = \mathbf{1}$.<br>
+              &nbsp;&nbsp;Würde man fälschlicherweise den Exponenten modulo 3 nehmen ($4 \bmod 3 = 1$):<br>
+              &nbsp;&nbsp;$2^{4 \bmod 3} = 2^1 = \mathbf{2} \neq 1$ (völlig falsches Ergebnis!).<br>
+              • <em>Richtig:</em> Wie Exponenten vereinfacht werden dürfen, regelt der nachfolgende <strong>Satz von Euler</strong>: Exponenten dürfen modulo $\mathbf{\varphi(N)}$ reduziert werden!
+            </div>
           </div>
         </div>
 
@@ -645,15 +707,40 @@
           <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
             Für jede natürliche Zahl $N$ und jede Zahl $M$, die teilerfremd zu $N$ ist ($\operatorname{ggT}(M, N) = 1$), gilt:
           </p>
-          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.2rem; color: var(--theme-oberstufe-dark);">
             $$M^{\varphi(N)} \equiv 1 \pmod N$$
           </div>
-          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+
+          <!-- Konkretes Zahlenbeispiel für Euler -->
+          <div style="background: var(--bg-subtle); border-left: 3px solid var(--theme-oberstufe); padding: 10px 14px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 0.9rem 0; font-size: 0.9rem; line-height: 1.75;">
+            <strong>Konkretes Zahlenbeispiel zum Mitrechnen im Kopf:</strong><br>
+            Wählen wir den kleinen Modul $N = 10$. Die zu 10 teilerfremden Zahlen unterhalb von 10 sind $\{1, 3, 7, 9\}$, daher gilt $\varphi(10) = 4$.<br><br>
+            • Test mit $M = 3$ ($\operatorname{ggT}(3, 10) = 1$):<br>
+            &nbsp;&nbsp;Nach Euler muss $3^{\varphi(10)} = 3^4 \equiv 1 \pmod{10}$ gelten.<br>
+            &nbsp;&nbsp;Rechnung: $3^4 = 81 = 8 \cdot 10 + \mathbf{1} \implies 81 \bmod 10 = \mathbf{1}$. Stimmt exakt!<br><br>
+            • Test mit $M = 7$ ($\operatorname{ggT}(7, 10) = 1$):<br>
+            &nbsp;&nbsp;$7^2 = 49 \equiv 9 \equiv -1 \pmod{10}$.<br>
+            &nbsp;&nbsp;$7^4 = (7^2)^2 \equiv (-1)^2 = \mathbf{1} \pmod{10}$. Stimmt ebenfalls!
+          </div>
+
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0.5rem;">
             <strong>Mathematische Begründung der RSA-Entschlüsselung:</strong><br>
-            Da $e \cdot d \equiv 1 \pmod{\varphi(N)}$ gewählt wurde, gibt es eine ganze Zahl $k \in \mathbb{N}$ mit $e \cdot d = k \cdot \varphi(N) + 1$. Beim Entschlüsseln wird das Chiffrat $C = M^e \pmod N$ potenziert:
+            Da $e \cdot d \equiv 1 \pmod{\varphi(N)}$ gewählt wurde, gibt es eine ganze Zahl $k \in \mathbb{N}$ mit $e \cdot d = k \cdot \varphi(N) + 1$. Beim Entschlüsseln wird das Chiffrat $C = M^e \pmod N$ mit dem geheimen Schlüssel $d$ potenziert:
             $$C^d \equiv (M^e)^d = M^{e \cdot d} = M^{k \cdot \varphi(N) + 1} = \left(M^{\varphi(N)}\right)^k \cdot M^1 \equiv 1^k \cdot M \equiv \mathbf{M} \pmod N$$
-            Der Satz von Euler garantiert exakt, dass der Reste-Zyklus nach $\varphi(N)$ Schritten wieder auf 1 springt und der eine zusätzliche Schritt (+1) exakt die ursprüngliche Nachricht $M$ liefert.
           </p>
+
+          <!-- Mini-RSA Zahlenbeispiel -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.75;">
+            <strong>Konkreter RSA-Ablauf an unserem Mini-Beispiel ($N = 10, \varphi(N) = 4$):</strong><br>
+            1. Öffentlicher Exponent gewählt: $e = 3$ mit $\operatorname{ggT}(3, 4) = 1$.<br>
+            2. Privater Schlüssel $d$ gesucht mit $3 \cdot d \equiv 1 \pmod 4$. Für $d = 3$ gilt: $3 \cdot 3 = 9 = 2 \cdot 4 + 1 \equiv 1 \pmod 4 \implies d = 3$.<br>
+            3. Bob verschlüsselt die Nachricht $M = 7$:<br>
+            &nbsp;&nbsp;&nbsp;$$C = M^e \bmod N = 7^3 \bmod 10 = 343 \bmod 10 = \mathbf{3}$$
+            4. Alice entschlüsselt mit ihrem privaten Schlüssel $d = 3$:<br>
+            &nbsp;&nbsp;&nbsp;$$M' = C^d \bmod N = 3^3 \bmod 10 = 27 \bmod 10 = \mathbf{7}$$
+            &nbsp;&nbsp;&nbsp;↳ Die ursprüngliche Nachricht $M = 7$ ist wieder exakt wiederhergestellt, weil:<br>
+            &nbsp;&nbsp;&nbsp;$$C^d = (7^3)^3 = 7^9 = 7^{2 \cdot 4 + 1} = (7^4)^2 \cdot 7^1 \equiv (1)^2 \cdot 7 = 1 \cdot 7 = \mathbf{7} \pmod{10}$$
+          </div>
         </div>
 
         <!-- Satz 2: Fermat -->
@@ -777,24 +864,116 @@
           • Teilbarkeit prüfen: $481 : 13 = \mathbf{37}$ (glatt teilbar!) $\implies \mathbf{d = 37}$.
         </div>
 
-        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.75rem 0 0.5rem 0;">Der mathematische Reste-Zyklus & Satz von Euler</h3>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.5rem 0; color: var(--text-main);">
+          Der mathematische Reste-Zyklus & Satz von Euler im Detail
+        </h3>
         <p>
-          Warum kommt beim Entschlüsseln $C^d = (M^e)^d$ wieder die ursprüngliche Nachricht $M$ heraus? Nach dem <strong>Satz von Euler</strong> wiederholen sich Potenzen modulo $N$ zyklisch:
+          Warum kommt beim Entschlüsseln $C^d = (M^e)^d$ wieder die ursprüngliche Nachricht $M$ heraus?  
+          Das Fundament dafür bildet der <strong>Satz von Leonhard Euler</strong>. Er besagt, dass sich Reste beim fortlaufenden Potenzieren modulo $N$ in einem festen Zyklus wiederholen:
         </p>
+
         <div style="text-align: center; margin: 0.85rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
-          $$M^{\varphi(N)} \equiv 1 \pmod N \quad (\text{für alle } M \text{ mit } \operatorname{ggT}(M, N) = 1)$$
+          $$M^{\varphi(N)} \equiv 1 \pmod N \quad (\text{für alle Zahlen } M \text{ mit } \operatorname{ggT}(M, N) = 1)$$
         </div>
 
+        <!-- Anschauliches Einstiegsbeispiel mit kleinen Zahlen -->
+        <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color); margin: 1.25rem 0;">
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1rem; margin-bottom: 0.5rem;">
+            1. Anschauliches Einführungsbeispiel: Der Karussell-Effekt (zum Mitrechnen im Kopf)
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.5rem;">
+            Nehmen wir den kleinen Modul $N = 10$. Die teilerfremden Zahlen zu 10 sind $\{1, 3, 7, 9\}$, also gilt $\varphi(10) = 4$.<br>
+            Wählen wir als Basis die Zahl $M = 3$ ($\operatorname{ggT}(3, 10) = 1$) und berechnen die Potenzen schrittweise:
+          </p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; line-height: 1.8; background: var(--bg-subtle); padding: 10px 14px; border-radius: var(--radius-sm);">
+            • 3¹ = 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≡ 3 mod 10<br>
+            • 3² = 9 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≡ 9 mod 10<br>
+            • 3³ = 27 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≡ 7 mod 10<br>
+            • 3⁴ = 81 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≡ 1 mod 10 &nbsp;&nbsp; (← Nach genau φ(10) = 4 Schritten landen wir bei der 1!)<br>
+            • 3⁵ = 81 × 3 &nbsp; ≡ 3 mod 10 &nbsp;&nbsp; (← Das Karussell startet exakt wieder bei 3!)<br>
+            • 3⁶ = 3⁵ × 3 &nbsp; ≡ 9 mod 10 &nbsp;&nbsp; (← wieder 9, danach 7, 1, 3, 9, 7, 1 ...)
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-top: 0.6rem; margin-bottom: 0;">
+            <strong>Erkenntnis für den Reste-Zyklus:</strong><br>
+            Die Reste durchlaufen eine geschlossene Runde: $3 \to 9 \to 7 \to 1 \to 3 \dots$<br>
+            Nach jeweils <strong>$\varphi(N) = 4$ Schritten</strong> schlägt die Potenz bei der <strong>1</strong> auf. Da $1 \cdot M = M$ ist, setzt der nächste Schritt den Zyklus wieder genau auf den Anfangswert zurück!
+          </p>
+        </div>
+
+        <!-- Wie RSA das nutzt: Der "+1"-Schritt -->
+        <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color); margin: 1.25rem 0;">
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1rem; margin-bottom: 0.5rem;">
+            2. Wie nutzt RSA diesen Zyklus? (Der „+1“-Schritt zur Entschlüsselung)
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.6rem;">
+            Beim Verschlüsseln rechnen wir $C = M^e \pmod N$, beim Entschlüsseln $C^d = (M^e)^d = M^{e \cdot d} \pmod N$.<br>
+            Weil wir $d$ so gewählt haben, dass $e \cdot d \equiv 1 \pmod{\varphi(N)}$ ist, gilt nach Definition der Teilbarkeit:
+          </p>
+          <div style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0; color: var(--theme-oberstufe-dark);">
+            $$e \cdot d = k \cdot \varphi(N) + \mathbf{1} \quad (k \in \mathbb{N})$$
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.4rem;">
+            Setzen wir diesen Exponenten in die Entschlüsselung ein und wenden die modularen Potenzregeln an:
+          </p>
+          <div style="background: var(--bg-subtle); padding: 0.9rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.95rem; line-height: 1.8; text-align: center;">
+            $$C^d = M^{e \cdot d} = M^{k \cdot \varphi(N) + 1} = \big(M^{\varphi(N)}\big)^k \cdot M^1 \equiv (1)^k \cdot M^1 = 1 \cdot M = \mathbf{M} \pmod N$$
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-top: 0.6rem; margin-bottom: 0;">
+            <strong>In Worten erklärt:</strong><br>
+            Der Exponent $e \cdot d$ lässt das Karussell $k$ volle Runden drehen (jede volle Runde endet bei 1, und $1^k = 1$). Durch das <strong>$+1$ im Exponenten</strong> macht die Rechnung nach den $k$ vollen Runden noch <strong>genau einen Einzelschritt weiter</strong> – und landet dadurch zielsicher wieder beim ursprünglichen Klartext $M$!
+          </p>
+        </div>
+
+        <!-- Anwendung auf unser Unterrichtsbeispiel -->
+        <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color); margin: 1.25rem 0;">
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1rem; margin-bottom: 0.5rem;">
+            3. Anwendung auf unser Unterrichtsbeispiel ($N = 55, \varphi(N) = 40$)
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.5rem;">
+            Im Unterricht hatten wir $e = 13$ und $d = 37$ berechnet. Das Produkt der Exponenten beträgt:
+          </p>
+          <div style="text-align: center; font-size: 1.05rem; margin: 0.4rem 0;">
+            $$e \cdot d = 13 \cdot 37 = 481 = \mathbf{12} \cdot 40 + \mathbf{1}$$
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.5rem;">
+            Hier ist $k = 12$. Es werden also <strong>12 volle 40er-Runden</strong> gedreht (jede Runde landet bei 1), und dann folgt noch <strong>genau 1 Schritt</strong>.<br>
+            Testen wir das an einer teilerfremden Zahl wie $M = 2$ ($\operatorname{ggT}(2, 55) = 1$):
+          </p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; line-height: 1.7; background: var(--bg-subtle); padding: 8px 12px; border-radius: var(--radius-sm);">
+            • Satz von Euler: 2⁴⁰ mod 55 = 1<br>
+            • Entschlüsseln: &nbsp;2⁴⁸¹ = (2⁴⁰)¹² × 2¹ ≡ 1¹² × 2 = 2 mod 55
+          </div>
+        </div>
+
+        <!-- Was ist mit M = 20? -->
         <div class="info-callout">
-          <strong>Wichtige Beobachtung zu unserem Unterrichtsbeispiel $M = 20$:</strong><br>
-          Berechnet man $20^{40} \bmod 55$, so erhält man <strong>nicht 1, sondern 45</strong>! Warum?<br>
-          Weil $\operatorname{ggT}(20, 55) = 5 \neq 1$ ist. Die Zahl 20 ist durch 5 teilbar. Jede Potenz von 20 ist ebenfalls durch 5 teilbar und kann bei Division durch 55 niemals den Rest 1 ergeben.<br><br>
-          <strong>Warum funktioniert RSA trotzdem?</strong><br>
-          Die Reste von 20 durchlaufen modulo 55 eine geschlossene 5er-Schleife:
-          $$20 \to 15 \to 25 \to 5 \to 45 \to 20 \dots$$
-          Weil 40 ein Vielfaches von 5 ist ($8 \cdot 5 = 40$), landet $20^{40}$ am Ende der Schleife bei 45. Durch den Exponenten $e \cdot d = 12 \cdot 40 + \mathbf{1} = 481$ folgt nach den 40 Runden noch genau <strong>1 Extraschritt</strong>:
-          $$20^{481} = (20^{40})^{12} \cdot 20^1 \equiv 45^{12} \cdot 20 \equiv \mathbf{20} \pmod{55}$$
-          Die Entschlüsselung funktioniert somit auch bei gemeinsamen Teilern fehlerfrei!
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1rem; margin-bottom: 0.5rem;">
+            4. Und was ist mit unserer Zahl M = 20? (Der Spezialfall ggT(M, N) ≠ 1)
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.5rem;">
+            Hier entstand im Unterricht die berechtigte Verwirrung: Rechnet man $20^{40} \bmod 55$ im Taschenrechner nach, kommt <strong>nicht 1, sondern 45</strong> heraus!<br>
+            <strong>Warum?</strong> Weil $\operatorname{ggT}(20, 55) = 5 \neq 1$ ist. 20 ist ein Vielfaches von 5. Jede Potenz von 20 bleibt durch 5 teilbar und kann bei Teilung durch 55 niemals den Rest 1 ergeben.
+          </p>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.4rem;">
+            <strong>Schauen wir uns den tatsächlichen Reste-Zyklus von 20 modulo 55 an:</strong>
+          </p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; line-height: 1.8; background: #ffffff; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color);">
+            • 20¹ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≡ 20 mod 55<br>
+            • 20² = 400 &nbsp; ≡ 15 mod 55 &nbsp;&nbsp;(da 400 = 7 × 55 + 15)<br>
+            • 20³ = 15×20 ≡ 25 mod 55 &nbsp;&nbsp;(unser Geheimtext C = 25!)<br>
+            • 20⁴ = 25×20 ≡ &nbsp;5 mod 55 &nbsp;&nbsp;(da 500 = 9 × 55 + 5)<br>
+            • 20⁵ = &nbsp;5×20 ≡ 45 mod 55 &nbsp;&nbsp;(da 100 = 1 × 55 + 45 ← hier landet auch 20⁴⁰!)<br>
+            • 20⁶ = 45×20 ≡ 20 mod 55 &nbsp;&nbsp;(← Die Schleife schließt sich exakt nach 5 Schritten!)
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-top: 0.6rem; margin-bottom: 0;">
+            <strong>Warum entschlüsselt RSA trotzdem fehlerfrei?</strong><br>
+            Die Reste von 20 bilden eine geschlossene 5er-Schleife: $\mathbf{20 \to 15 \to 25 \to 5 \to 45 \to 20 \dots}$<br>
+            Unser Exponent ist $e \cdot d = 481$. Teilen wir 481 durch die Periodenlänge 5:<br>
+            $$481 = \mathbf{96} \cdot 5 + \mathbf{1}$$
+            Es werden also <strong>96 volle Runden</strong> in der 5er-Schleife gedreht, und dann folgt noch <strong>genau 1 Schritt (+1)</strong>:<br>
+            $$20 \to 15 \to 25 \to 5 \to 45 \xrightarrow{\text{+1 Schritt}} \mathbf{20}$$
+            Deshalb kommt auch beim Chiffrat $C = 25$ nach $25^{37} \equiv 20^{481} \equiv \mathbf{20} \pmod{55}$ wieder exakt die ursprüngliche Nachricht heraus!
+          </p>
         </div>
       </div>
     </section>
