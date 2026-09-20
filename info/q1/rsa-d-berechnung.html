@@ -563,81 +563,45 @@
         $$d = x + \varphi(N)$$
       </div>
 
-      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Schritt-für-Schritt-Anleitung an unserem Unterrichtsbeispiel</h3>
+      <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Schritt-für-Schritt-Anleitung durch Rückwärts-Einsetzen am Unterrichtsbeispiel</h3>
       <p>
-        Wir berechnen $d$ für $e = 3$ und $\varphi(N) = 40$.
+        Wir berechnen $d$ für $e = 3$ und $\varphi(N) = 40$ systematisch in drei aufeinander aufbauenden Schritten:
       </p>
 
-      <div class="grid-two">
-        <div class="card-subtle">
-          <h4>Methode A: Rückwärts-Einsetzen</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-            1. Euklidischer Algorithmus (Hinweg):
-          </p>
-          <div style="font-size: 0.9rem; line-height: 1.8;">
-            (Zeile 1) $40 = \mathbf{13} \cdot 3 + \mathbf{1}$<br>
-            (Zeile 2) $3 = 3 \cdot 1 + 0$ (Abbruch!)<br>
-            $\implies \operatorname{ggT}(40, 3) = 1$.
-          </div>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0.75rem 0 0.5rem 0;">
-            2. Rückwärts nach dem Rest 1 umstellen:
-          </p>
-          <div style="font-size: 0.9rem; line-height: 1.8;">
-            $1 = 40 - 13 \cdot 3$<br>
-            $1 = 1 \cdot 40 + (\mathbf{-13}) \cdot 3$
-          </div>
-          <p style="font-size: 0.88rem; margin-top: 0.5rem;">
-            Der Faktor vor $e = 3$ ist $x = -13$.<br>
-            Da $x < 0$: $d = -13 + 40 = \mathbf{27}$!
-          </p>
+      <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.5rem;">
+        <h4 style="color: var(--theme-oberstufe-dark);">1. Schritt: Euklidischer Algorithmus (Hinweg)</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Teile fortlaufend mit Rest, bis der Rest 0 erreicht ist:
+        </p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          (Zeile 1) &nbsp; $40 = \mathbf{13} \cdot 3 + \mathbf{1}$<br>
+          (Zeile 2) &nbsp; $3 = \mathbf{3} \cdot 1 + 0$ &nbsp; (Abbruch, da Rest 0 erreicht)
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">
+          $\implies$ Der letzte Rest vor der 0 ist 1. Damit ist bestätigt: $\operatorname{ggT}(40, 3) = 1$.
+        </p>
+
+        <h4 style="color: var(--theme-oberstufe-dark); margin-top: 1.25rem;">2. Schritt: Gleichung nach dem Rest 1 umstellen</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Isoliere den Rest 1 aus der vorletzten Zeile:
+        </p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          $$1 = 40 - 13 \cdot 3$$
+          $$1 = 1 \cdot 40 + (\mathbf{-13}) \cdot 3$$
         </div>
 
-        <div class="card-subtle">
-          <h4>Methode B: Das EEA-Tabellenschema</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-            Der Standard für Klausuren (fehlerfrei und schnell):
-          </p>
-          <table class="data-table" style="font-size: 0.85rem; margin-top: 0.25rem;">
-            <thead>
-              <tr>
-                <th class="center">Schritt</th>
-                <th class="center">Quotient $q$</th>
-                <th class="center">Rest $r$</th>
-                <th class="center">Koeffizient $x$</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="center">Start 1</td>
-                <td class="center">-</td>
-                <td class="center">40</td>
-                <td class="center">0</td>
-              </tr>
-              <tr>
-                <td class="center">Start 2</td>
-                <td class="center">13</td>
-                <td class="center">3</td>
-                <td class="center">1</td>
-              </tr>
-              <tr class="highlight">
-                <td class="center">Ziel</td>
-                <td class="center">3</td>
-                <td class="center">1</td>
-                <td class="center"><strong>-13</strong></td>
-              </tr>
-              <tr>
-                <td class="center">Ende</td>
-                <td class="center">-</td>
-                <td class="center">0</td>
-                <td class="center">-</td>
-              </tr>
-            </tbody>
-          </table>
-          <p style="font-size: 0.85rem; line-height: 1.5; color: var(--text-muted);">
-            Rekursion für $x$: $x_{\text{neu}} = x_{\text{vor-vor}} - q \cdot x_{\text{vor}}$<br>
-            $0 - 13 \cdot 1 = \mathbf{-13} \implies d = -13 + 40 = \mathbf{27}$.
-          </p>
+        <h4 style="color: var(--theme-oberstufe-dark); margin-top: 1.25rem;">3. Schritt: Koeffizient ablesen & anpassen</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Der Faktor vor dem öffentlichen Exponenten $e = 3$ ist der Bézout-Koeffizient:
+        </p>
+        <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+          $$x = -13$$
+          Da $x < 0$ ist, addieren wir einmal den Modul $\varphi(N) = 40$ hinzu, um die kleinste positive Zahl zu erhalten:
+          $$d = -13 + 40 = \mathbf{27}$$
         </div>
+        <p style="font-size: 0.88rem; margin-top: 0.5rem;">
+          <strong>Probe:</strong> $3 \cdot 27 = 81 = 2 \cdot 40 + 1 \equiv 1 \pmod{40}$ (Bestätigt)
+        </p>
       </div>
 
       <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Ein zweites ausführliches Beispiel zum Nachvollziehen</h3>
@@ -890,102 +854,133 @@
         return;
       }
 
-      // 2. Tabellenschema / Koeffizienten rückwärts
-      // Tabellen-Arrays
-      let rows = [];
-      // Initialzeilen: r0 = phi, x0 = 0, y0 = 1; r1 = e, x1 = 1, y1 = -q...
-      // Wir verwenden das klassische Schema:
-      // s_i = s_{i-2} - q_i * s_{i-1}
-      let rArr = [phi, e];
-      let qArr = [null, null];
-      let xArr = [0, 1]; // x ist Koeffizient von e
+      // Filter non-zero remainder steps
+      let nonZeroSteps = steps.filter(s => s.r !== 0);
+      let m = nonZeroSteps.length;
 
-      for (let i = 0; i < steps.length; i++) {
-        let st = steps[i];
-        if (st.r === 0) break;
-        let q = st.q;
-        let nextX = xArr[i] - q * xArr[i + 1];
-        xArr.push(nextX);
-        rArr.push(st.r);
-        qArr.push(q);
+      // Arrays für Zahlenwerte: R[0] = phi, R[1] = e, R[2] = r_0, ..., R[m+1] = 1
+      let R = [phi, e];
+      for (let i = 0; i < nonZeroSteps.length; i++) {
+        R.push(nonZeroSteps[i].r);
       }
 
-      let rawX = xArr[xArr.length - 1];
-      let finalD = ((rawX % phi) + phi) % phi;
+      // Startgleichung für Rest 1:
+      // 1 = R[m-1] - q_{m-1} * R[m]
+      let cA = 1;
+      let idxA = m - 1;
+      let cB = -nonZeroSteps[m - 1].q;
+      let idxB = m;
+
+      function formatLinearMath(c1, v1, c2, v2) {
+        let t1 = (c1 === 1 ? "" : (c1 === -1 ? "-" : c1 + " \\cdot ")) + v1;
+        let t2;
+        if (c2 >= 0) {
+          t2 = "+ " + (c2 === 1 ? "" : c2 + " \\cdot ") + v2;
+        } else {
+          t2 = "- " + (Math.abs(c2) === 1 ? "" : Math.abs(c2) + " \\cdot ") + v2;
+        }
+        return `$$1 = ${t1} ${t2}$$`;
+      }
+
+      // Rückwärts-Einsetzen vorbereiten
+      let subStepsHtml = `<p style="color:var(--text-muted); margin-bottom:4px;">Starte mit der umgestellten Gleichung für den Rest 1:</p>`;
+      subStepsHtml += formatLinearMath(cA, R[idxA], cB, R[idxB]);
+
+      // Rückwärts-Schleife
+      for (let k = m - 2; k >= 0; k--) {
+        let subRem = R[idxB];
+        let subA = R[k];
+        let subQ = nonZeroSteps[k].q;
+        let subB = R[k + 1];
+
+        subStepsHtml += `<p style="color:var(--text-muted); margin:8px 0 2px 0;">Ersetze den Rest <strong>${subRem}</strong> durch $(${subA} - ${subQ} \\cdot ${subB})$:</p>`;
+
+        let termA = (cA === 1 ? "" : (cA === -1 ? "-" : cA + " \\cdot ")) + R[idxA];
+        let signB = cB >= 0 ? "+ " : "- ";
+        let absB = Math.abs(cB);
+        let factorB = absB === 1 ? "" : absB + " \\cdot ";
+
+        subStepsHtml += `$$1 = ${termA} ${signB}${factorB}(${subA} - ${subQ} \\cdot ${subB})$$`;
+
+        let newCA = cB;
+        let newIdxA = k;
+        let newCB = cA - cB * subQ;
+        let newIdxB = k + 1;
+
+        subStepsHtml += `<p style="color:var(--text-muted); margin:4px 0 2px 0;">Ausmultiplizieren & zusammenfassen:</p>`;
+        subStepsHtml += formatLinearMath(newCA, R[newIdxA], newCB, R[newIdxB]);
+
+        cA = newCA;
+        idxA = newIdxA;
+        cB = newCB;
+        idxB = newIdxB;
+      }
+
+      let coeffE = cB;
+      let coeffPhi = cA;
+      let finalD = ((coeffE % phi) + phi) % phi;
 
       // HTML zusammenbauen
       let html = `
         <div style="font-weight:800; color:var(--text-main); font-size:1.05rem; margin-bottom:8px;">
           Berechnungsergebnis: d = ${finalD}
         </div>
-        <p style="margin-bottom:12px;">
+        <p style="margin-bottom:14px; font-size:0.92rem;">
           Da $\\operatorname{ggT}(${e}, ${phi}) = 1$ ist, existiert der private Schlüssel $d$.
         </p>
 
-        <h4 style="font-size:0.95rem; font-weight:700; margin:12px 0 6px 0;">1. Euklidischer Algorithmus (Hinweg):</h4>
-        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.9rem; line-height:1.7;">
+        <h4 style="font-size:0.95rem; font-weight:700; margin:14px 0 6px 0; color:var(--theme-oberstufe-dark);">
+          1. Schritt: Euklidischer Algorithmus (Hinweg – Divisionen mit Rest)
+        </h4>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.9rem; line-height:1.8;">
       `;
 
       for (let i = 0; i < steps.length; i++) {
         let st = steps[i];
-        html += `<div>${st.a} = ${st.q} × ${st.b} + ${st.r}</div>`;
+        html += `<div>(${i + 1}) &nbsp; ${st.a} = ${st.q} × ${st.b} + <strong>${st.r}</strong></div>`;
       }
 
       html += `
         </div>
-        <h4 style="font-size:0.95rem; font-weight:700; margin:16px 0 6px 0;">2. EEA-Tabellenschema:</h4>
-        <table class="data-table" style="background:#ffffff;">
-          <thead>
-            <tr>
-              <th class="center">Index i</th>
-              <th class="center">Quotient q</th>
-              <th class="center">Rest r</th>
-              <th class="center">Koeffizient von e (x)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="center">0</td>
-              <td class="center">-</td>
-              <td class="center">${phi}</td>
-              <td class="center">0</td>
-            </tr>
-            <tr>
-              <td class="center">1</td>
-              <td class="center">${steps[0].q}</td>
-              <td class="center">${e}</td>
-              <td class="center">1</td>
-            </tr>
+
+        <h4 style="font-size:0.95rem; font-weight:700; margin:18px 0 6px 0; color:var(--theme-oberstufe-dark);">
+          2. Schritt: Gleichungen nach den Resten umstellen
+        </h4>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-size:0.9rem; line-height:1.8;">
       `;
 
-      for (let i = 2; i < xArr.length; i++) {
-        let isFinal = (i === xArr.length - 1);
-        html += `
-          <tr ${isFinal ? 'class="highlight"' : ''}>
-            <td class="center">${i}</td>
-            <td class="center">${steps[i - 1] ? steps[i - 1].q : '-'}</td>
-            <td class="center">${rArr[i]}</td>
-            <td class="center"><strong>${xArr[i]}</strong></td>
-          </tr>
-        `;
+      for (let i = 0; i < nonZeroSteps.length; i++) {
+        let st = nonZeroSteps[i];
+        html += `<div>Rest <strong>${st.r}</strong>: &nbsp; $${st.r} = ${st.a} - ${st.q} \\cdot ${st.b}$</div>`;
       }
 
       html += `
-          </tbody>
-        </table>
+        </div>
 
-        <h4 style="font-size:0.95rem; font-weight:700; margin:16px 0 6px 0;">3. Auswertung:</h4>
-        <div style="font-size:0.92rem; line-height:1.7;">
-          • Ermittelter Bézout-Koeffizient: $x = ${rawX}$<br>
+        <h4 style="font-size:0.95rem; font-weight:700; margin:18px 0 6px 0; color:var(--theme-oberstufe-dark);">
+          3. Schritt: Rückwärts-Einsetzen (Schritt für Schritt)
+        </h4>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:12px 14px; border-radius:6px; font-size:0.9rem; line-height:1.8;">
+          ${subStepsHtml}
+        </div>
+
+        <h4 style="font-size:0.95rem; font-weight:700; margin:18px 0 6px 0; color:var(--theme-oberstufe-dark);">
+          4. Schritt: Auswertung & Probe
+        </h4>
+        <div style="font-size:0.92rem; line-height:1.75;">
+          • Ermittelte Linearkombination: $$1 = ${coeffPhi} \\cdot ${phi} + (${coeffE}) \\cdot ${e}$$
+          • Der Koeffizient vor $e = ${e}$ ist: <strong>$x = ${coeffE}$</strong><br>
       `;
 
-      if (rawX < 0) {
+      if (coeffE < 0) {
         html += `
-          • Da $x < 0$ ist, addieren wir $\\varphi(N) = ${phi}$: $d = ${rawX} + ${phi} = \\mathbf{${finalD}}$<br>
+          • Da $x < 0$ ist, addieren wir den Modul $\\varphi(N) = ${phi}$ hinzu:<br>
+          &nbsp;&nbsp;$$d = ${coeffE} + ${phi} = \\mathbf{${finalD}}$$
         `;
       } else {
         html += `
-          • Da $x > 0$ ist, gilt unmittelbar: $d = \\mathbf{${finalD}}$<br>
+          • Da $x > 0$ ist, gilt unmittelbar:<br>
+          &nbsp;&nbsp;$$d = \\mathbf{${finalD}}$$
         `;
       }
 
