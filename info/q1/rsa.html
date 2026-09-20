@@ -4,64 +4,220 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>RSA-Verfahren & Kryptographie | Informatik Q1</title>
-  
+  <title>Das RSA-Kryptosystem | Informatik Q1</title>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/main.css">
-  
+
   <!-- KaTeX für mathematische Formeln -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      function initKaTeX() {
-        if (typeof renderMathInElement === "function") {
-          renderMathInElement(document.body, {
-            delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-            ],
-            throwOnError: false
-          });
-        } else {
-          setTimeout(initKaTeX, 50);
-        }
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
       }
-      initKaTeX();
-    });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
   </script>
 
   <style>
-    /* Spezifische Ergänzungen für das RSA Modul */
-    .calc-box {
+    /* Tab-Leiste im Stil von 9b */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin: 1.5rem 0 1.75rem 0;
+      border-bottom: 2px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
       background: #ffffff;
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+    }
+
+    .tab-btn.active {
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-color: var(--theme-oberstufe);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Tab-Panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modul-Inhaltsblöcke */
+    .card-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
       margin-bottom: 2rem;
       box-shadow: var(--shadow-sm);
     }
 
-    .calc-grid {
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      width: 28px;
+      height: 28px;
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+
+    .info-callout {
+      background: var(--bg-subtle);
+      border-left: 4px solid var(--theme-oberstufe);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .grid-two { grid-template-columns: 1fr; }
+    }
+
+    .card-subtle {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .card-subtle h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Tabellen */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    table.data-table td.center, table.data-table th.center {
+      text-align: center;
+    }
+
+    table.data-table tr.highlight {
+      background: var(--theme-oberstufe-light);
+      font-weight: 700;
+    }
+
+    /* Rechner-Formulare */
+    .calc-panel {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .form-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       margin-bottom: 1.25rem;
     }
 
-    .input-group {
+    .form-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
-    .input-group label {
+    .form-group label {
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--text-muted);
@@ -69,7 +225,7 @@
       letter-spacing: 0.5px;
     }
 
-    .input-group input, .input-group select {
+    .form-group input {
       padding: 0.65rem 0.85rem;
       border: 1.5px solid var(--border-color);
       border-radius: var(--radius-sm);
@@ -78,39 +234,38 @@
       color: var(--text-main);
       background: var(--bg-main);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s ease;
     }
 
-    .input-group input:focus, .input-group select:focus {
+    .form-group input:focus {
       border-color: var(--theme-oberstufe);
     }
 
-    .btn-calc {
+    .btn-action {
       background: var(--theme-oberstufe);
-      color: white;
+      color: #ffffff;
       border: none;
       padding: 0.75rem 1.5rem;
       font-weight: 700;
       border-radius: var(--radius-sm);
       cursor: pointer;
       font-size: 0.95rem;
-      transition: opacity 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      transition: background-color 0.2s ease;
     }
 
-    .btn-calc:hover { opacity: 0.9; }
+    .btn-action:hover {
+      background: var(--theme-oberstufe-dark);
+    }
 
-    .result-display {
+    .output-box {
       background: #f8fafc;
+      border: 1px solid var(--border-color);
       border-left: 4px solid var(--theme-oberstufe);
       border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
+      padding: 1.25rem;
       margin-top: 1.25rem;
-      font-family: 'JetBrains Mono', monospace;
       font-size: 0.92rem;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .key-badge {
@@ -125,18 +280,77 @@
     .badge-pub { background: #e0e7ff; color: #3730a3; }
     .badge-priv { background: #fee2e2; color: #991b1b; }
 
-    /* Quiz-Styles */
+    /* Aufgaben & Aufklappbare Lösungen */
+    .task-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #ffffff;
+    }
+
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .task-badge {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+      background: #fcfdfe;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-toggle-solution {
+      margin-top: 0.75rem;
+      background: #ffffff;
+      border: 1.5px solid var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-solution:hover {
+      background: var(--theme-oberstufe-light);
+    }
+
+    /* Quiz */
     .quiz-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
       padding: 1.25rem;
       margin-bottom: 1.25rem;
     }
 
     .quiz-question {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.98rem;
       margin-bottom: 0.85rem;
       display: flex;
       gap: 8px;
@@ -156,10 +370,7 @@
       background: var(--bg-main);
       cursor: pointer;
       font-size: 0.9rem;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      transition: all 0.2s ease;
     }
 
     .quiz-option:hover {
@@ -186,230 +397,456 @@
       font-weight: 600;
       display: none;
     }
-
-    table.step-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.75rem;
-      font-size: 0.88rem;
-    }
-    table.step-table th, table.step-table td {
-      border: 1px solid var(--border-color);
-      padding: 6px 10px;
-      text-align: center;
-    }
-    table.step-table th { background: #f1f5f9; font-weight: 700; }
   </style>
 </head>
 <body>
 
   <div class="container">
 
-    <!-- Nav -->
-    <div style="padding: 1.25rem 0 0.5rem 0;">
+    <!-- Navigationsleiste -->
+    <div class="portal-nav">
       <a href="index.html" class="nav-back-link">
         ← Zurück zur Q1-Übersicht
       </a>
+      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Informatik Q1 • Kryptographie</span>
     </div>
 
-    <!-- Header -->
-    <header class="portal-header">
-      <div class="badge-pill badge-oberstufe">Kryptographie • Modul 01</div>
+    <!-- Modul-Kopf -->
+    <header class="portal-header" style="text-align: left; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+      <div class="badge-pill badge-oberstufe">Kryptographie • Baustein 3</div>
       <h1>Das RSA-Kryptosystem</h1>
-      <p class="subtitle">Asymmetrische Verschlüsselung, Einwegfunktionen, digitale Signaturen & interaktiver RSA-Laborrechner.</p>
+      <p class="subtitle">
+        Zentrales Oberstufenportal: Unterrichtsbeispiel, Reste-Zyklus nach Euler, Rückwärts-Einsetzen, interaktives Schlüssellabor, Square-and-Multiply & Klausurtraining.
+      </p>
       <div class="timestamp-pill">
-        <span>🟢</span> Interaktives Lernmodul • Schuljahr 2026/27
+        Stand: Schuljahr 2026/27 • Gymnasiale Oberstufe
       </div>
     </header>
 
-    <!-- INTRO-ALERT -->
-    <div class="alert-card">
-      <div class="alert-icon">🔐</div>
-      <div class="alert-content">
-        <h3>Wie funktioniert moderne Verschlüsselung?</h3>
-        <p>Jedes Mal, wenn du im Browser ein Schloss-Symbol (HTTPS) siehst oder WhatsApp nutzt, arbeiten asymmetrische Verfahren. Hier lernst du den mathematischen Kern von RSA kennen und kannst Schlüsselerzeugung, Ver- und Entschlüsselung live ausprobieren!</p>
-      </div>
-    </div>
+    <!-- Reiter-Navigation (Vorbild: Mathe 9b) -->
+    <nav class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab-uebersicht')">1. Unterrichtsbeispiel & Zyklus</button>
+      <button class="tab-btn" onclick="switchTab('tab-d-berechnung')">2. Berechnung von d (Rückwärts-Einsetzen)</button>
+      <button class="tab-btn" onclick="switchTab('tab-labor')">3. Interaktives RSA-Labor</button>
+      <button class="tab-btn" onclick="switchTab('tab-square-multiply')">4. Square-and-Multiply</button>
+      <button class="tab-btn" onclick="switchTab('tab-training')">5. Klausurtraining & Selbst-Check</button>
+    </nav>
 
-    <!-- 1. SPICKZETTEL -->
-    <h2 class="section-heading"><span>📌</span> Die RSA-Formeln auf einen Blick</h2>
-    <div class="dashboard-grid">
-      
-      <!-- Box 1: Schlüssel -->
-      <div class="class-card theme-oberstufe">
-        <div class="class-card-header">
-          <span class="badge-pill badge-oberstufe" style="margin-bottom:0;">Schritt 1</span>
-          <span class="class-card-icon">🔑</span>
+    <!-- ========================================== -->
+    <!-- REITER 1: UNTERRICHTSBEISPIEL & ZYKLUS     -->
+    <!-- ========================================== -->
+    <section id="tab-uebersicht" class="tab-panel active">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">1</span>
+          Das Unterrichtsbeispiel in der Zusammenfassung
+        </h2>
+
+        <p>
+          Im Unterricht haben wir das RSA-Verfahren mit den Primzahlen $p = 5$ und $q = 11$ durchgeführt. Hier sind alle Kenndaten unseres Beispiels auf einen Blick:
+        </p>
+
+        <div class="grid-two">
+          <div class="card-subtle">
+            <h4>Ausgangswerte & Modul</h4>
+            <ul style="margin-left: 1.2rem; font-size: 0.92rem; line-height: 1.75;">
+              <li>Primzahlen: $p = 5$ und $q = 11$</li>
+              <li>RSA-Modul: $N = p \cdot q = 5 \cdot 11 = \mathbf{55}$</li>
+              <li>Eulersche $\varphi$-Funktion: $\varphi(N) = (p-1)(q-1) = 4 \cdot 10 = \mathbf{40}$</li>
+              <li>Öffentlicher Exponent: $e = 13$ mit $\operatorname{ggT}(13, 40) = 1$</li>
+            </ul>
+          </div>
+          <div class="card-subtle">
+            <h4>Schlüssel & Nachrichtenbeispiel</h4>
+            <ul style="margin-left: 1.2rem; font-size: 0.92rem; line-height: 1.75;">
+              <li><strong>Öffentlicher Schlüssel (Public Key):</strong> $(e = 13, N = 55)$</li>
+              <li><strong>Privater Schlüssel (Private Key):</strong> $(d = 37, N = 55)$</li>
+              <li>Klartext-Nachricht: $\mathbf{M = 20}$</li>
+              <li>Geheimtext (Chiffrat): $\mathbf{C = 25}$</li>
+            </ul>
+          </div>
         </div>
-        <h3 class="class-card-title">Schlüsselerzeugung</h3>
-        <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-          1. Wähle Primzahlen $p$ und $q$.<br>
-          2. $N = p \cdot q$ (RSA-Modul)<br>
-          3. $\varphi(N) = (p-1)(q-1)$<br>
-          4. Wähle $e$ mit $\operatorname{ggT}(e, \varphi(N)) = 1$<br>
-          5. Berechne $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$<br>
-          <div style="margin-top:8px;">
-            <span class="key-badge badge-pub">Public: $(e, N)$</span>
-            <span class="key-badge badge-priv">Private: $(d, N)$</span>
+
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem 0;">Bisheriger Weg: Ermittlung von d durch Ausprobieren</h3>
+        <p>
+          Der private Schlüssel $d$ ist das multiplikative Inverse zu $e = 13$ modulo $\varphi(N) = 40$:
+        </p>
+        <div style="text-align: center; margin: 0.75rem 0; font-size: 1.1rem;">
+          $$13 \cdot d \equiv 1 \pmod{40} \quad\iff\quad 13 \cdot d = k \cdot 40 + 1 \quad (k \in \mathbb{N})$$
+        </div>
+        <p>
+          Das Produkt $13 \cdot d$ muss um 1 größer sein als ein Vielfaches von 40. Durch systematisches Durchprobieren von $k$ finden wir für $k = 12$:
+        </p>
+        <div style="background: var(--bg-subtle); padding: 0.9rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.92rem; line-height: 1.7;">
+          • $k = 12 \implies 12 \cdot 40 + 1 = 481$<br>
+          • Teilbarkeit prüfen: $481 : 13 = \mathbf{37}$ (glatt teilbar!) $\implies \mathbf{d = 37}$.
+        </div>
+
+        <h3 style="font-size: 1.05rem; font-weight: 700; margin: 1.75rem 0 0.5rem 0;">Der mathematische Reste-Zyklus & Satz von Euler</h3>
+        <p>
+          Warum kommt beim Entschlüsseln $C^d = (M^e)^d$ wieder die ursprüngliche Nachricht $M$ heraus? Nach dem <strong>Satz von Euler</strong> wiederholen sich Potenzen modulo $N$ zyklisch:
+        </p>
+        <div style="text-align: center; margin: 0.85rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+          $$M^{\varphi(N)} \equiv 1 \pmod N \quad (\text{für alle } M \text{ mit } \operatorname{ggT}(M, N) = 1)$$
+        </div>
+
+        <div class="info-callout">
+          <strong>Wichtige Beobachtung zu unserem Unterrichtsbeispiel $M = 20$:</strong><br>
+          Berechnet man $20^{40} \bmod 55$, so erhält man <strong>nicht 1, sondern 45</strong>! Warum?<br>
+          Weil $\operatorname{ggT}(20, 55) = 5 \neq 1$ ist. Die Zahl 20 ist durch 5 teilbar. Jede Potenz von 20 ist ebenfalls durch 5 teilbar und kann bei Division durch 55 niemals den Rest 1 ergeben.<br><br>
+          <strong>Warum funktioniert RSA trotzdem?</strong><br>
+          Die Reste von 20 durchlaufen modulo 55 eine geschlossene 5er-Schleife:
+          $$20 \to 15 \to 25 \to 5 \to 45 \to 20 \dots$$
+          Weil 40 ein Vielfaches von 5 ist ($8 \cdot 5 = 40$), landet $20^{40}$ am Ende der Schleife bei 45. Durch den Exponenten $e \cdot d = 12 \cdot 40 + \mathbf{1} = 481$ folgt nach den 40 Runden noch genau <strong>1 Extraschritt</strong>:
+          $$20^{481} = (20^{40})^{12} \cdot 20^1 \equiv 45^{12} \cdot 20 \equiv \mathbf{20} \pmod{55}$$
+          Die Entschlüsselung funktioniert somit auch bei gemeinsamen Teilern fehlerfrei!
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 2: BERECHNUNG VON D (RÜCKWÄRTS)     -->
+    <!-- ========================================== -->
+    <section id="tab-d-berechnung" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">2</span>
+          Systematische Berechnung von d durch Rückwärts-Einsetzen
+        </h2>
+
+        <p>
+          Bei echten Schlüssellängen (RSA-2048) besitzt $\varphi(N)$ über 600 Dezimalstellen. Ein Durchprobieren von $k = 1, 2, 3 \dots$ ist technisch ausgeschlossen. Der <strong>Erweiterte Euklidische Algorithmus (EEA)</strong> liefert $d$ in Sekundenbruchteilen über das Lemma von Bézout:
+        </p>
+        <div style="text-align: center; margin: 0.85rem 0; font-size: 1.15rem;">
+          $$1 = x \cdot e + y \cdot \varphi(N) \implies 1 \equiv x \cdot e \pmod{\varphi(N)}$$
+        </div>
+        <p>
+          Der Koeffizient $x$ vor dem Exponenten $e$ ist direkt unser gesuchter privater Schlüssel $d$.
+        </p>
+
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.5rem 0 0.75rem 0;">Das Unterrichtsbeispiel Schritt für Schritt</h3>
+        <p>Gegeben: $e = 13$ und $\varphi(N) = 40$.</p>
+
+        <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.5rem;">
+          <h4 style="color: var(--theme-oberstufe-dark);">1. Schritt: Euklidischer Algorithmus (Hinweg)</h4>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            (Zeile 1) &nbsp; $40 = \mathbf{3} \cdot 13 + \mathbf{1}$<br>
+            (Zeile 2) &nbsp; $13 = \mathbf{13} \cdot 1 + 0$ &nbsp; (Abbruch, da Rest 0 erreicht)
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">
+            $\implies$ Der letzte Rest vor der 0 ist 1. Damit gilt: $\operatorname{ggT}(40, 13) = 1$.
+          </p>
+
+          <h4 style="color: var(--theme-oberstufe-dark); margin-top: 1.25rem;">2. Schritt: Gleichung nach dem Rest 1 umstellen</h4>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            $$1 = 40 - 3 \cdot 13$$
+            $$1 = 1 \cdot 40 + (\mathbf{-3}) \cdot 13$$
+          </div>
+
+          <h4 style="color: var(--theme-oberstufe-dark); margin-top: 1.25rem;">3. Schritt: Koeffizient ablesen & anpassen</h4>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            Der Faktor vor $e = 13$ ist:
+            $$x = -3$$
+            Da $x < 0$ ist, addieren wir einmal den Modul $\varphi(N) = 40$ hinzu:
+            $$d = -3 + 40 = \mathbf{37}$$
+          </div>
+          <p style="font-size: 0.88rem; margin-top: 0.5rem;">
+            <strong>Probe:</strong> $13 \cdot 37 = 481 = 12 \cdot 40 + 1 \equiv 1 \pmod{40}$ (Bestätigt)
+          </p>
+        </div>
+
+        <!-- Hintergrund-Box -->
+        <div class="card-subtle" style="background:#fcfdfe; border: 1.5px solid var(--border-color); border-left: 4px solid var(--theme-oberstufe); margin: 1.5rem 0;">
+          <h4 style="color:var(--theme-oberstufe-dark); font-size: 1.05rem; margin-bottom: 0.75rem;">
+            Mathematischer Hintergrund: Warum ist die Addition von $+\varphi(N)$ zulässig?
+          </h4>
+          <p style="font-size: 0.92rem; margin-bottom: 0.65rem;">
+            <strong>1. Notwendigkeit eines positiven Exponenten:</strong><br>
+            Ein negativer Exponent wie $d = -3$ würde beim Entschlüsseln $C^{-3} \pmod N = \frac{1}{C^3} \pmod N$ bedeuten (Brüche im Restesystem). Potenzierungsalgorithmen wie <em>Square-and-Multiply</em> setzen zwingend eine positive Zahl $d \in \{1, 2, \dots, \varphi(N)-1\}$ voraus.
+          </p>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">
+            <strong>2. Kongruenz im Restesystem modulo $\varphi(N)$ (Uhren-Prinzip):</strong><br>
+            Zahlen, die sich um ein volles Vielfaches von $\varphi(N)$ unterscheiden, besitzen modulo $\varphi(N)$ denselben Rest:<br>
+            • Auf einer 12-Stunden-Uhr entspricht „3 Stunden zurück“ ($-3$) exakt der Uhrzeit „9 Uhr“ ($-3 + 12 = 9$).<br>
+            • Modulo 40 sind $-3$ und $-3 + 40 = 37$ kongruent. Beide ergeben mit $e = 13$ multipliziert denselben Rest 1:<br>
+            &nbsp;&nbsp;↳ $13 \cdot (-3) = -39 = -1 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$<br>
+            &nbsp;&nbsp;↳ $13 \cdot 37 = 481 = 12 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$
+          </p>
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 1.75rem 0 0.75rem 0;">Zweites ausführliches Beispiel (mehrere Schritte)</h3>
+        <p>
+          Gegeben: $p = 7, q = 13 \implies N = 91, \varphi(N) = 72$. Gewählt: $e = 5$.
+        </p>
+
+        <div class="card-subtle" style="background: #ffffff; border: 1.5px solid var(--border-color);">
+          <p><strong>1. Hinweg (Euklidischer Algorithmus):</strong></p>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            $72 = \mathbf{14} \cdot 5 + \mathbf{2}$<br>
+            $5 = \mathbf{2} \cdot 2 + \mathbf{1}$<br>
+            $2 = 2 \cdot 1 + 0 \implies \operatorname{ggT}(72, 5) = 1$.
+          </div>
+
+          <p style="margin-top: 0.75rem;"><strong>2. Rückweg (Rückwärts-Einsetzen):</strong></p>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            Isoliere den Rest 1 aus der vorletzten Zeile:
+            $$1 = 5 - 2 \cdot 2$$
+            Ersetze den Rest 2 durch die erste Zeile ($2 = 72 - 14 \cdot 5$):
+            $$1 = 5 - 2 \cdot (72 - 14 \cdot 5)$$
+            Ausmultiplizieren und zusammenfassen:
+            $$1 = 1 \cdot 5 - 2 \cdot 72 + 28 \cdot 5 = \mathbf{29} \cdot 5 - 2 \cdot 72$$
+          </div>
+
+          <p style="margin-top: 0.75rem;"><strong>3. Ergebnis & Probe:</strong></p>
+          <div style="font-size: 0.92rem; line-height: 1.8; margin-left: 0.5rem;">
+            Der Faktor vor $e = 5$ ist $x = 29$. Da $x > 0$ ist: $\mathbf{d = 29}$.<br>
+            <strong>Probe:</strong> $5 \cdot 29 = 145 = 2 \cdot 72 + 1 \equiv 1 \pmod{72}$ (Bestätigt)
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Box 2: Ver- und Entschlüsselung -->
-      <div class="class-card theme-mathe">
-        <div class="class-card-header">
-          <span class="badge-pill badge-mathe" style="margin-bottom:0;">Schritt 2 & 3</span>
-          <span class="class-card-icon">⚡</span>
-        </div>
-        <h3 class="class-card-title">Ver- & Entschlüsseln</h3>
-        <div style="font-size:0.9rem; line-height:1.8; color:var(--text-main);">
-          <strong>Verschlüsseln (mit Public Key $e$):</strong><br>
-          $$C = M^e \pmod N$$
-          <strong>Entschlüsseln (mit Private Key $d$):</strong><br>
-          $$M = C^d \pmod N$$
-          <strong>Digitale Signatur (mit Private Key $d$):</strong><br>
-          $$S = M^d \pmod N \implies \text{Prüfen: } M = S^e \pmod N$$
-        </div>
-      </div>
+    <!-- ========================================== -->
+    <!-- REITER 3: INTERAKTIVES RSA-LABOR           -->
+    <!-- ========================================== -->
+    <section id="tab-labor" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">3</span>
+          Interaktives RSA- & Rückwärts-Rechnerlabor
+        </h2>
 
-    </div>
+        <p>
+          Gib zwei Primzahlen $p$ und $q$ sowie einen öffentlichen Exponenten $e$ ein. Das Labor berechnet die Schlüssel, zeigt alle Schritte des Rückwärts-Einsetzens und verschlüsselt beliebige Zahlen:
+        </p>
 
-    <!-- 2. INTERAKTIVER RSA-LABORRECHNER -->
-    <h2 class="section-heading"><span>🧪</span> Interaktives RSA-Labor (Hands-On Rechner)</h2>
-    <div class="calc-box">
-      <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem; color:var(--text-main);">1. Schlüsselpaar generieren</h3>
-      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Gib zwei Primzahlen $p$ und $q$ sowie einen dazu teilerfremden öffentlichen Exponenten $e$ ein:</p>
-      
-      <div class="calc-grid">
-        <div class="input-group">
-          <label>Primzahl p</label>
-          <input type="number" id="primeP" value="5" min="2">
-        </div>
-        <div class="input-group">
-          <label>Primzahl q</label>
-          <input type="number" id="primeQ" value="11" min="2">
-        </div>
-        <div class="input-group">
-          <label>Öffentlicher Exponent e</label>
-          <input type="number" id="inputE" value="13" min="2">
-        </div>
-      </div>
+        <div class="calc-panel">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.75rem;">1. Schlüsselerzeugung</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Primzahl p</label>
+              <input type="number" id="primeP" value="5" min="2">
+            </div>
+            <div class="form-group">
+              <label>Primzahl q</label>
+              <input type="number" id="primeQ" value="11" min="2">
+            </div>
+            <div class="form-group">
+              <label>Öffentlicher Exponent e</label>
+              <input type="number" id="inputE" value="13" min="2">
+            </div>
+          </div>
 
-      <button class="btn-calc" onclick="generateKeys()">Schlüssel berechnen</button>
+          <button class="btn-action" onclick="generateKeys()">Schlüssel berechnen & Rückweg anzeigen</button>
 
-      <div id="keyResults" class="result-display" style="display:none;"></div>
+          <div id="keyResults" class="output-box" style="display: none;"></div>
 
-      <hr style="border:0; border-top:1px solid var(--border-color); margin:1.5rem 0;">
+          <hr style="border:0; border-top:1px solid var(--border-color); margin:1.75rem 0;">
 
-      <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.75rem; color:var(--text-main);">2. Nachricht verschlüsseln & entschlüsseln</h3>
-      <div class="calc-grid">
-        <div class="input-group">
-          <label>Nachricht M (Zahl < N)</label>
-          <input type="number" id="msgM" value="20" min="1">
-        </div>
-      </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.75rem;">2. Nachricht verschlüsseln & entschlüsseln</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nachricht M (Zahl < N)</label>
+              <input type="number" id="msgM" value="20" min="1">
+            </div>
+          </div>
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn-calc" style="background:var(--accent);" onclick="encryptMessage()">Verschlüsseln</button>
-        <button class="btn-calc" style="background:var(--success);" onclick="decryptMessage()">Entschlüsseln</button>
-      </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-action" style="background:#0284c7;" onclick="encryptMessage()">Verschlüsseln</button>
+            <button class="btn-action" style="background:#059669;" onclick="decryptMessage()">Entschlüsseln</button>
+          </div>
 
-      <div id="cryptoResults" class="result-display" style="display:none;"></div>
-    </div>
-
-    <!-- 3. SQUARE AND MULTIPLY RECHNER -->
-    <h2 class="section-heading"><span>⚡</span> Square-and-Multiply Rechner</h2>
-    <div class="calc-box">
-      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">
-        Berechne $Basis^{Exponent} \pmod{Modul}$ schrittweise durch wiederholtes Quadrieren:
-      </p>
-      <div class="calc-grid">
-        <div class="input-group">
-          <label>Basis (z. B. C)</label>
-          <input type="number" id="smBase" value="14">
-        </div>
-        <div class="input-group">
-          <label>Exponent (z. B. d)</label>
-          <input type="number" id="smExp" value="27">
-        </div>
-        <div class="input-group">
-          <label>Modul N</label>
-          <input type="number" id="smMod" value="55">
+          <div id="cryptoResults" class="output-box" style="display: none;"></div>
         </div>
       </div>
-      <button class="btn-calc" onclick="calculateSquareAndMultiply()">🚀 Schritt für Schritt berechnen</button>
-      
-      <div id="smResults" class="result-display" style="display:none;"></div>
-    </div>
+    </section>
 
-    <!-- 4. SELBSTTEST QUIZ -->
-    <h2 class="section-heading"><span>🧠</span> Selbsttest: Teste dein RSA-Wissen!</h2>
-    
-    <!-- Frage 1 -->
-    <div class="quiz-card" id="q1">
-      <div class="quiz-question">
-        <span>1.</span>
-        <span>Warum ist das RSA-Verfahren asymmetrisch?</span>
-      </div>
-      <div class="quiz-options">
-        <div class="quiz-option" onclick="checkQuiz(1, 0, false)">Weil Nachrichten unterschiedlich schnell verschlüsselt wie entschlüsselt werden.</div>
-        <div class="quiz-option" onclick="checkQuiz(1, 1, true)">Weil zum Verschlüsseln ein anderer Schlüssel (Public Key) genutzt wird als zum Entschlüsseln (Private Key).</div>
-        <div class="quiz-option" onclick="checkQuiz(1, 2, false)">Weil die beiden Primzahlen p und q niemals gleich groß sein dürfen.</div>
-      </div>
-      <div class="quiz-feedback" id="fb1"></div>
-    </div>
+    <!-- ========================================== -->
+    <!-- REITER 4: SQUARE-AND-MULTIPLY              -->
+    <!-- ========================================== -->
+    <section id="tab-square-multiply" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">4</span>
+          Square-and-Multiply (Potenzierungs-Algorithmus)
+        </h2>
 
-    <!-- Frage 2 -->
-    <div class="quiz-card" id="q2">
-      <div class="quiz-question">
-        <span>2.</span>
-        <span>Wie berechnet man die Eulersche Phi-Funktion $\varphi(N)$ für $N = p \cdot q$, wenn $p$ und $q$ Primzahlen sind?</span>
-      </div>
-      <div class="quiz-options">
-        <div class="quiz-option" onclick="checkQuiz(2, 0, false)">$\varphi(N) = p \cdot q - 1$</div>
-        <div class="quiz-option" onclick="checkQuiz(2, 1, true)">$\varphi(N) = (p - 1) \cdot (q - 1)$</div>
-        <div class="quiz-option" onclick="checkQuiz(2, 2, false)">$\varphi(N) = \frac{p+q}{2}$</div>
-      </div>
-      <div class="quiz-feedback" id="fb2"></div>
-    </div>
+        <p>
+          Wie berechnen Computer $20^{13} \bmod 55$ oder $25^{37} \bmod 55$, ohne dass Zahlen mit hunderten Stellen entstehen?  
+          Durch <strong>wiederholtes Quadrieren (Square)</strong> und bedarfsweises <strong>Multiplizieren (Multiply)</strong>:
+        </p>
 
-    <!-- Frage 3 -->
-    <div class="quiz-card" id="q3">
-      <div class="quiz-question">
-        <span>3.</span>
-        <span>Wie erzeugt Alice eine digitale Signatur für eine Nachricht $M$?</span>
-      </div>
-      <div class="quiz-options">
-        <div class="quiz-option" onclick="checkQuiz(3, 0, false)">Sie verschlüsselt die Nachricht mit Bobs öffentlichem Schlüssel $e_{Bob}$.</div>
-        <div class="quiz-option" onclick="checkQuiz(3, 1, false)">Sie schickt ihr handschriftliches Foto im Anhang mit.</div>
-        <div class="quiz-option" onclick="checkQuiz(3, 2, true)">Sie „verschlüsselt“ $M$ mit ihrem eigenen geheimen privaten Schlüssel $d_{Alice}$ ($S = M^{d_{Alice}} \pmod N$).</div>
-      </div>
-      <div class="quiz-feedback" id="fb3"></div>
-    </div>
+        <div class="info-callout">
+          <strong>Prinzip am Unterrichtsbeispiel $20^{13} \bmod 55$:</strong><br>
+          1. Zerlege den Exponenten binär: $13 = 8 + 4 + 1 = (1101)_2$.<br>
+          2. Berechne fortlaufend die Quadrate modulo 55:<br>
+          &nbsp;&nbsp;• $20^1 = \mathbf{20}$<br>
+          &nbsp;&nbsp;• $20^2 = 400 \equiv \mathbf{15} \pmod{55}$<br>
+          &nbsp;&nbsp;• $20^4 = 15^2 = 225 \equiv \mathbf{5} \pmod{55}$<br>
+          &nbsp;&nbsp;• $20^8 = 5^2 = \mathbf{25} \pmod{55}$<br>
+          3. Multipliziere nur die relevanten Potenzen ($8 + 4 + 1$):<br>
+          &nbsp;&nbsp;$$20^{13} \equiv 25 \cdot 5 \cdot 20 = 125 \cdot 20 \equiv 15 \cdot 20 = 300 \equiv \mathbf{25} \pmod{55}$$
+        </div>
 
-    <!-- Frage 4 -->
-    <div class="quiz-card" id="q4">
-      <div class="quiz-question">
-        <span>4.</span>
-        <span>Worauf beruht die mathematische Sicherheit von RSA im Kern?</span>
+        <div class="calc-panel">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.75rem;">Interaktiver Square-and-Multiply Rechner</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Basis (z. B. M oder C)</label>
+              <input type="number" id="smBase" value="20">
+            </div>
+            <div class="form-group">
+              <label>Exponent (z. B. e oder d)</label>
+              <input type="number" id="smExp" value="13">
+            </div>
+            <div class="form-group">
+              <label>Modul N</label>
+              <input type="number" id="smMod" value="55">
+            </div>
+          </div>
+          <button class="btn-action" onclick="calculateSquareAndMultiply()">Schritt für Schritt berechnen</button>
+
+          <div id="smResults" class="output-box" style="display: none;"></div>
+        </div>
       </div>
-      <div class="quiz-options">
-        <div class="quiz-option" onclick="checkQuiz(4, 0, true)">Auf der Schwierigkeit, eine sehr große Zahl $N$ in ihre beiden Primfaktoren $p$ und $q$ zu zerlegen (Faktorisierungsproblem).</div>
-        <div class="quiz-option" onclick="checkQuiz(4, 1, false)">Darauf, dass der Verschlüsselungsalgorithmus streng geheim gehalten wird.</div>
-        <div class="quiz-option" onclick="checkQuiz(4, 2, false)">Auf der Unmöglichkeit, Reste mit Modulo zu berechnen.</div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 5: KLAUSURTRAINING & SELBST-CHECK   -->
+    <!-- ========================================== -->
+    <section id="tab-training" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">5</span>
+          Klausurtraining & Selbst-Check
+        </h2>
+
+        <p>
+          Bereite dich gezielt auf Klausuren vor: Bearbeite die Aufgaben eigenständig auf Papier und überprüfe deine Lösung per Klick.
+        </p>
+
+        <!-- Aufgabe 1 -->
+        <div class="task-card">
+          <div class="task-meta">
+            <span class="task-title">Aufgabe 1: Multiplikatives Inverses mit Rückwärts-Einsetzen</span>
+            <span class="task-badge">Standardaufgabe</span>
+          </div>
+          <p style="font-size: 0.92rem;">
+            Gegeben sind $e = 7$ und $\varphi(N) = 26$. Berechne den privaten Schlüssel $d$ durch Rückwärts-Einsetzen.
+          </p>
+          <button class="btn-toggle-solution" onclick="toggleSolution(1)">Lösung & Rechenweg aufdecken</button>
+          <div id="sol1" class="solution-content">
+            <div style="font-size: 0.9rem; line-height: 1.75;">
+              <strong>1. Hinweg (Euklidischer Algorithmus):</strong><br>
+              $26 = 3 \cdot 7 + 5$<br>
+              $7 = 1 \cdot 5 + 2$<br>
+              $5 = 2 \cdot 2 + 1$<br>
+              $2 = 2 \cdot 1 + 0 \implies \operatorname{ggT}(26, 7) = 1$.<br><br>
+              <strong>2. Rückweg (Rückwärts-Einsetzen):</strong><br>
+              $1 = 5 - 2 \cdot 2$<br>
+              $1 = 5 - 2 \cdot (7 - 1 \cdot 5) = 3 \cdot 5 - 2 \cdot 7$<br>
+              $1 = 3 \cdot (26 - 3 \cdot 7) - 2 \cdot 7 = 3 \cdot 26 - 11 \cdot 7$<br><br>
+              <strong>3. Auswertung:</strong><br>
+              Koeffizient vor 7 ist $x = -11$. Da negativ: $d = -11 + 26 = \mathbf{15}$.<br>
+              <strong>Probe:</strong> $7 \cdot 15 = 105 = 4 \cdot 26 + 1 \equiv 1 \pmod{26}$ (Bestätigt)
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 2 -->
+        <div class="task-card">
+          <div class="task-meta">
+            <span class="task-title">Aufgabe 2: Vollständige RSA-Schlüsselerzeugung</span>
+            <span class="task-badge">Komplexaufgabe</span>
+          </div>
+          <p style="font-size: 0.92rem;">
+            Gegeben sind die Primzahlen $p = 3$ und $q = 11$. Bestimme $N$, $\varphi(N)$ und berechne für $e = 3$ den privaten Schlüssel $d$.
+          </p>
+          <button class="btn-toggle-solution" onclick="toggleSolution(2)">Lösung & Rechenweg aufdecken</button>
+          <div id="sol2" class="solution-content">
+            <div style="font-size: 0.9rem; line-height: 1.75;">
+              • $N = p \cdot q = 3 \cdot 11 = \mathbf{33}$<br>
+              • $\varphi(N) = (3 - 1) \cdot (11 - 1) = 2 \cdot 10 = \mathbf{20}$<br>
+              • Prüfung: $\operatorname{ggT}(3, 20) = 1$ (Erfüllt)<br><br>
+              <strong>Berechnung von d:</strong><br>
+              $20 = 6 \cdot 3 + 2$<br>
+              $3 = 1 \cdot 2 + 1$<br>
+              Rückweg: $1 = 3 - 1 \cdot 2 = 3 - 1 \cdot (20 - 6 \cdot 3) = \mathbf{7} \cdot 3 - 1 \cdot 20$<br>
+              Koeffizient vor 3 ist $x = 7 \implies \mathbf{d = 7}$.<br>
+              <strong>Probe:</strong> $3 \cdot 7 = 21 = 1 \cdot 20 + 1 \equiv 1 \pmod{20}$ (Bestätigt)
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Sektion -->
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 2rem 0 1rem 0;">Selbsttest: Überprüfe dein Verständnis</h3>
+
+        <div class="quiz-card" id="q1">
+          <div class="quiz-question">
+            <span>1.</span>
+            <span>Warum ist das RSA-Verfahren asymmetrisch?</span>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(1, 0, false)">Weil Nachrichten unterschiedlich schnell verschlüsselt wie entschlüsselt werden.</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 1, true)">Weil zum Verschlüsseln ein anderer Schlüssel (Public Key) genutzt wird als zum Entschlüsseln (Private Key).</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 2, false)">Weil die beiden Primzahlen p und q niemals gleich groß sein dürfen.</div>
+          </div>
+          <div class="quiz-feedback" id="fb1"></div>
+        </div>
+
+        <div class="quiz-card" id="q2">
+          <div class="quiz-question">
+            <span>2.</span>
+            <span>Welche Bedingung muss für den öffentlichen Exponenten e bezüglich φ(N) zwingend gelten?</span>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(2, 0, false)">e muss eine gerade Zahl sein.</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 1, true)">ggT(e, φ(N)) = 1 (Teilerfremdheit).</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 2, false)">e muss größer als das RSA-Modul N sein.</div>
+          </div>
+          <div class="quiz-feedback" id="fb2"></div>
+        </div>
+
+        <div class="quiz-card" id="q3">
+          <div class="quiz-question">
+            <span>3.</span>
+            <span>Was tun wir, wenn das Rückwärts-Einsetzen einen negativen Koeffizienten x liefert?</span>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(3, 0, false)">Wir streichen das Minuszeichen einfach weg.</div>
+            <div class="quiz-option" onclick="checkQuiz(3, 1, true)">Wir addieren einmal φ(N) hinzu, um die kleinste positive Zahl derselben Restklasse zu erhalten (d = x + φ(N)).</div>
+            <div class="quiz-option" onclick="checkQuiz(3, 2, false)">Wir müssen die Primzahlen p und q verwerfen und von vorne beginnen.</div>
+          </div>
+          <div class="quiz-feedback" id="fb3"></div>
+        </div>
       </div>
-      <div class="quiz-feedback" id="fb4"></div>
-    </div>
+    </section>
 
     <!-- Footer -->
     <footer>
-      <p><strong>Informatik Q1</strong> • Schulportal 2026/2027 • Kryptographie & RSA</p>
+      <p><strong>Informatik Q1</strong> • Schulportal 2026/2027 • Das RSA-Kryptosystem</p>
     </footer>
 
   </div>
 
   <script>
-    // Hilfsfunktionen für Mathe
+    // Tab-Umschaltung
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add('active');
+
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => {
+        return (btn.getAttribute('onclick') || '').includes(tabId);
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+
+      triggerKaTeX();
+    }
+
+    // Mathe-Hilfsfunktionen
     function isPrime(n) {
       if (n < 2) return false;
       for (let i = 2; i * i <= n; i++) {
@@ -465,6 +902,7 @@
       let chosenE = parseInt(document.getElementById('inputE').value);
       let out = document.getElementById('keyResults');
       out.style.display = 'block';
+      currentKeys = null;
 
       if (isNaN(p) || isNaN(q) || !isPrime(p) || !isPrime(q)) {
         out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Sowohl p als auch q müssen Primzahlen sein!</span>`;
@@ -485,7 +923,6 @@
 
       let g = gcd(chosenE, phi);
       if (g !== 1) {
-        // Finde alternative teilerfremde Werte für e
         let possibleE = [];
         for (let cand = 3; cand < phi; cand += 2) {
           if (gcd(cand, phi) === 1) {
@@ -500,20 +937,116 @@
         return;
       }
 
-      let d = modInverse(chosenE, phi);
-      currentKeys = { p, q, N, phi, e: chosenE, d };
+      // Divisionskette Hinweg
+      let steps = [];
+      let a = phi;
+      let b = chosenE;
+      while (b !== 0) {
+        let quot = Math.floor(a / b);
+        let rem = a % b;
+        steps.push({ a, b, q: quot, r: rem });
+        a = b;
+        b = rem;
+      }
 
-      out.innerHTML = `
+      let nonZeroSteps = steps.filter(s => s.r !== 0);
+      let m = nonZeroSteps.length;
+
+      let R = [phi, chosenE];
+      for (let i = 0; i < nonZeroSteps.length; i++) {
+        R.push(nonZeroSteps[i].r);
+      }
+
+      let cA = 1;
+      let idxA = m - 1;
+      let cB = -nonZeroSteps[m - 1].q;
+      let idxB = m;
+
+      function formatLinearMath(c1, v1, c2, v2) {
+        let t1 = (c1 === 1 ? "" : (c1 === -1 ? "-" : c1 + " \\cdot ")) + v1;
+        let t2;
+        if (c2 >= 0) {
+          t2 = "+ " + (c2 === 1 ? "" : c2 + " \\cdot ") + v2;
+        } else {
+          t2 = "- " + (Math.abs(c2) === 1 ? "" : Math.abs(c2) + " \\cdot ") + v2;
+        }
+        return `$$1 = ${t1} ${t2}$$`;
+      }
+
+      let subStepsHtml = `<p style="color:var(--text-muted); margin-bottom:4px;">Start mit der umgestellten Gleichung für den Rest 1:</p>`;
+      subStepsHtml += formatLinearMath(cA, R[idxA], cB, R[idxB]);
+
+      for (let k = m - 2; k >= 0; k--) {
+        let subRem = R[idxB];
+        let subA = R[k];
+        let subQ = nonZeroSteps[k].q;
+        let subB = R[k + 1];
+
+        subStepsHtml += `<p style="color:var(--text-muted); margin:8px 0 2px 0;">Ersetze den Rest <strong>${subRem}</strong> durch $(${subA} - ${subQ} \\cdot ${subB})$:</p>`;
+
+        let termA = (cA === 1 ? "" : (cA === -1 ? "-" : cA + " \\cdot ")) + R[idxA];
+        let signB = cB >= 0 ? "+ " : "- ";
+        let absB = Math.abs(cB);
+        let factorB = absB === 1 ? "" : absB + " \\cdot ";
+
+        subStepsHtml += `$$1 = ${termA} ${signB}${factorB}(${subA} - ${subQ} \\cdot ${subB})$$`;
+
+        let newCA = cB;
+        let newIdxA = k;
+        let newCB = cA - cB * subQ;
+        let newIdxB = k + 1;
+
+        subStepsHtml += `<p style="color:var(--text-muted); margin:4px 0 2px 0;">Ausmultiplizieren & zusammenfassen:</p>`;
+        subStepsHtml += formatLinearMath(newCA, R[newIdxA], newCB, R[newIdxB]);
+
+        cA = newCA;
+        idxA = newIdxA;
+        cB = newCB;
+        idxB = newIdxB;
+      }
+
+      let coeffE = cB;
+      let coeffPhi = cA;
+      let finalD = ((coeffE % phi) + phi) % phi;
+
+      currentKeys = { p, q, N, phi, e: chosenE, d: finalD };
+
+      let html = `
         <div style="font-weight:700; margin-bottom:8px; color:#1e293b;">Schlüssel erfolgreich berechnet:</div>
         <div><strong>1. RSA-Modul:</strong> N = p × q = ${p} × ${q} = <strong>${N}</strong></div>
         <div><strong>2. Phi-Funktion:</strong> φ(N) = (${p}-1) × (${q}-1) = <strong>${phi}</strong></div>
         <div><strong>3. Öffentlicher Exponent e:</strong> gewählt: <strong>${chosenE}</strong> (da ggT(${chosenE}, ${phi}) = 1)</div>
-        <div><strong>4. Privater Exponent d:</strong> berechnet: <strong>${d}</strong> (da ${chosenE} × ${d} = ${chosenE * d} ≡ 1 mod ${phi})</div>
-        <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #cbd5e1;">
-          <span class="key-badge badge-pub">Öffentlicher Schlüssel (Public Key): (e = ${chosenE}, N = ${N})</span><br>
-          <span class="key-badge badge-priv">Privater Schlüssel (Private Key): (d = ${d}, N = ${N})</span>
+        <div><strong>4. Privater Exponent d:</strong> berechnet: <strong>${finalD}</strong> (da ${chosenE} × ${finalD} = ${chosenE * finalD} ≡ 1 mod ${phi})</div>
+        <div style="margin:12px 0; padding-top:10px; border-top:1px dashed #cbd5e1;">
+          <span class="key-badge badge-pub">Public Key: (e = ${chosenE}, N = ${N})</span>
+          <span class="key-badge badge-priv">Private Key: (d = ${finalD}, N = ${N})</span>
+        </div>
+
+        <h4 style="font-size:0.95rem; font-weight:700; margin:16px 0 6px 0; color:var(--theme-oberstufe-dark);">
+          Rückwärts-Einsetzen im Detail:
+        </h4>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:0.88rem; line-height:1.7;">
+      `;
+
+      for (let i = 0; i < steps.length; i++) {
+        let st = steps[i];
+        html += `<div>(${i + 1}) &nbsp; ${st.a} = ${st.q} × ${st.b} + ${st.r}</div>`;
+      }
+
+      html += `
+        </div>
+        <div style="background:#ffffff; border:1px solid var(--border-color); padding:10px 14px; border-radius:6px; font-size:0.88rem; line-height:1.75; margin-top:8px;">
+          ${subStepsHtml}
+          <div style="margin-top:10px; padding-top:8px; border-top:1px dashed #e2e8f0;">
+            Koeffizient vor e: $x = ${coeffE}$<br>
+            ${coeffE < 0 ? `Da $x < 0$: $d = ${coeffE} + ${phi} = \\mathbf{${finalD}}$` : `Da $x > 0$: $d = \\mathbf{${finalD}}$`}<br>
+            <strong>Probe:</strong> $(${chosenE} \\cdot ${finalD}) \\bmod ${phi} = ${chosenE * finalD} \\bmod ${phi} = ${(chosenE * finalD) % phi}$ (Bestätigt)
+          </div>
         </div>
       `;
+
+      out.innerHTML = html;
+      triggerKaTeX();
     }
 
     function encryptMessage() {
@@ -565,13 +1098,13 @@
 
       let tableHtml = `
         <div style="margin-bottom:8px;"><strong>Exponent binär:</strong> ${exp} = (${binStr})₂ (Länge: ${binStr.length} Bits)</div>
-        <table class="step-table">
+        <table class="data-table">
           <thead>
             <tr>
-              <th>Bit</th>
+              <th class="center">Bit</th>
               <th>Aktion</th>
               <th>Rechnung</th>
-              <th>Aktueller Wert mod ${mod}</th>
+              <th class="center">Aktueller Wert mod ${mod}</th>
             </tr>
           </thead>
           <tbody>
@@ -579,42 +1112,39 @@
 
       for (let i = 0; i < binStr.length; i++) {
         let bit = binStr[i];
-        
-        // Quadrieren (außer vor erstem Bit)
         if (i > 0) {
           let prev = currentVal;
           currentVal = (currentVal * currentVal) % modBig;
           tableHtml += `
             <tr>
-              <td>-</td>
+              <td class="center">-</td>
               <td><strong>Square</strong> (Quadrieren)</td>
               <td>${prev}² mod ${mod}</td>
-              <td><strong>${currentVal}</strong></td>
+              <td class="center"><strong>${currentVal}</strong></td>
             </tr>
           `;
         } else {
           currentVal = baseBig;
           tableHtml += `
             <tr>
-              <td>${bit}</td>
-              <td>Start (erstes Bit)</td>
+              <td class="center">${bit}</td>
+              <td>Startwert</td>
               <td>${b} mod ${mod}</td>
-              <td><strong>${currentVal}</strong></td>
+              <td class="center"><strong>${currentVal}</strong></td>
             </tr>
           `;
           continue;
         }
 
-        // Multiplizieren falls Bit 1
         if (bit === '1') {
           let prev = currentVal;
           currentVal = (currentVal * baseBig) % modBig;
           tableHtml += `
             <tr style="background:#f0f9ff;">
-              <td><strong>1</strong></td>
+              <td class="center"><strong>1</strong></td>
               <td><strong>Multiply</strong> (Basis multiplizieren)</td>
               <td>(${prev} × ${b}) mod ${mod}</td>
-              <td><strong>${currentVal}</strong></td>
+              <td class="center"><strong>${currentVal}</strong></td>
             </tr>
           `;
         }
@@ -631,7 +1161,19 @@
       out.innerHTML = tableHtml;
     }
 
-    // Quiz Logik
+    function toggleSolution(num) {
+      let box = document.getElementById('sol' + num);
+      let btn = event.target;
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+        btn.textContent = 'Lösung & Rechenweg aufdecken';
+      } else {
+        box.style.display = 'block';
+        btn.textContent = 'Lösung verbergen';
+        triggerKaTeX();
+      }
+    }
+
     function checkQuiz(qNum, optIdx, isCorrect) {
       let card = document.getElementById('q' + qNum);
       let options = card.querySelectorAll('.quiz-option');
@@ -644,15 +1186,20 @@
 
       if (isCorrect) {
         options[optIdx].classList.add('correct');
-        fb.innerHTML = `<span style="color:#059669;">✔ Richtig! Hervorragend verstanden.</span>`;
+        fb.innerHTML = `<span style="color:#059669;">Richtig! Hervorragend verstanden.</span>`;
       } else {
         options[optIdx].classList.add('wrong');
-        fb.innerHTML = `<span style="color:#dc2626;">❌ Leider nicht ganz richtig. Schau dir die Spickzettel-Karten oben noch einmal an!</span>`;
+        fb.innerHTML = `<span style="color:#dc2626;">Leider nicht ganz richtig. Überprüfe die Erklärung in den ersten beiden Reitern noch einmal.</span>`;
       }
     }
 
-    // Initialer Aufruf
     window.addEventListener('DOMContentLoaded', () => {
+      if (window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        if (document.getElementById(hash)) {
+          switchTab(hash);
+        }
+      }
       generateKeys();
     });
   </script>
