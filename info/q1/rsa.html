@@ -560,7 +560,80 @@
         </div>
 
         <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.75rem 0; color: var(--text-main);">
-          3. Die mathematischen Sätze: Warum funktioniert RSA?
+          3. Modulares Rechnen: Kongruenz ($\equiv$) & Rechenregeln für Reste
+        </h3>
+        <p>
+          Das gesamte RSA-Verfahren basiert auf der sogenannten <strong>Uhren-Arithmetik (Modulare Arithmetik)</strong>. Bevor wir die großen Sätze betrachten, halten wir die grundlegenden Schreibweisen und Rechenregeln fest:
+        </p>
+
+        <!-- Box 1: Modulo und Dreifachgleichheitszeichen -->
+        <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.25rem;">
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.02rem; margin-bottom: 0.5rem;">
+            Der Modulo-Operator ($\bmod$) & das Dreifachgleichheitszeichen ($\equiv$)
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.6rem;">
+            • <strong>Der Operator $\bmod N$:</strong> Liefert den ganzzahligen Divisionsrest bei Teilung durch $N$.<br>
+            &nbsp;&nbsp;↳ <em>Beispiel:</em> $23 \bmod 5 = \mathbf{3}$, da $23 = 4 \cdot 5 + 3$.<br><br>
+            • <strong>Das Kongruenzzeichen $\equiv$ (Dreifachgleichheitszeichen):</strong><br>
+            &nbsp;&nbsp;Man liest $a \equiv b \pmod N$ als: <em>„$a$ ist kongruent zu $b$ modulo $N$“</em>.<br>
+            &nbsp;&nbsp;<strong>Mathematische Definition:</strong> Zwei Zahlen sind kongruent modulo $N$, wenn ihre Differenz $(a - b)$ ohne Rest durch $N$ teilbar ist – oder gleichbedeutend: wenn beide bei Division durch $N$ denselben Rest ergeben:
+          </p>
+          <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem; color: var(--theme-oberstufe-dark);">
+            $$a \equiv b \pmod N \quad\iff\quad N \text{ teilt } (a - b) \quad\iff\quad (a \bmod N) = (b \bmod N)$$
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.7; margin-bottom: 0;">
+            <strong>Anschauliches Uhren-Beispiel ($N = 12$):</strong><br>
+            Auf einer 12-Stunden-Uhr entsprechen 15 Uhr und 3 Uhr derselben Zeigerstellung:<br>
+            $$15 \equiv 3 \pmod{12}, \quad \text{denn } 15 - 3 = 12 \text{ ist durch 12 teilbar.}$$
+            Genauso entsprechen „3 Stunden zurück“ ($-3$) exakt 9 Uhr:<br>
+            $$-3 \equiv 9 \pmod{12}, \quad \text{denn } -3 - 9 = -12 \text{ ist durch 12 teilbar.}$$
+          </p>
+        </div>
+
+        <!-- Box 2: Modulare Rechenregeln -->
+        <div class="card-subtle" style="background:#ffffff; border: 1.5px solid var(--border-color); margin-bottom: 1.5rem;">
+          <h4 style="color: var(--theme-oberstufe-dark); font-size: 1.02rem; margin-bottom: 0.5rem;">
+            Die fundamentalen Rechenregeln der modularen Arithmetik
+          </h4>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin-bottom: 0.75rem;">
+            Die wichtigste Erkenntnis für die Informatik: <strong>Man darf Zwischenergebnisse jederzeit modulo $N$ vereinfachen!</strong> Große Zahlen müssen nicht erst komplett ausmultipliziert werden:
+          </p>
+
+          <div style="font-size: 0.92rem; line-height: 1.8;">
+            <p><strong>1. Multiplikationsregel beim Resterechnen:</strong></p>
+            <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
+              $$(a \cdot b) \bmod N = \big((a \bmod N) \cdot (b \bmod N)\big) \bmod N$$
+              $$\text{bzw. in Kongruenz: } a \equiv a' \land b \equiv b' \pmod N \implies a \cdot b \equiv a' \cdot b' \pmod N$$
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.75rem;">
+              <em>Beispiel:</em> $(14 \cdot 16) \bmod 5 = ((14 \bmod 5) \cdot (16 \bmod 5)) \bmod 5 = (4 \cdot 1) \bmod 5 = \mathbf{4}$.<br>
+              (Man muss nicht erst mühsam $14 \cdot 16 = 224$ rechnen, denn $224 \bmod 5 = 4$).
+            </p>
+
+            <p><strong>2. Additionsregel beim Resterechnen:</strong></p>
+            <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
+              $$(a + b) \bmod N = \big((a \bmod N) + (b \bmod N)\big) \bmod N$$
+            </div>
+
+            <p><strong>3. Potenzregel beim Resterechnen:</strong></p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+              Da eine Potenz $a^b$ lediglich eine wiederholte Multiplikation $a \cdot a \cdot \dots \cdot a$ ist, darf die <strong>Basis $a$ vor und während der Potenzierung jederzeit modulo $N$ reduziert werden</strong>:
+            </p>
+            <div style="text-align:center; font-size:1.05rem; margin: 0.4rem 0 0.8rem 0; background: var(--bg-subtle); padding: 0.6rem; border-radius: var(--radius-sm);">
+              $$(a^b) \bmod N = \big((a \bmod N)^b\big) \bmod N$$
+              $$(a^{x + y}) \bmod N = \big((a^x \bmod N) \cdot (a^y \bmod N)\big) \bmod N$$
+              $$(a^{x \cdot y}) \bmod N = \big((a^x)^y\big) \bmod N$$
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">
+              <em>Beispiel:</em> $16^3 \bmod 5 = (16 \bmod 5)^3 \bmod 5 = 1^3 \bmod 5 = \mathbf{1}$.<br>
+              <em>Bedeutung für RSA:</em> Computer können $C = M^e \bmod N$ und $M = C^d \bmod N$ selbst bei riesigen Schlüsseln blitzschnell berechnen, da man nach jeder Multiplikation sofort wieder $\bmod N$ rechnet und Zahlen niemals explodieren.<br>
+              <strong>Wichtige Warnung (Merksatz):</strong> Die Reduktionsregel gilt <strong>nur für die Basis</strong> modulo $N$. Der Exponent darf <em>nicht</em> einfach modulo $N$ reduziert werden, sondern folgt dem Satz von Euler modulo $\varphi(N)$!
+            </p>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.75rem 0; color: var(--text-main);">
+          4. Die mathematischen Sätze: Warum funktioniert RSA?
         </h3>
 
         <!-- Satz 1: Euler -->
@@ -640,7 +713,7 @@
 
         <!-- Spickzettel-Kompaktkarte -->
         <div class="info-callout" style="margin-top: 1.5rem;">
-          <h4 style="color: var(--theme-oberstufe-dark); margin-bottom: 0.4rem;">Die RSA-Formeln auf einen Blick:</h4>
+          <h4 style="color: var(--theme-oberstufe-dark); margin-bottom: 0.4rem;">5. Die RSA-Formeln auf einen Blick</h4>
           <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; line-height: 1.8;">
             1. Modul: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; N = p × q<br>
             2. Phi-Funktion: &nbsp;&nbsp; φ(N) = (p - 1) × (q - 1)<br>
