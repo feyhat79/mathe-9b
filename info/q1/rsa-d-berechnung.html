@@ -574,38 +574,17 @@
 
         <div style="font-size: 0.9rem; line-height: 1.75; margin-left: 0.25rem;">
           <p style="margin-bottom: 0.65rem;">
-            <strong>1. Notwendigkeit eines positiven Exponenten:</strong><br>
-            Ein negativer Exponent wie $d = -13$ würde beim Entschlüsseln die Berechnung von $C^{-13} \pmod N = (C^{-1})^{13} \pmod N$ erfordern. Dazu müsste für jedes empfangene Chiffrat zunächst aufwändig das modulare Inverse $C^{-1}$ berechnet werden, was bei $\operatorname{ggT}(C, N) > 1$ sogar scheitern würde. Algorithmen wie <em>Square-and-Multiply</em> setzen zwingend eine positive Binärdarstellung des Exponenten $d \in \{1, 2, \dots, \varphi(N)-1\}$ voraus.
-          </p>
-
-          <p style="margin-bottom: 0.65rem;">
-            <strong>2. Kongruenz im Restesystem modulo $\varphi(N)$ (Uhren-Prinzip):</strong><br>
-            Gesucht ist eine Zahl $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$. Zahlen, die sich um ein ganzzahliges Vielfaches von $\varphi(N)$ unterscheiden, besitzen denselben Rest modulo $\varphi(N)$:<br>
-            • Auf einer 12-Stunden-Uhr entspricht „3 Stunden zurück“ ($-3$) exakt der Uhrzeit „9 Uhr“ ($-3 + 12 = 9$).<br>
-            • Modulo $40$ sind $-13$ und $-13 + 40 = 27$ kongruent. Multipliziert mit $e = 3$ führen beide zum selben Rest 1:<br>
-            &nbsp;&nbsp;↳ $3 \cdot (-13) = -39 = -1 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$<br>
-            &nbsp;&nbsp;↳ $3 \cdot 27 = 81 = 2 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$
-          </p>
-
-          <p style="margin-bottom: 0.65rem;">
-            <strong>3. Algebraischer Beweis (Null-Addition in der Bézout-Gleichung):</strong><br>
-            Aus der Bézout-Identität gilt:
-            $$1 = x \cdot e + y \cdot \varphi(N)$$
-            Durch Addition und Subtraktion des Terms $e \cdot \varphi(N)$ (Addition einer neutralen Null) ergibt sich:
-            $$1 = x \cdot e + e \cdot \varphi(N) + y \cdot \varphi(N) - e \cdot \varphi(N)$$
-            Durch Ausklammern von $e$ und $\varphi(N)$ folgt unmittelbar:
-            $$1 = \mathbf{(x + \varphi(N))} \cdot e + (y - e) \cdot \varphi(N)$$
-            Der Wert der Gleichung bleibt exakt 1. Der neue Koeffizient vor $e$ lautet nun $(x + \varphi(N))$, während $(y - e)$ eine neue ganze Zahl bildet.<br>
-            Am Unterrichtsbeispiel ($x = -13, y = 1, e = 3, \varphi(N) = 40$):
-            $$1 = (-13 + 40) \cdot 3 + (1 - 3) \cdot 40 = \mathbf{27} \cdot 3 + (-2) \cdot 40 = 81 - 80 = 1$$
-            Damit ist der positive Exponent $d = 27$ algebraisch exakt hergeleitet.
+            <strong>1. Warum ein positives d erforderlich ist:</strong><br>
+            Ein negativer Exponent wie $d = -13$ würde beim Entschlüsseln die Berechnung von Brüchen im Restesystem ($C^{-13} = \frac{1}{C^{13}}$) bedeuten. Modulare Potenzierungsalgorithmen wie <em>Square-and-Multiply</em> setzen zwingend eine positive Binärdarstellung des Exponenten $d \in \{1, 2, \dots, \varphi(N)-1\}$ voraus.
           </p>
 
           <p style="margin-bottom: 0;">
-            <strong>4. Wirkung auf die Entschlüsselung (Euler-Zyklus):</strong><br>
-            Nach dem Satz von Euler gilt für jede teilerfremde Nachricht $C^{\varphi(N)} \equiv 1 \pmod N$. Somit folgt für den Entschlüsselungsvorgang:
-            $$C^d = C^{x + \varphi(N)} = C^x \cdot \underbrace{C^{\varphi(N)}}_{\equiv 1} \equiv C^x \pmod N$$
-            Das Hinzuaddieren von $\varphi(N)$ im Exponenten entspricht modulo $N$ einer Multiplikation mit 1 und lässt das Dechiffrier-Ergebnis unverändert.
+            <strong>2. Warum die Addition von $+\varphi(N)$ das richtige d liefert (Uhren-Prinzip):</strong><br>
+            Wir suchen ein $d$ mit $e \cdot d \equiv 1 \pmod{\varphi(N)}$. Im Restesystem modulo $\varphi(N)$ sind Zahlen, die sich um ein volles Vielfaches von $\varphi(N)$ unterscheiden, exakt derselbe Zeigerstand:<br>
+            • Auf einer 12-Stunden-Uhr entspricht „3 Stunden zurück“ ($-3$) exakt der Uhrzeit „9 Uhr“ ($-3 + 12 = 9$).<br>
+            • Modulo $40$ sind $-13$ und $-13 + 40 = 27$ kongruent. Multipliziert mit $e = 3$ führen beide zum identischen Rest 1:<br>
+            &nbsp;&nbsp;↳ $3 \cdot (-13) = -39 = -1 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$<br>
+            &nbsp;&nbsp;↳ $3 \cdot 27 = 81 = 2 \cdot 40 + \mathbf{1} \equiv 1 \pmod{40}$
           </p>
         </div>
       </div>
