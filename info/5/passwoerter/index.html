@@ -8,8 +8,370 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../assets/css/main.css">
+
+  <style>
+    /* ── Lokale Erweiterungen ── */
+    .back-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      transition: all 0.2s ease;
+    }
+    .back-nav:hover { color: var(--theme-mathe); border-color: var(--theme-mathe); transform: translateX(-2px); }
+
+    /* Kriterien-Liste */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .criteria-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .criteria-num {
+      background: var(--theme-mathe);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .criteria-text strong {
+      display: block;
+      font-weight: 700;
+      font-size: 0.97rem;
+      margin-bottom: 2px;
+    }
+    .criteria-text span {
+      color: var(--text-muted);
+      font-size: 0.87rem;
+    }
+    .criteria-special {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.97rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--theme-mathe);
+      background: var(--theme-mathe-light);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    /* Merksatz-Methode Schritte */
+    .method-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .method-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .method-step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+    .step-badge {
+      background: var(--theme-mathe);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 4px 12px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .method-step-header h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .method-step p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      margin-bottom: 0.85rem;
+    }
+
+    /* Merksatz-Visualisierung */
+    .sentence-display {
+      background: var(--bg-subtle);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      font-size: 1rem;
+      line-height: 1.8;
+      font-weight: 500;
+    }
+    .letter-highlight {
+      background: var(--theme-mathe-light);
+      color: var(--theme-mathe);
+      font-weight: 800;
+      border-bottom: 2px solid var(--theme-mathe);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* Anfangsbuchstaben-Anzeige */
+    .initials-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 0.75rem;
+    }
+    .initial-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    .initial-box.original {
+      background: var(--theme-mathe-light);
+      color: var(--theme-mathe);
+      border: 1.5px solid #bfdbfe;
+    }
+    .initial-box.replaced {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1.5px solid #fcd34d;
+    }
+    .initial-box.unchanged {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-color);
+    }
+
+    /* Schritt-3-Pfeile */
+    .transform-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .transform-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .arrow-down {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 2px 0;
+    }
+    .result-box {
+      background: #fff7ed;
+      border: 2px solid #f59e0b;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #92400e;
+    }
+    .replaced-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 6px;
+    }
+
+    /* Merkkasten */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      position: relative;
+      margin-bottom: 2rem;
+      background: #fff;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -13px;
+      left: 18px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 99px;
+    }
+    .merke-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .merke-box ul li {
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #fee2e2;
+      color: #111827;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .merke-box ul li:last-child { border-bottom: none; }
+    .merke-rule-num {
+      background: #dc2626;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.78rem;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Passwort-Checker */
+    .checker-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
+    }
+    .checker-box h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .checker-box p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+    }
+    .pw-input-wrap {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .pw-input {
+      width: 100%;
+      padding: 0.8rem 3rem 0.8rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-main);
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s;
+      letter-spacing: 1px;
+    }
+    .pw-input:focus { border-color: var(--theme-mathe); }
+    .pw-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1rem;
+      padding: 4px;
+    }
+    .strength-bar-bg {
+      height: 8px;
+      background: var(--bg-subtle);
+      border-radius: 99px;
+      margin-bottom: 0.6rem;
+      overflow: hidden;
+    }
+    .strength-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.4s ease, background 0.4s ease;
+      width: 0%;
+    }
+    .strength-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.85rem;
+    }
+    .criteria-checks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+    .crit-check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .crit-check.ok { color: #059669; }
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .crit-check.ok .check-icon {
+      background: #059669;
+      border-color: #059669;
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .criteria-checks { grid-template-columns: 1fr; }
+      .initials-row { gap: 4px; }
+      .initial-box { width: 36px; height: 36px; font-size: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -19,73 +381,280 @@
     <header class="portal-header">
       <div class="badge-pill badge-diff">Informatik Stufe 5 · Aktuelles Modul</div>
       <h1>Sichere Passwörter</h1>
-      <p class="subtitle">Kriterien für sichere Passwörter kennen und selbst ein starkes, merkbares Passwort erstellen.</p>
+      <p class="subtitle">Was ein Passwort wirklich sicher macht – und wie du dir eines baust, das du dir gut merken kannst.</p>
       <div class="timestamp-pill">
         <span>🟢</span> Schuljahr 2026/27
       </div>
     </header>
 
-    <!-- Zurück-Link -->
-    <a href="../" style="display:inline-flex; align-items:center; gap:6px; color:var(--theme-info); font-size:0.9rem; font-weight:600; text-decoration:none; margin-bottom:1.5rem;">
-      ← Zurück zur Übersicht
-    </a>
+    <!-- Zurück -->
+    <a href="../" class="back-nav">← Zurück zur Übersicht</a>
 
-    <!-- Lernziele -->
-    <div class="alert-card">
-      <div class="alert-icon">🎯</div>
-      <div class="alert-content">
-        <h3>Das lernst du in dieser Reihe</h3>
-        <p>Welche Merkmale ein sicheres Passwort ausmachen – und wie du dir ein starkes Passwort mithilfe eines Satzes selbst baust.</p>
+    <!-- ═══════════════════════════════════════════════
+         1. Kriterien
+    ════════════════════════════════════════════════ -->
+    <h2 class="section-heading">1 &nbsp; Kriterien für sichere Passwörter</h2>
+
+    <div class="criteria-grid">
+      <div class="criteria-item">
+        <div class="criteria-num">1</div>
+        <div class="criteria-text">
+          <strong>Keine persönlichen Daten</strong>
+          <span>Kein Name, Geburtstag, Tier- oder Stadtname.</span>
+        </div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">2</div>
+        <div class="criteria-text">
+          <strong>Mindestlänge: 8 Zeichen</strong>
+          <span>Mehr Zeichen = viel sicherer.</span>
+        </div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">3</div>
+        <div class="criteria-text">
+          <strong>Mindestens eine Zahl</strong>
+          <span>Z. B. eine <strong>0</strong> bis <strong>9</strong>.</span>
+        </div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">4</div>
+        <div class="criteria-text">
+          <strong>Mindestens ein Großbuchstabe</strong>
+          <span>Groß- und Kleinbuchstaben gemischt.</span>
+        </div>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-num">5</div>
+        <div class="criteria-text">
+          <strong>Mindestens ein Sonderzeichen</strong>
+          <div class="criteria-special">! &nbsp; @ &nbsp; # &nbsp; $ &nbsp; % &nbsp; ^ &nbsp; ( &nbsp; ) &nbsp; _ &nbsp; +</div>
+        </div>
       </div>
     </div>
 
-    <!-- Themen der Reihe -->
-    <h2 class="section-heading"><span>📚</span> Themen dieser Reihe</h2>
-    <div class="dashboard-grid">
+    <!-- ═══════════════════════════════════════════════
+         2. Merksatz-Methode
+    ════════════════════════════════════════════════ -->
+    <h2 class="section-heading">2 &nbsp; Die Merksatz-Methode</h2>
+    <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem; margin-top:-0.75rem;">
+      So erzeugst du ein Passwort, das sicher <em>und</em> merkbar ist.
+    </p>
 
-      <div class="class-card" style="border: 2px solid var(--theme-mathe);">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuell im Unterricht</span>
+    <div class="method-steps">
+
+      <!-- Schritt 1 -->
+      <div class="method-step">
+        <div class="method-step-header">
+          <div class="step-badge">Schritt 1</div>
+          <h3>Wähle einen prägenden Satz</h3>
         </div>
-        <h3 class="class-card-title">Kriterien & Passwort-Methode</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Was macht ein Passwort sicher? Länge, Zahlen, Groß-/Kleinschreibung und Sonderzeichen.
-          Eigene Passwörter aus einem Merksatz ableiten.
+        <p>Überlege dir ein Zitat, ein Sprichwort oder einen Satz, den du gut kennst. Er sollte mindestens 8 Wörter haben.</p>
+        <div class="sentence-display">
+          <span class="letter-highlight">W</span>er&nbsp;
+          <span class="letter-highlight">i</span>m&nbsp;
+          <span class="letter-highlight">G</span>lashaus&nbsp;
+          <span class="letter-highlight">s</span>itzt,&nbsp;
+          <span class="letter-highlight">s</span>ollte&nbsp;
+          <span class="letter-highlight">n</span>icht&nbsp;
+          <span class="letter-highlight">m</span>it&nbsp;
+          <span class="letter-highlight">S</span>teinen&nbsp;
+          <span class="letter-highlight">w</span>erfen.
+        </div>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="method-step">
+        <div class="method-step-header">
+          <div class="step-badge">Schritt 2</div>
+          <h3>Schreibe die Anfangsbuchstaben auf</h3>
+        </div>
+        <p>Nimm den ersten Buchstaben jedes Wortes – achte genau auf Groß- und Kleinschreibung!</p>
+        <div class="initials-row">
+          <div class="initial-box original">W</div>
+          <div class="initial-box original">i</div>
+          <div class="initial-box original">G</div>
+          <div class="initial-box original">s</div>
+          <div class="initial-box original">s</div>
+          <div class="initial-box original">n</div>
+          <div class="initial-box original">m</div>
+          <div class="initial-box original">S</div>
+          <div class="initial-box original">w</div>
+        </div>
+        <p style="margin-top:0.75rem; margin-bottom:0;">
+          Ergebnis: &nbsp;
+          <span style="font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.05rem; letter-spacing:2px; color:var(--theme-mathe);">WiGssnmSw</span>
         </p>
-        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Materialien folgen</span>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="method-step">
+        <div class="method-step-header">
+          <div class="step-badge">Schritt 3</div>
+          <h3>Ersetze Buchstaben durch Zahlen oder Sonderzeichen</h3>
+        </div>
+        <p>
+          Ersetze, <strong>falls es Sinn ergibt</strong>, einzelne Buchstaben durch ähnlich aussehende Zahlen oder Sonderzeichen.
+          <strong>Wichtig:</strong> Gleiche Buchstaben immer gleich ersetzen!
+        </p>
+
+        <div class="transform-container">
+          <div class="transform-row">
+            <div class="initial-box unchanged">W</div>
+            <div class="initial-box replaced">i → !</div>
+            <div class="initial-box replaced">G → 6</div>
+            <div class="initial-box unchanged">s</div>
+            <div class="initial-box unchanged">s</div>
+            <div class="initial-box unchanged">n</div>
+            <div class="initial-box unchanged">m</div>
+            <div class="initial-box replaced">S → $</div>
+            <div class="initial-box unchanged">w</div>
+          </div>
+          <div class="arrow-down">↓ &nbsp; Ergebnis</div>
+          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+            <div class="result-box">W!6ssn m$w</div>
+            <div style="font-size:0.82rem; color:var(--text-muted);">
+              Länge: 9 &nbsp;·&nbsp; Zahl: ✓ &nbsp;·&nbsp; Sonderzeichen: ✓ &nbsp;·&nbsp; Groß/Klein: ✓
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem; background:var(--bg-subtle); border-radius:10px; padding:0.85rem 1rem; font-size:0.87rem; color:var(--text-muted);">
+          <strong style="color:var(--text-main);">Aufgabe:</strong>
+          Notiere für deinen eigenen Satz, welche Buchstaben du ersetzt und durch welches Zeichen. Zum Beispiel:
+          A → 4 &nbsp;·&nbsp; B → 8 &nbsp;·&nbsp; i → !
+        </div>
       </div>
 
     </div>
 
-    <!-- iPad Quick Guide -->
-    <div class="ipad-guide">
-      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-        Tipp: Als App auf den Startbildschirm
-      </h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Füge diese Seite deinem iPad-Home-Bildschirm hinzu, um jederzeit schnell darauf zuzugreifen:</p>
-      <div class="ipad-guide-steps">
-        <div class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-text"><strong>Teilen-Symbol</strong>Im Safari-Browser oben rechts auf das Viereck mit Pfeil nach oben tippen.</div>
+    <!-- ═══════════════════════════════════════════════
+         3. Merkkasten
+    ════════════════════════════════════════════════ -->
+    <div class="merke-box">
+      <div class="merke-tag">Merke</div>
+      <ul>
+        <li>
+          <div class="merke-rule-num">1</div>
+          <span>Gleiche Buchstaben werden <strong>immer</strong> durch das gleiche Zeichen ersetzt – in jedem Passwort, das du mit dieser Methode erstellst.</span>
+        </li>
+        <li>
+          <div class="merke-rule-num">2</div>
+          <span>Groß- und Kleinbuchstaben müssen <strong>unbedingt</strong> unterschieden werden. Aus „S" und „s" werden unterschiedliche Zeichen!</span>
+        </li>
+        <li>
+          <div class="merke-rule-num">3</div>
+          <span>Passwörter niemals aufschreiben und <strong>niemals</strong> an andere weitergeben – auch nicht an Freunde.</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         4. Interaktiver Passwort-Checker
+    ════════════════════════════════════════════════ -->
+    <h2 class="section-heading">3 &nbsp; Teste dein Passwort</h2>
+
+    <div class="checker-box">
+      <h3>Passwortstärke prüfen</h3>
+      <p>Gib dein selbst erstelltes Passwort ein – der Checker zeigt dir sofort, welche Kriterien erfüllt sind.</p>
+
+      <div class="pw-input-wrap">
+        <input class="pw-input" type="password" id="pwInput" placeholder="Dein Passwort …" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="pw-toggle" id="pwToggle" type="button" title="Passwort anzeigen/verbergen">👁</button>
+      </div>
+
+      <div class="strength-bar-bg">
+        <div class="strength-bar-fill" id="strengthBar"></div>
+      </div>
+      <div class="strength-label" id="strengthLabel" style="color:var(--text-muted);">Gib ein Passwort ein …</div>
+
+      <div class="criteria-checks">
+        <div class="crit-check" id="ck-len">
+          <div class="check-icon" id="ic-len"></div>
+          Mindestens 8 Zeichen
         </div>
-        <div class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-text"><strong>Zum Home-Bildschirm</strong>Nach unten scrollen und auf <em>„Zum Home-Bildschirm"</em> tippen.</div>
+        <div class="crit-check" id="ck-upper">
+          <div class="check-icon" id="ic-upper"></div>
+          Großbuchstabe vorhanden
         </div>
-        <div class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-text"><strong>Hinzufügen</strong>Oben rechts auf <em>„Hinzufügen"</em> tippen – fertig!</div>
+        <div class="crit-check" id="ck-num">
+          <div class="check-icon" id="ic-num"></div>
+          Zahl vorhanden
+        </div>
+        <div class="crit-check" id="ck-special">
+          <div class="check-icon" id="ic-special"></div>
+          Sonderzeichen vorhanden
+        </div>
+        <div class="crit-check" id="ck-lower">
+          <div class="check-icon" id="ic-lower"></div>
+          Kleinbuchstabe vorhanden
+        </div>
+        <div class="crit-check" id="ck-long">
+          <div class="check-icon" id="ic-long"></div>
+          Mindestens 12 Zeichen (stark)
         </div>
       </div>
     </div>
 
     <!-- Footer -->
     <footer>
-      <p><strong>Informatik Klasse 5</strong> • Schulportal 2026/2027</p>
-      <p style="margin-top: 4px;">Fragen zum Unterricht? Melde dich in <strong>Microsoft Teams</strong>!</p>
+      <p><strong>Informatik Klasse 5</strong> · Schulportal 2026/27</p>
+      <p style="margin-top:4px;">Fragen? Melde dich in <strong>Microsoft Teams</strong>!</p>
     </footer>
 
   </div>
+
+  <script>
+    /* ── Passwort-Checker ── */
+    const input = document.getElementById('pwInput');
+    const toggle = document.getElementById('pwToggle');
+    const bar = document.getElementById('strengthBar');
+    const label = document.getElementById('strengthLabel');
+
+    const checks = {
+      len:     { el: document.getElementById('ck-len'),     ic: document.getElementById('ic-len'),     test: pw => pw.length >= 8 },
+      upper:   { el: document.getElementById('ck-upper'),   ic: document.getElementById('ic-upper'),   test: pw => /[A-ZÄÖÜ]/.test(pw) },
+      lower:   { el: document.getElementById('ck-lower'),   ic: document.getElementById('ic-lower'),   test: pw => /[a-zäöüß]/.test(pw) },
+      num:     { el: document.getElementById('ck-num'),     ic: document.getElementById('ic-num'),     test: pw => /[0-9]/.test(pw) },
+      special: { el: document.getElementById('ck-special'), ic: document.getElementById('ic-special'), test: pw => /[^A-Za-z0-9äöüÄÖÜß]/.test(pw) },
+      long:    { el: document.getElementById('ck-long'),    ic: document.getElementById('ic-long'),    test: pw => pw.length >= 12 }
+    };
+
+    const levels = [
+      { score: 0, label: 'Gib ein Passwort ein …', color: 'var(--text-muted)', fill: 0,   barColor: '#e2e8f0' },
+      { score: 1, label: 'Sehr schwach',            color: '#dc2626',           fill: 10,  barColor: '#dc2626' },
+      { score: 2, label: 'Schwach',                 color: '#ea580c',           fill: 30,  barColor: '#ea580c' },
+      { score: 3, label: 'Mittel',                  color: '#b45309',           fill: 55,  barColor: '#f59e0b' },
+      { score: 4, label: 'Gut',                     color: '#2563eb',           fill: 75,  barColor: '#2563eb' },
+      { score: 5, label: 'Stark',                   color: '#059669',           fill: 90,  barColor: '#059669' },
+      { score: 6, label: 'Sehr stark!',             color: '#059669',           fill: 100, barColor: '#059669' },
+    ];
+
+    function update() {
+      const pw = input.value;
+      let score = 0;
+      Object.values(checks).forEach(c => {
+        const ok = c.test(pw);
+        c.el.classList.toggle('ok', ok);
+        c.ic.textContent = ok ? '✓' : '';
+        if (ok) score++;
+      });
+      if (pw.length === 0) score = 0;
+      const lvl = levels[Math.min(score, levels.length - 1)];
+      bar.style.width = lvl.fill + '%';
+      bar.style.background = lvl.barColor;
+      label.textContent = lvl.label;
+      label.style.color = lvl.color;
+    }
+
+    input.addEventListener('input', update);
+
+    toggle.addEventListener('click', () => {
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      toggle.textContent = isHidden ? '🙈' : '👁';
+    });
+  </script>
 
 </body>
 </html>
