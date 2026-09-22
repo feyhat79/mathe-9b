@@ -4,70 +4,276 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Info 5">
   <title>Informatik Klasse 5 | Schulportal</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+      --shadow-hover: 0 10px 25px rgba(59, 130, 246, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0 1rem 3rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* Header */
+    header { padding: 2.5rem 0 1.5rem 0; text-align: center; }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.85rem;
+      padding: 5px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #059669;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title span {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    /* Topics Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .topic-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: #cbd5e1;
+    }
+
+    .topic-card.active-topic { border: 2px solid var(--primary); }
+
+    .topic-card.active-topic::before {
+      content: "AKTUELL";
+      position: absolute;
+      top: 12px;
+      right: -26px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 28px;
+      transform: rotate(45deg);
+      letter-spacing: 0.5px;
+    }
+
+    .topic-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+
+    .badge-current  { background-color: var(--success-light); color: var(--success); }
+    .badge-upcoming { background-color: var(--warning-light);  color: #b45309; }
+
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .topic-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
+      flex-grow: 1;
+    }
+
+    .btn-topic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.8rem 1.25rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      width: 100%;
+    }
+
+    .btn-topic:hover { background-color: var(--primary-dark); color: white; }
+
+    .btn-disabled {
+      background-color: #f1f5f9;
+      color: #94a3b8;
+      cursor: not-allowed;
+      border: 1px solid var(--border);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
 </head>
 <body>
 
   <div class="container">
 
     <!-- Header -->
-    <header class="portal-header">
-      <div class="badge-pill badge-diff">Informatik Stufe 5 (5b, 5c, 5d, 5e)</div>
+    <header>
+      <div class="badge-pill">Info 5 &bull; Schulportal</div>
       <h1>Informatik Klasse 5</h1>
-
-      <div class="timestamp-pill">
-        <span>🟢</span> Stand: Schuljahr 2026/27
-      </div>
+      <div class="timestamp-pill">Schuljahr 2026/27</div>
     </header>
 
-
-
-    <!-- Modules Grid -->
-    <h2 class="section-heading"><span>📚</span> Unterrichtsmodule &amp; Themen</h2>
-    <div class="dashboard-grid">
+    <!-- Topics Grid -->
+    <h2 class="section-title"><span>I</span> Unterrichtsmodule</h2>
+    <div class="grid">
 
       <!-- Aktuelles Modul: Sichere Passwörter -->
-      <div class="class-card" style="border: 2px solid var(--theme-mathe);">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Aktuelles Modul</span>
+      <div class="topic-card active-topic">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <span class="topic-badge badge-current" style="margin-bottom:0;">Aktuelles Modul</span>
         </div>
-        <h3 class="class-card-title">Sichere Passwörter</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Kriterien für sichere Passwörter kennen und selbst ein starkes Passwort erstellen.</p>
-        <a href="./passwoerter/" class="btn-open" style="background:var(--theme-mathe);">Zum Modul</a>
+        <h3 class="topic-title">Sichere Passwörter</h3>
+        <p class="topic-desc">Kriterien für sichere Passwörter kennen und selbst ein starkes, merkbares Passwort mit der Merksatz-Methode erstellen.</p>
+        <a href="./passwoerter/" class="btn-topic">Modul öffnen</a>
       </div>
 
       <!-- Demnächst: Tastatur & Sonderzeichen -->
-      <div class="class-card">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
+      <div class="topic-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <span class="topic-badge badge-upcoming" style="margin-bottom:0;">Demnächst</span>
         </div>
-        <h3 class="class-card-title">Tastatur &amp; Sonderzeichen</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Die Tastatur kennenlernen und Sonderzeichen gezielt eingeben.</p>
-        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Noch nicht freigeschaltet</span>
+        <h3 class="topic-title">Tastatur &amp; Sonderzeichen</h3>
+        <p class="topic-desc">Die Tastatur kennenlernen und Sonderzeichen gezielt eingeben.</p>
+        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
       </div>
 
       <!-- Demnächst: Binärzahlen -->
-      <div class="class-card">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Demnächst</span>
+      <div class="topic-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <span class="topic-badge badge-upcoming" style="margin-bottom:0;">Demnächst</span>
         </div>
-        <h3 class="class-card-title">Binärzahlen</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Wie Computer mit Nullen und Einsen rechnen – das Binärsystem verstehen und anwenden.</p>
-        <span class="btn-open" style="background:#e2e8f0; color:#94a3b8; cursor:not-allowed;">Noch nicht freigeschaltet</span>
+        <h3 class="topic-title">Binärzahlen</h3>
+        <p class="topic-desc">Wie Computer mit Nullen und Einsen rechnen – das Binärsystem verstehen und anwenden.</p>
+        <span class="btn-topic btn-disabled">Noch nicht freigeschaltet</span>
       </div>
 
     </div>
 
-
-
     <!-- Footer -->
     <footer>
-      <p><strong>Informatik Klasse 5</strong> • Schulportal 2026/2027</p>
+      <p>Informatik Klasse 5 &bull; Schulportal 2026/27</p>
     </footer>
 
   </div>

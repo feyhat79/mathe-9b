@@ -9,9 +9,95 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../../assets/css/main.css">
 
   <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+      /* Aliase für alte Variablennamen */
+      --bg-card: #ffffff;
+      --bg-main: #f8fafc;
+      --border-color: #e2e8f0;
+      --theme-mathe: #3b82f6;
+      --theme-mathe-light: #dbeafe;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0 1rem 3rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    header { padding: 2.5rem 0 1.5rem 0; text-align: center; }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 { font-size: 2.3rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 0.5rem; }
+
+    .subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.85rem;
+      padding: 5px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #059669;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 2.5rem 0 1.25rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    footer { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem; margin-top: 3rem; }
+
     /* ── Lokale Erweiterungen ── */
     .back-nav {
       display: inline-flex;
@@ -23,12 +109,13 @@
       text-decoration: none;
       padding: 6px 14px;
       border-radius: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       margin-bottom: 2rem;
       transition: all 0.2s ease;
     }
-    .back-nav:hover { color: var(--theme-mathe); border-color: var(--theme-mathe); transform: translateX(-2px); }
+    .back-nav:hover { color: var(--primary); border-color: var(--primary); transform: translateX(-2px); }
+
 
     /* Kriterien-Liste */
     .criteria-grid {
@@ -378,22 +465,19 @@
   <div class="container">
 
     <!-- Header -->
-    <header class="portal-header">
-      <div class="badge-pill badge-diff">Informatik Stufe 5 · Aktuelles Modul</div>
+    <header>
+      <div class="badge-pill">Info 5 &bull; Aktuelles Modul</div>
       <h1>Sichere Passwörter</h1>
       <p class="subtitle">Was ein Passwort wirklich sicher macht – und wie du dir eines baust, das du dir gut merken kannst.</p>
-      <div class="timestamp-pill">
-        <span>🟢</span> Schuljahr 2026/27
-      </div>
+      <div class="timestamp-pill">Schuljahr 2026/27</div>
     </header>
 
     <!-- Zurück -->
     <a href="../" class="back-nav">← Zurück zur Übersicht</a>
 
-    <!-- ═══════════════════════════════════════════════
-         1. Kriterien
-    ════════════════════════════════════════════════ -->
-    <h2 class="section-heading">1 &nbsp; Kriterien für sichere Passwörter</h2>
+    <!-- 1. Kriterien -->
+    <h2 class="section-title">1 &nbsp; Kriterien für sichere Passwörter</h2>
+
 
     <div class="criteria-grid">
       <div class="criteria-item">
@@ -436,7 +520,7 @@
     <!-- ═══════════════════════════════════════════════
          2. Merksatz-Methode
     ════════════════════════════════════════════════ -->
-    <h2 class="section-heading">2 &nbsp; Die Merksatz-Methode</h2>
+    <h2 class="section-title">2 &nbsp; Die Merksatz-Methode</h2>
     <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem; margin-top:-0.75rem;">
       So erzeugst du ein Passwort, das sicher <em>und</em> merkbar ist.
     </p>
@@ -552,7 +636,7 @@
     <!-- ═══════════════════════════════════════════════
          4. Interaktiver Passwort-Checker
     ════════════════════════════════════════════════ -->
-    <h2 class="section-heading">3 &nbsp; Teste dein Passwort</h2>
+    <h2 class="section-title">3 &nbsp; Teste dein Passwort</h2>
 
     <div class="checker-box">
       <h3>Passwortstärke prüfen</h3>
