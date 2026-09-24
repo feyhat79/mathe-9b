@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Dreiecks-Topologie & Redundantes Routing | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+         setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Füller-Königsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;        /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Füllertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --font-scale: 1;
+    }
+
+    /* BEAMER-MODUS */
+    body.beamer-mode {
+      --font-scale: 1.15;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    body.beamer-mode .card {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body.beamer-mode .sub-card {
+      background-color: #27354a;
+      border-color: #475569;
+      color: #f8fafc;
+    }
+    body.beamer-mode .merke-box {
+      background-color: #1a2234;
+      border-color: #ef4444;
+    }
+    body.beamer-mode .merke-content {
+      color: #f8fafc !important;
+    }
+    body.beamer-mode .code-pill {
+      background: #0f172a;
+      border-color: #475569;
+      color: #93c5fd;
+    }
+    body.beamer-mode .sim-diagram {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: calc(11pt * var(--font-scale));
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* PRESENTER TOOLBAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary-focus);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-action:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .btn-action.active {
+      background: var(--primary-focus);
+      border-color: #60a5fa;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: calc(2rem * var(--font-scale));
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+      line-height: 1.25;
+    }
+    body.beamer-mode h1 {
+      color: #93c5fd;
+    }
+
+    .lead-subtitle {
+      color: var(--text-muted);
+      font-size: calc(1.05rem * var(--font-scale));
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-badge {
+      background: var(--primary);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: calc(1.25rem * var(--font-scale));
+      font-weight: 700;
+      color: var(--text);
+    }
+    body.beamer-mode .step-title {
+      color: #f8fafc;
+    }
+
+    /* SUB-CARDS & GRIDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 0.75rem 0;
+    }
+    @media (max-width: 760px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+
+    .highlight-label {
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 3px;
+    }
+    body.beamer-mode .highlight-label {
+      color: #60a5fa;
+    }
+
+    /* PROBLEM BOX */
+    .conflict-box {
+      background: #fffbeb;
+      border-left: 4px solid var(--warning);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1rem 0;
+      font-size: calc(10.5pt * var(--font-scale));
+    }
+    body.beamer-mode .conflict-box {
+      background: #27272a;
+      border-left-color: #f59e0b;
+    }
+
+    .conflict-title {
+      font-weight: 800;
+      color: #b45309;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    body.beamer-mode .conflict-title {
+      color: #fbbf24;
+    }
+
+    /* CODE PILL */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      border: 1px solid #bfdbfe;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* INSTRUCTION STEPS */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1rem 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+    body.beamer-mode .step-item {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    .step-marker {
+      width: 30px;
+      height: 30px;
+      background: var(--primary-focus);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+    .step-content h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    body.beamer-mode .step-content h4 {
+      color: #93c5fd;
+    }
+
+    /* DIAGRAMM CONTAINER */
+    .sim-diagram {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    /* TABELLE */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(10pt * var(--font-scale));
+      margin-top: 8px;
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    body.beamer-mode .calc-table th {
+      background: #1e293b;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+    .calc-table td {
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      vertical-align: middle;
+    }
+    body.beamer-mode .calc-table td {
+      border-color: #334155;
+    }
+
+    /* DER ROTE MERKSATZ-KASTEN (ORIGINAL GEMINI STANDARD) */
+    .merke-box {
+      border: 2.5px solid var(--danger);
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 14px 18px;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -11px;
+      left: 14px;
+      background: var(--danger);
+      color: #ffffff;
+      font-size: 8.5pt;
+      font-weight: 800;
+      padding: 1px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-content {
+      color: #111827; /* Zwingend schwarz/dunkel */
+      font-size: calc(11pt * var(--font-scale));
+      line-height: 1.55;
+    }
+
+    /* INTERAKTIVE FRAGEN / DETEKTIV */
+    .question-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .question-card {
+      background: #1e293b;
+      border-color: #475569;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    body.beamer-mode .question-title {
+      color: #f8fafc;
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    body.beamer-mode .btn-reveal {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+
+    .question-answer {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.95rem;
+      color: #166534;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    body.beamer-mode .question-answer {
+      color: #86efac;
+    }
+    .question-answer.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER TOOLBAR
+       ======================================================== -->
+  <div class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
+      <span style="font-weight: 700; font-size: 0.92rem;">
+        Informatik EF • Stufe 5: Dreiecks-Topologie & Redundantes Routing
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="toggleAllAnswers()">Alle Lösungen aufdecken</button>
+      <button class="btn-action" id="btnBeamer" onclick="toggleBeamer()">Beamer-Modus</button>
+      <button class="btn-action" onclick="window.print()">Drucken / PDF</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Thema 1: Rechnernetze (Stufe 5)</div>
+      <h1>Dreiecks-Topologie &amp; Redundante Ausweichrouten</h1>
+      <p class="lead-subtitle">
+        Wie Rechnernetze durch maschenförmige Verkabelung ausfallsicher werden, wie Daten bei einem Leitungsbruch über Ausweichrouten umgeleitet werden – und worauf man bei der Umleitung von Hin- und Rückweg achten muss.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         TEIL 1: DIE PROBLEMSTELLUNG: AUSFALLSICHERHEIT IM INTERNET
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Die Problemstellung: Wenn das Hauptkabel bricht</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        In einer einfachen Kette aus zwei Routern gibt es für Datenpakete zwischen Standort A (<span class="code-pill">192.168.0.0 / 24</span>) und Standort B (<span class="code-pill">192.168.1.0 / 24</span>) nur einen einzigen Übertragungsweg. Fällt das Verbindungskabel durch Bauarbeiten oder einen Hardwaredefekt aus, bricht die gesamte Kommunikation zusammen.
+      </p>
+
+      <div class="conflict-box">
+        <div class="conflict-title">Das Prinzip der Redundanz:</div>
+        Um Netzwerke ausfallsicher zu machen, verbindet man Router in einer <strong>maschen- oder dreiecksförmigen Topologie</strong>. 
+        <br><br>
+        Durch das Hinzufügen eines dritten Vermittlungsrechners <strong>VR-2</strong> (z. B. am Standort C mit <span class="code-pill">192.168.5.0 / 24</span>) entstehen <strong>drei unabhängige Verbindungskabel (Transfernetze)</strong> zwischen den drei Vermittlungsrechnern.
+        <br><br>
+        <strong>Die zentrale Aufgabe:</strong>
+        Wenn das direkte Kabel zwischen VR-0 und VR-1 ausfällt, müssen wir den Vermittlungsrechnern eine <strong>Alternative über VR-2 (Multi-Hop)</strong> beibringen.
+      </div>
+
+      <div class="grid-2">
+        <div class="sub-card" style="border-left: 3px solid var(--danger);">
+          <strong style="color: var(--danger);">Gefahr beim Ausfall (Single Point of Failure):</strong><br>
+          Wenn eine Direktverbindung bricht und keine Ausweichroute konfiguriert ist, verwirft der Router Pakete mit einer Fehlermeldung (<em>Destination Host Unreachable</em>).
+        </div>
+        <div class="sub-card" style="border-left: 3px solid var(--success);">
+          <strong style="color: var(--success);">Die Lösung: Redundantes Routing:</strong><br>
+          Tritt der Notfall ein, wird das Zielnetz über einen Zwischen-Router (<em>Next Hop</em>) adressiert. Daten umfahren den Engpass über den sogenannten Transit-Router.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 2: NETZWERKTOPOLOGIE & ADRESSPLAN
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Dreiecks-Topologie in Filius (3 Netzwerke, 3 Transfernetze)</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Nachfolgend siehst du die Netzwerktopologie aus unserer Filius-Datei <span class="code-pill">2VR-Neu.fls</span> mit drei lokalen Netzen und drei verbindenden Transfernetzen:
+      </p>
+
+      <!-- SVG TOPOLOGY DIAGRAM -->
+      <div class="sim-diagram">
+        <svg viewBox="0 0 900 440" style="width: 100%; height: auto; font-family: 'Calibri', sans-serif;">
+          <!-- HINTERGRÜNDE DER DREI LOKALEN NETZE -->
+          <!-- Netz 0 (gelb - unten links) -->
+          <rect x="20" y="270" width="260" height="155" rx="10" fill="#fef9c3" stroke="#eab308" stroke-width="2" />
+          <text x="35" y="295" fill="#854d0e" font-size="14" font-weight="bold">NETZWERK 0 (192.168.0.0 / 24)</text>
+
+          <!-- Netz 1 (grün - unten rechts) -->
+          <rect x="620" y="270" width="260" height="155" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2" />
+          <text x="635" y="295" fill="#166534" font-size="14" font-weight="bold">NETZWERK 1 (192.168.1.0 / 24)</text>
+
+          <!-- Netz 5 (violett - oben Mitte) -->
+          <rect x="320" y="15" width="260" height="135" rx="10" fill="#f3e8ff" stroke="#a855f7" stroke-width="2" />
+          <text x="335" y="38" fill="#6b21a8" font-size="14" font-weight="bold">NETZWERK 5 (192.168.5.0 / 24)</text>
+
+          <!-- VERBINDUNGSLINIEN ZU SWITCHES & COMPUTERN -->
+          <!-- Netz 0 Geräte zu Switch 0 -->
+          <line x1="85" y1="355" x2="165" y2="355" stroke="#64748b" stroke-width="2" />
+          <line x1="165" y1="355" x2="230" y2="330" stroke="#1e3a8a" stroke-width="2.5" />
+
+          <!-- Netz 1 Geräte zu Switch 1 -->
+          <line x1="815" y1="355" x2="735" y2="355" stroke="#64748b" stroke-width="2" />
+          <line x1="735" y1="355" x2="670" y2="330" stroke="#1e3a8a" stroke-width="2.5" />
+
+          <!-- Netz 5 Geräte zu VR-2 -->
+          <line x1="450" y1="95" x2="450" y2="175" stroke="#6b21a8" stroke-width="2.5" />
+
+          <!-- TRANSFERNETZE (DAS DREIECK ZWISCHEN ROUTERN) -->
+          <!-- Transfernetz 2 (VR-0 <-> VR-1: UNTEN DIREKTVERBINDUNG) -->
+          <line x1="280" y1="330" x2="620" y2="330" stroke="#dc2626" stroke-width="3.5" stroke-dasharray="8,5" />
+          <rect x="400" y="315" width="100" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" />
+          <text x="450" y="332" text-anchor="middle" fill="#dc2626" font-size="10.5" font-weight="bold">Transfer 2: .2.0/24 (DEFEKT)</text>
+
+          <!-- Transfernetz 3 (VR-0 <-> VR-2: LINKS DIAGONAL) -->
+          <line x1="250" y1="300" x2="410" y2="200" stroke="#0284c7" stroke-width="3.5" />
+          <text x="305" y="240" fill="#0369a1" font-size="10.5" font-weight="bold">Transfer 3 (.3.0/24)</text>
+
+          <!-- Transfernetz 4 (VR-1 <-> VR-2: RECHTS DIAGONAL) -->
+          <line x1="650" y1="300" x2="490" y2="200" stroke="#0284c7" stroke-width="3.5" />
+          <text x="560" y="240" fill="#0369a1" font-size="10.5" font-weight="bold">Transfer 4 (.4.0/24)</text>
+
+          <!-- GERÄTE BOXEN -->
+          <!-- Laptop 0.10 -->
+          <rect x="35" y="330" width="100" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="45" y="350" fill="#111827" font-size="11" font-weight="bold">Laptop 0.10</text>
+          <text x="45" y="367" fill="#475569" font-size="10">192.168.0.10</text>
+
+          <!-- Laptop 1.10 -->
+          <rect x="765" y="330" width="100" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="775" y="350" fill="#111827" font-size="11" font-weight="bold">Laptop 1.10</text>
+          <text x="775" y="367" fill="#475569" font-size="10">192.168.1.10</text>
+
+          <!-- Server / Laptop 5.10 -->
+          <rect x="400" y="60" width="100" height="48" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+          <text x="410" y="80" fill="#111827" font-size="11" font-weight="bold">Server 5.10</text>
+          <text x="410" y="97" fill="#475569" font-size="10">192.168.5.10</text>
+
+          <!-- ROUTER BOXEN (VR-0, VR-1, VR-2) -->
+          <!-- VR-0 (unten links) -->
+          <rect x="210" y="300" width="70" height="60" rx="8" fill="#1e3a8a" stroke="#172554" stroke-width="2" />
+          <text x="245" y="327" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">VR-0</text>
+          <text x="245" y="344" text-anchor="middle" fill="#93c5fd" font-size="9">.0.1 / .2.1 / .3.1</text>
+
+          <!-- VR-1 (unten rechts) -->
+          <rect x="620" y="300" width="70" height="60" rx="8" fill="#1e3a8a" stroke="#172554" stroke-width="2" />
+          <text x="655" y="327" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">VR-1</text>
+          <text x="655" y="344" text-anchor="middle" fill="#93c5fd" font-size="9">.1.1 / .2.2 / .4.1</text>
+
+          <!-- VR-2 (oben Mitte - TRANSIT ROUTER) -->
+          <rect x="415" y="160" width="70" height="60" rx="8" fill="#7c3aed" stroke="#5b21b6" stroke-width="2" />
+          <text x="450" y="187" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">VR-2</text>
+          <text x="450" y="204" text-anchor="middle" fill="#e9d5ff" font-size="9">.5.1 / .3.2 / .4.2</text>
+
+          <!-- AUSWEICHPFAD PFEILE -->
+          <path d="M 270 300 Q 320 220 410 185" fill="none" stroke="#059669" stroke-width="3" stroke-dasharray="4,3" />
+          <path d="M 490 185 Q 580 220 630 300" fill="none" stroke="#059669" stroke-width="3" stroke-dasharray="4,3" />
+          <text x="450" y="235" text-anchor="middle" fill="#059669" font-size="11" font-weight="bold">Ausweichpfad (Umleitung über VR-2)</text>
+        </svg>
+      </div>
+
+      <!-- ADRESSIERUNGSTABELLE DER SCHNITTSTELLEN -->
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th>Vermittlungsrechner</th>
+            <th>Schnittstelle & IP-Adresse</th>
+            <th>Zugehöriges Subnetz</th>
+            <th>Funktion / Verbindung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="3"><strong>VR-0</strong> (Standort A)</td>
+            <td>Schnittstelle 0: <span class="code-pill">192.168.0.1</span></td>
+            <td><span class="code-pill">192.168.0.0 / 24</span></td>
+            <td>Gateway für lokales Netzwerk 0</td>
+          </tr>
+          <tr>
+            <td>Schnittstelle 1: <span class="code-pill">192.168.2.1</span></td>
+            <td><span class="code-pill">192.168.2.0 / 24</span></td>
+            <td>Transfernetz 2 direkt zu VR-1 (aktuell defekt)</td>
+          </tr>
+          <tr style="background: #eff6ff;">
+            <td>Schnittstelle 2: <span class="code-pill">192.168.3.1</span></td>
+            <td><span class="code-pill">192.168.3.0 / 24</span></td>
+            <td>Transfernetz 3 zu VR-2 (Ausweichpfad)</td>
+          </tr>
+          <tr>
+            <td rowspan="3"><strong>VR-1</strong> (Standort B)</td>
+            <td>Schnittstelle 1: <span class="code-pill">192.168.1.1</span></td>
+            <td><span class="code-pill">192.168.1.0 / 24</span></td>
+            <td>Gateway für lokales Netzwerk 1</td>
+          </tr>
+          <tr>
+            <td>Schnittstelle 0: <span class="code-pill">192.168.2.2</span></td>
+            <td><span class="code-pill">192.168.2.0 / 24</span></td>
+            <td>Transfernetz 2 direkt zu VR-0 (aktuell defekt)</td>
+          </tr>
+          <tr style="background: #eff6ff;">
+            <td>Schnittstelle 2: <span class="code-pill">192.168.4.1</span></td>
+            <td><span class="code-pill">192.168.4.0 / 24</span></td>
+            <td>Transfernetz 4 zu VR-2 (Ausweichpfad)</td>
+          </tr>
+          <tr style="background: #f5f3ff;">
+            <td rowspan="3"><strong>VR-2</strong> (Standort C / Transit)</td>
+            <td>Schnittstelle 2: <span class="code-pill">192.168.5.1</span></td>
+            <td><span class="code-pill">192.168.5.0 / 24</span></td>
+            <td>Gateway für lokales Netzwerk 5 (Server)</td>
+          </tr>
+          <tr style="background: #f5f3ff;">
+            <td>Schnittstelle 0: <span class="code-pill">192.168.3.2</span></td>
+            <td><span class="code-pill">192.168.3.0 / 24</span></td>
+            <td>Verbindung zu VR-0 (Next Hop für VR-0)</td>
+          </tr>
+          <tr style="background: #f5f3ff;">
+            <td>Schnittstelle 1: <span class="code-pill">192.168.4.2</span></td>
+            <td><span class="code-pill">192.168.4.0 / 24</span></td>
+            <td>Verbindung zu VR-1 (Next Hop für VR-1)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ======================================================
+         TEIL 3: SCHRITT-FÜR-SCHRITT ANLEITUNG ZUR UMLEITUNG
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Geführte Anleitung: Ausweichroute schalten</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Führe die folgenden Schritte in Filius mit deiner geöffneten Datei <span class="code-pill">2VR-Neu.fls</span> durch:
+      </p>
+
+      <div class="step-list">
+        
+        <!-- Schritt 1 -->
+        <div class="step-item">
+          <div class="step-marker">1</div>
+          <div class="step-content">
+            <h4>Ausfall der Hauptleitung simulieren</h4>
+            <p>
+              Wechsle in Filius in den <strong>Entwurfsmodus</strong>. Klicke auf das rote Scheren-Symbol und lösche die Verbindung zwischen <strong>VR-0</strong> und <strong>VR-1</strong> (Transfernetz 2).
+              <br>
+              Starte den Aktionsmodus und sende von <span class="code-pill">192.168.0.10</span> einen Ping an <span class="code-pill">192.168.1.10</span>.
+              <br>
+              <strong>Beobachtung:</strong> Der Ping schlägt fehl, da VR-0 versucht, das Paket über das gelöschte Kabel an <span class="code-pill">192.168.2.2</span> zu senden.
+            </p>
+          </div>
+        </div>
+
+        <!-- Schritt 2 -->
+        <div class="step-item">
+          <div class="step-marker">2</div>
+          <div class="step-content">
+            <h4>Hinweg umleiten: Weiterleitungstabelle auf VR-0 anpassen</h4>
+            <p>
+              Öffne die Konfiguration von <strong>VR-0</strong> und passe die Zeile für das Zielnetz <span class="code-pill">192.168.1.0 / 24</span> an:
+              <br>
+              • <strong>Ziel-Netzadresse:</strong> <span class="code-pill">192.168.1.0</span>
+              <br>
+              • <strong>Subnetzmaske:</strong> <span class="code-pill">255.255.255.0</span>
+              <br>
+              • <strong>Nächster Rechner (Next Hop):</strong> <span class="code-pill">192.168.3.2</span> <em>(die Schnittstelle von VR-2 im Transfernetz 3)</em>
+              <br>
+              • <strong>Eigene Schnittstelle:</strong> <span class="code-pill">192.168.3.1</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Schritt 3 -->
+        <div class="step-item">
+          <div class="step-marker">3</div>
+          <div class="step-content">
+            <h4>Rückweg umleiten: Weiterleitungstabelle auf VR-1 anpassen</h4>
+            <p>
+              Öffne die Konfiguration von <strong>VR-1</strong> und passe die Zeile für das Zielnetz <span class="code-pill">192.168.0.0 / 24</span> an:
+              <br>
+              • <strong>Ziel-Netzadresse:</strong> <span class="code-pill">192.168.0.0</span>
+              <br>
+              • <strong>Subnetzmaske:</strong> <span class="code-pill">255.255.255.0</span>
+              <br>
+              • <strong>Nächster Rechner (Next Hop):</strong> <span class="code-pill">192.168.4.2</span> <em>(die Schnittstelle von VR-2 im Transfernetz 4)</em>
+              <br>
+              • <strong>Eigene Schnittstelle:</strong> <span class="code-pill">192.168.4.1</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Schritt 4 -->
+        <div class="step-item">
+          <div class="step-marker">4</div>
+          <div class="step-content">
+            <h4>Erfolgs-Check mit Ping und traceroute</h4>
+            <p>
+              Wechsle wieder in den Aktionsmodus und sende erneut von <span class="code-pill">192.168.0.10</span> den Befehl im Terminal:
+              <br>
+              <span class="code-pill">ping 192.168.1.10</span>
+              <br>
+              Prüfe anschließend den Weg der Datenpakete über Zwischenstationen mit:
+              <br>
+              <span class="code-pill">traceroute 192.168.1.10</span>
+              <br>
+              <strong>Ergebnis:</strong> Der Pfad verläuft nun über 2 Hops (<span class="code-pill">192.168.3.2</span> $\rightarrow$ <span class="code-pill">192.168.4.1</span> $\rightarrow$ Ziel)!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 4: MERKSATZ (KÖNIGSBALU & ROTER MERKKASTEN)
+         ====================================================== -->
+    <div class="merke-box">
+      <div class="merke-tag">MERKE</div>
+      <div class="merke-content">
+        <strong>Redundanz, Multi-Hop-Routing &amp; Transit-Vermittlung:</strong>
+        <br><br>
+        1. <strong>Redundante Netzwerktopologie:</strong> Wenn Vermittlungsrechner maschenförmig im Kreis oder Dreieck verbunden sind, existieren mehrere unabhängige Pfade zwischen den Netzwerken.
+        <br><br>
+        2. <strong>Multi-Hop-Routing:</strong> Erreicht ein Paket sein Zielnetz nicht auf direktem Weg, leitet der Router das Paket an einen Zwischen-Router (<em>Transit-Router</em>) weiter. Das Paket durchläuft dabei mehrere Zwischenstationen (<em>Hops</em>).
+        <br><br>
+        3. <strong>Zwei-Wege-Pflicht (Bidirektionalität):</strong> Bei jeder Routing-Umleitung müssen stets **sowohl der Hinweg als auch der Rückweg** angepasst werden. Fehlt die Rückroute auf dem Ziel-Router, kommen die Antwort-Pakete (<em>Echo Reply</em>) nicht beim Quell-Rechner an.
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TEIL 5: DETEKTIV-CHECK & VERSTÄNDNISFRAGEN
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">4</span>
+          <h2 class="step-title">Detektiv-Check: Verständnisfragen &amp; Fehlerdiagnose</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Testet euer Wissen zum redundanten Routing. Klickt auf die Buttons, um eure Vermutungen mit den Erklärungen abzugleichen.
+      </p>
+
+      <!-- FRAGE 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(this)">
+          <div class="question-title">
+            1. Frage: Der Ping schlägt fehl, obwohl VR-0 die neue Umleitung über VR-2 kennt. Woran liegt das?
+          </div>
+          <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer">
+          • <strong>Ursache:</strong> Auf VR-1 wurde die Rückroute für das Netzwerk <span class="code-pill">192.168.0.0 / 24</span> nicht angepasst!
+          <br>
+          • <strong>Erklärung:</strong> Das Ping-Paket (<em>Echo Request</em>) kommt zwar erfolgreich über VR-0 und VR-2 bei Laptop <span class="code-pill">192.168.1.10</span> an. Wenn dieser jedoch antwortet (<em>Echo Reply</em>), versucht VR-1 die Antwort immer noch über das defekte Direktkabel (<span class="code-pill">192.168.2.1</span>) zu schicken und verwirft das Paket.
+        </div>
+      </div>
+
+      <!-- FRAGE 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(this)">
+          <div class="question-title">
+            2. Frage: Muss auf dem Transit-Router VR-2 eine spezielle Weiterleitungstabelle für Umleitungen eingetragen werden?
+          </div>
+          <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer">
+          • <strong>Antwort:</strong> Nein, wenn VR-2 bereits alle direkt angeschlossenen Transfernetze kennt!
+          <br>
+          • <strong>Erklärung:</strong> Da VR-2 direkt mit Transfernetz 3 (<span class="code-pill">192.168.3.0 / 24</span> an VR-0) und Transfernetz 4 (<span class="code-pill">192.168.4.0 / 24</span> an VR-1) verkabelt ist, weiß VR-2 von Natur aus, an welcher Schnittstelle VR-0 und VR-1 hängen. Er leitet Transit-Pakete automatisch an den Ziel-Router weiter.
+        </div>
+      </div>
+
+      <!-- FRAGE 3 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(this)">
+          <div class="question-title">
+            3. Frage: Im echten Internet gibt es Millionen von Routern. Warum reicht unser statisches Routing dort nicht aus?
+          </div>
+          <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer">
+          • <strong>Antwort:</strong> Manuelles Eintippen von Hand ist bei ständigen Kabelbrüchen und Millionen Routern unmöglich.
+          <br>
+          • <strong>Erklärung:</strong> Im echten Internet nutzen Router **dynamische Routing-Protokolle** (wie OSPF oder BGP). Die Router unterhalten sich laufend untereinander und bemerken Leitungsausfälle automatisch innerhalb von Millisekunden. Sie berechnen Ausweichrouten selbstständig neu, ohne dass ein Administrator eingreifen muss.
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // BEAMER MODUS TOGGLE
+    function toggleBeamer() {
+      document.body.classList.toggle('beamer-mode');
+      const btn = document.getElementById('btnBeamer');
+      if (document.body.classList.contains('beamer-mode')) {
+        btn.classList.add('active');
+        btn.innerText = 'Beamer-Modus (An)';
+      } else {
+        btn.classList.remove('active');
+        btn.innerText = 'Beamer-Modus';
+      }
+    }
+
+    // ANTWORTEN EINZELN AUFDECKEN
+    function toggleAnswer(element) {
+      let card = element.closest('.question-card');
+      let answer = card.querySelector('.question-answer');
+      let btn = card.querySelector('.btn-reveal');
+      
+      if (answer.classList.contains('show')) {
+        answer.classList.remove('show');
+        btn.innerText = 'Antwort & Erklärung aufdecken';
+      } else {
+        answer.classList.add('show');
+        btn.innerText = 'Antwort verbergen';
+      }
+    }
+
+    // ALLE ANTWORTEN AUFDECKEN / VERBERGEN
+    let allShow = false;
+    function toggleAllAnswers() {
+      allShow = !allShow;
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      
+      answers.forEach(ans => {
+        if (allShow) ans.classList.add('show');
+        else ans.classList.remove('show');
+      });
+
+      buttons.forEach(btn => {
+        if (allShow) btn.innerText = 'Antwort verbergen';
+        else btn.innerText = 'Antwort & Erklärung aufdecken';
+      });
+    }
+  </script>
+</body>
+</html>
