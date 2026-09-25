@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Prolog Sicherung: Datenfluss &amp; Inferenz | Informatik Diff-10</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+  
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #1e293b;
+      --primary-light: #eff6ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --radius-sm: 5px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    .btn-swish-ext {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #ffffff;
+      background: var(--primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-swish-ext:hover {
+      background: #172554;
+      transform: translateY(-1px);
+    }
+
+    /* Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-diff {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 780px;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+    }
+
+    .step-marker {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Interactive Stepper Visualizer */
+    .visualizer-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .scen-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .scen-btn {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .scen-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+
+    .code-stage {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .step-info-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .ctrl-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-nav-prev {
+      background: #334155;
+      color: #f8fafc;
+    }
+    .btn-nav-prev:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .btn-nav-next {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-nav-next:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+
+    /* Explanation Cards */
+    .rule-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      background: var(--bg);
+      margin-bottom: 1rem;
+    }
+
+    .rule-card h4 {
+      font-size: 1.05rem;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Interactive Check / Quiz */
+    .quiz-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      background: #ffffff;
+    }
+
+    .quiz-question {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .solution-btn {
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 0.85rem;
+      background: #f1f5f9;
+      border-left: 3px solid var(--primary);
+      border-radius: 4px;
+      font-size: 0.92rem;
+    }
+
+    .solution-content.visible {
+      display: block;
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">← Zurück zur Diff-10 Übersicht</a>
+      <a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="btn-swish-ext">
+        SWISH-Editor im Web öffnen ↗
+      </a>
+    </div>
+
+    <!-- Portal Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-diff">Informatik Differenzierung • Klasse 10</div>
+      <h1>Sicherung: Datenfluss &amp; Inferenz in Prolog</h1>
+      <p class="subtitle">Wie Prolog denkt: Unifikation, die Zwischenvariable als Stafette, der Operator \= und die anonyme Variable _.</p>
+    </header>
+
+    <!-- Modul 1: Interaktive Simulation -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="step-marker">1</div>
+        <h2 class="section-title">Interaktiver Datenfluss-Visualisierer</h2>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.25rem;">
+        Wähle ein Szenario und klicke auf <strong>„Weiter ▶“</strong>, um Schritt für Schritt nachzuvollziehen, wie Prolog Variablen bindet und Werte von links nach rechts durchreicht.
+      </p>
+
+      <div class="visualizer-box">
+        <!-- Szenario Auswahl -->
+        <div class="scen-tabs">
+          <button id="scen-tab-1" class="scen-btn active" onclick="switchVisualizerScenario(1)">
+            1. Zwischenvariable (grossvater/2)
+          </button>
+          <button id="scen-tab-2" class="scen-btn" onclick="switchVisualizerScenario(2)">
+            2. Ungleichheit \= (geschwister/2)
+          </button>
+          <button id="scen-tab-3" class="scen-btn" onclick="switchVisualizerScenario(3)">
+            3. Anonyme Variable _ (hat_kinder/1)
+          </button>
+        </div>
+
+        <!-- Query -->
+        <div style="font-size:0.82rem; color:#94a3b8; font-family:'JetBrains Mono', monospace; margin-bottom:6px;">
+          Anfrage an das System: <span id="v-query" style="color:#60a5fa; font-weight:700;">?- grossvater(kronos, ares).</span>
+        </div>
+
+        <!-- Visuelle Regel-Bühne -->
+        <div id="v-rule-stage" class="code-stage">
+          <!-- Dynamischer Inhalt -->
+        </div>
+
+        <!-- Schritt-Erklärung -->
+        <div class="step-info-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span id="v-badge" style="background:#2563eb; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:4px;">
+              Schritt 0 / 4
+            </span>
+            <span id="v-status" style="font-family:'JetBrains Mono', monospace; font-size:0.82rem; color:#cbd5e1; font-weight:700;">
+              Ausstehend
+            </span>
+          </div>
+          <div id="v-title" style="font-size:0.95rem; font-weight:700; color:#ffffff; margin-bottom:4px;">
+            Startzustand: Anfrage empfangen
+          </div>
+          <p id="v-desc" style="font-size:0.88rem; color:#94a3b8; line-height:1.5;">
+            Prolog sucht eine passende Regel für die Anfrage.
+          </p>
+        </div>
+
+        <!-- Steuerung -->
+        <div class="ctrl-bar">
+          <div style="display:flex; gap:8px;">
+            <button id="v-btn-prev" class="ctrl-btn btn-nav-prev" onclick="stepVisualizer(-1)" disabled>
+              ◀ Zurück
+            </button>
+            <button id="v-btn-next" class="ctrl-btn btn-nav-next" onclick="stepVisualizer(1)">
+              Weiter ▶
+            </button>
+            <button class="ctrl-btn btn-reset" onclick="resetVisualizer()">
+              Neu starten
+            </button>
+          </div>
+          <div style="font-size:0.82rem; color:#64748b;">
+            Tipp: Nutze die Vor-/Zurück-Tasten auf dem iPad.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modul 2: Die 3 Kernkonzepte im Überblick -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="step-marker">2</div>
+        <h2 class="section-title">Die 3 Kernregeln zur Inferenz</h2>
+      </div>
+
+      <!-- Konzept 1 -->
+      <div class="rule-card">
+        <h4>1. Die Zwischenvariable als Daten-Stafette</h4>
+        <p style="font-size:0.95rem; margin-bottom:0.5rem;">
+          In Prolog gibt es keine Rückgabewerte. Daten fließen von links nach rechts, indem <strong>dieselbe Variable</strong> in zwei Teilzielen auftaucht:
+        </p>
+        <div class="code-pill" style="display:block; padding:8px 12px; margin-bottom:0.5rem; background:#fff;">
+          grossvater(G, K) :- vater(G, <strong style="color:#d97706;">E</strong>) , elternteil(<strong style="color:#d97706;">E</strong>, K).
+        </div>
+        <ul style="font-size:0.9rem; color:var(--text-muted); padding-left:1.25rem;">
+          <li>Ziel 1 bindet <span class="code-pill">E</span> an einen konkreten Wert aus der Wissensbasis (z. B. <code class="code-pill">E = zeus</code>).</li>
+          <li>Ziel 2 übernimmt diesen gebundenen Wert und prüft <code class="code-pill">elternteil(zeus, K)</code>.</li>
+        </ul>
+      </div>
+
+      <!-- Konzept 2 -->
+      <div class="rule-card">
+        <h4>2. Das Identitätsproblem &amp; der Operator \=</h4>
+        <p style="font-size:0.95rem; margin-bottom:0.5rem;">
+          Unterschiedliche Variablennamen bedeuten in Prolog <strong>nicht automatisch unterschiedliche Objekte</strong>:
+        </p>
+        <div class="code-pill" style="display:block; padding:8px 12px; margin-bottom:0.5rem; background:#fff;">
+          geschwister(X, Y) :- elternteil(E, X), elternteil(E, Y), <strong style="color:#dc2626;">X \= Y</strong>.
+        </div>
+        <ul style="font-size:0.9rem; color:var(--text-muted); padding-left:1.25rem;">
+          <li>Ohne <code class="code-pill">X \= Y</code> ist jede Person Geschwister von sich selbst!</li>
+          <li><code class="code-pill">X \= Y</code> muss <strong>am Ende</strong> stehen, wenn $X$ und $Y$ bereits feste Werte haben.</li>
+        </ul>
+      </div>
+
+      <!-- Konzept 3 -->
+      <div class="rule-card">
+        <h4>3. Die anonyme Variable _ (Scheuklappen-Prinzip)</h4>
+        <p style="font-size:0.95rem; margin-bottom:0.5rem;">
+          Wird eingesetzt, wenn wir nur prüfen wollen, <strong>ob</strong> ein passender Fakt existiert, der Name aber irrelevant ist:
+        </p>
+        <div class="code-pill" style="display:block; padding:8px 12px; margin-bottom:0.5rem; background:#fff;">
+          hat_kinder(X) :- elternteil(X, <strong style="color:#7c3aed;">_</strong>).
+        </div>
+        <ul style="font-size:0.9rem; color:var(--text-muted); padding-left:1.25rem;">
+          <li>Vermeidet Compiler-Warnungen (*Singleton variables*).</li>
+          <li>Jeder Unterstrich <code class="code-pill">_</code> ist unabhängig – zwei Unterstriche verlangen <strong>keine</strong> Gleichheit!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Modul 3: Interaktive Diagnose & Selbsttest -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="step-marker">3</div>
+        <h2 class="section-title">Selbsttest: Finde den Denkfehler</h2>
+      </div>
+
+      <!-- Frage 1 -->
+      <div class="quiz-card">
+        <div class="quiz-question">1. Warum scheitert die folgende Regel für Großeltern?</div>
+        <div class="code-pill" style="display:block; padding:6px 10px; margin-bottom:8px;">
+          grossvater(G, K) :- vater(G, X), elternteil(Y, K).
+        </div>
+        <button class="solution-btn" onclick="toggleSolution('sol-1')">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol-1" class="solution-content">
+          <strong>Erklärung:</strong> Die Kette ist unterbrochen! <code class="code-pill">X</code> und <code class="code-pill">Y</code> sind zwei völlig unverbundene Variablen. Prolog sucht irgendeinen Menschen $X$, dessen Vater $G$ ist, und irgendeinen Menschen $Y$, der Elternteil von $K$ ist. Es besteht kein Verwandtschaftsbezug zwischen $G$ und $K$.<br>
+          <strong>Korrektur:</strong> Dieselbe Variable für das Bindeglied nutzen: <code class="code-pill">grossvater(G, K) :- vater(G, E), elternteil(E, K).</code>
+        </div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="quiz-card">
+        <div class="quiz-question">2. Was passiert, wenn man \= ganz an den Anfang der Regel stellt?</div>
+        <div class="code-pill" style="display:block; padding:6px 10px; margin-bottom:8px;">
+          geschwister(X, Y) :- X \= Y, elternteil(E, X), elternteil(E, Y).
+        </div>
+        <button class="solution-btn" onclick="toggleSolution('sol-2')">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol-2" class="solution-content">
+          <strong>Erklärung:</strong> Wenn die Abfrage <code class="code-pill">?- geschwister(ares, Wer).</code> gestellt wird, ist <code class="code-pill">Wer</code> zu Beginn noch eine freie, ungebundene Variable. In Standard-Prolog schlägt <code class="code-pill">ares \= Wer</code> sofort fehl, weil zwei freie Variablen miteinander unifiziert werden könnten!<br>
+          <strong>Regel:</strong> Bedingungen mit <code class="code-pill">\=</code> gehören immer an das <strong>Ende</strong> des Regelkörpers, nachdem alle beteiligten Variablen durch Fakten gebunden wurden.
+        </div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="quiz-card">
+        <div class="quiz-question">3. Was ist der fundamentale Unterschied zwischen paar(X, X) und paar(_, _)?</div>
+        <button class="solution-btn" onclick="toggleSolution('sol-3')">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol-3" class="solution-content">
+          <strong>Erklärung:</strong><br>
+          • <code class="code-pill">paar(X, X)</code> fordert zwingend, dass beide Argumente <strong>identisch</strong> sind (z. B. <code class="code-pill">paar(apfel, apfel)</code>).<br>
+          • <code class="code-pill">paar(_, _)</code> akzeptiert jedes beliebige Paar (z. B. auch <code class="code-pill">paar(apfel, birne)</code>), da jeder Unterstrich ein völlig unabhängiger Platzhalter ist.
+        </div>
+      </div>
+    </div>
+
+    <!-- Modul 4: Download Arbeitsblatt -->
+    <div class="section-card" style="background:#eff6ff; border-color:#bfdbfe;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h3 style="font-size:1.15rem; color:#1e3a8a; font-weight:700; margin-bottom:4px;">Begleitendes Arbeitsblatt AB 03</h3>
+          <p style="font-size:0.92rem; color:#334155;">
+            Lade das passende Tracing- und Diagnose-Arbeitsblatt als gestochen scharfes PDF herunter.
+          </p>
+        </div>
+        <a href="../../1. Halbjahr/AB03_Sicherung_Regeln_Variablen.pdf" class="btn-swish-ext" style="background:#1e3a8a;">
+          AB 03 herunterladen (PDF) &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top:2.5rem; text-align:center; color:var(--text-muted); font-size:0.88rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+      <p><strong>Informatik Differenzierung 10 (Diff-10)</strong> • Schulportal 2026/2027</p>
+      <p style="margin-top:4px;">Fragen zur logischen Programmierung? Stelle sie im Unterricht oder über Teams!</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Visualizer Logic
+    const visualizerScenarios = {
+      1: {
+        query: "?- grossvater(kronos, ares).",
+        steps: [
+          {
+            badge: "Schritt 0 / 4",
+            title: "Anfrage an das System",
+            desc: "Prolog empfängt ?- grossvater(kronos, ares) und sucht die Regel grossvater(G, K) in der Wissensbasis.",
+            html: `<span>grossvater(</span><span style="color:#94a3b8; font-weight:bold;">G</span><span>, </span><span style="color:#94a3b8; font-weight:bold;">K</span><span>) :- vater(G, </span><span style="color:#f59e0b; font-weight:bold;">E</span><span>), elternteil(</span><span style="color:#f59e0b; font-weight:bold;">E</span><span>, K).</span>`,
+            status: "Warte auf Unifikation"
+          },
+          {
+            badge: "Schritt 1 / 4",
+            title: "Regelkopf-Bindung (G & K)",
+            desc: "Die Werte aus der Anfrage werden an den Kopf gebunden: G = kronos und K = ares.",
+            html: `<span>grossvater(</span><span style="color:#60a5fa; font-weight:bold;">kronos</span><span>, </span><span style="color:#60a5fa; font-weight:bold;">ares</span><span>) :- vater(</span><span style="color:#60a5fa; font-weight:bold;">kronos</span><span>, </span><span style="color:#f59e0b; font-weight:bold;">E</span><span>), elternteil(</span><span style="color:#f59e0b; font-weight:bold;">E</span><span>, </span><span style="color:#60a5fa; font-weight:bold;">ares</span><span>).</span>`,
+            status: "G=kronos, K=ares gebunden"
+          },
+          {
+            badge: "Schritt 2 / 4",
+            title: "Teilziel 1: Zwischenvariable E wird gebunden",
+            desc: "Prolog durchsucht die Fakten nach vater(kronos, E) und findet vater(kronos, zeus). Damit bindet E an zeus!",
+            html: `<span>grossvater(kronos, ares) :- vater(kronos, </span><span style="color:#34d399; font-weight:bold;">zeus</span><span>) ✓ , elternteil(</span><span style="background:#d97706; color:#fff; padding:1px 6px; border-radius:4px; font-weight:bold;">E → zeus</span><span>, ares).</span>`,
+            status: "E = zeus gefunden"
+          },
+          {
+            badge: "Schritt 3 / 4",
+            title: "Stafetten-Übergabe an Teilziel 2",
+            desc: "Der gebundene Wert zeus wird eingesetzt: Jetzt prüft Prolog elternteil(zeus, ares).",
+            html: `<span>grossvater(kronos, ares) :- vater(kronos, zeus) ✓ , elternteil(</span><span style="color:#34d399; font-weight:bold;">zeus</span><span>, ares) ?</span>`,
+            status: "Prüfe elternteil(zeus, ares)"
+          },
+          {
+            badge: "Schritt 4 / 4",
+            title: "Beweis vollständig",
+            desc: "Wissensbasis bestätigt elternteil(zeus, ares). Beide Bedingungen sind wahr!",
+            html: `<span>grossvater(kronos, ares) :- </span><span style="color:#34d399; font-weight:bold;">vater(kronos, zeus) ✓</span><span> , </span><span style="color:#34d399; font-weight:bold;">elternteil(zeus, ares) ✓</span>`,
+            status: "true."
+          }
+        ]
+      },
+      2: {
+        query: "?- geschwister(ares, ares).",
+        steps: [
+          {
+            badge: "Schritt 0 / 3",
+            title: "Die naive Regel (ohne \\=)",
+            desc: "Ohne Schutzschranke prüft Prolog nur: geschwister(X, Y) :- elternteil(E, X), elternteil(E, Y).",
+            html: `<span>geschwister(</span><span style="color:#f87171; font-weight:bold;">ares</span><span>, </span><span style="color:#f87171; font-weight:bold;">ares</span><span>) :- elternteil(E, ares), elternteil(E, ares).</span>`,
+            status: "Problemfall"
+          },
+          {
+            badge: "Schritt 1 / 3",
+            title: "Identitätsfalle schnappt zu",
+            desc: "Für E = zeus ist elternteil(zeus, ares) wahr. Beide Teilziele stimmen – Ares wäre sein eigenes Geschwister!",
+            html: `<span>elternteil(zeus, ares) ✓  UND  elternteil(zeus, ares) ✓  → </span><span style="color:#f87171; font-weight:bold;">Logikfehler!</span>`,
+            status: "Fehlerhaft: true."
+          },
+          {
+            badge: "Schritt 2 / 3",
+            title: "Schutz durch Ungleichheit (X \\= Y)",
+            desc: "Mit X \\= Y am Ende prüft Prolog am Schluss: ares \\= ares. Das schlägt fehl!",
+            html: `<span>geschwister(ares, ares) :- elternteil(E, ares), elternteil(E, ares), </span><span style="background:#dc2626; color:#fff; padding:1px 6px; border-radius:4px; font-weight:bold;">ares \\= ares ✗</span>`,
+            status: "false. (Korrekt abgewiesen)"
+          },
+          {
+            badge: "Schritt 3 / 3",
+            title: "Test mit hephaistos",
+            desc: "Bei ?- geschwister(ares, hephaistos): E = zeus passt, und ares \\= hephaistos ist wahr!",
+            html: `<span>geschwister(ares, hephaistos) :- elternteil(zeus, ares) ✓, elternteil(zeus, hephaistos) ✓, </span><span style="color:#34d399; font-weight:bold;">ares \\= hephaistos ✓</span>`,
+            status: "true."
+          }
+        ]
+      },
+      3: {
+        query: "?- hat_kinder(zeus).",
+        steps: [
+          {
+            badge: "Schritt 0 / 2",
+            title: "Anonyme Variable _",
+            desc: "Regel: hat_kinder(X) :- elternteil(X, _). Der konkrete Name des Kindes ist Prolog egal.",
+            html: `<span>hat_kinder(</span><span style="color:#60a5fa; font-weight:bold;">zeus</span><span>) :- elternteil(</span><span style="color:#60a5fa; font-weight:bold;">zeus</span><span>, </span><span style="color:#c084fc; font-weight:bold;">_</span><span>).</span>`,
+            status: "Prüfe Existenz"
+          },
+          {
+            badge: "Schritt 1 / 2",
+            title: "Erster Treffer in Fakten",
+            desc: "Prolog findet elternteil(zeus, ares). Der Unterstrich matcht sofort mit ares.",
+            html: `<span>Gefunden: elternteil(zeus, </span><span style="color:#c084fc; font-weight:bold;">ares</span><span>) ✓  — Kein Variablenname gespeichert.</span>`,
+            status: "Treffer gefunden"
+          },
+          {
+            badge: "Schritt 2 / 2",
+            title: "Erfolgreicher Nachweis",
+            desc: "Da die Existenz mindestens eines Kindes bewiesen ist, bestätigt Prolog direkt mit true.",
+            html: `<span>hat_kinder(zeus) :- </span><span style="color:#34d399; font-weight:bold;">elternteil(zeus, _) ✓</span>`,
+            status: "true."
+          }
+        ]
+      }
+    };
+
+    let curVScen = 1;
+    let curVStep = 0;
+
+    function renderVisualizer() {
+      const scen = visualizerScenarios[curVScen];
+      const step = scen.steps[curVStep];
+
+      document.getElementById('v-query').textContent = scen.query;
+      document.getElementById('v-rule-stage').innerHTML = step.html;
+      document.getElementById('v-badge').textContent = step.badge;
+      document.getElementById('v-title').textContent = step.title;
+      document.getElementById('v-desc').textContent = step.desc;
+      document.getElementById('v-status').textContent = step.status;
+
+      document.getElementById('v-btn-prev').disabled = (curVStep === 0);
+      document.getElementById('v-btn-next').disabled = (curVStep === scen.steps.length - 1);
+    }
+
+    function switchVisualizerScenario(id) {
+      curVScen = id;
+      curVStep = 0;
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById('scen-tab-' + i);
+        if (i === id) {
+          btn.className = 'scen-btn active';
+        } else {
+          btn.className = 'scen-btn';
+        }
+      }
+      renderVisualizer();
+    }
+
+    function stepVisualizer(delta) {
+      const scen = visualizerScenarios[curVScen];
+      const newStep = curVStep + delta;
+      if (newStep >= 0 && newStep < scen.steps.length) {
+        curVStep = newStep;
+        renderVisualizer();
+      }
+    }
+
+    function resetVisualizer() {
+      curVStep = 0;
+      renderVisualizer();
+    }
+
+    // Solution toggles
+    function toggleSolution(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('visible');
+    }
+
+    // Init
+    renderVisualizer();
+  </script>
+</body>
+</html>
