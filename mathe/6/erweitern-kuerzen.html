@@ -728,20 +728,23 @@
       <div class="regel-title">Die goldene Erweiterungsregel</div>
       <p>
         Man <strong>erweitert</strong> einen Bruch, indem man den <strong>Zähler</strong> und den <strong>Nenner</strong>
-        mit <strong>derselben Zahl $k$ ($k > 0$) multipliziert</strong>.
+        mit <strong>derselben Zahl multipliziert</strong> (zum Beispiel mit $2, 3, 4, 5, \dots$).
       </p>
     </div>
 
     <div class="arrow-schema-card">
-      <span style="font-size: 0.85rem; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 0.5px;">Allgemeine Formel</span>
-      <div class="arrow-schema-formula">
-        $$\frac{a}{b} = \frac{a \cdot k}{b \cdot k}$$
+      <span style="font-size: 0.85rem; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 0.5px;">Die Grundregel auf einen Blick</span>
+      <div class="arrow-schema-formula" style="font-size: 1.5rem; margin: 0.8rem 0;">
+        $$\frac{\text{Zähler} \cdot \text{Zahl}}{\text{Nenner} \cdot \text{Zahl}}$$
       </div>
-      <p style="font-size: 0.875rem; color: #475569; margin: 0; text-align: center;">
-        Beispiel: Erweitere $\frac{3}{5}$ mit der Erweiterungszahl $4$:
+      <p style="font-size: 0.9rem; color: #475569; margin: 0; text-align: center;">
+        Beispiel: Erweitere $\frac{3}{5}$ mit der Zahl $4$:
       </p>
-      <div class="arrow-schema-formula" style="color: #ea580c;">
-        $$\frac{3}{5} \stackrel{\cdot 4}{=} \frac{3 \cdot 4}{5 \cdot 4} = \frac{12}{20}$$
+      <div class="arrow-schema-formula" style="color: #ea580c; font-size: 1.5rem; margin: 0.8rem 0;">
+        $$\frac{3}{5} = \frac{3 \cdot 4}{5 \cdot 4} = \frac{12}{20}$$
+      </div>
+      <div style="background: #fff7ed; border: 1.5px solid #fed7aa; border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.9rem; color: #9a3412; font-weight: 700; text-align: center;">
+        Merkregel: Oben mal $4$ &mdash; und unten mal $4$!
       </div>
     </div>
 
@@ -775,20 +778,23 @@
       <div class="regel-title">Die Kürzungsregel</div>
       <p>
         Man <strong>kürzt</strong> einen Bruch, indem man den <strong>Zähler</strong> und den <strong>Nenner</strong>
-        durch <strong>denselben gemeinsamen Teiler $k$ ($k > 1$) dividiert</strong>.
+        durch <strong>dieselbe Zahl teilt</strong> (eine Zahl, durch die sich Zähler und Nenner ohne Rest teilen lassen).
       </p>
     </div>
 
     <div class="arrow-schema-card">
-      <span style="font-size: 0.85rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.5px;">Allgemeine Kürzungs-Formel</span>
-      <div class="arrow-schema-formula">
-        $$\frac{a}{b} = \frac{a : k}{b : k}$$
+      <span style="font-size: 0.85rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.5px;">Die Kürzungsregel auf einen Blick</span>
+      <div class="arrow-schema-formula" style="font-size: 1.5rem; margin: 0.8rem 0;">
+        $$\frac{\text{Zähler} : \text{Zahl}}{\text{Nenner} : \text{Zahl}}$$
       </div>
-      <p style="font-size: 0.875rem; color: #475569; margin: 0; text-align: center;">
-        Beispiel: Kürze $\frac{18}{24}$ durch den gemeinsamen Teiler $6$:
+      <p style="font-size: 0.9rem; color: #475569; margin: 0; text-align: center;">
+        Beispiel: Kürze $\frac{18}{24}$ durch die Zahl $6$:
       </p>
-      <div class="arrow-schema-formula" style="color: #16a34a;">
-        $$\frac{18}{24} \stackrel{: 6}{=} \frac{18 : 6}{24 : 6} = \frac{3}{4}$$
+      <div class="arrow-schema-formula" style="color: #16a34a; font-size: 1.5rem; margin: 0.8rem 0;">
+        $$\frac{18}{24} = \frac{18 : 6}{24 : 6} = \frac{3}{4}$$
+      </div>
+      <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 0.6rem 1.2rem; font-size: 0.9rem; color: #166534; font-weight: 700; text-align: center;">
+        Merkregel: Oben geteilt durch $6$ &mdash; und unten geteilt durch $6$!
       </div>
     </div>
 
@@ -797,12 +803,12 @@
     </p>
     <ul style="font-size: 0.935rem; color: #1e293b; line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.25rem;">
       <li>
-        <strong>Weg 1 (Schrittweise kürzen):</strong> Wenn du den größten Teiler nicht sofort siehst, teile in einfachen Schritten (z. B. zuerst durch $2$, dann durch $3$):
+        <strong>Weg 1 (Schrittweise kürzen):</strong> Wenn du die größte Zahl nicht sofort siehst, teile in einfachen Schritten (z. B. zuerst durch $2$, dann durch $3$):
         $$\frac{36}{48} \xrightarrow{: 2} \frac{18}{24} \xrightarrow{: 2} \frac{9}{12} \xrightarrow{: 3} \frac{3}{4}$$
       </li>
       <li>
-        <strong>Weg 2 (Kürzen mit dem ggT):</strong> Bestimme den <em>größten gemeinsamen Teiler</em> von Zähler und Nenner. Mit $\operatorname{ggT}(36, 48) = 12$ kürzt du in einem einzigen Schritt:
-        $$\frac{36}{48} \stackrel{: 12}{=} \frac{36 : 12}{48 : 12} = \frac{3}{4}$$
+        <strong>Weg 2 (Auf einen Schlag mit einer großen Zahl kürzen):</strong> Wenn du direkt siehst, dass sich beide Zahlen durch $12$ teilen lassen, bist du sofort fertig:
+        $$\frac{36}{48} = \frac{36 : 12}{48 : 12} = \frac{3}{4}$$
       </li>
     </ul>
 
@@ -810,11 +816,11 @@
     <div class="merke-box">
       <span class="merke-tag">MERKE</span>
       <p>
-        Ein Bruch heißt <strong>vollständig gekürzt</strong> (in der <em>Grundform</em>),
-        wenn Zähler und Nenner <strong>teilerfremd</strong> sind – das heißt, wenn sie außer der $1$ keinen gemeinsamen Teiler mehr besitzen!
+        Ein Bruch heißt <strong>vollständig gekürzt</strong> (oder steht in der <em>Grundform</em>),
+        wenn sich Zähler und Nenner <strong>durch keine gemeinsame Zahl mehr teilen lassen</strong> (außer durch die $1$).
       </p>
       <p>
-        Beispiel: Bei $\frac{3}{4}$ haben $3$ und $4$ keinen gemeinsamen Teiler mehr außer $1$. Der Bruch $\frac{3}{4}$ ist vollständig gekürzt.
+        Beispiel: Bei $\frac{3}{4}$ lassen sich die $3$ und die $4$ durch keine gemeinsame Zahl mehr teilen. Der Bruch ist fertig gekürzt!
       </p>
     </div>
   </div>
@@ -846,7 +852,7 @@
       </div>
 
       <div class="controls-row">
-        <span class="control-label">Erweitern mit ($k$):</span>
+        <span class="control-label">Erweitern mit:</span>
         <button class="btn-chip active factor-btn" onclick="setExpandFactor(1, this)">&middot; 1</button>
         <button class="btn-chip factor-btn" onclick="setExpandFactor(2, this)">&middot; 2</button>
         <button class="btn-chip factor-btn" onclick="setExpandFactor(3, this)">&middot; 3</button>
@@ -991,21 +997,21 @@
       <div class="uebung-solution">
         <p><strong>Lösungsweg:</strong></p>
         <p>
-          a) $\frac{16}{24}$: Beide Zahlen sind durch $8$ teilbar ($\operatorname{ggT} = 8$):<br>
+          a) $\frac{16}{24}$: Beide Zahlen lassen sich durch $8$ teilen:<br>
           $$\frac{16}{24} = \frac{16 : 8}{24 : 8} = \frac{2}{3}$$
           <em>(Schrittweise: erst durch $2 \rightarrow \frac{8}{12}$, dann durch $4 \rightarrow \frac{2}{3}$.)</em>
         </p>
         <p>
           b) $\frac{45}{60}$: Beide Zahlen enden auf $5$ bzw. $0$, also durch $5$ teilbar: $\frac{45:5}{60:5} = \frac{9}{12}$. Nun noch durch $3$ teilen:<br>
           $$\frac{9}{12} = \frac{9 : 3}{12 : 3} = \frac{3}{4}$$
-          <em>(Oder direkt mit $\operatorname{ggT} = 15$: $\frac{45:15}{60:15} = \frac{3}{4}$.)</em>
+          <em>(Oder direkt in einem Schritt durch $15$ geteilt: $\frac{45:15}{60:15} = \frac{3}{4}$.)</em>
         </p>
         <p>
-          c) $\frac{28}{42}$: Beide sind durch $14$ teilbar (oder schrittweise erst $: 2 \rightarrow \frac{14}{21}$, dann $: 7$):<br>
+          c) $\frac{28}{42}$: Beide lassen sich durch $14$ teilen (oder schrittweise erst durch $2 \rightarrow \frac{14}{21}$, dann durch $7$):<br>
           $$\frac{28}{42} = \frac{2}{3}$$
         </p>
         <p>
-          d) $\frac{75}{100}$: Beide Zahlen sind durch $25$ teilbar ($\operatorname{ggT} = 25$):<br>
+          d) $\frac{75}{100}$: Beide Zahlen lassen sich durch $25$ teilen:<br>
           $$\frac{75}{100} = \frac{75 : 25}{100 : 25} = \frac{3}{4}$$
         </p>
       </div>
@@ -1026,7 +1032,7 @@
             D: $\frac{17}{51}$ &emsp;
             E: $\frac{21}{35}$
           </div>
-          Welche Brüche lassen sich nicht weiter kürzen (sind teilerfremd)?
+          Welche Brüche lassen sich nicht weiter kürzen (sind schon fertig gekürzt)?
         </div>
       </div>
       <button class="uebung-btn" onclick="toggleUebung(this)">
@@ -1265,9 +1271,9 @@
     // KaTeX Rechnung aktualisieren
     const formulaDiv = document.getElementById('expand-formula');
     if (expandFactor === 1) {
-      formulaDiv.innerHTML = `$$\\text{Ausgangsbruch: } \\frac{${baseZaehler}}{${baseNenner}} = \\text{Wert: } ${(baseZaehler/baseNenner).toFixed(2).replace('.', ',')}$$`;
+      formulaDiv.innerHTML = `$$\\text{Ausgangsbruch: } \\frac{${baseZaehler}}{${baseNenner}}$$`;
     } else {
-      formulaDiv.innerHTML = `$$\\frac{${baseZaehler}}{${baseNenner}} \\stackrel{\\cdot ${expandFactor}}{=} \\frac{${baseZaehler} \\cdot ${expandFactor}}{${baseNenner} \\cdot ${expandFactor}} = \\frac{${filledPieces}}{${totalPieces}}$$`;
+      formulaDiv.innerHTML = `$$\\frac{${baseZaehler}}{${baseNenner}} = \\frac{${baseZaehler} \\cdot ${expandFactor}}{${baseNenner} \\cdot ${expandFactor}} = \\frac{${filledPieces}}{${totalPieces}}$$`;
     }
     setTimeout(triggerKaTeX, 30);
   }
@@ -1374,7 +1380,7 @@
         "Zähler und Nenner vertauschen"
       ],
       c: 0,
-      exp: "Erweitern heißt: Zähler und Nenner mit derselben natürlichen Zahl multiplizieren ($\\frac{a \\cdot k}{b \\cdot k}$)."
+      exp: "Erweitern heißt: Zähler und Nenner mit derselben Zahl multiplizieren, zum Beispiel $\\frac{2 \\cdot 3}{5 \\cdot 3} = \\frac{6}{15}$."
     },
     // 2
     {
@@ -1440,13 +1446,13 @@
     {
       q: "Was bedeutet es, einen Bruch zu <strong>kürzen</strong>?",
       opts: [
-        "Zähler und Nenner durch denselben gemeinsamen Teiler teilen",
+        "Zähler und Nenner durch dieselbe Zahl teilen",
         "Zähler und Nenner um dieselbe Zahl verringern (subtrahieren)",
         "Nur den Nenner durch zwei teilen",
         "Die Nullen am Ende wegstreichen"
       ],
       c: 0,
-      exp: "Kürzen bedeutet: Zähler und Nenner durch dieselbe Zahl dividieren ($\\frac{a : k}{b : k}$)."
+      exp: "Kürzen bedeutet: Zähler und Nenner durch dieselbe Zahl teilen, zum Beispiel $\\frac{6 : 3}{9 : 3} = \\frac{2}{3}$."
     },
     // 8
     {
@@ -1476,13 +1482,13 @@
     {
       q: "Wann nennt man einen Bruch <strong>vollständig gekürzt</strong>?",
       opts: [
-        "Wenn Zähler und Nenner außer der $1$ keinen gemeinsamen Teiler mehr haben",
+        "Wenn sich Zähler und Nenner durch keine Zahl mehr teilen lassen (außer durch $1$)",
         "Wenn im Zähler eine $1$ steht",
         "Wenn der Zähler ungerade und der Nenner gerade ist",
         "Wenn der Bruch kleiner als $\\frac{1}{2}$ ist"
       ],
       c: 0,
-      exp: "Ein Bruch ist vollständig gekürzt (Grundform), wenn Zähler und Nenner teilerfremd sind (ihr $\\operatorname{ggT}$ ist $1$)."
+      exp: "Ein Bruch ist vollständig gekürzt (in der Grundform), wenn man ihn nicht mehr weiter teilen kann (außer durch $1$)."
     },
     // 11
     {
@@ -1522,7 +1528,7 @@
     },
     // 14
     {
-      q: "Kürze $\\frac{36}{48}$ mit dem größten gemeinsamen Teiler $\\operatorname{ggT}(36, 48) = 12$.",
+      q: "Kürze $\\frac{36}{48}$ direkt in einem Schritt durch die Zahl $12$.",
       opts: [
         "$\\frac{3}{4}$",
         "$\\frac{6}{8}$",
@@ -1662,7 +1668,7 @@
         "$\\frac{2}{3}$"
       ],
       c: 0,
-      exp: "$\\frac{18}{30}$ gekürzt mit dem $\\operatorname{ggT} = 6$: $\\frac{18 : 6}{30 : 6} = \\frac{3}{5}$."
+      exp: "Beide Zahlen lassen sich durch $6$ teilen: $\\frac{18 : 6}{30 : 6} = \\frac{3}{5}$."
     },
     // 26
     {
