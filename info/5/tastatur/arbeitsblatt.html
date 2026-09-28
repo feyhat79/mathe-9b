@@ -39,9 +39,6 @@
        HEADER / META
     ============================================================ */
     .doc-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
       margin-bottom: 3px;
     }
 
@@ -50,17 +47,6 @@
       font-weight: 700;
       color: #1e3a8a;
       line-height: 1.2;
-    }
-
-    .doc-points-badge {
-      font-size: 8pt;
-      font-weight: 700;
-      color: #1e3a8a;
-      border: 1.5px solid #1e3a8a;
-      border-radius: 4px;
-      padding: 2px 7px;
-      white-space: nowrap;
-      align-self: center;
     }
 
     .doc-meta {
@@ -79,7 +65,7 @@
     }
 
     /* ============================================================
-       SECTION TITLES
+       SECTION LABEL
     ============================================================ */
     .section-label {
       font-size: 8.5pt;
@@ -92,6 +78,8 @@
 
     /* ============================================================
        TASTATUR-SCHAUBILD
+       Grundeinheit ku = 38px, Gap = 2px
+       Taste der Breite n: n*38 + (n-1)*2 px
     ============================================================ */
     .schaubild-wrap {
       margin-bottom: 6px;
@@ -101,7 +89,7 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
-      margin: 0.3rem 0 0.4rem;
+      margin: 0.35rem 0 0.3rem;
     }
 
     .kb-row {
@@ -109,76 +97,114 @@
       gap: 2px;
     }
 
+    /* Basis-Taste */
     .key {
-      min-height: 20px;
-      border: 1px solid #94a3b8;
+      height: 34px;
+      border: 1px solid #555;
       border-radius: 3px;
       background: white;
       position: relative;
       font-family: 'Courier New', monospace;
-      font-size: 6.5pt;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-end;
-      padding: 1px 2px;
-      box-sizing: border-box;
+      padding: 1px 3px;
       flex-shrink: 0;
     }
 
-    .key .kn  { font-weight: 700; color: #0f172a; font-size: 7pt; line-height: 1; }
-    .key .ks  { font-size: 5.5pt; color: #1d4ed8; font-weight: 700; position: absolute; top: 1px; right: 2px; line-height: 1; }
-    .key .kg  { font-size: 5.5pt; color: #065f46; font-weight: 700; position: absolute; top: 1px; left: 2px; line-height: 1; }
+    /* Normale Zeichen (unten links) */
+    .key .kn {
+      font-weight: 700;
+      color: #111827;
+      font-size: 10.5pt;
+      line-height: 1;
+    }
 
-    /* Sondertasten */
-    .key.sp   { background: #f1f5f9; }
-    .key.sp .lbl { font-size: 5.5pt; color: #475569; font-weight: 700; white-space: nowrap; font-family: 'Calibri','Segoe UI',Arial,sans-serif; }
+    /* Shift-Zeichen (oben rechts, UNTERSTRICHEN für B&W) */
+    .key .ks {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #111827;
+      text-decoration: underline;
+      position: absolute;
+      top: 2px;
+      right: 3px;
+      line-height: 1;
+    }
 
-    /* Shift-Tasten */
-    .key.k-shift { background: #dbeafe; }
+    /* AltGr-Zeichen (oben links, KURSIV für B&W) */
+    .key .kg {
+      font-size: 7.5pt;
+      font-weight: 700;
+      font-style: italic;
+      color: #111827;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      line-height: 1;
+    }
 
-    /* AltGr */
-    .key.k-altgr { background: #d1fae5; font-weight: 800; }
-    .key.k-altgr .lbl { color: #065f46; font-size: 5.5pt; font-weight: 800; font-family: 'Calibri','Segoe UI',Arial,sans-serif; }
+    /* Sondertasten – hellgrau */
+    .key.sp {
+      background: #e0e0e0;
+      border: 1px solid #444;
+    }
+    .key.sp .lbl {
+      font-size: 7.5pt;
+      color: #111;
+      font-weight: 700;
+      white-space: nowrap;
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    }
 
-    /* Widths in px */
-    .w22  { width: 22px; }
-    .w35  { width: 35px; }
-    .w41  { width: 41px; }
-    .w47  { width: 47px; }
-    .w52  { width: 52px; }
-    .w63  { width: 63px; }
-    .w130 { width: 130px; }
+    /* Shift-Tasten – diagonale Schraffur (B&W-erkennbar) */
+    .key.k-shift {
+      background: repeating-linear-gradient(
+        135deg,
+        #fff,
+        #fff 3px,
+        #bbb 3px,
+        #bbb 4px
+      );
+      border: 1.5px solid #333;
+    }
+    .key.k-shift .lbl {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #111;
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    }
 
-    /* Legende */
+    /* AltGr-Taste – deutlich dunkleres Grau + dicker Rahmen */
+    .key.k-altgr {
+      background: #999;
+      border: 2px solid #111;
+    }
+    .key.k-altgr .lbl {
+      font-size: 7.5pt;
+      font-weight: 800;
+      color: #000;
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    }
+
+    /* ── Breiten: n*38 + (n-1)*2 px ── */
+    .w38  { width: 38px;  }   /* 1u */
+    .w48  { width: 48px;  }   /* 1.25u */
+    .w58  { width: 58px;  }   /* 1.5u  */
+    .w68  { width: 68px;  }   /* 1.75u */
+    .w78  { width: 78px;  }   /* 2u    */
+    .w88  { width: 88px;  }   /* 2.25u */
+    .w108 { width: 108px; }   /* 2.75u */
+    .w228 { width: 228px; }   /* 5.75u */
+
+    /* Legende – B&W-Beschreibung statt Farbquadrate */
     .kb-legend {
-      display: flex;
-      gap: 10px;
-      font-size: 6.5pt;
+      font-size: 7.5pt;
       color: #374151;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 2px;
+      margin-top: 4px;
+      line-height: 1.6;
     }
-
-    .kb-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .leg-sq {
-      width: 9px;
-      height: 9px;
-      border: 1px solid #94a3b8;
-      border-radius: 1px;
-      flex-shrink: 0;
-    }
-
-    .leg-white  { background: white; }
-    .leg-blue   { background: #dbeafe; }
-    .leg-green  { background: #d1fae5; }
-    .leg-gray   { background: #f1f5f9; }
 
     /* ============================================================
        AUFGABEN
@@ -215,17 +241,6 @@
       color: #111827;
     }
 
-    .task-points {
-      margin-left: auto;
-      font-size: 8pt;
-      color: #1e3a8a;
-      font-weight: 700;
-      border: 1px solid #1e3a8a;
-      border-radius: 10px;
-      padding: 1px 6px;
-      white-space: nowrap;
-    }
-
     .task-instr {
       font-size: 11pt;
       color: #111827;
@@ -257,10 +272,11 @@
       min-width: 14px;
     }
 
+    /* Tasten-Anzeige in Aufgabe 1 – B&W-Muster statt Farben */
     .key-display {
-      border: 1.5px solid #475569;
+      border: 1.5px solid #555;
       border-radius: 3px;
-      background: #f8fafc;
+      background: #e0e0e0;
       font-family: 'Courier New', monospace;
       font-size: 8pt;
       font-weight: 700;
@@ -272,13 +288,34 @@
       flex-shrink: 0;
     }
 
-    .key-display.kd-shift { background: #dbeafe; }
-    .key-display.kd-altgr { background: #d1fae5; }
-    .key-display.kd-sp    { background: #f1f5f9; }
+    /* Shift → schraffiert + gestrichelter Rand */
+    .key-display.kd-shift {
+      background: repeating-linear-gradient(
+        135deg,
+        #fff,
+        #fff 3px,
+        #bbb 3px,
+        #bbb 4px
+      );
+      border: 1.5px dashed #333;
+    }
+
+    /* AltGr → dunkelgrau + dicker Rand */
+    .key-display.kd-altgr {
+      background: #999;
+      border: 2px solid #111;
+      color: #fff;
+    }
+
+    /* Normale Sondertaste → mittelgrau */
+    .key-display.kd-sp {
+      background: #e0e0e0;
+      border: 1.5px solid #555;
+    }
 
     .dotline {
       font-size: 9pt;
-      color: #94a3b8;
+      color: #999;
       letter-spacing: 1.5px;
       font-family: 'Courier New', monospace;
       flex: 1;
@@ -297,13 +334,13 @@
     }
 
     .aufg2-table th {
-      background: #1e3a8a;
+      background: #111827;
       color: white;
       font-size: 9pt;
       font-weight: 700;
       padding: 3px 6px;
       text-align: center;
-      border: 1px solid #1e3a8a;
+      border: 1px solid #111827;
     }
 
     .aufg2-table th:first-child {
@@ -311,7 +348,7 @@
     }
 
     .aufg2-table td {
-      border: 1px solid #cbd5e1;
+      border: 1px solid #555;
       padding: 3px 6px;
       text-align: center;
       height: 18px;
@@ -321,25 +358,22 @@
     .aufg2-table td:first-child {
       font-weight: 700;
       text-align: left;
-      background: #f8fafc;
-      color: #1e3a8a;
+      background: #e8e8e8;
+      color: #111827;
     }
 
-    .aufg2-table tr:nth-child(even) td { background-color: #f9fafb; }
-    .aufg2-table tr:nth-child(even) td:first-child { background: #f1f5f9; }
+    .aufg2-table tr:nth-child(even) td { background-color: #f5f5f5; }
+    .aufg2-table tr:nth-child(even) td:first-child { background: #ddd; }
 
-    /* Vorgegebene Zellen */
+    /* Vorgegebene Zellen – B&W: fett, kursiv, grau hinterlegt */
     .cell-given {
       font-style: italic;
-      color: #1d4ed8;
-      background: #eff6ff !important;
-      font-weight: 600;
+      font-weight: 700;
+      color: #111827;
+      background: #d4d4d4 !important;
     }
 
-    /* Leere ausfüllbare Zellen */
-    .cell-blank {
-      min-width: 28px;
-    }
+    .cell-blank { min-width: 28px; }
 
     /* ============================================================
        AUFGABE 3 – Tastenkombinationen
@@ -369,30 +403,23 @@
       font-family: 'Courier New', monospace;
       font-size: 11pt;
       font-weight: 700;
-      color: #1e3a8a;
+      color: #111827;
       min-width: 12px;
       text-align: center;
     }
 
-    .task3-eq {
-      color: #475569;
-      font-size: 10pt;
-    }
+    .task3-eq { color: #475569; font-size: 10pt; }
 
     .fill-line-short {
       border: none;
-      border-bottom: 1px dotted #94a3b8;
+      border-bottom: 1px dotted #555;
       min-width: 38px;
       display: inline-block;
       height: 14px;
       vertical-align: middle;
     }
 
-    .task3-plus {
-      color: #475569;
-      font-size: 10pt;
-      padding: 0 1px;
-    }
+    .task3-plus { color: #475569; font-size: 10pt; padding: 0 1px; }
 
     /* ============================================================
        AUFGABE 4 – Passwort
@@ -405,17 +432,17 @@
     }
 
     .aufg4-table th {
-      background: #1e3a8a;
+      background: #111827;
       color: white;
       font-size: 9pt;
       font-weight: 700;
       padding: 3px 8px;
       text-align: left;
-      border: 1px solid #1e3a8a;
+      border: 1px solid #111827;
     }
 
     .aufg4-table td {
-      border: 1px solid #cbd5e1;
+      border: 1px solid #555;
       padding: 4px 8px;
       height: 20px;
       font-size: 10pt;
@@ -427,10 +454,9 @@
     .merke-box {
       border: 2.5px solid #dc2626;
       border-radius: 4px;
-      padding: 8px 10px 8px 10px;
+      padding: 8px 10px;
       margin-top: 8px;
       position: relative;
-      margin-left: 0;
     }
 
     .merke-tag {
@@ -449,7 +475,7 @@
 
     .merke-content {
       font-size: 11pt;
-      color: #111827;  /* ZWINGEND SCHWARZ */
+      color: #111827;
       margin-top: 4px;
     }
 
@@ -460,17 +486,11 @@
 
     .merke-content li {
       margin-bottom: 2px;
-      color: #111827; /* ZWINGEND SCHWARZ */
-    }
-
-    .merke-content strong {
       color: #111827;
     }
 
-    /* ============================================================
-       UTILITY
-    ============================================================ */
-    .mt4 { margin-top: 4px; }
+    .merke-content strong { color: #111827; }
+
     .mt6 { margin-top: 6px; }
   </style>
 </head>
@@ -481,10 +501,8 @@
        KOPFZEILE
   ============================================================ -->
   <div class="doc-header">
-    <div class="doc-title">Die Tastatur – Drei Ebenen</div>
-    <div class="doc-points-badge">/ 32 Punkte</div>
+    <div class="doc-title">Die Tastatur &ndash; Drei Ebenen</div>
   </div>
-
   <div class="doc-meta">
     <span>Name:&nbsp;________________________________</span>
     <span>Klasse:&nbsp;_______</span>
@@ -500,95 +518,98 @@
 
     <div class="kb-schaubild">
 
-      <!-- Zahlenreihe -->
+      <!-- Zahlenreihe: ^(38) + 12×38 + Rücktaste(78) + 13×2 = 598 px -->
       <div class="kb-row">
-        <div class="key sp w22"><span class="lbl">^</span></div>
-        <div class="key w22"><span class="ks">!</span><span class="kn">1</span></div>
-        <div class="key w22"><span class="ks">"</span><span class="kn">2</span></div>
-        <div class="key w22"><span class="ks">§</span><span class="kn">3</span></div>
-        <div class="key w22"><span class="ks">$</span><span class="kn">4</span></div>
-        <div class="key w22"><span class="ks">%</span><span class="kn">5</span></div>
-        <div class="key w22"><span class="ks">&amp;</span><span class="kn">6</span></div>
-        <div class="key w22"><span class="ks">/</span><span class="kg">{</span><span class="kn">7</span></div>
-        <div class="key w22"><span class="ks">(</span><span class="kg">[</span><span class="kn">8</span></div>
-        <div class="key w22"><span class="ks">)</span><span class="kg">]</span><span class="kn">9</span></div>
-        <div class="key w22"><span class="ks">=</span><span class="kg">}</span><span class="kn">0</span></div>
-        <div class="key w22"><span class="ks">?</span><span class="kg">\</span><span class="kn">ß</span></div>
-        <div class="key w22"><span class="ks">`</span><span class="kn">´</span></div>
-        <div class="key sp w47" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x232B; Rücktaste</span></div>
+        <div class="key sp w38" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">^</span></div>
+        <div class="key w38"><span class="ks">!</span><span class="kn">1</span></div>
+        <div class="key w38"><span class="ks">"</span><span class="kn">2</span></div>
+        <div class="key w38"><span class="ks">§</span><span class="kn">3</span></div>
+        <div class="key w38"><span class="ks">$</span><span class="kn">4</span></div>
+        <div class="key w38"><span class="ks">%</span><span class="kn">5</span></div>
+        <div class="key w38"><span class="ks">&amp;</span><span class="kn">6</span></div>
+        <div class="key w38"><span class="ks">/</span><span class="kg">{</span><span class="kn">7</span></div>
+        <div class="key w38"><span class="ks">(</span><span class="kg">[</span><span class="kn">8</span></div>
+        <div class="key w38"><span class="ks">)</span><span class="kg">]</span><span class="kn">9</span></div>
+        <div class="key w38"><span class="ks">=</span><span class="kg">}</span><span class="kn">0</span></div>
+        <div class="key w38"><span class="ks">?</span><span class="kg">\</span><span class="kn">ß</span></div>
+        <div class="key w38"><span class="ks">`</span><span class="kn">´</span></div>
+        <div class="key sp w78" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x232B; Rücktaste</span></div>
       </div>
 
-      <!-- QWERTZ-Reihe -->
+      <!-- QWERTZ-Reihe: Tab(58) + 12×38 + Enter(58) + 13×2 = 598 px -->
       <div class="kb-row">
-        <div class="key sp w35"><span class="lbl">&#x21E5; Tab</span></div>
-        <div class="key w22"><span class="ks">Q</span><span class="kg">@</span><span class="kn">q</span></div>
-        <div class="key w22"><span class="ks">W</span><span class="kn">w</span></div>
-        <div class="key w22"><span class="ks">E</span><span class="kg">€</span><span class="kn">e</span></div>
-        <div class="key w22"><span class="ks">R</span><span class="kn">r</span></div>
-        <div class="key w22"><span class="ks">T</span><span class="kn">t</span></div>
-        <div class="key w22"><span class="ks">Z</span><span class="kn">z</span></div>
-        <div class="key w22"><span class="ks">U</span><span class="kn">u</span></div>
-        <div class="key w22"><span class="ks">I</span><span class="kn">i</span></div>
-        <div class="key w22"><span class="ks">O</span><span class="kn">o</span></div>
-        <div class="key w22"><span class="ks">P</span><span class="kn">p</span></div>
-        <div class="key w22"><span class="ks">Ü</span><span class="kn">ü</span></div>
-        <div class="key w22"><span class="ks">*</span><span class="kg">~</span><span class="kn">+</span></div>
-        <div class="key sp w35"><span class="lbl">&#x21B5; Enter</span></div>
+        <div class="key sp w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x21E5; Tab</span></div>
+        <div class="key w38"><span class="ks">Q</span><span class="kg">@</span><span class="kn">q</span></div>
+        <div class="key w38"><span class="ks">W</span><span class="kn">w</span></div>
+        <div class="key w38"><span class="ks">E</span><span class="kg">€</span><span class="kn">e</span></div>
+        <div class="key w38"><span class="ks">R</span><span class="kn">r</span></div>
+        <div class="key w38"><span class="ks">T</span><span class="kn">t</span></div>
+        <div class="key w38"><span class="ks">Z</span><span class="kn">z</span></div>
+        <div class="key w38"><span class="ks">U</span><span class="kn">u</span></div>
+        <div class="key w38"><span class="ks">I</span><span class="kn">i</span></div>
+        <div class="key w38"><span class="ks">O</span><span class="kn">o</span></div>
+        <div class="key w38"><span class="ks">P</span><span class="kn">p</span></div>
+        <div class="key w38"><span class="ks">Ü</span><span class="kn">ü</span></div>
+        <div class="key w38"><span class="ks">*</span><span class="kg">~</span><span class="kn">+</span></div>
+        <div class="key sp w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x21B5; Enter</span></div>
       </div>
 
-      <!-- ASDF-Reihe -->
+      <!-- ASDF-Reihe: CapsLock(68) + 11×38 + #(48) + 12×2 = 558 px -->
       <div class="kb-row">
-        <div class="key sp w41"><span class="lbl">&#x21EA; CapsLock</span></div>
-        <div class="key w22"><span class="ks">A</span><span class="kn">a</span></div>
-        <div class="key w22"><span class="ks">S</span><span class="kn">s</span></div>
-        <div class="key w22"><span class="ks">D</span><span class="kn">d</span></div>
-        <div class="key w22"><span class="ks">F</span><span class="kn">f</span></div>
-        <div class="key w22"><span class="ks">G</span><span class="kn">g</span></div>
-        <div class="key w22"><span class="ks">H</span><span class="kn">h</span></div>
-        <div class="key w22"><span class="ks">J</span><span class="kn">j</span></div>
-        <div class="key w22"><span class="ks">K</span><span class="kn">k</span></div>
-        <div class="key w22"><span class="ks">L</span><span class="kn">l</span></div>
-        <div class="key w22"><span class="ks">Ö</span><span class="kn">ö</span></div>
-        <div class="key w22"><span class="ks">Ä</span><span class="kn">ä</span></div>
-        <div class="key w22"><span class="ks">'</span><span class="kn">#</span></div>
+        <div class="key sp w68" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x21EA; Feststelltaste</span></div>
+        <div class="key w38"><span class="ks">A</span><span class="kn">a</span></div>
+        <div class="key w38"><span class="ks">S</span><span class="kn">s</span></div>
+        <div class="key w38"><span class="ks">D</span><span class="kn">d</span></div>
+        <div class="key w38"><span class="ks">F</span><span class="kn">f</span></div>
+        <div class="key w38"><span class="ks">G</span><span class="kn">g</span></div>
+        <div class="key w38"><span class="ks">H</span><span class="kn">h</span></div>
+        <div class="key w38"><span class="ks">J</span><span class="kn">j</span></div>
+        <div class="key w38"><span class="ks">K</span><span class="kn">k</span></div>
+        <div class="key w38"><span class="ks">L</span><span class="kn">l</span></div>
+        <div class="key w38"><span class="ks">Ö</span><span class="kn">ö</span></div>
+        <div class="key w38"><span class="ks">Ä</span><span class="kn">ä</span></div>
+        <div class="key w48"><span class="ks">'</span><span class="kn">#</span></div>
       </div>
 
-      <!-- YXCV-Reihe -->
+      <!-- YXCV-Reihe: ShiftL(88) + 11×38 + ShiftR(108) + 12×2 = 638 px -->
       <div class="kb-row">
-        <div class="key sp k-shift w52"><span class="lbl">&#x21E7; Shift</span></div>
-        <div class="key w22"><span class="ks">></span><span class="kn">&lt;</span></div>
-        <div class="key w22"><span class="ks">Y</span><span class="kn">y</span></div>
-        <div class="key w22"><span class="ks">X</span><span class="kn">x</span></div>
-        <div class="key w22"><span class="ks">C</span><span class="kn">c</span></div>
-        <div class="key w22"><span class="ks">V</span><span class="kn">v</span></div>
-        <div class="key w22"><span class="ks">B</span><span class="kn">b</span></div>
-        <div class="key w22"><span class="ks">N</span><span class="kn">n</span></div>
-        <div class="key w22"><span class="ks">M</span><span class="kn">m</span></div>
-        <div class="key w22"><span class="ks">;</span><span class="kn">,</span></div>
-        <div class="key w22"><span class="ks">:</span><span class="kn">.</span></div>
-        <div class="key w22"><span class="ks">_</span><span class="kn">-</span></div>
-        <div class="key sp k-shift w63"><span class="lbl">&#x21E7; Shift</span></div>
+        <div class="key sp k-shift w88" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x21E7; Shift</span></div>
+        <div class="key w38"><span class="ks">&gt;</span><span class="kg">|</span><span class="kn">&lt;</span></div>
+        <div class="key w38"><span class="ks">Y</span><span class="kn">y</span></div>
+        <div class="key w38"><span class="ks">X</span><span class="kn">x</span></div>
+        <div class="key w38"><span class="ks">C</span><span class="kn">c</span></div>
+        <div class="key w38"><span class="ks">V</span><span class="kn">v</span></div>
+        <div class="key w38"><span class="ks">B</span><span class="kn">b</span></div>
+        <div class="key w38"><span class="ks">N</span><span class="kn">n</span></div>
+        <div class="key w38"><span class="ks">M</span><span class="kn">m</span></div>
+        <div class="key w38"><span class="ks">;</span><span class="kn">,</span></div>
+        <div class="key w38"><span class="ks">:</span><span class="kn">.</span></div>
+        <div class="key w38"><span class="ks">_</span><span class="kn">-</span></div>
+        <div class="key sp k-shift w108" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">&#x21E7; Shift</span></div>
       </div>
 
       <!-- Unterste Reihe -->
       <div class="kb-row">
-        <div class="key sp w35" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Strg</span></div>
-        <div class="key sp w22" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Win</span></div>
-        <div class="key sp w35" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Alt</span></div>
-        <div class="key sp w130" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Leertaste</span></div>
-        <div class="key sp k-altgr w35" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">AltGr</span></div>
-        <div class="key sp w22" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Win</span></div>
-        <div class="key sp w22" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Men&#xFC;</span></div>
-        <div class="key sp w35" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Strg</span></div>
+        <div class="key sp w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Strg</span></div>
+        <div class="key sp w38" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Win</span></div>
+        <div class="key sp w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Alt</span></div>
+        <div class="key sp w228" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Leertaste</span></div>
+        <div class="key sp k-altgr w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">AltGr</span></div>
+        <div class="key sp w38" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Win</span></div>
+        <div class="key sp w38" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Men&#xFC;</span></div>
+        <div class="key sp w58" style="display:flex;align-items:center;justify-content:center;"><span class="lbl">Strg</span></div>
       </div>
+
     </div><!-- /.kb-schaubild -->
 
-    <!-- Legende -->
+    <!-- Legende: B&W-Beschreibung (keine Farbquadrate) -->
     <div class="kb-legend">
-      <div class="kb-legend-item"><div class="leg-sq leg-white"></div><span>Ebene 1 – Normal</span></div>
-      <div class="kb-legend-item"><div class="leg-sq leg-blue"></div><span>+ Shift (Ebene 2)</span></div>
-      <div class="kb-legend-item"><div class="leg-sq leg-green"></div><span>+ AltGr (Ebene 3)</span></div>
-      <div class="kb-legend-item"><div class="leg-sq leg-gray"></div><span>Sondertaste</span></div>
+      Normale Zeichen stehen <strong>unten links</strong> auf der Taste &nbsp;&middot;&nbsp;
+      <u>Shift-Zeichen sind unterstrichen</u> und stehen <strong>oben rechts</strong> &nbsp;&middot;&nbsp;
+      <em>AltGr-Zeichen sind kursiv</em> und stehen <strong>oben links</strong> &nbsp;&middot;&nbsp;
+      <span style="background:#e0e0e0; border:1px solid #555; padding:0 3px; font-size:7pt;">Grau</span> = Sondertaste &nbsp;&middot;&nbsp;
+      <span style="background:repeating-linear-gradient(135deg,#fff,#fff 3px,#bbb 3px,#bbb 4px); border:1px dashed #333; padding:0 3px; font-size:7pt;">Schraffiert</span> = Shift &nbsp;&middot;&nbsp;
+      <span style="background:#999; border:2px solid #111; padding:0 3px; font-size:7pt; color:#fff;">Dunkel</span> = AltGr
     </div>
 
   </div><!-- /.schaubild-wrap -->
@@ -596,13 +617,12 @@
   <hr class="doc-rule" style="margin-bottom:6px;">
 
   <!-- ============================================================
-       AUFGABE 1
+       AUFGABE 1 – Tasten benennen
   ============================================================ -->
   <div class="task-block">
     <div class="task-header">
       <div class="task-num">1</div>
       <div class="task-title">Benenne die Tasten</div>
-      <div class="task-points">8 Punkte</div>
     </div>
     <div class="task-instr">
       Schreibe den Namen der markierten Taste auf die gepunktete Linie.
@@ -650,7 +670,7 @@
         <span class="dotline">. . . . . . . . . . . . . . . . . . .</span>
       </div>
 
-      <!-- (6) CapsLock -->
+      <!-- (6) Feststelltaste -->
       <div class="task1-item">
         <span class="task1-num">(6)</span>
         <div class="key-display kd-sp">&#x21EA;&nbsp;CapsLock</div>
@@ -678,18 +698,17 @@
   </div><!-- /.task-block -->
 
   <!-- ============================================================
-       AUFGABE 2
+       AUFGABE 2 – Welches Zeichen entsteht?
   ============================================================ -->
   <div class="task-block">
     <div class="task-header">
       <div class="task-num">2</div>
       <div class="task-title">Welches Zeichen entsteht?</div>
-      <div class="task-points">12 Punkte</div>
     </div>
     <div class="task-instr">
       Trage ein, welches Zeichen bei der jeweiligen Tastenkombination erscheint.
-      Ein Strich (–) bedeutet: kein besonderes Zeichen auf dieser Ebene.
-      <em style="color:#1d4ed8;font-size:9.5pt;">(Kursiv&nbsp;+&nbsp;blaue Zellen = schon vorgegeben, zur Orientierung)</em>
+      Ein Strich (&ndash;) bedeutet: kein besonderes Zeichen auf dieser Ebene.
+      <em style="font-size:9.5pt;">(Grau hinterlegt &amp; kursiv = vorgegeben, zur Orientierung.)</em>
     </div>
 
     <table class="aufg2-table">
@@ -707,7 +726,7 @@
           <td>1</td>
           <td class="cell-given">1</td>
           <td class="cell-blank">&nbsp;</td>
-          <td style="color:#475569;">–</td>
+          <td style="color:#555;">&ndash;</td>
         </tr>
         <!-- 2 -->
         <tr>
@@ -742,7 +761,7 @@
           <td>ß</td>
           <td class="cell-blank">&nbsp;</td>
           <td class="cell-blank">&nbsp;</td>
-          <td style="color:#475569;">–</td>
+          <td style="color:#555;">&ndash;</td>
         </tr>
         <!-- + -->
         <tr>
@@ -753,23 +772,22 @@
         </tr>
         <!-- – -->
         <tr>
-          <td>–</td>
+          <td>&ndash;</td>
           <td class="cell-blank">&nbsp;</td>
           <td class="cell-blank">&nbsp;</td>
-          <td style="color:#475569;">–</td>
+          <td style="color:#555;">&ndash;</td>
         </tr>
       </tbody>
     </table>
   </div><!-- /.task-block -->
 
   <!-- ============================================================
-       AUFGABE 3
+       AUFGABE 3 – Tastenkombinationen
   ============================================================ -->
   <div class="task-block">
     <div class="task-header">
       <div class="task-num">3</div>
       <div class="task-title">Tastenkombinationen</div>
-      <div class="task-points">8 Punkte</div>
     </div>
     <div class="task-instr">
       Welche Tasten musst du drücken, um das Zeichen einzugeben? Schreibe die Tastenkombination auf.
@@ -853,13 +871,12 @@
   </div><!-- /.task-block -->
 
   <!-- ============================================================
-       AUFGABE 4
+       AUFGABE 4 – Passwort
   ============================================================ -->
   <div class="task-block">
     <div class="task-header">
       <div class="task-num">4</div>
       <div class="task-title">Dein Passwort und die Tastatur</div>
-      <div class="task-points">4 Punkte</div>
     </div>
     <div class="task-instr">
       Schau dir dein Passwort aus der letzten Stunde noch einmal an
@@ -875,18 +892,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
       </tbody>
     </table>
   </div><!-- /.task-block -->
@@ -899,16 +907,16 @@
     <div class="merke-content">
       <ol>
         <li>
-          <strong>Ebene 1 – Normal:</strong>
-          Buchstaben in Kleinschreibung, Ziffern 0–9 – einfach tippen.
+          <strong>Ebene 1 &ndash; Normal:</strong>
+          Buchstaben in Kleinschreibung, Ziffern 0&ndash;9 &ndash; einfach tippen.
         </li>
         <li>
-          <strong>Ebene 2 – Shift:</strong>
+          <strong>Ebene 2 &ndash; Shift:</strong>
           Shift gedrückt halten + Taste &rarr; Großbuchstaben und Zeichen wie
           <span style="font-family:'Courier New',monospace;font-size:10pt;">! &quot; § $ % &amp; / ( ) = ?</span>
         </li>
         <li>
-          <strong>Ebene 3 – AltGr:</strong>
+          <strong>Ebene 3 &ndash; AltGr:</strong>
           AltGr gedrückt halten + Taste &rarr; Sonderzeichen wie
           <span style="font-family:'Courier New',monospace;font-size:10pt;">@ € { [ ] } \ ~</span>
         </li>
