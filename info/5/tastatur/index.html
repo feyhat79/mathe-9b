@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die QWERTZ-Tastatur – Informatik 5b</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #1d4ed8;
+      --primary-l: #dbeafe;
+      --shift-c: #b45309;
+      --shift-bg: #fef3c7;
+      --altgr-c: #065f46;
+      --altgr-bg: #d1fae5;
+      --key-bg: #ffffff;
+      --key-border: #94a3b8;
+      --key-shadow: 0 2px 0 0 #94a3b8;
+      --key-sp-bg: #f1f5f9;
+      --ku: 54px;
+      --gap: 5px;
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #0f172a;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --key-bg: #1e293b;
+      --key-border: #475569;
+      --key-shadow: 0 2px 0 0 #0f172a;
+      --key-sp-bg: #162032;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── TOPBAR ── */
+    #topbar {
+      background: var(--surface);
+      border-bottom: 1.5px solid var(--border);
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+      height: 56px;
+    }
+
+    #topbar h1 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+
+    #layer-tabs {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      align-items: center;
+    }
+
+    .layer-tab {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-2);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .layer-tab:hover { border-color: var(--primary); color: var(--primary); }
+
+    .layer-tab.active-normal {
+      background: var(--primary-l);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .layer-tab.active-shift {
+      background: var(--shift-bg);
+      border-color: var(--shift-c);
+      color: var(--shift-c);
+    }
+
+    .layer-tab.active-altgr {
+      background: var(--altgr-bg);
+      border-color: var(--altgr-c);
+      color: var(--altgr-c);
+    }
+
+    .tab-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .layer-tab.active-shift .tab-badge { background: var(--shift-c); }
+    .layer-tab.active-altgr .tab-badge { background: var(--altgr-c); }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-quiz {
+      padding: 6px 16px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.01em;
+    }
+    .btn-quiz:hover { background: #1e40af; transform: translateY(-1px); }
+
+    .btn-dark {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface-2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: border-color 0.15s;
+      color: var(--text);
+    }
+    .btn-dark:hover { border-color: var(--primary); }
+
+    /* ── MAIN ── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 12px 8px;
+      overflow: hidden;
+      gap: 12px;
+    }
+
+    /* ── KEYBOARD ── */
+    #keyboard-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .kb-row {
+      display: flex;
+      gap: var(--gap);
+    }
+
+    /* ── KEY ── */
+    .k {
+      height: calc(var(--ku) * 0.85);
+      background: var(--key-bg);
+      border: 1.5px solid var(--key-border);
+      border-radius: 6px;
+      box-shadow: var(--key-shadow);
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s, border-color 0.1s, background 0.1s;
+      flex-shrink: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .k:hover { border-color: var(--primary); transform: translateY(-1px); }
+    .k.selected {
+      border-color: var(--primary);
+      border-width: 2px;
+      box-shadow: 0 0 0 2px var(--primary-l), var(--key-shadow);
+    }
+
+    .k.dim { opacity: 0.28; pointer-events: none; }
+
+    .k.sp {
+      background: var(--key-sp-bg);
+    }
+
+    .k.flash {
+      animation: kflash 0.75s ease forwards;
+    }
+
+    @keyframes kflash {
+      0%   { background: #bbf7d0; border-color: #059669; box-shadow: 0 0 0 3px #6ee7b7; transform: translateY(-2px); }
+      60%  { background: #bbf7d0; border-color: #059669; }
+      100% { background: var(--key-bg); border-color: var(--key-border); box-shadow: var(--key-shadow); transform: none; }
+    }
+
+    .k-g {
+      position: absolute; top: 3px; left: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(var(--ku) * 0.17);
+      font-weight: 700;
+      color: var(--altgr-c);
+      line-height: 1;
+      transition: font-size 0.12s, font-weight 0.12s;
+    }
+
+    .k-s {
+      position: absolute; top: 3px; right: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(var(--ku) * 0.17);
+      font-weight: 700;
+      color: var(--shift-c);
+      line-height: 1;
+      transition: font-size 0.12s, font-weight 0.12s;
+    }
+
+    .k-n {
+      position: absolute; bottom: 4px; left: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(var(--ku) * 0.27);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      transition: font-size 0.12s, font-weight 0.12s;
+    }
+
+    .k-lbl {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: calc(var(--ku) * 0.15);
+      font-weight: 700;
+      color: var(--muted);
+      padding: 0 6px;
+      text-align: center;
+      line-height: 1.2;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Layer highlighting */
+    body.l-normal .k-n { font-size: calc(var(--ku) * 0.31); color: var(--primary); }
+    body.l-shift  .k-s { font-size: calc(var(--ku) * 0.28); font-weight: 800; }
+    body.l-altgr  .k-g { font-size: calc(var(--ku) * 0.28); font-weight: 800; }
+
+    /* ── INFO PANEL ── */
+    #info-panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      min-height: 72px;
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-shrink: 0;
+    }
+
+    #info-char {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      min-width: 52px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    #info-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #info-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    #info-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+    }
+
+    kbd {
+      display: inline-block;
+      background: var(--surface-2);
+      border: 1.5px solid var(--key-border);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      box-shadow: 0 1px 0 0 var(--key-border);
+    }
+
+    #info-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .layer-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .lc-normal { background: var(--primary-l); color: var(--primary); }
+    .lc-shift  { background: var(--shift-bg);  color: var(--shift-c);  }
+    .lc-altgr  { background: var(--altgr-bg);  color: var(--altgr-c);  }
+
+    #info-default {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* ── SHORTCUTS BAR ── */
+    #shortcuts-bar {
+      background: var(--surface-2);
+      border-top: 1px solid var(--border);
+      padding: 5px 18px;
+      font-size: 0.73rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    #shortcuts-bar kbd {
+      font-size: 0.7rem;
+      padding: 0px 5px;
+      box-shadow: 0 1px 0 var(--key-border);
+    }
+
+    /* ── QUIZ OVERLAY ── */
+    #quiz-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #quiz-overlay.active {
+      display: flex;
+    }
+
+    #quiz-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 40px 52px 36px;
+      min-width: 340px;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+      text-align: center;
+    }
+
+    #quiz-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #quiz-char {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+      min-height: 6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #quiz-answer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #quiz-answer.visible { display: flex; }
+
+    #quiz-combo {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    #quiz-progress {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .btn-quiz-action {
+      padding: 10px 32px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      min-width: 180px;
+    }
+    .btn-quiz-action:hover { background: #1e40af; transform: translateY(-1px); }
+
+    .btn-quiz-close {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      padding: 6px 18px;
+      border-radius: 7px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-quiz-close:hover { border-color: var(--primary); color: var(--primary); }
+
+    .quiz-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* ── RESPONSIVE SCALE ── */
+    #KU { width: var(--ku); height: 0; position: absolute; visibility: hidden; }
+
+    @media (max-width: 1100px) {
+      :root { --ku: 46px; }
+    }
+    @media (max-width: 900px) {
+      :root { --ku: 38px; }
+    }
+  </style>
+</head>
+<body class="l-normal">
+
+  <!-- Hidden key-unit measurement div -->
+  <div id="KU"></div>
+
+  <!-- ── TOPBAR ── -->
+  <div id="topbar">
+    <h1>QWERTZ-Tastatur</h1>
+
+    <div id="layer-tabs">
+      <button class="layer-tab active-normal" data-layer="normal" onclick="setLayer('normal')">
+        Ebene 1 – Normal
+        <span class="tab-badge">1</span>
+      </button>
+      <button class="layer-tab" data-layer="shift" onclick="setLayer('shift')">
+        ⇧ Shift
+        <span class="tab-badge">2</span>
+      </button>
+      <button class="layer-tab" data-layer="altgr" onclick="setLayer('altgr')">
+        AltGr
+        <span class="tab-badge">3</span>
+      </button>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-quiz" onclick="openQuiz()">Schatzsuche starten</button>
+      <button class="btn-dark" onclick="toggleDark()" title="Hell/Dunkel wechseln" id="dark-btn">☀</button>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <div id="main">
+    <!-- Keyboard -->
+    <div id="keyboard-wrap"></div>
+
+    <!-- Info Panel -->
+    <div id="info-panel">
+      <div id="info-default">Klicke eine Taste an, um Details zu sehen.</div>
+      <div id="info-content" style="display:none; width:100%; display:none; align-items:center; gap:18px; flex:1;">
+        <div id="info-char"></div>
+        <div id="info-body">
+          <div id="info-title"></div>
+          <div id="info-sub"></div>
+        </div>
+        <div id="info-layers"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SHORTCUTS BAR ── -->
+  <div id="shortcuts-bar">
+    Tastaturkürzel:&nbsp;
+    <kbd>1</kbd> Normal &nbsp;·&nbsp;
+    <kbd>2</kbd> Shift &nbsp;·&nbsp;
+    <kbd>3</kbd> AltGr &nbsp;·&nbsp;
+    <kbd>Leertaste</kbd> / <kbd>Enter</kbd> Auflösen · Weiter in der Schatzsuche &nbsp;·&nbsp;
+    <kbd>Esc</kbd> Schatzsuche beenden
+  </div>
+
+  <!-- ── QUIZ OVERLAY ── -->
+  <div id="quiz-overlay">
+    <div id="quiz-card">
+      <div id="quiz-label">Schatzsuche – Wo versteckt sich dieses Zeichen?</div>
+      <div id="quiz-char">@</div>
+      <div id="quiz-answer">
+        <div id="quiz-combo"></div>
+      </div>
+      <div id="quiz-progress"></div>
+      <div class="quiz-row">
+        <button class="btn-quiz-action" id="quiz-action-btn" onclick="quizAction()">Auflösen</button>
+        <button class="btn-quiz-close" onclick="closeQuiz()">Schatzsuche beenden</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── DATA ──────────────────────────────────────────────────────────────────
+
+  const ROWS = [
+    [ // Zahlenreihe
+      {id:'hat',   n:'^', s:'°',  g:'',    w:1},
+      {id:'k1',    n:'1', s:'!',  g:'',    w:1},
+      {id:'k2',    n:'2', s:'"',  g:'²',   w:1},
+      {id:'k3',    n:'3', s:'§',  g:'³',   w:1},
+      {id:'k4',    n:'4', s:'$',  g:'',    w:1},
+      {id:'k5',    n:'5', s:'%',  g:'',    w:1},
+      {id:'k6',    n:'6', s:'&',  g:'',    w:1},
+      {id:'k7',    n:'7', s:'/',  g:'{',   w:1},
+      {id:'k8',    n:'8', s:'(',  g:'[',   w:1},
+      {id:'k9',    n:'9', s:')',  g:']',   w:1},
+      {id:'k0',    n:'0', s:'=',  g:'}',   w:1},
+      {id:'sz',    n:'ß', s:'?',  g:'\\',  w:1},
+      {id:'acu',   n:'´', s:'`',  g:'',    w:1},
+      {id:'bs',    n:'',  s:'',   g:'',    w:2,    sp:true, lbl:'⌫ Rücktaste'},
+    ],
+    [ // QWERTZ
+      {id:'tab',   n:'',  s:'',   g:'',    w:1.5,  sp:true, lbl:'⇥ Tab'},
+      {id:'q',     n:'q', s:'Q',  g:'@',   w:1},
+      {id:'w',     n:'w', s:'W',  g:'',    w:1},
+      {id:'e',     n:'e', s:'E',  g:'€',   w:1},
+      {id:'r',     n:'r', s:'R',  g:'',    w:1},
+      {id:'t',     n:'t', s:'T',  g:'',    w:1},
+      {id:'z',     n:'z', s:'Z',  g:'',    w:1},
+      {id:'u',     n:'u', s:'U',  g:'',    w:1},
+      {id:'i',     n:'i', s:'I',  g:'',    w:1},
+      {id:'o',     n:'o', s:'O',  g:'',    w:1},
+      {id:'p',     n:'p', s:'P',  g:'',    w:1},
+      {id:'ue',    n:'ü', s:'Ü',  g:'',    w:1},
+      {id:'plu',   n:'+', s:'*',  g:'~',   w:1},
+      {id:'ent',   n:'',  s:'',   g:'',    w:1.5,  sp:true, lbl:'↵ Enter'},
+    ],
+    [ // ASDF
+      {id:'cap',   n:'',  s:'',   g:'',    w:1.75, sp:true, lbl:'⇪ Feststelltaste'},
+      {id:'a',     n:'a', s:'A',  g:'',    w:1},
+      {id:'s',     n:'s', s:'S',  g:'',    w:1},
+      {id:'d',     n:'d', s:'D',  g:'',    w:1},
+      {id:'f',     n:'f', s:'F',  g:'',    w:1},
+      {id:'g',     n:'g', s:'G',  g:'',    w:1},
+      {id:'h',     n:'h', s:'H',  g:'',    w:1},
+      {id:'j',     n:'j', s:'J',  g:'',    w:1},
+      {id:'k',     n:'k', s:'K',  g:'',    w:1},
+      {id:'l',     n:'l', s:'L',  g:'',    w:1},
+      {id:'oe',    n:'ö', s:'Ö',  g:'',    w:1},
+      {id:'ae',    n:'ä', s:'Ä',  g:'',    w:1},
+      {id:'hsh',   n:'#', s:"'",  g:'',    w:1.25},
+    ],
+    [ // YXCV
+      {id:'shl',   n:'',  s:'',   g:'',    w:2.25, sp:true, lbl:'⇧ Shift', isShift:true},
+      {id:'lt',    n:'<', s:'>',  g:'|',   w:1},
+      {id:'y',     n:'y', s:'Y',  g:'',    w:1},
+      {id:'x',     n:'x', s:'X',  g:'',    w:1},
+      {id:'c',     n:'c', s:'C',  g:'',    w:1},
+      {id:'v',     n:'v', s:'V',  g:'',    w:1},
+      {id:'b',     n:'b', s:'B',  g:'',    w:1},
+      {id:'n',     n:'n', s:'N',  g:'',    w:1},
+      {id:'m',     n:'m', s:'M',  g:'µ',   w:1},
+      {id:'com',   n:',', s:';',  g:'',    w:1},
+      {id:'dot',   n:'.', s:':',  g:'',    w:1},
+      {id:'min',   n:'-', s:'_',  g:'',    w:1},
+      {id:'shr',   n:'',  s:'',   g:'',    w:2.75, sp:true, lbl:'⇧ Shift', isShift:true},
+    ],
+    [ // Unterste Reihe
+      {id:'ctl',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Strg'},
+      {id:'win',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Win'},
+      {id:'alt',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Alt'},
+      {id:'spc',   n:'',  s:'',   g:'',    w:5.75, sp:true, lbl:'Leertaste'},
+      {id:'agr',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'AltGr', isAltGr:true},
+      {id:'wnr',   n:'',  s:'',   g:'',    w:1,    sp:true, lbl:'Win'},
+      {id:'men',   n:'',  s:'',   g:'',    w:1,    sp:true, lbl:'Menü'},
+      {id:'ctr',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Strg'},
+    ],
+  ];
+
+  const QUIZ = [
+    {c:'@',  info:'AltGr + Q',   keys:['q'],  mod:'altgr'},
+    {c:'!',  info:'Shift + 1',   keys:['k1'], mod:'shift'},
+    {c:'?',  info:'Shift + ß',   keys:['sz'], mod:'shift'},
+    {c:'$',  info:'Shift + 4',   keys:['k4'], mod:'shift'},
+    {c:'%',  info:'Shift + 5',   keys:['k5'], mod:'shift'},
+    {c:'&',  info:'Shift + 6',   keys:['k6'], mod:'shift'},
+    {c:'/',  info:'Shift + 7',   keys:['k7'], mod:'shift'},
+    {c:'(',  info:'Shift + 8',   keys:['k8'], mod:'shift'},
+    {c:')',  info:'Shift + 9',   keys:['k9'], mod:'shift'},
+    {c:'=',  info:'Shift + 0',   keys:['k0'], mod:'shift'},
+    {c:'_',  info:'Shift + -',   keys:['min'],mod:'shift'},
+    {c:'"',  info:'Shift + 2',   keys:['k2'], mod:'shift'},
+    {c:'€',  info:'AltGr + E',   keys:['e'],  mod:'altgr'},
+    {c:'+',  info:'Taste +',     keys:['plu'], mod:'normal'},
+    {c:'*',  info:'Shift + +',   keys:['plu'], mod:'shift'},
+    {c:';',  info:'Shift + ,',   keys:['com'], mod:'shift'},
+    {c:':',  info:'Shift + .',   keys:['dot'], mod:'shift'},
+  ];
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+
+  let currentLayer = 'normal';
+  let selectedKeyId = null;
+  let isDark = false;
+
+  // Quiz state
+  let quizActive = false;
+  let quizDeck = [];
+  let quizIndex = 0;
+  let quizRevealed = false;
+  let quizTotal = 0;
+
+  // ── BUILD KEYBOARD ────────────────────────────────────────────────────────
+
+  function getKU() {
+    return document.getElementById('KU').getBoundingClientRect().width || 54;
+  }
+
+  function buildKeyboard() {
+    const wrap = document.getElementById('keyboard-wrap');
+    wrap.innerHTML = '';
+    const K = getKU();
+    const GAP = 5;
+
+    ROWS.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'kb-row';
+
+      row.forEach(key => {
+        const el = document.createElement('div');
+        el.className = 'k' + (key.sp ? ' sp' : '');
+        el.dataset.id = key.id;
+        if (key.isShift) el.dataset.isshift = '1';
+        if (key.isAltGr) el.dataset.isaltgr = '1';
+
+        const w = key.w || 1;
+        const px = K * w + GAP * (w - 1);
+        el.style.minWidth = el.style.width = px + 'px';
+
+        if (key.sp) {
+          // Special key: show label
+          const lbl = document.createElement('span');
+          lbl.className = 'k-lbl';
+          lbl.textContent = key.lbl || '';
+          el.appendChild(lbl);
+        } else {
+          // Normal key: show g, s, n layers
+          if (key.g) {
+            const gEl = document.createElement('span');
+            gEl.className = 'k-g';
+            gEl.textContent = key.g;
+            el.appendChild(gEl);
+          }
+          if (key.s) {
+            const sEl = document.createElement('span');
+            sEl.className = 'k-s';
+            sEl.textContent = key.s;
+            el.appendChild(sEl);
+          }
+          if (key.n) {
+            const nEl = document.createElement('span');
+            nEl.className = 'k-n';
+            nEl.textContent = key.n;
+            el.appendChild(nEl);
+          }
+        }
+
+        el.addEventListener('click', () => handleKeyClick(key));
+        rowEl.appendChild(el);
+      });
+
+      wrap.appendChild(rowEl);
+    });
+
+    applyLayerDim();
+    if (selectedKeyId) {
+      const el = document.querySelector(`.k[data-id="${selectedKeyId}"]`);
+      if (el) el.classList.add('selected');
+    }
+  }
+
+  // ── LAYER ─────────────────────────────────────────────────────────────────
+
+  function setLayer(layer) {
+    currentLayer = layer;
+    document.body.classList.remove('l-normal', 'l-shift', 'l-altgr');
+    document.body.classList.add('l-' + layer);
+
+    // Update tabs
+    document.querySelectorAll('.layer-tab').forEach(tab => {
+      tab.classList.remove('active-normal', 'active-shift', 'active-altgr');
+      if (tab.dataset.layer === layer) {
+        tab.classList.add('active-' + layer);
+      }
+    });
+
+    applyLayerDim();
+  }
+
+  function applyLayerDim() {
+    if (currentLayer !== 'altgr') {
+      document.querySelectorAll('.k').forEach(el => el.classList.remove('dim'));
+      return;
+    }
+    // In AltGr mode: dim keys with no AltGr character
+    ROWS.flat().forEach(key => {
+      const el = document.querySelector(`.k[data-id="${key.id}"]`);
+      if (!el) return;
+      if (key.sp) {
+        el.classList.remove('dim');
+      } else {
+        if (!key.g) {
+          el.classList.add('dim');
+        } else {
+          el.classList.remove('dim');
+        }
+      }
+    });
+  }
+
+  // ── KEY CLICK ─────────────────────────────────────────────────────────────
+
+  function handleKeyClick(key) {
+    // Deselect previous
+    document.querySelectorAll('.k.selected').forEach(el => el.classList.remove('selected'));
+
+    const el = document.querySelector(`.k[data-id="${key.id}"]`);
+    if (el) el.classList.add('selected');
+    selectedKeyId = key.id;
+
+    showInfo(key);
+  }
+
+  function layerChar(key) {
+    if (currentLayer === 'shift') return key.s || key.n || '';
+    if (currentLayer === 'altgr') return key.g || key.n || '';
+    return key.n || '';
+  }
+
+  function showInfo(key) {
+    const def = document.getElementById('info-default');
+    const content = document.getElementById('info-content');
+    const charEl = document.getElementById('info-char');
+    const titleEl = document.getElementById('info-title');
+    const subEl = document.getElementById('info-sub');
+    const layersEl = document.getElementById('info-layers');
+
+    def.style.display = 'none';
+    content.style.display = 'flex';
+
+    // Special key explanations
+    if (key.sp) {
+      switch(key.id) {
+        case 'bs':
+          charEl.textContent = '⌫';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = 'Rücktaste (Backspace)';
+          subEl.innerHTML = 'Löscht das Zeichen <strong>links</strong> vom Cursor. Tipp: Gedrückt halten löscht kontinuierlich.';
+          layersEl.innerHTML = '';
+          return;
+        case 'ent':
+          charEl.textContent = '↵';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = 'Enter (Eingabetaste)';
+          subEl.innerHTML = 'Bestätigt Eingaben oder beginnt eine <strong>neue Zeile</strong> in einem Text.';
+          layersEl.innerHTML = '';
+          return;
+        case 'tab':
+          charEl.textContent = '⇥';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = 'Tabulator-Taste (Tab)';
+          subEl.innerHTML = 'Springt zum nächsten <strong>Tabulatorsprung</strong>, z. B. in Tabellen oder Formularen.';
+          layersEl.innerHTML = '';
+          return;
+        case 'cap':
+          charEl.textContent = '⇪';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = 'Feststelltaste (Caps Lock)';
+          subEl.innerHTML = 'Schaltet <strong>Großbuchstaben dauerhaft ein</strong>. Drücke erneut, um auszuschalten. Eine Kontrolllampe zeigt den Zustand an.';
+          layersEl.innerHTML = '';
+          return;
+        case 'spc':
+          charEl.textContent = '⎵';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = 'Leertaste (Space)';
+          subEl.innerHTML = 'Fügt ein <strong>Leerzeichen</strong> zwischen Wörter ein. Die längste Taste auf der Tastatur.';
+          layersEl.innerHTML = '';
+          return;
+        case 'shl':
+        case 'shr':
+          charEl.textContent = '⇧';
+          charEl.style.color = 'var(--shift-c)';
+          titleEl.textContent = 'Shift-Taste (Umschalttaste)';
+          subEl.innerHTML = 'Gedrückt halten + Buchstabe → <strong>Großbuchstabe</strong>.<br>Gedrückt halten + Zifferntaste → Sonderzeichen (<kbd>Shift</kbd>+<kbd>1</kbd> = <kbd>!</kbd>, <kbd>Shift</kbd>+<kbd>2</kbd> = <kbd>"</kbd> …)';
+          layersEl.innerHTML = '';
+          return;
+        case 'agr':
+          charEl.textContent = 'AltGr';
+          charEl.style.fontSize = '1rem';
+          charEl.style.color = 'var(--altgr-c)';
+          titleEl.textContent = 'AltGr-Taste (Alternativ-Grafik)';
+          subEl.innerHTML = 'Drücke <kbd>AltGr</kbd> + eine Taste, um <strong>grüne Sonderzeichen</strong> einzugeben.<br>Beispiele: <kbd>AltGr</kbd>+<kbd>Q</kbd> = <kbd>@</kbd>&nbsp; <kbd>AltGr</kbd>+<kbd>E</kbd> = <kbd>€</kbd>&nbsp; <kbd>AltGr</kbd>+<kbd>7</kbd> = <kbd>{</kbd>';
+          layersEl.innerHTML = '';
+          charEl.style.fontSize = '';
+          return;
+        default:
+          charEl.textContent = key.lbl || '—';
+          charEl.style.color = 'var(--muted)';
+          titleEl.textContent = key.lbl || 'Sondertaste';
+          subEl.innerHTML = 'Steuertaste ohne direkte Zeicheneingabe.';
+          layersEl.innerHTML = '';
+          return;
+      }
+    }
+
+    // Normal character key
+    const activeChar = layerChar(key);
+    charEl.textContent = activeChar || key.n || '?';
+    charEl.style.color = 'var(--primary)';
+    charEl.style.fontSize = '';
+
+    // Title based on layer
+    let titleText = '';
+    if (currentLayer === 'normal') {
+      titleText = `„${key.n}" – Normale Ebene (direkte Eingabe)`;
+    } else if (currentLayer === 'shift') {
+      titleText = `„${key.s || key.n}" – Shift-Ebene`;
+    } else {
+      titleText = key.g ? `„${key.g}" – AltGr-Ebene` : `Keine AltGr-Belegung auf dieser Taste`;
+    }
+    titleEl.textContent = titleText;
+
+    // Combination chips
+    let comboHtml = '';
+    if (currentLayer === 'normal') {
+      comboHtml = `Eingabe: <kbd>${key.n}</kbd>`;
+    } else if (currentLayer === 'shift') {
+      comboHtml = `Kombination: <kbd>⇧ Shift</kbd> + <kbd>${key.n || key.id}</kbd> → <kbd>${key.s || '—'}</kbd>`;
+    } else if (currentLayer === 'altgr') {
+      if (key.g) {
+        comboHtml = `Kombination: <kbd>AltGr</kbd> + <kbd>${key.n || key.id}</kbd> → <kbd>${key.g}</kbd>`;
+      } else {
+        comboHtml = `Diese Taste hat keine AltGr-Belegung.`;
+      }
+    }
+    subEl.innerHTML = comboHtml;
+
+    // Layer chips
+    layersEl.innerHTML = '';
+    if (key.n) {
+      const c = document.createElement('span');
+      c.className = 'layer-chip lc-normal';
+      c.textContent = `Normal: ${key.n}`;
+      layersEl.appendChild(c);
+    }
+    if (key.s) {
+      const c = document.createElement('span');
+      c.className = 'layer-chip lc-shift';
+      c.textContent = `Shift: ${key.s}`;
+      layersEl.appendChild(c);
+    }
+    if (key.g) {
+      const c = document.createElement('span');
+      c.className = 'layer-chip lc-altgr';
+      c.textContent = `AltGr: ${key.g}`;
+      layersEl.appendChild(c);
+    }
+  }
+
+  // ── QUIZ ──────────────────────────────────────────────────────────────────
+
+  function shuffleDeck() {
+    quizDeck = [...QUIZ].sort(() => Math.random() - 0.5);
+    quizIndex = 0;
+    quizTotal = quizDeck.length;
+  }
+
+  function openQuiz() {
+    quizActive = true;
+    shuffleDeck();
+    quizRevealed = false;
+    document.getElementById('quiz-overlay').classList.add('active');
+    showQuizItem();
+  }
+
+  function closeQuiz() {
+    quizActive = false;
+    document.getElementById('quiz-overlay').classList.remove('active');
+    // Remove any flash classes
+    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
+  }
+
+  function showQuizItem() {
+    const item = quizDeck[quizIndex];
+    quizRevealed = false;
+
+    document.getElementById('quiz-char').textContent = item.c;
+    document.getElementById('quiz-answer').classList.remove('visible');
+    document.getElementById('quiz-combo').innerHTML = '';
+    document.getElementById('quiz-action-btn').textContent = 'Auflösen';
+    document.getElementById('quiz-progress').textContent =
+      `Zeichen ${quizIndex + 1} von ${quizTotal}`;
+  }
+
+  function revealQuiz() {
+    const item = quizDeck[quizIndex];
+    quizRevealed = true;
+
+    // Build combo display
+    const combo = document.getElementById('quiz-combo');
+    combo.innerHTML = '';
+    const kbds = item.info.split(' + ');
+    kbds.forEach((k, i) => {
+      const kEl = document.createElement('kbd');
+      kEl.textContent = k;
+      combo.appendChild(kEl);
+      if (i < kbds.length - 1) {
+        const plus = document.createTextNode(' + ');
+        combo.appendChild(plus);
+      }
+    });
+
+    document.getElementById('quiz-answer').classList.add('visible');
+    document.getElementById('quiz-action-btn').textContent = 'Weiter';
+
+    // Flash keys on keyboard background
+    flashKeys(item);
+  }
+
+  function flashKeys(item) {
+    // Remove existing flashes
+    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
+
+    // Small delay to allow reflow
+    setTimeout(() => {
+      // Flash the specific keys
+      item.keys.forEach(kid => {
+        const el = document.querySelector(`.k[data-id="${kid}"]`);
+        if (el) {
+          el.classList.add('flash');
+          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
+        }
+      });
+
+      // Flash modifier keys
+      if (item.mod === 'shift') {
+        document.querySelectorAll('.k[data-isshift]').forEach(el => {
+          el.classList.add('flash');
+          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
+        });
+      } else if (item.mod === 'altgr') {
+        document.querySelectorAll('.k[data-isaltgr]').forEach(el => {
+          el.classList.add('flash');
+          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
+        });
+      }
+    }, 20);
+  }
+
+  function nextQuiz() {
+    quizIndex++;
+    if (quizIndex >= quizDeck.length) {
+      // All done – reshuffle
+      shuffleDeck();
+    }
+    showQuizItem();
+  }
+
+  function quizAction() {
+    if (!quizRevealed) {
+      revealQuiz();
+    } else {
+      nextQuiz();
+    }
+  }
+
+  // ── DARK MODE ─────────────────────────────────────────────────────────────
+
+  function toggleDark() {
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    document.getElementById('dark-btn').textContent = isDark ? '☾' : '☀';
+  }
+
+  // ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '1' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('normal'); }
+    if (e.key === '2' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('shift'); }
+    if (e.key === '3' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('altgr'); }
+
+    if (quizActive) {
+      if (e.key === 'Escape') { closeQuiz(); }
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); quizAction(); }
+    }
+  });
+
+  // ── RESIZE ────────────────────────────────────────────────────────────────
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildKeyboard, 200);
+  });
+
+  // ── INIT ──────────────────────────────────────────────────────────────────
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildKeyboard();
+    setLayer('normal');
+  });
+  </script>
+</body>
+</html>
