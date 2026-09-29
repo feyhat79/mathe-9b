@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>AB 1.3 – Wurzelgesetze & Vereinfachen | Mathe 9b</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX(el) {
+      const target = el || document.body;
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(target, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(() => triggerKaTeX(el), 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => triggerKaTeX());
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', () => triggerKaTeX());
+  </script>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --violet: #7c3aed;
+      --violet-light: #f5f3ff;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 11pt;
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #0f172a; color: #ffffff;
+      padding: 9px 18px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      border-bottom: 2px solid var(--primary);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 10px; }
+    .toolbar-title { font-weight: 700; font-size: 0.9rem; }
+    .toolbar-right { display: flex; gap: 8px; }
+    .btn-toolbar {
+      background: rgba(255,255,255,0.12); color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 5px 12px; border-radius: 6px;
+      font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+      transition: background 0.2s;
+    }
+    .btn-toolbar:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── CONTAINER & HEADER ── */
+    .container { max-width: 960px; margin: 1.5rem auto; padding: 0 1.25rem; }
+
+    .hero-header { text-align: center; padding: 0.5rem 0 1.5rem 0; }
+    .badge-chapter {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 14px; background: var(--primary-light); color: var(--primary-dark);
+      border-radius: 999px; font-size: 0.82rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;
+    }
+    h1 { font-size: 1.95rem; font-weight: 800; color: var(--primary-dark); letter-spacing: -0.5px; margin-bottom: 0.3rem; }
+    .lead { color: var(--text-muted); font-size: 1rem; max-width: 720px; margin: 0 auto; }
+
+    /* ── TABS ── */
+    .tab-nav {
+      display: flex; gap: 4px; margin-bottom: 1.25rem;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 6px;
+      box-shadow: var(--shadow-sm); flex-wrap: wrap;
+    }
+    .tab-btn {
+      flex: 1; min-width: 130px; padding: 9px 12px; border: none;
+      background: transparent; color: var(--text-muted);
+      font-family: inherit; font-size: 0.88rem; font-weight: 700;
+      border-radius: 10px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .tab-btn:hover { background: var(--primary-light); color: var(--primary-dark); }
+    .tab-btn.active { background: var(--primary); color: #ffffff; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.4rem 1.5rem;
+      margin-bottom: 1.25rem; box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 0.9rem; padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .card-badge {
+      background: var(--primary); color: #fff;
+      width: 30px; height: 30px; border-radius: 7px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; font-weight: 800; flex-shrink: 0;
+    }
+    .card-title { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+
+    .sub-card {
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.8rem 1rem;
+      margin: 0.5rem 0; font-size: 10.5pt;
+    }
+    .sub-label { font-weight: 700; color: var(--primary-dark); display: block; margin-bottom: 3px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0.75rem 0; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 0.75rem 0; }
+    @media (max-width: 700px) { .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ── MERKE-BOX (Schulblatt-Standard) ── */
+    .merke-box {
+      border: 2.5px solid var(--danger); border-radius: 6px;
+      background: #ffffff; padding: 14px 18px;
+      margin: 1.25rem 0; position: relative;
+    }
+    .merke-tag {
+      position: absolute; top: -11px; left: 14px;
+      background: var(--danger); color: #ffffff;
+      font-size: 8.5pt; font-weight: 800; padding: 1px 10px;
+      border-radius: 3px; letter-spacing: 0.6px; text-transform: uppercase;
+    }
+    .merke-content { color: #111827; font-size: 11pt; line-height: 1.6; }
+
+    /* ── AUFDECKKARTEN ── */
+    .reveal-card {
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem; transition: border-color 0.2s;
+    }
+    .reveal-card.solved { border-color: var(--success); background: #f0fdf4; }
+    .reveal-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 10px; cursor: pointer;
+    }
+    .reveal-question { font-weight: 700; font-size: 1rem; flex: 1; }
+    .btn-reveal {
+      font-family: inherit; font-size: 0.8rem; font-weight: 700;
+      padding: 4px 11px; border-radius: 5px; border: 1px solid var(--border);
+      background: #ffffff; color: var(--primary); cursor: pointer; white-space: nowrap;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .btn-reveal:hover { background: var(--primary-light); border-color: var(--primary); }
+    .reveal-body {
+      display: none; margin-top: 0.7rem; padding-top: 0.7rem;
+      border-top: 1px dashed var(--border);
+    }
+    .reveal-body.show { display: block; }
+    .solution-steps { display: flex; flex-direction: column; gap: 4px; }
+    .sol-step {
+      display: flex; align-items: baseline; gap: 12px;
+      padding: 4px 0;
+    }
+    .sol-step-formula { min-width: 160px; font-size: 1rem; color: var(--primary-dark); font-weight: 600; }
+    .sol-step-hint { font-size: 9.5pt; color: var(--text-muted); }
+
+    /* ── HINWEIS-BOX ── */
+    .hint-box {
+      background: var(--accent-light); border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 10px 14px; margin: 0.75rem 0; font-size: 10.5pt;
+    }
+    .hint-box strong { color: #92400e; }
+
+    /* ── WARNUNG-BOX ── */
+    .warn-box {
+      background: var(--danger-light); border-left: 4px solid var(--danger);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 10px 14px; margin: 0.75rem 0; font-size: 10.5pt;
+    }
+    .warn-box strong { color: #991b1b; }
+
+    /* ── AUFGABEN-STERN-BADGES ── */
+    .stern-header {
+      display: flex; align-items: center; gap: 8px;
+      margin: 1.5rem 0 0.75rem 0;
+    }
+    .stern-badge {
+      background: var(--primary-light); color: var(--primary-dark);
+      font-size: 0.78rem; font-weight: 800; padding: 3px 10px;
+      border-radius: 999px; letter-spacing: 0.3px;
+    }
+    .stern-badge.mittel { background: #fef3c7; color: #92400e; }
+    .stern-badge.schwer { background: #f5f3ff; color: #5b21b6; }
+    .stern-title { font-size: 1rem; font-weight: 700; }
+
+    /* ── ZUFALLS-TRAINER ── */
+    .trainer-card {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem; margin-bottom: 1.5rem;
+      box-shadow: 0 8px 30px rgba(49,46,129,0.3);
+      color: #ffffff;
+    }
+    .trainer-top {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 1.25rem;
+    }
+    .trainer-meta { display: flex; align-items: center; gap: 10px; }
+    .trainer-label {
+      font-size: 0.78rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.7px; background: rgba(255,255,255,0.15);
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .trainer-counter {
+      font-size: 0.82rem; font-weight: 600; color: #a5b4fc;
+    }
+    .trainer-level {
+      font-size: 0.75rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .level-1 { background: #d1fae5; color: #065f46; }
+    .level-2 { background: #fef3c7; color: #92400e; }
+    .level-3 { background: #fce7f3; color: #9d174d; }
+
+    .trainer-problem {
+      text-align: center; padding: 1rem 0 1.25rem 0;
+    }
+    .trainer-prompt {
+      font-size: 0.95rem; color: #a5b4fc; font-weight: 600; margin-bottom: 0.5rem;
+    }
+    .trainer-radical {
+      font-size: 2.6rem; font-weight: 800; color: #ffffff; letter-spacing: -1px;
+      min-height: 4rem; display: flex; align-items: center; justify-content: center;
+    }
+
+    .trainer-steps-container {
+      background: rgba(255,255,255,0.07); border-radius: var(--radius-md);
+      padding: 0; overflow: hidden;
+      margin-bottom: 1rem;
+      min-height: 0; transition: min-height 0.3s;
+    }
+    .trainer-steps-container:not(:empty) { padding: 0.75rem 1rem; }
+
+    .trainer-step {
+      display: flex; align-items: baseline; gap: 14px;
+      padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+      animation: fadeIn 0.25s ease;
+    }
+    .trainer-step:last-child { border-bottom: none; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+    .trainer-step-formula {
+      min-width: 170px; font-size: 1.1rem; font-weight: 700; color: #e0e7ff;
+    }
+    .trainer-step-hint {
+      font-size: 9pt; color: #a5b4fc; line-height: 1.4;
+    }
+
+    .trainer-buttons {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .btn-trainer {
+      font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      padding: 8px 16px; border-radius: 8px; border: none;
+      cursor: pointer; transition: all 0.2s; flex: 1; min-width: 110px;
+    }
+    .btn-trainer:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-next-step { background: #4f46e5; color: #ffffff; }
+    .btn-next-step:not(:disabled):hover { background: #4338ca; }
+    .btn-all-steps { background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-all-steps:not(:disabled):hover { background: rgba(255,255,255,0.25); }
+    .btn-new-task { background: #ffffff; color: #312e81; font-weight: 800; }
+    .btn-new-task:hover { background: #e0e7ff; }
+
+    /* ── STEP-LIST (Tab 2) ── */
+    .step-list { display: flex; flex-direction: column; gap: 10px; margin: 0.75rem 0; }
+    .step-item-row {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 10px 14px;
+    }
+    .step-num {
+      width: 28px; height: 28px; background: var(--primary); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.88rem; flex-shrink: 0;
+    }
+    .step-text { flex: 1; }
+    .step-text strong { color: var(--primary-dark); }
+
+    /* ── DRUCKEN ── */
+    @media print {
+      .toolbar { display: none; }
+      .tab-nav { display: none; }
+      .tab-panel { display: block !important; }
+      .trainer-card { display: none; }
+      body { background: white; padding-bottom: 0; }
+      .card { box-shadow: none; border: 1px solid #cbd5e1; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <a href="index.html" class="btn-toolbar">← Übersicht</a>
+      <span class="toolbar-title">Mathe 9b &nbsp;•&nbsp; AB 1.3 – Wurzelgesetze &amp; Vereinfachen</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn-toolbar" onclick="alleLoesungenAufdecken()">Alle Lösungen</button>
+      <button class="btn-toolbar" onclick="window.print()">Drucken / PDF</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Mathe 9b &nbsp;•&nbsp; Kapitel I (AB 1.3)</div>
+      <h1>Wurzelgesetze &amp; Vereinfachen</h1>
+      <p class="lead">Produkt- und Quotientenregel, teilweises Wurzelziehen, geschicktes Rechnen – und ein interaktiver Trainer zum Üben.</p>
+    </header>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="showTab(0)">1 &nbsp; Die Gesetze</button>
+      <button class="tab-btn" onclick="showTab(1)">2 &nbsp; Teilweises Wurzelziehen</button>
+      <button class="tab-btn" onclick="showTab(2)">3 &nbsp; Geschickt Rechnen</button>
+      <button class="tab-btn" onclick="showTab(3)">4 &nbsp; Üben &amp; Trainer</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB 1 – DIE ZWEI WURZELGESETZE
+         ══════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-0">
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">1</span>
+          <h2 class="card-title">Woher kommen die Regeln? – Eine Beobachtung</h2>
+        </div>
+        <p>Wir wissen bereits: $\sqrt{9} = 3$ und $\sqrt{4} = 2$. Was ist nun $\sqrt{9} \cdot \sqrt{4}$?</p>
+        <p style="margin: 0.6rem 0;">
+          $$\sqrt{9} \cdot \sqrt{4} = 3 \cdot 2 = 6$$
+          Andererseits: $\sqrt{9 \cdot 4} = \sqrt{36} = 6$. Das Ergebnis ist dasselbe!
+        </p>
+        <p>Dieses Muster lässt sich beweisen und gilt für alle positiven Zahlen. Man darf Wurzeln bei <strong>Produkten</strong> und <strong>Quotienten</strong> auseinander- oder zusammenziehen.</p>
+      </div>
+
+      <!-- MERKE-BOX -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke</div>
+        <div class="merke-content">
+          <strong>Die zwei Wurzelgesetze</strong> &nbsp;(für $a > 0$ und $b > 0$):
+          <br><br>
+          <strong>Produktregel:</strong>
+          $$\sqrt{a \cdot b} \;=\; \sqrt{a} \cdot \sqrt{b}$$
+          <strong>Quotientenregel:</strong>
+          $$\sqrt{\dfrac{a}{b}} \;=\; \dfrac{\sqrt{a}}{\sqrt{b}} \qquad \text{bzw.} \qquad \dfrac{\sqrt{a}}{\sqrt{b}} = \sqrt{\dfrac{a}{b}}$$
+          Man kann Wurzeln zusammenziehen oder auseinandernehmen – aber <strong>nur bei Produkten und Quotienten, niemals bei Summen oder Differenzen!</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">2</span>
+          <h2 class="card-title">Geführte Beispiele</h2>
+        </div>
+        <p style="margin-bottom: 0.75rem; color: var(--text-muted);">Klappe die Lösungen auf und vergleiche dein Ergebnis.</p>
+
+        <!-- Beispiel 1 -->
+        <div class="reveal-card" id="rc-t1-1">
+          <div class="reveal-header" onclick="toggleReveal('rc-t1-1')">
+            <div class="reveal-question">Beispiel 1: Berechne $\sqrt{4} \cdot \sqrt{9}$ und $\sqrt{4 \cdot 9}$ – sind die Ergebnisse gleich?</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step">
+                <span class="sol-step-formula">$\sqrt{4} \cdot \sqrt{9}$</span>
+                <span class="sol-step-hint">Gegebenes Produkt zweier Wurzeln</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= 2 \cdot 3$</span>
+                <span class="sol-step-hint">$\sqrt{4} = 2$ und $\sqrt{9} = 3$ direkt ausrechnen</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= 6$</span>
+                <span class="sol-step-hint"></span>
+              </div>
+            </div>
+            <p style="margin: 0.6rem 0 0.3rem 0;">Zum Vergleich: $\sqrt{4 \cdot 9} = \sqrt{36} = 6$ ✓ &nbsp;— Beide Wege liefern das gleiche Ergebnis, die Produktregel gilt!</p>
+          </div>
+        </div>
+
+        <!-- Beispiel 2 -->
+        <div class="reveal-card" id="rc-t1-2">
+          <div class="reveal-header" onclick="toggleReveal('rc-t1-2')">
+            <div class="reveal-question">Beispiel 2: Berechne $\dfrac{\sqrt{2}}{\sqrt{8}}$ mithilfe der Quotientenregel.</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step">
+                <span class="sol-step-formula">$\dfrac{\sqrt{2}}{\sqrt{8}}$</span>
+                <span class="sol-step-hint">Quotientenregel: Bruch unter eine Wurzel ziehen</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= \sqrt{\dfrac{2}{8}}$</span>
+                <span class="sol-step-hint">$\dfrac{\sqrt{a}}{\sqrt{b}} = \sqrt{\dfrac{a}{b}}$</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= \sqrt{\dfrac{1}{4}}$</span>
+                <span class="sol-step-hint">Bruch kürzen: $\dfrac{2}{8} = \dfrac{1}{4}$</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= \dfrac{1}{2}$</span>
+                <span class="sol-step-hint">$\sqrt{\dfrac{1}{4}} = \dfrac{\sqrt{1}}{\sqrt{4}} = \dfrac{1}{2}$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beispiel 3 -->
+        <div class="reveal-card" id="rc-t1-3">
+          <div class="reveal-header" onclick="toggleReveal('rc-t1-3')">
+            <div class="reveal-question">Beispiel 3: Berechne $\sqrt{125} \cdot \sqrt{5}$ geschickt.</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step">
+                <span class="sol-step-formula">$\sqrt{125} \cdot \sqrt{5}$</span>
+                <span class="sol-step-hint">Produktregel: zwei Wurzeln zu einer zusammenziehen</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= \sqrt{125 \cdot 5}$</span>
+                <span class="sol-step-hint">$\sqrt{a} \cdot \sqrt{b} = \sqrt{a \cdot b}$</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= \sqrt{625}$</span>
+                <span class="sol-step-hint">$125 \cdot 5 = 625$</span>
+              </div>
+              <div class="sol-step">
+                <span class="sol-step-formula">$= 25$</span>
+                <span class="sol-step-hint">$625 = 25^2$, also $\sqrt{625} = 25$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB 2 – TEILWEISES WURZELZIEHEN
+         ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-1">
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">1</span>
+          <h2 class="card-title">Die Strategie: Quadratzahl als Faktor herausziehen</h2>
+        </div>
+        <p>Viele Wurzeln lassen sich nicht direkt ausrechnen – zum Beispiel $\sqrt{72}$. Trotzdem kann man sie <strong>vereinfachen</strong>, wenn man im Radikanden eine <strong>Quadratzahl als Faktor</strong> entdeckt.</p>
+        <div class="hint-box" style="margin-top: 0.75rem;">
+          <strong>Vorgehensweise:</strong> Schreibe den Radikanden als Produkt: einer möglichst großen Quadratzahl mal dem Rest. Dann wende die Produktregel an und ziehe die Quadratzahl unter der Wurzel.
+        </div>
+
+        <p style="margin-top: 0.75rem;"><strong>Schritt für Schritt am Beispiel $\sqrt{72}$:</strong></p>
+        <div class="step-list">
+          <div class="step-item-row">
+            <div class="step-num">1</div>
+            <div class="step-text">Finde alle Quadratteiler von 72: $4, 9, 36$ &nbsp;— der <strong>größte</strong> ist $36 = 6^2$.</div>
+          </div>
+          <div class="step-item-row">
+            <div class="step-num">2</div>
+            <div class="step-text">Schreibe $72 = 36 \cdot 2$, also $\sqrt{72} = \sqrt{36 \cdot 2}$.</div>
+          </div>
+          <div class="step-item-row">
+            <div class="step-num">3</div>
+            <div class="step-text">Produktregel anwenden: $\sqrt{36 \cdot 2} = \sqrt{36} \cdot \sqrt{2}$.</div>
+          </div>
+          <div class="step-item-row">
+            <div class="step-num">4</div>
+            <div class="step-text">$\sqrt{36} = 6$, also: $\sqrt{72} = 6\sqrt{2}$.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MERKE-BOX -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke</div>
+        <div class="merke-content">
+          <strong>Teilweises Wurzelziehen:</strong> &nbsp;Schreibe den Radikanden als $a^2 \cdot r$, wobei $a^2$ die <em>größte</em> darin enthaltene Quadratzahl ist. Dann gilt:
+          $$\sqrt{a^2 \cdot r} \;=\; a \cdot \sqrt{r}$$
+          Das Ergebnis $a\sqrt{r}$ heißt <em>vereinfachte Wurzel</em> oder <em>halbvereinfachte Form</em>.
+          <br><br>
+          Tipp: Überprüfe nach dem Vereinfachen, ob $r$ noch einen quadratischen Teiler enthält – wenn ja, ist der Schritt noch nicht abgeschlossen!
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">2</span>
+          <h2 class="card-title">Übungsbeispiele – decke die Lösung auf</h2>
+        </div>
+
+        <!-- Beispiel 1 -->
+        <div class="reveal-card" id="rc-t2-1">
+          <div class="reveal-header" onclick="toggleReveal('rc-t2-1')">
+            <div class="reveal-question">Vereinfache: $\sqrt{50}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{50}$</span><span class="sol-step-hint">Größter Quadratteiler von 50: $25 = 5^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{25 \cdot 2}$</span><span class="sol-step-hint">$50 = 25 \cdot 2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{25} \cdot \sqrt{2}$</span><span class="sol-step-hint">Produktregel</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 5\sqrt{2}$</span><span class="sol-step-hint">$\sqrt{25} = 5$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beispiel 2 -->
+        <div class="reveal-card" id="rc-t2-2">
+          <div class="reveal-header" onclick="toggleReveal('rc-t2-2')">
+            <div class="reveal-question">Vereinfache: $\sqrt{48}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{48}$</span><span class="sol-step-hint">Quadratteiler von 48: $4, 16$ &nbsp;— größter ist $16 = 4^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{16 \cdot 3}$</span><span class="sol-step-hint">$48 = 16 \cdot 3$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{16} \cdot \sqrt{3}$</span><span class="sol-step-hint">Produktregel</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 4\sqrt{3}$</span><span class="sol-step-hint">$\sqrt{16} = 4$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beispiel 3 -->
+        <div class="reveal-card" id="rc-t2-3">
+          <div class="reveal-header" onclick="toggleReveal('rc-t2-3')">
+            <div class="reveal-question">Vereinfache: $\sqrt{63}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{63}$</span><span class="sol-step-hint">Größter Quadratteiler von 63: $9 = 3^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{9 \cdot 7}$</span><span class="sol-step-hint">$63 = 9 \cdot 7$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 3\sqrt{7}$</span><span class="sol-step-hint">Produktregel und $\sqrt{9} = 3$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beispiel 4 -->
+        <div class="reveal-card" id="rc-t2-4">
+          <div class="reveal-header" onclick="toggleReveal('rc-t2-4')">
+            <div class="reveal-question">Vereinfache: $\sqrt{98}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{98}$</span><span class="sol-step-hint">Größter Quadratteiler von 98: $49 = 7^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{49 \cdot 2}$</span><span class="sol-step-hint">$98 = 49 \cdot 2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 7\sqrt{2}$</span><span class="sol-step-hint">$\sqrt{49} = 7$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beispiel 5 -->
+        <div class="reveal-card" id="rc-t2-5">
+          <div class="reveal-header" onclick="toggleReveal('rc-t2-5')">
+            <div class="reveal-question">Vereinfache: $\sqrt{108}$ &nbsp;<em>(Achtung: der erste Quadratteiler, den man findet, ist oft nicht der größte!)</em></div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{108}$</span><span class="sol-step-hint">Quadratteiler von 108: $4, 9, 36$ — größter ist $36 = 6^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{36 \cdot 3}$</span><span class="sol-step-hint">$108 = 36 \cdot 3$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 6\sqrt{3}$</span><span class="sol-step-hint">$\sqrt{36} = 6$ &nbsp;— fertig!</span></div>
+            </div>
+            <div class="warn-box" style="margin-top: 0.6rem;">
+              <strong>Häufiger Fehler:</strong> $\sqrt{108} = \sqrt{4 \cdot 27} = 2\sqrt{27}$ — noch nicht fertig! $\sqrt{27} = 3\sqrt{3}$, also braucht man noch einen weiteren Schritt. Daher direkt mit dem <em>größten</em> Quadratteiler arbeiten!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB 3 – GESCHICKT RECHNEN
+         ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-2">
+
+      <!-- A: Produkte -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">A</span>
+          <h2 class="card-title">Produkte von Wurzeln geschickt berechnen</h2>
+        </div>
+        <p style="margin-bottom: 0.75rem;">Wenn man zwei Wurzeln miteinander multipliziert, zieht man sie zunächst zu einer Wurzel zusammen und vereinfacht dann das Produkt unter der Wurzel.</p>
+
+        <div class="reveal-card" id="rc-t3-a1">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-a1')">
+            <div class="reveal-question">Berechne: $\sqrt{2} \cdot \sqrt{8}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{2} \cdot \sqrt{8}$</span><span class="sol-step-hint">Produktregel: zusammenziehen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{2 \cdot 8}$</span><span class="sol-step-hint">$\sqrt{a} \cdot \sqrt{b} = \sqrt{a \cdot b}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{16}$</span><span class="sol-step-hint">$2 \cdot 8 = 16$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 4$</span><span class="sol-step-hint">$16 = 4^2$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-a2">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-a2')">
+            <div class="reveal-question">Berechne: $\sqrt{3} \cdot \sqrt{27}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{3} \cdot \sqrt{27}$</span><span class="sol-step-hint">Zusammenziehen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{81}$</span><span class="sol-step-hint">$3 \cdot 27 = 81$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 9$</span><span class="sol-step-hint">$81 = 9^2$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-a3">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-a3')">
+            <div class="reveal-question">Berechne: $\sqrt{5} \cdot \sqrt{20}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{5} \cdot \sqrt{20} = \sqrt{100} = 10$</span><span class="sol-step-hint">$5 \cdot 20 = 100$ und $\sqrt{100} = 10$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B: Quotienten -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">B</span>
+          <h2 class="card-title">Quotienten von Wurzeln kürzen</h2>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-b1">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-b1')">
+            <div class="reveal-question">Berechne: $\dfrac{\sqrt{18}}{\sqrt{2}}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\dfrac{\sqrt{18}}{\sqrt{2}}$</span><span class="sol-step-hint">Quotientenregel rückwärts</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{\dfrac{18}{2}}$</span><span class="sol-step-hint">Zu einem Bruch unter der Wurzel zusammenfassen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{9} = 3$</span><span class="sol-step-hint">$\dfrac{18}{2} = 9$ und $\sqrt{9} = 3$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-b2">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-b2')">
+            <div class="reveal-question">Berechne: $\dfrac{\sqrt{48}}{\sqrt{3}}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\dfrac{\sqrt{48}}{\sqrt{3}} = \sqrt{\dfrac{48}{3}} = \sqrt{16} = 4$</span><span class="sol-step-hint">$\dfrac{48}{3} = 16$ und $\sqrt{16} = 4$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-b3">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-b3')">
+            <div class="reveal-question">Berechne: $\sqrt{\dfrac{9}{25}}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{\dfrac{9}{25}}$</span><span class="sol-step-hint">Quotientenregel: Wurzel auf Zähler und Nenner verteilen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \dfrac{\sqrt{9}}{\sqrt{25}}$</span><span class="sol-step-hint">$\sqrt{\dfrac{a}{b}} = \dfrac{\sqrt{a}}{\sqrt{b}}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \dfrac{3}{5}$</span><span class="sol-step-hint">$\sqrt{9} = 3$, $\sqrt{25} = 5$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C: Distributivgesetz -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">C</span>
+          <h2 class="card-title">Distributivgesetz mit Wurzeln</h2>
+        </div>
+        <p style="margin-bottom: 0.75rem;">Das gewohnte Distributivgesetz gilt auch, wenn Wurzeln im Spiel sind: $a(b + c) = ab + ac$.</p>
+
+        <div class="reveal-card" id="rc-t3-c1">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-c1')">
+            <div class="reveal-question">Berechne: $\sqrt{3} \cdot (\sqrt{12} - \sqrt{3})$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{3}(\sqrt{12} - \sqrt{3})$</span><span class="sol-step-hint">Distributivgesetz ausmultiplizieren</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{3} \cdot \sqrt{12} - \sqrt{3} \cdot \sqrt{3}$</span><span class="sol-step-hint">Jeden Summanden einzeln multiplizieren</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{36} - \sqrt{9}$</span><span class="sol-step-hint">Produktregel: $\sqrt{3} \cdot \sqrt{12} = \sqrt{36}$, $\sqrt{3} \cdot \sqrt{3} = \sqrt{9}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 6 - 3$</span><span class="sol-step-hint">$\sqrt{36} = 6$, $\sqrt{9} = 3$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 3$</span><span class="sol-step-hint">Ergebnis</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-t3-c2">
+          <div class="reveal-header" onclick="toggleReveal('rc-t3-c2')">
+            <div class="reveal-question">Berechne: $5 \cdot \sqrt{2} - 7 \cdot \sqrt{2}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$5\sqrt{2} - 7\sqrt{2}$</span><span class="sol-step-hint">Gleiche Wurzel → ausklammern wie bei Variablen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= (5 - 7)\sqrt{2}$</span><span class="sol-step-hint">$\sqrt{2}$ ausklammern: $5\sqrt{2} - 7\sqrt{2} = (5-7)\sqrt{2}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= -2\sqrt{2}$</span><span class="sol-step-hint">$5 - 7 = -2$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WARNUNG -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge" style="background: var(--danger);">!</span>
+          <h2 class="card-title">Typische Falle: Summen und Differenzen</h2>
+        </div>
+        <div class="warn-box">
+          <strong>Die Wurzelgesetze gelten NUR für Produkte und Quotienten – niemals für Summen oder Differenzen!</strong>
+        </div>
+        <div class="grid-2">
+          <div class="sub-card" style="border-left: 3px solid var(--danger);">
+            <span class="sub-label" style="color: var(--danger);">Falsch:</span>
+            $\sqrt{16 + 9} \stackrel{?}{=} \sqrt{16} + \sqrt{9} = 4 + 3 = 7$
+          </div>
+          <div class="sub-card" style="border-left: 3px solid var(--success);">
+            <span class="sub-label" style="color: var(--success);">Richtig:</span>
+            $\sqrt{16 + 9} = \sqrt{25} = 5$
+            <br><small>Erst addieren, dann Wurzel ziehen!</small>
+          </div>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 10pt; color: var(--text-muted);">Merkhilfe: $7 \neq 5$ – also kann die linke Rechnung nicht stimmen.</p>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         TAB 4 – ÜBEN & ZUFALLS-TRAINER
+         ══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-3">
+
+      <!-- ── ZUFALLS-TRAINER ── -->
+      <div class="trainer-card" id="trainer-card">
+        <div class="trainer-top">
+          <div class="trainer-meta">
+            <span class="trainer-label">Zufalls-Trainer</span>
+            <span class="trainer-counter" id="trainer-counter">Aufgabe 1</span>
+          </div>
+          <span class="trainer-level level-1" id="trainer-level">Stufe 1</span>
+        </div>
+
+        <div class="trainer-problem">
+          <div class="trainer-prompt">Vereinfache so weit wie möglich:</div>
+          <div class="trainer-radical" id="trainer-radical"><!-- filled by JS --></div>
+        </div>
+
+        <div class="trainer-steps-container" id="trainer-steps"></div>
+
+        <div class="trainer-buttons">
+          <button class="btn-trainer btn-next-step" id="btn-next" onclick="naechsterSchritt()">Nächster Schritt</button>
+          <button class="btn-trainer btn-all-steps" id="btn-all" onclick="alleSchritte()">Alle Schritte</button>
+          <button class="btn-trainer btn-new-task" onclick="neueAufgabe()">Neue Aufgabe →</button>
+        </div>
+      </div>
+
+      <!-- ── GESTUFTE AUFGABEN ── -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-badge">A</span>
+          <h2 class="card-title">Gestufte Aufgaben</h2>
+        </div>
+
+        <!-- Stufe 1 -->
+        <div class="stern-header">
+          <span class="stern-badge">Stufe 1 – Basis</span>
+          <span class="stern-title">Direkte Anwendung der Gesetze</span>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-1">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-1')">
+            <div class="reveal-question">a) $\sqrt{3} \cdot \sqrt{12}$ &emsp; b) $\sqrt{5} \cdot \sqrt{45}$ &emsp; c) $\dfrac{\sqrt{50}}{\sqrt{2}}$</div>
+            <button class="btn-reveal">Lösungen aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">a) $\sqrt{36} = 6$</span><span class="sol-step-hint">$3 \cdot 12 = 36$, $\sqrt{36} = 6$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">b) $\sqrt{225} = 15$</span><span class="sol-step-hint">$5 \cdot 45 = 225$, $\sqrt{225} = 15$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">c) $\sqrt{25} = 5$</span><span class="sol-step-hint">$\sqrt{50 / 2} = \sqrt{25} = 5$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-2">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-2')">
+            <div class="reveal-question">d) $\sqrt{7} \cdot \sqrt{63}$ &emsp; e) $\dfrac{\sqrt{72}}{\sqrt{8}}$ &emsp; f) $\sqrt{\dfrac{16}{49}}$</div>
+            <button class="btn-reveal">Lösungen aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">d) $\sqrt{441} = 21$</span><span class="sol-step-hint">$7 \cdot 63 = 441 = 21^2$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">e) $\sqrt{9} = 3$</span><span class="sol-step-hint">$72 \div 8 = 9$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">f) $\dfrac{4}{7}$</span><span class="sol-step-hint">$\dfrac{\sqrt{16}}{\sqrt{49}} = \dfrac{4}{7}$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stufe 2 -->
+        <div class="stern-header">
+          <span class="stern-badge mittel">Stufe 2 – Mittel</span>
+          <span class="stern-title">Teilweises Wurzelziehen</span>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-3">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-3')">
+            <div class="reveal-question">a) $\sqrt{45}$ &emsp; b) $\sqrt{75}$ &emsp; c) $\sqrt{80}$</div>
+            <button class="btn-reveal">Lösungen aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">a) $3\sqrt{5}$</span><span class="sol-step-hint">$45 = 9 \cdot 5$, $\sqrt{9} = 3$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">b) $5\sqrt{3}$</span><span class="sol-step-hint">$75 = 25 \cdot 3$, $\sqrt{25} = 5$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">c) $4\sqrt{5}$</span><span class="sol-step-hint">$80 = 16 \cdot 5$, $\sqrt{16} = 4$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-4">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-4')">
+            <div class="reveal-question">d) $\sqrt{125}$ &emsp; e) $\sqrt{90}$ &emsp; f) $\sqrt{112}$</div>
+            <button class="btn-reveal">Lösungen aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">d) $5\sqrt{5}$</span><span class="sol-step-hint">$125 = 25 \cdot 5$, $\sqrt{25} = 5$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">e) $3\sqrt{10}$</span><span class="sol-step-hint">$90 = 9 \cdot 10$, $\sqrt{9} = 3$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">f) $4\sqrt{7}$</span><span class="sol-step-hint">$112 = 16 \cdot 7$, $\sqrt{16} = 4$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stufe 3 -->
+        <div class="stern-header">
+          <span class="stern-badge schwer">Stufe 3 – Herausforderung</span>
+          <span class="stern-title">Gemischte Terme vereinfachen</span>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-5">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-5')">
+            <div class="reveal-question">a) $\sqrt{8} + \sqrt{18}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{8} + \sqrt{18}$</span><span class="sol-step-hint">Beide Wurzeln zuerst teilweise vereinfachen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 2\sqrt{2} + 3\sqrt{2}$</span><span class="sol-step-hint">$\sqrt{8} = 2\sqrt{2}$, $\sqrt{18} = 3\sqrt{2}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 5\sqrt{2}$</span><span class="sol-step-hint">Gleichartige Wurzelterme addieren: $(2+3)\sqrt{2}$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-6">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-6')">
+            <div class="reveal-question">b) $2\sqrt{3} \cdot 3\sqrt{3}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$2\sqrt{3} \cdot 3\sqrt{3}$</span><span class="sol-step-hint">Koeffizienten und Wurzeln getrennt multiplizieren</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= (2 \cdot 3) \cdot (\sqrt{3} \cdot \sqrt{3})$</span><span class="sol-step-hint">Reihenfolge der Multiplikation ändern</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 6 \cdot \sqrt{9}$</span><span class="sol-step-hint">$\sqrt{3} \cdot \sqrt{3} = \sqrt{9}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 6 \cdot 3 = 18$</span><span class="sol-step-hint">$\sqrt{9} = 3$</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-7">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-7')">
+            <div class="reveal-question">c) $\sqrt{50} + \sqrt{32} - \sqrt{18}$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{50} + \sqrt{32} - \sqrt{18}$</span><span class="sol-step-hint">Alle drei Wurzeln vereinfachen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 5\sqrt{2} + 4\sqrt{2} - 3\sqrt{2}$</span><span class="sol-step-hint">$\sqrt{50}=5\sqrt{2}$, $\sqrt{32}=4\sqrt{2}$, $\sqrt{18}=3\sqrt{2}$</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= (5+4-3)\sqrt{2}$</span><span class="sol-step-hint">Koeffizienten zusammenrechnen</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 6\sqrt{2}$</span><span class="sol-step-hint">Fertig!</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-card" id="rc-ub-8">
+          <div class="reveal-header" onclick="toggleReveal('rc-ub-8')">
+            <div class="reveal-question">d) $\sqrt{5} \cdot (\sqrt{20} + \sqrt{5})$</div>
+            <button class="btn-reveal">Lösung aufdecken</button>
+          </div>
+          <div class="reveal-body">
+            <div class="solution-steps">
+              <div class="sol-step"><span class="sol-step-formula">$\sqrt{5}(\sqrt{20} + \sqrt{5})$</span><span class="sol-step-hint">Distributivgesetz anwenden</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{5} \cdot \sqrt{20} + \sqrt{5} \cdot \sqrt{5}$</span><span class="sol-step-hint">Ausmultiplizieren</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= \sqrt{100} + \sqrt{25}$</span><span class="sol-step-hint">Produktregel</span></div>
+              <div class="sol-step"><span class="sol-step-formula">$= 10 + 5 = 15$</span><span class="sol-step-hint">$\sqrt{100}=10$, $\sqrt{25}=5$</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end tab-3 -->
+
+  </div><!-- end container -->
+
+  <script>
+  // ════════════════════════════════════════════════
+  //  TAB-WECHSEL
+  // ════════════════════════════════════════════════
+  function showTab(n) {
+    document.querySelectorAll('.tab-panel').forEach((p, i) => {
+      p.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === n);
+    });
+  }
+
+  // ════════════════════════════════════════════════
+  //  AUFDECK-KARTEN (statische Lösungen)
+  // ════════════════════════════════════════════════
+  function toggleReveal(id) {
+    const card = document.getElementById(id);
+    const body = card.querySelector('.reveal-body');
+    const btn  = card.querySelector('.btn-reveal');
+    const open = body.classList.toggle('show');
+    card.classList.toggle('solved', open);
+    btn.textContent = open ? 'Lösung verbergen' : (btn.textContent.includes('Lösungen') ? 'Lösungen aufdecken' : 'Lösung aufdecken');
+  }
+
+  function alleLoesungenAufdecken() {
+    document.querySelectorAll('.reveal-body').forEach(b => b.classList.add('show'));
+    document.querySelectorAll('.reveal-card').forEach(c => c.classList.add('solved'));
+    document.querySelectorAll('.btn-reveal').forEach(b => b.textContent = 'Lösung verbergen');
+  }
+
+  // ════════════════════════════════════════════════
+  //  ZUFALLS-TRAINER
+  // ════════════════════════════════════════════════
+
+  const aufgabenPool = [
+    // ── Stufe 1 (einfach) ──────────────────────────
+    { level: 1, n: 8,   sqF: 4,  rest: 2,  koeff: 2,
+      steps: [
+        { f: '\\sqrt{8}',              h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{4 \\cdot 2}',   h: 'Größter Quadratteiler von 8: \\(4 = 2^2\\)' },
+        { f: '= \\sqrt{4} \\cdot \\sqrt{2}', h: 'Produktregel anwenden' },
+        { f: '= 2 \\cdot \\sqrt{2}',   h: '\\(\\sqrt{4} = 2\\)' },
+        { f: '= 2\\sqrt{2}',           h: 'Vereinfacht – fertig!' }
+      ]},
+    { level: 1, n: 12,  sqF: 4,  rest: 3,  koeff: 2,
+      steps: [
+        { f: '\\sqrt{12}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{4 \\cdot 3}',   h: 'Größter Quadratteiler von 12: \\(4 = 2^2\\)' },
+        { f: '= 2\\sqrt{3}',           h: 'Produktregel und \\(\\sqrt{4} = 2\\)' }
+      ]},
+    { level: 1, n: 18,  sqF: 9,  rest: 2,  koeff: 3,
+      steps: [
+        { f: '\\sqrt{18}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 2}',   h: 'Größter Quadratteiler von 18: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{2}',           h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    { level: 1, n: 20,  sqF: 4,  rest: 5,  koeff: 2,
+      steps: [
+        { f: '\\sqrt{20}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{4 \\cdot 5}',   h: 'Größter Quadratteiler von 20: \\(4 = 2^2\\)' },
+        { f: '= 2\\sqrt{5}',           h: '\\(\\sqrt{4} = 2\\)' }
+      ]},
+    { level: 1, n: 27,  sqF: 9,  rest: 3,  koeff: 3,
+      steps: [
+        { f: '\\sqrt{27}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 3}',   h: 'Größter Quadratteiler von 27: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{3}',           h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    { level: 1, n: 45,  sqF: 9,  rest: 5,  koeff: 3,
+      steps: [
+        { f: '\\sqrt{45}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 5}',   h: 'Größter Quadratteiler von 45: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{5}',           h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    { level: 1, n: 50,  sqF: 25, rest: 2,  koeff: 5,
+      steps: [
+        { f: '\\sqrt{50}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{25 \\cdot 2}',  h: 'Größter Quadratteiler von 50: \\(25 = 5^2\\)' },
+        { f: '= 5\\sqrt{2}',           h: '\\(\\sqrt{25} = 5\\)' }
+      ]},
+    { level: 1, n: 75,  sqF: 25, rest: 3,  koeff: 5,
+      steps: [
+        { f: '\\sqrt{75}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{25 \\cdot 3}',  h: 'Größter Quadratteiler von 75: \\(25 = 5^2\\)' },
+        { f: '= 5\\sqrt{3}',           h: '\\(\\sqrt{25} = 5\\)' }
+      ]},
+    // ── Stufe 2 (mittel) ──────────────────────────
+    { level: 2, n: 32,  sqF: 16, rest: 2,  koeff: 4,
+      steps: [
+        { f: '\\sqrt{32}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{16 \\cdot 2}',  h: 'Größter Quadratteiler von 32: \\(16 = 4^2\\)' },
+        { f: '= \\sqrt{16} \\cdot \\sqrt{2}', h: 'Produktregel' },
+        { f: '= 4\\sqrt{2}',           h: '\\(\\sqrt{16} = 4\\)' }
+      ]},
+    { level: 2, n: 48,  sqF: 16, rest: 3,  koeff: 4,
+      steps: [
+        { f: '\\sqrt{48}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{16 \\cdot 3}',  h: 'Quadratteiler von 48: \\(4\\) und \\(16\\) — größter ist \\(16 = 4^2\\)' },
+        { f: '= 4\\sqrt{3}',           h: '\\(\\sqrt{16} = 4\\)' }
+      ]},
+    { level: 2, n: 63,  sqF: 9,  rest: 7,  koeff: 3,
+      steps: [
+        { f: '\\sqrt{63}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 7}',   h: 'Größter Quadratteiler von 63: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{7}',           h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    { level: 2, n: 72,  sqF: 36, rest: 2,  koeff: 6,
+      steps: [
+        { f: '\\sqrt{72}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{36 \\cdot 2}',  h: 'Quadratteiler von 72: \\(4, 9, 36\\) — größter ist \\(36 = 6^2\\)' },
+        { f: '= \\sqrt{36} \\cdot \\sqrt{2}', h: 'Produktregel' },
+        { f: '= 6\\sqrt{2}',           h: '\\(\\sqrt{36} = 6\\)' }
+      ]},
+    { level: 2, n: 80,  sqF: 16, rest: 5,  koeff: 4,
+      steps: [
+        { f: '\\sqrt{80}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{16 \\cdot 5}',  h: 'Größter Quadratteiler von 80: \\(16 = 4^2\\)' },
+        { f: '= 4\\sqrt{5}',           h: '\\(\\sqrt{16} = 4\\)' }
+      ]},
+    { level: 2, n: 98,  sqF: 49, rest: 2,  koeff: 7,
+      steps: [
+        { f: '\\sqrt{98}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{49 \\cdot 2}',  h: 'Größter Quadratteiler von 98: \\(49 = 7^2\\)' },
+        { f: '= 7\\sqrt{2}',           h: '\\(\\sqrt{49} = 7\\)' }
+      ]},
+    { level: 2, n: 125, sqF: 25, rest: 5,  koeff: 5,
+      steps: [
+        { f: '\\sqrt{125}',            h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{25 \\cdot 5}',  h: 'Größter Quadratteiler von 125: \\(25 = 5^2\\)' },
+        { f: '= 5\\sqrt{5}',           h: '\\(\\sqrt{25} = 5\\)' }
+      ]},
+    { level: 2, n: 90,  sqF: 9,  rest: 10, koeff: 3,
+      steps: [
+        { f: '\\sqrt{90}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 10}',  h: 'Größter Quadratteiler von 90: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{10}',          h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    // ── Stufe 3 (schwer) ──────────────────────────
+    { level: 3, n: 24,  sqF: 4,  rest: 6,  koeff: 2,
+      steps: [
+        { f: '\\sqrt{24}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{4 \\cdot 6}',   h: 'Größter Quadratteiler von 24: \\(4 = 2^2\\)' },
+        { f: '= 2\\sqrt{6}',           h: '\\(\\sqrt{4} = 2\\)' }
+      ]},
+    { level: 3, n: 54,  sqF: 9,  rest: 6,  koeff: 3,
+      steps: [
+        { f: '\\sqrt{54}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{9 \\cdot 6}',   h: 'Größter Quadratteiler von 54: \\(9 = 3^2\\)' },
+        { f: '= 3\\sqrt{6}',           h: '\\(\\sqrt{9} = 3\\)' }
+      ]},
+    { level: 3, n: 96,  sqF: 16, rest: 6,  koeff: 4,
+      steps: [
+        { f: '\\sqrt{96}',             h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{16 \\cdot 6}',  h: 'Quadratteiler von 96: \\(4, 16\\) — größter ist \\(16 = 4^2\\)' },
+        { f: '= 4\\sqrt{6}',           h: '\\(\\sqrt{16} = 4\\)' }
+      ]},
+    { level: 3, n: 108, sqF: 36, rest: 3,  koeff: 6,
+      steps: [
+        { f: '\\sqrt{108}',            h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{36 \\cdot 3}',  h: 'Quadratteiler von 108: \\(4, 9, 36\\) — größter ist \\(36 = 6^2\\)' },
+        { f: '= \\sqrt{36} \\cdot \\sqrt{3}', h: 'Produktregel' },
+        { f: '= 6\\sqrt{3}',           h: '\\(\\sqrt{36} = 6\\)' }
+      ]},
+    { level: 3, n: 112, sqF: 16, rest: 7,  koeff: 4,
+      steps: [
+        { f: '\\sqrt{112}',            h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{16 \\cdot 7}',  h: 'Größter Quadratteiler von 112: \\(16 = 4^2\\)' },
+        { f: '= 4\\sqrt{7}',           h: '\\(\\sqrt{16} = 4\\)' }
+      ]},
+    { level: 3, n: 150, sqF: 25, rest: 6,  koeff: 5,
+      steps: [
+        { f: '\\sqrt{150}',            h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{25 \\cdot 6}',  h: 'Größter Quadratteiler von 150: \\(25 = 5^2\\)' },
+        { f: '= 5\\sqrt{6}',           h: '\\(\\sqrt{25} = 5\\)' }
+      ]},
+    { level: 3, n: 180, sqF: 36, rest: 5,  koeff: 6,
+      steps: [
+        { f: '\\sqrt{180}',            h: 'Gegebene Aufgabe' },
+        { f: '= \\sqrt{36 \\cdot 5}',  h: 'Quadratteiler von 180: \\(4, 9, 36\\) — größter ist \\(36 = 6^2\\)' },
+        { f: '= 6\\sqrt{5}',           h: '\\(\\sqrt{36} = 6\\)' }
+      ]},
+  ];
+
+  const levelLabels = { 1: 'Stufe 1', 2: 'Stufe 2', 3: 'Stufe 3' };
+  const levelClasses = { 1: 'level-1', 2: 'level-2', 3: 'level-3' };
+
+  let currentIdx   = -1;
+  let currentStep  = 0;
+  let taskCount    = 0;
+
+  function renderF(latex) {
+    if (typeof katex === 'undefined') return '$' + latex + '$';
+    try { return katex.renderToString(latex, { throwOnError: false, displayMode: false }); }
+    catch(e) { return latex; }
+  }
+
+  function neueAufgabe() {
+    let newIdx;
+    do { newIdx = Math.floor(Math.random() * aufgabenPool.length); }
+    while (newIdx === currentIdx && aufgabenPool.length > 1);
+    currentIdx  = newIdx;
+    currentStep = 0;
+
+    const a = aufgabenPool[currentIdx];
+    taskCount++;
+
+    // Radical display
+    document.getElementById('trainer-radical').innerHTML =
+      renderF('\\sqrt{' + a.n + '}');
+
+    // Level badge
+    const lvlEl = document.getElementById('trainer-level');
+    lvlEl.textContent  = levelLabels[a.level];
+    lvlEl.className    = 'trainer-level ' + levelClasses[a.level];
+
+    // Counter
+    document.getElementById('trainer-counter').textContent = 'Aufgabe ' + taskCount;
+
+    // Clear steps
+    document.getElementById('trainer-steps').innerHTML = '';
+
+    // Reset buttons
+    const btnNext = document.getElementById('btn-next');
+    btnNext.disabled    = false;
+    btnNext.textContent = 'Nächster Schritt';
+
+    document.getElementById('btn-all').disabled = false;
+  }
+
+  function naechsterSchritt() {
+    const a = aufgabenPool[currentIdx];
+    if (currentIdx < 0 || currentStep >= a.steps.length) return;
+
+    const step = a.steps[currentStep];
+    const container = document.getElementById('trainer-steps');
+
+    const div = document.createElement('div');
+    div.className = 'trainer-step';
+    div.innerHTML = '<div class="trainer-step-formula">' + renderF(step.f) + '</div>' +
+                    '<div class="trainer-step-hint">' + step.h + '</div>';
+    container.appendChild(div);
+
+    // Render KaTeX in hint (may contain \(...\))
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(div.querySelector('.trainer-step-hint'), {
+        delimiters: [{left:'\\(',right:'\\)',display:false}],
+        throwOnError: false
+      });
+    }
+
+    currentStep++;
+
+    if (currentStep >= a.steps.length) {
+      const btnNext = document.getElementById('btn-next');
+      btnNext.textContent = 'Fertig!';
+      btnNext.disabled    = true;
+      document.getElementById('btn-all').disabled = true;
+    }
+  }
+
+  function alleSchritte() {
+    const a = aufgabenPool[currentIdx];
+    if (currentIdx < 0) return;
+
+    const container = document.getElementById('trainer-steps');
+    container.innerHTML = '';
+
+    a.steps.forEach(step => {
+      const div = document.createElement('div');
+      div.className = 'trainer-step';
+      div.innerHTML = '<div class="trainer-step-formula">' + renderF(step.f) + '</div>' +
+                      '<div class="trainer-step-hint">' + step.h + '</div>';
+      container.appendChild(div);
+    });
+
+    if (typeof renderMathInElement === 'function') {
+      container.querySelectorAll('.trainer-step-hint').forEach(el => {
+        renderMathInElement(el, {
+          delimiters: [{left:'\\(',right:'\\)',display:false}],
+          throwOnError: false
+        });
+      });
+    }
+
+    currentStep = a.steps.length;
+    document.getElementById('btn-next').disabled = true;
+    document.getElementById('btn-next').textContent = 'Fertig!';
+    document.getElementById('btn-all').disabled = true;
+  }
+
+  // Erste Aufgabe automatisch laden sobald KaTeX bereit ist
+  window.addEventListener('load', function() {
+    // kurze Verzögerung damit katex.js sicher geladen ist
+    setTimeout(neueAufgabe, 200);
+  });
+  </script>
+
+</body>
+</html>
