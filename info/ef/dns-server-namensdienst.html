@@ -649,6 +649,72 @@
         </svg>
       </div>
 
+
+      <!-- BEGRIFFSERKLÄRUNG: PORT & PROTOKOLL -->
+      <div class="grid-2" style="margin-top: 1.2rem; margin-bottom: 0.5rem;">
+
+        <!-- PORT -->
+        <div class="sub-card" style="border-left: 4px solid var(--primary);">
+          <span class="highlight-label" style="font-size: 1rem;">Was ist ein Port?</span>
+          <p style="margin-bottom: 0.6rem;">
+            Stell dir vor, ein Rechner ist ein großes Bürogebäude mit einer einzigen Straßenadresse (= IP-Adresse). Innerhalb des Gebäudes gibt es viele Türen mit Nummern (= Ports). Jede Tür führt zu einem anderen Dienst:
+          </p>
+          <table class="calc-table">
+            <thead>
+              <tr>
+                <th>Port-Nummer</th>
+                <th>Dienst / Verwendung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="code-pill">53</span></td>
+                <td>DNS – Namensauflösung</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">80</span></td>
+                <td>HTTP – Webseiten (unverschlüsselt)</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">443</span></td>
+                <td>HTTPS – Webseiten (verschlüsselt)</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 0.6rem; font-size: 0.92em; color: var(--text-muted);">
+            Ein Datenpaket enthält neben der Ziel-IP-Adresse immer auch eine <strong>Ziel-Port-Nummer</strong>. So weiß das Betriebssystem des Zielrechners, welchem Programm es das Paket übergeben soll.
+          </p>
+        </div>
+
+        <!-- PROTOKOLL / UDP vs TCP -->
+        <div class="sub-card" style="border-left: 4px solid var(--accent);">
+          <span class="highlight-label" style="font-size: 1rem;">Was ist ein Protokoll? (UDP &amp; TCP)</span>
+          <p style="margin-bottom: 0.6rem;">
+            Ein <strong>Protokoll</strong> ist eine vereinbarte Sprache und ein Regelwerk, das festlegt, <em>wie</em> zwei Rechner miteinander kommunizieren – also in welcher Reihenfolge Pakete gesendet werden und was bei einem Fehler passiert.
+          </p>
+          <div class="grid-2" style="margin: 0.5rem 0 0.5rem 0; gap: 8px;">
+            <div style="background:#ecfdf5; border: 1px solid #6ee7b7; border-radius: 6px; padding: 8px 10px;">
+              <strong style="color:#065f46; display:block; margin-bottom:4px;">UDP</strong>
+              <em style="font-size:0.9em; color:#047857;">User Datagram Protocol</em>
+              <br>
+              Wie eine Postkarte: einfach losschicken, kein Rückmeldeweg. Schnell, aber keine Garantie, dass die Postkarte ankommt.
+              <br><span style="font-size:0.88em; color:var(--text-muted);">Typisch für: DNS, Video-Streaming</span>
+            </div>
+            <div style="background:#eff6ff; border: 1px solid #93c5fd; border-radius: 6px; padding: 8px 10px;">
+              <strong style="color:#1e3a8a; display:block; margin-bottom:4px;">TCP</strong>
+              <em style="font-size:0.9em; color:#1d4ed8;">Transmission Control Protocol</em>
+              <br>
+              Wie ein Einschreibebrief: Es wird erst eine Verbindung aufgebaut, dann die Zustellung bestätigt. Zuverlässig, aber etwas langsamer.
+              <br><span style="font-size:0.88em; color:var(--text-muted);">Typisch für: HTTP/Webseiten, E-Mail</span>
+            </div>
+          </div>
+          <p style="font-size: 0.92em; color: var(--text-muted);">
+            DNS nutzt <strong>UDP</strong>, weil eine Namensanfrage aus nur <em>einem</em> winzigen Paket besteht – da wäre der Aufwand eines TCP-Verbindungsaufbaus unnötig verschwendete Zeit.
+          </p>
+        </div>
+      </div>
+
+      <!-- DREI SUB-CARDS: ABLAUF -->
       <div class="grid-3">
         <div class="sub-card">
           <span class="highlight-label">1. Die DNS-Anfrage (Query)</span>
@@ -664,6 +730,7 @@
         </div>
       </div>
     </section>
+
 
     <!-- ======================================================
          TEIL 3: NETZWERKTOPOLOGIE MIT 3 NETZEN
@@ -929,6 +996,8 @@
         3. <strong>Client-Konfiguration:</strong> Ein Rechner kann Namen nur auflösen, wenn in seiner Netzwerkkonfiguration die <strong>IP-Adresse eines erreichbaren DNS-Servers</strong> hinterlegt ist. Liegt der DNS-Server in einem anderen Netzwerk, muss zwingend auch das <strong>Standard-Gateway</strong> konfiguriert sein.
         <br><br>
         4. <strong>Diagnose-Werkzeug:</strong> Mit dem Befehl <span class="code-pill">nslookup &lt;Domainname&gt;</span> lässt sich der DNS-Server gezielt abfragen, um Namensauflösungsfehler von Routing- oder Webserverfehlern zu isolieren.
+        <br><br>
+        5. <strong>Port &amp; Protokoll:</strong> Ein <strong>Port</strong> ist eine Tür-Nummer am Zielrechner, die den richtigen Dienst auswählt (DNS: Port <span class="code-pill">53</span>, HTTP: Port <span class="code-pill">80</span>). Das <strong>Protokoll</strong> legt fest, nach welchen Regeln die Kommunikation abläuft. DNS nutzt <strong>UDP</strong> – ein schnelles, verbindungsloses Protokoll, das sich für kleine Einzel-Anfragen eignet. Webseiten (HTTP) nutzen dagegen <strong>TCP</strong>, das eine zuverlässige, bestätigte Verbindung aufbaut.
       </div>
     </div>
 
