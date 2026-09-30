@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Einstieg in BlueJ: Klassen, Objekte &amp; Zustand | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Fueller-Koenigsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;        /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Fuellertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-scale: 1;
+    }
+
+    body.beamer-mode {
+      --font-scale: 1.18;
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #2d3d5a;
+      --primary-light: #1e293b;
+      --accent-light: #241c3d;
+      --success-light: #064e3b;
+      --warning-light: #451a03;
+      --danger-light: #450a0a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: calc(11pt * var(--font-scale));
+      padding-bottom: 4rem;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* TOP PRESENTER BAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      font-size: 0.88rem;
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-action:hover { background: rgba(255,255,255,0.25); }
+    .btn-action.active { background: var(--primary-focus); border-color: #60a5fa; }
+
+    .container {
+      max-width: 980px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.85rem;
+    }
+    body.beamer-mode .badge-chapter { color: #93c5fd; }
+
+    h1 {
+      font-size: calc(1.9rem * var(--font-scale));
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+    body.beamer-mode h1 { color: #60a5fa; }
+
+    .lead-subtitle {
+      font-size: calc(1.05rem * var(--font-scale));
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* DOWNLOAD BANNER */
+    .download-card {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0 2rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+    }
+
+    .download-text h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+    .download-text p {
+      font-size: 0.88rem;
+      color: #dbeafe;
+    }
+
+    .btn-download {
+      background: #ffffff;
+      color: #1e3a8a;
+      padding: 9px 18px;
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* CARD SECTIONS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: calc(1.2rem * var(--font-scale));
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+    }
+    body.beamer-mode .step-title { color: #93c5fd; }
+
+    /* GRID BOXES */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 1rem 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 1rem 0;
+    }
+    @media (max-width: 760px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.15rem;
+      font-size: calc(10pt * var(--font-scale));
+    }
+    body.beamer-mode .sub-card { background: #1a243b; }
+
+    /* CODE PILL */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+    }
+    body.beamer-mode .code-pill {
+      background: #334155;
+      color: #f8fafc;
+      border-color: #475569;
+    }
+
+    /* BLUEJ UI MOCKUP / SCHEMATICS */
+    .bluej-window-mockup {
+      background: #e2e8f0;
+      border: 2px solid #64748b;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 1.25rem 0;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .mockup-titlebar {
+      background: #334155;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mockup-content {
+      display: flex;
+      flex-direction: column;
+      height: 320px;
+      background: #ffffff;
+    }
+    body.beamer-mode .mockup-content { background: #1e293b; }
+
+    .mockup-class-area {
+      flex: 1;
+      padding: 16px;
+      background: #f8fafc;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      position: relative;
+    }
+    body.beamer-mode .mockup-class-area { background: #1e293b; }
+
+    .mockup-class-box {
+      width: 110px;
+      height: 80px;
+      background: #fed7aa;
+      border: 1.5px solid #ea580c;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #9a3412;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+      cursor: pointer;
+    }
+    .mockup-class-box.active {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .mockup-bench-area {
+      height: 100px;
+      background: #fee2e2;
+      border-top: 2px solid #ef4444;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    body.beamer-mode .mockup-bench-area {
+      background: #3b1818;
+      border-top-color: #b91c1c;
+    }
+
+    .mockup-object-box {
+      padding: 8px 14px;
+      background: #dc2626;
+      color: #ffffff;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .area-label {
+      position: absolute;
+      right: 12px;
+      bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
+    }
+
+    /* SCREENSHOT CONTAINER */
+    .screenshot-card {
+      margin: 1.25rem 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #f8fafc;
+    }
+    .screenshot-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .screenshot-caption {
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      font-style: italic;
+    }
+    body.beamer-mode .screenshot-caption {
+      background: #1e293b;
+    }
+
+    /* INSPEKTOR TABELLE */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: calc(10pt * var(--font-scale));
+      margin: 0.75rem 0;
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 800;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    body.beamer-mode .calc-table th {
+      background: #1e293b;
+      color: #93c5fd;
+    }
+    .calc-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+    }
+
+    /* MERKE BOX (Standard aus GEMINI.md) */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      background: #fef2f2;
+      position: relative;
+    }
+    body.beamer-mode .merke-box {
+      background: #2b1111;
+      border-color: #ef4444;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .merke-content {
+      color: #111827;
+      font-size: calc(10.5pt * var(--font-scale));
+      line-height: 1.55;
+    }
+    body.beamer-mode .merke-content {
+      color: #f8fafc;
+    }
+
+    /* QUESTION / COLLAPSIBLE */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .question-card { background: #172033; }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+    body.beamer-mode .question-title { color: #f8fafc; }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    body.beamer-mode .btn-reveal {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+
+    .question-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed var(--border);
+      font-size: calc(10pt * var(--font-scale));
+      color: #1e3a8a;
+    }
+    body.beamer-mode .question-answer { color: #93c5fd; }
+    .question-answer.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP PRESENTER BAR -->
+  <div class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
+      <span style="font-weight: 700; font-size: 0.92rem;">
+        Informatik EF • Thema 2: Einführung in BlueJ &amp; OOP (Stunde 1)
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="toggleAllAnswers()">Alle Erklärungen aufdecken</button>
+      <button class="btn-action" id="btnBeamer" onclick="toggleBeamer()">Beamer-Modus</button>
+      <button class="btn-action" onclick="window.print()">Drucken</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Objektorientierte Programmierung</div>
+      <h1>Einstieg in BlueJ: Klassen, Objekte &amp; Zustand</h1>
+      <p class="lead-subtitle">
+        Von der Ausstechform zum echten Plätzchen: Wie wir in BlueJ ohne Tippfehler grafische Figuren erschaffen, deren Fähigkeiten steuern und ihren inneren Speicherzustand im Inspektor erforschen.
+      </p>
+    </header>
+
+    <!-- DOWNLOAD BOX -->
+    <div class="download-card">
+      <div class="download-text">
+        <h3>Projekt-Download: Figuren_EF.zip</h3>
+        <p>Lade das vorbereitete BlueJ-Projekt herunter, entpacke die ZIP-Datei und öffne die Datei <strong>package.bluej</strong>.</p>
+      </div>
+      <a href="Figuren_EF.zip" download="Figuren_EF.zip" class="btn-download">Projekt herunterladen (.zip)</a>
+    </div>
+
+    <!-- ======================================================
+         TEIL 1: DAS MENTALE MODELL
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">1</span>
+        <h2 class="step-title">Das mentale Modell: Bauplan vs. Einzelstück</h2>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        In der realen Welt und in moderner Software gibt es eine klare Trennung zwischen der <strong>Konstruktionszeichnung</strong> und dem <strong>fertigen Produkt</strong>:
+      </p>
+
+      <div class="grid-2">
+        <div class="sub-card" style="border-left: 3px solid var(--accent);">
+          <strong style="color: var(--accent); font-size: 1rem;">Die Klasse (Der Bauplan):</strong>
+          <p style="margin-top: 4px;">
+            Wie eine <strong>Ausstechform für Weihnachtsplätzchen</strong> oder ein Architekturplan für ein Haus.
+          </p>
+          <ul style="margin-left: 1.25rem; margin-top: 6px;">
+            <li>Existiert im Projekt <strong>genau einmal</strong>.</li>
+            <li>Legt fest, welche Eigenschaften und Fähigkeiten alle Exemplare besitzen werden.</li>
+            <li>Man kann sie selbst weder anmalen noch essen – sie ist nur die Vorlage!</li>
+          </ul>
+        </div>
+
+        <div class="sub-card" style="border-left: 3px solid var(--success);">
+          <strong style="color: var(--success); font-size: 1rem;">Das Objekt (Das fertige Einzelstück):</strong>
+          <p style="margin-top: 4px;">
+            Das <strong>konkret ausgestochene Plätzchen</strong> auf dem Backblech oder das gebaute Haus in der Straße.
+          </p>
+          <ul style="margin-left: 1.25rem; margin-top: 6px;">
+            <li>Aus einem einzigen Bauplan können <strong>beliebig viele Objekte</strong> entstehen.</li>
+            <li>Jedes Objekt hat sein <strong>eigenes Aussehen</strong> (z. B. rot verziert, groß oder klein).</li>
+            <li>Im Speicher des Computers belegt jedes Objekt einen eigenen Platz.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 2: DIE BLUEJ-OBERFLÄCHE
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">2</span>
+        <h2 class="step-title">BlueJ verstehen: Die zwei Ebenen</h2>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        Wenn du das Projekt <span class="code-pill">Figuren_EF</span> in BlueJ öffnest, siehst du sofort diese strikte Trennung auf dem Bildschirm:
+      </p>
+
+      <!-- Screenshot / Visuelle Schematik -->
+      <div class="screenshot-card">
+        <img src="img/bluej_hauptfenster.png" alt="BlueJ Hauptfenster mit Klassenbereich und Objektleiste" onerror="this.style.display='none'; document.getElementById('mockup1').style.display='block';">
+        <div id="mockup1" class="bluej-window-mockup" style="display:none;">
+          <div class="mockup-titlebar">
+            <span>BlueJ: Figuren_EF</span>
+            <span>Projekt • Bearbeiten • Werkzeuge</span>
+          </div>
+          <div class="mockup-content">
+            <div class="mockup-class-area">
+              <div class="mockup-class-box">Kreis</div>
+              <div class="mockup-class-box">Quadrat</div>
+              <div class="mockup-class-box">Dreieck</div>
+              <div class="mockup-class-box" style="background:#e2e8f0; border-color:#94a3b8; color:#475569;">Leinwand</div>
+              <span class="area-label">Bereich 1: Klassen (Baupläne)</span>
+            </div>
+            <div class="mockup-bench-area">
+              <div class="mockup-object-box">sonne: Kreis</div>
+              <div class="mockup-object-box" style="background:#2563eb;">dach: Dreieck</div>
+              <span class="area-label">Bereich 2: Werkbank (Objektleiste / Speicher)</span>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-caption">
+          Abbildung 1: Oben befinden sich die Klassen (Baupläne). Unten auf der roten Werkbank (Object Bench) leben die konkreten Objekte im Arbeitsspeicher.
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="sub-card">
+          <strong>1. Der obere Bereich (Klassendiagramm):</strong><br>
+          Hier liegen die Klassen <span class="code-pill">Kreis</span>, <span class="code-pill">Quadrat</span> und <span class="code-pill">Dreieck</span>. Das sind reine Schablonen.
+        </div>
+        <div class="sub-card">
+          <strong>2. Der untere rote Streifen (Objektleiste / Object Bench):</strong><br>
+          Das ist deine Werkbank. Jedes rote Rechteck, das hier abgelegt wird, ist ein lebendiges Objekt im Arbeitsspeicher deines Rechners.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 3: SCHRITT-FÜR-SCHRITT IN DIE PRAXIS
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">3</span>
+        <h2 class="step-title">Geführte Praxis: Deine ersten vier Aktionen</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Führe mit deinem Sitznachbarn die folgenden vier Schritte exakt der Reihe nach durch. Ihr braucht dazu noch keine einzige Zeile Programmcode schreiben!
+      </p>
+
+      <!-- Schritt A -->
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 4px;">Schritt A: Ein Objekt erschaffen (Instanziierung)</h4>
+        <ol style="margin-left: 1.25rem;">
+          <li>Mache einen <strong>Rechtsklick</strong> auf den orangefarbenen Kasten der Klasse <span class="code-pill">Kreis</span>.</li>
+          <li>Wähle ganz oben den Eintrag <strong><span class="code-pill">new Kreis()</span></strong>.</li>
+          <li>BlueJ fragt nach einem Namen. Tippe als Bezeichner: <span class="code-pill">sonne</span> ein und bestätige mit <strong>OK</strong>.</li>
+        </ol>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+          • <em>Ergebnis:</em> Unten auf der roten Werkbank erscheint ein rotes Kästchen mit der Aufschrift <span class="code-pill">sonne</span>. Du hast soeben ein konkretes Objekt instanziiert!
+        </p>
+      </div>
+
+      <!-- Schritt B -->
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 4px;">Schritt B: Die Fernbedienung nutzen (Methoden aufrufen)</h4>
+        <ol style="margin-left: 1.25rem;">
+          <li>Klicke mit der <strong>rechten Maustaste</strong> auf dein neues Objekt <span class="code-pill">sonne</span> auf der Werkbank.</li>
+          <li>Es öffnet sich ein Menü mit Verben. Klicke auf <strong><span class="code-pill">void sichtbarMachen()</span></strong>.</li>
+        </ol>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 4px;">
+          • <em>Ergebnis:</em> Ein weißes Zeichenfenster („Leinwand“) öffnet sich auf dem Bildschirm und ein blauer Kreis wird gezeichnet!
+        </p>
+      </div>
+
+      <!-- Schritt C -->
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 4px;">Schritt C: Das Gedächtnis durchleuchten (Der Objekt-Inspektor)</h4>
+        <p style="margin-bottom: 6px;">
+          Woher weiß der Computer eigentlich, wie groß der Kreis ist, wo er steht und welche Farbe er hat?
+        </p>
+        <ol style="margin-left: 1.25rem;">
+          <li>Mache einen <strong>Doppelklick</strong> auf das Objekt <span class="code-pill">sonne</span> (oder Rechtsklick ➔ <em>Inspizieren</em>).</li>
+          <li>Es öffnet sich ein neues Fenster: der <strong>Objekt-Inspektor</strong>!</li>
+        </ol>
+
+        <!-- Screenshot Inspektor -->
+        <div class="screenshot-card" style="margin-top: 8px;">
+          <img src="img/bluej_inspektor.png" alt="BlueJ Objekt-Inspektor" onerror="this.style.display='none'; document.getElementById('tableInspektor').style.display='table';">
+          <table class="calc-table" id="tableInspektor" style="display:none;">
+            <thead>
+              <tr>
+                <th>Eigenschaftsname (Attribut / Variable)</th>
+                <th>Aktueller Wert (Zustand)</th>
+                <th>Bedeutung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="code-pill">groesse</span></td>
+                <td><strong>68</strong></td>
+                <td>Durchmesser in Bildschirmpixeln</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">xPosition</span></td>
+                <td><strong>230</strong></td>
+                <td>Horizontaler Abstand vom linken Rand</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">yPosition</span></td>
+                <td><strong>90</strong></td>
+                <td>Vertikaler Abstand vom oberen Rand</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">farbe</span></td>
+                <td><strong>"blau"</strong></td>
+                <td>Zeichenfarbe (als Text in Anführungszeichen)</td>
+              </tr>
+              <tr>
+                <td><span class="code-pill">istSichtbar</span></td>
+                <td><strong>true</strong></td>
+                <td>Sichtbarkeitsstatus (wahr oder falsch)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="screenshot-caption">
+            Abbildung 2: Der Objekt-Inspektor zeigt das innere Gedächtnis des Objekts. Jede Zeile ist ein Attribut (eine Variable), in der genau ein aktueller Wert gespeichert ist.
+          </div>
+        </div>
+      </div>
+
+      <!-- Schritt D -->
+      <div>
+        <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 4px;">Schritt D: Zusatz-Informationen mitgeben (Parameter)</h4>
+        <p style="margin-bottom: 6px;">
+          Lass den Objekt-Inspektor geöffnet und lege ihn neben das Zeichenfenster.
+        </p>
+        <ol style="margin-left: 1.25rem;">
+          <li>Rechtsklick auf <span class="code-pill">sonne</span> ➔ <strong><span class="code-pill">void farbeAendern(String neueFarbe)</span></strong>.</li>
+          <li>Es erscheint ein Eingabefeld. Tippe dort ein: <span class="code-pill">"gelb"</span> (wichtig: inklusive Anführungszeichen!). Bestätige mit OK.</li>
+          <li>Beobachte die Leinwand <strong>und</strong> den Inspektor: Der Kreis wird gelb – und der Wert von <span class="code-pill">farbe</span> springt sofort auf <span class="code-pill">"gelb"</span>!</li>
+          <li>Rechtsklick auf <span class="code-pill">sonne</span> ➔ <strong><span class="code-pill">void langsamHorizontalBewegen(int distanz)</span></strong> mit dem Wert <span class="code-pill">120</span>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 4: DER ROTE MERKSATZ-KASTEN
+         ====================================================== -->
+    <div class="merke-box">
+      <div class="merke-tag">MERKE</div>
+      <div class="merke-content">
+        <strong>Die vier Grundpfeiler der Objektorientierung:</strong>
+        <br><br>
+        1. <strong>Klasse (Class):</strong> Der abstrakte Bauplan. Er legt fest, welche Eigenschaften und Methoden alle Objekte dieses Typs besitzen (z. B. <span class="code-pill">Kreis</span>).
+        <br><br>
+        2. <strong>Objekt (Instanz):</strong> Das konkrete Einzelexemplar, das zur Laufzeit im Speicher erzeugt wird (z. B. <span class="code-pill">sonne</span>).
+        <br><br>
+        3. <strong>Attribut (Instanzvariable):</strong> Ein beschriftetes Speicherfach im Objekt, das ein bestimmtes Merkmal festhält (z. B. <span class="code-pill">xPosition</span>, <span class="code-pill">farbe</span>). Die Gesamtheit aller Attributwerte zu einem Zeitpunkt nennt man den <strong>Zustand</strong> des Objekts.
+        <br><br>
+        4. <strong>Methode (Method):</strong> Ein Befehl bzw. eine Fähigkeit des Objekts. Methoden können den Zustand verändern (z. B. <span class="code-pill">sichtbarMachen()</span>) oder Aktionen ausführen. Werte, die man einer Methode beim Aufruf mitgeben muss, heißen <strong>Parameter</strong> (z. B. die neue Farbe).
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TEIL 5: EXPERIMENTIER-AUFTRÄGE FÜR TANDEMS
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">4</span>
+        <h2 class="step-title">Experimentier-Labor: Aufgaben für Sitznachbarn</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Arbeitet zu zweit an euren Rechnern: Einer führt die Klicks in BlueJ aus, der andere liest die Messwerte im Inspektor ab. Wechselt euch bei den Aufgaben ab!
+      </p>
+
+      <!-- Aufgabe 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('ans1', this)">
+          <div class="question-title">
+            1. Detektiv-Check: Was passiert beim Verschieben?
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 6px;">
+          Rufe für die Sonne dreimal hintereinander <span class="code-pill">nachRechtsBewegen()</span> auf. Um wie viele Bildschirmpunkte verändert sich die <span class="code-pill">xPosition</span> im Inspektor bei jedem Klick?
+        </p>
+        <div class="question-answer" id="ans1">
+          • <strong>Erklärung:</strong> Die <span class="code-pill">xPosition</span> erhöht sich bei jedem Aufruf von <span class="code-pill">nachRechtsBewegen()</span> um exakt <strong>20 Pixel</strong> (von z. B. 230 auf 250, 270, 290). Die Methode verändert also gezielt den Wert der Variablen im Speicher!
+        </div>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('ans2', this)">
+          <div class="question-title">
+            2. Praxis-Auftrag: Die Verkehrsampel
+          </div>
+          <button class="btn-reveal">Lösung &amp; Anleitung aufdecken</button>
+        </div>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 6px;">
+          Erzeuge auf der Werkbank:
+          <br>• Ein <span class="code-pill">Quadrat</span> namens <span class="code-pill">kasten</span> (schwarz, vergrößert).
+          <br>• Drei <span class="code-pill">Kreis</span>-Objekte namens <span class="code-pill">oben</span>, <span class="code-pill">mitte</span> und <span class="code-pill">unten</span>.
+          <br>Positioniere die Lampen im Kasten so, dass eine korrekte Ampelphase (z. B. Rot-Gelb) entsteht.
+        </p>
+        <div class="question-answer" id="ans2">
+          • <strong>Vorgehensweise:</strong><br>
+          1. <span class="code-pill">kasten = new Quadrat()</span> ➔ <span class="code-pill">sichtbarMachen()</span>, <span class="code-pill">farbeAendern("schwarz")</span>, <span class="code-pill">groesseAendern(150)</span>.<br>
+          2. Drei Kreise erzeugen, jeweils <span class="code-pill">sichtbarMachen()</span> und <span class="code-pill">groesseAendern(40)</span>.<br>
+          3. <span class="code-pill">oben.farbeAendern("rot")</span>, <span class="code-pill">mitte.farbeAendern("gelb")</span>, <span class="code-pill">unten.farbeAendern("schwarz")</span> (ausgeschaltet).<br>
+          4. Über <span class="code-pill">horizontalBewegen(...)</span> und <span class="code-pill">vertikalBewegen(...)</span> die Kreise passgenau in den schwarzen Kasten schieben.
+        </div>
+      </div>
+
+      <!-- Aufgabe 3 (Experte) -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('ans3', this)">
+          <div class="question-title">
+            3. Experten-Challenge: Das Traumhaus
+          </div>
+          <button class="btn-reveal">Tipps aufdecken</button>
+        </div>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 6px;">
+          Erschaffe ein vollständiges Landschaftsbild auf der Leinwand:
+          <br>• Eine Hauswand (<span class="code-pill">Quadrat</span>, z. B. rot)
+          <br>• Ein spitzes Dach (<span class="code-pill">Dreieck</span>, z. B. gruen oder schwarz)
+          <br>• Ein rundes Fenster (<span class="code-pill">Kreis</span>, z. B. weiss oder blau)
+          <br>• Eine Sonne am Himmel, die anschließend langsam über das Dach wandert.
+        </p>
+        <div class="question-answer" id="ans3">
+          • <strong>Tipp zur Reihenfolge:</strong><br>
+          Objekte, die du <em>später</em> sichtbar machst, werden über ältere Objekte gezeichnet. Mache daher zuerst die Hauswand sichtbar und danach das Fenster, damit das Fenster auf der Wand liegt und nicht dahinter verschwindet!
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top: 3rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+      <p><strong>Informatik Einführungsphase (EF)</strong> • Schulportal 2026/2027</p>
+      <p style="margin-top: 4px;">Arbeitsmaterialien &amp; Projektdateien verbleiben im Kursordner.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleAnswer(id, headerElem) {
+      const ans = document.getElementById(id);
+      const btn = headerElem.querySelector('.btn-reveal');
+      if (ans.classList.contains('show')) {
+        ans.classList.remove('show');
+        btn.textContent = 'Antwort aufdecken';
+      } else {
+        ans.classList.add('show');
+        btn.textContent = 'Antwort verbergen';
+      }
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      const anyHidden = Array.from(answers).some(a => !a.classList.contains('show'));
+
+      answers.forEach(a => {
+        if (anyHidden) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+
+      buttons.forEach(b => {
+        b.textContent = anyHidden ? 'Antwort verbergen' : 'Antwort aufdecken';
+      });
+    }
+
+    function toggleBeamer() {
+      document.body.classList.toggle('beamer-mode');
+      const btn = document.getElementById('btnBeamer');
+      btn.classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>
