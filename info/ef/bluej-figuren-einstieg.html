@@ -766,6 +766,28 @@
             Abbildung 2: Der Objekt-Inspektor zeigt das innere Gedächtnis des Objekts. Jede Zeile ist ein Attribut (eine Variable), in der genau ein aktueller Wert gespeichert ist.
           </div>
         </div>
+
+        <!-- Detektiv-Frage: Der Konstruktor -->
+        <div class="question-card" style="margin-top: 14px; background: #fffbeb; border: 1.5px solid #fde68a;">
+          <div class="question-header" onclick="toggleAnswer('ansKonstruktor', this)">
+            <div class="question-title" style="color: #92400e;">
+              Detektiv-Frage: Woher stammen die Startwerte im Inspektor?
+            </div>
+            <button class="btn-reveal" style="border-color: #f59e0b; color: #b45309;">Erklärung aufdecken</button>
+          </div>
+          <p style="font-size: 0.9rem; color: #78350f; margin-top: 6px;">
+            Hast du dich gefragt: Woher weiß der Kreis im allerersten Moment eigentlich, dass er 68 Pixel groß und blau sein soll? Wir haben doch noch gar keine Methode wie <span class="code-pill">farbeAendern()</span> aufgerufen!
+          </p>
+          <div class="question-answer" id="ansKonstruktor" style="color: #92400e; border-top-color: #fcd34d;">
+            <strong>Des Rätsels Lösung: Der Konstruktor!</strong>
+            <br><br>
+            • Das Wort stammt von lateinisch <em>construere</em> (bauen, errichten).
+            <br>
+            • Immer wenn du per Rechtsklick auf die Klasse <strong><span class="code-pill">new Kreis()</span></strong> auswählst, rufst du genau diesen <strong>Konstruktor</strong> auf.
+            <br>
+            • Der Konstruktor ist die Geburtsstunde des Objekts: Er reserviert den Speicherplatz und belegt alle Attribute sofort mit ihren <strong>Startwerten (Werkseinstellungen)</strong>.
+          </div>
+        </div>
       </div>
 
       <!-- Schritt D -->
@@ -789,7 +811,7 @@
     <div class="merke-box">
       <div class="merke-tag">MERKE</div>
       <div class="merke-content">
-        <strong>Die vier Grundpfeiler der Objektorientierung:</strong>
+        <strong>Die fünf Grundpfeiler der Objektorientierung:</strong>
         <br><br>
         1. <strong>Klasse (Class):</strong> Der abstrakte Bauplan. Er legt fest, welche Eigenschaften und Methoden alle Objekte dieses Typs besitzen (z. B. <span class="code-pill">Kreis</span>).
         <br><br>
@@ -798,6 +820,8 @@
         3. <strong>Attribut (Instanzvariable):</strong> Ein beschriftetes Speicherfach im Objekt, das ein bestimmtes Merkmal festhält (z. B. <span class="code-pill">xPosition</span>, <span class="code-pill">farbe</span>). Die Gesamtheit aller Attributwerte zu einem Zeitpunkt nennt man den <strong>Zustand</strong> des Objekts.
         <br><br>
         4. <strong>Methode (Method):</strong> Ein Befehl bzw. eine Fähigkeit des Objekts. Methoden können den Zustand verändern (z. B. <span class="code-pill">sichtbarMachen()</span>) oder Aktionen ausführen. Werte, die man einer Methode beim Aufruf mitgeben muss, heißen <strong>Parameter</strong> (z. B. die neue Farbe).
+        <br><br>
+        5. <strong>Konstruktor (Constructor):</strong> Eine spezielle Vorbereitungsmethode, die genau <strong>einmal bei der Erschaffung</strong> eines Objekts aufgerufen wird (<span class="code-pill">new ...</span>). Er reserviert den Speicher und belegt die Attribute mit ihren <strong>Startwerten (Werkseinstellungen)</strong>.
       </div>
     </div>
 
