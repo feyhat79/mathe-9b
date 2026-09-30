@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Vererbung, Methodenanpassung & super-Aufrufe | Informatik Q2</title>
+  <title>Vererbung, Überschreiben &amp; Überladen | Informatik Q2</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- KaTeX für mathematische & technische Formeln -->
+  <!-- KaTeX fuer mathematische & technische Formeln -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
@@ -42,7 +42,7 @@
 
   <style>
     :root {
-      --primary: #1e3a8a;       /* Füller-Königsblau */
+      --primary: #1e3a8a;       /* Fueller-Koenigsblau */
       --primary-focus: #2563eb;
       --primary-light: #eff6ff;
       --accent: #7c3aed;        /* Informatik-Violett */
@@ -55,7 +55,7 @@
       --danger-light: #fef2f2;
       --bg: #f8fafc;
       --card-bg: #ffffff;
-      --text: #111827;          /* Füllertiefes Schwarz */
+      --text: #111827;          /* Fuellertiefes Schwarz */
       --text-muted: #475569;
       --border: #cbd5e1;
       --radius-lg: 14px;
@@ -172,7 +172,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 4px 14px;
       background: var(--primary-light);
       color: var(--primary);
       border-radius: 999px;
@@ -184,7 +184,7 @@
     }
 
     h1 {
-      font-size: calc(2rem * var(--font-scale));
+      font-size: calc(2.1rem * var(--font-scale));
       font-weight: 800;
       letter-spacing: -0.5px;
       color: var(--primary);
@@ -198,7 +198,7 @@
     .lead-subtitle {
       color: var(--text-muted);
       font-size: calc(1.05rem * var(--font-scale));
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
@@ -258,8 +258,16 @@
       gap: 12px;
       margin: 0.75rem 0;
     }
-    @media (max-width: 680px) {
-      .grid-2 { grid-template-columns: 1fr; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 0.75rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
 
     .sub-card {
@@ -278,6 +286,40 @@
     }
     body.beamer-mode .highlight-label {
       color: #60a5fa;
+    }
+
+    /* DOWNLOAD BOX */
+    .download-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    }
+
+    .download-btn {
+      background: #ffffff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: all 0.2s;
+    }
+    .download-btn:hover {
+      background: #f1f5f9;
+      transform: translateY(-1px);
     }
 
     /* CODE & CODE PILLS */
@@ -338,7 +380,7 @@
       color: #fbbf24;
     }
 
-    /* DER ROTE MERKSATZ-KASTEN (ORIGINAL GEMINI STANDARD) */
+    /* DER ROTE MERKSATZ-KASTEN (GEMINI-STANDARD) */
     .merke-box {
       border: 2.5px solid var(--danger);
       border-radius: 6px;
@@ -366,6 +408,35 @@
       color: #111827; /* Zwingend schwarz/dunkel */
       font-size: calc(11pt * var(--font-scale));
       line-height: 1.55;
+    }
+
+    /* VERGLEICHSTABELLE */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: calc(10pt * var(--font-scale));
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      text-align: left;
+    }
+    body.beamer-mode .calc-table th {
+      background: #1e293b;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+    .calc-table td {
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      vertical-align: top;
+    }
+    body.beamer-mode .calc-table td {
+      border-color: #334155;
     }
 
     /* INTERAKTIVE FRAGEN / DETEKTIV */
@@ -400,17 +471,17 @@
     }
 
     .btn-reveal {
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 5px;
-      border: 1px solid #cbd5e1;
       background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--primary);
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .btn-reveal:hover {
       background: var(--primary-light);
@@ -427,45 +498,45 @@
       margin-top: 10px;
       padding-top: 10px;
       border-top: 1px dashed var(--border);
-      font-size: 0.95rem;
-      color: #166534;
-      font-weight: 600;
+      color: var(--text-muted);
+      font-size: calc(10.5pt * var(--font-scale));
       line-height: 1.5;
     }
     body.beamer-mode .question-answer {
-      color: #86efac;
+      color: #cbd5e1;
+      border-top-color: #475569;
     }
     .question-answer.show {
       display: block;
     }
 
-    /* COMPARISON TABLE */
-    .calc-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: calc(10pt * var(--font-scale));
-      margin-top: 8px;
+    /* PRAXIS-AUFGABEN-KACHELN */
+    .task-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
     }
-    .calc-table th {
-      background: #eff6ff;
-      color: #1e3a8a;
-      font-weight: 700;
+
+    .task-card {
+      border-left: 4px solid var(--primary);
+      background: #ffffff;
       border: 1px solid var(--border);
-      padding: 8px 12px;
-      text-align: left;
+      border-left-width: 4px;
+      border-left-color: var(--primary);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 14px;
     }
-    body.beamer-mode .calc-table th {
+    body.beamer-mode .task-card {
       background: #1e293b;
-      color: #93c5fd;
       border-color: #475569;
-    }
-    .calc-table td {
-      border: 1px solid var(--border);
-      padding: 8px 12px;
-      vertical-align: top;
-    }
-    body.beamer-mode .calc-table td {
-      border-color: #334155;
+      border-left-color: #60a5fa;
     }
   </style>
 </head>
@@ -478,7 +549,7 @@
     <div class="presenter-left">
       <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
       <span style="font-weight: 700; font-size: 0.92rem;">
-        Informatik Q2 • Modul 4: Vererbung, Überschreiben & super
+        Informatik Q2 • Modul 4: Vererbung, Überschreiben &amp; Überladen
       </span>
     </div>
     <div style="display: flex; gap: 8px;">
@@ -493,205 +564,270 @@
     <!-- HERO HEADER -->
     <header class="hero-header">
       <div class="badge-chapter">Informatik Q2 • Wiederholung OOP (Teil 4)</div>
-      <h1>Vererbung, Methodenanpassung &amp; super-Aufrufe</h1>
+      <h1>Vererbung, Überschreiben &amp; Überladen</h1>
       <p class="lead-subtitle">
-        Wie wir Klassenhierarchien mit <code>extends</code> aufbauen, den Unterschied zwischen <strong>Überschreiben</strong> und <strong>Überladen</strong> meistern und den <code>super</code>-Aufruf gezielt im Konstruktor sowie in Methoden einsetzen.
+        Vom Albtraum doppelten Quellcodes zur eleganten Klassenhierarchie mit <code>extends</code>. Wir meistern das Fundament-Prinzip mit <code>super(...)</code> und den zentralen Unterschied zwischen <strong>Methoden-Überschreiben</strong> und <strong>Methoden-Überladen</strong>.
       </p>
     </header>
 
+    <!-- DOWNLOAD-BOX BLUEJ -->
+    <div class="download-card">
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 4px;">BlueJ-Projekt: Spielfiguren &amp; Helden</h3>
+        <p style="font-size: 0.92rem; opacity: 0.92;">
+          Starterprojekt mit genau 3 Klassen (<code>Spielfigur</code>, <code>Krieger</code>, <code>Magier</code>). Direkt in BlueJ öffnen und ausprobieren.
+        </p>
+      </div>
+      <a href="BlueJ_Vererbung.zip" download="BlueJ_Vererbung.zip" class="download-btn">
+        Projekt herunterladen (.zip)
+      </a>
+    </div>
+
     <!-- ======================================================
-         TEIL 1: DAS SZENARIO & DIE OBERKLASSE
+         ABSCHNITT 1: MOTIVATION & DIE IDEE DER VERERBUNG
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
           <span class="step-badge">1</span>
-          <h2 class="step-title">Das Szenario: Das Mensa-Karten-System der Schule</h2>
+          <h2 class="step-title">Einstieg: Das Rollenspiel-Dilemma (Warum Vererbung?)</h2>
         </div>
       </div>
 
       <p style="margin-bottom: 0.75rem;">
-        An unserer Schule nutzen alle Personen eine digitale Mensa-Karte. Jeder Benutzer besitzt gemeinsame Eigenschaften (Name, ID, Guthaben), doch verschiedene Benutzergruppen verhalten sich beim Bezahlen unterschiedlich:
+        Stell dir vor, du entwickelst die Logik für ein rundenbasiertes Rollenspiel. Im Spiel treten verschiedene Charaktere an: tapfere <strong>Krieger</strong> mit schwerer Eisenrüstung und weise <strong>Magier</strong> mit mächtigen Zaubersprüchen.
       </p>
 
-      <div class="grid-2">
-        <div class="sub-card" style="border-left: 3px solid var(--primary);">
-          <span class="highlight-label">• Oberklasse: Nutzer</span>
-          Allgemeine Basisklasse für alle Mensa-Karten. Speichert <span class="code-pill">name</span>, <span class="code-pill">id</span> und <span class="code-pill">guthaben</span>. Zieht beim Bezahlen den Betrag vom Guthaben ab.
+      <div class="conflict-box">
+        <div class="conflict-title">Das Albtraumszenario OHNE Vererbung (Copy-&-Paste-Programmierung):</div>
+        Schreiben wir für <code>Krieger</code> und <code>Magier</code> jeweils eine völlig eigenständige Klasse, müssen wir Attribute wie <span class="code-pill">name</span>, <span class="code-pill">lebenspunkte</span>, <span class="code-pill">basisSchaden</span> und Methoden wie <span class="code-pill">nimmSchaden()</span> oder <span class="code-pill">heilen()</span> in beiden Klassen doppelt programmieren.
+        <br><br>
+        <strong>Die gravierende Folge:</strong> Ändert sich eine grundlegende Spielregel (z. B. <em>„Lebenspunkte dürfen nach einem Treffer niemals negativ werden, sondern stoppen bei 0“</em>), müssen wir jede Klasse einzeln suchen und manuell umschreiben. Wer das vergisst, erzeugt inkonsistente Bugs. In der Software-Entwicklung verstößt dies gegen das fundamentale Prinzip <strong>DRY (Don't Repeat Yourself)</strong>.
+      </div>
+
+      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">Die architektonische Lösung: Generalisierung &amp; Spezialisierung</h3>
+      <p style="margin-bottom: 0.75rem;">
+        Wir analysieren alle Figuren und trennen das <strong>Gemeinsame</strong> vom <strong>Besonderen</strong>:
+      </p>
+
+      <div class="grid-3">
+        <div class="sub-card" style="border-top: 3px solid var(--primary);">
+          <span class="highlight-label">• Oberklasse: Spielfigur</span>
+          Bündelt alle universellen Eigenschaften: Name, Lebenspunkte, Basisschaden sowie Standard-Aktionen wie Schaden nehmen, Heilen und Statusanzeige.
         </div>
-        <div class="sub-card" style="border-left: 3px solid var(--accent);">
-          <span class="highlight-label">• Unterklasse: Schueler</span>
-          Erbt von <span class="code-pill">Nutzer</span> (<span class="code-pill">extends Nutzer</span>). Speichert zusätzlich die <span class="code-pill">klasse</span> (z. B. "Q2") und erhält automatisch <strong>10% Schülerrabatt</strong> beim Bezahlen!
+        <div class="sub-card" style="border-top: 3px solid var(--accent);">
+          <span class="highlight-label">• Unterklasse: Krieger</span>
+          Erbt alles von <code>Spielfigur</code>. Besitzt zusätzlich eine <span class="code-pill">ruestung</span>, die erlittenen Schaden vorab absorbiert.
+        </div>
+        <div class="sub-card" style="border-top: 3px solid var(--success);">
+          <span class="highlight-label">• Unterklasse: Magier</span>
+          Erbt alles von <code>Spielfigur</code>. Besitzt zusätzlich <span class="code-pill">mana</span> und feuert mächtige Zauberangriffe mit doppeltem Schaden ab.
         </div>
       </div>
 
-      <div class="conflict-box">
-        <div class="conflict-title">Die Problemstellung ohne Vererbung:</div>
-        Müssten wir für <span class="code-pill">Schueler</span> und <span class="code-pill">Lehrer</span> jeweils eigene Klassen schreiben, würden wir Attribute wie <span class="code-pill">name</span>, <span class="code-pill">guthaben</span> und Methoden wie <span class="code-pill">guthabenAufladen(...)</span> doppelt programmieren.
-        <br><br>
-        <strong>Die Lösung durch Vererbung:</strong>
-        Die Unterklasse <span class="code-pill">Schueler</span> erbt mit dem Schlüsselwort <span class="code-pill">extends</span> alle Attribute und Methoden der Oberklasse <span class="code-pill">Nutzer</span> und passt nur das an, was speziell ist!
+      <div style="background: #f1f5f9; border-radius: var(--radius-md); padding: 12px 16px; margin-top: 1rem; font-size: 0.95rem;">
+        <strong>Die „Ist-ein“-Beziehung (Generalisierung):</strong><br>
+        Vererbung modelliert immer eine hierarchische Beziehung:
+        <ul style="margin: 6px 0 0 20px;">
+          <li>Ein <code>Krieger</code> <strong>ist eine</strong> <code>Spielfigur</code>.</li>
+          <li>Ein <code>Magier</code> <strong>ist eine</strong> <code>Spielfigur</code>.</li>
+        </ul>
+        In Java wird diese Beziehung mit dem Schlüsselwort <span class="code-pill">extends</span> ausgedrückt.
       </div>
     </section>
 
     <!-- ======================================================
-         TEIL 2: DIE IMPLEMENTIERUNG & DER super-KONSTRUKTOR
+         ABSCHNITT 2: DIE 3 KLASSEN IM DETAIL & DER SUPER-KONSTRUKTOR
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
           <span class="step-badge">2</span>
-          <h2 class="step-title">Oberklasse Nutzer &amp; Unterklasse Schueler mit super(...)</h2>
+          <h2 class="step-title">Die Implementierung: Sichtbarkeit &amp; das Fundament mit super(...)</h2>
         </div>
       </div>
 
+      <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">1. Die Oberklasse: Spielfigur.java</h3>
       <p style="margin-bottom: 0.75rem;">
-        Schauen wir uns die Oberklasse <span class="code-pill">Nutzer</span> an. Die Attribute sind wie in den Materialien der Abiturkommission NRW mit <span class="code-pill">protected</span> oder <span class="code-pill">private</span> geschützt:
+        Attribute werden als <span class="code-pill">protected</span> deklariert. Dadurch sind sie für die eigenen Methoden und alle erbenden Unterklassen direkt erreichbar, bleiben aber nach außen hin vor fremden Zugriffen gekapselt:
       </p>
 
-      <pre><span class="code-keyword">public class</span> <span class="code-type">Nutzer</span> {
-    <span class="code-keyword">private</span> <span class="code-type">String</span> name;
-    <span class="code-keyword">private</span> <span class="code-type">String</span> id;
-    <span class="code-keyword">protected double</span> guthaben;
+      <pre><span class="code-keyword">public class</span> <span class="code-type">Spielfigur</span> {
+    <span class="code-comment">// protected: Sichtbar in dieser Klasse UND in allen erbenden Unterklassen</span>
+    <span class="code-keyword">protected</span> <span class="code-type">String</span> name;
+    <span class="code-keyword">protected int</span> lebenspunkte;
+    <span class="code-keyword">protected int</span> basisSchaden;
 
-    <span class="code-keyword">public</span> <span class="code-func">Nutzer</span>(<span class="code-type">String</span> pName, <span class="code-type">String</span> pId, <span class="code-type">double</span> pGuthaben) {
+    <span class="code-keyword">public</span> <span class="code-func">Spielfigur</span>(<span class="code-type">String</span> pName, <span class="code-type">int</span> pLebenspunkte, <span class="code-type">int</span> pBasisSchaden) {
         <span class="code-keyword">this</span>.name = pName;
-        <span class="code-keyword">this</span>.id = pId;
-        <span class="code-keyword">this</span>.guthaben = pGuthaben;
+        <span class="code-keyword">this</span>.lebenspunkte = Math.max(0, pLebenspunkte);
+        <span class="code-keyword">this</span>.basisSchaden = Math.max(0, pBasisSchaden);
     }
 
-    <span class="code-keyword">public void</span> <span class="code-func">bezahlen</span>(<span class="code-type">double</span> pBetrag) {
-        <span class="code-keyword">if</span> (<span class="code-keyword">this</span>.guthaben >= pBetrag) {
-            <span class="code-keyword">this</span>.guthaben -= pBetrag;
+    <span class="code-keyword">public void</span> <span class="code-func">nimmSchaden</span>(<span class="code-type">int</span> pSchaden) {
+        <span class="code-keyword">if</span> (pSchaden > 0) {
+            <span class="code-keyword">this</span>.lebenspunkte -= pSchaden;
+            <span class="code-keyword">if</span> (<span class="code-keyword">this</span>.lebenspunkte < 0) {
+                <span class="code-keyword">this</span>.lebenspunkte = 0;
+            }
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] erleidet "</span> + pSchaden + <span class="code-string">" Schaden. LP: "</span> + <span class="code-keyword">this</span>.lebenspunkte);
+        }
+    }
+
+    <span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel) {
+        <span class="code-keyword">if</span> (pZiel != <span class="code-keyword">null</span> && <span class="code-keyword">this</span>.lebenspunkte > 0) {
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] greift ["</span> + pZiel.getName() + <span class="code-string">"] an ("</span> + <span class="code-keyword">this</span>.basisSchaden + <span class="code-string">" Schaden)."</span>);
+            pZiel.nimmSchaden(<span class="code-keyword">this</span>.basisSchaden);
         }
     }
 }</pre>
 
-      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">Der super(...)-Aufruf im Konstruktor der Unterklasse</h3>
+      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">2. Der Konstruktor der Unterklasse: Das Fundament-Prinzip</h3>
       <p style="margin-bottom: 0.75rem;">
-        Da die Attribute <span class="code-pill">name</span> und <span class="code-pill">id</span> in der Oberklasse <span class="code-pill">private</span> sind, kann die Unterklasse <span class="code-pill">Schueler</span> nicht direkt darauf zugreifen.
-        Sie ruft deshalb in der <strong>allerersten Zeile ihrem Konstruktor</strong> den Oberklassen-Konstruktor mit <span class="code-pill">super(...)</span> auf:
+        Wenn wir ein Objekt vom Typ <span class="code-pill">Krieger</span> instanziieren, muss im Arbeitsspeicher zuerst das Basis-Objekt der <span class="code-pill">Spielfigur</span> existieren.
+        Daher verlangt die Java-Sprachspezifikation verbindlich:
       </p>
 
-      <pre><span class="code-keyword">public class</span> <span class="code-type">Schueler</span> <span class="code-keyword">extends</span> <span class="code-type">Nutzer</span> {
-    <span class="code-keyword">private</span> <span class="code-type">String</span> klasse;
+      <div style="background: #eff6ff; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 1rem;">
+        <strong>Die Fundament-Regel:</strong>
+        Der Aufruf des Oberklassen-Konstruktors mit <span class="code-pill">super(...)</span> muss <strong>ausnahmslos die allererste Anweisung</strong> im Konstruktor der Unterklasse sein! Erst wenn das Fundament steht, dürfen spezifische Unterklassen-Attribute initialisiert werden.
+      </div>
 
-    <span class="code-keyword">public</span> <span class="code-func">Schueler</span>(<span class="code-type">String</span> pName, <span class="code-type">String</span> pId, <span class="code-type">double</span> pGuthaben, <span class="code-type">String</span> pKlasse) {
-        <span class="code-keyword">super</span>(pName, pId, pGuthaben); <span class="code-comment">// 1. WICHTIG: Erster Aufruf initialisiert Oberklasse!</span>
-        <span class="code-keyword">this</span>.klasse = pKlasse;        <span class="code-comment">// 2. Eigenes Attribut initialisieren</span>
+      <pre><span class="code-keyword">public class</span> <span class="code-type">Krieger</span> <span class="code-keyword">extends</span> <span class="code-type">Spielfigur</span> {
+    <span class="code-keyword">private int</span> ruestung;
+
+    <span class="code-keyword">public</span> <span class="code-func">Krieger</span>(<span class="code-type">String</span> pName, <span class="code-type">int</span> pLebenspunkte, <span class="code-type">int</span> pBasisSchaden, <span class="code-type">int</span> pRuestung) {
+        <span class="code-keyword">super</span>(pName, pLebenspunkte, pBasisSchaden); <span class="code-comment">// 1. ZWINGEND ERSTE ZEILE: Initialisiert Spielfigur</span>
+        <span class="code-keyword">this</span>.ruestung = Math.max(0, pRuestung);     <span class="code-comment">// 2. Eigenes Attribut des Kriegers setzen</span>
     }
 }</pre>
     </section>
 
     <!-- ======================================================
-         TEIL 3: ÜBERSCHREIBEN VS. ÜBERLADEN
+         ABSCHNITT 3: ÜBERSCHREIBEN VS. ÜBERLADEN
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
           <span class="step-badge">3</span>
-          <h2 class="step-title">Überschreiben vs. Überladen (Der zentrale Unterschied)</h2>
+          <h2 class="step-title">Überschreiben (Overriding) vs. Überladen (Overloading)</h2>
         </div>
       </div>
 
       <p style="margin-bottom: 0.75rem;">
-        In Klausuren wird oft verwechselt, was <strong>Überschreiben</strong> (Overriding) und was <strong>Überladen</strong> (Overloading) bedeutet. Hier ist die Gegenüberstellung:
+        In Informatik-Klausuren und im Abitur gehören die Begriffe <strong>Überschreiben</strong> und <strong>Überladen</strong> zu den häufigsten Fehlerquellen. Sie klingen ähnlich, beschreiben aber zwei völlig unterschiedliche Konzepte der objektorientierten Programmierung:
       </p>
 
+      <!-- VERGLEICHSTABELLE -->
       <table class="calc-table">
         <thead>
           <tr>
-            <th style="width: 50%;">Methoden ÜBERSCHREIBEN (Overriding)</th>
-            <th style="width: 50%;">Methoden ÜBERLADEN (Overloading)</th>
+            <th style="width: 50%;">Methoden ÜBERSCHREIBEN (Method Overriding)</th>
+            <th style="width: 50%;">Methoden ÜBERLADEN (Method Overloading)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              • <strong>Wo?</strong> In der <strong>Unterklasse</strong> (vererbungsspezifisch).<br>
-              • <strong>Signatur:</strong> Exakt <strong>gleicher Name</strong> und exakt <strong>gleiche Parameterliste</strong> wie in der Oberklasse.<br>
-              • <strong>Zweck:</strong> Die Unterklasse <em>ersetzt</em> oder <em>spezialisiert</em> das Verhalten der Oberklasse.<br>
-              • <strong>Annotation:</strong> Best Practice mit <span class="code-pill">@Override</span>.
+              • <strong>Wo?</strong> Ausschließlich <strong>zwischen Ober- und Unterklasse</strong> (setzt Vererbung voraus).<br><br>
+              • <strong>Signatur:</strong> Exakt <strong>derselbe Name</strong> und exakt <strong>dieselbe Parameterliste</strong> (Anzahl und Typen).<br><br>
+              • <strong>Zweck:</strong> Die Unterklasse <em>spezialisiert</em> oder <em>verändert</em> das Verhalten einer geerbten Methode.<br><br>
+              • <strong>Kennzeichnung:</strong> Empfohlen mit <span class="code-pill">@Override</span>. Der Compiler prüft, ob die Methode in der Oberklasse wirklich existiert.<br><br>
+              • <strong>Bindungszeitpunkt:</strong> <strong>Dynamische Methodenbindung</strong> zur Laufzeit (Polymorphie).
             </td>
             <td>
-              • <strong>Wo?</strong> In der <strong>gleichen Klasse</strong> oder auch in Unterklassen.<br>
-              • <strong>Signatur:</strong> <strong>Gleicher Name</strong>, aber <strong>UNTERSCHIEDLICHE Parameterliste</strong> (Anzahl oder Typen der Parameter).<br>
-              • <strong>Zweck:</strong> Bietet dem Aufrufer verschiedene Wege an, eine Methode zu nutzen (z. B. mit oder ohne Zusatzangabe).
+              • <strong>Wo?</strong> Innerhalb <strong>derselben Klasse</strong> (oder auch über Vererbungsgrenzen hinweg).<br><br>
+              • <strong>Signatur:</strong> <strong>Derselbe Name</strong>, aber <strong>UNTERSCHIEDLICHE Parameterliste</strong> (andere Anzahl oder andere Datentypen).<br><br>
+              • <strong>Zweck:</strong> Bietet dem Aufrufer <em>unterschiedliche Bedienvarianten</em> derselben Aktion an (z. B. Standardwert vs. Detailkonfiguration).<br><br>
+              • <strong>Kennzeichnung:</strong> Keine besondere Annotation.<br><br>
+              • <strong>Bindungszeitpunkt:</strong> <strong>Statische Bindung</strong> bereits beim Kompilieren anhand der übergebenen Parameter.
             </td>
           </tr>
         </tbody>
       </table>
 
-      <!-- CODE-BEISPIEL ÜBERSCHREIBEN MIT SUPER -->
-      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">1. Beispielfall: Überschreiben mit super.bezahlen(...)</h3>
+      <!-- PRAXISBEISPIEL 1: ÜBERSCHREIBEN -->
+      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">1. Praxisbeispiel: Überschreiben mit super.methode(...)</h3>
       <p style="margin-bottom: 0.75rem;">
-        Ein Schüler bekommt 10% Rabatt. Wir <strong>überschreiben</strong> die Methode <span class="code-pill">bezahlen(double pBetrag)</span> und nutzen <span class="code-pill">super.bezahlen(...)</span>, um den bereits fertig abgebuchten Vorgang der Oberklasse nicht neu schreiben zu müssen:
+        Der <code>Krieger</code> überschreibt die Methode <span class="code-pill">nimmSchaden(int pSchaden)</span>. Seine Rüstung fängt Schaden ab. Anschließend ruft er mit <span class="code-pill">super.nimmSchaden(...)</span> die Basismethode der Oberklasse auf, damit die Lebenspunkte an zentraler Stelle abgezogen werden:
       </p>
 
-      <pre>    <span class="code-keyword">@Override</span>
-    <span class="code-keyword">public void</span> <span class="code-func">bezahlen</span>(<span class="code-type">double</span> pBetrag) {
-        <span class="code-type">double</span> rabattierterBetrag = pBetrag * <span class="code-string">0.90</span>; <span class="code-comment">// 10% Schuelerrabatt</span>
-        <span class="code-keyword">super</span>.bezahlen(rabattierterBetrag);          <span class="code-comment">// Ruft die Abbuchungslogik der Oberklasse auf!</span>
-    }</pre>
+      <pre><span class="code-comment">// In der Klasse Krieger:</span>
+<span class="code-keyword">@Override</span>
+<span class="code-keyword">public void</span> <span class="code-func">nimmSchaden</span>(<span class="code-type">int</span> pSchaden) {
+    <span class="code-type">int</span> effektiverSchaden = pSchaden - <span class="code-keyword">this</span>.ruestung;
+    <span class="code-keyword">if</span> (effektiverSchaden < 0) {
+        effektiverSchaden = 0;
+    }
+    System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] blockt mit Ruestung. Schaden reduziert auf: "</span> + effektiverSchaden);
+    
+    <span class="code-comment">// Weiterleitung an die Oberklasse Spielfigur:</span>
+    <span class="code-keyword">super</span>.nimmSchaden(effektiverSchaden);
+}</pre>
 
-      <!-- CODE-BEISPIEL ÜBERLADEN -->
-      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">2. Beispielfall: Überladen von bezahlen(...)</h3>
+      <!-- PRAXISBEISPIEL 2: ÜBERLADEN -->
+      <h3 style="font-size: 1.1rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">2. Praxisbeispiel: Überladen der Methode angreifen(...)</h3>
       <p style="margin-bottom: 0.75rem;">
-        Zusätzlich bieten wir in der Klasse eine **überladene** Methode an, die neben dem Betrag auch noch den Artikelnamen als Protokoll entgegennimmt:
+        In der Oberklasse <span class="code-pill">Spielfigur</span> stellen wir zwei Varianten von <code>angreifen</code> bereit: einen einfachen Angriff und einen Kraftangriff mit Bonus-Schaden:
       </p>
 
-      <pre>    <span class="code-comment">// Überladene Methode (unterschiedliche Parameterliste!)</span>
-    <span class="code-keyword">public void</span> <span class="code-func">bezahlen</span>(<span class="code-type">double</span> pBetrag, <span class="code-type">String</span> pArtikelName) {
-        System.out.println(<span class="code-string">"Kauf von: "</span> + pArtikelName);
-        <span class="code-keyword">this</span>.bezahlen(pBetrag); <span class="code-comment">// Ruft die normale bezahlen-Methode auf</span>
-    }</pre>
+      <pre><span class="code-comment">// Variante 1: Normaler Angriff (1 Parameter)</span>
+<span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel) {
+    pZiel.nimmSchaden(<span class="code-keyword">this</span>.basisSchaden);
+}
+
+<span class="code-comment">// Variante 2: UEBERLADENE Methode mit Bonusschaden (2 Parameter!)</span>
+<span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel, <span class="code-type">int</span> pBonusSchaden) {
+    <span class="code-type">int</span> gesamt = <span class="code-keyword">this</span>.basisSchaden + Math.max(0, pBonusSchaden);
+    System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] fuehrt Kraftangriff aus!"</span>);
+    pZiel.nimmSchaden(gesamt);
+}</pre>
     </section>
 
     <!-- ======================================================
-         TEIL 4: MERKSATZ (KÖNIGSBALU & ROTER MERKKASTEN)
+         ABSCHNITT 4: ROTER MERKSATZ-KASTEN (GEMINI-STANDARD)
          ====================================================== -->
     <div class="merke-box">
       <div class="merke-tag">MERKE</div>
       <div class="merke-content">
-        <strong>Vererbung, super &amp; Methodensignaturen in Java:</strong>
+        <strong>Die 4 goldenen Regeln der Vererbung in Java:</strong>
         <br><br>
-        1. <strong>super(...) im Konstruktor:</strong> Muss die <strong>allererste Anweisung</strong> im Konstruktor der Unterklasse sein, um die Attribute der Oberklasse zu initialisieren.
+        1. <strong>Klassenhierarchie mit <code>extends</code>:</strong> Die Unterklasse erbt alle nicht-privaten Attribute und Methoden der Oberklasse. Sie erweitert oder spezialisiert das Verhalten („Ist-ein“-Beziehung).
         <br><br>
-        2. <strong>super.methode(...) bei Methoden:</strong> Greift gezielt auf die Methode der Oberklasse zu, falls die Unterklasse diese Methode mit <span class="code-pill">@Override</span> überschrieben hat.
+        2. <strong>Fundament-Regel mit <code>super(...)</code>:</strong> Der Konstruktor der Oberklasse muss als <strong>allererste Zeile</strong> im Unterklassen-Konstruktor aufgerufen werden. Erst danach dürfen eigene Attribute initialisiert werden.
         <br><br>
-        3. <strong>Überschreiben (Overriding):</strong> Unterklasse nutzt <strong>exakt dieselbe Signatur</strong> (Name + Parameter) wie die Oberklasse, um deren Verhalten zu spezialisieren.
+        3. <strong>Überschreiben (Overriding):</strong> Exakt <strong>gleiche Signatur</strong> (gleicher Name, identische Parameterliste) in der Unterklasse. Spezialisiert das geerbte Verhalten. Mit <span class="code-pill">super.methode()</span> kann die ursprüngliche Logik der Oberklasse weiterverwendet werden.
         <br><br>
-        4. <strong>Überladen (Overloading):</strong> Methoden heißen gleich, unterscheiden sich aber in ihren <strong>Parametern</strong> (Typen oder Anzahl). Der Compiler wählt anhand der Argumente die passende Methode aus.
+        4. <strong>Überladen (Overloading):</strong> <strong>Gleicher Name</strong>, aber <strong>unterschiedliche Parameterliste</strong>. Kann innerhalb derselben Klasse existieren. Der Compiler entscheidet beim Übersetzen anhand der Argumente, welche Variante aufgerufen wird.
       </div>
     </div>
 
     <!-- ======================================================
-         TEIL 5: DETEKTIV-CHECK & KLAUSURAUFGABEN
+         ABSCHNITT 5: DETEKTIV-CHECK & KLAUSUR-FRAGEN
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
           <span class="step-badge">4</span>
-          <h2 class="step-title">Detektiv-Check: Quelltext-Analyse &amp; Typische Fehler</h2>
+          <h2 class="step-title">Detektiv-Check: Klausurtypische Verständnisfragen</h2>
         </div>
       </div>
 
       <p style="margin-bottom: 1rem;">
-        Analysiere die Quelltexte und teste dein Verständnis. Klicke auf die Buttons, um die Erklärungen aufzudecken.
+        Teste dein Verständnis der Konzepte an diesen typischen Fragestellungen. Klicke auf die Schaltfläche, um die ausführliche Begründung aufzudecken.
       </p>
 
       <!-- FRAGE 1 -->
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(this)">
           <div class="question-title">
-            1. Frage: Warum meldet der Java-Compiler einen Fehler, wenn super(pName, pId, pGuthaben) an zweiter Stelle im Konstruktor steht?
+            1. Frage: Warum meldet der Java-Compiler einen Fehler, wenn super(pName, pLP, pSchaden) erst nach this.ruestung = pRuestung steht?
           </div>
           <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
         </div>
         <div class="question-answer">
-          • <strong>Regel:</strong> Java schreibt vor, dass die Oberklasse vollständig konstruiert sein muss, bevor die Unterklasse eigene Attribute initialisiert.
-          <br>
-          • <strong>Erklärung:</strong> Würde erst eigener Code ausgeführt, könnte dieser versehentlich auf noch uninitialisierte Attribute der Oberklasse zugreifen. Deshalb muss <span class="code-pill">super(...)</span> zwingend in der <strong>allerersten Zeile</strong> stehen.
+          • <strong>Regel:</strong> Java verlangt, dass die Basisklasse vollständig konstruiert sein muss, bevor die Unterklasse eigene Initialisierungen vornimmt.<br>
+          • <strong>Erklärung:</strong> Würde vor dem <span class="code-pill">super(...)</span>-Aufruf eigener Code ausgeführt, könnte dieser auf Methoden oder Felder der Oberklasse zugreifen, die zu diesem Zeitpunkt noch gar nicht initialisiert wurden. Deshalb erzwingt der Compiler, dass <span class="code-pill">super(...)</span> zwingend an <strong>erster Stelle</strong> steht.
         </div>
       </div>
 
@@ -699,18 +835,17 @@
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(this)">
           <div class="question-title">
-            2. Frage: Liegt in folgendem Code ein Überschreiben oder ein Überladen vor?
+            2. Frage: Liegt in folgendem Methodenpaar ein Überschreiben oder ein Überladen vor?
             <br>
-            <span class="code-pill">Oberklasse: void drucken(int pAnzahl)</span> 
+            <span class="code-pill">Oberklasse: void heilen(int pPunkte)</span>
             <br>
-            <span class="code-pill">Unterklasse: void drucken(String pText)</span>
+            <span class="code-pill">Unterklasse: void heilen(Spielfigur pZiel, int pPunkte)</span>
           </div>
           <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
         </div>
         <div class="question-answer">
-          • <strong>Antwort:</strong> Es handelt sich um <strong>Überladen</strong>!
-          <br>
-          • <strong>Begründung:</strong> Obwohl die Methode in einer Unterklasse definiert ist, unterscheidet sich der Parametertyp (<span class="code-pill">int</span> vs. <span class="code-pill">String</span>). Es ist somit eine neue, überladene Variante der Methode und kein Überschreiben!
+          • <strong>Antwort:</strong> Es handelt sich um <strong>Überladen (Overloading)</strong>!<br>
+          • <strong>Begründung:</strong> Obwohl sich die zweite Methode in der Unterklasse befindet, hat sie eine <strong>andere Parameterliste</strong> (zwei Parameter statt einem). Die ursprüngliche Methode <span class="code-pill">heilen(int)</span> bleibt in der Unterklasse weiterhin unverändert erhalten. Die Unterklasse bietet lediglich eine zusätzliche, überladene Variante an.
         </div>
       </div>
 
@@ -718,14 +853,152 @@
       <div class="question-card">
         <div class="question-header" onclick="toggleAnswer(this)">
           <div class="question-title">
-            3. Frage: Was passiert, wenn man in Schueler.bezahlen(...) aus Versehen bezahlen(rabattierterBetrag) statt super.bezahlen(...) schreibt?
+            3. Frage: Was passiert zur Laufzeit, wenn man in Krieger.nimmSchaden(...) versehentlich nimmSchaden(effektiverSchaden) statt super.nimmSchaden(effektiverSchaden) aufruft?
           </div>
           <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
         </div>
         <div class="question-answer">
-          • <strong>Folge:</strong> Es entsteht eine <strong>endlose Rekursion</strong> (<span class="code-pill">StackOverflowError</span>)!
-          <br>
-          • <strong>Erklärung:</strong> Ohne das Schlüsselwort <span class="code-pill">super.</span> ruft die Methode <span class="code-pill">bezahlen</span> sich selbst immer wieder in der Unterklasse auf, anstatt die Abbuchung der Oberklasse auszuführen.
+          • <strong>Folge:</strong> Das Programm stürzt mit einem <span class="code-pill">java.lang.StackOverflowError</span> ab!<br>
+          • <strong>Erklärung:</strong> Ohne das Präfix <span class="code-pill">super.</span> ruft sich die Methode der Unterklasse selbst unendlich oft rekursiv auf. Erst durch <span class="code-pill">super.nimmSchaden(...)</span> wird gezielt die Implementierung der Oberklasse adressiert.
+        </div>
+      </div>
+
+      <!-- FRAGE 4 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer(this)">
+          <div class="question-title">
+            4. Frage: Warum nutzt die Oberklasse für Attribute wie name und lebenspunkte das Schlüsselwort protected anstelle von private?
+          </div>
+          <button class="btn-reveal">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer">
+          • <strong>Antwort:</strong> Bei <span class="code-pill">private</span> haben selbst erbende Unterklassen keinen direkten Lese- oder Schreibzugriff auf das Attribut.<br>
+          • <strong>Erklärung:</strong> Mit <span class="code-pill">protected</span> dürfen spezialisierte Klassen wie <code>Krieger</code> oder <code>Magier</code> direkt auf <span class="code-pill">this.name</span> oder <span class="code-pill">this.lebenspunkte</span> zugreifen (z. B. für Bildschirmausgaben), während fremde Klassen von außerhalb keinen direkten Zugriff erhalten.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================
+         ABSCHNITT 6: PRAXIS-AUFGABEN IM BLUEJ-PROJEKT
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">5</span>
+          <h2 class="step-title">Praxis-Aufgaben: BlueJ-Labor (Hands-On)</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Öffne das Projekt <strong><code>BlueJ_Vererbung</code></strong> in BlueJ. Bearbeite die folgenden Aufgaben direkt im Java-Quelltext.
+      </p>
+
+      <!-- AUFGABE 1 -->
+      <div class="task-card">
+        <span class="task-badge">Aufgabe 1: Exploration auf der Werkbank</span>
+        <h4 style="font-size: 1.05rem; margin-bottom: 6px;">Objekt-Inspektion &amp; Vererbungs-Check</h4>
+        <p style="margin-bottom: 8px;">
+          1. Erstelle per Rechtsklick auf <code>Krieger</code> ein Objekt: <span class="code-pill">new Krieger("Geralt", 100, 15, 5)</span>.<br>
+          2. Erstelle per Rechtsklick auf <code>Magier</code> ein Objekt: <span class="code-pill">new Magier("Yennefer", 80, 12, 30)</span>.<br>
+          3. Doppelklicke auf beide roten Objekt-Karten auf der Werkbank (Objekt-Inspektor).
+        </p>
+        <div class="question-card" style="margin-top: 8px;">
+          <div class="question-header" onclick="toggleAnswer(this)">
+            <div class="question-title">Beobachtungsfrage: Was fällt dir im Objekt-Inspektor von BlueJ auf?</div>
+            <button class="btn-reveal">Antwort aufdecken</button>
+          </div>
+          <div class="question-answer">
+            BlueJ unterteilt den Objekt-Inspektor visuell in zwei Abschnitte:
+            Oben werden die <strong>geerbten Attribute</strong> der Oberklasse (<code>name</code>, <code>lebenspunkte</code>, <code>basisSchaden</code>) angezeigt. Darunter folgen die <strong>spezifischen Attribute</strong> der Unterklasse (z. B. <code>ruestung</code> beim Krieger bzw. <code>mana</code> beim Magier). Dies visualisiert perfekt, dass ein Unterklassen-Objekt alle Eigenschaften der Oberklasse in sich trägt.
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 2 -->
+      <div class="task-card">
+        <span class="task-badge">Aufgabe 2: Implementierung (Überschreiben)</span>
+        <h4 style="font-size: 1.05rem; margin-bottom: 6px;">Krieger-Spezialisierung: Kritischer Schild-Block</h4>
+        <p style="margin-bottom: 8px;">
+          Erweitere in der Klasse <code>Krieger</code> die überschriebene Methode <span class="code-pill">nimmSchaden(int pSchaden)</span>:<br>
+          Wenn der erlittene Schaden höher als 30 Punkte ist, aktiviert der Krieger automatisch einen Notfall-Schildwall, der die Rüstung für diesen Treffer verdoppelt!
+        </p>
+        <div class="question-card" style="margin-top: 8px;">
+          <div class="question-header" onclick="toggleAnswer(this)">
+            <div class="question-title">Musterlösung für Aufgabe 2 aufdecken</div>
+            <button class="btn-reveal">Musterlösung anzeigen</button>
+          </div>
+          <div class="question-answer">
+            <pre><span class="code-keyword">@Override</span>
+<span class="code-keyword">public void</span> <span class="code-func">nimmSchaden</span>(<span class="code-type">int</span> pSchaden) {
+    <span class="code-type">int</span> wirksameRuestung = <span class="code-keyword">this</span>.ruestung;
+    <span class="code-keyword">if</span> (pSchaden > 30) {
+        wirksameRuestung = <span class="code-keyword">this</span>.ruestung * 2;
+        System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] aktiviert Notfall-Schildwall! Ruestung verdoppelt auf "</span> + wirksameRuestung);
+    }
+    <span class="code-type">int</span> effektiverSchaden = Math.max(0, pSchaden - wirksameRuestung);
+    <span class="code-keyword">super</span>.nimmSchaden(effektiverSchaden);
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 3 -->
+      <div class="task-card">
+        <span class="task-badge">Aufgabe 3: Implementierung (Überladen)</span>
+        <h4 style="font-size: 1.05rem; margin-bottom: 6px;">Magier-Erweiterung: Zauberangriff mit Elementar-Wahl</h4>
+        <p style="margin-bottom: 8px;">
+          Der Magier besitzt bereits <span class="code-pill">angreifen(Spielfigur pZiel)</span>.<br>
+          Füge in <code>Magier.java</code> eine <strong>überladene Methode</strong> <span class="code-pill">angreifen(Spielfigur pZiel, String pElement)</span> hinzu:<br>
+          • Kostet 15 Mana.<br>
+          • Richtet 3-fachen Basisschaden an.<br>
+          • Gibt den Elementtyp (z. B. "Eis" oder "Blitz") im Terminal aus.
+        </p>
+        <div class="question-card" style="margin-top: 8px;">
+          <div class="question-header" onclick="toggleAnswer(this)">
+            <div class="question-title">Musterlösung für Aufgabe 3 aufdecken</div>
+            <button class="btn-reveal">Musterlösung anzeigen</button>
+          </div>
+          <div class="question-answer">
+            <pre><span class="code-comment">// UEBERLADENE METHODE: Gleicher Name, zusaetzlicher Parameter String pElement</span>
+<span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel, <span class="code-type">String</span> pElement) {
+    <span class="code-keyword">if</span> (pZiel == <span class="code-keyword">null</span> || !istLebendig()) {
+        <span class="code-keyword">return</span>;
+    }
+    <span class="code-keyword">if</span> (<span class="code-keyword">this</span>.mana >= 15) {
+        <span class="code-keyword">this</span>.mana -= 15;
+        <span class="code-type">int</span> elementarSchaden = <span class="code-keyword">this</span>.basisSchaden * 3;
+        System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] schleudert einen "</span> + pElement + <span class="code-string">"-Sturm auf ["</span> 
+                           + pZiel.getName() + <span class="code-string">"]! ("</span> + elementarSchaden + <span class="code-string">" Schaden, Rest-Mana: "</span> + <span class="code-keyword">this</span>.mana + <span class="code-string">")"</span>);
+        pZiel.nimmSchaden(elementarSchaden);
+    } <span class="code-keyword">else</span> {
+        System.out.println(<span class="code-string">"Zu wenig Mana fuer Elementarzauber! Nutzt Basis-Angriff."</span>);
+        <span class="code-keyword">this</span>.angreifen(pZiel); <span class="code-comment">// Ruft die regulaere angreifen-Methode auf</span>
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4 -->
+      <div class="task-card">
+        <span class="task-badge">Aufgabe 4: Transfer (Architektur)</span>
+        <h4 style="font-size: 1.05rem; margin-bottom: 6px;">Neue Klasse: Bogenschütze</h4>
+        <p style="margin-bottom: 8px;">
+          Entwirf im Kopf oder auf Papier den Bauplan für eine dritte Unterklasse <span class="code-pill">Bogenschuetze extends Spielfigur</span>.<br>
+          Welches zusätzliche Attribut benötigt er? Wie muss sein Konstruktor aussehen? Welche Methode sollte er überschreiben?
+        </p>
+        <div class="question-card" style="margin-top: 8px;">
+          <div class="question-header" onclick="toggleAnswer(this)">
+            <div class="question-title">Architektur-Skizze aufdecken</div>
+            <button class="btn-reveal">Lösung anzeigen</button>
+          </div>
+          <div class="question-answer">
+            • <strong>Zusätzliches Attribut:</strong> <span class="code-pill">private int pfeile;</span> (z. B. Startwert 20 Pfeile).<br>
+            • <strong>Konstruktor:</strong> Ruft in Zeile 1 <span class="code-pill">super(pName, pLebenspunkte, pBasisSchaden);</span> auf und setzt anschließend <span class="code-pill">this.pfeile = pPfeile;</span>.<br>
+            • <strong>Überschriebene Methode <span class="code-pill">@Override public void angreifen(Spielfigur pZiel)</span>:</strong> Wenn noch Pfeile vorhanden sind, zieht der Angriff 1 Pfeil ab und verursacht Fernkampfschaden. Sind die Pfeile leer, greift er im Nahkampf (mit halbiertem Schaden) an.<br>
+            • <strong>Spezifische Methode:</strong> <span class="code-pill">public void koecherAuffuellen(int anzahl)</span>.
+          </div>
         </div>
       </div>
 
@@ -755,10 +1028,10 @@
       
       if (answer.classList.contains('show')) {
         answer.classList.remove('show');
-        btn.innerText = 'Antwort & Erklärung aufdecken';
+        if (btn) btn.innerText = btn.innerText.includes('Musterlösung') ? 'Musterlösung anzeigen' : 'Antwort & Erklärung aufdecken';
       } else {
         answer.classList.add('show');
-        btn.innerText = 'Antwort verbergen';
+        if (btn) btn.innerText = 'Antwort verbergen';
       }
     }
 
