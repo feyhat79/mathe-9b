@@ -368,6 +368,77 @@
       border-color: #475569;
     }
 
+    /* FLOW & AUFGABEN */
+    .flow-step-box {
+      background: #f8fafc;
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1rem 0;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+    }
+    body.beamer-mode .flow-step-box {
+      background: #1e293b;
+      border-color: #475569;
+      border-left-color: #38bdf8;
+    }
+    .flow-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .task-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #ffffff;
+    }
+    body.beamer-mode .task-card {
+      background: #1e293b;
+      border-color: #475569;
+    }
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    body.beamer-mode .task-header {
+      border-color: #475569;
+    }
+    .task-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .task-num-badge {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+    .task-diff-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
     /* FRAGEN & ACCORDIONS */
     .qa-box {
       border: 1px solid var(--border);
@@ -885,12 +956,131 @@
     </section>
 
     <!-- ======================================================
-         ABSCHNITT 5: INTERAKTIVER SIMULATOR
+         ABSCHNITT 5: PARAMETERFLUSS MIT KONKRETEN WERTEN
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
           <span class="step-badge">5</span>
+          <h2 class="step-title">Parameterfluss &amp; Methodenaufrufe mit konkreten Werten</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Damit die abstrakten Methoden greifbar werden, betrachten wir ein reales Klassenzimmer-Szenario mit 
+        <strong>echten Zahlen und Zeichenketten</strong>, die durch den Java-Code wandern:
+      </p>
+
+      <div class="sub-card" style="background:#eff6ff; border-color:#93c5fd;">
+        <h4 style="color:var(--primary); margin-bottom:6px;">Das Ausgangsszenario:</h4>
+        <ul style="margin-left: 1.4rem; line-height: 1.6;">
+          <li><strong>Lehrer-PC (Server):</strong> IP-Adresse <span class="code-pill">192.168.1.100</span>, geöffneter Port <span class="code-pill">50000</span>.</li>
+          <li><strong>Schüler Kevin (Client):</strong> PC 12 mit IP <span class="code-pill">192.168.1.42</span>. Sein Betriebssystem teilt ihm für die Verbindung temporär den freien Port <span class="code-pill">54321</span> zu.</li>
+        </ul>
+      </div>
+
+      <!-- SCHRITT A: VERBINDUNGSAUFBAU -->
+      <div class="flow-step-box">
+        <span class="flow-badge">Ablauf 1: Verbindungsaufbau &rarr; Hook 1 (processNewConnection)</span>
+        <p style="margin: 6px 0;"><strong>1. Was Kevin im Code aufruft:</strong></p>
+        <pre>EchoClient kevin = new EchoClient("192.168.1.100", 50000);</pre>
+        <p style="margin: 6px 0;"><strong>2. Was die Server-Blackbox automatisch aufruft:</strong></p>
+        <pre>processNewConnection("192.168.1.42", 54321);</pre>
+        <p style="margin: 6px 0;"><strong>3. Was im Servercode passiert und wie Parameter weitergereicht werden:</strong></p>
+        <pre>@Override
+public void processNewConnection(String pClientIP, int pClientPort) {
+    // pClientIP   erhaelt den Wert "192.168.1.42"
+    // pClientPort erhaelt den Wert 54321
+
+    System.out.println("Neuer Client da: " + pClientIP + " an Port " + pClientPort);
+
+    // PARAMETER-WEITERREICHUNG:
+    // Wir reichen pClientIP und pClientPort direkt an send(...) durch!
+    send(pClientIP, pClientPort, "WILLKOMMEN: Du bist verbunden!");
+}</pre>
+      </div>
+
+      <!-- SCHRITT B: NACHRICHT SENDEN -->
+      <div class="flow-step-box">
+        <span class="flow-badge">Ablauf 2: Kevin sendet Text &rarr; Hook 2 (processMessage)</span>
+        <p style="margin: 6px 0;"><strong>1. Kevin schickt eine Nachricht ab:</strong></p>
+        <pre>kevin.send("Hallo Herr Lehrer!");</pre>
+        <p style="margin: 6px 0;"><strong>2. Das TCP-Paket wandert durchs Netzwerkkabel. Auf dem Server ruft die Blackbox auf:</strong></p>
+        <pre>processMessage("192.168.1.42", 54321, "Hallo Herr Lehrer!");</pre>
+        <p style="margin: 6px 0;"><strong>3. Die Weiterreichung der Parameter im Server-Code:</strong></p>
+        <pre>@Override
+public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+    // Werte der Parameter:
+    // pClientIP   = "192.168.1.42"
+    // pClientPort = 54321
+    // pMessage    = "Hallo Herr Lehrer!"
+
+    // 1. Text verarbeiten & Antwort vorbereiten:
+    String antwort = "Echo: " + pMessage; // "Echo: Hallo Herr Lehrer!"
+
+    // 2. ENTSCHEIDENDE ZEILE: Wir uebergeben pClientIP und pClientPort an send(...),
+    //    damit genau Kevin die Antwort erhaelt und nicht sein Sitznachbar!
+    send(pClientIP, pClientPort, antwort);
+}</pre>
+      </div>
+
+      <!-- SCHRITT C: ANTWORT BEIM CLIENT -->
+      <div class="flow-step-box">
+        <span class="flow-badge">Ablauf 3: Die Server-Antwort erreicht Kevin</span>
+        <p style="margin: 6px 0;"><strong>Was die Client-Blackbox auf Kevins Rechner aufruft:</strong></p>
+        <pre>processMessage("Echo: Hallo Herr Lehrer!");</pre>
+        <p style="margin: 6px 0;"><strong>Kevins Client-Code führt aus:</strong></p>
+        <pre>@Override
+public void processMessage(String pMessage) {
+    // pMessage hat den Wert "Echo: Hallo Herr Lehrer!"
+    System.out.println("Vom Server erhalten: " + pMessage);
+}</pre>
+      </div>
+
+      <!-- VERGLEICHSTABELLE AHA-EFFEKT -->
+      <h3 style="font-size: 1.05rem; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">Der Aha-Effekt: Warum hat der Client weniger Parameter?</h3>
+      <table class="calc-table">
+        <thead>
+          <tr>
+            <th style="width: 15%;">Klasse</th>
+            <th style="width: 45%;">Methoden-Signatur</th>
+            <th style="width: 40%;">Warum diese Parameter?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Server</strong></td>
+            <td><code>processMessage(String ip, int port, String msg)</code></td>
+            <td><strong>3 Parameter:</strong> Der Server bedient viele Clients gleichzeitig. Er muss wissen: <em>Wer</em> hat geschrieben (<code>ip</code>, <code>port</code>) und <em>was</em> steht drin (<code>msg</code>)?</td>
+          </tr>
+          <tr>
+            <td><strong>Client</strong></td>
+            <td><code>processMessage(String msg)</code></td>
+            <td><strong>Nur 1 Parameter:</strong> Der Client ist nur mit <em>einem einzigen</em> Server verbunden. Er weiß ohnehin, wer absendet &ndash; er benötigt nur den Textinhalt (<code>msg</code>)!</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SCHRITT D: TRENNUNG -->
+      <div class="flow-step-box">
+        <span class="flow-badge">Ablauf 4: Kevin trennt die Verbindung &rarr; Hook 3 (processClosingConnection)</span>
+        <p style="margin: 6px 0;"><strong>Kevin ruft auf:</strong> <span class="code-pill">kevin.close();</span></p>
+        <p style="margin: 6px 0;"><strong>Die Server-Blackbox meldet den Abgang:</strong></p>
+        <pre>processClosingConnection("192.168.1.42", 54321);</pre>
+        <pre>@Override
+public void processClosingConnection(String pClientIP, int pClientPort) {
+    System.out.println("Teilnehmer hat das Netzwerk verlassen: " + pClientIP);
+}</pre>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         ABSCHNITT 6: INTERAKTIVER SIMULATOR
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">6</span>
           <h2 class="step-title">Interaktiver Simulator: Das Ping-Pong-Prinzip auf 127.0.0.1</h2>
         </div>
       </div>
@@ -950,12 +1140,12 @@
     </section>
 
     <!-- ======================================================
-         ABSCHNITT 6: DER PRAXIS-LEITFADEN IN BLUEJ
+         ABSCHNITT 7: DER PRAXIS-LEITFADEN IN BLUEJ
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
-          <span class="step-badge">6</span>
+          <span class="step-badge">7</span>
           <h2 class="step-title">Praxis-Leitfaden: Das 2-Stufen-Prinzip in BlueJ</h2>
         </div>
       </div>
@@ -967,9 +1157,9 @@
       <div class="sub-card">
         <h4 style="color: var(--primary); margin-bottom: 8px;">Stufe 1: Autarker Test am eigenen Computer (Localhost)</h4>
         <ol style="margin-left: 1.5rem; line-height: 1.6;">
-          <li>Rechtsklick auf <span class="code-pill">EchoServer</span> $\rightarrow$ <span class="code-pill">new EchoServer()</span> aufrufen. Der Server lauscht auf Port 50000.</li>
-          <li>Rechtsklick auf <span class="code-pill">EchoClient</span> $\rightarrow$ <span class="code-pill">new EchoClient()</span> aufrufen. Er verbindet sich mit <code>127.0.0.1</code>.</li>
-          <li>Rechtsklick auf das rote Client-Objekt unten links $\rightarrow$ Methode <span class="code-pill">sendeNachricht("Dein Text")</span> ausführen.</li>
+          <li>Rechtsklick auf <span class="code-pill">EchoServer</span> &rarr; <span class="code-pill">new EchoServer()</span> aufrufen. Der Server lauscht auf Port 50000.</li>
+          <li>Rechtsklick auf <span class="code-pill">EchoClient</span> &rarr; <span class="code-pill">new EchoClient()</span> aufrufen. Er verbindet sich mit <code>127.0.0.1</code>.</li>
+          <li>Rechtsklick auf das rote Client-Objekt unten links &rarr; Methode <span class="code-pill">sendeNachricht("Dein Text")</span> ausführen.</li>
           <li>Öffne das Terminal-Fenster in BlueJ: Du siehst das Echo des Servers!</li>
         </ol>
       </div>
@@ -984,24 +1174,242 @@
             <br>
             <code>new EchoClient("192.168.1.45", 50000)</code>
           </li>
-          <li>Sende eine Nachricht ab – sie wandert nun physisch durch das Netzwerkkabel deines Nachbarn!</li>
+          <li>Sende eine Nachricht ab &ndash; sie wandert nun physisch durch das Netzwerkkabel deines Nachbarn!</li>
         </ol>
       </div>
     </section>
 
     <!-- ======================================================
-         ABSCHNITT 7: AUSBLICK AUF DAS ROLLENSPIEL
+         ABSCHNITT 8: PRAKTISCHE ÜBUNGSAUFGABEN
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
-          <span class="step-badge">7</span>
+          <span class="step-badge">8</span>
+          <h2 class="step-title">Praktische Übungsaufgaben zur Methoden-Vertiefung</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Bearbeite die folgenden Aufgaben schrittweise in deiner BlueJ-Klasse <span class="code-pill">EchoServer</span>, 
+        um die Methoden und Parameter souverän zu beherrschen.
+      </p>
+
+      <!-- AUFGABE 1: TRACE -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title-group">
+            <span class="task-num-badge">Aufgabe 1</span>
+            <strong>Der Parameter-Detektiv (Trockenübung)</strong>
+          </div>
+          <span class="task-diff-badge">Verständnis</span>
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          Schülerin Mia sitzt an PC 05 mit der IP <span class="code-pill">192.168.1.15</span> (ihr Client-Port ist <span class="code-pill">49152</span>). 
+          Sie schickt die Nachricht <span class="code-pill">"Wie spät ist es?"</span> an den EchoServer.
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Deine Aufgabe:</strong>
+          <br>1. Welche Methode auf dem Server wird von der Blackbox aufgerufen?
+          <br>2. Welche exakten Werte haben die drei Parameter?
+          <br>3. Wie lautet der Java-Befehl im Server, um Mia die Antwort <span class="code-pill">"12:00 Uhr"</span> zurückzusenden?
+        </p>
+        <div class="qa-box" style="margin-bottom:0;">
+          <div class="qa-question">
+            <span>Musterlösung anzeigen</span>
+            <button class="qa-toggle-btn" onclick="toggleAnswer(this)">Antwort aufdecken</button>
+          </div>
+          <div class="qa-answer">
+            <strong>1. Aufgerufene Methode:</strong> <code>processMessage(String pClientIP, int pClientPort, String pMessage)</code><br>
+            <strong>2. Konkrete Parameterwerte:</strong>
+            <ul style="margin-left: 1.5rem; margin-top: 4px;">
+              <li><code>pClientIP</code> = <code>"192.168.1.15"</code></li>
+              <li><code>pClientPort</code> = <code>49152</code></li>
+              <li><code>pMessage</code> = <code>"Wie spät ist es?"</code></li>
+            </ul>
+            <strong>3. Rücksende-Befehl:</strong>
+            <pre>send(pClientIP, pClientPort, "12:00 Uhr");</pre>
+            <em>(oder alternativ mit den Literalen: <code>send("192.168.1.15", 49152, "12:00 Uhr");</code>)</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 2: CAPS-LOCK -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title-group">
+            <span class="task-num-badge">Aufgabe 2</span>
+            <strong>Der Großbuchstaben-Server (Caps-Bot)</strong>
+          </div>
+          <span class="task-diff-badge">Code-Modifikation</span>
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          Bisher antwortet der <span class="code-pill">EchoServer</span> mit <span class="code-pill">"Echo: " + pMessage</span>.
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Deine Aufgabe:</strong>
+          Ändere die Methode <span class="code-pill">processMessage</span> im <span class="code-pill">EchoServer</span> so ab, 
+          dass jeder eingehende Text komplett in <strong>GROSSBUCHSTABEN</strong> umgewandelt zurückgesendet wird.
+          <br><em>Tipp:</em> Nutze die Java-Standardmethode <span class="code-pill">pMessage.toUpperCase()</span>.
+        </p>
+        <div class="qa-box" style="margin-bottom:0;">
+          <div class="qa-question">
+            <span>Musterlösung anzeigen</span>
+            <button class="qa-toggle-btn" onclick="toggleAnswer(this)">Antwort aufdecken</button>
+          </div>
+          <div class="qa-answer">
+            <p>In <code>EchoServer.java</code> wird <code>processMessage</code> angepasst:</p>
+            <pre>@Override
+public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+    System.out.println("[SERVER] Empfangen von " + pClientIP + ": " + pMessage);
+
+    // Text in Grossbuchstaben umwandeln:
+    String antwort = pMessage.toUpperCase();
+
+    // Zurueck an genau diesen Client schicken:
+    send(pClientIP, pClientPort, antwort);
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 3: RAUM-CHAT (BROADCAST) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title-group">
+            <span class="task-num-badge">Aufgabe 3</span>
+            <strong>Der Raum-Chat: Broadcast mit sendToAll</strong>
+          </div>
+          <span class="task-diff-badge">Abitur-Methode</span>
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          In einem Chat soll eine Nachricht nicht nur an den Absender zurückgehen, sondern an <strong>alle</strong> 
+          Schülerinnen und Schüler im Raum weitergeleitet werden.
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Deine Aufgabe:</strong>
+          Ersetze in <span class="code-pill">processMessage</span> den Aufruf <span class="code-pill">send(...)</span> durch 
+          die geerbte Methode <span class="code-pill">sendToAll(...)</span>. Die Nachricht soll anzeigen, von welcher IP sie stammt:
+          <br>Format: <span class="code-pill">"[" + pClientIP + "]: " + pMessage</span>
+        </p>
+        <div class="qa-box" style="margin-bottom:0;">
+          <div class="qa-question">
+            <span>Musterlösung anzeigen</span>
+            <button class="qa-toggle-btn" onclick="toggleAnswer(this)">Antwort aufdecken</button>
+          </div>
+          <div class="qa-answer">
+            <pre>@Override
+public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+    // Chat-Nachricht formatieren:
+    String chatNachricht = "[" + pClientIP + "]: " + pMessage;
+
+    // An ALLE verbundenen Clients ausstrahlen:
+    sendToAll(chatNachricht);
+}</pre>
+            <p style="margin-top:6px;"><em>Hinweis:</em> Bei <code>sendToAll</code> entfallen IP und Port als Parameter, weil die Blackbox die Nachricht automatisch an jeden angemeldeten Client schickt!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4: BESUCHERZÄHLER -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title-group">
+            <span class="task-num-badge">Aufgabe 4</span>
+            <strong>Der Besucher-Zähler (Zustand im Server)</strong>
+          </div>
+          <span class="task-diff-badge">OOP &amp; Attribute</span>
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          Der Server soll sich merken, wie viele Clients sich seit dem Start insgesamt verbunden haben.
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Deine Aufgabe:</strong>
+          <br>1. Lege im <span class="code-pill">EchoServer</span> ein Attribut <span class="code-pill">private int besucherZahl = 0;</span> an.
+          <br>2. Erhöhe diesen Zähler in <span class="code-pill">processNewConnection</span> jedes Mal um 1.
+          <br>3. Sende dem neuen Client eine persönliche Begrüßung mit seiner Nummer:
+          <br><em>„Willkommen! Du bist Besucher Nummer [X]!“</em>
+        </p>
+        <div class="qa-box" style="margin-bottom:0;">
+          <div class="qa-question">
+            <span>Musterlösung anzeigen</span>
+            <button class="qa-toggle-btn" onclick="toggleAnswer(this)">Antwort aufdecken</button>
+          </div>
+          <div class="qa-answer">
+            <p>1. Attribut oben in der Klasse <code>EchoServer</code> deklarieren:</p>
+            <pre>public class EchoServer extends Server {
+    private int besucherZahl = 0;
+    // ...</pre>
+            <p>2. In <code>processNewConnection</code> hochzählen und versenden:</p>
+            <pre>@Override
+public void processNewConnection(String pClientIP, int pClientPort) {
+    this.besucherZahl++; // Zaehler um 1 erhoehen
+    
+    System.out.println("Besucher #" + this.besucherZahl + " verbunden von " + pClientIP);
+
+    String begruessung = "Willkommen! Du bist Besucher Nummer " + this.besucherZahl + "!";
+    send(pClientIP, pClientPort, begruessung);
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 5: PING-PONG BOT -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title-group">
+            <span class="task-num-badge">Aufgabe 5</span>
+            <strong>Der Ping-Pong-Bot (Erste Fallunterscheidung)</strong>
+          </div>
+          <span class="task-diff-badge">Protokoll-Basis</span>
+        </div>
+        <p style="margin-bottom: 0.5rem;">
+          Nun soll der Server nicht mehr blind jeden Text spiegeln, sondern auf bestimmte Schlüsselwörter reagieren.
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Deine Aufgabe:</strong>
+          Baue in <span class="code-pill">processMessage</span> eine Fallunterscheidung mit <span class="code-pill">if / else</span> ein:
+          <br>&bull; Wenn <span class="code-pill">pMessage</span> gleich <span class="code-pill">"PING"</span> ist &rarr; Antworte mit <span class="code-pill">"PONG"</span>.
+          <br>&bull; Wenn <span class="code-pill">pMessage</span> gleich <span class="code-pill">"INFO"</span> ist &rarr; Antworte mit <span class="code-pill">"Ich bin der Q2-Lernserver Version 1.0"</span>.
+          <br>&bull; Bei allem anderen &rarr; Antworte mit <span class="code-pill">"UNBEKANNTER BEFEHL: " + pMessage</span>.
+          <br><em>Achtung:</em> Strings vergleicht man in Java immer mit <span class="code-pill">.equals(...)</span>, niemals mit <span class="code-pill">==</span>!
+        </p>
+        <div class="qa-box" style="margin-bottom:0;">
+          <div class="qa-question">
+            <span>Musterlösung anzeigen</span>
+            <button class="qa-toggle-btn" onclick="toggleAnswer(this)">Antwort aufdecken</button>
+          </div>
+          <div class="qa-answer">
+            <pre>@Override
+public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+    if (pMessage.equalsIgnoreCase("PING")) {
+        send(pClientIP, pClientPort, "PONG");
+    } else if (pMessage.equalsIgnoreCase("INFO")) {
+        send(pClientIP, pClientPort, "Ich bin der Q2-Lernserver Version 1.0");
+    } else {
+        send(pClientIP, pClientPort, "UNBEKANNTER BEFEHL: " + pMessage);
+    }
+}</pre>
+            <p style="margin-top:6px;"><em>Erkenntnis:</em> Das ist bereits der Kern jedes Netzwerkprotokolls! Genau so steuern wir später im Rollenspiel Befehle wie <code>ANGRIFF</code> oder <code>HEILEN</code>.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================
+         ABSCHNITT 9: AUSBLICK AUF DAS ROLLENSPIEL
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">9</span>
           <h2 class="step-title">Ausblick: Vom Echo zum Rollenspiel-Duell (Das Protokoll)</h2>
         </div>
       </div>
 
       <p style="margin-bottom: 0.75rem;">
-        Unser EchoServer schickt bisher nur dummen Text zurück. Für ein echtes Online-Duell zwischen 
+        Unser EchoServer schickt bisher nur einfachen Text zurück. Für ein echtes Online-Duell zwischen 
         <strong>Krieger</strong> und <strong>Magier</strong> müssen sich Client und Server über eine feste Sprache verständigen: 
         ein <strong>Anwendungsprotokoll</strong>.
       </p>
@@ -1024,12 +1432,12 @@ String waffe  = teile[2];  // "SCHWERT"</pre>
     </section>
 
     <!-- ======================================================
-         ABSCHNITT 8: VERSTÄNDNISFRAGEN (MUSTERLÖSUNGEN)
+         ABSCHNITT 10: VERSTÄNDNISFRAGEN (MUSTERLÖSUNGEN)
          ====================================================== -->
     <section class="card">
       <div class="step-header">
         <div class="step-title-wrap">
-          <span class="step-badge">8</span>
+          <span class="step-badge">10</span>
           <h2 class="step-title">Verständnisfragen zur Selbstkontrolle</h2>
         </div>
       </div>
