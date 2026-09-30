@@ -675,8 +675,12 @@
     }
 
     <span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel) {
-        <span class="code-keyword">if</span> (pZiel != <span class="code-keyword">null</span> && <span class="code-keyword">this</span>.lebenspunkte > 0) {
-            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] greift ["</span> + pZiel.getName() + <span class="code-string">"] an ("</span> + <span class="code-keyword">this</span>.basisSchaden + <span class="code-string">" Schaden)."</span>);
+        <span class="code-keyword">if</span> (pZiel == <span class="code-keyword">null</span>) {
+            System.out.println(<span class="code-string">"Kein gueltiges Ziel angegeben!"</span>);
+        } <span class="code-keyword">else if</span> (!istLebendig()) {
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] kann nicht angreifen, da kampfunfaehig."</span>);
+        } <span class="code-keyword">else</span> {
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] fuehrt Basisangriff auf ["</span> + pZiel.getName() + <span class="code-string">"] aus ("</span> + <span class="code-keyword">this</span>.basisSchaden + <span class="code-string">" Schaden)."</span>);
             pZiel.nimmSchaden(<span class="code-keyword">this</span>.basisSchaden);
         }
     }
@@ -694,7 +698,8 @@
       </div>
 
       <pre><span class="code-keyword">public class</span> <span class="code-type">Krieger</span> <span class="code-keyword">extends</span> <span class="code-type">Spielfigur</span> {
-    <span class="code-keyword">private int</span> ruestung;
+    <span class="code-comment">// protected: Erlaubt zusaetzlich spaeteren Spezialisierungen (z. B. Paladin) direkten Zugriff</span>
+    <span class="code-keyword">protected int</span> ruestung;
 
     <span class="code-keyword">public</span> <span class="code-func">Krieger</span>(<span class="code-type">String</span> pName, <span class="code-type">int</span> pLebenspunkte, <span class="code-type">int</span> pBasisSchaden, <span class="code-type">int</span> pRuestung) {
         <span class="code-keyword">super</span>(pName, pLebenspunkte, pBasisSchaden); <span class="code-comment">// 1. ZWINGEND ERSTE ZEILE: Initialisiert Spielfigur</span>
@@ -1002,6 +1007,180 @@
         </div>
       </div>
 
+    </section>
+
+    <!-- ======================================================
+         ABSCHNITT 6: STUFE 2 – MEHRSTUFIGE VERERBUNG (MISSION EISMAGIER)
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <div class="step-title-wrap">
+          <span class="step-badge">6</span>
+          <h2 class="step-title">Stufe 2: Mehrstufige Vererbung (Programmier-Mission: Eismagier)</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Bisher haben wir eine flache Hierarchie betrachtet: <code>Krieger</code> und <code>Magier</code> erben direkt von <code>Spielfigur</code>. In größeren Softwaresystemen spezialisieren sich Klassen jedoch über mehrere Ebenen hinweg. Genau das bezeichnet man als <strong>mehrstufige Vererbung</strong>.
+      </p>
+
+      <div style="background: #f1f5f9; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 1rem; border-left: 4px solid var(--accent);">
+        <strong>Die Vererbungskette (Transitivität):</strong><br>
+        <code>Spielfigur</code> (Wurzel) &nbsp;➔&nbsp; <code>Magier</code> (1. Spezialisierung) &nbsp;➔&nbsp; <strong><code>Eismagier</code></strong> (2. Spezialisierung)<br>
+        <div style="font-size: 0.93rem; color: var(--text-muted); margin-top: 6px;">
+          • Ein <code>Eismagier</code> <em>ist ein</em> <code>Magier</code>.<br>
+          • Weil jeder <code>Magier</code> eine <code>Spielfigur</code> ist, <strong>ist ein <code>Eismagier</code> automatisch auch eine <code>Spielfigur</code>!</strong> Er erbt alle Attribute und Methoden beider Vorgängerklassen (Name, Lebenspunkte, Basisschaden, Mana, Heilen, Meditieren etc.).
+        </div>
+      </div>
+
+      <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 1.25rem;">
+        <h4 style="color: var(--primary); margin-bottom: 6px;">Die Fundament-Kaskade im Konstruktor:</h4>
+        <p style="font-size: 0.95rem; margin-bottom: 6px;">
+          Wenn der Konstruktor von <code>Eismagier</code> aufgerufen wird, ruft er in Zeile 1 mit <span class="code-pill">super(...)</span> den Konstruktor von <code>Magier</code> auf. Dieser ruft wiederum in Zeile 1 mit <span class="code-pill">super(...)</span> die <code>Spielfigur</code> auf.
+        </p>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          Erst wenn das gesamte Fundament von oben nach unten gegossen ist, initialisiert jede Stufe ihre eigenen Attribute.
+        </p>
+      </div>
+
+      <!-- SPEZIFIKATIONS-KASTEN FÜR DIE SCHÜLER -->
+      <div class="task-card" style="border-left-color: var(--accent); background: #ffffff;">
+        <span class="task-badge" style="background: var(--accent);">Programmier-Mission</span>
+        <h3 style="font-size: 1.15rem; color: var(--accent); margin-bottom: 8px;">Klasse Eismagier selbstständig in BlueJ implementieren</h3>
+        
+        <p style="margin-bottom: 10px;">
+          Erstelle in deinem BlueJ-Projekt eine neue Klasse <strong><code>Eismagier</code></strong> und setze die folgenden Spezifikationen exakt um:
+        </p>
+
+        <table class="calc-table" style="margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Element</th>
+              <th style="width: 35%;">Spezifikation</th>
+              <th style="width: 40%;">Hinweise / Logik</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Klassenkopf</strong></td>
+              <td><code>public class Eismagier extends Magier</code></td>
+              <td>Erbt von <code>Magier</code> (nicht direkt von <code>Spielfigur</code>!).</td>
+            </tr>
+            <tr>
+              <td><strong>Attribut</strong></td>
+              <td><code>private int frostGrad;</code></td>
+              <td>Gibt die Kältestufe des Zauberers an (z. B. 1 bis 5).</td>
+            </tr>
+            <tr>
+              <td><strong>Konstruktor</strong></td>
+              <td><code>public Eismagier(String pName, int pLP, int pSchaden, int pMana, int pFrostGrad)</code></td>
+              <td>
+                • Zeile 1: <code>super(pName, pLP, pSchaden, pMana);</code><br>
+                • Zeile 2: <code>this.frostGrad = Math.max(1, pFrostGrad);</code>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Überschreiben</strong></td>
+              <td><code>@Override<br>public void angreifen(Spielfigur pZiel)</code></td>
+              <td>
+                • Wenn Ziel ungültig: Meldung ausgeben.<br>
+                • Wenn kampfunfähig: Meldung ausgeben.<br>
+                • Wenn <code>this.mana &gt;= 12</code>:<br>
+                &nbsp;&nbsp;Verbraucht 12 Mana (<span class="code-pill">this.mana -= 12;</span>).<br>
+                &nbsp;&nbsp;Richtet Frostschaden an: <span class="code-pill">(this.basisSchaden * 2) + (this.frostGrad * 3)</span>.<br>
+                &nbsp;&nbsp;Gibt Blizzard-Meldung im Terminal aus.<br>
+                • Wenn zu wenig Mana:<br>
+                &nbsp;&nbsp;Ruft <code>super.angreifen(pZiel);</code> auf (Fallback auf Magier-Angriff)!
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Spezifische Methode</strong></td>
+              <td><code>public void eispanzer()</code></td>
+              <td>
+                Erhöht die Lebenspunkte um 15 (<span class="code-pill">heilen(15)</span>) und gibt eine Eispanzer-Meldung im Terminal aus.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Status-Methode</strong></td>
+              <td><code>@Override<br>public void statusAusgeben()</code></td>
+              <td>
+                Ruft <code>super.statusAusgeben();</code> auf und gibt zusätzlich den <span class="code-pill">frostGrad</span> aus.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TEST-CHECKLISTE -->
+        <h4 style="font-size: 1rem; color: var(--primary); margin: 12px 0 6px 0;">Test-Checkliste in BlueJ:</h4>
+        <ol style="margin-left: 20px; font-size: 0.95rem; line-height: 1.6;">
+          <li>Kompiliere das Projekt. Beobachte im BlueJ-Fenster: Zeigt der Vererbungspfeil von <code>Eismagier</code> auf <code>Magier</code>?</li>
+          <li>Erstelle per Rechtsklick: <span class="code-pill">new Eismagier("Jaina", 85, 12, 36, 4)</span>.</li>
+          <li>Doppelklicke auf das rote Objekt auf der Werkbank (Objekt-Inspektor): Siehst du jetzt <strong>3 geerbte Kategoriestufen</strong> (Spielfigur ➔ Magier ➔ Eismagier)?</li>
+          <li>Lass Jaina gegen Geralt (Krieger) antreten und beobachte die Schadensberechnung im Terminal!</li>
+        </ol>
+
+        <!-- AUFKLAPPBARE MUSTERLÖSUNG -->
+        <div class="question-card" style="margin-top: 14px;">
+          <div class="question-header" onclick="toggleAnswer(this)">
+            <div class="question-title">Vollständige Musterlösung für Eismagier.java aufdecken</div>
+            <button class="btn-reveal">Musterlösung anzeigen</button>
+          </div>
+          <div class="question-answer">
+            <pre><span class="code-comment">/**
+ * Unterklasse Eismagier
+ * 
+ * Demonstriert mehrstufige Vererbung:
+ * Spielfigur -&gt; Magier -&gt; Eismagier
+ */</span>
+<span class="code-keyword">public class</span> <span class="code-type">Eismagier</span> <span class="code-keyword">extends</span> <span class="code-type">Magier</span> {
+    <span class="code-comment">// Spezifisches Attribut der 3. Generation</span>
+    <span class="code-keyword">private int</span> frostGrad;
+
+    <span class="code-keyword">public</span> <span class="code-func">Eismagier</span>(<span class="code-type">String</span> pName, <span class="code-type">int</span> pLebenspunkte, <span class="code-type">int</span> pBasisSchaden, <span class="code-type">int</span> pMana, <span class="code-type">int</span> pFrostGrad) {
+        <span class="code-comment">// 1. Ruft den Konstruktor von Magier auf (dieser ruft Spielfigur auf)</span>
+        <span class="code-keyword">super</span>(pName, pLebenspunkte, pBasisSchaden, pMana);
+        <span class="code-comment">// 2. Eigenes Attribut initialisieren</span>
+        <span class="code-keyword">this</span>.frostGrad = Math.max(1, pFrostGrad);
+    }
+
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-func">angreifen</span>(<span class="code-type">Spielfigur</span> pZiel) {
+        <span class="code-keyword">if</span> (pZiel == <span class="code-keyword">null</span>) {
+            System.out.println(<span class="code-string">"Kein gueltiges Ziel angegeben!"</span>);
+        } <span class="code-keyword">else if</span> (!istLebendig()) {
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] kann nicht angreifen, da kampfunfaehig."</span>);
+        } <span class="code-keyword">else if</span> (<span class="code-keyword">this</span>.mana &gt;= 12) {
+            <span class="code-keyword">this</span>.mana -= 12;
+            <span class="code-type">int</span> frostSchaden = (<span class="code-keyword">this</span>.basisSchaden * 2) + (<span class="code-keyword">this</span>.frostGrad * 3);
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] entfesselt einen Blizzard auf ["</span> + pZiel.getName() 
+                               + <span class="code-string">"]! (-12 Mana, Frostgrad "</span> + <span class="code-keyword">this</span>.frostGrad + <span class="code-string">", "</span> + frostSchaden + <span class="code-string">" Schaden, Rest-Mana: "</span> + <span class="code-keyword">this</span>.mana + <span class="code-string">")"</span>);
+            pZiel.nimmSchaden(frostSchaden);
+        } <span class="code-keyword">else</span> {
+            System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] hat nicht genug Mana fuer Blizzard (nur "</span> + <span class="code-keyword">this</span>.mana + <span class="code-string">" Mana). Greift normal an!"</span>);
+            <span class="code-comment">// Ruft die angreifen-Methode der direkten Oberklasse Magier auf:</span>
+            <span class="code-keyword">super</span>.angreifen(pZiel);
+        }
+    }
+
+    <span class="code-comment">// Spezifische Methode des Eismagiers</span>
+    <span class="code-keyword">public void</span> <span class="code-func">eispanzer</span>() {
+        System.out.println(<span class="code-string">"["</span> + <span class="code-keyword">this</span>.name + <span class="code-string">"] huellt sich in einen schuetzenden Eispanzer!"</span>);
+        <span class="code-keyword">this</span>.heilen(15);
+    }
+
+    <span class="code-keyword">@Override</span>
+    <span class="code-keyword">public void</span> <span class="code-func">statusAusgeben</span>() {
+        <span class="code-keyword">super</span>.statusAusgeben(); <span class="code-comment">// Gibt Name, LP, Schaden und Mana via Magier/Spielfigur aus</span>
+        System.out.println(<span class="code-string">"Frostgrad:    "</span> + <span class="code-keyword">this</span>.frostGrad);
+    }
+
+    <span class="code-keyword">public int</span> <span class="code-func">getFrostGrad</span>() {
+        <span class="code-keyword">return this</span>.frostGrad;
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
     </section>
 
   </div>
