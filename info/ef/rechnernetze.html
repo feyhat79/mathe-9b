@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Rechnernetze &amp; Netzwerk-Topologien (Filius) | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Haupt-CSS -->
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;
+      --border-soft: #cbd5e1;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0 1rem 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .module-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Header */
+    .module-hero {
+      margin-bottom: 1.5rem;
+    }
+
+    .module-hero h1 {
+      font-size: 1.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .module-hero p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 800px;
+    }
+
+    /* Tab-Navigation / Karteireiter */
+    .tab-navigation-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 6px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .tab-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border-color: var(--border-soft);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
+    }
+
+    .tab-btn.active .tab-index {
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .tab-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    /* Active Stage Control Bar */
+    .active-stage-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stage-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .stage-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .stage-title-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .stage-desc-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .stage-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .action-btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: 1px solid var(--primary);
+    }
+
+    .action-btn-primary:hover {
+      background: var(--primary-focus);
+      border-color: var(--primary-focus);
+    }
+
+    .action-btn-secondary {
+      background: #f8fafc;
+      color: #1e3a8a;
+      border: 1px solid var(--border-soft);
+    }
+
+    .action-btn-secondary:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+
+    /* Embedded Unit Frame */
+    .frame-wrapper {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .embedded-frame {
+      width: 100%;
+      height: 80vh;
+      min-height: 750px;
+      border: none;
+      display: block;
+      background: #ffffff;
+    }
+
+    /* Footer Navigation within Module */
+    .stage-stepper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-step:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .btn-step:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .active-stage-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .stage-actions {
+        width: 100%;
+      }
+      .action-btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .embedded-frame {
+        height: 75vh;
+        min-height: 600px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Portal Navigation -->
+    <div class="module-nav">
+      <a href="index.html" class="nav-back-link">← Zurück zur Kursübersicht EF</a>
+      <span class="badge-pill badge-oberstufe" style="margin-bottom: 0;">Informatik EF • Thema 1</span>
+    </div>
+
+    <!-- Header -->
+    <header class="module-hero">
+      <div class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom: 0.5rem;">Abgeschlossene Reihe • 6 Stufen + Exkurs</div>
+      <h1>Rechnernetze &amp; Netzwerk-Topologien (Filius)</h1>
+      <p>
+        Von Peer-to-Peer und Binäradressen über Switches, Standard-Gateways und redundantes Routing bis zum DNS-Server: Wähle oben über die Karteireiter die gewünschte Lerneinheit aus.
+      </p>
+    </header>
+
+    <!-- Karteireiter / Tabs -->
+    <div class="tab-navigation-wrap">
+      <div class="tab-bar" id="tabBar" role="tablist">
+        <!-- Generiert via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Active Stage Information & Action Bar -->
+    <div class="active-stage-card" id="stageCard">
+      <div class="stage-meta">
+        <div class="stage-tag-row">
+          <span class="stage-badge" id="stageBadge">Stufe 1</span>
+          <span class="stage-title-text" id="stageTitle">1. Rechnernetze &amp; Filius-Einstieg</span>
+        </div>
+        <div class="stage-desc-text" id="stageDesc">
+          Peer-to-Peer, Schichtenmodell, Filius-Werkzeuge und Verbindungsprüfung mit Ping.
+        </div>
+      </div>
+      <div class="stage-actions" id="stageActions">
+        <!-- Dynamische Action-Buttons -->
+      </div>
+    </div>
+
+    <!-- Embedded Unit Frame -->
+    <div class="frame-wrapper">
+      <iframe id="unitFrame" class="embedded-frame" title="Lerneinheit Inhalt" src="rechnernetze-filius.html"></iframe>
+    </div>
+
+    <!-- Stepper Navigation (Vor / Zurück) -->
+    <div class="stage-stepper">
+      <button class="btn-step" id="btnPrev" onclick="navigateStep(-1)">← Vorherige Stufe</button>
+      <span style="font-size: 0.88rem; color: var(--text-muted); font-weight: 700;" id="stepCounter">Stufe 1 von 7</span>
+      <button class="btn-step" id="btnNext" onclick="navigateStep(1)">Nächste Stufe →</button>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+      <p><strong>Informatik Einführungsphase (EF)</strong> • Rechnernetze Gesamtmodul</p>
+      <p style="margin-top: 4px;">Tipp: Die Lerneinheiten können über „In Vollansicht öffnen“ auch im separaten Fenster oder Browser-Tab genutzt werden.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Einheiten-Konfiguration
+    const units = [
+      {
+        id: "stufe1",
+        number: "1",
+        label: "1. Filius-Einstieg",
+        badge: "Stufe 1 • Grundlagen",
+        title: "1. Rechnernetze & Filius-Einstieg",
+        desc: "Alltagsfragen, Peer-to-Peer, Schichtenmodell, Filius-Werkzeuge und Verbindungsprüfung mit Ping.",
+        file: "rechnernetze-filius.html",
+        pdf: null,
+        fls: null
+      },
+      {
+        id: "exkurs",
+        number: "E",
+        label: "Exkurs: Binär & IPv4",
+        badge: "Exkurs • Methodenblatt",
+        title: "Exkurs: Binärzahlen & IPv4-Adressierung",
+        desc: "8-Bit-Stellenwerttafel, Divisionsalgorithmus mit Rest, Herleitung von 255 und Trennung von Netz- und Geräteteil.",
+        file: "merkblatt-binaersystem.html",
+        pdf: "Merkblatt_Binaersystem_IPv4_Informatik_EF.pdf",
+        fls: null
+      },
+      {
+        id: "stufe2",
+        number: "2",
+        label: "2. Lokale Netze (Switch)",
+        badge: "Stufe 2 • Lokales Netz",
+        title: "2. Lokale Netze mit Switch",
+        desc: "Sterntopologie, Flooding, selbstlernende MAC-Adresstabelle (SAT) und Detektiv-Check.",
+        file: "switch-lokale-netze.html",
+        pdf: "Unterrichtsmodul_Switch_Lokale_Netze_EF.pdf",
+        fls: null
+      },
+      {
+        id: "stufe3",
+        number: "3",
+        label: "3. Zwei Netze (Router)",
+        badge: "Stufe 3 • 1 Router",
+        title: "3. Zwei Netze verbinden: Router & Gateway",
+        desc: "Grenzen des Switches, Standard-Gateway, Routing-Tabelle und Trennung von Subnetzen.",
+        file: "router-netzwerke-verbinden.html",
+        pdf: "Unterrichtsmodul_Router_Zwei_Netze_EF.pdf",
+        fls: null
+      },
+      {
+        id: "stufe4",
+        number: "4",
+        label: "4. Statisches Routing",
+        badge: "Stufe 4 • 2 Router",
+        title: "4. Mehrere Vermittlungsrechner: Routing",
+        desc: "Transfernetze zwischen Routern, statische Routing-Tabellen (Hin- und Rückweg) und Pfad-Analyse mit traceroute.",
+        file: "routing-mehrere-vermittlungsrechner.html",
+        pdf: null,
+        fls: "2VR.fls"
+      },
+      {
+        id: "stufe5",
+        number: "5",
+        label: "5. Dreieck & Redundanz",
+        badge: "Stufe 5 • Redundanz",
+        title: "5. Dreiecks-Topologie & Redundantes Routing",
+        desc: "3 Netzwerke im Dreieck, Ausfall der Hauptleitung simulieren, Multi-Hop-Ausweichrouten und Transitverkehr.",
+        file: "routing-dreieck-redundanz.html",
+        pdf: null,
+        fls: "2VR-Neu.fls"
+      },
+      {
+        id: "stufe6",
+        number: "6",
+        label: "6. DNS-Server",
+        badge: "Stufe 6 • Namensdienst",
+        title: "6. DNS-Server & Namensauflösung",
+        desc: "Das Telefonbuch des Internets: Domainnamen in IP-Adressen übersetzen, DNS-Dienst einrichten und mit nslookup analysieren.",
+        file: "dns-server-namensdienst.html",
+        pdf: "Unterrichtsmodul_DNS_Namensdienst_EF.pdf",
+        fls: null
+      }
+    ];
+
+    let currentUnitIndex = 0;
+
+    function renderTabs() {
+      const tabBar = document.getElementById("tabBar");
+      tabBar.innerHTML = "";
+
+      units.forEach((unit, index) => {
+        const btn = document.createElement("button");
+        btn.className = "tab-btn" + (index === currentUnitIndex ? " active" : "");
+        btn.setAttribute("role", "tab");
+        btn.setAttribute("aria-selected", index === currentUnitIndex ? "true" : "false");
+        btn.onclick = () => selectUnit(index);
+
+        btn.innerHTML = `<span class="tab-index">${unit.number}</span><span>${unit.label}</span>`;
+        tabBar.appendChild(btn);
+      });
+    }
+
+    function selectUnit(index, updateHash = true) {
+      if (index < 0 || index >= units.length) return;
+      currentUnitIndex = index;
+      const unit = units[currentUnitIndex];
+
+      // Update Tabs Visual
+      const tabBtns = document.querySelectorAll(".tab-btn");
+      tabBtns.forEach((btn, i) => {
+        if (i === currentUnitIndex) {
+          btn.classList.add("active");
+          btn.setAttribute("aria-selected", "true");
+          btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        } else {
+          btn.classList.remove("active");
+          btn.setAttribute("aria-selected", "false");
+        }
+      });
+
+      // Update Info Bar
+      document.getElementById("stageBadge").textContent = unit.badge;
+      document.getElementById("stageTitle").textContent = unit.title;
+      document.getElementById("stageDesc").textContent = unit.desc;
+
+      // Update Action Buttons
+      const actionsContainer = document.getElementById("stageActions");
+      actionsContainer.innerHTML = "";
+
+      // Fullscreen / Direct Open Button
+      const btnOpen = document.createElement("a");
+      btnOpen.href = unit.file;
+      btnOpen.target = "_blank";
+      btnOpen.className = "action-btn action-btn-primary";
+      btnOpen.innerHTML = "In Vollansicht öffnen ↗";
+      actionsContainer.appendChild(btnOpen);
+
+      // PDF Button if available
+      if (unit.pdf) {
+        const btnPdf = document.createElement("a");
+        btnPdf.href = unit.pdf;
+        btnPdf.target = "_blank";
+        btnPdf.className = "action-btn action-btn-secondary";
+        btnPdf.innerHTML = "Arbeitsblatt (PDF)";
+        actionsContainer.appendChild(btnPdf);
+      }
+
+      // FLS Button if available
+      if (unit.fls) {
+        const btnFls = document.createElement("a");
+        btnFls.href = unit.fls;
+        btnFls.download = unit.fls;
+        btnFls.className = "action-btn action-btn-secondary";
+        btnFls.innerHTML = `Filius-Datei (${unit.fls})`;
+        actionsContainer.appendChild(btnFls);
+      }
+
+      // Update Iframe
+      const frame = document.getElementById("unitFrame");
+      if (frame.getAttribute("src") !== unit.file) {
+        frame.setAttribute("src", unit.file);
+      }
+
+      // Update Stepper
+      document.getElementById("stepCounter").textContent = `Einheit ${currentUnitIndex + 1} von ${units.length}`;
+      document.getElementById("btnPrev").disabled = (currentUnitIndex === 0);
+      document.getElementById("btnNext").disabled = (currentUnitIndex === units.length - 1);
+
+      // Update Hash
+      if (updateHash) {
+        history.replaceState(null, "", `#${unit.id}`);
+      }
+    }
+
+    function navigateStep(direction) {
+      const newIndex = currentUnitIndex + direction;
+      if (newIndex >= 0 && newIndex < units.length) {
+        selectUnit(newIndex);
+      }
+    }
+
+    // Hash-based initialization
+    window.addEventListener("DOMContentLoaded", () => {
+      renderTabs();
+
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        const matchedIndex = units.findIndex(u => u.id === hash || u.id.toLowerCase() === hash.toLowerCase());
+        if (matchedIndex !== -1) {
+          selectUnit(matchedIndex, false);
+          return;
+        }
+      }
+      // Standard: Erste Einheit laden
+      selectUnit(0, false);
+    });
+
+    // Hash Change Event
+    window.addEventListener("hashchange", () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        const matchedIndex = units.findIndex(u => u.id === hash);
+        if (matchedIndex !== -1 && matchedIndex !== currentUnitIndex) {
+          selectUnit(matchedIndex, false);
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
