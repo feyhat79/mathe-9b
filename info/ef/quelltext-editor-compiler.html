@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Vom Quellcode zur Maschine: Editor &amp; Compiler | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Fueller-Koenigsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;        /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Fuellertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-scale: 1;
+    }
+
+    body.beamer-mode {
+      --font-scale: 1.18;
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #2d3d5a;
+      --primary-light: #1e293b;
+      --accent-light: #241c3d;
+      --success-light: #064e3b;
+      --warning-light: #451a03;
+      --danger-light: #450a0a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: calc(11pt * var(--font-scale));
+      padding-bottom: 4rem;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* TOP PRESENTER BAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      font-size: 0.88rem;
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-action:hover { background: rgba(255,255,255,0.25); }
+    .btn-action.active { background: var(--primary-focus); border-color: #60a5fa; }
+
+    .container {
+      max-width: 980px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.85rem;
+    }
+    body.beamer-mode .badge-chapter { color: #93c5fd; }
+
+    h1 {
+      font-size: calc(1.9rem * var(--font-scale));
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+    body.beamer-mode h1 { color: #60a5fa; }
+
+    .lead-subtitle {
+      font-size: calc(1.05rem * var(--font-scale));
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* CARD SECTIONS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: calc(1.2rem * var(--font-scale));
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+    }
+    body.beamer-mode .step-title { color: #93c5fd; }
+
+    /* GRID BOXES */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 1rem 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 1rem 0;
+    }
+    @media (max-width: 760px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.15rem;
+      font-size: calc(10pt * var(--font-scale));
+    }
+    body.beamer-mode .sub-card { background: #1a243b; }
+
+    /* CODE PILL & CODE BLOCK */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+    }
+    body.beamer-mode .code-pill {
+      background: #334155;
+      color: #f8fafc;
+      border-color: #475569;
+    }
+
+    .code-editor-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid #334155;
+      line-height: 1.5;
+    }
+
+    .code-keyword { color: #c084fc; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-string { color: #4ade80; }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-error { background: #7f1d1d; color: #fca5a5; padding: 2px 4px; border-radius: 3px; }
+
+    /* PROZESS PIPELINE */
+    .pipeline-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .pipeline-step {
+      flex: 1;
+      min-width: 140px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    body.beamer-mode .pipeline-step {
+      background: #1e293b;
+    }
+
+    .pipeline-arrow {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    body.beamer-mode .pipeline-arrow { color: #60a5fa; }
+
+    /* SCHRAFFUR MOCKUP */
+    .class-state-demo {
+      display: flex;
+      gap: 20px;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .state-box {
+      width: 150px;
+      height: 100px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      position: relative;
+    }
+
+    .state-compiled {
+      background: #fed7aa;
+      border: 2px solid #ea580c;
+      color: #9a3412;
+    }
+
+    .state-uncompiled {
+      background: repeating-linear-gradient(
+        -45deg,
+        #fed7aa,
+        #fed7aa 8px,
+        #ea580c 8px,
+        #ea580c 10px
+      );
+      border: 2px solid #c2410c;
+      color: #431407;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* MERKE BOX (Standard aus GEMINI.md) */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      background: #fef2f2;
+      position: relative;
+    }
+    body.beamer-mode .merke-box {
+      background: #2b1111;
+      border-color: #ef4444;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .merke-content {
+      color: #111827;
+      font-size: calc(10.5pt * var(--font-scale));
+      line-height: 1.55;
+    }
+    body.beamer-mode .merke-content {
+      color: #f8fafc;
+    }
+
+    /* QUESTION / COLLAPSIBLE */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      transition: all 0.2s;
+    }
+    body.beamer-mode .question-card { background: #172033; }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+    body.beamer-mode .question-title { color: #f8fafc; }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    body.beamer-mode .btn-reveal {
+      background: #334155;
+      color: #93c5fd;
+      border-color: #475569;
+    }
+
+    .question-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed var(--border);
+      font-size: calc(10pt * var(--font-scale));
+      color: #1e3a8a;
+    }
+    body.beamer-mode .question-answer { color: #93c5fd; }
+    .question-answer.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP PRESENTER BAR -->
+  <div class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Übersicht</a>
+      <a href="bluej-figuren-einstieg.html" class="btn-action" style="background: rgba(255,255,255,0.18);">← Stunde 1: Figuren</a>
+      <span style="font-weight: 700; font-size: 0.92rem;">
+        Informatik EF • Stunde 2: Quellcode, Editor &amp; Compiler
+      </span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="toggleAllAnswers()">Alle Erklärungen aufdecken</button>
+      <button class="btn-action" id="btnBeamer" onclick="toggleBeamer()">Beamer-Modus</button>
+      <button class="btn-action" onclick="window.print()">Drucken</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Baustein 2: Funktionsweise von Programmiersprachen</div>
+      <h1>Vom Quellcode zur Maschine: Editor &amp; Compiler</h1>
+      <p class="lead-subtitle">
+        Woher kommen die Schablonen in BlueJ? Wie aus getipptem englischem Text elektrische Signale für den Prozessor werden – und warum ein einziges fehlendes Semikolon den gesamten Computer stoppt.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         TEIL 1: DAS GRUNDPROBLEM DER INFORMATIK
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">1</span>
+        <h2 class="step-title">Das Grundproblem: Menschenprache vs. Prozessorsprache</h2>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        Aus unserer Unterrichtsreihe zu Rechnernetzen und dem Binärsystem wissen wir: <strong>Ein Computer versteht im Kern nur Strom an und Strom aus</strong> – also Nullen und Einsen ($0$ und $1$).
+      </p>
+
+      <div class="grid-2">
+        <div class="sub-card" style="border-left: 3px solid var(--accent);">
+          <strong style="color: var(--accent); font-size: 1rem;">Die Sicht des Menschen:</strong>
+          <p style="margin-top: 4px;">
+            Wir Menschen denken in Konzepten, Bedeutungen und Wörtern (z. B. <em>„Mache den Kreis sichtbar!“</em> oder <em>„Färbe die Sonne gelb!“</em>). Niemand von uns möchte Programme in 100.000 Binärziffern tippen.
+          </p>
+        </div>
+
+        <div class="sub-card" style="border-left: 3px solid var(--danger);">
+          <strong style="color: var(--danger); font-size: 1rem;">Die Sicht der CPU (Prozessor):</strong>
+          <p style="margin-top: 4px;">
+            Der Prozessor besitzt keinen gesunden Menschenverstand. Er kann ausschließlich elementare elektrische Schaltsignale im Takt verarbeiten. Englische Wörter versteht er nicht.
+          </p>
+        </div>
+      </div>
+
+      <p style="margin-top: 0.85rem;">
+        <strong>Die Lösung der Informatik:</strong> Wir schreiben in einer <em>höheren Programmiersprache</em> (hier: <strong>Java</strong>) und überlassen die mühsame Übersetzung einem Spezialprogramm: dem <strong>Compiler</strong>.
+      </p>
+    </section>
+
+    <!-- ======================================================
+         TEIL 2: DIE DREI SCHLÜSSEL-WERKZEUGE
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">2</span>
+        <h2 class="step-title">Die Übersetzungskette: Quellcode ➔ Editor ➔ Compiler</h2>
+      </div>
+
+      <!-- Pipeline Visualisierung -->
+      <div class="pipeline-container">
+        <div class="pipeline-step">
+          <strong style="color: var(--primary);">1. Quellcode</strong><br>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Textdatei</span><br>
+          <span class="code-pill">Kreis.java</span>
+        </div>
+        <div class="pipeline-arrow">➔</div>
+        <div class="pipeline-step">
+          <strong style="color: var(--accent);">2. Editor</strong><br>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Schreibfenster</span><br>
+          <span style="font-size: 0.82rem;">Eingabe &amp; Prüfung</span>
+        </div>
+        <div class="pipeline-arrow">➔</div>
+        <div class="pipeline-step">
+          <strong style="color: var(--warning);">3. Compiler</strong><br>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Übersetzer</span><br>
+          <span class="code-pill">javac</span>
+        </div>
+        <div class="pipeline-arrow">➔</div>
+        <div class="pipeline-step">
+          <strong style="color: var(--success);">4. Bytecode</strong><br>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Maschinennah</span><br>
+          <span class="code-pill">Kreis.class</span>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="sub-card">
+          <strong style="color: var(--primary);">Der Quellcode (Source Code):</strong><br>
+          Reiner Text, der in einer Programmiersprache verfasst ist. Er beschreibt präzise die Attribute, den Konstruktor und alle Methoden der Klasse.
+        </div>
+        <div class="sub-card">
+          <strong style="color: var(--accent);">Der Editor:</strong><br>
+          Das Schreibwerkzeug in BlueJ. Anders als Word fügt er keine Schriftarten oder Absätze hinzu, sondern hilft mit <em>Syntax-Highlighting</em> (Schlüsselwörter bunt hervorheben) und Zeilennummern.
+        </div>
+        <div class="sub-card">
+          <strong style="color: var(--warning);">Der Compiler (javac):</strong><br>
+          Der unbestechliche Übersetzer. Er prüft jedes Zeichen auf grammatikalische Korrektheit (Syntax) und wandelt den Text in maschinenausführbaren Bytecode um.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 3: DAS BLUEJ-PHÄNOMEN (SCHRAFFIERTE KÄSTEN)
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">3</span>
+        <h2 class="step-title">Das BlueJ-Signal: Warum ist der Kasten schraffiert?</h2>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        In BlueJ siehst du dem Klassendiagramm sofort an, ob dein Quellcode einsatzbereit ist:
+      </p>
+
+      <div class="class-state-demo">
+        <div style="flex: 1; min-width: 240px; display: flex; align-items: center; gap: 14px;">
+          <div class="state-box state-compiled">
+            <span>Kreis</span>
+            <span style="font-size: 0.72rem; font-weight: 500; margin-top: 4px;">Einfarbig</span>
+          </div>
+          <div style="font-size: 0.92rem;">
+            <strong style="color: #9a3412;">Kompiliert (Einsatzbereit):</strong><br>
+            Der Compiler hat den Quellcode fehlerfrei übersetzt. Du kannst per Rechtsklick Objekte instanziieren!
+          </div>
+        </div>
+
+        <div style="flex: 1; min-width: 240px; display: flex; align-items: center; gap: 14px;">
+          <div class="state-box state-uncompiled">
+            <span>Kreis</span>
+            <span style="font-size: 0.72rem; font-weight: 500; margin-top: 4px;">Schraffiert</span>
+          </div>
+          <div style="font-size: 0.92rem;">
+            <strong style="color: #c2410c;">Nicht kompiliert (Verändert):</strong><br>
+            Der Quelltext wurde geändert, aber noch nicht übersetzt. Ein Klick auf <strong>„Übersetzen“ (Compile)</strong> ist nötig.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         TEIL 4: PRAXIS-EXPERIMENT IM QUELLTEXT
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">4</span>
+        <h2 class="step-title">Geführtes Praxis-Experiment: Den Quelltext manipulieren</h2>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        Öffne nun in BlueJ zum ersten Mal das Innenleben der Klasse <span class="code-pill">Kreis</span>:
+      </p>
+
+      <h4 style="color: var(--primary); font-weight: 800; margin-bottom: 4px;">Auftrag A: Die Werkseinstellung des Konstruktors ändern</h4>
+      <ol style="margin-left: 1.25rem; margin-bottom: 1rem;">
+        <li>Mache einen <strong>Doppelklick</strong> auf den Kasten der Klasse <span class="code-pill">Kreis</span> im Hauptfenster.</li>
+        <li>Der Editor öffnet sich. Suche den <strong>Konstruktor</strong> (Zeile 24 bis 30):</li>
+      </ol>
+
+      <div class="code-editor-box">
+<span class="code-keyword">public</span> Kreis() {
+    groesse = <span class="code-string">68</span>;
+    xPosition = <span class="code-string">230</span>;
+    yPosition = <span class="code-string">90</span>;
+    farbe = <span class="code-string">"blau"</span>;  <span class="code-comment">// &lt;--- Ändere hier "blau" in "gelb"</span>
+    istSichtbar = <span class="code-keyword">false</span>;
+}
+      </div>
+
+      <ol start="3" style="margin-left: 1.25rem; margin-bottom: 1rem;">
+        <li>Ändere das Wort <span class="code-pill">"blau"</span> in <span class="code-pill">"gelb"</span>.</li>
+        <li>Klicke oben links im Editor auf die Schaltfläche <strong>„Übersetzen“ (Compile)</strong>.</li>
+        <li>Schließe den Editor, erzeuge mit <span class="code-pill">new Kreis()</span> ein neues Objekt und rufe <span class="code-pill">sichtbarMachen()</span> auf!</li>
+      </ol>
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        • <em>Beobachtung:</em> Jeder neu erzeugte Kreis startet ab jetzt von Geburt an in <strong>Gelb</strong>! Du hast soeben erfolgreich deinen ersten Quellcode modifiziert und kompiliert.
+      </p>
+
+      <h4 style="color: #dc2626; font-weight: 800; margin-bottom: 4px;">Auftrag B: Den Compiler gezielt provozieren (Syntaxfehler)</h4>
+      <p style="margin-bottom: 6px;">
+        Was passiert, wenn wir uns vertippen?
+      </p>
+      <ol style="margin-left: 1.25rem;">
+        <li>Öffne den Editor von <span class="code-pill">Kreis</span> erneut.</li>
+        <li>Lösche in Zeile 25 hinter <span class="code-pill">groesse = 68;</span> das <strong>Semikolon (<span class="code-pill">;</span>)</strong> weg.</li>
+        <li>Klicke auf <strong>„Übersetzen“</strong>.</li>
+      </ol>
+
+      <div class="code-editor-box" style="border-color: #ef4444;">
+groesse = <span class="code-string">68</span>   <span class="code-error">&lt;--- Semikolon fehlt!</span>
+<span class="code-comment">// Fehlermeldung am unteren Rand: ';' expected</span>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 6px;">
+        • <em>Erkenntnis:</em> Der Compiler ist absolut unnachgiebig. Er erzeugt <strong>keine</strong> fehlerhafte `.class`-Datei. Erst wenn der Syntaxfehler behoben ist, wird das Programm übersetzt.
+      </p>
+    </section>
+
+    <!-- ======================================================
+         TEIL 5: DER ROTE MERKSATZ-KASTEN
+         ====================================================== -->
+    <div class="merke-box">
+      <div class="merke-tag">MERKE</div>
+      <div class="merke-content">
+        <strong>Vom Quellcode zum laufenden Programm:</strong>
+        <br><br>
+        1. <strong>Quellcode (Source Code):</strong> Der von Menschen geschriebene Text in einer Programmiersprache (<span class="code-pill">.java</span>). Er hält sich strikt an die <strong>Syntax</strong> (Regeln und Grammatik der Sprache).
+        <br><br>
+        2. <strong>Editor:</strong> Das Textwerkzeug zur Eingabe des Quellcodes. Er bietet Hilfestellungen wie Zeilennummern, Klammern-Prüfung und Syntax-Farbhervorhebung.
+        <br><br>
+        3. <strong>Compiler:</strong> Ein Übersetzungsprogramm (<span class="code-pill">javac</span>). Er analysiert den Quelltext. Wenn keine Syntaxfehler vorliegen, erzeugt er maschinennahen <strong>Bytecode</strong> (<span class="code-pill">.class</span>).
+        <br><br>
+        4. <strong>Schraffur in BlueJ:</strong> Eine schraffierte Klasse signalisiert, dass ihr Quellcode verändert wurde und neu kompiliert werden muss, bevor neue Objekte erzeugt werden können.
+      </div>
+    </div>
+
+    <!-- ======================================================
+         TEIL 6: DETEKTIV-FRAGEN & CHECKPOINTS
+         ====================================================== -->
+    <section class="card">
+      <div class="step-header">
+        <span class="step-badge">5</span>
+        <h2 class="step-title">Detektiv-Check: Verständnis festigen</h2>
+      </div>
+
+      <!-- Frage 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q1', this)">
+          <div class="question-title">
+            1. Warum kann ein Computer den Quelltext nicht direkt ohne Compiler ausführen?
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer" id="q1">
+          • <strong>Erklärung:</strong> Die Hardware (der Prozessor) kennt nur elektrische Ströme, die als binäre Maschinensprache ($0$ und $1$) kodiert sind. Englische Wörter und grammatikalische Strukturen wie <span class="code-pill">public class</span> versteht die Recheneinheit nicht – sie müssen erst durch den Compiler in Bytecode übersetzt werden.
+        </div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q2', this)">
+          <div class="question-title">
+            2. Was ist der Unterschied zwischen einem Syntaxfehler und einem logischen Fehler?
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer" id="q2">
+          • <strong>Syntaxfehler:</strong> Verstoß gegen die Grammatikregeln von Java (z. B. fehlendes Semikolon, Tippfehler bei Schlüsselwörtern). Der Compiler bricht ab und erzeugt kein lauffähiges Programm.
+          <br><br>
+          • <strong>Logischer Fehler:</strong> Die Grammatik ist perfekt und der Compiler übersetzt fehlerfrei, aber das Programm tut nicht das, was der Programmierer wollte (z. B. der Kreis bewegt sich nach links statt nach rechts, weil ein Minuszeichen gesetzt wurde).
+        </div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleAnswer('q3', this)">
+          <div class="question-title">
+            3. Warum zeigt BlueJ im Projektordner immer Paare von .java- und .class-Dateien?
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <div class="question-answer" id="q3">
+          • <strong>Erklärung:</strong> Die <span class="code-pill">.java</span>-Datei enthält den lesbaren Quelltext für den Entwickler im Editor. Die <span class="code-pill">.class</span>-Datei enthält das vom Compiler erzeugte Übersetzungsprodukt (den Bytecode), das von der Java Virtual Machine ausgeführt wird.
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top: 3rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+      <p><strong>Informatik Einführungsphase (EF)</strong> • Baustein 2: Quellcode &amp; Compiler</p>
+      <p style="margin-top: 4px;">Entwurf – verbleibt lokal im Lehrerexemplar.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleAnswer(id, headerElem) {
+      const ans = document.getElementById(id);
+      const btn = headerElem.querySelector('.btn-reveal');
+      if (ans.classList.contains('show')) {
+        ans.classList.remove('show');
+        btn.textContent = 'Erklärung aufdecken';
+      } else {
+        ans.classList.add('show');
+        btn.textContent = 'Erklärung verbergen';
+      }
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      const anyHidden = Array.from(answers).some(a => !a.classList.contains('show'));
+
+      answers.forEach(a => {
+        if (anyHidden) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+
+      buttons.forEach(b => {
+        b.textContent = anyHidden ? 'Erklärung verbergen' : 'Erklärung aufdecken';
+      });
+    }
+
+    function toggleBeamer() {
+      document.body.classList.toggle('beamer-mode');
+      const btn = document.getElementById('btnBeamer');
+      btn.classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>
