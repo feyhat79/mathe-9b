@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Digitale Signaturen & Authentizität | Informatik Q1</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Tab-Leiste im Stil von RSA & 9b */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin: 1.5rem 0 1.75rem 0;
+      border-bottom: 2px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+    }
+
+    .tab-btn.active {
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-color: var(--theme-oberstufe);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      width: 28px;
+      height: 28px;
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+
+    .info-callout {
+      background: var(--bg-subtle);
+      border-left: 4px solid var(--theme-oberstufe);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 860px) {
+      .grid-three { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .grid-two { grid-template-columns: 1fr; }
+    }
+
+    .card-subtle {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .card-subtle h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Vergleichs-Karten */
+    .compare-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+    }
+
+    .compare-card.enc {
+      border-top: 4.5px solid #0284c7;
+    }
+
+    .compare-card.sig {
+      border-top: 4.5px solid #059669;
+    }
+
+    .compare-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .compare-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .tag-enc { background: #e0f2fe; color: #0369a1; }
+    .tag-sig { background: #ecfdf5; color: #047857; }
+
+    /* Tabellen */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    table.data-table td.center, table.data-table th.center {
+      text-align: center;
+    }
+
+    /* Interaktive Panels */
+    .calc-panel {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: #ffffff;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--theme-oberstufe);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    .btn-action {
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      background: var(--theme-oberstufe-dark);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1.5px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+    }
+
+    .btn-danger {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1.5px solid #fecaca;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-danger:hover {
+      background: #fee2e2;
+    }
+
+    .result-box {
+      margin-top: 1.25rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    /* Buchstaben-Pills */
+    .letter-chain {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0.75rem 0;
+      align-items: center;
+    }
+
+    .letter-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 6px;
+      padding: 4px 10px;
+      min-width: 44px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .letter-char {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--theme-oberstufe-dark);
+    }
+
+    .letter-val {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .math-operator {
+      font-weight: 800;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    /* Status-Banner */
+    .status-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+      margin-top: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .status-card.valid {
+      background: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+    }
+
+    .status-card.invalid {
+      background: #fef2f2;
+      border: 1.5px solid #ef4444;
+      color: #991b1b;
+    }
+
+    .status-header {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Klausur-Training */
+    .task-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .task-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .task-badge {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+      background: #fcfdfe;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-toggle-solution {
+      margin-top: 0.75rem;
+      background: #ffffff;
+      border: 1.5px solid var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-solution:hover {
+      background: var(--theme-oberstufe-light);
+    }
+
+    /* Quiz */
+    .quiz-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .quiz-question {
+      font-weight: 700;
+      font-size: 0.98rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-main);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .quiz-option:hover {
+      background: #ffffff;
+      border-color: var(--theme-oberstufe);
+    }
+
+    .quiz-option.correct {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
+      font-weight: 600;
+    }
+
+    .quiz-option.wrong {
+      background: #fef2f2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Navigationsleiste -->
+    <div class="portal-nav">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Q1-Übersicht
+      </a>
+      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Informatik Q1 • Kryptographie</span>
+    </div>
+
+    <!-- Modul-Kopf -->
+    <header class="portal-header" style="text-align: left; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+      <div class="badge-pill badge-oberstufe">Kryptographie • Baustein 4</div>
+      <h1>Digitale Signaturen & Authentizität</h1>
+      <p class="subtitle">
+        Authentizität und Integrität digitaler Botschaften mit RSA: Hashwert-Berechnung mit Modulo, Erzeugung & Prüfung digitaler Signaturen, interaktives Gruppenarbeits-Labor und Public-Key-Infrastrukturen (PKI).
+      </p>
+      <div class="timestamp-pill">
+        Stand: Schuljahr 2026/27 • Gymnasiale Oberstufe
+      </div>
+    </header>
+
+    <!-- Reiter-Navigation -->
+    <nav class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab-grundlagen')">1. Prinzip & Schutzziele</button>
+      <button class="tab-btn" onclick="switchTab('tab-ablauf')">2. Der mathematische Ablauf</button>
+      <button class="tab-btn" onclick="switchTab('tab-labor')">3. Interaktives Signatur-Labor</button>
+      <button class="tab-btn" onclick="switchTab('tab-gruppenarbeit')">4. Gruppenarbeits-Simulator</button>
+      <button class="tab-btn" onclick="switchTab('tab-sicherheit')">5. Realität: SHA-256 & PKI</button>
+      <button class="tab-btn" onclick="switchTab('tab-training')">6. Klausurtraining & Selbst-Check</button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- REITER 1: PRINZIP & SCHUTZZIELE            -->
+    <!-- ========================================== -->
+    <section id="tab-grundlagen" class="tab-panel active">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">1</span>
+          Schutzziele: Vertraulichkeit vs. Authentizität & Integrität
+        </h2>
+
+        <p>
+          In der modernen Informationssicherheit unterscheidet man klar zwischen verschiedenen Sicherheitszielen (Grundwerte der IT-Sicherheit nach BSI):
+        </p>
+
+        <div class="grid-three">
+          <div class="card-subtle">
+            <h4 style="color: #0284c7;">1. Vertraulichkeit</h4>
+            <p style="font-size: 0.9rem; margin: 0;">
+              Niemand Unbefugtes kann die Nachricht mitlesen. Das wird durch <strong>Verschlüsselung</strong> gewährleistet.
+            </p>
+          </div>
+          <div class="card-subtle">
+            <h4 style="color: #059669;">2. Authentizität</h4>
+            <p style="font-size: 0.9rem; margin: 0;">
+              Der Empfänger kann sicher nachweisen, von wem die Nachricht stammt (Urheberschaft & Urhebernachweis).
+            </p>
+          </div>
+          <div class="card-subtle">
+            <h4 style="color: #7c3aed;">3. Integrität</h4>
+            <p style="font-size: 0.9rem; margin: 0;">
+              Die Nachricht wurde auf dem Übertragungsweg nicht verändert (Unverfälschtheit).
+            </p>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Wesentliche Erkenntnis:</strong> Eine reine RSA-Verschlüsselung schützt ausschließlich die <em>Vertraulichkeit</em>. Wenn Bob einen verschlüsselten Text erhält, weiß er nur, dass der Absender Bobs öffentlichen Schlüssel benutzt hat – das kann jeder beliebige Angreifer weltweit gewesen sein! Um <strong>Authentizität und Integrität</strong> zu garantieren, wird die <strong>digitale Signatur</strong> benötigt.
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 2rem 0 0.85rem 0; color: var(--text-main);">
+          Gegenüberstellung: Verschlüsselung vs. Digitale Signatur
+        </h3>
+
+        <div class="grid-two">
+          <!-- Verschlüsselung -->
+          <div class="compare-card enc">
+            <div class="compare-title">
+              <span>Asymmetrische Verschlüsselung</span>
+              <span class="compare-tag tag-enc">Vertraulichkeit</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Ziel: Nur der autorisierte Empfänger soll die Nachricht im Klartext lesen können.
+            </p>
+            <ul style="font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.7;">
+              <li>Sender verschlüsselt mit dem <strong>öffentlichen Schlüssel des Empfängers</strong> $(e_{\text{Empf}}, N_{\text{Empf}})$:
+                $$C = M^{e_{\text{Empf}}} \pmod{N_{\text{Empf}}}$$
+              </li>
+              <li>Empfänger entschlüsselt mit seinem <strong>geheimen privaten Schlüssel</strong> $d_{\text{Empf}}$:
+                $$M = C^{d_{\text{Empf}}} \pmod{N_{\text{Empf}}}$$
+              </li>
+            </ul>
+          </div>
+
+          <!-- Signatur -->
+          <div class="compare-card sig">
+            <div class="compare-title">
+              <span>Digitale Signatur</span>
+              <span class="compare-tag tag-sig">Authentizität & Integrität</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Ziel: Urheberschaft nachweisen und jede Veränderung des Inhalts sofort entlarven.
+            </p>
+            <ul style="font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.7;">
+              <li>Sender signiert mit seinem <strong>eigenen privaten Schlüssel</strong> $d_{\text{Sender}}$:
+                $$S = H^{d_{\text{Sender}}} \pmod{N_{\text{Sender}}}$$
+              </li>
+              <li>Jeder prüft mit dem <strong>öffentlichen Schlüssel des Senders</strong> $(e_{\text{Sender}}, N_{\text{Sender}})$:
+                $$H' = S^{e_{\text{Sender}}} \pmod{N_{\text{Sender}}}$$
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 2rem 0 0.85rem 0; color: var(--text-main);">
+          Warum signiert man nicht die gesamte Nachricht direkt?
+        </h3>
+        <p>
+          Man könnte theoretisch jeden einzelnen Buchstaben einer Nachricht mit $d_{\text{Sender}}$ potenzieren. In der Praxis macht man das jedoch aus zwei Gründen niemals:
+        </p>
+        <ol style="margin-left: 1.35rem; font-size: 0.92rem; line-height: 1.75;">
+          <li><strong>Rechenaufwand (Performance):</strong> Modulare Potenzierungen mit großen Exponenten sind rechenintensiv. Eine PDF-Datei mit 50 MB mit RSA zu signieren würde Sekunden bis Minuten dauern.</li>
+          <li><strong>Modulbegrenzung:</strong> Die zu signierende Zahl muss kleiner als der Modul $N$ sein ($M < N$).</li>
+        </ol>
+        <p style="margin-top: 0.75rem;">
+          <strong>Die Lösung:</strong> Man berechnet zuerst einen kompakten, festen <strong>Prüfwert (Hashwert $H$)</strong> der Nachricht und signiert ausschließlich diesen Prüfwert!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 2: DER MATHEMATISCHE ABLAUF         -->
+    <!-- ========================================== -->
+    <section id="tab-ablauf" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">2</span>
+          Der 4-Phasen-Ablauf einer Digitalen Signatur
+        </h2>
+
+        <p>
+          Der Signatur- und Verifikationsprozess gliedert sich in vier präzise definierte Schritte. Wir verwenden hier exakt das Verfahren aus unserem Unterricht:
+        </p>
+
+        <!-- Phase 1 -->
+        <div class="card-subtle" style="margin-bottom: 1.25rem; border-left: 4px solid var(--theme-oberstufe);">
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--theme-oberstufe-dark); margin-bottom: 0.5rem;">
+            Phase 1: Prüfwert (Hashwert) berechnen
+          </h3>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+            Die Nachricht $M$ wird buchstabenweise in Alphabetspositionen übersetzt ($\text{A}=1, \text{B}=2, \dots, \text{Z}=26$). Die Summe aller Positionen wird gebildet und anschließend modulo $N$ gerechnet, damit der Prüfwert kleiner als der RSA-Modul ist:
+            $$H = \left( \sum_{i=1}^k \text{Position}(c_i) \right) \pmod{N_{\text{Sender}}}$$
+          </p>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="card-subtle" style="margin-bottom: 1.25rem; border-left: 4px solid #b91c1c;">
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: #b91c1c; margin-bottom: 0.5rem;">
+            Phase 2: Signatur mit dem geheimen Schlüssel erzeugen
+          </h3>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+            Der Sender berechnet den Signaturwert $S$, indem er den Hashwert $H$ mit seinem <strong>geheimen privaten Exponenten $d_{\text{Sender}}$</strong> potenziert:
+            $$S = H^{d_{\text{Sender}}} \pmod{N_{\text{Sender}}}$$
+            Da nur der Sender $d$ kennt, kann auch nur er diesen konkreten Wert $S$ erzeugen.
+          </p>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="card-subtle" style="margin-bottom: 1.25rem; border-left: 4px solid #0284c7;">
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: #0284c7; margin-bottom: 0.5rem;">
+            Phase 3: Paket übermitteln
+          </h3>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+            Der Sender schickt dem Empfänger ein zweiteiliges Paket über das Netzwerk:
+          </p>
+          <div style="background: #ffffff; border: 1.5px dashed var(--border-color); padding: 10px 14px; border-radius: 6px; margin-top: 8px; font-weight: 700; font-size: 0.95rem;">
+            Paket = (Nachricht im Klartext $M$, Signatur $S$)
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">
+            Hinweis: Die Nachricht wird hier unverschlüsselt übertragen – jeder kann sie lesen. Wenn zusätzlich Vertraulichkeit gewünscht ist, kann das gesamte Paket anschließend mit dem Public Key des Empfängers verschlüsselt werden.
+          </p>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="card-subtle" style="margin-bottom: 1.5rem; border-left: 4px solid #059669;">
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: #059669; margin-bottom: 0.5rem;">
+            Phase 4: Verifikation beim Empfänger (Der Echtheits-Test)
+          </h3>
+          <p style="font-size: 0.92rem; line-height: 1.7; margin: 0;">
+            Der Empfänger führt zwei unabhängige Berechnungen durch:
+          </p>
+          <ul style="font-size: 0.92rem; margin-left: 1.35rem; line-height: 1.75; margin-top: 6px;">
+            <li><strong>Schritt 4a:</strong> Er berechnet aus der empfangenen Nachricht $M$ selbst den Prüfwert:
+              $$H_{\text{neu}} = \left( \sum \text{Positionen} \right) \pmod{N_{\text{Sender}}}$$
+            </li>
+            <li><strong>Schritt 4b:</strong> Er entschlüsselt die Signatur $S$ mit dem <strong>öffentlichen Schlüssel des Senders $(e_{\text{Sender}}, N_{\text{Sender}})$</strong>:
+              $$H' = S^{e_{\text{Sender}}} \pmod{N_{\text{Sender}}}$$
+            </li>
+            <li><strong>Schritt 4c (Vergleich):</strong> Er vergleicht beide Werte:
+              $$H' \stackrel{?}{=} H_{\text{neu}}$$
+              Stimmen beide Werte exakt überein, ist mathematisch bewiesen: Die Signatur stammt vom Inhaber von $d_{\text{Sender}}$ und die Nachricht wurde nicht manipuliert!
+            </li>
+          </ul>
+        </div>
+
+        <!-- Durchgerechnetes Unterrichtsbeispiel -->
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin: 2rem 0 0.85rem 0; color: var(--text-main);">
+          Durchgerechnetes Unterrichtsbeispiel
+        </h3>
+
+        <div class="calc-panel">
+          <div style="font-weight: 700; color: var(--theme-oberstufe-dark); margin-bottom: 0.5rem;">
+            Voraussetzungen & RSA-Schlüsselpaar von Alice:
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7;">
+            • Primzahlen: $p = 5$, $q = 11 \implies N = 5 \cdot 11 = 55$<br>
+            • Eulersche Phi-Funktion: $\varphi(55) = (5-1) \cdot (11-1) = 40$<br>
+            • Öffentlicher Exponent: $e = 3$ (da $\operatorname{ggT}(3, 40) = 1$)<br>
+            • Privater Exponent: $d = 27$ (da $3 \cdot 27 = 81 \equiv 1 \pmod{40}$)<br>
+            • <strong>Public Key:</strong> $(e = 3, N = 55)$, <strong>Private Key:</strong> $(d = 27, N = 55)$<br>
+            • Zu signierende Nachricht: <strong>„CAB“</strong>
+          </p>
+
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Phase</th>
+                <th>Berechnung & Rechenweg</th>
+                <th style="width: 22%;">Ergebnis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Hashwert</strong></td>
+                <td>
+                  $\text{C}=3, \text{A}=1, \text{B}=2$<br>
+                  Summe: $3 + 1 + 2 = 6$<br>
+                  Modulo: $6 \pmod{55}$
+                </td>
+                <td><strong>$H = 6$</strong></td>
+              </tr>
+              <tr>
+                <td><strong>2. Signatur erzeugen</strong></td>
+                <td>
+                  Alice nutzt ihren privaten Schlüssel $d = 27$:<br>
+                  $S = H^d \pmod N = 6^{27} \pmod{55}$<br>
+                  (Mit Modulo-Potenzrechenregeln: $6^{27} \equiv 41 \pmod{55}$)
+                </td>
+                <td><strong>$S = 41$</strong></td>
+              </tr>
+              <tr>
+                <td><strong>3. Übertragung</strong></td>
+                <td>Alice schickt an Bob das Paket: (Nachricht: „CAB“, Signatur: $41$)</td>
+                <td>Paket gesendet</td>
+              </tr>
+              <tr>
+                <td><strong>4a. Hash neu berechnen</strong></td>
+                <td>Bob berechnet die Quersumme aus „CAB“ mod $55$: $3 + 1 + 2 = 6$</td>
+                <td><strong>$H_{\text{neu}} = 6$</strong></td>
+              </tr>
+              <tr>
+                <td><strong>4b. Signatur prüfen</strong></td>
+                <td>
+                  Bob setzt $S = 41$ in Alices Public Key $(e = 3, N = 55)$ ein:<br>
+                  $H' = S^e \pmod N = 41^3 \pmod{55}$<br>
+                  $41^3 = 68.921 = 1253 \cdot 55 + 6$
+                </td>
+                <td><strong>$H' = 6$</strong></td>
+              </tr>
+              <tr style="background: #ecfdf5;">
+                <td><strong>4c. Abgleich</strong></td>
+                <td colspan="2">
+                  <strong style="color: #065f46;">$H' = 6 = H_{\text{neu}} \implies$ Signatur gültig!</strong><br>
+                  Bob weiß sicher: Die Nachricht stammt von Alice und wurde unterwegs kein bisschen verändert.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 3: INTERAKTIVES SIGNATUR-LABOR     -->
+    <!-- ========================================== -->
+    <section id="tab-labor" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">3</span>
+          Interaktives Signatur-Labor
+        </h2>
+
+        <p>
+          Hier könnt ihr das Signatur-Verfahren live ausprobieren, eigene Schlüssel und Nachrichten eingeben und gezielt Angriffe simulieren:
+        </p>
+
+        <!-- Modus 1: Signatur erzeugen (Sender) -->
+        <div class="calc-panel" style="border-top: 4px solid #7c3aed;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--theme-oberstufe-dark); margin-bottom: 0.75rem;">
+            Sender-Bereich: Nachricht signieren (mit Private Key d)
+          </h3>
+
+          <div class="grid-two">
+            <div class="form-group">
+              <label class="form-label" for="labMsg">Nachricht (Text oder Codewort):</label>
+              <input type="text" id="labMsg" class="form-input" value="HALLO" placeholder="z. B. HALLO oder CAB" oninput="updateSignerLabor()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="labPreset">Unterrichts-Presets:</label>
+              <select id="labPreset" class="form-input" onchange="applyKeyPreset()">
+                <option value="55_3_27">Standard: N = 55 (p=5, q=11), e = 3, d = 27</option>
+                <option value="77_7_43">Alternativ: N = 77 (p=7, q=11), e = 7, d = 43</option>
+                <option value="33_3_7">Kompakt: N = 33 (p=3, q=11), e = 3, d = 7</option>
+                <option value="custom">Eigene Schlüssel eingeben...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-three" id="customKeysRow">
+            <div class="form-group">
+              <label class="form-label" for="labModN">RSA-Modul N:</label>
+              <input type="number" id="labModN" class="form-input" value="55" oninput="updateSignerLabor()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="labExpD">Sender Private Key d:</label>
+              <input type="number" id="labExpD" class="form-input" value="27" oninput="updateSignerLabor()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="labExpE">Sender Public Key e:</label>
+              <input type="number" id="labExpE" class="form-input" value="3" oninput="updateSignerLabor()">
+            </div>
+          </div>
+
+          <!-- Live Buchstaben-Zerlegung -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+              1. Buchstaben-Quersumme & Modulo-Hashwert:
+            </div>
+            <div id="labLetterBreakdown" class="letter-chain"></div>
+          </div>
+
+          <!-- Signatur-Ergebnis -->
+          <div id="labSignerResult" class="result-box"></div>
+
+          <div style="margin-top: 1rem; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-action" onclick="transferToReceiver()">
+              Paket an Empfänger-Bereich übergeben ↓
+            </button>
+            <button class="btn-secondary" onclick="setExampleWord('INFORMATIK')">
+              Beispiel „INFORMATIK“
+            </button>
+            <button class="btn-secondary" onclick="setExampleWord('KLAUSUR')">
+              Beispiel „KLAUSUR“
+            </button>
+          </div>
+        </div>
+
+        <!-- Modus 2: Signatur prüfen (Empfänger) -->
+        <div class="calc-panel" style="border-top: 4px solid #059669;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: #059669; margin-bottom: 0.75rem;">
+            Empfänger-Bereich: Signatur verifizieren (mit Public Key e)
+          </h3>
+
+          <div class="grid-two">
+            <div class="form-group">
+              <label class="form-label" for="recvMsg">Empfangene Nachricht:</label>
+              <input type="text" id="recvMsg" class="form-input" value="HALLO" oninput="updateReceiverLabor()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="recvSig">Empfangene Signatur S:</label>
+              <input type="number" id="recvSig" class="form-input" value="18" oninput="updateReceiverLabor()">
+            </div>
+          </div>
+
+          <div class="grid-two">
+            <div class="form-group">
+              <label class="form-label" for="recvModN">Öffentlicher Modul N des Senders:</label>
+              <input type="number" id="recvModN" class="form-input" value="55" oninput="updateReceiverLabor()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="recvExpE">Öffentlicher Exponent e des Senders:</label>
+              <input type="number" id="recvExpE" class="form-input" value="3" oninput="updateReceiverLabor()">
+            </div>
+          </div>
+
+          <!-- Verifikations-Ergebnis -->
+          <div id="labReceiverResult" class="result-box"></div>
+
+          <!-- Manipulations-Tester (Eve) -->
+          <div style="margin-top: 1.5rem; padding: 1.25rem; background: #fff5f5; border: 1.5px dashed #f87171; border-radius: var(--radius-sm);">
+            <div style="font-weight: 800; color: #991b1b; margin-bottom: 0.5rem; font-size: 0.95rem;">
+              Angriffs-Simulation (Man-in-the-Middle / Manipulation testen):
+            </div>
+            <p style="font-size: 0.88rem; color: #7f1d1d; margin-bottom: 0.85rem;">
+              Probiere aus, was passiert, wenn ein Angreifer die Nachricht manipuliert oder eine falsche Signatur mitsendet:
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn-danger" onclick="tamperMessage()">
+                Nachricht manipulieren (1 Buchstabe ändern)
+              </button>
+              <button class="btn-danger" onclick="tamperSignature()">
+                Signatur manipulieren (S + 1)
+              </button>
+              <button class="btn-secondary" onclick="restoreOriginalPacket()">
+                Originalpaket wiederherstellen
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 4: GRUPPENARBEITS-SIMULATOR         -->
+    <!-- ========================================== -->
+    <section id="tab-gruppenarbeit" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">4</span>
+          Leitfaden für die Gruppenarbeits-Simulation im Unterricht
+        </h2>
+
+        <p>
+          Für die Unterrichtssimulation arbeitet der Kurs in zwei Parteien (z. B. <strong>Gruppe 1: Alice</strong> und <strong>Gruppe 2: Bob</strong>). Optional agiert eine dritte Schülergruppe als <strong>Angreiferin Eve</strong>.
+        </p>
+
+        <div class="grid-two">
+          <!-- Gruppe 1 -->
+          <div class="card-subtle" style="border-top: 3px solid #7c3aed;">
+            <h4 style="color: var(--theme-oberstufe-dark);">Gruppe 1: Alice (Sender)</h4>
+            <ol style="font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.7; margin-top: 6px;">
+              <li>Generiert euer RSA-Schlüsselpaar $(p, q, N, \varphi(N), e, d)$.</li>
+              <li>Gebt euren <strong>Public Key $(e, N)$</strong> lautstark oder an der Tafel an Gruppe 2 weiter. Haltet $d$ streng geheim!</li>
+              <li>Einigt euch auf eine geheime Nachricht (z. B. ein Wort mit 3–6 Buchstaben).</li>
+              <li>Berechnet die Buchstaben-Quersumme und rechnet $\pmod N \implies$ euer Hashwert $H$.</li>
+              <li>Signiert den Hashwert mit eurem privaten Schlüssel: $S = H^d \pmod N$.</li>
+              <li>Schreibt das Paket auf einen Zettel: <code>[Nachricht: ..., Signatur S: ...]</code> und übergebt ihn an Gruppe 2.</li>
+            </ol>
+          </div>
+
+          <!-- Gruppe 2 -->
+          <div class="card-subtle" style="border-top: 3px solid #059669;">
+            <h4 style="color: #059669;">Gruppe 2: Bob (Empfänger)</h4>
+            <ol style="font-size: 0.88rem; margin-left: 1.25rem; line-height: 1.7; margin-top: 6px;">
+              <li>Notiert euch den Public Key $(e, N)$ von Gruppe 1.</li>
+              <li>Nehmt den Zettel mit der Nachricht und der Signatur $S$ entgegen.</li>
+              <li><strong>Eigene Hash-Berechnung:</strong> Ermittelt unabhängig die Buchstaben-Quersumme mod $N \implies H_{\text{neu}}$.</li>
+              <li><strong>Signatur entschlüsseln:</strong> Berechnet mit Alices Public Key: $H' = S^e \pmod N$.</li>
+              <li><strong>Prüfung:</strong> Ist $H' == H_{\text{neu}}$? Wenn ja: Beglaubigt die Botschaft als echt!</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="card-subtle" style="margin-top: 1.25rem; border-top: 3px solid #dc2626;">
+          <h4 style="color: #dc2626;">Rolle für Gruppe 3 (Angreiferin Eve – Der Fälschungsversuch)</h4>
+          <p style="font-size: 0.9rem; line-height: 1.7;">
+            Eve fängt den Zettel auf dem Weg zwischen Gruppe 1 und Gruppe 2 ab. Sie versucht, das Wort zu verändern (z. B. aus „JA“ macht sie „NEIN“ oder aus „NOTE1“ macht sie „NOTE5“).
+          </p>
+          <div class="info-callout" style="margin-bottom: 0;">
+            <strong>Aufgabe für den Kurs:</strong> Warum scheitert Eve zwingend, wenn sie die Signatur $S$ unverändert lässt? Und warum kann Eve auch keine neue gültige Signatur erzeugen? (Weil ihr der private Schlüssel $d_{\text{Alice}}$ fehlt!).
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.75rem 0;">
+          Protokolltabelle für den Hefter / OneNote
+        </h3>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Gruppe</th>
+              <th>Public Key $(e, N)$</th>
+              <th>Nachricht</th>
+              <th>Hashwert $H$</th>
+              <th>Signatur $S$</th>
+              <th>Verifikation ($H' \stackrel{?}{=} H$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Beispiel</strong></td>
+              <td>$(3, 55)$</td>
+              <td>CAB</td>
+              <td>$6$</td>
+              <td>$41$</td>
+              <td>$41^3 \equiv 6 \pmod{55}$ (Gültig)</td>
+            </tr>
+            <tr>
+              <td><strong>Eure Gruppe</strong></td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+            </tr>
+            <tr>
+              <td><strong>Partner-Gruppe</strong></td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+              <td>____</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 5: REALITÄT: SHA-256 & PKI          -->
+    <!-- ========================================== -->
+    <section id="tab-sicherheit" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">5</span>
+          Vom Unterrichtsmodell zur Realität: SHA-256 & PKI
+        </h2>
+
+        <p>
+          Unsere einfache Buchstaben-Quersumme mit Modulo $N$ eignet sich hervorragend, um das mathematische Grundprinzip von Hand im Heft nachzuvollziehen. In der echten IT-Sicherheit reicht eine einfache Quersumme jedoch nicht aus.
+        </p>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 1.5rem 0 0.5rem 0; color: var(--text-main);">
+          1. Warum einfache Quersummen unsicher sind (Kollisionsanfälligkeit)
+        </h3>
+        <p>
+          Eine Addition ist <strong>kommutativ</strong> ($a + b = b + a$). Das führt zu massiven Sicherheitsproblemen:
+        </p>
+        <ul style="margin-left: 1.35rem; font-size: 0.92rem; line-height: 1.75;">
+          <li><strong>Anagramme haben denselben Hashwert:</strong> „LEBEN“ und „NEBEL“ besitzen exakt dieselbe Buchstaben-Quersumme ($12+5+2+5+14 = 38$). Ein Angreifer könnte Wörter beliebig umstellen, ohne dass die Signatur ungültig wird!</li>
+          <li><strong>Gezielter Wertausgleich:</strong> Wenn ein Angreifer einen Buchstaben um 1 erhöht (z. B. $\text{A} \to \text{B}$) und einen anderen um 1 verringert (z. B. $\text{C} \to \text{B}$), bleibt die Quersumme identisch.</li>
+        </ul>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.5rem 0; color: var(--text-main);">
+          2. Anforderungen an echte kryptographische Hashfunktionen (z. B. SHA-256)
+        </h3>
+        <p>
+          Moderne Verfahren wie <strong>SHA-256</strong> (Secure Hash Algorithm mit 256 Bit) müssen vier strenge Eigenschaften erfüllen:
+        </p>
+
+        <div class="grid-two">
+          <div class="card-subtle">
+            <h4 style="color: var(--theme-oberstufe-dark);">1. Einweg-Eigenschaft (Pre-Image Resistance)</h4>
+            <p style="font-size: 0.88rem; margin: 0;">
+              Aus dem Hashwert $h$ darf es praktisch unmöglich sein, die ursprüngliche Nachricht $M$ zurückzurechnen.
+            </p>
+          </div>
+          <div class="card-subtle">
+            <h4 style="color: var(--theme-oberstufe-dark);">2. Kollisionsresistenz</h4>
+            <p style="font-size: 0.88rem; margin: 0;">
+              Es darf praktisch unmöglich sein, zwei unterschiedliche Nachrichten $M_1 \neq M_2$ zu finden, die denselben Hashwert erzeugen ($H(M_1) = H(M_2)$).
+            </p>
+          </div>
+          <div class="card-subtle">
+            <h4 style="color: var(--theme-oberstufe-dark);">3. Lawineneffekt (Avalanche Effect)</h4>
+            <p style="font-size: 0.88rem; margin: 0;">
+              Selbst wenn nur ein winziges Bit in der Nachricht verändert wird (z. B. Punkt statt Komma), ändert sich der Hashwert komplett unvorhersehbar (ca. 50 % aller Bits kippen).
+            </p>
+          </div>
+          <div class="card-subtle">
+            <h4 style="color: var(--theme-oberstufe-dark);">4. Schnelle Vorwärtsberechnung</h4>
+            <p style="font-size: 0.88rem; margin: 0;">
+              Für jede beliebige Datenmenge (von 1 Zeichen bis zu Terabytes) kann der Hashwert in Millisekunden berechnet werden.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 2rem 0 0.5rem 0; color: var(--text-main);">
+          3. Die Achillesferse: Woher wissen wir, wem der Public Key gehört?
+        </h3>
+        <p>
+          Wenn Alice Bob ihren öffentlichen Schlüssel schickt, könnte sich Eve dazwischenschalten (<strong>Man-in-the-Middle-Angriff</strong>). Eve fängt Alices Schlüssel ab und sendet Bob stattdessen ihren eigenen Schlüssel $e_{\text{Eve}}$. Bob glaubt nun fälschlicherweise, mit Alice zu kommunizieren.
+        </p>
+
+        <div class="info-callout">
+          <strong>Die Lösung des Internets: Digitale Zertifikate & Public-Key-Infrastruktur (PKI)</strong><br>
+          Niemand glaubt einem öffentlichen Schlüssel einfach so. Stattdessen wird der Schlüssel von einer weltweit vertrauenswürdigen <strong>Zertifizierungsstelle (Certificate Authority, CA)</strong> digital signiert! Dieses digitale Zertifikat (Standard X.509) garantiert: <em>„Dieser öffentliche Schlüssel gehört nachweislich zur Website bank.de oder zu Person Alice.“</em> (Grundlage von HTTPS im Webbrowser).
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- REITER 6: KLAUSURTRAINING & SELBST-CHECK  -->
+    <!-- ========================================== -->
+    <section id="tab-training" class="tab-panel">
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">6</span>
+          Klausurtraining & Selbst-Check
+        </h2>
+
+        <p>
+          Teste dein Wissen für Klausur und Abitur mit typischen Prüfungsfragen:
+        </p>
+
+        <!-- Quiz 1 -->
+        <div class="quiz-card" id="q1">
+          <div class="quiz-question">
+            Frage 1: Womit signiert der Absender eine Nachricht bei einer digitalen Signatur mit RSA?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(1, 0, false)">Mit dem öffentlichen Schlüssel des Empfängers</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 1, false)">Mit dem privaten Schlüssel des Empfängers</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 2, true)">Mit seinem eigenen privaten Schlüssel</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 3, false)">Mit einem gemeinsamen symmetrischen Sitzungsschlüssel</div>
+          </div>
+          <div class="quiz-feedback" id="fb1"></div>
+        </div>
+
+        <!-- Quiz 2 -->
+        <div class="quiz-card" id="q2">
+          <div class="quiz-question">
+            Frage 2: Welche Sicherheitsziele werden durch eine digitale Signatur primär garantiert?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(2, 0, false)">Ausschließlich Vertraulichkeit (Geheimhaltung)</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 1, true)">Authentizität (Urheberschaft) und Integrität (Unverfälschtheit)</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 2, false)">Verfügbarkeit von Servern gegen DoS-Angriffe</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 3, false)">Komprimierung der Datenmenge zur Übertragung</div>
+          </div>
+          <div class="quiz-feedback" id="fb2"></div>
+        </div>
+
+        <!-- Quiz 3 -->
+        <div class="quiz-card" id="q3">
+          <div class="quiz-question">
+            Frage 3: Ein Angreifer ändert ein Zeichen in einer übertragenen Nachricht. Welche Auswirkung hat das auf die Prüfung beim Empfänger?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option" onclick="checkQuiz(3, 0, false)">Die Signatur S lässt sich nicht mehr mathematisch entschlüsseln.</div>
+            <div class="quiz-option" onclick="checkQuiz(3, 1, true)">Der neu berechnete Hashwert H_neu weicht vom entschlüsselten Signaturwert H' ab.</div>
+            <div class="quiz-option" onclick="checkQuiz(3, 2, false)">Der öffentliche Schlüssel des Senders wird automatisch gesperrt.</div>
+            <div class="quiz-option" onclick="checkQuiz(3, 3, false)">Keine, solange die Signatur S unverändert bleibt.</div>
+          </div>
+          <div class="quiz-feedback" id="fb3"></div>
+        </div>
+
+        <!-- Aufgabe 1 mit Musterlösung -->
+        <div class="task-card">
+          <div class="task-header">
+            <div class="task-title">Rechenaufgabe 1: Manuelle Signatur-Verifikation</div>
+            <div class="task-badge">Klausurniveau</div>
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7;">
+            Alice besitzt den öffentlichen Schlüssel $(e = 3, N = 55)$. Bob erhält von Alice die Nachricht <strong>„ABI“</strong> zusammen mit dem Signaturwert <strong>$S = 23$</strong>.<br>
+            Das Hashverfahren entspricht unserer Unterrichtsvorschrift (Quersumme der Buchstabenpositionen $\text{A}=1, \text{B}=2, \dots, \text{Z}=26$ modulo $N$).<br>
+            <strong>Prüfe rechnerisch Schritt für Schritt</strong>, ob die Signatur gültig ist.
+          </p>
+          <button class="btn-toggle-solution" onclick="toggleSolution(1)">Lösung & Rechenweg aufdecken</button>
+          <div class="solution-content" id="sol1">
+            <strong>Schritt 1: Unabhängigen Hashwert $H_{\text{neu}}$ aus der Nachricht berechnen:</strong><br>
+            $\text{A}=1, \text{B}=2, \text{I}=9$.<br>
+            Summe: $1 + 2 + 9 = 12$.<br>
+            $H_{\text{neu}} = 12 \pmod{55} = 12$.<br><br>
+            <strong>Schritt 2: Signatur mit Alices Public Key $(e = 3, N = 55)$ entschlüsseln:</strong><br>
+            $H' = S^e \pmod N = 23^3 \pmod{55}$.<br>
+            Nebenrechnung:<br>
+            $23^2 = 529 = 9 \cdot 55 + 34 \implies 23^2 \equiv 34 \equiv -21 \pmod{55}$.<br>
+            $23^3 = 23^2 \cdot 23 \equiv (-21) \cdot 23 = -483 \pmod{55}$.<br>
+            Division mit Rest: $-483 = -9 \cdot 55 + 12$.<br>
+            $\implies H' = 12$.<br><br>
+            <strong>Schritt 3: Vergleich & Schlussfolgerung:</strong><br>
+            Da $H' = 12 = H_{\text{neu}}$, ist die Signatur <strong>gültig</strong>. Die Nachricht stammt nachweislich von Alice und wurde nicht modifiziert.
+          </div>
+        </div>
+
+        <!-- Aufgabe 2 mit Musterlösung -->
+        <div class="task-card">
+          <div class="task-header">
+            <div class="task-title">Theorieaufgabe 2: Vergleich mit echter Unterschrift</div>
+            <div class="task-badge">Abiturniveau</div>
+          </div>
+          <p style="font-size: 0.92rem; line-height: 1.7;">
+            Erkläre, inwiefern eine digitale Signatur einer klassischen handschriftlichen Unterschrift auf Papier in Bezug auf Fälschungssicherheit und Dokumentenbindung sogar <strong>überlegen</strong> ist.
+          </p>
+          <button class="btn-toggle-solution" onclick="toggleSolution(2)">Lösung & Rechenweg aufdecken</button>
+          <div class="solution-content" id="sol2">
+            <strong>1. Dokumentenbindung:</strong> Eine handschriftliche Unterschrift sieht immer gleich aus. Ein Betrüger könnte sie theoretisch einscannen und unter einen völlig anderen Vertrag kopieren. Eine digitale Signatur hingegen hängt <em>mathematisch vom gesamten Inhalt des Dokuments ab</em> (über den Hashwert). Wird auch nur ein Buchstabe des Dokuments geändert, wird die Signatur sofort ungültig.<br><br>
+            <strong>2. Mathematische Unfälschbarkeit:</strong> Ohne den geheimen privaten Schlüssel $d$ kann niemand eine gültige Signatur berechnen, da das Faktorisierungsproblem von $N$ das Erraten von $d$ verhindert.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Q1</strong> • Schulportal 2026/2027 • Digitale Signaturen & Authentizität</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Tab-Umschaltung
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add('active');
+
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => {
+        return (btn.getAttribute('onclick') || '').includes(tabId);
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+
+      triggerKaTeX();
+    }
+
+    // Mathematische Hilfsfunktionen
+    function modPow(base, exp, mod) {
+      base = BigInt(base);
+      exp = BigInt(exp);
+      mod = BigInt(mod);
+      if (mod === 1n) return 0n;
+      let result = 1n;
+      base = ((base % mod) + mod) % mod;
+      while (exp > 0n) {
+        if (exp % 2n === 1n) result = (result * base) % mod;
+        base = (base * base) % mod;
+        exp = exp / 2n;
+      }
+      return result;
+    }
+
+    function parseTextToNumbers(text) {
+      let upper = text.toUpperCase();
+      let letters = [];
+      let sum = 0;
+      for (let i = 0; i < upper.length; i++) {
+        let code = upper.charCodeAt(i);
+        if (code >= 65 && code <= 90) { // A - Z
+          let val = code - 64;
+          letters.push({ char: upper[i], val: val });
+          sum += val;
+        }
+      }
+      return { letters, sum };
+    }
+
+    // Labor: Presets
+    function applyKeyPreset() {
+      let preset = document.getElementById('labPreset').value;
+      if (preset === '55_3_27') {
+        document.getElementById('labModN').value = 55;
+        document.getElementById('labExpD').value = 27;
+        document.getElementById('labExpE').value = 3;
+      } else if (preset === '77_7_43') {
+        document.getElementById('labModN').value = 77;
+        document.getElementById('labExpD').value = 43;
+        document.getElementById('labExpE').value = 7;
+      } else if (preset === '33_3_7') {
+        document.getElementById('labModN').value = 33;
+        document.getElementById('labExpD').value = 7;
+        document.getElementById('labExpE').value = 3;
+      }
+      updateSignerLabor();
+    }
+
+    let lastCalculatedPayload = null;
+
+    function updateSignerLabor() {
+      let msg = document.getElementById('labMsg').value;
+      let N = parseInt(document.getElementById('labModN').value);
+      let d = parseInt(document.getElementById('labExpD').value);
+      let e = parseInt(document.getElementById('labExpE').value);
+
+      let breakdownEl = document.getElementById('labLetterBreakdown');
+      let resultEl = document.getElementById('labSignerResult');
+
+      if (!msg.trim()) {
+        breakdownEl.innerHTML = `<span style="color:var(--text-muted); font-size:0.9rem;">Bitte eine Nachricht eingeben...</span>`;
+        resultEl.innerHTML = `<span style="color:var(--text-muted);">Keine Eingabe.</span>`;
+        lastCalculatedPayload = null;
+        return;
+      }
+
+      if (isNaN(N) || N <= 1 || isNaN(d) || d <= 0) {
+        resultEl.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Bitte gültige positive Schlüsselwerte für N und d angeben!</span>`;
+        return;
+      }
+
+      let parsed = parseTextToNumbers(msg);
+      if (parsed.letters.length === 0) {
+        breakdownEl.innerHTML = `<span style="color:#dc2626;">Bitte mindestens einen Buchstaben (A–Z) eingeben!</span>`;
+        resultEl.innerHTML = ``;
+        return;
+      }
+
+      // Visualisierung der Buchstaben-Pills
+      let pillsHtml = '';
+      parsed.letters.forEach((item, idx) => {
+        pillsHtml += `
+          <div class="letter-pill">
+            <span class="letter-char">${item.char}</span>
+            <span class="letter-val">${item.val}</span>
+          </div>
+        `;
+        if (idx < parsed.letters.length - 1) {
+          pillsHtml += `<span class="math-operator">+</span>`;
+        }
+      });
+      pillsHtml += `<span class="math-operator">=</span>`;
+      pillsHtml += `
+        <div class="letter-pill" style="border-color:var(--theme-oberstufe); background:#f5f3ff;">
+          <span class="letter-char" style="font-size:0.9rem;">Summe</span>
+          <span class="letter-val" style="color:var(--theme-oberstufe-dark); font-weight:700;">${parsed.sum}</span>
+        </div>
+      `;
+      breakdownEl.innerHTML = pillsHtml;
+
+      // Hashwert
+      let H = parsed.sum % N;
+
+      // Signatur
+      let S = Number(modPow(H, d, N));
+
+      lastCalculatedPayload = {
+        msg: msg,
+        rawSum: parsed.sum,
+        H: H,
+        S: S,
+        N: N,
+        d: d,
+        e: e
+      };
+
+      resultEl.innerHTML = `
+        <div style="font-weight:700; color:var(--text-main); margin-bottom:6px;">
+          Berechnete Signatur-Ergebnisse:
+        </div>
+        <div><strong>1. Hashwert H:</strong> ${parsed.sum} mod ${N} = <span style="font-weight:800; color:var(--theme-oberstufe-dark); font-size:1.1rem;">${H}</span></div>
+        <div style="margin-top:4px;">
+          <strong>2. Signatur S:</strong> $S = H^d \\pmod N = ${H}^{${d}} \\pmod{${N}} = $
+          <span style="font-weight:800; color:#b91c1c; font-size:1.15rem; background:#fee2e2; padding:2px 8px; border-radius:4px;">${S}</span>
+        </div>
+        <div style="margin-top:10px; font-size:0.86rem; color:var(--text-muted); border-top:1px dashed var(--border-color); padding-top:8px;">
+          Paket zur Übertragung an Bob: <strong>(Nachricht: "${msg}", Signatur S = ${S})</strong> zusammen mit Public Key <strong>(e = ${e}, N = ${N})</strong>
+        </div>
+      `;
+
+      triggerKaTeX();
+    }
+
+    function setExampleWord(w) {
+      document.getElementById('labMsg').value = w;
+      updateSignerLabor();
+    }
+
+    function transferToReceiver() {
+      if (!lastCalculatedPayload) {
+        updateSignerLabor();
+      }
+      if (!lastCalculatedPayload) return;
+
+      document.getElementById('recvMsg').value = lastCalculatedPayload.msg;
+      document.getElementById('recvSig').value = lastCalculatedPayload.S;
+      document.getElementById('recvModN').value = lastCalculatedPayload.N;
+      document.getElementById('recvExpE').value = lastCalculatedPayload.e;
+
+      updateReceiverLabor();
+
+      // Sanftes Scrollen zum Empfänger-Bereich
+      document.getElementById('recvMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function updateReceiverLabor() {
+      let msg = document.getElementById('recvMsg').value;
+      let SVal = document.getElementById('recvSig').value.trim();
+      let NVal = document.getElementById('recvModN').value.trim();
+      let eVal = document.getElementById('recvExpE').value.trim();
+      let resultEl = document.getElementById('labReceiverResult');
+
+      if (!msg.trim() || SVal === "" || NVal === "" || eVal === "") {
+        resultEl.innerHTML = `<span style="color:var(--text-muted);">Bitte alle Empfänger-Felder ausfüllen.</span>`;
+        return;
+      }
+
+      let S = parseInt(SVal);
+      let N = parseInt(NVal);
+      let e = parseInt(eVal);
+
+      if (isNaN(S) || isNaN(N) || isNaN(e) || N <= 1 || e <= 0) {
+        resultEl.innerHTML = `<span style="color:#dc2626; font-weight:700;">Fehler: Ungültige Zahleneingabe für S, N oder e!</span>`;
+        return;
+      }
+
+      // 1. Unabhängig empfangene Nachricht hashen
+      let parsed = parseTextToNumbers(msg);
+      let H_neu = parsed.letters.length > 0 ? (parsed.sum % N) : 0;
+
+      // 2. Signatur mit Public Key entschlüsseln
+      let H_strich = Number(modPow(S, e, N));
+
+      let isValid = (H_strich === H_neu);
+
+      let statusHtml = '';
+      if (isValid) {
+        statusHtml = `
+          <div class="status-card valid">
+            <div class="status-header">
+              Signatur gültig! Authentizität & Integrität bestätigt
+            </div>
+            <div>
+              • Entschlüsselte Signatur: $H' = S^e \\pmod N = ${S}^{${e}} \\pmod{${N}} = \\mathbf{${H_strich}}$<br>
+              • Neu berechneter Hashwert: $H_{\\text{neu}} = \\mathbf{${H_neu}}$ (Quersumme ${parsed.sum} mod ${N})<br>
+              • <strong>Ergebnis:</strong> $H' = H_{\\text{neu}}$ (${H_strich} = ${H_neu}).
+            </div>
+            <div style="margin-top:6px; font-weight:600;">
+              Garantiert: Die Nachricht stammt nachweislich vom Besitzer des privaten Schlüssels d und wurde auf dem Weg nicht verändert.
+            </div>
+          </div>
+        `;
+      } else {
+        statusHtml = `
+          <div class="status-card invalid">
+            <div class="status-header">
+              Alarm: Signatur UNGÜLTIG! Manipulation erkannt
+            </div>
+            <div>
+              • Entschlüsselte Signatur: $H' = S^e \\pmod N = ${S}^{${e}} \\pmod{${N}} = \\mathbf{${H_strich}}$<br>
+              • Neu berechneter Hashwert: $H_{\\text{neu}} = \\mathbf{${H_neu}}$ (Quersumme ${parsed.sum} mod ${N})<br>
+              • <strong>Abweichung:</strong> $H' \\neq H_{\\text{neu}}$ (${H_strich} ≠ ${H_neu})!
+            </div>
+            <div style="margin-top:6px; font-weight:600;">
+              Warnung: Entweder wurde der Text unterwegs manipuliert, die Signatur ist gefälscht oder der Absender ist nicht der Inhaber des Schlüssels!
+            </div>
+          </div>
+        `;
+      }
+
+      resultEl.innerHTML = statusHtml;
+      triggerKaTeX();
+    }
+
+    // Angriffs-Simulation
+    function tamperMessage() {
+      let current = document.getElementById('recvMsg').value;
+      if (!current) current = "HALLO";
+      let chars = current.split('');
+      // Ändere den letzten Buchstaben
+      let lastChar = chars[chars.length - 1].toUpperCase();
+      let newChar = (lastChar === 'A') ? 'B' : 'A';
+      chars[chars.length - 1] = newChar;
+      document.getElementById('recvMsg').value = chars.join('');
+      updateReceiverLabor();
+    }
+
+    function tamperSignature() {
+      let current = parseInt(document.getElementById('recvSig').value) || 0;
+      document.getElementById('recvSig').value = current + 1;
+      updateReceiverLabor();
+    }
+
+    function restoreOriginalPacket() {
+      transferToReceiver();
+    }
+
+    // Klausurtraining
+    function toggleSolution(num) {
+      let box = document.getElementById('sol' + num);
+      let btn = event.target;
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+        btn.textContent = 'Lösung & Rechenweg aufdecken';
+      } else {
+        box.style.display = 'block';
+        btn.textContent = 'Lösung verbergen';
+        triggerKaTeX();
+      }
+    }
+
+    function checkQuiz(qNum, optIdx, isCorrect) {
+      let card = document.getElementById('q' + qNum);
+      let options = card.querySelectorAll('.quiz-option');
+      let fb = document.getElementById('fb' + qNum);
+      fb.style.display = 'block';
+
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+      });
+
+      if (isCorrect) {
+        options[optIdx].classList.add('correct');
+        fb.innerHTML = `<span style="color:#059669;">Richtig! Vollkommen korrekt erkannt.</span>`;
+      } else {
+        options[optIdx].classList.add('wrong');
+        fb.innerHTML = `<span style="color:#dc2626;">Leider nicht richtig. Schau dir die Gegenüberstellung in Reiter 1 und 2 nochmals an.</span>`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      applyKeyPreset();
+      updateReceiverLabor();
+    });
+  </script>
+
+</body>
+</html>
