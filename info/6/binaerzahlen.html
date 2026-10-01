@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Binärzahlen & Farbtiefe (0 bis 255) | Informatik Klasse 6</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #ea580c;
+      --primary-dark: #c2410c;
+      --primary-light: #fff7ed;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+    .portal-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      border: 1px solid #fed7aa;
+      transition: all 0.2s;
+    }
+
+    .nav-back-link:hover {
+      background: #ffedd5;
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .module-header {
+      padding: 1.75rem 0 2rem 0;
+      text-align: center;
+    }
+
+    .module-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0.5rem 0;
+      letter-spacing: -0.02em;
+    }
+
+    .module-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+      margin: 0 auto 1.25rem auto;
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-orange {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+
+    .badge-blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .badge-green {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-purple {
+      background: #faf5ff;
+      color: #7e22ce;
+      border: 1px solid #e9d5ff;
+    }
+
+    h2.card-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    /* 8-Bit Schalter-Labor */
+    .byte-switch-container {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .bit-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 680px) {
+      .bit-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+    }
+
+    .bit-card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bit-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .bit-card.on {
+      border-color: #ea580c;
+      background: #fff7ed;
+      box-shadow: 0 4px 10px rgba(234, 88, 12, 0.2);
+    }
+
+    .bit-potenz {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .bit-place-value {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .bit-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.15rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.15s ease;
+    }
+
+    .bit-card.on .bit-toggle {
+      background: #ea580c;
+      color: #ffffff;
+    }
+
+    .byte-display-box {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .byte-sum-formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+
+    .byte-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .byte-dec-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .byte-bin-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #0f172a;
+    }
+
+    /* Live Farb-Visualisierung */
+    .byte-color-bar {
+      height: 18px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      margin-top: 8px;
+      transition: background-color 0.1s ease;
+    }
+
+    /* Tabellen */
+    table.stellenwert-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    table.stellenwert-table th, table.stellenwert-table td {
+      border: 1px solid var(--border);
+      padding: 8px 6px;
+    }
+
+    table.stellenwert-table th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    table.stellenwert-table tr.highlight {
+      background: #fff7ed;
+      font-weight: 700;
+    }
+
+    /* Divisions-Rechner */
+    .div-calc-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .div-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .div-input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 120px;
+      font-family: inherit;
+    }
+
+    .div-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-calc {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-calc:hover {
+      background: var(--primary-dark);
+    }
+
+    .div-steps-table {
+      width: 100%;
+      max-width: 480px;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+    }
+
+    .div-steps-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .div-steps-table td.rest {
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: #fff7ed;
+      text-align: center;
+      width: 70px;
+    }
+
+    .div-steps-table td.arrow-cell {
+      width: 30px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Tafelbild Bereich */
+    .tafelbild-container {
+      background: #ffffff;
+      border: 3px solid #0f172a;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .tafelbild-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tafelbild-title-box h3 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .tafelbild-title-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .btn-tafelbild {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1.5px solid #0f172a;
+      background: #0f172a;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-tafelbild:hover {
+      background: #334155;
+      border-color: #334155;
+    }
+
+    .tafel-section {
+      margin-bottom: 1.75rem;
+    }
+
+    .tafel-section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tafel-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    /* Q&A / Accordion */
+    .qa-item {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .qa-item:hover {
+      border-color: #cbd5e1;
+    }
+
+    .qa-question {
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.98rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: #0f172a;
+    }
+
+    .qa-btn {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .qa-answer {
+      display: none;
+      padding: 1rem 1.25rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .qa-item.open .qa-answer {
+      display: block;
+    }
+
+    .qa-item.open .qa-btn {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .info-callout {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Navigationsleiste -->
+    <div class="portal-nav">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Übersicht Klasse 6
+      </a>
+      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Informatik Klasse 6 • Thema 2</span>
+    </div>
+
+    <!-- Modul-Header -->
+    <header class="module-header">
+      <div class="section-badge badge-orange">Unterrichtseinheit 2</div>
+      <h1>Wiederholung: Binärsystem &amp; Farbtiefe (0 bis 255)</h1>
+      <p class="module-subtitle">
+        Von Bits und Schaltern zum Computerbild: Stellenwerttafel, Umwandlungsmethoden (Zerlegung &amp; Divisionsalgorithmus) und das Geheimnis der 16,8 Millionen Farben.
+      </p>
+    </header>
+
+    <!-- Phase 1: Die Sprache des Computers -->
+    <section class="content-card">
+      <div class="section-badge badge-blue">Grundwissen</div>
+      <h2 class="card-title">
+        <span class="step-marker">1</span>
+        Was sind Binärzahlen? (Computer- &amp; Dualzahlen)
+      </h2>
+      <p>
+        Im Alltag rechnen wir Menschen mit dem <strong>Dezimalsystem</strong> (Zehnersystem). Wir haben zehn Finger und nutzen zehn Ziffern ($0, 1, 2, 3, 4, 5, 6, 7, 8, 9$).
+      </p>
+      <p style="margin-top: 0.75rem;">
+        Ein Computer besitzt jedoch keine Finger – er besteht aus Milliarden winziger elektronischer Schalter (Transistoren). Ein Schalter kennt nur genau zwei Zustände:
+      </p>
+      <ul style="margin-left: 1.35rem; font-size: 0.95rem; line-height: 1.75; margin-top: 6px;">
+        <li><strong>0:</strong> Schalter aus / kein Strom fließt</li>
+        <li><strong>1:</strong> Schalter an / Strom fließt</li>
+      </ul>
+      <div class="info-callout">
+        <strong>Definition:</strong> Zahlen, die ausschließlich aus den Ziffern <strong>0</strong> und <strong>1</strong> bestehen, heißen <strong>Binärzahlen</strong> (von lateinisch <em>bini</em> = doppelt, paarweise) oder <strong>Dualzahlen</strong>. Die Basis dieses Zahlensystems ist die <strong>2</strong>.
+      </div>
+    </section>
+
+    <!-- Phase 2: Die Stellenwerttafel & Interaktiver 8-Bit-Schalter -->
+    <section class="content-card">
+      <div class="section-badge badge-orange">Interaktives Labor</div>
+      <h2 class="card-title">
+        <span class="step-marker">2</span>
+        Die Stellenwerttafel &amp; der 8-Bit-Schalter
+      </h2>
+      <p>
+        Genau wie im Zehnersystem (Einer, Zehner, Hunderter, Tausender) hat jede Stelle im Binärsystem einen festen Wert. Im Zweiersystem <strong>verdoppelt</strong> sich der Wert von rechts nach links mit jeder Stelle:
+      </p>
+
+      <!-- Stellenwerttafel aus dem Unterricht -->
+      <table class="stellenwert-table">
+        <thead>
+          <tr>
+            <th>Zweierpotenz</th>
+            <th>$2^7$</th>
+            <th>$2^6$</th>
+            <th>$2^5$</th>
+            <th>$2^4$</th>
+            <th>$2^3$</th>
+            <th>$2^2$</th>
+            <th>$2^1$</th>
+            <th>$2^0$</th>
+            <th style="background:#e2e8f0;">Rechnung &amp; Dezimalwert</th>
+          </tr>
+          <tr>
+            <th>Stellenwert</th>
+            <th>128</th>
+            <th>64</th>
+            <th>32</th>
+            <th>16</th>
+            <th>8</th>
+            <th>4</th>
+            <th>2</th>
+            <th>1</th>
+            <th style="background:#e2e8f0;">Ergebnis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Beispiel 1</strong></td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>$16 + 8 + 2 + 1 =$ <strong>27</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Beispiel 2</strong></td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>$32 + 4 + 1 =$ <strong>37</strong></td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Alle 8 Bits an</strong></td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>$128+64+32+16+8+4+2+1 =$ <strong>255</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Interaktiver 8-Bit Schalter -->
+      <div class="byte-switch-container">
+        <div style="font-weight: 700; margin-bottom: 0.75rem; color: #0f172a; font-size: 0.95rem;">
+          Schalte die 8 Bits an oder aus und beobachte Dezimalwert &amp; Farbhelligkeit:
+        </div>
+
+        <div class="bit-grid" id="bitGrid">
+          <!-- Wird per JavaScript mit 8 Schaltern befüllt -->
+        </div>
+
+        <div class="byte-display-box">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Rechnung der eingeschalteten Stellenwerte:</div>
+          <div class="byte-sum-formula" id="byteSumFormula">0 = 0</div>
+          
+          <div class="byte-result-row">
+            <div>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Dezimalzahl (Intensität):</span><br>
+              <span class="byte-dec-val" id="byteDecVal">0</span>
+            </div>
+            <div>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">Binärzahl (8 Bit / 1 Byte):</span><br>
+              <span class="byte-bin-val" id="byteBinVal">00000000</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">
+              Live-Vorschau: Helligkeit eines Farbkanals (von 0 = Schwarz bis 255 = Volle Kraft):
+            </div>
+            <div class="byte-color-bar" id="byteColorBar" style="background-color: rgb(0,0,0);"></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-tafelbild" style="background:#ea580c; border-color:#ea580c;" onclick="setBytePattern([1,1,1,1,1,1,1,1])">Alle an (255)</button>
+          <button class="btn-tafelbild" style="background:#64748b; border-color:#64748b;" onclick="setBytePattern([0,0,0,0,0,0,0,0])">Alle aus (0)</button>
+          <button class="btn-tafelbild" style="background:#0f172a; border-color:#0f172a;" onclick="setBytePattern([0,0,0,1,1,0,1,1])">Beispiel 27</button>
+          <button class="btn-tafelbild" style="background:#0f172a; border-color:#0f172a;" onclick="setBytePattern([0,0,1,0,0,1,0,1])">Beispiel 37</button>
+          <button class="btn-tafelbild" style="background:#0f172a; border-color:#0f172a;" onclick="setBytePattern([0,0,1,0,1,0,0,0])">Beispiel 40</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 3: Umwandlungsmethoden -->
+    <section class="content-card">
+      <div class="section-badge badge-purple">Rechenverfahren</div>
+      <h2 class="card-title">
+        <span class="step-marker">3</span>
+        Zwei Methoden zur Umwandlung: Dezimal in Binär
+      </h2>
+      <p>
+        Wie verwandelt man eine normale Dezimalzahl (z. B. $40$) in eine Binärzahl? Im Unterricht haben wir zwei elegante Wege kennengelernt:
+      </p>
+
+      <!-- Methode 1: Stellenwertsystem (Zerlegung) -->
+      <div style="background:#ffffff; border:1.5px solid var(--border); border-left:4.5px solid #2563eb; border-radius:var(--radius-sm); padding:1.25rem; margin:1.25rem 0;">
+        <h3 style="font-size:1.1rem; font-weight:800; color:#1d4ed8; margin-bottom:0.5rem;">
+          Methode 1: Umwandlung mit Hilfe des Stellenwertsystems (Zerlegung)
+        </h3>
+        <p style="font-size:0.92rem; line-height:1.7;">
+          Wir suchen die größte Zweierpotenz, die in die Zahl passt, ziehen sie ab und wiederholen den Schritt:
+        </p>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-top:8px; font-family:'JetBrains Mono', monospace; font-size:0.95rem;">
+          40 = 32 + 8<br>
+          40 = <strong>1</strong> · 32 + <strong>0</strong> · 16 + <strong>1</strong> · 8 + <strong>0</strong> · 4 + <strong>0</strong> · 2 + <strong>0</strong> · 1<br>
+          $\implies$ Binärzahl: <strong style="color:#ea580c; font-size:1.1rem;">1 0 1 0 0 0</strong>
+        </div>
+      </div>
+
+      <!-- Methode 2: Divisionsalgorithmus -->
+      <div style="background:#ffffff; border:1.5px solid var(--border); border-left:4.5px solid #ea580c; border-radius:var(--radius-sm); padding:1.25rem; margin:1.25rem 0;">
+        <h3 style="font-size:1.1rem; font-weight:800; color:#c2410c; margin-bottom:0.5rem;">
+          Methode 2: Der Divisionsalgorithmus (Division durch 2 mit Rest)
+        </h3>
+        <p style="font-size:0.92rem; line-height:1.7;">
+          Wir teilen die Zahl wiederholt durch 2 mit Rest. Die Reste (0 oder 1) werden <strong>von unten nach oben</strong> als Binärzahl abgelesen:
+        </p>
+        
+        <table class="div-steps-table" style="margin-top:10px;">
+          <tbody>
+            <tr>
+              <td>40 : 2 = 20</td>
+              <td class="rest">R 0</td>
+              <td class="arrow-cell" style="vertical-align:bottom;">↑</td>
+            </tr>
+            <tr>
+              <td>20 : 2 = 10</td>
+              <td class="rest">R 0</td>
+              <td class="arrow-cell">│</td>
+            </tr>
+            <tr>
+              <td>10 : 2 = 5</td>
+              <td class="rest">R 0</td>
+              <td class="arrow-cell">│</td>
+            </tr>
+            <tr>
+              <td>5 : 2 = 2</td>
+              <td class="rest">R 1</td>
+              <td class="arrow-cell">│</td>
+            </tr>
+            <tr>
+              <td>2 : 2 = 1</td>
+              <td class="rest">R 0</td>
+              <td class="arrow-cell">│</td>
+            </tr>
+            <tr>
+              <td>1 : 2 = 0</td>
+              <td class="rest">R 1</td>
+              <td class="arrow-cell" style="vertical-align:top;">(Start)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.92rem; font-weight:700; color:#0f172a; margin-top:8px;">
+          Ergebnis: $40_{\text{dezimal}} = 101000_{\text{binär}}$
+        </p>
+      </div>
+
+      <!-- Interaktiver Divisions-Rechner zum Üben -->
+      <div class="div-calc-box">
+        <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem; color:#0f172a;">
+          Interaktiver Divisions-Rechner: Probiere eigene Zahlen aus!
+        </h4>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          Gib eine Dezimalzahl (z. B. 255, 40 oder dein Alter) ein, um die schrittweise Division durch 2 anzuzeigen:
+        </p>
+        <div class="div-input-group">
+          <input type="number" id="inputDec" class="div-input" min="0" max="255" value="255">
+          <button class="btn-calc" onclick="calculateDivisionSteps()">Schrittweise berechnen</button>
+        </div>
+        <div id="divisionOutput"></div>
+      </div>
+    </section>
+
+    <!-- Phase 4: Die Verbindung zu den Farben -->
+    <section class="content-card">
+      <div class="section-badge badge-green">Das Aha-Erlebnis</div>
+      <h2 class="card-title">
+        <span class="step-marker">4</span>
+        Warum ist die höchste Intensität für einen Farbkanal 255?
+      </h2>
+      <p>
+        Im Farbmischer haben wir gesehen, dass jeder Farbkanal (Rot, Grün, Blau) einen Schieberegler von <strong>0 bis 255</strong> besitzt. Jetzt verstehen wir genau, warum:
+      </p>
+
+      <div class="info-callout" style="background:#ecfdf5; border-color:#10b981;">
+        <h4 style="color:#065f46; font-size:1.05rem; font-weight:800; margin-bottom:6px;">Die drei goldenen Gründe:</h4>
+        <ol style="margin-left:1.35rem; color:#065f46; font-size:0.92rem; line-height:1.75;">
+          <li><strong>8 Bits = 1 Byte:</strong> Computer speichern Daten in Einheiten von 8 Bits (genannt <strong>Byte</strong>). 255 ist die allergrößte Zahl, die man mit 8 Bits darstellen kann ($11111111_2$).</li>
+          <li><strong>256 Abstufungen:</strong> Zählt man die $0$ mit, ergeben sich genau $256$ mögliche Helligkeitsstufen (von $0 = \text{aus}$ bis $255 = \text{volle Leuchtkraft}$).</li>
+          <li><strong>Grenze des menschlichen Auges:</strong> Unser Auge ist biologisch gar nicht in der Lage, noch feinere Unterschiede wahrzunehmen. Selbst wenn Entwickler 9 oder 10 Bits verwenden würden, könnten wir den Unterschied kaum sehen!</li>
+        </ol>
+      </div>
+
+      <!-- Das Zahlentripel -->
+      <h3 style="font-size:1.15rem; font-weight:800; margin:1.75rem 0 0.5rem 0; color:#0f172a;">
+        Das RGB-Zahlentripel $(R, G, B)$
+      </h3>
+      <p>
+        Jede Bildschirmfarbe setzt sich aus drei Werten zusammen: <code>(Rot, Grün, Blau)</code>.
+      </p>
+
+      <table class="stellenwert-table" style="margin-top:1rem;">
+        <thead>
+          <tr>
+            <th>Farbe</th>
+            <th>Zahlentripel $(R, G, B)$</th>
+            <th>Binär-Schreibweise (3 Bytes = 24 Bit)</th>
+            <th style="width:70px;">Farbe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Rot</strong></td>
+            <td><code>(255, 0, 0)</code></td>
+            <td><code>(11111111, 00000000, 00000000)</code></td>
+            <td style="background:#ff0000;"></td>
+          </tr>
+          <tr>
+            <td><strong>Magenta</strong></td>
+            <td><code>(255, 0, 255)</code></td>
+            <td><code>(11111111, 00000000, 11111111)</code></td>
+            <td style="background:#ff00ff;"></td>
+          </tr>
+          <tr>
+            <td><strong>Schwarz</strong></td>
+            <td><code>(0, 0, 0)</code></td>
+            <td><code>(00000000, 00000000, 00000000)</code></td>
+            <td style="background:#000000;"></td>
+          </tr>
+          <tr>
+            <td><strong>Weiß</strong></td>
+            <td><code>(255, 255, 255)</code></td>
+            <td><code>(11111111, 11111111, 11111111)</code></td>
+            <td style="background:#ffffff; border:1px solid #cbd5e1;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Phase 5: Auflösung der Hausaufgabe (Wie viele Farben gibt es?) -->
+    <section class="content-card">
+      <div class="section-badge badge-orange">Hausaufgabe &amp; Rekord</div>
+      <h2 class="card-title">
+        <span class="step-marker">5</span>
+        Wie viele verschiedene Farben gibt es im RGB-Modell insgesamt?
+      </h2>
+      <p>
+        Das war die große Frage aus der letzten Stunde: Wenn jeder der drei Farbkanäle genau 256 Stufen hat – wie viele Farben lassen sich daraus insgesamt kombinieren?
+      </p>
+
+      <div style="background:#fff7ed; border:2px solid #fed7aa; border-radius:var(--radius-md); padding:1.5rem; margin:1.25rem 0; text-align:center;">
+        <div style="font-size:0.9rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Die Kombinations-Rechnung:</div>
+        <div style="font-size:1.6rem; font-weight:800; color:#c2410c; margin:8px 0;">
+          $$256 \times 256 \times 256 = \mathbf{16.777.216} \text{ Farben}$$
+        </div>
+        <div style="font-size:0.95rem; color:#0f172a; margin-top:4px;">
+          Das sind knapp <strong>16,8 Millionen Farben</strong>!
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">
+          In Zweierpotenzen: $2^8 \times 2^8 \times 2^8 = 2^{24} = 16.777.216$ (man nennt dies <strong>24-Bit True Color</strong>).
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 6: Das fertige Tafelbild (Heftaufschrieb) -->
+    <section class="tafelbild-container" id="tafelbild-card">
+      <div class="tafelbild-header">
+        <div class="tafelbild-title-box">
+          <div class="section-badge badge-orange" style="margin-bottom:4px;">Heftaufschrieb • Merkheftsicherung</div>
+          <h3>Wiederholung – Binärsystem &amp; RGB-Farbtiefe</h3>
+          <p>Unterrichtsfach Informatik • Klasse 6 • Schuljahr 2026/27</p>
+        </div>
+        <div class="tafelbild-actions">
+          <button class="btn-tafelbild" onclick="window.print()">
+            Drucken / PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Tafel-Inhalt 1 -->
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">1</span>
+          Das Binärsystem (Dualzahlen)
+        </div>
+        <ul style="padding-left: 52px; font-size: 0.95rem; line-height: 1.75;">
+          <li>Binärzahlen heißen auch <strong>Computerzahlen</strong> bzw. <strong>Dualzahlen</strong>.</li>
+          <li>Sie bestehen ausschließlich aus Nullen und Einsen (2 Ziffern, d. h. die Basis ist 2).</li>
+          <li>Stellenwerte von rechts nach links: $1, 2, 4, 8, 16, 32, 64, 128 \dots$</li>
+        </ul>
+      </div>
+
+      <!-- Tafel-Inhalt 2 -->
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">2</span>
+          Umwandlung von Dezimalzahlen in Binärzahlen
+        </div>
+        <div style="padding-left: 32px; font-size: 0.95rem;">
+          <p><strong>A) Mit dem Stellenwertsystem (Zerlegung):</strong></p>
+          <div style="background:#f8fafc; padding:8px 12px; border-radius:6px; margin:4px 0 10px 0; font-family:'JetBrains Mono', monospace;">
+            40 = 32 + 8 = 1·32 + 0·16 + 1·8 + 0·4 + 0·2 + 0·1 $\implies$ <strong>101000</strong>
+          </div>
+          <p><strong>B) Mit dem Divisionsalgorithmus (Division durch 2 mit Rest):</strong></p>
+          <div style="background:#f8fafc; padding:8px 12px; border-radius:6px; margin:4px 0 10px 0; font-family:'JetBrains Mono', monospace;">
+            40 : 2 = 20 R 0 ↑<br>
+            20 : 2 = 10 R 0 │<br>
+            10 : 2 = 5  R 0 │<br>
+            5  : 2 = 2  R 1 │<br>
+            2  : 2 = 1  R 0 │<br>
+            1  : 2 = 0  R 1 │ (von unten nach oben: 40 = 101000)
+          </div>
+        </div>
+      </div>
+
+      <!-- Tafel-Inhalt 3 -->
+      <div class="tafel-section">
+        <div class="tafel-section-title">
+          <span class="tafel-num">3</span>
+          Warum ist die höchste Intensität für einen Farbkanal 255?
+        </div>
+        <ul style="padding-left: 52px; font-size: 0.95rem; line-height: 1.75;">
+          <li>255 ist die größte Zahl, die man mit <strong>8 Bits (1 Byte)</strong> darstellen kann ($11111111_2$).</li>
+          <li>Bei 8 Bits haben wir genau <strong>256 Abstufungen</strong> einer Farbe (0 bis 255).</li>
+          <li>Unser menschliches Auge könnte kaum noch Unterschiede erkennen, wenn wir 9 Bits oder mehr nähmen.</li>
+        </ul>
+      </div>
+
+      <!-- Tafel-Inhalt 4 -->
+      <div class="tafel-section" style="margin-bottom:0;">
+        <div class="tafel-section-title">
+          <span class="tafel-num">4</span>
+          Gesamtzahl aller Farben im RGB-Modell
+        </div>
+        <p style="padding-left: 32px; font-size: 0.95rem;">
+          $256 \times 256 \times 256 = \mathbf{16.777.216}$ verschiedene Farben (ca. 16,8 Millionen Farben / 24-Bit True Color).
+        </p>
+      </div>
+    </section>
+
+    <!-- Phase 7: Verständnis-Check für Schüler -->
+    <section class="content-card">
+      <div class="section-badge badge-green">Selbst-Check</div>
+      <h2 class="card-title">
+        <span class="step-marker">6</span>
+        Teste dein Wissen (Aufdecken &amp; Prüfen)
+      </h2>
+      <p style="margin-bottom: 1.25rem;">
+        Tippe auf eine Frage, um die Erklärung und Lösung anzuzeigen:
+      </p>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 1: Wie lautet die Binärzahl für die Dezimalzahl 255?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> $11111111_2$ (acht Einsen)! Da $128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = 255$ ist, sind alle 8 Schalter eines Bytes eingeschaltet.
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 2: Welches Zahlentripel beschreibt reines Magenta?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> <code>(255, 0, 255)</code>! Magenta entsteht durch die Mischung von vollem roten Licht und vollem blauen Licht. Grün ist ausgeschaltet ($0$).
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-question">
+          <span>Frage 3: In welcher Reihenfolge liest man das Ergebnis beim Divisionsalgorithmus ab?</span>
+          <span class="qa-btn">Antwort aufdecken</span>
+        </div>
+        <div class="qa-answer">
+          <strong>Erklärung:</strong> <strong>Von unten nach oben</strong>! Der allerletzte Rest, der bei der Rechnung $1 : 2 = 0 \text{ R } 1$ entsteht, ist die vorderste Ziffer (höchstwertiges Bit) der Binärzahl.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Klasse 6</strong> • Modul 2: Wiederholung Binärsystem &amp; Farbtiefe (0 bis 255)</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // 8-Bit Schalter Logik
+    const bitValues = [128, 64, 32, 16, 8, 4, 2, 1];
+    const bitPowers = ["2⁷", "2⁶", "2⁵", "2⁴", "2³", "2²", "2¹", "2⁰"];
+    let currentBits = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    function initBitGrid() {
+      const grid = document.getElementById('bitGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const card = document.createElement('div');
+        card.className = 'bit-card' + (currentBits[i] ? ' on' : '');
+        card.onclick = () => toggleBit(i);
+        card.innerHTML = `
+          <span class="bit-potenz">${bitPowers[i]}</span>
+          <span class="bit-place-value">${bitValues[i]}</span>
+          <div class="bit-toggle">${currentBits[i]}</div>
+        `;
+        grid.appendChild(card);
+      }
+      updateByteCalculations();
+    }
+
+    function toggleBit(index) {
+      currentBits[index] = currentBits[index] === 1 ? 0 : 1;
+      initBitGrid();
+    }
+
+    function setBytePattern(pattern) {
+      currentBits = [...pattern];
+      initBitGrid();
+    }
+
+    function updateByteCalculations() {
+      let sum = 0;
+      let activeTerms = [];
+      let binStr = "";
+
+      for (let i = 0; i < 8; i++) {
+        binStr += currentBits[i];
+        if (currentBits[i] === 1) {
+          sum += bitValues[i];
+          activeTerms.push(bitValues[i]);
+        }
+      }
+
+      document.getElementById('byteDecVal').textContent = sum;
+      document.getElementById('byteBinVal').textContent = binStr;
+
+      const formulaEl = document.getElementById('byteSumFormula');
+      if (activeTerms.length === 0) {
+        formulaEl.textContent = "Kein Bit aktiv = 0";
+      } else {
+        formulaEl.textContent = activeTerms.join(" + ") + " = " + sum;
+      }
+
+      // Farbe live aktualisieren (Graustufe / Helligkeit)
+      const colorBar = document.getElementById('byteColorBar');
+      colorBar.style.backgroundColor = `rgb(${sum}, ${sum}, ${sum})`;
+    }
+
+    // Interaktiver Divisions-Algorithmus
+    function calculateDivisionSteps() {
+      const valInput = document.getElementById('inputDec');
+      let n = parseInt(valInput.value);
+      const out = document.getElementById('divisionOutput');
+
+      if (isNaN(n) || n < 0) {
+        out.innerHTML = `<span style="color:#dc2626; font-weight:700;">Bitte eine gültige positive Zahl eingeben!</span>`;
+        return;
+      }
+
+      if (n === 0) {
+        out.innerHTML = `
+          <table class="div-steps-table">
+            <tr>
+              <td>0 : 2 = 0</td>
+              <td class="rest">R 0</td>
+              <td class="arrow-cell">↑</td>
+            </tr>
+          </table>
+          <p style="font-weight:700; color:#0f172a; margin-top:8px;">Ergebnis: $0_{\\text{dezimal}} = 0_{\\text{binär}}$</p>
+        `;
+        triggerKaTeX();
+        return;
+      }
+
+      let current = n;
+      let steps = [];
+      let rests = [];
+
+      while (current > 0) {
+        let quotient = Math.floor(current / 2);
+        let rest = current % 2;
+        steps.push({ current, quotient, rest });
+        rests.push(rest);
+        current = quotient;
+      }
+
+      let binResult = rests.slice().reverse().join('');
+
+      let html = '<table class="div-steps-table"><tbody>';
+      for (let i = 0; i < steps.length; i++) {
+        let arrow = "│";
+        if (i === 0) arrow = "↑ (Ende)";
+        if (i === steps.length - 1) arrow = "│ (Start)";
+
+        html += `
+          <tr>
+            <td>${steps[i].current} : 2 = ${steps[i].quotient}</td>
+            <td class="rest">R ${steps[i].rest}</td>
+            <td class="arrow-cell" style="font-size:0.85rem;">${arrow}</td>
+          </tr>
+        `;
+      }
+      html += '</tbody></table>';
+
+      html += `
+        <div style="margin-top:10px; padding:10px; background:#ffffff; border-radius:8px; border:1.5px solid #fed7aa;">
+          <strong>Von unten nach oben abgelesen:</strong><br>
+          <span style="font-size:1.15rem; font-weight:800; color:#c2410c;">
+            ${n}<sub>10</sub> = ${binResult}<sub>2</sub>
+          </span>
+          ${steps.length === 8 ? '<span style="color:#059669; font-weight:700; margin-left:8px;">(Genau 8 Bits = 1 Byte)</span>' : ''}
+        </div>
+      `;
+
+      out.innerHTML = html;
+      triggerKaTeX();
+    }
+
+    // Accordion Toggle
+    function toggleQA(element) {
+      element.classList.toggle('open');
+      const btn = element.querySelector('.qa-btn');
+      if (element.classList.contains('open')) {
+        btn.textContent = 'Antwort verbergen';
+      } else {
+        btn.textContent = 'Antwort aufdecken';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initBitGrid();
+      calculateDivisionSteps();
+    });
+  </script>
+
+</body>
+</html>
