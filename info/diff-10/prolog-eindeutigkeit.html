@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Prolog Vertiefung: Doppelte Antworten &amp; Eindeutigkeit | Informatik Diff-10</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #1e293b;
+      --primary-light: #eff6ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --radius-sm: 5px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 1rem 4rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Top Nav */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0 0.5rem 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    .btn-swish-ext {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #ffffff;
+      background: var(--primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-swish-ext:hover {
+      background: #172554;
+      transform: translateY(-1px);
+    }
+
+    /* Header */
+    .portal-header {
+      padding: 1.5rem 0 1.25rem 0;
+      text-align: left;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .badge-diff {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 800px;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+    }
+
+    .step-marker {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Code Pills & Blocks */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .var-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .code-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 0.85rem 0;
+    }
+
+    .code-box .comment { color: #94a3b8; font-style: italic; }
+    .code-box .keyword { color: #38bdf8; font-weight: 700; }
+    .code-box .atom { color: #86efac; }
+    .code-box .variable { color: #fde047; font-weight: 700; }
+    .code-box .operator { color: #f472b6; }
+
+    /* Comparison Table & Panels */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+    }
+
+    .comp-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      background: #ffffff;
+    }
+
+    .comp-panel.bad {
+      border-color: #fca5a5;
+      background: #fffafa;
+    }
+
+    .comp-panel.good {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .comp-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .comp-panel.bad .comp-title { color: #b91c1c; }
+    .comp-panel.good .comp-title { color: #15803d; }
+
+    /* Merke Box */
+    .merke-box {
+      border: 2px solid #dc2626;
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      display: inline-block;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .merke-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.4rem;
+    }
+
+    .merke-content {
+      font-size: 0.95rem;
+      color: #111827;
+      line-height: 1.55;
+    }
+
+    /* Proof Tree Interactive Explorer */
+    .explorer-container {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .explorer-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .explorer-tab-btn {
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .explorer-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+
+    .proof-tree-visual {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      min-height: 200px;
+    }
+
+    .tree-node {
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 4px 0;
+    }
+
+    .node-query {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .node-branch {
+      background: #334155;
+      color: #f1f5f9;
+    }
+
+    .node-match {
+      background: #065f46;
+      color: #a7f3d0;
+      font-weight: 700;
+      border: 1px solid #059669;
+    }
+
+    .proof-path-card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .proof-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .badge-path1 { background: #0284c7; color: #ffffff; }
+    .badge-path2 { background: #7c3aed; color: #ffffff; }
+
+    /* Interactive Check / Aufdeckkarten */
+    .quiz-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      background: #ffffff;
+    }
+
+    .quiz-num {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .quiz-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      display: inline;
+    }
+
+    .quiz-body {
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+      color: #334155;
+    }
+
+    .btn-reveal {
+      margin-top: 0.75rem;
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-reveal:hover {
+      background: #dbeafe;
+    }
+
+    .solution-box {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .solution-box.visible {
+      display: block;
+    }
+
+    /* Summary Table */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    .summary-table th, .summary-table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    .summary-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .summary-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Navigation -->
+    <div class="nav-bar">
+      <a href="index.html" class="nav-back-link">
+        ← Zurück zur Diff-10 Übersicht
+      </a>
+      <a href="https://swish.swi-prolog.org/" target="_blank" rel="noopener noreferrer" class="btn-swish-ext">
+        SWISH Editor öffnen ↗
+      </a>
+    </div>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-diff">Informatik Differenzierung • Klasse 10</div>
+      <h1>Prolog: Doppelte Antworten &amp; Eindeutigkeit</h1>
+      <p class="subtitle">
+        Warum Prolog Ergebnisse mehrfach meldet, was Beweiswege und Backtracking bedeuten und wie wir mit dem Prädikat <code>distinct/1</code> exakt eindeutige Ausgaben erzielen.
+      </p>
+    </header>
+
+    <!-- SECTION 1: DIE BEOBACHTUNG -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="step-marker">1</div>
+        <h2 class="section-title">Die Beobachtung: Doppelte Treffer bei Abfragen</h2>
+      </div>
+
+      <p>
+        Beim Testen des Olymp-Stammbaums in der letzten Stunde ist bei vielen Abfragen ein Phänomen aufgefallen: Auf der Suche nach Verwandten hat Prolog denselben Namen mehrfach hintereinander ausgegeben.
+      </p>
+
+      <div class="code-box">
+<span class="comment">?- onkel(Wer, ares).</span>
+Wer = poseidon ;
+Wer = hades ;
+Wer = poseidon ;
+Wer = hades.
+      </div>
+
+      <p style="margin-top: 0.75rem;">
+        Ebenso bei der Suche nach dem Großvater von Ares:
+      </p>
+
+      <div class="code-box">
+<span class="comment">?- grossvater(Wer, ares).</span>
+Wer = kronos ;
+Wer = kronos.
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comp-panel bad">
+          <div class="comp-title">Typisches Fehlkonzept</div>
+          <p style="font-size: 0.92rem; color: #7f1d1d;">
+            <em>„Prolog hat einen Fehler, ist in einer Endlosschleife gefangen oder meine Regel ist völlig falsch geschrieben.“</em>
+          </p>
+        </div>
+        <div class="comp-panel good">
+          <div class="comp-title">Die informatische Realität</div>
+          <p style="font-size: 0.92rem; color: #14532d;">
+            <strong>Prolog funktioniert absolut fehlerfrei!</strong> Prolog zählt keine Personen, sondern durchsucht das logische System nach allen gültigen <strong>Beweiswegen</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: WARUM PASSIERT DAS? -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="step-marker">2</div>
+        <h2 class="section-title">Die Ursache: Beweiswege statt Namenslisten</h2>
+      </div>
+
+      <p>
+        Prolog ist keine relationale Datenbank oder Tabellenkalkulation, die doppelte Zeilen automatisch wegwirft. Prolog ist ein <strong>automatischer Beweiser</strong>. Jedes Mal, wenn Prolog einen vollständigen, logisch korrekten Weg durch deine Regeln und Fakten findet, meldet es einen Treffer.
+      </p>
+
+      <!-- MERKE BOX: BEWEISWEGE -->
+      <div class="merke-box">
+        <div class="merke-tag">MERKE</div>
+        <div class="merke-title">Das Beweisweg-Prinzip in Prolog</div>
+        <div class="merke-content">
+          Prolog sucht nach <strong>Beweisen</strong> für eine Aussage, nicht nach einer mathematischen Menge eindeutiger Namen. Gibt es für dieselbe Tatsache <strong>zwei verschiedene Begründungen</strong> im Wissensnetz, wird die Antwort auch <strong>zweimal</strong> ausgegeben.
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">
+        Konkretes Beispiel 1: Der Großvater von Ares
+      </h3>
+      <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+        Betrachten wir die Regel: <code class="code-pill">grossvater(G, K) :- vater(G, E), elternteil(E, K).</code>
+      </p>
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-size: 0.93rem;">
+        <p style="margin-bottom: 6px;">
+          Wer sind die Eltern (<span class="var-pill">E</span>) von Ares? In unserer Wissensbasis stehen zwei Fakten:
+        </p>
+        <ul style="margin-left: 1.25rem; margin-bottom: 8px;">
+          <li><code class="code-pill">vater(zeus, ares).</code> &rarr; Zeus ist der Vater.</li>
+          <li><code class="code-pill">mutter(hera, ares).</code> &rarr; Hera ist die Mutter.</li>
+        </ul>
+        <p style="margin-bottom: 4px;">
+          <strong>Beweisweg 1 (väterliche Linie):</strong> Prolog setzt <span class="var-pill">E = zeus</span>. Der Vater von Zeus ist Kronos (<code class="code-pill">vater(kronos, zeus)</code>).<br>
+          &rarr; Ergebnis: <code class="code-pill">Wer = kronos</code>.
+        </p>
+        <p>
+          <strong>Beweisweg 2 (mütterliche Linie):</strong> Nach Drücken von <kbd style="background:#e2e8f0; padding:1px 5px; border-radius:3px;">;</kbd> macht Prolog <em>Backtracking</em> und prüft die Mutter: <span class="var-pill">E = hera</span>. Der Vater von Hera ist ebenfalls Kronos (<code class="code-pill">vater(kronos, hera)</code>).<br>
+          &rarr; Ergebnis: <code class="code-pill">Wer = kronos</code>.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">
+        Konkretes Beispiel 2: Geschwister &amp; Vollgeschwister
+      </h3>
+      <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+        In unserer Regel für Geschwister haben wir definiert:
+      </p>
+      <div class="code-box">
+geschwister(X, Y) :- 
+    elternteil(E, X), 
+    elternteil(E, Y), 
+    X \= Y.
+      </div>
+      <p style="font-size: 0.93rem;">
+        Diese Regel fragt: <em>„Gibt es mindestens ein gemeinsames Elternteil $E$?</em><br>
+        Bei Vollgeschwistern (wie Zeus und Poseidon) gibt es aber <strong>zwei gemeinsame Elternteile</strong>:
+      </p>
+      <ul style="margin-left: 1.25rem; font-size: 0.93rem; margin-top: 4px;">
+        <li>Beweis über den gemeinsamen Vater: <code class="code-pill">E = kronos</code></li>
+        <li>Beweis über die gemeinsame Mutter: <code class="code-pill">E = rhea</code></li>
+      </ul>
+      <p style="font-size: 0.93rem; margin-top: 6px;">
+        Deshalb liefert bereits die Geschwisterabfrage jeden Bruder und jede Schwester <strong>zweimal</strong>!
+      </p>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">
+        Konkretes Beispiel 3: Die Multiplikation beim Onkel
+      </h3>
+      <p style="font-size: 0.93rem;">
+        Beim Onkel treffen beide Effekte zusammen:
+      </p>
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.9rem 1.1rem; font-size: 0.92rem; color: #1e3a8a;">
+        <strong>2 Elternteile von Ares (Zeus &amp; Hera) &times; 2 Geschwisterwege (über Kronos &amp; Rhea) = 4 Beweiswege!</strong><br>
+        Poseidon ist der Onkel von Ares über:
+        <ol style="margin-left: 1.25rem; margin-top: 4px;">
+          <li>Zeus via gemeinsamen Vater Kronos</li>
+          <li>Zeus via gemeinsame Mutter Rhea</li>
+          <li>Hera via gemeinsamen Vater Kronos</li>
+          <li>Hera via gemeinsame Mutter Rhea</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SECTION 3: INTERAKTIVER BEWEISBAUM-EXPLORER -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="step-marker">3</div>
+        <h2 class="section-title">Interaktiver Beweisbaum-Explorer</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Wähle ein Szenario und klicke auf die verschiedenen Beweispfade, um nachzuvollziehen, wie Prolog im Hintergrund verzweigt:
+      </p>
+
+      <div class="explorer-container">
+        <div class="explorer-tabs">
+          <button class="explorer-tab-btn active" onclick="selectScenario('grossvater')">Szenario A: grossvater(Wer, ares)</button>
+          <button class="explorer-tab-btn" onclick="selectScenario('onkel')">Szenario B: onkel(Wer, ares)</button>
+        </div>
+
+        <div id="treeDisplay" class="proof-tree-visual">
+          <!-- Dynamischer Inhalt via JavaScript -->
+        </div>
+
+        <div id="treeInfo" class="proof-path-card">
+          <!-- Dynamische Info-Box -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: DIE LÖSUNG MIT DISTINCT/1 -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="step-marker">4</div>
+        <h2 class="section-title">Die Lösung in der Praxis: distinct/1 &amp; Mengen</h2>
+      </div>
+
+      <p>
+        Häufig interessiert uns in der Praxis nicht, auf wie vielen Wegen jemand verwandt ist, sondern schlicht die <strong>eindeutige Menge aller Personen</strong>.
+      </p>
+      <p style="margin-top: 0.5rem;">
+        In SWI-Prolog gibt es dafür ein elegantes Bordmittel: das Prädikat <code class="code-pill">distinct/1</code>.
+      </p>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.25rem 0 0.4rem 0;">
+        1. Der Duplikat-Filter: distinct/1
+      </h3>
+      <p style="font-size: 0.95rem;">
+        Wir wickeln die ursprüngliche Abfrage einfach in <code class="code-pill">distinct(...)</code> ein:
+      </p>
+
+      <div class="code-box">
+<span class="comment">% Vorher: liefert Poseidon und Hades jeweils mehrfach</span>
+<span class="comment">?- onkel(Wer, ares).</span>
+
+<span class="comment">% Nachher: filtert bereits ausgegebene Werte automatisch heraus!</span>
+<span class="comment">?- distinct(onkel(Wer, ares)).</span>
+Wer = poseidon ;
+Wer = hades.
+      </div>
+
+      <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.93rem; color: #14532d;">
+        <strong>Wie distinct/1 arbeitet:</strong><br>
+        Prolog führt die Inferenz ganz normal durch. Vor jeder Bildschirmausgabe prüft <code class="code-pill">distinct/1</code> jedoch in einem internen Speicher: <em>„Wurde der Wert für diese Variable bereits ausgegeben?“</em> Falls ja, wird der Treffer übersprungen und sofort zum nächsten Beweisweg weitergesprungen.
+      </div>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.4rem 0;">
+        2. Echte Mengen bilden mit setof/3 (Zusatzwissen)
+      </h3>
+      <p style="font-size: 0.95rem;">
+        Wenn wir alle Lösungen nicht einzeln mit Semikolon durchklicken, sondern direkt als <strong>zusammenhängende Liste</strong> erhalten möchten, nutzen wir <code class="code-pill">setof/3</code>:
+      </p>
+
+      <div class="code-box">
+<span class="comment">% Syntax: setof(AusgabeVariable, ZielAbfrage, ErgebnisListe)</span>
+<span class="comment">?- setof(O, onkel(O, ares), AlleOnkel).</span>
+AlleOnkel = [hades, poseidon].
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 0.4rem;">
+        Das Prädikat <code class="code-pill">setof/3</code> eliminiert automatisch Duplikate und sortiert die Liste alphabetisch.
+      </p>
+
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">
+        Vergleich der Methoden im Unterricht
+      </h3>
+
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Werkzeug</th>
+            <th>Wann nutzen wir es?</th>
+            <th>Verhalten bei Duplikaten</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Standard-Abfrage</strong><br><code class="code-pill">?- onkel(Wer, ares).</code></td>
+            <td>Wenn wir alle logischen Beweiswege untersuchen und nachvollziehen wollen.</td>
+            <td>Gibt jeden Beweisweg einzeln aus (inklusive Wiederholungen).</td>
+          </tr>
+          <tr>
+            <td><strong>Filter: distinct/1</strong><br><code class="code-pill">?- distinct(onkel(Wer, ares)).</code></td>
+            <td>Wenn wir im interaktiven Editor einzelne Personen ohne Doppelungen durchklicken wollen.</td>
+            <td>Gibt jeden Namen genau <strong>einmal</strong> aus.</td>
+          </tr>
+          <tr>
+            <td><strong>Menge: setof/3</strong><br><code class="code-pill">?- setof(O, onkel(O, ares), L).</code></td>
+            <td>Wenn wir die Gesamtheit aller Lösungen auf einen Schlag als Liste brauchen.</td>
+            <td>Liefert eine sortierte Liste aller Lösungen ohne Duplikate.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 5: INTERAKTIVE VERSTÄNDNISFRAGEN -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="step-marker">5</div>
+        <h2 class="section-title">Wissens-Check: Teste dein Verständnis</h2>
+      </div>
+
+      <!-- Frage 1 -->
+      <div class="quiz-card">
+        <span class="quiz-num">1</span>
+        <div class="quiz-title">Warum ist eine doppelte Antwort kein Softwarefehler?</div>
+        <div class="quiz-body">
+          Ein Mitschüler sagt: <em>„Mein Programm ist fehlerhaft, weil Poseidon zweimal als Bruder von Zeus ausgegeben wird.“</em> Wie erklärst du ihm das Phänomen anhand der Stammbaum-Daten?
+        </div>
+        <button class="btn-reveal" onclick="toggleSolution('sol1', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol1" class="solution-box">
+          <strong>Erklärung:</strong><br>
+          Poseidon und Zeus sind Vollgeschwister. Die Regel <code class="code-pill">geschwister(X, Y)</code> prüft ein gemeinsames Elternteil $E$. Da Kronos der gemeinsame Vater <em>und</em> Rhea die gemeinsame Mutter ist, findet Prolog zwei unabhängige, logisch korrekte Beweise. Das Programm arbeitet vollkommen korrekt.
+        </div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="quiz-card">
+        <span class="quiz-num">2</span>
+        <div class="quiz-title">Formuliere eine Abfrage mit distinct/1</div>
+        <div class="quiz-body">
+          Wie lautet die SWI-Prolog-Abfrage, um alle Tanten von Ares zu finden, sodass jeder Name garantiert nur genau einmal ausgegeben wird?
+        </div>
+        <button class="btn-reveal" onclick="toggleSolution('sol2', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol2" class="solution-box">
+          <strong>Lösung:</strong><br>
+          <code class="code-pill">?- distinct(tante(Wer, ares)).</code><br><br>
+          <strong>Ergebnis:</strong><br>
+          Prolog liefert <code class="code-pill">Wer = demeter ; Wer = hestia.</code> jeweils genau einmal, anstatt sie über väterliche und mütterliche Linien mehrfach aufzulisten.
+        </div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="quiz-card">
+        <span class="quiz-num">3</span>
+        <div class="quiz-title">Verändert distinct/1 die Wissensbasis?</div>
+        <div class="quiz-body">
+          Ändert der Einsatz von <code class="code-pill">distinct/1</code> etwas an den Regeln oder Fakten in deiner Prolog-Datei?
+        </div>
+        <button class="btn-reveal" onclick="toggleSolution('sol3', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="sol3" class="solution-box">
+          <strong>Erklärung:</strong><br>
+          Nein. Die Wissensbasis (<code class="code-pill">stammbaum_olymp.pl</code>) bleibt völlig unverändert. <code class="code-pill">distinct/1</code> ist ein reiner Abfrage-Filter, der bei der Auswertung im Editor dafür sorgt, dass bereits ausgegebene Bindungen unterdrückt werden.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+      <p><strong>Informatik Differenzierung 10 (Diff-10)</strong> • Thema: Logische Programmierung mit Prolog</p>
+      <p style="margin-top: 4px;">Schuljahr 2026/27</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Daten für den interaktiven Beweisbaum
+    const scenarios = {
+      grossvater: {
+        title: "Anfrage: ?- grossvater(Wer, ares).",
+        treeHtml: `
+          <div style="margin-bottom: 10px;">
+            <span class="tree-node node-query">?- grossvater(Wer, ares)</span>
+          </div>
+          <div style="border-left: 2px dashed #475569; padding-left: 15px; margin-left: 15px;">
+            <div style="margin-bottom: 12px;">
+              <span class="proof-badge badge-path1">Pfad A: Vater-Linie (E = zeus)</span><br>
+              &bull; elternteil(zeus, ares) &rarr; <span style="color:#86efac;">wahr</span> (via vater)<br>
+              &bull; vater(Wer, zeus) &rarr; <span class="tree-node node-match">Wer = kronos</span>
+            </div>
+            <div>
+              <span class="proof-badge badge-path2">Pfad B: Mutter-Linie (E = hera)</span><br>
+              &bull; elternteil(hera, ares) &rarr; <span style="color:#86efac;">wahr</span> (via mutter)<br>
+              &bull; vater(Wer, hera) &rarr; <span class="tree-node node-match">Wer = kronos</span>
+            </div>
+          </div>
+        `,
+        infoHtml: `
+          <h4 style="color:#38bdf8; margin-bottom: 6px;">Ergebnis der Inferenz:</h4>
+          <p style="font-size: 0.92rem; line-height: 1.45;">
+            Prolog findet <strong>2 Beweispfade</strong>. Kronos ist sowohl über Zeus als auch über Hera der Großvater von Ares. Bei Standard-Abfragen liefert Prolog daher zweimal <code style="color:#fde047;">kronos</code>. Mit <code style="color:#86efac;">distinct(grossvater(Wer, ares))</code> wird Pfad B ausgeblendet.
+          </p>
+        `
+      },
+      onkel: {
+        title: "Anfrage: ?- onkel(Wer, ares).",
+        treeHtml: `
+          <div style="margin-bottom: 10px;">
+            <span class="tree-node node-query">?- onkel(Wer, ares)</span>
+          </div>
+          <div style="border-left: 2px dashed #475569; padding-left: 15px; margin-left: 15px;">
+            <div style="margin-bottom: 10px;">
+              <span class="proof-badge badge-path1">Über Zeus (Vater von Ares)</span><br>
+              &bull; via gemeinsamer Vater Kronos: <span class="tree-node node-match">Wer = poseidon</span>, <span class="tree-node node-match">Wer = hades</span><br>
+              &bull; via gemeinsame Mutter Rhea: <span class="tree-node node-match">Wer = poseidon</span>, <span class="tree-node node-match">Wer = hades</span>
+            </div>
+            <div>
+              <span class="proof-badge badge-path2">Über Hera (Mutter von Ares)</span><br>
+              &bull; via gemeinsamer Vater Kronos: <span class="tree-node node-match">Wer = poseidon</span>, <span class="tree-node node-match">Wer = hades</span><br>
+              &bull; via gemeinsame Mutter Rhea: <span class="tree-node node-match">Wer = poseidon</span>, <span class="tree-node node-match">Wer = hades</span>
+            </div>
+          </div>
+        `,
+        infoHtml: `
+          <h4 style="color:#38bdf8; margin-bottom: 6px;">Ergebnis der Inferenz:</h4>
+          <p style="font-size: 0.92rem; line-height: 1.45;">
+            Insgesamt existieren <strong>4 Beweiswege</strong> für Poseidon und <strong>4 Beweiswege</strong> für Hades (2 Elternteile &times; 2 Geschwistereltern). <code style="color:#86efac;">distinct(onkel(Wer, ares))</code> filtert alle 6 redundanten Pfade heraus und meldet jeden Onkel exakt einmal.
+          </p>
+        `
+      }
+    };
+
+    function selectScenario(key) {
+      document.querySelectorAll('.explorer-tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const sc = scenarios[key];
+      document.getElementById('treeDisplay').innerHTML = sc.treeHtml;
+      document.getElementById('treeInfo').innerHTML = sc.infoHtml;
+    }
+
+    function toggleSolution(id, btn) {
+      const box = document.getElementById(id);
+      if (box.classList.contains('visible')) {
+        box.classList.remove('visible');
+        btn.textContent = 'Antwort & Erklärung aufdecken';
+      } else {
+        box.classList.add('visible');
+        btn.textContent = 'Antwort verbergen';
+      }
+    }
+
+    // Init Explorer
+    document.addEventListener('DOMContentLoaded', () => {
+      selectScenario('grossvater');
+    });
+  </script>
+</body>
+</html>
