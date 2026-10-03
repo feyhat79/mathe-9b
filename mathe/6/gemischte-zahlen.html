@@ -219,31 +219,6 @@
       padding: 1rem;
       border-radius: 10px;
     }
-    .lab-input-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .lab-input-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #475569;
-    }
-    .lab-input {
-      width: 58px;
-      padding: 6px 8px;
-      text-align: center;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 800;
-      color: #111827;
-      outline: none;
-    }
-    .lab-input:focus {
-      border-color: #7c3aed;
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
-    }
     .btn-chip {
       padding: 3px 10px;
       border-radius: 999px;
@@ -285,6 +260,110 @@
       border-left: 3px solid #7c3aed;
     }
 
+    /* ══════════════════════════════════════════════════════════
+       ECHTE BRUCH-SCHABLONEN (VISUAL FRACTION TEMPLATES)
+    ═══════════════════════════════════════════════════════════ */
+    .trainer-interactive-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      margin: 1.4rem 0;
+      padding: 1.3rem;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+    }
+    .trainer-task-math {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+    }
+    .fraction-template {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #ffffff;
+      padding: 10px 14px;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .fraction-template:focus-within {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3.5px rgba(124, 58, 237, 0.18);
+    }
+    .whole-box-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .input-whole {
+      width: 58px;
+      height: 72px;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      border: 2px solid #94a3b8;
+      border-radius: 8px;
+      background: #ffffff;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .input-whole:focus {
+      border-color: #7c3aed;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    }
+    .fraction-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .input-frac {
+      width: 54px;
+      height: 33px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      border: 1.5px solid #94a3b8;
+      border-radius: 6px;
+      background: #ffffff;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .input-frac:focus {
+      border-color: #7c3aed;
+      background: #ffffff;
+      box-shadow: 0 0 0 2.5px rgba(124, 58, 237, 0.2);
+    }
+    .fraction-bar-line {
+      width: 100%;
+      min-width: 48px;
+      height: 3px;
+      background: #1e3a8a;
+      border-radius: 2px;
+      margin: 2px 0;
+    }
+    .template-sublabel {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
     /* Trainer Styles */
     .trainer-card {
       background: #ffffff;
@@ -297,7 +376,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
     .trainer-score {
       font-size: 0.82rem;
@@ -307,25 +386,11 @@
       padding: 3px 10px;
       border-radius: 999px;
     }
-    .trainer-formula {
-      font-size: 1.8rem;
-      font-weight: 800;
-      text-align: center;
-      margin: 1rem 0;
-      color: #1e3a8a;
-    }
-    .trainer-input-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 1.2rem 0;
-    }
     .btn-trainer-action {
-      padding: 0.6rem 1.4rem;
+      padding: 0.65rem 1.5rem;
       background: #7c3aed;
       color: #fff;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 700;
       border: none;
       border-radius: 8px;
@@ -633,6 +698,7 @@
     @media (max-width: 640px) {
       .types-grid { grid-template-columns: 1fr; }
       .step-card { flex-direction: column; align-items: flex-start; }
+      .trainer-interactive-wrap { flex-direction: column; }
       .bottom-nav { flex-direction: column; align-items: stretch; text-align: center; }
     }
   </style>
@@ -940,7 +1006,7 @@
     <div class="lab-box">
       <div class="lab-title">Labor 1: Der visuelle Bruch-Wandler</div>
       <div class="lab-subtitle">
-        Gib beliebige Werte ein oder wähle typische Beispiele. Verfolge live die Rechenschritte und das visuelle Kachel-Modell.
+        Gib beliebige Werte in die Bruch-Schablone ein oder wähle typische Beispiele. Verfolge live die Rechenschritte und das Kachel-Modell.
       </div>
 
       <!-- Tabs -->
@@ -955,16 +1021,18 @@
 
       <!-- Tab-Inhalt A: Unecht zu Gemischt -->
       <div id="tab-content-a">
-        <div class="lab-controls">
-          <div class="lab-input-group">
-            <span class="lab-input-label">Zähler:</span>
-            <input type="number" id="inp-a-z" class="lab-input" value="11" min="1" max="60" oninput="updateLabA()">
+        <div class="lab-controls" style="justify-content: flex-start; align-items: center;">
+          <div style="font-size: 0.88rem; font-weight: 800; color: #1e3a8a; margin-right: 0.5rem;">Unechter Bruch:</div>
+          
+          <!-- Bruch-Schablone für unechten Bruch -->
+          <div class="fraction-template" style="background: #ffffff; padding: 6px 12px;">
+            <div class="fraction-stack">
+              <input type="number" id="inp-a-z" class="input-frac" value="11" min="1" max="60" oninput="updateLabA()" title="Zähler" style="width: 58px; height: 32px;">
+              <div class="fraction-bar-line" style="min-width: 52px;"></div>
+              <input type="number" id="inp-a-n" class="input-frac" value="4" min="1" max="24" oninput="updateLabA()" title="Nenner" style="width: 58px; height: 32px;">
+            </div>
           </div>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #94a3b8;">/</div>
-          <div class="lab-input-group">
-            <span class="lab-input-label">Nenner:</span>
-            <input type="number" id="inp-a-n" class="lab-input" value="4" min="1" max="24" oninput="updateLabA()">
-          </div>
+
           <div style="display: flex; gap: 4px; align-items: center; margin-left: auto; flex-wrap: wrap;">
             <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; margin-right: 4px;">Vorlagen:</span>
             <button class="btn-chip" onclick="setPresetA(7, 4)">7/4</button>
@@ -984,20 +1052,23 @@
 
       <!-- Tab-Inhalt B: Gemischt zu Unecht -->
       <div id="tab-content-b" style="display: none;">
-        <div class="lab-controls">
-          <div class="lab-input-group">
-            <span class="lab-input-label">Ganze:</span>
-            <input type="number" id="inp-b-g" class="lab-input" value="3" min="1" max="15" oninput="updateLabB()">
+        <div class="lab-controls" style="justify-content: flex-start; align-items: center;">
+          <div style="font-size: 0.88rem; font-weight: 800; color: #1e3a8a; margin-right: 0.5rem;">Gemischte Zahl:</div>
+          
+          <!-- Bruch-Schablone für gemischten Bruch -->
+          <div class="fraction-template" style="background: #ffffff; padding: 6px 12px;">
+            <div class="whole-box-wrap">
+              <input type="number" id="inp-b-g" class="input-whole" value="3" min="1" max="15" oninput="updateLabB()" title="Ganze" style="width: 50px; height: 66px; font-size: 1.45rem;">
+              <span class="template-sublabel" style="font-size: 0.62rem;">Ganze</span>
+            </div>
+            <div class="fraction-stack">
+              <input type="number" id="inp-b-z" class="input-frac" value="2" min="1" max="23" oninput="updateLabB()" title="Zähler" style="width: 50px; height: 30px;">
+              <div class="fraction-bar-line" style="min-width: 44px;"></div>
+              <input type="number" id="inp-b-n" class="input-frac" value="5" min="2" max="24" oninput="updateLabB()" title="Nenner" style="width: 50px; height: 30px;">
+              <span class="template-sublabel" style="font-size: 0.62rem;">Bruch</span>
+            </div>
           </div>
-          <div class="lab-input-group">
-            <span class="lab-input-label">Zähler:</span>
-            <input type="number" id="inp-b-z" class="lab-input" value="2" min="1" max="23" oninput="updateLabB()">
-          </div>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #94a3b8;">/</div>
-          <div class="lab-input-group">
-            <span class="lab-input-label">Nenner:</span>
-            <input type="number" id="inp-b-n" class="lab-input" value="5" min="2" max="24" oninput="updateLabB()">
-          </div>
+
           <div style="display: flex; gap: 4px; align-items: center; margin-left: auto; flex-wrap: wrap;">
             <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; margin-right: 4px;">Vorlagen:</span>
             <button class="btn-chip" onclick="setPresetB(2, 3, 4)">2 3/4</button>
@@ -1020,24 +1091,26 @@
     <div class="lab-box" style="margin-top: 2rem;">
       <div class="lab-title">Labor 2: Der Hin- und Her-Speedtrainer</div>
       <div class="lab-subtitle">
-        Teste dein Können im direkten Kopfrechnen. Löse die gestellte Aufgabe und überprüfe dein Ergebnis mit einem Klick!
+        Trage deine Lösung direkt in die Bruch-Schablone ein und überprüfe dein Ergebnis mit einem Klick oder mit der Enter-Taste.
       </div>
 
       <div class="trainer-card">
         <div class="trainer-task-header">
-          <span style="font-size: 0.85rem; font-weight: 700; color: #475569;" id="trainer-task-type">
+          <span style="font-size: 0.88rem; font-weight: 800; color: #1e3a8a;" id="trainer-task-type">
             Aufgabe: Unechten Bruch in gemischte Zahl umwandeln
           </span>
           <span class="trainer-score" id="trainer-score-display">0 gelöst</span>
         </div>
 
-        <div class="trainer-formula" id="trainer-task-display">
-          $$\frac{17}{4}$$
-        </div>
+        <!-- Zentrierter Formel- und Schablonen-Bereich -->
+        <div class="trainer-interactive-wrap">
+          <div class="trainer-task-math" id="trainer-task-display">
+            <!-- Wird per JS befüllt: z. B. 16/3 = -->
+          </div>
 
-        <!-- Eingabefelder dynamisch -->
-        <div id="trainer-inputs-area" class="trainer-input-row">
-          <!-- Wird per JS befüllt -->
+          <div id="trainer-inputs-area">
+            <!-- Wird per JS mit der echten Bruch-Schablone befüllt -->
+          </div>
         </div>
 
         <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1rem;">
@@ -1438,20 +1511,20 @@
     }
     // Fall 2: Echter Bruch (Ganze = 0)
     else if (g === 0) {
-      resEl.innerHTML = `$\\frac{${z}}{${n}}$ ist ein <strong>echter Bruch</strong> (Wert $< 1$).`;
+      resEl.innerHTML = `$\\frac{${z}}{${n}}$ ist ein <strong>echter Bruch</strong> (Wert &lt; 1).`;
       expEl.innerHTML = `Da der Zähler (${z}) kleiner als der Nenner (${n}) ist, gibt es noch kein volles Ganzes.`;
     }
     // Fall 3: Unechter Bruch -> Gemischte Zahl
     else {
       const teiler = gcd(r, n);
-      let kuerzHinweis = '';
       if (teiler > 1) {
         const rK = r / teiler;
         const nK = n / teiler;
-        kuerzHinweis = ` $= \\mathbf{${g}\\frac{${rK}}{${nK}}}$ (mit ${teiler} gekürzt)`;
+        resEl.innerHTML = `$\\frac{${z}}{${n}} = ${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies ${g}\\frac{${r}}{${n}} = \\mathbf{${g}\\frac{${rK}}{${nK}}}$ <span style="font-size: 0.88rem; font-weight: normal; color: #16a34a;">(mit ${teiler} gekürzt)</span>`;
+      } else {
+        resEl.innerHTML = `$\\frac{${z}}{${n}} = ${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}$`;
       }
 
-      resEl.innerHTML = `$\\frac{${z}}{${n}} = ${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}${kuerzHinweis}`;
       expEl.innerHTML = `
         <strong>Rechenschritt:</strong> $${z} : ${n} = ${g}$ Ganze mit Rest $${r}$.<br>
         Die $${g}$ Ganzen ergeben $${g} \\cdot ${n} = ${g * n}$ Teile. Zusammen mit den restlichen $${r}$ Teilen sind das genau die $${z}$ Teile.
@@ -1460,7 +1533,10 @@
 
     // SVG zeichnen (Balken)
     svgEl.innerHTML = renderFractionSvgBlocks(g, r, n, '#2563eb');
-    triggerKaTeX(document.getElementById('tab-content-a'));
+    setTimeout(() => {
+      triggerKaTeX(resEl);
+      triggerKaTeX(expEl);
+    }, 20);
   }
 
   function updateLabB() {
@@ -1483,7 +1559,10 @@
     `;
 
     svgEl.innerHTML = renderFractionSvgBlocks(g, z, n, '#16a34a');
-    triggerKaTeX(document.getElementById('tab-content-b'));
+    setTimeout(() => {
+      triggerKaTeX(resEl);
+      triggerKaTeX(expEl);
+    }, 20);
   }
 
   function renderFractionSvgBlocks(g, r, n, color) {
@@ -1541,10 +1620,16 @@
 
 
   /* ----------------------------------------------------
-     4. LABOR 2: SPEED-TRAINER LOGIK
+     4. LABOR 2: SPEED-TRAINER MIT BRUCH-SCHABLONE
   ---------------------------------------------------- */
   let trainerSolvedCount = 0;
   let trainerCurrentTask = null;
+
+  function handleTrainerKeyDown(e) {
+    if (e.key === 'Enter') {
+      checkTrainerAnswer();
+    }
+  }
 
   function generateNewTrainerTask() {
     const feedbackBox = document.getElementById('trainer-feedback-box');
@@ -1567,27 +1652,47 @@
 
     if (type === 0) {
       taskTitle.innerText = 'Wandle den unechten Bruch in eine gemischte Zahl um:';
-      taskDisplay.innerHTML = `$\\mathbf{\\frac{${z}}{${n}}} = \\text{?}$`;
+      taskDisplay.innerHTML = `$\\mathbf{\\frac{${z}}{${n}}} \\; = $`;
       inputsArea.innerHTML = `
-        <span style="font-weight: 700; color: #475569;">Ganze:</span>
-        <input type="number" id="tr-in-g" class="lab-input" style="width: 55px;" placeholder="G">
-        <span style="font-weight: 700; color: #475569; margin-left: 0.5rem;">Bruch:</span>
-        <input type="number" id="tr-in-z" class="lab-input" style="width: 50px;" placeholder="Z">
-        <span style="font-size: 1.2rem; font-weight: 800; color: #94a3b8;">/</span>
-        <input type="number" id="tr-in-n" class="lab-input" style="width: 50px;" placeholder="N">
+        <div class="fraction-template mixed-template">
+          <div class="whole-box-wrap">
+            <input type="number" id="tr-in-g" class="input-whole" placeholder="G" title="Ganze Zahl" onkeydown="handleTrainerKeyDown(event)">
+            <span class="template-sublabel">Ganze</span>
+          </div>
+          <div class="fraction-stack">
+            <input type="number" id="tr-in-z" class="input-frac" placeholder="Z" title="Rest-Zähler" onkeydown="handleTrainerKeyDown(event)">
+            <div class="fraction-bar-line"></div>
+            <input type="number" id="tr-in-n" class="input-frac" placeholder="N" title="Nenner" onkeydown="handleTrainerKeyDown(event)">
+            <span class="template-sublabel">Bruch</span>
+          </div>
+        </div>
       `;
+      setTimeout(() => {
+        const inpG = document.getElementById('tr-in-g');
+        if (inpG) inpG.focus();
+      }, 50);
     } else {
       taskTitle.innerText = 'Wandle die gemischte Zahl in einen unechten Bruch um:';
-      taskDisplay.innerHTML = `$\\mathbf{${g}\\frac{${r}}{${n}}} = \\text{?}$`;
+      taskDisplay.innerHTML = `$\\mathbf{${g}\\frac{${r}}{${n}}} \\; = $`;
       inputsArea.innerHTML = `
-        <span style="font-weight: 700; color: #475569;">Unechter Bruch:</span>
-        <input type="number" id="tr-in-z" class="lab-input" style="width: 65px;" placeholder="Zähler">
-        <span style="font-size: 1.2rem; font-weight: 800; color: #94a3b8;">/</span>
-        <input type="number" id="tr-in-n" class="lab-input" style="width: 65px;" placeholder="Nenner">
+        <div class="fraction-template pure-template">
+          <div class="fraction-stack">
+            <input type="number" id="tr-in-z" class="input-frac" style="width: 74px;" placeholder="Zähler" title="Neuer Zähler" onkeydown="handleTrainerKeyDown(event)">
+            <div class="fraction-bar-line" style="min-width: 68px;"></div>
+            <input type="number" id="tr-in-n" class="input-frac" style="width: 74px;" placeholder="Nenner" title="Nenner" onkeydown="handleTrainerKeyDown(event)">
+            <span class="template-sublabel">Unechter Bruch</span>
+          </div>
+        </div>
       `;
+      setTimeout(() => {
+        const inpZ = document.getElementById('tr-in-z');
+        if (inpZ) inpZ.focus();
+      }, 50);
     }
 
-    triggerKaTeX(document.getElementById('trainer-task-display'));
+    setTimeout(() => {
+      triggerKaTeX(document.getElementById('trainer-task-display'));
+    }, 20);
   }
 
   function checkTrainerAnswer() {
@@ -1602,7 +1707,7 @@
 
       if (isNaN(userG) || isNaN(userZ) || isNaN(userN)) {
         fb.className = 'trainer-feedback wrong';
-        fb.innerHTML = 'Bitte alle drei Felder (Ganze, Zähler, Nenner) ausfüllen!';
+        fb.innerHTML = 'Bitte alle Felder der Schablone (Ganze, Zähler und Nenner) ausfüllen!';
         return;
       }
 
@@ -1615,10 +1720,14 @@
         trainerSolvedCount++;
         document.getElementById('trainer-score-display').innerText = `${trainerSolvedCount} gelöst`;
         fb.className = 'trainer-feedback correct';
-        fb.innerHTML = `<strong>Richtig gerechnet!</strong> $${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}${isReducedCorrect && teiler > 1 ? ` = ${g}\\frac{${r/teiler}}{${n/teiler}}` : ''}.`;
+        if (isReducedCorrect && teiler > 1) {
+          fb.innerHTML = `<strong>Richtig gerechnet!</strong> $${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies ${g}\\frac{${r}}{${n}} = \\mathbf{${g}\\frac{${r/teiler}}{${n/teiler}}}$ <span style="font-size: 0.88rem; color: #16a34a;">(vollständig gekürzt)</span>.`;
+        } else {
+          fb.innerHTML = `<strong>Richtig gerechnet!</strong> $${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}$.`;
+        }
       } else {
         fb.className = 'trainer-feedback wrong';
-        fb.innerHTML = `<strong>Noch nicht ganz richtig.</strong><br>Tipp: Rechne $${z} : ${n}$. Wie oft passt ${n} in ${z}? Der Rest ist der neue Zähler.`;
+        fb.innerHTML = `<strong>Noch nicht ganz richtig.</strong><br>Tipp: Rechne $${z} : ${n}$. Wie oft passt ${n} in ${z}? Das ganzzahlige Ergebnis kommt in das Feld <strong>Ganze</strong>, der Rest in den <strong>Zähler</strong>.`;
       }
     } else {
       const userZ = parseInt(document.getElementById('tr-in-z').value);
@@ -1626,7 +1735,7 @@
 
       if (isNaN(userZ) || isNaN(userN)) {
         fb.className = 'trainer-feedback wrong';
-        fb.innerHTML = 'Bitte Zähler und Nenner eingeben!';
+        fb.innerHTML = 'Bitte Zähler und Nenner in die Bruch-Schablone eintragen!';
         return;
       }
 
@@ -1641,7 +1750,9 @@
       }
     }
 
-    triggerKaTeX(document.getElementById('trainer-feedback-box'));
+    setTimeout(() => {
+      triggerKaTeX(document.getElementById('trainer-feedback-box'));
+    }, 20);
   }
 
 
