@@ -17,27 +17,28 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   <script>
-    function triggerKaTeX() {
+    function triggerKaTeX(target) {
+      const el = (target && target.nodeType) ? target : document.body;
       if (typeof renderMathInElement === "function") {
-        renderMathInElement(document.body, {
+        renderMathInElement(el, {
           delimiters: [
             {left: '$$', right: '$$', display: true},
             {left: '$', right: '$', display: false},
-            {left: '\(', right: '\)', display: false},
-            {left: '\[', right: '\]', display: true}
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
           ],
           throwOnError: false
         });
       } else {
-        setTimeout(triggerKaTeX, 30);
+        setTimeout(() => triggerKaTeX(target), 30);
       }
     }
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+      document.addEventListener('DOMContentLoaded', () => triggerKaTeX());
     } else {
       triggerKaTeX();
     }
-    window.addEventListener('load', triggerKaTeX);
+    window.addEventListener('load', () => triggerKaTeX());
   </script>
 
   <style>
@@ -333,7 +334,7 @@
     }
     .btn-trainer-action:hover {
       background: #6d28d9;
-    }}
+    }
     .trainer-feedback {
       display: none;
       padding: 0.85rem 1rem;
@@ -1364,7 +1365,7 @@
     } else {
       el.classList.add('open');
       btn.innerText = 'Lösung verbergen';
-      setTimeout(triggerKaTeX, 20);
+      triggerKaTeX(el);
     }
   }
 
@@ -1432,12 +1433,12 @@
 
     // Fall 1: Scheinbruch (Rest 0)
     if (r === 0) {
-      resEl.innerHTML = `$\frac{${z}}{${n}} = ${z} : ${n} = \mathbf{${g}}$ (Scheinbruch!)`;
+      resEl.innerHTML = `$\\frac{${z}}{${n}} = ${z} : ${n} = \\mathbf{${g}}$ (Scheinbruch!)`;
       expEl.innerHTML = `Der Zähler <strong>${z}</strong> lässt sich ohne Rest durch <strong>${n}</strong> teilen ($${z} : ${n} = ${g}$). Es entsteht genau die ganze Zahl <strong>${g}</strong>.`;
     }
     // Fall 2: Echter Bruch (Ganze = 0)
     else if (g === 0) {
-      resEl.innerHTML = `$\frac{${z}}{${n}}$ ist ein <strong>echter Bruch</strong> (Wert $< 1$).`;
+      resEl.innerHTML = `$\\frac{${z}}{${n}}$ ist ein <strong>echter Bruch</strong> (Wert $< 1$).`;
       expEl.innerHTML = `Da der Zähler (${z}) kleiner als der Nenner (${n}) ist, gibt es noch kein volles Ganzes.`;
     }
     // Fall 3: Unechter Bruch -> Gemischte Zahl
@@ -1447,19 +1448,19 @@
       if (teiler > 1) {
         const rK = r / teiler;
         const nK = n / teiler;
-        kuerzHinweis = ` $= \mathbf{${g}\frac{${rK}}{${nK}}}$ (mit ${teiler} gekürzt)`;
+        kuerzHinweis = ` $= \\mathbf{${g}\\frac{${rK}}{${nK}}}$ (mit ${teiler} gekürzt)`;
       }
 
-      resEl.innerHTML = `$\frac{${z}}{${n}} = ${z} : ${n} = ${g} \text{ Rest } ${r} \implies \mathbf{${g}\frac{${r}}{${n}}}${kuerzHinweis}`;
+      resEl.innerHTML = `$\\frac{${z}}{${n}} = ${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}${kuerzHinweis}`;
       expEl.innerHTML = `
         <strong>Rechenschritt:</strong> $${z} : ${n} = ${g}$ Ganze mit Rest $${r}$.<br>
-        Die $${g}$ Ganzen ergeben $${g} \cdot ${n} = ${g * n}$ Teile. Zusammen mit den restlichen $${r}$ Teilen sind das genau die $${z}$ Teile.
+        Die $${g}$ Ganzen ergeben $${g} \\cdot ${n} = ${g * n}$ Teile. Zusammen mit den restlichen $${r}$ Teilen sind das genau die $${z}$ Teile.
       `;
     }
 
     // SVG zeichnen (Balken)
     svgEl.innerHTML = renderFractionSvgBlocks(g, r, n, '#2563eb');
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('tab-content-a'));
   }
 
   function updateLabB() {
@@ -1475,14 +1476,14 @@
 
     const zNeu = (g * n) + z;
 
-    resEl.innerHTML = `$\mathbf{${g}\frac{${z}}{${n}}} = \frac{${g} \cdot ${n} + ${z}}{${n}} = \frac{${g * n} + ${z}}{${n}} = \mathbf{\frac{${zNeu}}{${n}}}$`;
+    resEl.innerHTML = `$\\mathbf{${g}\\frac{${z}}{${n}}} = \\frac{${g} \\cdot ${n} + ${z}}{${n}} = \\frac{${g * n} + ${z}}{${n}} = \\mathbf{\\frac{${zNeu}}{${n}}}$`;
     expEl.innerHTML = `
-      <strong>Rechenschritt:</strong> Jedes der $${g}$ Ganzen besteht aus $${n}$ Teilen $\implies ${g} \cdot ${n} = ${g * n}$ Teile.<br>
-      Dazu kommen die bereits vorhandenen $${z}$ Teile $\implies ${g * n} + ${z} = ${zNeu}$ Teile. Der Nenner bleibt $${n}$.
+      <strong>Rechenschritt:</strong> Jedes der $${g}$ Ganzen besteht aus $${n}$ Teilen $\\implies ${g} \\cdot ${n} = ${g * n}$ Teile.<br>
+      Dazu kommen die bereits vorhandenen $${z}$ Teile $\\implies ${g * n} + ${z} = ${zNeu}$ Teile. Der Nenner bleibt $${n}$.
     `;
 
     svgEl.innerHTML = renderFractionSvgBlocks(g, z, n, '#16a34a');
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('tab-content-b'));
   }
 
   function renderFractionSvgBlocks(g, r, n, color) {
@@ -1566,7 +1567,7 @@
 
     if (type === 0) {
       taskTitle.innerText = 'Wandle den unechten Bruch in eine gemischte Zahl um:';
-      taskDisplay.innerHTML = `$\mathbf{\frac{${z}}{${n}}} = \text{?}$`;
+      taskDisplay.innerHTML = `$\\mathbf{\\frac{${z}}{${n}}} = \\text{?}$`;
       inputsArea.innerHTML = `
         <span style="font-weight: 700; color: #475569;">Ganze:</span>
         <input type="number" id="tr-in-g" class="lab-input" style="width: 55px;" placeholder="G">
@@ -1577,7 +1578,7 @@
       `;
     } else {
       taskTitle.innerText = 'Wandle die gemischte Zahl in einen unechten Bruch um:';
-      taskDisplay.innerHTML = `$\mathbf{${g}\frac{${r}}{${n}}} = \text{?}$`;
+      taskDisplay.innerHTML = `$\\mathbf{${g}\\frac{${r}}{${n}}} = \\text{?}$`;
       inputsArea.innerHTML = `
         <span style="font-weight: 700; color: #475569;">Unechter Bruch:</span>
         <input type="number" id="tr-in-z" class="lab-input" style="width: 65px;" placeholder="Zähler">
@@ -1586,7 +1587,7 @@
       `;
     }
 
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('trainer-task-display'));
   }
 
   function checkTrainerAnswer() {
@@ -1614,7 +1615,7 @@
         trainerSolvedCount++;
         document.getElementById('trainer-score-display').innerText = `${trainerSolvedCount} gelöst`;
         fb.className = 'trainer-feedback correct';
-        fb.innerHTML = `<strong>Richtig gerechnet!</strong> $${z} : ${n} = ${g} \text{ Rest } ${r} \implies \mathbf{${g}\frac{${r}}{${n}}}${isReducedCorrect && teiler > 1 ? ` = ${g}\frac{${r/teiler}}{${n/teiler}}` : ''}.`;
+        fb.innerHTML = `<strong>Richtig gerechnet!</strong> $${z} : ${n} = ${g} \\text{ Rest } ${r} \\implies \\mathbf{${g}\\frac{${r}}{${n}}}${isReducedCorrect && teiler > 1 ? ` = ${g}\\frac{${r/teiler}}{${n/teiler}}` : ''}.`;
       } else {
         fb.className = 'trainer-feedback wrong';
         fb.innerHTML = `<strong>Noch nicht ganz richtig.</strong><br>Tipp: Rechne $${z} : ${n}$. Wie oft passt ${n} in ${z}? Der Rest ist der neue Zähler.`;
@@ -1633,14 +1634,14 @@
         trainerSolvedCount++;
         document.getElementById('trainer-score-display').innerText = `${trainerSolvedCount} gelöst`;
         fb.className = 'trainer-feedback correct';
-        fb.innerHTML = `<strong>Perfekt!</strong> ${g} Ganze mal ${n} ist $${g * n}$, plus ${r} ergibt $\mathbf{\frac{${z}}{${n}}}$.`;
+        fb.innerHTML = `<strong>Perfekt!</strong> ${g} Ganze mal ${n} ist $${g * n}$, plus ${r} ergibt $\\mathbf{\\frac{${z}}{${n}}}$.`;
       } else {
         fb.className = 'trainer-feedback wrong';
-        fb.innerHTML = `<strong>Leider falsch.</strong><br>Rechne: $(\text{Ganze} \cdot \text{Nenner}) + \text{Zähler} = (${g} \cdot ${n}) + ${r} = ${z}$. Der Nenner bleibt ${n}!`;
+        fb.innerHTML = `<strong>Leider falsch.</strong><br>Rechne: $(\\text{Ganze} \\cdot \\text{Nenner}) + \\text{Zähler} = (${g} \\cdot ${n}) + ${r} = ${z}$. Der Nenner bleibt ${n}!`;
       }
     }
 
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('trainer-feedback-box'));
   }
 
 
@@ -1657,76 +1658,76 @@
         "Wenn der Zähler genau 1 ist."
       ],
       correctIndex: 0,
-      explanation: "Ein echter Bruch hat immer einen Zähler, der kleiner ist als der Nenner ($Z < N$). Sein Wert liegt zwischen $0$ und $1$ (z. B. $\frac{3}{4}$).",
+      explanation: "Ein echter Bruch hat immer einen Zähler, der kleiner ist als der Nenner ($Z < N$). Sein Wert liegt zwischen $0$ und $1$ (z. B. $\\frac{3}{4}$).",
     },
     {
       question: "Welcher der folgenden Brüche ist ein Scheinbruch?",
       options: [
-        "$\frac{13}{4}$",
-        "$\frac{24}{6}$",
-        "$\frac{5}{8}$",
-        "$\frac{11}{3}$"
+        "$\\frac{13}{4}$",
+        "$\\frac{24}{6}$",
+        "$\\frac{5}{8}$",
+        "$\\frac{11}{3}$"
       ],
       correctIndex: 1,
-      explanation: "Bei $\frac{24}{6}$ geht die Division ohne Rest auf: $24 : 6 = 4$. Der Bruch ist in Wahrheit die ganze Zahl $4$!",
+      explanation: "Bei $\\frac{24}{6}$ geht die Division ohne Rest auf: $24 : 6 = 4$. Der Bruch ist in Wahrheit die ganze Zahl $4$!",
     },
     {
-      question: "Wandle den unechten Bruch $\frac{15}{4}$ in eine gemischte Zahl um:",
+      question: "Wandle den unechten Bruch $\\frac{15}{4}$ in eine gemischte Zahl um:",
       options: [
-        "$3\frac{3}{4}$",
-        "$4\frac{1}{4}$",
-        "$3\frac{1}{4}$",
-        "$2\frac{7}{4}$"
+        "$3\\frac{3}{4}$",
+        "$4\\frac{1}{4}$",
+        "$3\\frac{1}{4}$",
+        "$2\\frac{7}{4}$"
       ],
       correctIndex: 0,
-      explanation: "$15 : 4 = 3 \text{ Rest } 3$. Also lautet die gemischte Zahl $3\frac{3}{4}$.",
+      explanation: "$15 : 4 = 3 \\text{ Rest } 3$. Also lautet die gemischte Zahl $3\\frac{3}{4}$.",
     },
     {
-      question: "Wandle die gemischte Zahl $4\frac{2}{3}$ in einen unechten Bruch um:",
+      question: "Wandle die gemischte Zahl $4\\frac{2}{3}$ in einen unechten Bruch um:",
       options: [
-        "$\frac{11}{3}$",
-        "$\frac{14}{3}$",
-        "$\frac{8}{3}$",
-        "$\frac{24}{3}$"
+        "$\\frac{11}{3}$",
+        "$\\frac{14}{3}$",
+        "$\\frac{8}{3}$",
+        "$\\frac{24}{3}$"
       ],
       correctIndex: 1,
-      explanation: "Formel: $\frac{G \cdot N + Z}{N} = \frac{4 \cdot 3 + 2}{3} = \frac{12 + 2}{3} = \frac{14}{3}$.",
+      explanation: "Formel: $\\frac{G \\cdot N + Z}{N} = \\frac{4 \\cdot 3 + 2}{3} = \\frac{12 + 2}{3} = \\frac{14}{3}$.",
     },
     {
-      question: "Wandle $\frac{22}{6}$ in eine gemischte Zahl um und gib das vollständig gekürzte Ergebnis an:",
+      question: "Wandle $\\frac{22}{6}$ in eine gemischte Zahl um und gib das vollständig gekürzte Ergebnis an:",
       options: [
-        "$3\frac{4}{6}$",
-        "$3\frac{2}{3}$",
-        "$4\frac{1}{3}$",
-        "$3\frac{1}{2}$"
+        "$3\\frac{4}{6}$",
+        "$3\\frac{2}{3}$",
+        "$4\\frac{1}{3}$",
+        "$3\\frac{1}{2}$"
       ],
       correctIndex: 1,
-      explanation: "$22 : 6 = 3 \text{ Rest } 4 \implies 3\frac{4}{6}$. Kürzen des Bruchs $\frac{4}{6}$ mit $2$ ergibt $\mathbf{3\frac{2}{3}}$.",
+      explanation: "$22 : 6 = 3 \\text{ Rest } 4 \\implies 3\\frac{4}{6}$. Kürzen des Bruchs $\\frac{4}{6}$ mit $2$ ergibt $\\mathbf{3\\frac{2}{3}}$.",
     },
     {
-      question: "Welchen Wert hat der Bruch $\frac{35}{7}$?",
+      question: "Welchen Wert hat der Bruch $\\frac{35}{7}$?",
       options: [
-        "$4\frac{7}{7}$",
-        "$5\frac{1}{7}$",
+        "$4\\frac{7}{7}$",
+        "$5\\frac{1}{7}$",
         "Genau $5$",
-        "$\frac{7}{35}$"
+        "$\\frac{7}{35}$"
       ],
       correctIndex: 2,
       explanation: "$35 : 7 = 5$ Rest $0$. Da der Rest $0$ ist, schreibt man keinen Bruch mehr dahinter. Es ist genau die ganze Zahl $5$.",
     },
     {
-      question: "Welche Umrechnung von $5\frac{3}{8}$ in einen unechten Bruch ist korrekt gerechnet?",
+      question: "Welche Umrechnung von $5\\frac{3}{8}$ in einen unechten Bruch ist korrekt gerechnet?",
       options: [
-        "$\frac{5 \cdot 8 + 3}{8} = \frac{43}{8}$",
-        "$\frac{5 + 3}{8} = \frac{8}{8}$",
-        "$\frac{5 \cdot 3 + 8}{8} = \frac{23}{8}$",
-        "$\frac{53}{8}$"
+        "$\\frac{5 \\cdot 8 + 3}{8} = \\frac{43}{8}$",
+        "$\\frac{5 + 3}{8} = \\frac{8}{8}$",
+        "$\\frac{5 \\cdot 3 + 8}{8} = \\frac{23}{8}$",
+        "$\\frac{53}{8}$"
       ],
       correctIndex: 0,
-      explanation: "$5$ Ganze mit je $8$ Teilen ergeben $5 \cdot 8 = 40$ Teile. Zusammen mit den $3$ vorhandenen Teilen sind es $43$ Teile: $\frac{43}{8}$.",
+      explanation: "$5$ Ganze mit je $8$ Teilen ergeben $5 \\cdot 8 = 40$ Teile. Zusammen mit den $3$ vorhandenen Teilen sind es $43$ Teile: $\\frac{43}{8}$.",
     },
     {
-      question: "Aus welcher Division mit Rest entstand die gemischte Zahl $4\frac{2}{5}$?",
+      question: "Aus welcher Division mit Rest entstand die gemischte Zahl $4\\frac{2}{5}$?",
       options: [
         "$42 : 5$",
         "$22 : 5$",
@@ -1734,29 +1735,29 @@
         "$24 : 5$"
       ],
       correctIndex: 1,
-      explanation: "Rückrechnung: $4 \cdot 5 + 2 = 22$. Die ursprüngliche Division lautete also $22 : 5 = 4 \text{ Rest } 2$.",
+      explanation: "Rückrechnung: $4 \\cdot 5 + 2 = 22$. Die ursprüngliche Division lautete also $22 : 5 = 4 \\text{ Rest } 2$.",
     },
     {
-      question: "Welcher unechte Bruch hat denselben Wert wie die gemischte Zahl $2\frac{7}{10}$?",
+      question: "Welcher unechte Bruch hat denselben Wert wie die gemischte Zahl $2\\frac{7}{10}$?",
       options: [
-        "$\frac{14}{10}$",
-        "$\frac{27}{10}$",
-        "$\frac{20}{10}$",
-        "$\frac{17}{10}$"
+        "$\\frac{14}{10}$",
+        "$\\frac{27}{10}$",
+        "$\\frac{20}{10}$",
+        "$\\frac{17}{10}$"
       ],
       correctIndex: 1,
-      explanation: "$2 \cdot 10 + 7 = 20 + 7 = 27$. Der Bruch lautet $\frac{27}{10}$.",
+      explanation: "$2 \\cdot 10 + 7 = 20 + 7 = 27$. Der Bruch lautet $\\frac{27}{10}$.",
     },
     {
       question: "Sachaufgabe: Für eine Wanderung werden 19 halbe Brötchen geschmiert. Wie vielen ganzen Brötchen entspricht das?",
       options: [
         "$9$ ganze Brötchen",
-        "$9\frac{1}{2}$ ganze Brötchen",
+        "$9\\frac{1}{2}$ ganze Brötchen",
         "$10$ ganze Brötchen",
-        "$19\frac{1}{2}$ ganze Brötchen"
+        "$19\\frac{1}{2}$ ganze Brötchen"
       ],
       correctIndex: 1,
-      explanation: "Bruch: $\frac{19}{2}$ Brötchen. Division mit Rest: $19 : 2 = 9 \text{ Rest } 1$. Das entspricht genau $9\frac{1}{2}$ ganzen Brötchen.",
+      explanation: "Bruch: $\\frac{19}{2}$ Brötchen. Division mit Rest: $19 : 2 = 9 \\text{ Rest } 1$. Das entspricht genau $9\\frac{1}{2}$ ganzen Brötchen.",
     }
   ];
 
@@ -1801,7 +1802,7 @@
 
     document.getElementById('btn-quiz-next').style.display = 'none';
 
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('quiz-question-view'));
   }
 
   function selectQuizAnswer(chosenIdx, clickedBtn) {
@@ -1827,7 +1828,7 @@
 
     expBox.style.display = 'block';
     document.getElementById('btn-quiz-next').style.display = 'inline-block';
-    setTimeout(triggerKaTeX, 20);
+    triggerKaTeX(document.getElementById('quiz-explanation-box'));
   }
 
   function nextQuestion() {
