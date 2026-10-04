@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Die QWERTZ-Tastatur – Informatik 5b</title>
+  <title>Die QWERTZ-Tastatur – Informatik 5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -176,7 +176,7 @@
       align-items: center;
       justify-content: center;
       padding: 14px 12px 8px;
-      overflow: hidden;
+      overflow-y: auto;
       gap: 12px;
     }
 
@@ -233,7 +233,7 @@
     }
 
     .k-g {
-      position: absolute; top: 3px; left: 4px;
+      position: absolute; bottom: 4px; right: 4px;
       font-family: 'JetBrains Mono', monospace;
       font-size: calc(var(--ku) * 0.17);
       font-weight: 700;
@@ -243,7 +243,7 @@
     }
 
     .k-s {
-      position: absolute; top: 3px; right: 4px;
+      position: absolute; top: 3px; left: 4px;
       font-family: 'JetBrains Mono', monospace;
       font-size: calc(var(--ku) * 0.17);
       font-weight: 700;
@@ -381,80 +381,125 @@
       box-shadow: 0 1px 0 var(--key-border);
     }
 
-    /* ── QUIZ OVERLAY ── */
-    #quiz-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.72);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #quiz-overlay.active {
-      display: flex;
-    }
-
-    #quiz-card {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 18px;
-      padding: 40px 52px 36px;
-      min-width: 340px;
-      max-width: 500px;
+    /* ── LEGENDE (Standardanzeige) ── */
+    #info-default {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.28);
-      text-align: center;
+      gap: 6px;
+      width: 100%;
     }
+    .lg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.84rem;
+      color: var(--text);
+    }
+    .lg .layer-chip { min-width: 170px; text-align: center; }
+    .lg-hint { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
-    #quiz-label {
-      font-size: 0.78rem;
+    /* ── EBENEN-TRAINING ── */
+    #train-panel {
+      display: none;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px 14px;
+      width: 100%;
+      max-width: 980px;
+      flex-shrink: 0;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #train-panel.active { display: flex; }
+
+    #train-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--muted);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
+    #train-head .spacer { flex: 1; }
 
-    #quiz-char {
+    #train-body {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    #train-char {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 5rem;
+      font-size: 3.6rem;
       font-weight: 700;
-      color: var(--primary);
-      line-height: 1;
-      min-height: 6rem;
+      color: var(--text);
+      min-width: 110px;
+      height: 84px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: var(--surface-2);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      flex-shrink: 0;
+      line-height: 1;
     }
+    #train-char.small { font-size: 1.5rem; }
 
-    #quiz-answer {
-      display: none;
+    #train-main {
+      flex: 1;
+      display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 8px;
     }
 
-    #quiz-answer.visible { display: flex; }
+    #train-question { font-size: 0.95rem; font-weight: 700; color: var(--text); }
 
-    #quiz-combo {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
+    #train-layers { display: flex; gap: 8px; }
+
+    .train-layer-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--surface-2);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.15s, background 0.15s;
     }
+    .train-layer-btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .train-layer-btn .tl-name { font-size: 0.85rem; font-weight: 800; }
+    .train-layer-btn .tl-how  { font-size: 0.74rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
 
-    #quiz-progress {
-      font-size: 0.75rem;
+    .train-layer-btn[data-layer="normal"] { color: var(--primary); }
+    .train-layer-btn[data-layer="shift"]  { color: var(--shift-c); }
+    .train-layer-btn[data-layer="altgr"]  { color: var(--altgr-c); }
+    .train-layer-btn[data-layer="normal"]:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-l); }
+    .train-layer-btn[data-layer="shift"]:hover:not(:disabled)  { border-color: var(--shift-c); background: var(--shift-bg); }
+    .train-layer-btn[data-layer="altgr"]:hover:not(:disabled)  { border-color: var(--altgr-c); background: var(--altgr-bg); }
+
+    .train-layer-btn.right { border-color: #059669; background: #d1fae5; }
+    .train-layer-btn.wrong { border-color: #dc2626; background: #fee2e2; opacity: 0.7; }
+    .train-layer-btn:disabled { cursor: default; }
+
+    #train-feedback {
+      font-size: 0.85rem;
       color: var(--muted);
-      font-weight: 600;
+      min-height: 2.6em;
+      line-height: 1.4;
     }
+    #train-feedback.ok  { color: #047857; font-weight: 600; }
+    #train-feedback.bad { color: #b91c1c; font-weight: 600; }
 
     .btn-quiz-action {
-      padding: 10px 32px;
+      padding: 10px 28px;
       background: var(--primary);
       color: #fff;
       border: none;
@@ -464,7 +509,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: background 0.15s, transform 0.1s;
-      min-width: 180px;
+      white-space: nowrap;
     }
     .btn-quiz-action:hover { background: #1e40af; transform: translateY(-1px); }
 
@@ -472,20 +517,21 @@
       background: transparent;
       border: 1.5px solid var(--border);
       color: var(--muted);
-      padding: 6px 18px;
+      padding: 4px 14px;
       border-radius: 7px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
       transition: border-color 0.15s, color 0.15s;
     }
     .btn-quiz-close:hover { border-color: var(--primary); color: var(--primary); }
 
-    .quiz-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    .k.wrong { animation: kwrong 0.5s ease; }
+    @keyframes kwrong {
+      0%, 100% { transform: none; }
+      20%, 60% { transform: translateX(-3px); border-color: #dc2626; background: #fee2e2; }
+      40%, 80% { transform: translateX(3px);  border-color: #dc2626; background: #fee2e2; }
     }
 
     /* ── RESPONSIVE SCALE ── */
@@ -510,21 +556,21 @@
 
     <div id="layer-tabs">
       <button class="layer-tab active-normal" data-layer="normal" onclick="setLayer('normal')">
-        Ebene 1 – Normal
+        Normale Ebene
         <span class="tab-badge">1</span>
       </button>
       <button class="layer-tab" data-layer="shift" onclick="setLayer('shift')">
-        ⇧ Shift
+        Hochgestellte Ebene (Shift)
         <span class="tab-badge">2</span>
       </button>
       <button class="layer-tab" data-layer="altgr" onclick="setLayer('altgr')">
-        AltGr
+        Tiefgestellte Ebene (AltGr)
         <span class="tab-badge">3</span>
       </button>
     </div>
 
     <div class="top-actions">
-      <button class="btn-quiz" onclick="openQuiz()">Schatzsuche starten</button>
+      <button class="btn-quiz" onclick="openTrain()">Ebenen-Training starten</button>
       <button class="btn-dark" onclick="toggleDark()" title="Hell/Dunkel wechseln" id="dark-btn">☀</button>
     </div>
   </div>
@@ -536,7 +582,12 @@
 
     <!-- Info Panel -->
     <div id="info-panel">
-      <div id="info-default">Klicke eine Taste an, um Details zu sehen.</div>
+      <div id="info-default">
+        <div class="lg"><span class="layer-chip lc-normal">Normale Ebene</span><span><strong>Taste drücken</strong>: Kleinbuchstaben, Zahlen und einige Sonderzeichen (auf der Taste unten links)</span></div>
+        <div class="lg"><span class="layer-chip lc-shift">Hochgestellte Ebene</span><span><strong>SHIFT + Taste</strong>: Großbuchstaben und die hochgestellten Zeichen (oben links)</span></div>
+        <div class="lg"><span class="layer-chip lc-altgr">Tiefgestellte Ebene</span><span><strong>ALT GR + Taste</strong>: die tiefgestellten Zeichen (unten rechts)</span></div>
+        <div class="lg-hint">Klicke eine Taste an, um Details zu sehen.</div>
+      </div>
       <div id="info-content" style="display:none; width:100%; display:none; align-items:center; gap:18px; flex:1;">
         <div id="info-char"></div>
         <div id="info-body">
@@ -546,33 +597,49 @@
         <div id="info-layers"></div>
       </div>
     </div>
+    <!-- Ebenen-Training -->
+    <div id="train-panel">
+      <div id="train-head">
+        <span id="train-title">Ebenen-Training</span>
+        <span id="train-progress"></span>
+        <span class="spacer"></span>
+        <button class="btn-quiz-close" onclick="closeTrain()">Training beenden</button>
+      </div>
+      <div id="train-body">
+        <div id="train-char"></div>
+        <div id="train-main">
+          <div id="train-question"></div>
+          <div id="train-layers">
+            <button class="train-layer-btn" data-layer="normal" onclick="trainChooseLayer('normal')">
+              <span class="tl-name">Normale Ebene</span>
+              <span class="tl-how">Taste drücken</span>
+            </button>
+            <button class="train-layer-btn" data-layer="shift" onclick="trainChooseLayer('shift')">
+              <span class="tl-name">Hochgestellte Ebene</span>
+              <span class="tl-how">SHIFT + Taste</span>
+            </button>
+            <button class="train-layer-btn" data-layer="altgr" onclick="trainChooseLayer('altgr')">
+              <span class="tl-name">Tiefgestellte Ebene</span>
+              <span class="tl-how">ALT GR + Taste</span>
+            </button>
+          </div>
+          <div id="train-feedback"></div>
+        </div>
+        <button class="btn-quiz-action" id="train-next" onclick="trainNext()" style="display:none;">Weiter</button>
+      </div>
+    </div>
   </div>
 
   <!-- ── SHORTCUTS BAR ── -->
   <div id="shortcuts-bar">
     Tastaturkürzel:&nbsp;
-    <kbd>1</kbd> Normal &nbsp;·&nbsp;
-    <kbd>2</kbd> Shift &nbsp;·&nbsp;
-    <kbd>3</kbd> AltGr &nbsp;·&nbsp;
-    <kbd>Leertaste</kbd> / <kbd>Enter</kbd> Auflösen · Weiter in der Schatzsuche &nbsp;·&nbsp;
-    <kbd>Esc</kbd> Schatzsuche beenden
+    <kbd>1</kbd> Normale Ebene &nbsp;·&nbsp;
+    <kbd>2</kbd> Hochgestellte Ebene &nbsp;·&nbsp;
+    <kbd>3</kbd> Tiefgestellte Ebene &nbsp;·&nbsp;
+    <kbd>Leertaste</kbd> / <kbd>Enter</kbd> Weiter im Training &nbsp;·&nbsp;
+    <kbd>Esc</kbd> Training beenden
   </div>
 
-  <!-- ── QUIZ OVERLAY ── -->
-  <div id="quiz-overlay">
-    <div id="quiz-card">
-      <div id="quiz-label">Schatzsuche – Wo versteckt sich dieses Zeichen?</div>
-      <div id="quiz-char">@</div>
-      <div id="quiz-answer">
-        <div id="quiz-combo"></div>
-      </div>
-      <div id="quiz-progress"></div>
-      <div class="quiz-row">
-        <button class="btn-quiz-action" id="quiz-action-btn" onclick="quizAction()">Auflösen</button>
-        <button class="btn-quiz-close" onclick="closeQuiz()">Schatzsuche beenden</button>
-      </div>
-    </div>
-  </div>
 
   <script>
   // ── DATA ──────────────────────────────────────────────────────────────────
@@ -652,25 +719,6 @@
     ],
   ];
 
-  const QUIZ = [
-    {c:'@',  info:'AltGr + Q',   keys:['q'],  mod:'altgr'},
-    {c:'!',  info:'Shift + 1',   keys:['k1'], mod:'shift'},
-    {c:'?',  info:'Shift + ß',   keys:['sz'], mod:'shift'},
-    {c:'$',  info:'Shift + 4',   keys:['k4'], mod:'shift'},
-    {c:'%',  info:'Shift + 5',   keys:['k5'], mod:'shift'},
-    {c:'&',  info:'Shift + 6',   keys:['k6'], mod:'shift'},
-    {c:'/',  info:'Shift + 7',   keys:['k7'], mod:'shift'},
-    {c:'(',  info:'Shift + 8',   keys:['k8'], mod:'shift'},
-    {c:')',  info:'Shift + 9',   keys:['k9'], mod:'shift'},
-    {c:'=',  info:'Shift + 0',   keys:['k0'], mod:'shift'},
-    {c:'_',  info:'Shift + -',   keys:['min'],mod:'shift'},
-    {c:'"',  info:'Shift + 2',   keys:['k2'], mod:'shift'},
-    {c:'€',  info:'AltGr + E',   keys:['e'],  mod:'altgr'},
-    {c:'+',  info:'Taste +',     keys:['plu'], mod:'normal'},
-    {c:'*',  info:'Shift + +',   keys:['plu'], mod:'shift'},
-    {c:';',  info:'Shift + ,',   keys:['com'], mod:'shift'},
-    {c:':',  info:'Shift + .',   keys:['dot'], mod:'shift'},
-  ];
 
   // ── STATE ─────────────────────────────────────────────────────────────────
 
@@ -678,12 +726,16 @@
   let selectedKeyId = null;
   let isDark = false;
 
-  // Quiz state
-  let quizActive = false;
-  let quizDeck = [];
-  let quizIndex = 0;
-  let quizRevealed = false;
-  let quizTotal = 0;
+  // Training state
+  let trainActive = false;
+  let trainDeck = [];
+  let trainIndex = 0;
+  let trainStep = 0;       // 1 = Ebene wählen, 2 = Taste klicken, 3 = fertig, 4 = Ergebnis
+  let trainFirstTry = true;
+  let trainAutoTimer = null;
+  const TRAIN_AUTO_MS = 3000;   // Pause bis zum automatischen Weiterspringen
+  let trainScore = 0;
+  const TRAIN_PER_LAYER = 4;
 
   // ── BUILD KEYBOARD ────────────────────────────────────────────────────────
 
@@ -796,6 +848,7 @@
   // ── KEY CLICK ─────────────────────────────────────────────────────────────
 
   function handleKeyClick(key) {
+    if (trainActive) { trainKeyClick(key); return; }
     // Deselect previous
     document.querySelectorAll('.k.selected').forEach(el => el.classList.remove('selected'));
 
@@ -897,7 +950,7 @@
     // Title based on layer
     let titleText = '';
     if (currentLayer === 'normal') {
-      titleText = `„${key.n}" – Normale Ebene (direkte Eingabe)`;
+      titleText = `„${key.n}" – Normale Ebene (Taste drÃ¼cken)`;
     } else if (currentLayer === 'shift') {
       titleText = `„${key.s || key.n}" – Shift-Ebene`;
     } else {
@@ -925,90 +978,207 @@
     if (key.n) {
       const c = document.createElement('span');
       c.className = 'layer-chip lc-normal';
-      c.textContent = `Normal: ${key.n}`;
+      c.textContent = `Normale Ebene: ${key.n}`;
       layersEl.appendChild(c);
     }
     if (key.s) {
       const c = document.createElement('span');
       c.className = 'layer-chip lc-shift';
-      c.textContent = `Shift: ${key.s}`;
+      c.textContent = `Hochgestellt: ${key.s}`;
       layersEl.appendChild(c);
     }
     if (key.g) {
       const c = document.createElement('span');
       c.className = 'layer-chip lc-altgr';
-      c.textContent = `AltGr: ${key.g}`;
+      c.textContent = `Tiefgestellt: ${key.g}`;
       layersEl.appendChild(c);
     }
   }
 
-  // ── QUIZ ──────────────────────────────────────────────────────────────────
+  // ── EBENEN-TRAINING ───────────────────────────────────────────────────────
 
-  function shuffleDeck() {
-    quizDeck = [...QUIZ].sort(() => Math.random() - 0.5);
-    quizIndex = 0;
-    quizTotal = quizDeck.length;
+  const LAYER_INFO = {
+    normal: { name: 'Normale Ebene',       how: 'Taste drücken' },
+    shift:  { name: 'Hochgestellte Ebene', how: 'SHIFT + Taste' },
+    altgr:  { name: 'Tiefgestellte Ebene', how: 'ALT GR + Taste' },
+  };
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
-  function openQuiz() {
-    quizActive = true;
-    shuffleDeck();
-    quizRevealed = false;
-    document.getElementById('quiz-overlay').classList.add('active');
-    showQuizItem();
-  }
-
-  function closeQuiz() {
-    quizActive = false;
-    document.getElementById('quiz-overlay').classList.remove('active');
-    // Remove any flash classes
-    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
-  }
-
-  function showQuizItem() {
-    const item = quizDeck[quizIndex];
-    quizRevealed = false;
-
-    document.getElementById('quiz-char').textContent = item.c;
-    document.getElementById('quiz-answer').classList.remove('visible');
-    document.getElementById('quiz-combo').innerHTML = '';
-    document.getElementById('quiz-action-btn').textContent = 'Auflösen';
-    document.getElementById('quiz-progress').textContent =
-      `Zeichen ${quizIndex + 1} von ${quizTotal}`;
-  }
-
-  function revealQuiz() {
-    const item = quizDeck[quizIndex];
-    quizRevealed = true;
-
-    // Build combo display
-    const combo = document.getElementById('quiz-combo');
-    combo.innerHTML = '';
-    const kbds = item.info.split(' + ');
-    kbds.forEach((k, i) => {
-      const kEl = document.createElement('kbd');
-      kEl.textContent = k;
-      combo.appendChild(kEl);
-      if (i < kbds.length - 1) {
-        const plus = document.createTextNode(' + ');
-        combo.appendChild(plus);
-      }
+  function layerPool(layer) {
+    const seen = new Set();
+    const out = [];
+    ROWS.flat().forEach(key => {
+      if (key.sp) return;
+      const c = layer === 'normal' ? key.n : layer === 'shift' ? key.s : key.g;
+      if (c && !seen.has(c)) { seen.add(c); out.push({ c, layer, key }); }
     });
+    return out;
+  }
 
-    document.getElementById('quiz-answer').classList.add('visible');
-    document.getElementById('quiz-action-btn').textContent = 'Weiter';
+  function keyName(key) {
+    return /^[a-zäöü]$/.test(key.n) ? key.n.toUpperCase() : key.n;
+  }
 
-    // Flash keys on keyboard background
-    flashKeys(item);
+  function comboHtml(item) {
+    const k = keyName(item.key);
+    if (item.layer === 'normal') return `<kbd>${item.c}</kbd>`;
+    if (item.layer === 'shift')  return `<kbd>Shift</kbd> + <kbd>${k}</kbd> ergibt <kbd>${item.c}</kbd>`;
+    return `<kbd>Alt Gr</kbd> + <kbd>${k}</kbd> ergibt <kbd>${item.c}</kbd>`;
+  }
+
+  function openTrain() {
+    trainActive = true;
+    trainDeck = shuffle([
+      ...shuffle(layerPool('normal')).slice(0, TRAIN_PER_LAYER),
+      ...shuffle(layerPool('shift')).slice(0, TRAIN_PER_LAYER),
+      ...shuffle(layerPool('altgr')).slice(0, TRAIN_PER_LAYER),
+    ]);
+    trainIndex = 0;
+    trainScore = 0;
+    document.getElementById('info-panel').style.display = 'none';
+    document.getElementById('train-panel').classList.add('active');
+    document.querySelectorAll('.k.selected').forEach(el => el.classList.remove('selected'));
+    selectedKeyId = null;
+    setLayer('normal');
+    showTrainItem();
+  }
+
+  function closeTrain() {
+    trainActive = false;
+    trainStep = 0;
+    clearTimeout(trainAutoTimer);
+    document.getElementById('train-panel').classList.remove('active');
+    document.getElementById('info-panel').style.display = '';
+    document.querySelectorAll('.k.flash, .k.wrong').forEach(el => el.classList.remove('flash', 'wrong'));
+  }
+
+  function setTrainFeedback(html, cls) {
+    const fb = document.getElementById('train-feedback');
+    fb.innerHTML = html;
+    fb.className = cls || '';
+  }
+
+  function showTrainItem() {
+    const item = trainDeck[trainIndex];
+    trainStep = 1;
+    trainFirstTry = true;
+
+    const ch = document.getElementById('train-char');
+    ch.textContent = item.c;
+    ch.classList.remove('small');
+    document.getElementById('train-progress').textContent =
+      `Zeichen ${trainIndex + 1} von ${trainDeck.length}  ·  Punkte: ${trainScore}`;
+    document.getElementById('train-question').textContent =
+      'Schritt 1: Auf welcher Ebene der Tastatur liegt dieses Zeichen?';
+    setTrainFeedback('Suche das Zeichen auf der Tastatur. Steht es unten links, oben links oder unten rechts auf der Taste?');
+    document.getElementById('train-next').style.display = 'none';
+    document.querySelectorAll('.train-layer-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('right', 'wrong');
+    });
+    document.getElementById('train-layers').style.display = 'flex';
+  }
+
+  function trainChooseLayer(layer) {
+    if (!trainActive || trainStep !== 1) return;
+    const item = trainDeck[trainIndex];
+    const btn = document.querySelector(`.train-layer-btn[data-layer="${layer}"]`);
+
+    if (layer === item.layer) {
+      trainStep = 2;
+      btn.classList.add('right');
+      document.querySelectorAll('.train-layer-btn').forEach(b => b.disabled = true);
+      setLayer(item.layer);
+      document.getElementById('train-question').textContent =
+        'Schritt 2: Klicke auf der Tastatur die Taste an, mit der du dieses Zeichen schreibst.';
+      setTrainFeedback(
+        `Richtig: Das Zeichen <kbd>${item.c}</kbd> liegt auf der <strong>${LAYER_INFO[item.layer].name}</strong> (${LAYER_INFO[item.layer].how}).`,
+        'ok'
+      );
+    } else {
+      trainFirstTry = false;
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      setTrainFeedback('Nicht ganz. Schau noch einmal genau hin, wo das Zeichen auf der Taste steht, und versuche eine andere Ebene.', 'bad');
+    }
+  }
+
+  function trainKeyClick(key) {
+    if (trainStep !== 2) return;
+    const item = trainDeck[trainIndex];
+    const el = document.querySelector(`.k[data-id="${key.id}"]`);
+
+    if (key.id === item.key.id) {
+      trainStep = 3;
+      if (trainFirstTry) trainScore++;
+      flashKeys({ keys: [item.key.id], mod: item.layer });
+      document.getElementById('train-question').textContent = 'Geschafft!';
+      setTrainFeedback(
+        `So gibst du das Zeichen ein: ${comboHtml(item)}` +
+        (trainFirstTry ? '' : '<br>Diesmal gab es noch Fehlversuche, dafür gibt es keinen Punkt.'),
+        'ok'
+      );
+      document.getElementById('train-progress').textContent =
+        `Zeichen ${trainIndex + 1} von ${trainDeck.length}  ·  Punkte: ${trainScore}`;
+      const next = document.getElementById('train-next');
+      next.textContent = trainIndex + 1 >= trainDeck.length ? 'Ergebnis ansehen' : 'Weiter';
+      next.style.display = '';
+      clearTimeout(trainAutoTimer);
+      trainAutoTimer = setTimeout(trainNext, TRAIN_AUTO_MS);
+    } else {
+      trainFirstTry = false;
+      if (el) {
+        el.classList.remove('wrong');
+        void el.offsetWidth;
+        el.classList.add('wrong');
+      }
+      setTrainFeedback(`Das ist nicht die richtige Taste. Auf welcher Taste steht <kbd>${item.c}</kbd> in dieser Ebene?`, 'bad');
+    }
+  }
+
+  function trainNext() {
+    if (!trainActive || trainStep !== 3) return;
+    clearTimeout(trainAutoTimer);
+    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
+    trainIndex++;
+    if (trainIndex >= trainDeck.length) {
+      showTrainResult();
+    } else {
+      showTrainItem();
+    }
+  }
+
+  function showTrainResult() {
+    trainStep = 4;
+    const total = trainDeck.length;
+    const ch = document.getElementById('train-char');
+    ch.textContent = `${trainScore} / ${total}`;
+    ch.classList.add('small');
+    document.getElementById('train-question').textContent =
+      `Du hast ${trainScore} von ${total} Zeichen auf Anhieb richtig zugeordnet.`;
+    document.getElementById('train-layers').style.display = 'none';
+    setTrainFeedback(
+      'Merke: Normale Ebene = Taste drücken. Hochgestellte Ebene = SHIFT + Taste. Tiefgestellte Ebene = ALT GR + Taste.'
+    );
+    document.getElementById('train-progress').textContent = 'Ergebnis';
+    const next = document.getElementById('train-next');
+    next.textContent = 'Neue Runde';
+    next.style.display = '';
+    next.onclick = () => { next.onclick = trainNext; openTrain(); };
   }
 
   function flashKeys(item) {
-    // Remove existing flashes
     document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
 
-    // Small delay to allow reflow
     setTimeout(() => {
-      // Flash the specific keys
       item.keys.forEach(kid => {
         const el = document.querySelector(`.k[data-id="${kid}"]`);
         if (el) {
@@ -1017,7 +1187,6 @@
         }
       });
 
-      // Flash modifier keys
       if (item.mod === 'shift') {
         document.querySelectorAll('.k[data-isshift]').forEach(el => {
           el.classList.add('flash');
@@ -1030,23 +1199,6 @@
         });
       }
     }, 20);
-  }
-
-  function nextQuiz() {
-    quizIndex++;
-    if (quizIndex >= quizDeck.length) {
-      // All done – reshuffle
-      shuffleDeck();
-    }
-    showQuizItem();
-  }
-
-  function quizAction() {
-    if (!quizRevealed) {
-      revealQuiz();
-    } else {
-      nextQuiz();
-    }
   }
 
   // ── DARK MODE ─────────────────────────────────────────────────────────────
@@ -1064,9 +1216,12 @@
     if (e.key === '2' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('shift'); }
     if (e.key === '3' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('altgr'); }
 
-    if (quizActive) {
-      if (e.key === 'Escape') { closeQuiz(); }
-      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); quizAction(); }
+    if (trainActive) {
+      if (e.key === 'Escape') { closeTrain(); }
+      if ((e.key === ' ' || e.key === 'Enter') && (trainStep === 3 || trainStep === 4)) {
+        e.preventDefault();
+        document.getElementById('train-next').click();
+      }
     }
   });
 
