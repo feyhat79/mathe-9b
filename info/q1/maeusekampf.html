@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Abstrakte Datentypen: Stack, Queue & Der Mäusekampf | Informatik Q1</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Tab-Leiste */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin: 1.5rem 0 1.75rem 0;
+      border-bottom: 2px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 10px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--theme-oberstufe);
+      color: var(--theme-oberstufe);
+    }
+
+    .tab-btn.active {
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-color: var(--theme-oberstufe);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      width: 28px;
+      height: 28px;
+      background: var(--theme-oberstufe);
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .comparison-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      background: #ffffff;
+    }
+
+    .comparison-card.bad {
+      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+    }
+
+    .comparison-card.good {
+      border-left: 4px solid #10b981;
+      background: #ecfdf5;
+    }
+
+    .comparison-card h4 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .comparison-card.bad h4 { color: #b91c1c; }
+    .comparison-card.good h4 { color: #047857; }
+
+    /* Röhren-Simulation & Visualisierung */
+    .lab-stage {
+      background: #0f172a;
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      color: #f8fafc;
+      margin: 1.5rem 0;
+    }
+
+    .lab-tubes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 850px) {
+      .lab-tubes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tube-container {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tube-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 6px;
+    }
+
+    .tube-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    .tube-badge {
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    .tube-fifo { background: #1e40af; color: #dbeafe; }
+    .tube-lifo { background: #9a3412; color: #ffedd5; }
+
+    .tube-display {
+      min-height: 140px;
+      background: #090d16;
+      border: 1px dashed #475569;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mouse-item {
+      background: #3b82f6;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      width: 90%;
+      justify-content: space-between;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .mouse-power {
+      background: rgba(0,0,0,0.3);
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
+
+    /* Simulation Controls */
+    .sim-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #334155;
+    }
+
+    .btn-sim {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-sim:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-sim:disabled {
+      background: #475569;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .sim-log {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #a5f3fc;
+      margin-top: 10px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Code View Box */
+    .code-box {
+      background: #0f172a;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 1rem 0;
+      border: 1px solid #1e293b;
+    }
+
+    .code-box .kw { color: #93c5fd; font-weight: 700; }
+    .code-box .type { color: #6ee7b7; font-weight: 600; }
+    .code-box .str { color: #fde047; }
+    .code-box .num { color: #fdba74; }
+    .code-box .comment { color: #64748b; font-style: italic; }
+
+    /* Software Box */
+    .software-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin: 1.25rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Zurück-Button -->
+    <a href="index.html" class="btn-back">← Zurück zur Übersicht</a>
+
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="badge-pill badge-diff">Informatik Q1 • Reihe 2</div>
+      <h1>Abstrakte Datentypen: Stack, Queue & Der Mäusekampf</h1>
+      <p class="subtitle">Problemaufriss: Warum Arrays scheitern, Schnittstellen-Disziplin und das Röhrenlabor des Professors.</p>
+      <div class="timestamp-pill">
+        Stand: Schuljahr 2026/27 • BlueJ Starterprojekt &amp; Handreichung
+      </div>
+    </header>
+
+    <!-- Tab Bar Navigation -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab-motivation', this)">
+        <span>1</span> Problemaufriss: Warum keine Arrays?
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-labor', this)">
+        <span>2</span> Das Labor des Professors
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-simulation', this)">
+        <span>3</span> Interaktiver Mäusekampf
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-code', this)">
+        <span>4</span> Klassen &amp; Java-Code
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-download', this)">
+        <span>5</span> BlueJ für USB-Stick
+      </button>
+    </div>
+
+    <!-- =====================================================================
+         TAB 1: PROBLEMAUFRISS (WARUM KEINE ARRAYS?)
+         ===================================================================== -->
+    <div id="tab-motivation" class="tab-panel active">
+      
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">1</span>
+          Die Grenzen klassischer Arrays im Praxiseinsatz
+        </h2>
+        <p style="color:var(--text-muted); margin-bottom:1rem;">
+          In der Einführungsphase (EF) haben wir gelernt, mehrere Objekte gleichen Typs in einem Array (z. B. <code>Maus[] tiere = new Maus[10];</code>) abzulegen. In realen Software-Systemen (Warteschlangen, Protokollstapel, dynamische Röhren) versagt dieser Ansatz jedoch aus drei gravierenden Gründen:
+        </p>
+
+        <div class="comparison-grid">
+          
+          <!-- Das Problem mit Arrays -->
+          <div class="comparison-card bad">
+            <h4>Schwachstellen des Arrays (Bisher)</h4>
+            <ul style="padding-left: 1.25rem; font-size: 0.92rem; color: #7f1d1d; line-height: 1.5;">
+              <li><strong>Feste, starre Kapazität:</strong> Ein Array kann nach seiner Initialisierung weder wachsen noch schrumpfen. Kommt ein 11. Tier an, stürzt das Programm mit <code>ArrayIndexOutOfBoundsException</code> ab.</li>
+              <li><strong>Teurer Verschiebeaufwand:</strong> Wenn die vorderste Maus an Index <code>0</code> die Röhre verlässt, müssen alle verbleibenden Elemente umständlich um einen Platz aufgerückt werden ($O(n)$-Aufwand).</li>
+              <li><strong>Fehlende Zugriffsdisziplin:</strong> Über <code>tiere[4]</code> kann man direkt mitten in die Röhre greifen. Reale Naturgesetze (hinten anstellen, nur von oben entnehmen) werden ausgehebelt.</li>
+            </ul>
+          </div>
+
+          <!-- Die Lösung mit ADT -->
+          <div class="comparison-card good">
+            <h4>Die Lösung: Abstrakte Datentypen (ADT)</h4>
+            <ul style="padding-left: 1.25rem; font-size: 0.92rem; color: #065f46; line-height: 1.5;">
+              <li><strong>Dynamisches Wachstum:</strong> Die Struktur belegt nur exakt so viel Arbeitsspeicher, wie gerade benötigt wird. Es gibt keine starre Obergrenze.</li>
+              <li><strong>Effiziente Operationen:</strong> Elemente werden am Anfang oder Ende mit konstantem Aufwand ($O(1)$) angehängt oder entnommen – ohne Umsortieren des Rests.</li>
+              <li><strong>Strikte Kapselung:</strong> Der Zugriff ist ausschließlich über klar definierte Methoden (z. B. <code>push</code>, <code>pop</code>, <code>enqueue</code>, <code>dequeue</code>) möglich. Schummeln mitten in der Struktur ist technisch unmöglich.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--radius-md); padding:1rem 1.25rem; margin-top:1.25rem;">
+          <h4 style="color:#1e3a8a; font-size:0.98rem; font-weight:800; margin-bottom:4px;">Merksatz: Was bedeutet „Abstrakter Datentyp“ (ADT)?</h4>
+          <p style="font-size:0.92rem; color:#1e293b; line-height:1.45;">
+            Ein Abstrakter Datentyp trennt strikt zwischen der <strong>Spezifikation</strong> (<em>„Was kann die Datenstruktur von außen?“</em>) und der <strong>Implementierung</strong> (<em>„Wie ist sie intern im Speicher aufgebaut?“</em>). Als Programmierer nutzen wir die saubere Schnittstelle, ohne uns mit Speicheradressen oder internen Arrays herumschlagen zu müssen.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =====================================================================
+         TAB 2: DAS LABOR DES PROFESSORS
+         ===================================================================== -->
+    <div id="tab-labor" class="tab-panel">
+      
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">2</span>
+          Der Versuchsaufbau: Röhren, Schächte &amp; Naturgesetze
+        </h2>
+        <p style="color:var(--text-muted); margin-bottom:1rem;">
+          Um das Verhalten von Datenstrukturen intuitiv zu verstehen, betrachten wir das Experiment von Professor Dr. Hastig. Der Versuchsaufbau besteht aus drei klar getrennten Bereichen:
+        </p>
+
+        <div class="comparison-grid">
+          
+          <!-- QUEUE -->
+          <div class="comparison-card" style="border-left: 4px solid #2563eb; background:#f0f9ff;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h4 style="color:#1e40af; margin:0;">1. Die Warteschlange (Queue)</h4>
+              <span class="badge-pill" style="background:#dbeafe; color:#1e40af; margin:0;">FIFO-Prinzip</span>
+            </div>
+            <p style="font-size:0.92rem; color:#334155; line-height:1.45;">
+              • <strong>Bauweise:</strong> Eine beidseitig offene Glasröhre (Eingang und Ausgang).<br>
+              • <strong>Prinzip:</strong> <strong>FIFO</strong> (<em>First In, First Out</em>). Wer zuerst die Röhre betritt, kommt auch als Erstes vorne wieder heraus.<br>
+              • <strong>Methoden:</strong> <code>enqueue(o)</code> (hinten anstellen), <code>dequeue()</code> (vorne verlassen), <code>front()</code> (vorderstes Element ansehen).
+            </p>
+          </div>
+
+          <!-- STACK -->
+          <div class="comparison-card" style="border-left: 4px solid #ea580c; background:#fff7ed;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <h4 style="color:#9a3412; margin:0;">2. Der Kellerspeicher (Stack)</h4>
+              <span class="badge-pill" style="background:#ffedd5; color:#9a3412; margin:0;">LIFO-Prinzip</span>
+            </div>
+            <p style="font-size:0.92rem; color:#334155; line-height:1.45;">
+              • <strong>Bauweise:</strong> Ein senkrechter, unten geschlossener Schacht (Sackgasse).<br>
+              • <strong>Prinzip:</strong> <strong>LIFO</strong> (<em>Last In, First Out</em>). Wer zuletzt hineingesprungen ist, sitzt ganz oben auf und muss als Erstes wieder heraus.<br>
+              • <strong>Methoden:</strong> <code>push(o)</code> (oben drauflegen), <code>pop()</code> (oberstes entfernen), <code>peek()</code> (oberstes ansehen).
+            </p>
+          </div>
+
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.25rem; margin-top:1.25rem;">
+          <h4 style="font-size:1rem; font-weight:800; color:#1e3a8a; margin-bottom:6px;">Die Spielregeln des Mäusekampfs:</h4>
+          <ol style="padding-left:1.25rem; font-size:0.92rem; color:#334155; line-height:1.5;">
+            <li><strong>Der Eingang:</strong> Ankommende Mäuse reihen sich in der Eingangsröhre (<code>Queue eingang</code>) ein.</li>
+            <li><strong>Der Kampf:</strong> Die vorderste Maus im Eingang fordert die oberste Maus im Kellerschacht (<code>Stack keller</code>) heraus.</li>
+            <li><strong>Überlegenheit am Eingang:</strong> Ist die Eingangsmaus stärker als die Kellermaus, dringt sie siegreich in den Keller ein (<code>keller.push(eingang.front())</code>).</li>
+            <li><strong>Verteidigung im Keller:</strong> Ist die Kellermaus stärker oder gleichstark, verteidigt sie ihr Revier und die unterlegene/fertige Maus wandert in die Ausgangsröhre (<code>ausgang.enqueue(keller.peek())</code>).</li>
+            <li><strong>Leerer Keller:</strong> Ist der Keller leer, fällt die ankommende Eingangsmaus kampflos hinein.</li>
+          </ol>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =====================================================================
+         TAB 3: INTERAKTIVER MÄUSEKAMPF (SIMULATION)
+         ===================================================================== -->
+    <div id="tab-simulation" class="tab-panel">
+      
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">3</span>
+          Interaktive Labor-Simulation
+        </h2>
+        <p style="color:var(--text-muted); margin-bottom:0.75rem;">
+          Beobachte live, wie sich die Datenstrukturen bei jedem Schritt verändern. Du kannst das Duell Schritt für Schritt durchspielen oder eine automatische Simulation starten:
+        </p>
+
+        <div class="lab-stage">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <span style="font-weight:800; color:#38bdf8; font-size:1.05rem;">Versuchsstand: Professor Dr. Hastig</span>
+            <span id="sim-status" style="font-size:0.85rem; background:#334155; padding:3px 10px; border-radius:12px; color:#f1f5f9;">Bereit</span>
+          </div>
+
+          <div class="lab-tubes-grid">
+            
+            <!-- EINGANG -->
+            <div class="tube-container">
+              <div class="tube-header">
+                <span class="tube-title">1. Eingangsröhre</span>
+                <span class="tube-badge tube-fifo">Queue (FIFO)</span>
+              </div>
+              <div id="display-eingang" class="tube-display">
+                <!-- Dynamisch generiert -->
+              </div>
+            </div>
+
+            <!-- KELLER -->
+            <div class="tube-container">
+              <div class="tube-header">
+                <span class="tube-title">2. Kampf-Keller</span>
+                <span class="tube-badge tube-lifo">Stack (LIFO)</span>
+              </div>
+              <div id="display-keller" class="tube-display">
+                <!-- Dynamisch generiert -->
+              </div>
+            </div>
+
+            <!-- AUSGANG -->
+            <div class="tube-container">
+              <div class="tube-header">
+                <span class="tube-title">3. Ausgangsröhre</span>
+                <span class="tube-badge tube-fifo">Queue (FIFO)</span>
+              </div>
+              <div id="display-ausgang" class="tube-display">
+                <!-- Dynamisch generiert -->
+              </div>
+            </div>
+
+          </div>
+
+          <div class="sim-controls">
+            <button id="btn-next-step" class="btn-sim" onclick="stepSimulation()">Nächster Schritt →</button>
+            <button id="btn-auto-step" class="btn-sim" style="background:#059669;" onclick="runAutoSimulation()">Auto-Play ⏯</button>
+            <button class="btn-sim" style="background:#64748b;" onclick="resetSimulation()">Zurücksetzen ↺</button>
+          </div>
+
+          <div id="sim-log" class="sim-log">
+            Klicke auf „Nächster Schritt“, um die Simulation mit 4 Testmäusen zu starten.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =====================================================================
+         TAB 4: KLASSEN & JAVA-CODE
+         ===================================================================== -->
+    <div id="tab-code" class="tab-panel">
+      
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">4</span>
+          Der Java-Quelltext im BlueJ-Projekt
+        </h2>
+        <p style="color:var(--text-muted); margin-bottom:1rem;">
+          Das gesamte Szenario wird durch saubere, überschaubare Klassen modelliert. Hier sind die beiden Kernklassen:
+        </p>
+
+        <!-- Maus.java -->
+        <h3 style="font-size:1.1rem; font-weight:800; color:#1e3a8a; margin-top:1.25rem;">1. Die Klasse <code>Maus.java</code></h3>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.5rem;">
+          Ein einfaches Datenträger-Objekt mit Nummer und Zufallsstärke ($1 \dots 1000$):
+        </p>
+        <div class="code-box">
+<span class="kw">public class</span> <span class="type">Maus</span> {
+    <span class="kw">int</span> nummer; 
+    <span class="kw">int</span> staerke; 
+    
+    <span class="kw">public</span> <span class="type">Maus</span>(<span class="kw">int</span> n) {
+        nummer = n; 
+        staerke = (<span class="kw">int</span>)(Math.random() * <span class="num">1000</span>) + <span class="num">1</span>; 
+    }
+    
+    <span class="kw">int</span> getNummer() { <span class="kw">return</span> nummer; }
+    <span class="kw">int</span> getStaerke() { <span class="kw">return</span> staerke; }
+    
+    <span class="kw">void</span> drucken() {
+        System.out.println(<span class="str">"Maus #"</span> + nummer + <span class="str">" | Stärke: "</span> + staerke);  
+    }
+}</div>
+
+        <!-- Maeusekampf.java -->
+        <h3 style="font-size:1.1rem; font-weight:800; color:#1e3a8a; margin-top:1.75rem;">2. Der Duell-Algorithmus in <code>Maeusekampf.java</code></h3>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.5rem;">
+          Die Methode <code>meinMampf()</code> steuert die Interaktion zwischen <code>eingang</code> (Queue), <code>keller</code> (Stack) und <code>ausgang</code> (Queue):
+        </p>
+        <div class="code-box">
+<span class="kw">public class</span> <span class="type">Maeusekampf</span> {
+    <span class="type">Queue</span> eingang; 
+    <span class="type">Stack</span> keller; 
+    <span class="type">Queue</span> ausgang; 
+
+    <span class="kw">void</span> meinMampf() {
+        <span class="kw">while</span> (!eingang.isEmpty() || !keller.isEmpty()) {
+            <span class="kw">if</span> (eingang.isEmpty() && !keller.isEmpty()) {
+                vonKellerNachAusgang(); 
+            }
+            <span class="kw">else if</span> (!eingang.isEmpty() && keller.isEmpty()) {
+                vonEingangNachKeller(); 
+            }
+            <span class="kw">else</span> { <span class="comment">// Beide Strukturen enthalten mindestens eine Maus:</span>
+                <span class="type">Maus</span> mEingang = (<span class="type">Maus</span>)(eingang.front());
+                <span class="type">Maus</span> mKeller  = (<span class="type">Maus</span>)(keller.peek());
+                
+                <span class="kw">if</span> (mEingang.getStaerke() > mKeller.getStaerke()) {
+                    vonEingangNachKeller(); <span class="comment">// Eingangsmaus siegt und dringt ein</span>
+                } <span class="kw">else</span> {
+                    vonKellerNachAusgang(); <span class="comment">// Kellermaus verteidigt & wandert raus</span>
+                }
+            }
+        }
+    }
+}</div>
+
+      </div>
+
+    </div>
+
+    <!-- =====================================================================
+         TAB 5: BLUEJ PORTABLE DOWNLOAD & USB-STICK
+         ===================================================================== -->
+    <div id="tab-download" class="tab-panel">
+      
+      <div class="card-section">
+        <h2 class="card-title">
+          <span class="step-marker">5</span>
+          BlueJ Portable für deinen USB-Stick
+        </h2>
+        <p style="color:var(--text-muted); margin-bottom:1.25rem;">
+          Damit du sowohl auf den Schul-PCs als auch zu Hause am eigenen Laptop oder PC ohne Administrator-Rechte programmieren kannst, stellen wir die offizielle Standalone-Version von BlueJ bereit:
+        </p>
+
+        <!-- Software Box -->
+        <div class="software-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div>
+              <span class="badge-pill" style="background:#eff6ff; color:#1d4ed8; margin-bottom:0.4rem;">Installationsfrei • Plug &amp; Play</span>
+              <h3 style="font-size:1.25rem; font-weight:800; color:var(--text-main); margin-bottom:4px;">BlueJ Portable (Version 6.0.1 für Windows)</h3>
+              <p style="color:var(--text-muted); font-size:0.92rem; max-width:650px;">
+                Vollständig konfiguriert inklusive aktuellem Java Development Kit (JDK). Läuft direkt von jedem USB-Stick ohne Installation.
+              </p>
+            </div>
+            <div>
+              <a href="https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-6.0.1/BlueJ-windows-6.0.1.zip" target="_blank" class="btn-open" style="background:#1e3a8a; color:#ffffff; padding:11px 20px; border-radius:var(--radius-sm); text-decoration:none; font-weight:700; font-size:0.92rem; display:inline-block;">
+                BlueJ Portable herunterladen (.zip) ↓
+              </a>
+            </div>
+          </div>
+
+          <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--border-color); font-size:0.9rem; color:var(--text-main); line-height:1.5;">
+            <strong>Anleitung in 3 einfachen Schritten:</strong><br>
+            1. <strong>ZIP entpacken:</strong> Lade die ZIP-Datei herunter und entpacke den gesamten Ordner auf deinen USB-Stick.<br>
+            2. <strong>Projekt ablegen:</strong> Kopiere den Projektordner <span class="code-pill">Maeusekampf</span> direkt neben die <span class="code-pill">BlueJ.exe</span>.<br>
+            3. <strong>Starten:</strong> Doppelklick auf <span class="code-pill">BlueJ.exe</span> – wähle <em>Projekt &gt; Projekt öffnen</em> und starte direkt durch!
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Informatik Qualifikationsphase 1 (Q1)</strong> • Schulportal 2026/2027</p>
+      <p style="margin-top: 4px;">Fragen zum Unterricht oder zu Aufgaben? Melde dich gerne in <strong>Microsoft Teams</strong>!</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Tab Switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      const target = document.getElementById(tabId);
+      if (target) {
+        target.classList.add('active');
+        btn.classList.add('active');
+      }
+    }
+
+    // =========================================================================
+    // INTERAKTIVE SIMULATION
+    // =========================================================================
+    const initialMice = [
+      { id: 1, power: 400 },
+      { id: 2, power: 750 },
+      { id: 3, power: 250 },
+      { id: 4, power: 900 }
+    ];
+
+    let state = {
+      eingang: [],
+      keller: [],
+      ausgang: [],
+      stepCount: 0,
+      autoTimer: null
+    };
+
+    function resetSimulation() {
+      if (state.autoTimer) clearInterval(state.autoTimer);
+      state.eingang = JSON.parse(JSON.stringify(initialMice));
+      state.keller = [];
+      state.ausgang = [];
+      state.stepCount = 0;
+      updateUI("Simulation zurückgesetzt. 4 Mäuse stehen in der Eingangsröhre bereit.");
+      document.getElementById('btn-next-step').disabled = false;
+      document.getElementById('sim-status').textContent = "Bereit (Schritt 0)";
+    }
+
+    function renderTubes() {
+      // Eingang (Queue: vorderste Maus ist Index 0)
+      const elEingang = document.getElementById('display-eingang');
+      elEingang.innerHTML = state.eingang.length === 0 
+        ? '<span style="color:#64748b; font-size:0.8rem;">(Röhre leer)</span>' 
+        : state.eingang.map((m, i) => `
+            <div class="mouse-item" style="background:${i === 0 ? '#38bdf8' : '#1e3a8a'};">
+              <span>${i === 0 ? '▶ ' : ''}Maus #${m.id}</span>
+              <span class="mouse-power">${m.power}</span>
+            </div>
+          `).join('');
+
+      // Keller (Stack: oberste Maus ist Index 0)
+      const elKeller = document.getElementById('display-keller');
+      elKeller.innerHTML = state.keller.length === 0 
+        ? '<span style="color:#64748b; font-size:0.8rem;">(Keller leer)</span>' 
+        : state.keller.map((m, i) => `
+            <div class="mouse-item" style="background:${i === 0 ? '#fb923c' : '#c2410c'};">
+              <span>${i === 0 ? '▲ Oben: ' : ''}Maus #${m.id}</span>
+              <span class="mouse-power">${m.power}</span>
+            </div>
+          `).join('') + '<div style="font-size:0.75rem; color:#64748b; margin-top:4px;">══ BODEN ══</div>';
+
+      // Ausgang (Queue)
+      const elAusgang = document.getElementById('display-ausgang');
+      elAusgang.innerHTML = state.ausgang.length === 0 
+        ? '<span style="color:#64748b; font-size:0.8rem;">(Noch keine Mäuse)</span>' 
+        : state.ausgang.map(m => `
+            <div class="mouse-item" style="background:#10b981;">
+              <span>Maus #${m.id} (Entkommen)</span>
+              <span class="mouse-power">${m.power}</span>
+            </div>
+          `).join('');
+    }
+
+    function updateUI(logMessage) {
+      renderTubes();
+      document.getElementById('sim-log').textContent = logMessage;
+    }
+
+    function stepSimulation() {
+      if (state.eingang.length === 0 && state.keller.length === 0) {
+        updateUI("Simulation beendet! Alle Mäuse haben den Versuchsaufbau durchlaufen.");
+        document.getElementById('btn-next-step').disabled = true;
+        document.getElementById('sim-status').textContent = "Fertig";
+        if (state.autoTimer) clearInterval(state.autoTimer);
+        return;
+      }
+
+      state.stepCount++;
+      document.getElementById('sim-status').textContent = "Schritt " + state.stepCount;
+
+      // Logik aus meinMampf()
+      if (state.eingang.length === 0 && state.keller.length > 0) {
+        const m = state.keller.shift();
+        state.ausgang.push(m);
+        updateUI(`Schritt ${state.stepCount}: Eingang ist leer ➔ Maus #${m.id} (Stärke ${m.power}) wandert aus dem Keller in den Ausgang.`);
+      }
+      else if (state.eingang.length > 0 && state.keller.length === 0) {
+        const m = state.eingang.shift();
+        state.keller.unshift(m);
+        updateUI(`Schritt ${state.stepCount}: Keller war leer ➔ Maus #${m.id} (Stärke ${m.power}) rutscht in den Keller.`);
+      }
+      else {
+        const mEingang = state.eingang[0];
+        const mKeller = state.keller[0];
+
+        if (mEingang.power > mKeller.power) {
+          const m = state.eingang.shift();
+          state.keller.unshift(m);
+          updateUI(`Schritt ${state.stepCount}: Duell! Maus #${m.id} (${m.power}) > Maus #${mKeller.id} (${mKeller.power}) ➔ Eingangsmaus siegt und drängt in den Keller!`);
+        } else {
+          const m = state.keller.shift();
+          state.ausgang.push(m);
+          updateUI(`Schritt ${state.stepCount}: Duell! Kellermaus #${m.id} (${m.power}) verteidigt Revier gegen #${mEingang.id} (${mEingang.power}) ➔ Maus #${m.id} wandert in den Ausgang!`);
+        }
+      }
+
+      if (state.eingang.length === 0 && state.keller.length === 0) {
+        document.getElementById('btn-next-step').disabled = true;
+        document.getElementById('sim-status').textContent = "Fertig";
+        if (state.autoTimer) clearInterval(state.autoTimer);
+      }
+    }
+
+    function runAutoSimulation() {
+      if (state.autoTimer) {
+        clearInterval(state.autoTimer);
+        state.autoTimer = null;
+        document.getElementById('btn-auto-step').textContent = "Auto-Play ⏯";
+      } else {
+        document.getElementById('btn-auto-step').textContent = "Pause ⏸";
+        state.autoTimer = setInterval(() => {
+          if (state.eingang.length === 0 && state.keller.length === 0) {
+            clearInterval(state.autoTimer);
+            state.autoTimer = null;
+            document.getElementById('btn-auto-step').textContent = "Auto-Play ⏯";
+          } else {
+            stepSimulation();
+          }
+        }, 1200);
+      }
+    }
+
+    // Initialisierung bei Seitenaufruf
+    document.addEventListener('DOMContentLoaded', () => {
+      resetSimulation();
+    });
+  </script>
+</body>
+</html>
