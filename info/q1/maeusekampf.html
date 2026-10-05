@@ -367,7 +367,7 @@
         <span>3</span> Interaktiver Mäusekampf
       </button>
       <button class="tab-btn" onclick="switchTab('tab-code', this)">
-        <span>4</span> Klassen &amp; Java-Code
+        <span>4</span> Modellierung der Mäuse
       </button>
       <button class="tab-btn" onclick="switchTab('tab-download', this)">
         <span>5</span> BlueJ für USB-Stick
@@ -424,7 +424,7 @@
     </div>
 
     <!-- =====================================================================
-         TAB 2: DAS LABOR DES PROFESSORS
+         TAB 2: DAS LABOR DES PROFESSORS (MIT RÖHRENSYSTEM-SKIZZE)
          ===================================================================== -->
     <div id="tab-labor" class="tab-panel">
       
@@ -436,6 +436,113 @@
         <p style="color:var(--text-muted); margin-bottom:1rem;">
           Um das Verhalten von Datenstrukturen intuitiv zu verstehen, betrachten wir das Experiment von Professor Dr. Hastig. Der Versuchsaufbau besteht aus drei klar getrennten Bereichen:
         </p>
+
+        <!-- SVG-Skizze des Röhrensystems -->
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: var(--radius-md); padding: 1.25rem; margin: 1.25rem 0; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
+            <span style="font-weight: 800; color: #1e3a8a; font-size: 1.05rem;">Skizze: Das Röhren- und Schachtsystem im Labor</span>
+            <span class="badge-pill badge-oberstufe" style="margin: 0;">Schematische Übersicht</span>
+          </div>
+
+          <svg viewBox="0 0 740 290" width="100%" height="auto" style="display: block; font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#1e40af" />
+              </marker>
+              <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#c2410c" />
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#047857" />
+              </marker>
+            </defs>
+
+            <!-- Hintergrund Rahmen -->
+            <rect x="2" y="2" width="736" height="286" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+
+            <!-- ================= 1. EINGANGSRÖHRE (QUEUE) ================= -->
+            <rect x="25" y="55" width="230" height="50" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
+            <line x1="20" y1="55" x2="255" y2="55" stroke="#1e40af" stroke-width="3" />
+            <line x1="20" y1="105" x2="255" y2="105" stroke="#1e40af" stroke-width="3" />
+            
+            <text x="30" y="32" font-size="13" font-weight="bold" fill="#1e40af">1. Eingangsröhre (Queue)</text>
+            <rect x="185" y="20" width="55" height="18" rx="3" fill="#dbeafe" />
+            <text x="194" y="33" font-size="10" font-weight="bold" fill="#1e40af">FIFO</text>
+            <text x="30" y="47" font-size="10.5" fill="#475569">Beidseitig offen • Zustrom neuer Versuchsmäuse</text>
+
+            <!-- Pfeil Eingang -->
+            <path d="M 5 80 L 22 80" stroke="#1e40af" stroke-width="2.5" marker-end="url(#arrow-blue)" />
+
+            <!-- Mäuse in der Eingangsröhre -->
+            <rect x="40" y="65" width="48" height="30" rx="15" fill="#93c5fd" stroke="#1e40af" stroke-width="1.5" />
+            <text x="54" y="84" font-size="11" font-weight="bold" fill="#1e3a8a">M3</text>
+
+            <rect x="105" y="65" width="48" height="30" rx="15" fill="#60a5fa" stroke="#1e40af" stroke-width="1.5" />
+            <text x="119" y="84" font-size="11" font-weight="bold" fill="#1e3a8a">M2</text>
+
+            <rect x="175" y="63" width="55" height="34" rx="17" fill="#1e40af" stroke="#0f172a" stroke-width="2" />
+            <text x="192" y="84" font-size="12" font-weight="bold" fill="#ffffff">M1</text>
+            
+            <text x="175" y="122" font-size="10" font-weight="bold" fill="#1e40af">vorne (front)</text>
+
+            <!-- ================= WEICHE / DUELL-ZONE ================= -->
+            <rect x="255" y="35" width="150" height="90" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-dasharray="4,3" stroke-width="1.5" />
+            <text x="272" y="55" font-size="11" font-weight="bold" fill="#0f172a">Duell- &amp; Weichenzone</text>
+            <text x="268" y="72" font-size="9.5" fill="#475569">Professor vergleicht:</text>
+            <rect x="264" y="78" width="132" height="20" rx="3" fill="#f1f5f9" stroke="#cbd5e1" />
+            <text x="270" y="92" font-size="9" font-weight="bold" fill="#0f172a">Stärke(M_in) &gt; Stärke(M_keller)?</text>
+            <text x="268" y="115" font-size="9" fill="#059669">Ja ➔ push() in Keller</text>
+
+            <!-- Pfeil von Eingang in Weiche -->
+            <path d="M 235 80 L 255 80" stroke="#1e40af" stroke-width="2" marker-end="url(#arrow-blue)" />
+
+            <!-- ================= 2. KAMPF-KELLER (STACK) ================= -->
+            <rect x="300" y="125" width="60" height="135" fill="#fff7ed" stroke="#fed7aa" stroke-width="1" />
+            <line x1="300" y1="125" x2="300" y2="260" stroke="#c2410c" stroke-width="3" />
+            <line x1="360" y1="125" x2="360" y2="260" stroke="#c2410c" stroke-width="3" />
+            
+            <rect x="294" y="260" width="72" height="10" fill="#7c2d12" rx="2" />
+            <line x1="294" y1="260" x2="366" y2="260" stroke="#431407" stroke-width="2" />
+            <text x="304" y="280" font-size="9" font-weight="bold" fill="#7c2d12">BODEN</text>
+
+            <path d="M 322 110 L 322 135" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)" />
+            <path d="M 338 135 L 338 110" stroke="#c2410c" stroke-width="2" marker-end="url(#arrow-orange)" />
+
+            <rect x="306" y="218" width="48" height="30" rx="15" fill="#fed7aa" stroke="#c2410c" stroke-width="1.5" />
+            <text x="322" y="237" font-size="11" font-weight="bold" fill="#9a3412">M_a</text>
+
+            <rect x="304" y="160" width="52" height="34" rx="17" fill="#ea580c" stroke="#431407" stroke-width="2" />
+            <text x="320" y="181" font-size="12" font-weight="bold" fill="#ffffff">M_b</text>
+
+            <text x="375" y="165" font-size="13" font-weight="bold" fill="#c2410c">2. Kampf-Keller (Stack)</text>
+            <rect x="375" y="173" width="55" height="18" rx="3" fill="#ffedd5" />
+            <text x="384" y="186" font-size="10" font-weight="bold" fill="#9a3412">LIFO</text>
+            <text x="375" y="206" font-size="10.5" fill="#475569">• Unten geschlossene Sackgasse</text>
+            <text x="375" y="222" font-size="10.5" fill="#475569">• Oben drauflegen: push()</text>
+            <text x="375" y="238" font-size="10.5" fill="#475569">• Oben abräumen: pop() / peek()</text>
+
+            <path d="M 350 145 C 380 145, 395 100, 410 80" fill="none" stroke="#047857" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow-green)" />
+
+            <!-- ================= 3. AUSGANGSRÖHRE (QUEUE) ================= -->
+            <rect x="405" y="55" width="270" height="50" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1" />
+            <line x1="405" y1="55" x2="685" y2="55" stroke="#047857" stroke-width="3" />
+            <line x1="405" y1="105" x2="685" y2="105" stroke="#047857" stroke-width="3" />
+
+            <text x="420" y="32" font-size="13" font-weight="bold" fill="#047857">3. Ausgangsröhre (Queue)</text>
+            <rect x="615" y="20" width="55" height="18" rx="3" fill="#d1fae5" />
+            <text x="624" y="33" font-size="10" font-weight="bold" fill="#047857">FIFO</text>
+            <text x="420" y="47" font-size="10.5" fill="#475569">Beidseitig offen • Verlassen des Versuchsaufbaus</text>
+
+            <rect x="460" y="65" width="55" height="30" rx="15" fill="#10b981" stroke="#065f46" stroke-width="1.5" />
+            <text x="473" y="84" font-size="11" font-weight="bold" fill="#ffffff">M_fertig</text>
+
+            <rect x="540" y="65" width="55" height="30" rx="15" fill="#34d399" stroke="#065f46" stroke-width="1.5" />
+            <text x="555" y="84" font-size="11" font-weight="bold" fill="#065f46">M_sieger</text>
+
+            <path d="M 660 80 L 705 80" stroke="#047857" stroke-width="2.5" marker-end="url(#arrow-green)" />
+            <text x="655" y="122" font-size="10" font-weight="bold" fill="#047857">Ins Freie</text>
+          </svg>
+        </div>
 
         <div class="comparison-grid">
           
@@ -557,74 +664,59 @@
     </div>
 
     <!-- =====================================================================
-         TAB 4: KLASSEN & JAVA-CODE
+         TAB 4: DIE VERSUCHSMÄUSE: MODELLIERUNG (OHNE QUELLCODE)
          ===================================================================== -->
     <div id="tab-code" class="tab-panel">
       
       <div class="card-section">
         <h2 class="card-title">
           <span class="step-marker">4</span>
-          Der Java-Quelltext im BlueJ-Projekt
+          Die Versuchsmäuse: Merkmale, Verhalten &amp; Modellierung
         </h2>
-        <p style="color:var(--text-muted); margin-bottom:1rem;">
-          Das gesamte Szenario wird durch saubere, überschaubare Klassen modelliert. Hier sind die beiden Kernklassen:
+        <p style="color:var(--text-muted); margin-bottom:1.25rem;">
+          Bevor Klassen und Methoden in Java programmiert werden, erarbeiten wir gemeinsam die Modellierung der Versuchsmäuse im Objektorientierten Entwurf (OOP). Jede Maus ist ein eigenständiges Objekt im Labor des Professors.
         </p>
 
-        <!-- Maus.java -->
-        <h3 style="font-size:1.1rem; font-weight:800; color:#1e3a8a; margin-top:1.25rem;">1. Die Klasse <code>Maus.java</code></h3>
-        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.5rem;">
-          Ein einfaches Datenträger-Objekt mit Nummer und Zufallsstärke ($1 \dots 1000$):
-        </p>
-        <div class="code-box">
-<span class="kw">public class</span> <span class="type">Maus</span> {
-    <span class="kw">int</span> nummer; 
-    <span class="kw">int</span> staerke; 
-    
-    <span class="kw">public</span> <span class="type">Maus</span>(<span class="kw">int</span> n) {
-        nummer = n; 
-        staerke = (<span class="kw">int</span>)(Math.random() * <span class="num">1000</span>) + <span class="num">1</span>; 
-    }
-    
-    <span class="kw">int</span> getNummer() { <span class="kw">return</span> nummer; }
-    <span class="kw">int</span> getStaerke() { <span class="kw">return</span> staerke; }
-    
-    <span class="kw">void</span> drucken() {
-        System.out.println(<span class="str">"Maus #"</span> + nummer + <span class="str">" | Stärke: "</span> + staerke);  
-    }
-}</div>
+        <!-- Merkmale & Verhalten -->
+        <div class="comparison-grid">
+          
+          <div class="comparison-card" style="border-left: 4px solid var(--theme-oberstufe); background:#f8fafc;">
+            <h4 style="color:#1e3a8a; margin-bottom:0.75rem;">1. Merkmale einer Maus (Attribute)</h4>
+            <p style="font-size:0.92rem; color:#334155; line-height:1.5; margin-bottom:0.75rem;">
+              Was muss sich eine Maus im Arbeitsspeicher merken können?
+            </p>
+            <ul style="padding-left:1.25rem; font-size:0.92rem; color:#334155; line-height:1.5;">
+              <li><strong>Eindeutige Nummer:</strong> Jedes Tier erhält beim Eintritt ins Labor eine feste Kennziffer (z. B. auf dem Rücken markiert), damit der Professor die Maus während des gesamten Versuchs eindeutig identifizieren und protokollieren kann.</li>
+              <li><strong>Biologische Kampfkraft (Stärke):</strong> Jede Maus besitzt ein individuelles Stärke-Niveau (ein Messwert von $1$ bis $1000$). Diese Stärke entscheidet im Röhrenduell darüber, ob die Maus die Vorherrschaft gewinnt oder weitergeleitet wird.</li>
+            </ul>
+          </div>
 
-        <!-- Maeusekampf.java -->
-        <h3 style="font-size:1.1rem; font-weight:800; color:#1e3a8a; margin-top:1.75rem;">2. Der Duell-Algorithmus in <code>Maeusekampf.java</code></h3>
-        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:0.5rem;">
-          Die Methode <code>meinMampf()</code> steuert die Interaktion zwischen <code>eingang</code> (Queue), <code>keller</code> (Stack) und <code>ausgang</code> (Queue):
-        </p>
-        <div class="code-box">
-<span class="kw">public class</span> <span class="type">Maeusekampf</span> {
-    <span class="type">Queue</span> eingang; 
-    <span class="type">Stack</span> keller; 
-    <span class="type">Queue</span> ausgang; 
+          <div class="comparison-card" style="border-left: 4px solid #059669; background:#f8fafc;">
+            <h4 style="color:#059669; margin-bottom:0.75rem;">2. Fähigkeiten einer Maus (Methoden)</h4>
+            <p style="font-size:0.92rem; color:#334155; line-height:1.5; margin-bottom:0.75rem;">
+              Welche Auskünfte und Aktionen muss ein Maus-Objekt liefern können?
+            </p>
+            <ul style="padding-left:1.25rem; font-size:0.92rem; color:#334155; line-height:1.5;">
+              <li><strong>Nummer mitteilen:</strong> Andere Objekte (wie die Duell-Arena oder der Versuchsleiter) müssen die Nummer abfragen können (z. B. für Protokolle oder Beschriftungen).</li>
+              <li><strong>Stärke preisgeben:</strong> Um Duell-Entscheidungen im Kellerschacht zu treffen, muss die aktuelle Stärke für Vergleiche abrufbar sein.</li>
+              <li><strong>Selbstauskunft auf der Konsole:</strong> Eine Maus sollte sich selbst formatiert auf dem Bildschirm melden können (z. B. Ausgabe von Nummer und Stärkewert im Terminal).</li>
+            </ul>
+          </div>
 
-    <span class="kw">void</span> meinMampf() {
-        <span class="kw">while</span> (!eingang.isEmpty() || !keller.isEmpty()) {
-            <span class="kw">if</span> (eingang.isEmpty() && !keller.isEmpty()) {
-                vonKellerNachAusgang(); 
-            }
-            <span class="kw">else if</span> (!eingang.isEmpty() && keller.isEmpty()) {
-                vonEingangNachKeller(); 
-            }
-            <span class="kw">else</span> { <span class="comment">// Beide Strukturen enthalten mindestens eine Maus:</span>
-                <span class="type">Maus</span> mEingang = (<span class="type">Maus</span>)(eingang.front());
-                <span class="type">Maus</span> mKeller  = (<span class="type">Maus</span>)(keller.peek());
-                
-                <span class="kw">if</span> (mEingang.getStaerke() > mKeller.getStaerke()) {
-                    vonEingangNachKeller(); <span class="comment">// Eingangsmaus siegt und dringt ein</span>
-                } <span class="kw">else</span> {
-                    vonKellerNachAusgang(); <span class="comment">// Kellermaus verteidigt & wandert raus</span>
-                }
-            }
-        }
-    }
-}</div>
+        </div>
+
+        <!-- Leitfragen für den Unterricht -->
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:var(--radius-md); padding:1.25rem; margin-top:1.25rem;">
+          <h4 style="font-size:1.05rem; font-weight:800; color:#1e3a8a; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px;">
+            <span>Leitfragen für die gemeinsame Umsetzung im Unterricht:</span>
+          </h4>
+          <ol style="padding-left:1.25rem; font-size:0.92rem; color:#334155; line-height:1.55;">
+            <li><strong>Variablentypen:</strong> Welche Datentypen eignen sich in Java am besten für die Attribute <code>nummer</code> und <code>staerke</code>?</li>
+            <li><strong>Der Konstruktor:</strong> Warum sollte der Konstruktor die Nummer als Parameter entgegennehmen (von außen vorgegeben), die Stärke jedoch selbstständig als Zufallszahl zwischen $1$ und $1000$ würfeln?</li>
+            <li><strong>Geheimnisprinzip &amp; Kapselung:</strong> Warum machen wir Attribute nach den OOP-Regeln üblicherweise <code>private</code> und schreiben separate Abfrage-Methoden (Getter), statt von außen direkt auf die Variablen zuzugreifen?</li>
+            <li><strong>Rückgabetyp vs. void:</strong> Welchen Rückgabetyp benötigen Methoden, die einen Wert liefern, und welchen Typ hat eine reine Konsolenausgabe?</li>
+          </ol>
+        </div>
 
       </div>
 
