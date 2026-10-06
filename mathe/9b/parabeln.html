@@ -128,44 +128,52 @@
       transition: background-color 0.2s, color 0.2s;
     }
 
-    /* Top Navigation */
-    .top-nav {
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* PRÄSENTATIONS-LEISTE (STANDARD GEM. GEMINI.MD) */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
       background: #0f172a;
       color: #ffffff;
-      padding: 11px 20px;
+      padding: 10px 16px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
       border-bottom: 2px solid var(--primary);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
 
-    .top-nav-left {
+    .presenter-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .nav-back-link {
+    .btn-nav-back {
       color: #94a3b8;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       padding: 6px 12px;
       border-radius: 6px;
       background: rgba(255,255,255,0.08);
       transition: all 0.2s;
     }
-    .nav-back-link:hover {
+    .btn-nav-back:hover {
       background: rgba(255,255,255,0.18);
       color: #ffffff;
     }
 
-    .nav-topic-title {
+    .presenter-title {
       font-size: 0.95rem;
       font-weight: 700;
       display: flex;
@@ -173,34 +181,60 @@
       gap: 8px;
     }
 
-    .nav-badge {
+    .presenter-badge {
       background: var(--primary);
-      color: #ffffff;
+      color: white;
       font-size: 0.72rem;
       padding: 2px 8px;
       border-radius: 999px;
-      font-weight: 800;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .btn-beamer {
-      background: rgba(255,255,255,0.12);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 14px;
+    .presenter-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 13px;
       border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.84rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: inherit;
     }
-    .btn-beamer:hover {
-      background: rgba(255,255,255,0.22);
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
     }
-    .btn-beamer.active {
+    .presenter-tab-btn.active {
       background: var(--primary);
+      color: #ffffff;
       border-color: #60a5fa;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+    }
+    .presenter-tab-btn.btn-summary {
+      background: #059669;
+      color: #ffffff;
+      border-color: #34d399;
+    }
+    .presenter-tab-btn.btn-summary:hover {
+      background: #047857;
+      border-color: #10b981;
     }
 
     /* Container */
@@ -265,6 +299,7 @@
       padding: 2rem 2.25rem;
       margin-bottom: 2rem;
       box-shadow: var(--shadow-sm);
+      scroll-margin-top: 75px;
     }
 
     .card-title {
@@ -687,21 +722,23 @@
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="top-nav">
-    <div class="top-nav-left">
-      <a href="index.html" class="nav-back-link">← Zurück zur Übersicht 9b</a>
-      <div class="nav-topic-title">
+  <!-- Top Navigation (Presenter-Bar) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
+      <div class="presenter-title">
         <span>Mathe 9b • Kapitel II: Quadratische Funktionen</span>
-        <span class="nav-badge">Unterrichtsrückblick</span>
+        <span class="presenter-badge">Unterrichtsrückblick</span>
       </div>
     </div>
-    <div>
-      <button class="btn-beamer" id="btnBeamerToggle" onclick="toggleBeamer()">
-        <span id="beamerText">Beamer-Modus</span>
-      </button>
+    <div class="presenter-actions">
+      <a href="#sec-ausgangslage" class="presenter-tab-btn active">1. Kontext</a>
+      <a href="#sec-herleitung" class="presenter-tab-btn">2. Herleitung</a>
+      <a href="#sec-zuwachs" class="presenter-tab-btn">3. Zuwachsanalyse</a>
+      <a href="#sec-graph" class="presenter-tab-btn">4. Graphen-Labor</a>
+      <a href="#sec-merksatz" class="presenter-tab-btn btn-summary">Zusammenfassung</a>
     </div>
-  </header>
+  </nav>
 
   <main class="container">
 
@@ -715,7 +752,7 @@
     </section>
 
     <!-- 1. Der Sachkontext -->
-    <article class="card">
+    <article class="card" id="sec-ausgangslage">
       <h2 class="card-title">
         <span class="step-circle">1</span>
         Die Ausgangslage: Der Ferienjob-Wettstreit
@@ -738,7 +775,7 @@
     </article>
 
     <!-- 2. Zustandekommen der Funktionsgleichungen nebeneinander -->
-    <article class="card">
+    <article class="card" id="sec-herleitung">
       <h2 class="card-title">
         <span class="step-circle">2</span>
         Wie kommen die Funktionsgleichungen zustande?
@@ -868,7 +905,7 @@
     </article>
 
     <!-- 3. Wertevergleich & Zuwachsanalyse -->
-    <article class="card">
+    <article class="card" id="sec-zuwachs">
       <h2 class="card-title">
         <span class="step-circle">3</span>
         Wertevergleich &amp; Die Zuwachsanalyse ($\Delta y$)
@@ -966,7 +1003,7 @@
     </article>
 
     <!-- 4. Grafische Veranschaulichung mit Slider -->
-    <article class="card">
+    <article class="card" id="sec-graph">
       <h2 class="card-title">
         <span class="step-circle">4</span>
         Grafische Veranschaulichung im Koordinatensystem
@@ -1163,7 +1200,7 @@
     </article>
 
     <!-- 5. Merkheft-Sicherung (Der Merksatz) -->
-    <article class="card">
+    <article class="card" id="sec-merksatz">
       <h2 class="card-title">
         <span class="step-circle">5</span>
         Zusammenfassung fürs Merkheft
@@ -1221,14 +1258,6 @@
   </main>
 
   <script>
-    // Beamer-Modus umschalten
-    function toggleBeamer() {
-      document.body.classList.toggle('beamer-mode');
-      const isBeamer = document.body.classList.contains('beamer-mode');
-      document.getElementById('btnBeamerToggle').classList.toggle('active', isBeamer);
-      document.getElementById('beamerText').innerText = isBeamer ? "Beamer AN" : "Beamer-Modus";
-    }
-
     // Tagesdaten für den Schieberegler
     const TAGES_DATEN = [
       { day: 0, felix: 0, samira: 0, diff: 0, leader: "Startpunkt", comment: "<strong>Tag 0 – Die Ausgangslage:</strong> Noch hat niemand gearbeitet, beide Konten stehen bei 0 €. Beide Graphen starten gemeinsam im Koordinatenursprung (0|0)." },
@@ -1347,6 +1376,28 @@
     // Initialisierung bei Start
     window.addEventListener('DOMContentLoaded', () => {
       showDay(4);
+
+      // Scroll-Highlighting für Presenter-Navigation
+      const navLinks = document.querySelectorAll('.presenter-actions .presenter-tab-btn');
+      const secIds = ['sec-ausgangslage', 'sec-herleitung', 'sec-zuwachs', 'sec-graph', 'sec-merksatz'];
+      const sections = secIds.map(id => document.getElementById(id)).filter(Boolean);
+
+      window.addEventListener('scroll', () => {
+        let currentId = 'sec-ausgangslage';
+        const scrollPos = window.scrollY + 120;
+        sections.forEach(sec => {
+          if (sec && sec.offsetTop <= scrollPos) {
+            currentId = sec.id;
+          }
+        });
+        navLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }, { passive: true });
     });
   </script>
 

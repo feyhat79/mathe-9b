@@ -49,41 +49,109 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      padding: 0 1rem 4rem 1rem;
+      padding-bottom: 5rem;
+    }
+
+    /* PRÄSENTATIONS-LEISTE (STANDARD GEM. GEMINI.MD) */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-back {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .btn-nav-back:hover {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+    }
+
+    .presenter-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presenter-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .presenter-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+    .presenter-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
     }
 
     .container {
       max-width: 860px;
       margin: 0 auto;
-    }
-
-    /* Navigation */
-    .top-nav {
-      padding: 1.25rem 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-
-    .back-btn:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-      border-color: var(--primary);
+      padding: 1.5rem 1rem;
     }
 
     /* Header */
@@ -106,41 +174,6 @@
     .module-desc {
       color: var(--text-muted);
       font-size: 1rem;
-    }
-
-    /* Tabs */
-    .tab-bar {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      margin-bottom: 1.75rem;
-      border-bottom: 2px solid var(--border);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .tab-btn {
-      padding: 10px 16px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-    }
-
-    .tab-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .tab-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
     }
 
     /* Panels */
@@ -645,34 +678,35 @@
 </head>
 <body>
 
-  <div class="container">
-
-    <!-- Top Nav -->
-    <div class="top-nav">
-      <a href="index.html" class="back-btn">← Zur Themenübersicht</a>
-      <span style="font-size: 0.82rem; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 999px;">
-        🟢 Stand: 7. September 2026
-      </span>
+  <!-- PRÄSENTATIONS-LEISTE (STANDARD GEM. GEMINI.MD) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
+      <div class="presenter-title">
+        <span>Mathe 9b • Wiederholung: LGS</span>
+        <span class="presenter-badge">Themen-Modul</span>
+      </div>
     </div>
+    <div class="presenter-actions">
+      <button class="presenter-tab-btn active" onclick="switchTab('tab-einsetzen')">1. Einsetzungsverfahren</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-gleichsetzen')">2. Gleichsetzungsverfahren</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-graphisch')">3. Graphische Deutung</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-addieren')">4. Additionsverfahren</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-quiz')">5. Selbst-Check</button>
+    </div>
+  </nav>
+
+  <div class="container">
 
     <!-- Header -->
     <div class="module-header">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
         <h1 style="margin-bottom: 0;">Lineare Gleichungssysteme (LGS)</h1>
         <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); padding: 3px 8px; border-radius: 6px;">
-          Mathe 9b • Modul 1
+          Mathe 9b • Wiederholung
         </span>
       </div>
       <p class="module-desc" style="margin-top: 0.5rem;">Übersicht der rechnerischen Lösungsverfahren, der graphischen Interpretation und interaktiver Selbst-Check.</p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('tab-einsetzen')">1. Einsetzungsverfahren</button>
-      <button class="tab-btn" onclick="switchTab('tab-gleichsetzen')">2. Gleichsetzungsverfahren</button>
-      <button class="tab-btn" onclick="switchTab('tab-graphisch')">3. Graphische Deutung</button>
-      <button class="tab-btn" onclick="switchTab('tab-addieren')">4. Additionsverfahren</button>
-      <button class="tab-btn" onclick="switchTab('tab-quiz')" style="border-color: var(--primary); color: var(--primary); font-weight: 800;">5. Selbst-Check (Quiz) 🎯</button>
     </div>
 
     <!-- ========================================== -->
@@ -883,14 +917,14 @@
         <!-- Banner zum Arbeitsblatt -->
         <div class="worksheet-banner">
           <div class="worksheet-banner-left">
-            <div class="worksheet-banner-icon">📄</div>
+            <div class="worksheet-banner-icon" style="font-weight: 800; font-size: 0.95rem; color: #1e40af; background: #dbeafe; border-radius: 8px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">AB</div>
             <div>
               <div class="worksheet-banner-title">Arbeitsblatt für den Unterricht (Analog mit Karoraster)</div>
               <div class="worksheet-banner-desc">2-seitiges DIN-A4-Arbeitsblatt mit Zeichenrastern für Bleistift &amp; Geodreieck sowie integrierter Lehrerversion (Lösungen in Rot).</div>
             </div>
           </div>
           <a href="arbeitsblatt-lgs-graphisch.html" target="_blank" class="btn-worksheet">
-            <span>🖨️</span> Arbeitsblatt öffnen &amp; drucken →
+            Arbeitsblatt öffnen &amp; drucken →
           </a>
         </div>
 
@@ -908,7 +942,7 @@
         <!-- Grüner Flashback-Kasten -->
         <div class="box-flashback">
           <div class="box-flashback-title">
-            <span>🔄</span> Flashback: Wie zeichnet man $y = m \cdot x + b$ noch einmal?
+            Flashback: Wie zeichnet man $y = m \cdot x + b$ noch einmal?
           </div>
           <div class="box-flashback-content">
             <p style="margin-bottom: 0.4rem;">Lineare Funktionen hast du im letzten Schuljahr kennengelernt. So bringst du eine Gerade schnell und sicher aufs Papier:</p>
@@ -1118,7 +1152,7 @@
         <!-- Didaktische Reflexionsbox: Grenzen des Zeichnens -->
         <div class="box-reflection">
           <div class="box-reflection-title">
-            <span>🤔</span> Warum rechnen wir eigentlich, wenn man doch zeichnen kann?
+            Warum rechnen wir eigentlich, wenn man doch zeichnen kann?
           </div>
           <p style="color: #581c87; font-size: 0.95rem; line-height: 1.6;">
             Das graphische Verfahren ist hervorragend geeignet, um Gleichungssysteme <strong>geometrisch zu verstehen</strong> und Lösungen anschaulich zu überprüfen. In der Praxis stößt das Zeichnen mit Bleistift und Geodreieck jedoch schnell an Grenzen:
@@ -1295,7 +1329,7 @@
         
         <!-- Startbildschirm -->
         <div id="quiz-start-view">
-          <h2 class="card-title">🎯 Selbst-Check: Eigendiagnose zu LGS</h2>
+          <h2 class="card-title">Selbst-Check: Eigendiagnose zu LGS</h2>
           <p style="margin-bottom: 1.25rem;">
             Finde heraus, wie sicher du im Thema <strong>Lineare Gleichungssysteme</strong> bist! 
             Bei jedem Start wählt das System <strong>10 zufällige Fragen</strong> aus unserem Pool:
@@ -1354,7 +1388,7 @@
 
         <!-- Auswertungs-Ansicht -->
         <div id="quiz-result-view" style="display: none;">
-          <h2 class="card-title">🎉 Deine Eigendiagnose</h2>
+          <h2 class="card-title">Deine Eigendiagnose</h2>
           
           <div style="text-align: center; padding: 1.5rem 0;">
             <div id="quiz-final-score" style="font-size: 3rem; font-weight: 800; color: var(--primary);">8 / 10</div>
@@ -1374,7 +1408,7 @@
           </div>
 
           <button class="btn-next-q" onclick="startQuiz()" style="margin-top: 1.5rem;">
-            🔄 Test mit 10 neuen Fragen wiederholen
+            Test mit 10 neuen Fragen wiederholen
           </button>
         </div>
 
@@ -1392,14 +1426,25 @@
   <!-- Script für Tabs, Aufklapplösungen & Quiz -->
   <script>
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.presenter-tab-btn, .tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
 
-      event.currentTarget.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
+      const target = document.getElementById(tabId);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
-      if (window.renderMathInElement) {
-        renderMathInElement(document.getElementById(tabId), {
+      document.querySelectorAll('.presenter-tab-btn, .tab-btn').forEach(btn => {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
+          btn.classList.add('active');
+        }
+      });
+
+      if (typeof triggerKaTeX === 'function') {
+        triggerKaTeX();
+      } else if (window.renderMathInElement && target) {
+        renderMathInElement(target, {
           delimiters: [
             {left: '$$', right: '$$', display: true},
             {left: '$', right: '$', display: false}
@@ -1795,10 +1840,10 @@
       let badgeText = "Solide Leistung!";
       let badgeColor = "#2563eb";
       if (quizScore >= 9) {
-        badgeText = "Hervorragend! Du bist top vorbereitet! 🌟";
+        badgeText = "Hervorragend! Du bist top vorbereitet!";
         badgeColor = "#059669";
       } else if (quizScore >= 7) {
-        badgeText = "Gute Leistung! Die Grundlagen sitzen sicher. 👍";
+        badgeText = "Gute Leistung! Die Grundlagen sitzen sicher.";
         badgeColor = "#2563eb";
       } else if (quizScore >= 5) {
         badgeText = "Auf gutem Weg! Wiederhole noch gezielt deine Schwachstellen.";
