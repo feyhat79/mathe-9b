@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AB 2.1 – Lineares vs. Quadratisches Wachstum: Einstieg in Parabeln | Mathe 9b</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.38;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-teacher-active {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    body.teacher-mode .badge-teacher-active {
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       DRUCK- & BLATT-LAYOUT (2 SEITEN A4)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 1.5rem auto 4rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 11mm 14mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* ========================================================
+       TYPOGRAFIE & FARBEN (FÜLLER-STIL GEMÄSS GEMINI.MD)
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 7px;
+      margin-bottom: 10px;
+    }
+
+    .doc-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .doc-course {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .badge-sheet {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 8pt;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 8.5pt;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-label {
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* ========================================================
+       AUFGABEN-KARTEN & STRUKTUR
+       ======================================================== */
+    .task-card {
+      margin-bottom: 11px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+
+    .task-title {
+      font-size: 12pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-num {
+      width: 22px;
+      height: 22px;
+      background: #1e3a8a;
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9pt;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .task-points {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #64748b;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    .task-desc {
+      font-size: 10.5pt;
+      color: #111827;
+      margin-bottom: 6px;
+      line-height: 1.42;
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 9px;
+    }
+
+    /* ========================================================
+       TABELLEN & RASTER
+       ======================================================== */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.8pt;
+      text-align: center;
+      margin: 5px 0;
+      background: #ffffff;
+    }
+
+    .calc-table th, .calc-table td {
+      border: 1.5px solid #cbd5e1;
+      padding: 5px 6px;
+      vertical-align: middle;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      font-size: 9.5pt;
+    }
+
+    .calc-table .row-label {
+      text-align: left;
+      font-weight: 700;
+      background: #f8fafc;
+      padding-left: 9px;
+      white-space: nowrap;
+    }
+
+    /* ========================================================
+       ROTER MERKSATZ-KASTEN (VERBINDLICH LAUT GEMINI.MD)
+       ======================================================== */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 10px 14px;
+      margin: 8px 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 8pt;
+      font-weight: 800;
+      padding: 1px 9px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-title {
+      font-size: 10.8pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+    }
+
+    .merke-content {
+      color: #111827 !important; /* Streng Füllerschwarz! */
+      font-size: 9.8pt;
+      line-height: 1.45;
+    }
+
+    /* ========================================================
+       LÖSUNGEN & SCHÜLER-LINIEN
+       ======================================================== */
+    .blank-line {
+      display: inline-block;
+      border-bottom: 1.5px dotted #64748b;
+      min-width: 60px;
+      height: 1.15em;
+      vertical-align: bottom;
+      margin: 0 3px;
+    }
+
+    .dotted-lines {
+      width: 100%;
+      height: 2.2em;
+      background-image: repeating-linear-gradient(
+        transparent,
+        transparent 1.05em,
+        #94a3b8 1.05em,
+        #94a3b8 1.15em
+      );
+      margin-top: 4px;
+    }
+
+    .sol-val, .sol-text, .sol-step, .sol-inline {
+      display: none;
+      color: #dc2626 !important;
+      font-weight: 700;
+    }
+
+    body.teacher-mode .sol-val {
+      display: inline !important;
+    }
+    body.teacher-mode .sol-text {
+      display: inline !important;
+    }
+    body.teacher-mode .sol-step {
+      display: block !important;
+    }
+    body.teacher-mode .sol-inline {
+      display: inline !important;
+    }
+    body.teacher-mode .blank-line {
+      display: none !important;
+    }
+    body.teacher-mode .dotted-lines {
+      background-image: none !important;
+    }
+
+    /* SVG GRAPHEN */
+    .sol-graph {
+      display: none;
+    }
+    body.teacher-mode .sol-graph {
+      display: inline !important;
+    }
+
+    /* ========================================================
+       DRUCK-STYLES (MS EDGE HEADLESS A4)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: 275mm !important;
+        max-height: 277mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP SCREEN TOOLBAR
+       ======================================================== -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="wurzeln.html" class="toolbar-btn-nav">← Kapitel I</a>
+      <a href="index.html" class="toolbar-btn-nav">Portal-Übersicht</a>
+      <span class="toolbar-title">
+        AB 2.1: Lineares vs. Quadratisches Wachstum (Normalparabel)
+      </span>
+      <span class="badge-teacher-active">Musterlösung aktiv</span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" id="btnToggleTeacher" onclick="toggleTeacherMode()">
+        Musterlösung einblenden
+      </button>
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / Als PDF speichern
+      </button>
+      <a href="AB_2.1_Normalparabel_Einstieg_Mathe_9b.pdf" download class="btn-action btn-download-pdf">
+        Schüler-PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       ARBEITSBLATT (EXAKT 2 DIN-A4-SEITEN)
+       ======================================================== -->
+  <div class="sheet-wrapper">
+
+    <!-- ======================================================
+         SEITE 1: ANWENDUNGSFALL, TABELLE & GRAPHENVERGLEICH
+         ====================================================== -->
+    <div class="page" id="page1">
+      <div>
+        <header class="doc-header">
+          <div class="doc-header-top">
+            <span class="doc-course">Mathematik 9b • Kapitel II: Quadratische Funktionen</span>
+            <span class="badge-sheet">AB 2.1</span>
+          </div>
+          <h1 class="doc-title">Lineares vs. Quadratisches Wachstum – Der Ferienjob-Wettstreit</h1>
+          <p class="doc-subtitle">Vom Alltagsvergleich zur Funktionsgleichung, Wertetabelle und Graphenkrümmung</p>
+          
+          <div class="meta-bar">
+            <div class="meta-item">
+              <span class="meta-label">Name:</span>
+              <span class="blank-line" style="min-width: 160px;"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Datum:</span>
+              <span class="blank-line" style="min-width: 90px;"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Klasse:</span>
+              <span style="font-weight: 700; color: #1e3a8a;">9b</span>
+            </div>
+            <div class="meta-item" style="margin-left: auto;">
+              <span class="meta-label">Punkte:</span>
+              <span class="blank-line" style="min-width: 45px; text-align: center;"></span>
+              <span style="font-size: 8pt; color: #64748b;">/ 30</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- AUFGABE 1: DER SACHKONTEXT & HYPOTHESE -->
+        <section class="task-card">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">1</span>
+              Die Ausgangslage: Welches Bonus-Modell ist attraktiver?
+            </h2>
+            <span class="task-points">4 Punkte</span>
+          </div>
+          
+          <p class="task-desc">
+            Felix und Samira helfen in den Ferien bei einem 6-tägigen Nachbarschaftsprojekt aus. Für ihre tägliche Prämie dürfen sie zwischen zwei Berechnungsmodellen wählen:
+          </p>
+
+          <div class="grid-2" style="margin-bottom: 8px;">
+            <div class="sub-card" style="border-left: 3.5px solid #2563eb;">
+              <strong style="color: #1e40af;">Modell A (Felix – Das lineare Modell):</strong><br>
+              Felix erhält für jeden gearbeiteten Tag genau <strong>$4\text{ €}$</strong> feste Prämie.<br>
+              Funktionsgleichung: $f(x) = $<span class="blank-line" style="min-width: 70px;"></span><span class="sol-val">4x</span>
+            </div>
+            <div class="sub-card" style="border-left: 3.5px solid #7c3aed;">
+              <strong style="color: #6d28d9;">Modell B (Samira – Das quadratische Modell):</strong><br>
+              Samiras Prämie berechnet sich als <strong>Quadrat der bisherigen Arbeitstage</strong> ($x \cdot x$).<br>
+              Funktionsgleichung: $g(x) = $<span class="blank-line" style="min-width: 70px;"></span><span class="sol-val">x^2</span>
+            </div>
+          </div>
+
+          <p class="task-desc">
+            <strong>a) Vermutung:</strong> Wer wird nach 6 Tagen wohl mehr Geld verdient haben? Begründe deine spontane Vermutung:<br>
+            <span class="blank-line" style="width: 100%;"></span>
+            <span class="sol-text">Mögliche Schülervermutung: Felix wirkt anfangs sicherer, aber Samiras Quadratwerte steigen ab Tag 4 explosiv an.</span>
+          </p>
+        </section>
+
+        <!-- AUFGABE 2: WERTETABELLE & ZUNAHME -->
+        <section class="task-card">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">2</span>
+              Wertetabelle &amp; Wachstums-Vergleich: Schritt für Schritt rechnen
+            </h2>
+            <span class="task-points">8 Punkte</span>
+          </div>
+          
+          <p class="task-desc">
+            Berechne die Prämien für beide Modelle und ermittle jeweils die <strong>Zunahme ($\Delta y$)</strong> von einem Tag zum nächsten:
+          </p>
+
+          <table class="calc-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Arbeitstag $x$</th>
+                <th style="width: 12%;">0</th>
+                <th style="width: 12%;">1</th>
+                <th style="width: 12%;">2</th>
+                <th style="width: 12%;">3</th>
+                <th style="width: 13%;">4</th>
+                <th style="width: 13%;">5</th>
+                <th style="width: 13%;">6</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label"><strong>Felix:</strong> $f(x) = 4x$</td>
+                <td>0 €</td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">4 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">8 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">12 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">16 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">20 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">24 €</span></td>
+              </tr>
+              <tr style="background: #fdf2f8;">
+                <td class="row-label" style="font-size: 8.5pt; color: #64748b;">Zunahme Felix ($\Delta y$)</td>
+                <td>–</td>
+                <td><span class="sol-val">+4 €</span></td>
+                <td><span class="sol-val">+4 €</span></td>
+                <td><span class="sol-val">+4 €</span></td>
+                <td><span class="sol-val">+4 €</span></td>
+                <td><span class="sol-val">+4 €</span></td>
+                <td><span class="sol-val">+4 €</span></td>
+              </tr>
+              <tr>
+                <td class="row-label"><strong>Samira:</strong> $g(x) = x^2$</td>
+                <td>0 €</td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">1 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">4 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">9 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">16 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">25 €</span></td>
+                <td><span class="blank-line" style="min-width: 25px;"></span><span class="sol-val">36 €</span></td>
+              </tr>
+              <tr style="background: #fdf2f8;">
+                <td class="row-label" style="font-size: 8.5pt; color: #64748b;">Zunahme Samira ($\Delta y$)</td>
+                <td>–</td>
+                <td><span class="sol-val">+1 €</span></td>
+                <td><span class="sol-val">+3 €</span></td>
+                <td><span class="sol-val">+5 €</span></td>
+                <td><span class="sol-val">+7 €</span></td>
+                <td><span class="sol-val">+9 €</span></td>
+                <td><span class="sol-val">+11 €</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid-2" style="margin-top: 6px;">
+            <div class="sub-card">
+              <strong>Gleichstand an Tag:</strong> $x = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">4</span> mit <span class="blank-line" style="min-width: 35px;"></span><span class="sol-val">16 €</span>.<br>
+              <span style="font-size: 8.5pt; color: #475569;">Felix liegt an Tag 1–3 vorn; Samira überholt ab Tag 5!</span>
+            </div>
+            <div class="sub-card">
+              <strong>Wachstums-Beobachtung:</strong><br>
+              Felix’ Zunahme ist <span class="blank-line" style="min-width: 60px;"></span><span class="sol-val">konstant (+4 €)</span>.<br>
+              Samiras Zunahme <span class="blank-line" style="min-width: 70px;"></span><span class="sol-val">wächst selbst (+1, +3, +5, ...)</span>.
+            </div>
+          </div>
+        </section>
+
+        <!-- AUFGABE 3: GRAPHISCHER VERGLEICH -->
+        <section class="task-card">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">3</span>
+              Graphen zeichnen: Gerade (Lineal) vs. Kurve (Freihand)
+            </h2>
+            <span class="task-points">6 Punkte</span>
+          </div>
+          
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="flex: 1;">
+              <p class="task-desc">
+                Trage die Punkte aus der Wertetabelle in das Koordinatensystem ein:<br>
+                • <strong>Felix:</strong> Verbinde die Punkte mit Lineal (blau).<br>
+                • <strong>Samira:</strong> Verbinde die Punkte freihand als geschwungene Kurve (rot/lila).
+              </p>
+              
+              <div class="sub-card" style="margin-top: 6px;">
+                <strong>Erkenntnis zum Graphenverlauf:</strong><br>
+                1. Felix’ Graph ist eine <span class="blank-line" style="min-width: 80px;"></span><span class="sol-val">Gerade (Steigung m = 4)</span>.<br>
+                2. Samiras Graph lässt sich <span class="blank-line" style="min-width: 60px;"></span><span class="sol-val">nicht</span> mit dem Lineal zeichnen, sondern bildet eine <span class="blank-line" style="min-width: 70px;"></span><span class="sol-val">gekrümmte Kurve</span>.<br>
+                3. Schnittpunkt beider Graphen: $S($<span class="sol-val">4</span> $|$ <span class="sol-val">16</span>$)$
+              </div>
+            </div>
+
+            <!-- SVG KOORDINATENSYSTEM (5mm Karo = 24px) -->
+            <div style="flex-shrink: 0; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 4px;">
+              <svg viewBox="0 0 280 230" width="280" height="230" style="display: block;">
+                <defs>
+                  <pattern id="grid-p1" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+                  </pattern>
+                </defs>
+                <rect width="280" height="230" fill="#ffffff" />
+                <rect width="280" height="230" fill="url(#grid-p1)" />
+
+                <!-- Achsen: Ursprung bei (40, 205) -->
+                <!-- X-Achse: Tage 0 bis 7 (1 Tag = 30px) -->
+                <line x1="25" y1="205" x2="272" y2="205" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="272,202 278,205 272,208" fill="#334155"/>
+                <text x="264" y="220" font-size="9.5" font-weight="700" fill="#334155">x (Tage)</text>
+
+                <!-- Y-Achse: Prämie 0 bis 40 € (5 € = 22.5px -> 1 € = 4.5px) -->
+                <line x1="40" y1="218" x2="40" y2="10" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="37,10 40,4 43,10" fill="#334155"/>
+                <text x="46" y="14" font-size="9.5" font-weight="700" fill="#334155">y (€)</text>
+
+                <!-- Ticks X (30px pro Tag) -->
+                <text x="32" y="218" font-size="8.5" fill="#64748b">0</text>
+                <line x1="70" y1="202" x2="70" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="67" y="218" font-size="8.5" fill="#64748b">1</text>
+                <line x1="100" y1="202" x2="100" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="97" y="218" font-size="8.5" fill="#64748b">2</text>
+                <line x1="130" y1="202" x2="130" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="218" font-size="8.5" fill="#64748b">3</text>
+                <line x1="160" y1="202" x2="160" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="157" y="218" font-size="8.5" fill="#64748b">4</text>
+                <line x1="190" y1="202" x2="190" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="187" y="218" font-size="8.5" fill="#64748b">5</text>
+                <line x1="220" y1="202" x2="220" y2="208" stroke="#475569" stroke-width="1.2"/>
+                <text x="217" y="218" font-size="8.5" fill="#64748b">6</text>
+
+                <!-- Ticks Y (22.5px = 5 €) -->
+                <line x1="37" y1="182.5" x2="43" y2="182.5" stroke="#475569" stroke-width="1.2"/>
+                <text x="24" y="185.5" font-size="8.5" fill="#64748b">5</text>
+                <line x1="37" y1="160" x2="43" y2="160" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="163" font-size="8.5" fill="#64748b">10</text>
+                <line x1="37" y1="137.5" x2="43" y2="137.5" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="140.5" font-size="8.5" fill="#64748b">15</text>
+                <line x1="37" y1="115" x2="43" y2="115" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="118" font-size="8.5" fill="#64748b">20</text>
+                <line x1="37" y1="92.5" x2="43" y2="92.5" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="95.5" font-size="8.5" fill="#64748b">25</text>
+                <line x1="37" y1="70" x2="43" y2="70" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="73" font-size="8.5" fill="#64748b">30</text>
+                <line x1="37" y1="47.5" x2="43" y2="47.5" stroke="#475569" stroke-width="1.2"/>
+                <text x="19" y="50.5" font-size="8.5" fill="#64748b">35</text>
+
+                <!-- LÖSUNG IN LEHRERVERSION -->
+                <g class="sol-graph">
+                  <!-- Felix: Gerade f(x) = 4x von (0,205) bis (6.2, 205 - 24.8*4.5 = 93.4) -->
+                  <line x1="40" y1="205" x2="235" y2="93.4" stroke="#2563eb" stroke-width="2"/>
+                  <text x="238" y="97" font-size="8.5" font-weight="700" fill="#2563eb">f(x)=4x</text>
+                  <!-- Felix Punkte -->
+                  <circle cx="40" cy="205" r="2.5" fill="#2563eb"/>
+                  <circle cx="70" cy="187" r="2.5" fill="#2563eb"/>
+                  <circle cx="100" cy="169" r="2.5" fill="#2563eb"/>
+                  <circle cx="130" cy="151" r="2.5" fill="#2563eb"/>
+                  <circle cx="160" cy="133" r="2.5" fill="#2563eb"/>
+                  <circle cx="190" cy="115" r="2.5" fill="#2563eb"/>
+                  <circle cx="220" cy="97" r="2.5" fill="#2563eb"/>
+
+                  <!-- Samira: Parabelast g(x) = x^2 -->
+                  <!-- (0,205), (1, 200.5), (2, 187), (3, 164.5), (4, 133), (5, 92.5), (6, 43) -->
+                  <path d="M 40 205 Q 100 196 130 164.5 T 160 133 T 190 92.5 T 220 43" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+                  <text x="208" y="36" font-size="8.5" font-weight="700" fill="#dc2626">g(x)=x²</text>
+                  <!-- Samira Punkte -->
+                  <circle cx="70" cy="200.5" r="2.5" fill="#dc2626"/>
+                  <circle cx="100" cy="187" r="2.5" fill="#dc2626"/>
+                  <circle cx="130" cy="164.5" r="2.5" fill="#dc2626"/>
+                  <circle cx="160" cy="133" r="3.5" fill="#dc2626"/>
+                  <circle cx="190" cy="92.5" r="2.5" fill="#dc2626"/>
+                  <circle cx="220" cy="43" r="2.5" fill="#dc2626"/>
+
+                  <!-- Schnittpunkt S(4|16) -->
+                  <line x1="160" y1="205" x2="160" y2="133" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+                  <line x1="40" y1="133" x2="160" y2="133" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
+                  <text x="165" y="128" font-size="8.5" font-weight="700" fill="#dc2626">S(4|16)</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ======================================================
+         SEITE 2: ÜBERGANG ZUR THEORIE & DIE NORMALPARABEL
+         ====================================================== -->
+    <div class="page" id="page2">
+      <div>
+        <!-- KOMPAKTER KOPF SEITE 2 -->
+        <header class="doc-header" style="padding-bottom: 5px; margin-bottom: 8px;">
+          <div class="doc-header-top">
+            <span class="doc-course">Mathematik 9b • Kapitel II (Seite 2)</span>
+            <span class="badge-sheet">AB 2.1</span>
+          </div>
+          <h1 class="doc-title" style="font-size: 13pt;">Der Übergang in die Mathematik: Die Normalparabel $y = x^2$</h1>
+        </header>
+
+        <!-- AUFGABE 4: DER SCHRITT INS NEGATIVE -->
+        <section class="task-card">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">4</span>
+              Der Schritt ins Negative: Aus $x \ge 0$ wird ganz $\mathbb{R}$
+            </h2>
+            <span class="task-points">5 Punkte</span>
+          </div>
+          
+          <p class="task-desc">
+            Im Sachkontext gab es keine negativen Tage. In der reinen Mathematik können wir für $x$ alle reellen Zahlen einsetzen. Fülle die Wertetabelle für die Grundfunktion $f(x) = x^2$ aus:
+          </p>
+
+          <table class="calc-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Zahl $x$</th>
+                <th style="width: 10%;">-3</th>
+                <th style="width: 10%;">-2</th>
+                <th style="width: 10%;">-1</th>
+                <th style="width: 10%;">0</th>
+                <th style="width: 10%;">1</th>
+                <th style="width: 10%;">2</th>
+                <th style="width: 10%;">3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-label"><strong>Quadrat $y = x^2$</strong></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">9</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">4</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">1</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">0</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">1</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">4</span></td>
+                <td><span class="blank-line" style="min-width: 20px;"></span><span class="sol-val">9</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid-2" style="margin-top: 6px;">
+            <div class="sub-card">
+              <strong>Warum ist $(-2)^2 = +4$ positiv?</strong><br>
+              Begründung: <span class="blank-line" style="width: 90%;"></span>
+              <span class="sol-text">Minus mal Minus ergibt Plus: $(-2) \cdot (-2) = +4$. Quadrate reeller Zahlen sind niemals negativ!</span>
+            </div>
+            <div class="sub-card">
+              <strong>Symmetrie-Entdeckung:</strong><br>
+              Was fällt beim Vorzeichenwechsel auf? <span class="blank-line" style="width: 70%;"></span>
+              <span class="sol-text">Gegenzahlen besitzen denselben Funktionswert: $f(-x) = f(x)$. Der Graph ist achsensymmetrisch zur y-Achse!</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- AUFGABE 5: DIE NORMALPARABEL ZEICHNEN -->
+        <section class="task-card">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">5</span>
+              Das Meisterstück: Die vollständige Normalparabel zeichnen
+            </h2>
+            <span class="task-points">5 Punkte</span>
+          </div>
+          
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="flex: 1;">
+              <p class="task-desc">
+                Trage alle 7 Wertepaare als Punkte in das Koordinatensystem ein. Verbinde sie <strong>freihand als gleichmäßige, u-förmige Kurve</strong> (keine Ecken, kein spitzes V am Tiefpunkt!).
+              </p>
+              
+              <div class="sub-card" style="margin-top: 6px;">
+                <strong>Wichtige Form-Merkmale:</strong><br>
+                • Tiefster Punkt: <span class="blank-line" style="min-width: 90px;"></span><span class="sol-val">Scheitelpunkt S(0|0)</span><br>
+                • Symmetrieachse: <span class="blank-line" style="min-width: 90px;"></span><span class="sol-val">die y-Achse (x = 0)</span><br>
+                • Öffnung: <span class="blank-line" style="min-width: 90px;"></span><span class="sol-val">nach oben geöffnet</span>
+              </div>
+            </div>
+
+            <!-- SVG NORMALPARABEL -->
+            <div style="flex-shrink: 0; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; padding: 4px;">
+              <svg viewBox="0 0 280 230" width="280" height="230" style="display: block;">
+                <defs>
+                  <pattern id="grid-p2" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <path d="M 12 0 L 0 0 0 12" fill="none" stroke="#e2e8f0" stroke-width="0.6"/>
+                  </pattern>
+                </defs>
+                <rect width="280" height="230" fill="#ffffff" />
+                <rect width="280" height="230" fill="url(#grid-p2)" />
+
+                <!-- Achsen: Ursprung bei (140, 195) -->
+                <!-- X-Achse: -3.5 bis +3.5 (1 Einheit = 30px) -->
+                <line x1="20" y1="195" x2="265" y2="195" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="265,192 271,195 265,198" fill="#334155"/>
+                <text x="262" y="210" font-size="9.5" font-weight="700" fill="#334155">x</text>
+
+                <!-- Y-Achse: -1 bis 10 (1 Einheit = 18px) -->
+                <line x1="140" y1="222" x2="140" y2="8" stroke="#334155" stroke-width="1.6"/>
+                <polygon points="137,8 140,2 143,8" fill="#334155"/>
+                <text x="146" y="12" font-size="9.5" font-weight="700" fill="#334155">y</text>
+
+                <!-- Ticks X (30px pro Einheit) -->
+                <line x1="50" y1="192" x2="50" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="44" y="210" font-size="8.5" fill="#64748b">-3</text>
+                <line x1="80" y1="192" x2="80" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="74" y="210" font-size="8.5" fill="#64748b">-2</text>
+                <line x1="110" y1="192" x2="110" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="104" y="210" font-size="8.5" fill="#64748b">-1</text>
+                <text x="133" y="208" font-size="8.5" fill="#64748b">0</text>
+                <line x1="170" y1="192" x2="170" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="167" y="210" font-size="8.5" fill="#64748b">1</text>
+                <line x1="200" y1="192" x2="200" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="197" y="210" font-size="8.5" fill="#64748b">2</text>
+                <line x1="230" y1="192" x2="230" y2="198" stroke="#475569" stroke-width="1.2"/>
+                <text x="227" y="210" font-size="8.5" fill="#64748b">3</text>
+
+                <!-- Ticks Y (18px pro Einheit) -->
+                <line x1="137" y1="177" x2="143" y2="177" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="180" font-size="8.5" fill="#64748b">1</text>
+                <line x1="137" y1="159" x2="143" y2="159" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="162" font-size="8.5" fill="#64748b">2</text>
+                <line x1="137" y1="123" x2="143" y2="123" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="126" font-size="8.5" fill="#64748b">4</text>
+                <line x1="137" y1="87" x2="143" y2="87" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="90" font-size="8.5" fill="#64748b">6</text>
+                <line x1="137" y1="51" x2="143" y2="51" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="54" font-size="8.5" fill="#64748b">8</text>
+                <line x1="137" y1="33" x2="143" y2="33" stroke="#475569" stroke-width="1.2"/>
+                <text x="127" y="36" font-size="8.5" fill="#64748b">9</text>
+
+                <!-- LÖSUNG IN LEHRERVERSION -->
+                <g class="sol-graph">
+                  <!-- Normalparabel Kurve durch (-3,9), (-2,4), (-1,1), (0,0), (1,1), (2,4), (3,9) -->
+                  <!-- Pixel: (50,33), (80,123), (110,177), (140,195), (170,177), (200,123), (230,33) -->
+                  <path d="M 45 15 Q 95 190 140 195 Q 185 190 235 15" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+                  <text x="228" y="25" font-size="8.5" font-weight="700" fill="#dc2626">y = x²</text>
+                  
+                  <!-- Punkte -->
+                  <circle cx="50" cy="33" r="3" fill="#dc2626"/>
+                  <circle cx="80" cy="123" r="3" fill="#dc2626"/>
+                  <circle cx="110" cy="177" r="3" fill="#dc2626"/>
+                  <circle cx="140" cy="195" r="4" fill="#dc2626"/>
+                  <circle cx="170" cy="177" r="3" fill="#dc2626"/>
+                  <circle cx="200" cy="123" r="3" fill="#dc2626"/>
+                  <circle cx="230" cy="33" r="3" fill="#dc2626"/>
+
+                  <!-- Scheitelpunkt S(0|0) -->
+                  <text x="146" y="206" font-size="9" font-weight="800" fill="#dc2626">S(0|0)</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- DER ROTE MERKSATZ-KASTEN (GEMÄSS GEMINI.MD) -->
+        <div class="merke-box">
+          <div class="merke-tag">Merke</div>
+          <div class="merke-title">Quadratische Funktion &amp; Normalparabel – Definition</div>
+          <div class="merke-content">
+            1. <strong>Quadratische Funktion:</strong> Eine Funktion der Form $f(x) = x^2$ heißt <em>quadratische Grundfunktion</em>. Die Variable $x$ steht im Quadrat ($x^2$).<br>
+            2. <strong>Normalparabel:</strong> Der Graph von $f(x) = x^2$ ist eine gleichmäßig gekrümmte Kurve und heißt <strong>Normalparabel</strong>. Sie ist nach oben geöffnet.<br>
+            3. <strong>Scheitelpunkt:</strong> Der tiefste Punkt des Graphen heißt <strong>Scheitelpunkt</strong>. Er liegt bei der Normalparabel im Ursprung: $\mathbf{S(0|0)}$.<br>
+            4. <strong>Achsensymmetrie:</strong> Die $y$-Achse ist die Spiegelachse der Normalparabel. Es gilt: $\mathbf{f(-x) = f(x)}$ bzw. $(-x)^2 = x^2$.<br>
+            5. <strong>Wachstum:</strong> Das quadratische Wachstum ist nicht linear. Es beginnt am Scheitel flach und wächst dann schneller als jede lineare Funktion!
+          </div>
+        </div>
+
+        <!-- AUFGABE 6: WISSENS-CHECK & ANWENDUNG -->
+        <section class="task-card" style="margin-bottom: 0;">
+          <div class="task-header">
+            <h2 class="task-title">
+              <span class="task-num">6</span>
+              Verständnis- &amp; Punkte-Check zur Normalparabel
+            </h2>
+            <span class="task-points">6 Punkte</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="sub-card">
+              <strong>a) Punktprobe:</strong><br>
+              Liegt $P(5|25)$ auf der Normalparabel?<br>
+              <span class="blank-line" style="min-width: 40px;"></span><span class="sol-val">Ja: $5^2 = 25$ ✓</span><br>
+              Liegt $Q(-4|16)$ darauf?<br>
+              <span class="blank-line" style="min-width: 40px;"></span><span class="sol-val">Ja: $(-4)^2 = 16$ ✓</span>
+            </div>
+
+            <div class="sub-card">
+              <strong>b) Vorzeichen &amp; Quadranten:</strong><br>
+              Kann $y = x^2$ negative $y$-Werte haben?<br>
+              <span class="blank-line" style="width: 90%;"></span>
+              <span class="sol-text">Nein! Da $x^2 \ge 0$ für alle $x \in \mathbb{R}$, liegt die Normalparabel nie unterhalb der x-Achse.</span>
+            </div>
+
+            <div class="sub-card">
+              <strong>c) Fehlende Koordinate:</strong><br>
+              $A(2{,}5 \mid \text{?}) \implies y = $<span class="blank-line" style="min-width: 30px;"></span><span class="sol-val">6,25</span><br>
+              $B(\text{?} \mid 49)$ mit $x < 0$:<br>
+              $x = $<span class="blank-line" style="min-width: 35px;"></span><span class="sol-val">-7</span> &nbsp;($(-7)^2 = 49$)
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      const isTeacher = document.body.classList.toggle('teacher-mode');
+      const btn = document.getElementById('btnToggleTeacher');
+      if (isTeacher) {
+        btn.textContent = 'Schülerversion anzeigen (Lösungen verbergen)';
+      } else {
+        btn.textContent = 'Musterlösung einblenden';
+      }
+    }
+  </script>
+</body>
+</html>
