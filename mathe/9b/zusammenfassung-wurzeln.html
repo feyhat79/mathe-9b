@@ -482,15 +482,28 @@
       line-height: 1.45;
     }
 
-    .upside-down {
-      transform: rotate(180deg);
-      font-size: 8pt;
-      color: #64748b;
-      text-align: center;
-      padding: 4px 0;
-      border-top: 1px dotted #cbd5e1;
-      margin-top: 6px;
-      line-height: 1.35;
+    .selftest-solutions-box {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 5px;
+      padding: 7px 11px;
+      margin-top: 8px;
+    }
+
+    .selftest-solutions-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 3px;
+    }
+
+    .selftest-solutions-grid {
+      font-size: 9.5pt;
+      color: #14532d;
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .card-box {
@@ -890,9 +903,17 @@
           <div style="margin-top: 8px; font-size: 10pt; line-height: 1.45;">
             <strong>5. Sachaufgabe:</strong> Ein quadratisches Klassenzimmer hat eine Grundfläche von $A = 81\text{ m}^2$. Wie lang ist die Wandseite $a$ und wie groß ist der Gesamtumfang $U$ des Raumes?
           </div>
-          <div class="upside-down">
-            <strong>Kopfüber-Lösungen zur Selbstkontrolle:</strong><br>
-            1a) 9, 1b) 17, 1c) 0,8 | 2a) 5/8, 2b) √(9/4) = 3/2 = 1,5 | 3) 0,03 (4 Stellen → 2 Stellen) | 4) 5 < √30 < 6 (da 25 < 30 < 36) | 5) a = √81 = 9 m; Umfang U = 4 · 9 m = 36 m
+          <div class="selftest-solutions-box">
+            <div class="selftest-solutions-title">
+              Lösungen zur Selbstkontrolle:
+            </div>
+            <div class="selftest-solutions-grid">
+              <div><strong>1. Kopfrechnen:</strong> a) $\sqrt{81} = 9$ &nbsp;|&nbsp; b) $\sqrt{289} = 17$ &nbsp;|&nbsp; c) $\sqrt{0{,}64} = 0{,}8$</div>
+              <div><strong>2. Brüche:</strong> a) $\sqrt{\frac{25}{64}} = \frac{5}{8}$ &nbsp;|&nbsp; b) $\sqrt{2\frac{1}{4}} = \sqrt{\frac{9}{4}} = \frac{3}{2} = 1{,}5$</div>
+              <div><strong>3. Nachkommastellen:</strong> $\sqrt{0{,}0009} = 0{,}03$ (4 Stellen unter Wurzel $\to$ 2 Stellen im Ergebnis)</div>
+              <div><strong>4. Eingrenzen:</strong> $5 < \sqrt{30} < 6$, da $25 < 30 < 36$ bzw. $5^2 < 30 < 6^2$</div>
+              <div><strong>5. Sachaufgabe:</strong> Seitenlänge $a = \sqrt{81\text{ m}^2} = 9\text{ m}$; Umfang $U = 4 \cdot 9\text{ m} = 36\text{ m}$</div>
+            </div>
           </div>
         </div>
 
