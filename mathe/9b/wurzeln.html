@@ -844,6 +844,196 @@
       font-size: 1.3rem;
       font-weight: 800;
     }
+
+    /* STEP-LIST (PHASE 2) */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0.75rem 0;
+    }
+    .step-item-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(0,0,0,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+    }
+    body.beamer-mode .step-item-row {
+      background: #162032;
+      border-color: #334155;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+    .step-text {
+      flex: 1;
+    }
+    .step-text strong {
+      color: var(--primary);
+    }
+    body.beamer-mode .step-text strong {
+      color: #60a5fa;
+    }
+
+    /* MODUL-TRAINER STYLES (PHASE 4) */
+    .trainer-card {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      box-shadow: 0 8px 24px rgba(49,46,129,0.25);
+      color: #ffffff;
+    }
+    body.beamer-mode .trainer-card {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border: 1px solid #334155;
+    }
+    .trainer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .trainer-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .trainer-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      background: rgba(255,255,255,0.15);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .trainer-counter {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #a5b4fc;
+    }
+    .trainer-level {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .level-1 { background: #d1fae5; color: #065f46; }
+    .level-2 { background: #fef3c7; color: #92400e; }
+    .level-3 { background: #fce7f3; color: #9d174d; }
+    .trainer-problem {
+      text-align: center;
+      padding: 0.75rem 0 1rem 0;
+    }
+    .trainer-prompt {
+      font-size: 0.95rem;
+      color: #a5b4fc;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .trainer-radical {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .trainer-steps-container {
+      background: rgba(255,255,255,0.07);
+      border-radius: var(--radius-md);
+      padding: 0;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      min-height: 0;
+      transition: min-height 0.3s;
+    }
+    .trainer-steps-container:not(:empty) {
+      padding: 0.75rem 1rem;
+    }
+    .trainer-step {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      animation: fadeIn 0.25s ease;
+    }
+    .trainer-step:last-child {
+      border-bottom: none;
+    }
+    .trainer-step-formula {
+      min-width: 160px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #e0e7ff;
+    }
+    .trainer-step-hint {
+      font-size: 0.88rem;
+      color: #a5b4fc;
+      line-height: 1.4;
+    }
+    .trainer-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-trainer {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+      min-width: 105px;
+    }
+    .btn-trainer:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-next-step {
+      background: #4f46e5;
+      color: #ffffff;
+    }
+    .btn-next-step:not(:disabled):hover {
+      background: #4338ca;
+    }
+    .btn-all-steps {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .btn-all-steps:not(:disabled):hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .btn-new-task {
+      background: #ffffff;
+      color: #312e81;
+      font-weight: 800;
+    }
+    .btn-new-task:hover {
+      background: #e0e7ff;
+    }
   </style>
 </head>
 <body>
@@ -865,6 +1055,9 @@
       </a>
       <a href="arbeitsblatt-wurzeln.html" target="_blank" class="btn-action" style="background: #1d4ed8; text-decoration: none;">
         AB 1.2 (Wurzeln)
+      </a>
+      <a href="arbeitsblatt-wurzelgesetze.html" target="_blank" class="btn-action" style="background: #1e40af; text-decoration: none;">
+        AB 1.3 (Wurzelgesetze)
       </a>
       <a href="Zusammenfassung_Quadratwurzeln_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #059669; text-decoration: none;">
         Zusammenfassung (PDF)
@@ -1255,89 +1448,334 @@
          ======================================================== -->
     <div id="tab-gesetze" class="tab-panel">
       
+      <!-- PHASE 1: DIE ZWEI WURZELGESETZE -->
       <section class="card">
         <div class="card-header">
           <div class="step-tag">
             <span class="step-number">1</span>
-            <span>Das Multiplikationsgesetz für Quadratwurzeln</span>
+            <span>Die beiden Wurzelgesetze (Multiplikation &amp; Division)</span>
           </div>
+          <span class="text-muted" style="font-size: 0.9rem;">Grundregeln</span>
         </div>
-        <p style="margin-bottom: 0.75rem;">
-          Beim Multiplizieren von Wurzeln darf man die Radikanden unter einer gemeinsamen Wurzel zusammenfassen:
+
+        <p style="margin-bottom: 1rem;">
+          <strong>Einstiegsbeobachtung:</strong> Was passiert, wenn man Wurzeln miteinander multipliziert oder dividiert?
         </p>
-        <div class="definition-box" style="padding: 1.25rem;">
-          <div style="font-size: 1.5rem; font-weight: 800;">
-            $$\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b} \quad (\text{für } a, b \ge 0)$$
-          </div>
-        </div>
-        
+
         <div class="grid-2">
           <div class="sub-card">
-            <span class="highlight-label">Beispiel 1: Gemeinsam vereinfachen</span>
-            $$\sqrt{2} \cdot \sqrt{8} = \sqrt{2 \cdot 8} = \sqrt{16} = 4$$
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
-              Erstaunlich: Zwei irrationale Faktoren ergeben ein ganzzahliges Produkt!
+            <span class="highlight-label">Beobachtung 1: Multiplikation</span>
+            $$\sqrt{4} \cdot \sqrt{9} = 2 \cdot 3 = 6$$
+            $$\sqrt{4 \cdot 9} = \sqrt{36} = 6$$
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">
+              Ergebnis ist identisch: Man darf Faktoren unter einer gemeinsamen Wurzel zusammenfassen.
             </p>
           </div>
           <div class="sub-card">
-            <span class="highlight-label">Beispiel 2: Teilweises Wurzelziehen</span>
-            $$\sqrt{50} = \sqrt{25 \cdot 2} = \sqrt{25} \cdot \sqrt{2} = 5\sqrt{2}$$
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
-              Zerlege den Radikanden in eine möglichst große Quadratzahl und einen Restfaktor.
+            <span class="highlight-label">Beobachtung 2: Division</span>
+            $$\frac{\sqrt{36}}{\sqrt{4}} = \frac{6}{2} = 3$$
+            $$\sqrt{\frac{36}{4}} = \sqrt{9} = 3$$
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">
+              Ergebnis ist identisch: Auch Brüche dürfen unter eine gemeinsame Wurzel gezogen werden.
             </p>
+          </div>
+        </div>
+
+        <div class="definition-box" style="padding: 1.5rem; margin: 1.25rem 0;">
+          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Satz: Die zwei Wurzelgesetze</h3>
+          <p style="opacity: 0.9; margin-bottom: 0.75rem;">Für alle nicht-negativen Zahlen $a \ge 0$ und $b \ge 0$ (bzw. $b > 0$) gilt:</p>
+          <div class="grid-2" style="margin: 0; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 0.9rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85; margin-bottom: 4px;">Produktregel</div>
+              <div style="font-size: 1.35rem; font-weight: 800;">$$\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b}$$</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 0.9rem; border-radius: var(--radius-md);">
+              <div style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85; margin-bottom: 4px;">Quotientenregel</div>
+              <div style="font-size: 1.35rem; font-weight: 800;">$$\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}} \quad (b > 0)$$</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Typische Rechenwege zum Aufdecken:</h4>
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Weg A: Unter eine Wurzel ziehen</span>
+            <p class="text-muted" style="font-size: 0.9rem;">Irrationales wird rational:</p>
+            $$\sqrt{2} \cdot \sqrt{8} = \text{?}$$
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{2} \cdot \sqrt{8} = \sqrt{2 \cdot 8} = \sqrt{16} = 4$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Zwei irrationale Faktoren ergeben ein glattes ganzzahliges Produkt!</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <span class="highlight-label">Weg B: Bruch radizieren</span>
+            <p class="text-muted" style="font-size: 0.9rem;">Wurzel auf Zähler &amp; Nenner aufteilen:</p>
+            $$\sqrt{\frac{25}{49}} = \text{?}$$
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{\frac{25}{49}} = \frac{\sqrt{25}}{\sqrt{49}} = \frac{5}{7}$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Zähler und Nenner separat ziehen.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Weg C: Bruch unter die Wurzel</span>
+            <p class="text-muted" style="font-size: 0.9rem;">Erst kürzen, dann ziehen:</p>
+            $$\frac{\sqrt{72}}{\sqrt{2}} = \text{?}$$
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\frac{\sqrt{72}}{\sqrt{2}} = \sqrt{\frac{72}{2}} = \sqrt{36} = 6$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">$\frac{72}{2} = 36$ und $6^2 = 36$.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <span class="highlight-label">Weg D: Große Produkte vereinfachen</span>
+            <p class="text-muted" style="font-size: 0.9rem;">Zusammenfassen im Radikanden:</p>
+            $$\sqrt{5} \cdot \sqrt{20} = \text{?}$$
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{5} \cdot \sqrt{20} = \sqrt{5 \cdot 20} = \sqrt{100} = 10$$
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
+      <!-- PHASE 2: TEILWEISES WURZELZIEHEN -->
       <section class="card">
         <div class="card-header">
           <div class="step-tag">
             <span class="step-number">2</span>
-            <span>Das Divisionsgesetz für Quadratwurzeln</span>
+            <span>Teilweises Wurzelziehen (Wurzeln vereinfachen)</span>
           </div>
+          <span class="text-muted" style="font-size: 0.9rem;">Kernkompetenz</span>
         </div>
+
         <p style="margin-bottom: 0.75rem;">
-          Beim Dividieren von Wurzeln bzw. bei Brüchen gilt dieselbe Regel:
+          Viele Wurzeln ergeben keine ganze Zahl (z. B. $\sqrt{50}$ oder $\sqrt{72}$). Trotzdem lassen sie sich <strong>exakt vereinfachen</strong>, indem man quadratische Faktoren unter der Wurzel hervorzieht.
         </p>
-        <div class="definition-box" style="padding: 1.25rem;">
-          <div style="font-size: 1.5rem; font-weight: 800;">
-            $$\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}} \quad (\text{für } a \ge 0, b > 0)$$
+
+        <!-- SCHRITT FÜR SCHRITT LISTE -->
+        <div class="step-list">
+          <div class="step-item-row">
+            <div class="step-num">1</div>
+            <div class="step-text">
+              <strong>Größten Quadratteiler finden:</strong> Prüfe die Quadratzahlen $4, 9, 16, 25, 36, 49, \dots$, ob sie Teiler des Radikanden sind. Wähle stets den <em>größtmöglichen</em> Teiler!
+            </div>
+          </div>
+          <div class="step-item-row">
+            <div class="step-num">2</div>
+            <div class="step-text">
+              <strong>Produkt zerlegen:</strong> Schreibe den Radikanden als Produkt aus Quadratzahl und Restfaktor: $\sqrt{a^2 \cdot r} = \sqrt{a^2} \cdot \sqrt{r}$.
+            </div>
+          </div>
+          <div class="step-item-row">
+            <div class="step-num">3</div>
+            <div class="step-text">
+              <strong>Wurzel ziehen:</strong> Ziehe die Wurzel aus der Quadratzahl und schreibe sie als Vorfaktor vor die verbleibende Wurzel: $a \cdot \sqrt{r}$ bzw. $a\sqrt{r}$.
+            </div>
           </div>
         </div>
 
+        <h4 style="font-weight: 700; margin: 1.25rem 0 0.5rem 0;">Geführte Trainingsbeispiele zum Aufdecken:</h4>
         <div class="grid-2">
           <div class="sub-card">
-            <span class="highlight-label">Beispiel: Bruch radizieren</span>
-            $$\sqrt{\frac{25}{49}} = \frac{\sqrt{25}}{\sqrt{49}} = \frac{5}{7}$$
+            <span class="highlight-label">Beispiel 1: $\sqrt{50}$</span>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{50} = \sqrt{25 \cdot 2} = \sqrt{25} \cdot \sqrt{2} = 5\sqrt{2}$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Größter Quadratteiler: $25 = 5^2$. Rest: $2$.</span>
+              </div>
+            </div>
           </div>
+
           <div class="sub-card">
-            <span class="highlight-label">Beispiel: Unter eine Wurzel ziehen</span>
-            $$\frac{\sqrt{72}}{\sqrt{2}} = \sqrt{\frac{72}{2}} = \sqrt{36} = 6$$
+            <span class="highlight-label">Beispiel 2: $\sqrt{48}$</span>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{48} = \sqrt{16 \cdot 3} = \sqrt{16} \cdot \sqrt{3} = 4\sqrt{3}$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Größter Quadratteiler: $16 = 4^2$. Rest: $3$.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel 3: $\sqrt{75}$</span>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{75} = \sqrt{25 \cdot 3} = \sqrt{25} \cdot \sqrt{3} = 5\sqrt{3}$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Größter Quadratteiler: $25 = 5^2$. Rest: $3$.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <span class="highlight-label">Beispiel 4: $\sqrt{72}$</span>
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Lösung aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{72} = \sqrt{36 \cdot 2} = \sqrt{36} \cdot \sqrt{2} = 6\sqrt{2}$$
+                <span style="font-size: 0.88rem; color: var(--text-muted);">Größter Quadratteiler: $36 = 6^2$. Rest: $2$.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conflict-box">
+          <div class="conflict-title">Typischer Stolperstein: Warum der GRÖSSTE Teiler gewählt werden muss!</div>
+          Was passiert bei $\sqrt{108}$, wenn man ungeduldig ist?<br>
+          • <strong>Zu kleiner Teiler (4):</strong> $\sqrt{108} = \sqrt{4 \cdot 27} = 2\sqrt{27}$ &nbsp;— <em>Noch nicht fertig vereinfacht!</em> Im Rest $27$ steckt noch die Quadratzahl $9 = 3^2$ ($2 \cdot 3\sqrt{3} = 6\sqrt{3}$).<br>
+          • <strong>Direkt mit dem größten Teiler (36):</strong> $\sqrt{108} = \sqrt{36 \cdot 3} = 6\sqrt{3}$ &nbsp;— <em>Sofort vollständig vereinfacht!</em>
+        </div>
+      </section>
+
+      <!-- PHASE 3: TERMUMFORMUNGEN & DISTRIBUTIVGESETZ -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">3</span>
+            <span>Rechnen mit Wurzeltermen &amp; Ausmultiplizieren</span>
+          </div>
+          <span class="text-muted" style="font-size: 0.9rem;">Terme vereinfachen</span>
+        </div>
+
+        <p style="margin-bottom: 0.75rem;">
+          Beim Rechnen mit Wurzeln gelten dieselben Termregeln wie in der Algebra mit Variablen ($x$):
+        </p>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <span class="highlight-label">Regel 1: Gleichartige Wurzeln addieren &amp; subtrahieren</span>
+            <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+              Man darf nur Wurzeln mit <strong>demselben Radikanden</strong> zusammenfassen (Ausklammern):
+            </p>
+            $$5\sqrt{2} + 3\sqrt{2} = (5 + 3)\sqrt{2} = 8\sqrt{2}$$
+            $$7\sqrt{3} - 4\sqrt{3} = (7 - 4)\sqrt{3} = 3\sqrt{3}$$
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+              $\sqrt{2} + \sqrt{3}$ kann <strong>nicht</strong> zusammengefasst werden!
+            </p>
+          </div>
+
+          <div class="sub-card">
+            <span class="highlight-label">Regel 2: Klammern ausmultiplizieren (Distributivgesetz)</span>
+            <p style="font-size: 0.92rem; margin-bottom: 0.5rem;">
+              Jeder Summand in der Klammer wird einzeln mit der äußeren Wurzel multipliziert:
+            </p>
+            $$\sqrt{3} \cdot (\sqrt{12} - \sqrt{3}) = \sqrt{36} - \sqrt{9} = 6 - 3 = 3$$
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleSection(this)">Weiteres Beispiel aufdecken</button>
+              <div class="revealed-content">
+                $$\sqrt{5} \cdot (\sqrt{20} + \sqrt{5}) = \sqrt{100} + \sqrt{25} = 10 + 5 = 15$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conflict-box">
+          <div class="conflict-title">Die häufigste mathematische Falle (Vorsicht bei Summen &amp; Differenzen!):</div>
+          Für Summen und Differenzen gilt das Wurzelgesetz <strong>niemals</strong>:<br>
+          $$\sqrt{a + b} \neq \sqrt{a} + \sqrt{b} \quad \text{und} \quad \sqrt{a - b} \neq \sqrt{a} - \sqrt{b}$$
+          <strong>Gegenbeispiel:</strong> $\sqrt{9 + 16} = \sqrt{25} = 5$. Aber $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$. Da $5 \neq 7$, darf man bei Plus/Minus die Wurzel niemals trennen!
+        </div>
+      </section>
+
+      <!-- PHASE 4: INTERAKTIVER SCHRITT-FÜR-SCHRITT-TRAINER -->
+      <section class="card">
+        <div class="card-header">
+          <div class="step-tag">
+            <span class="step-number">4</span>
+            <span>Interaktiver Schritt-für-Schritt-Trainer: Teilweises Wurzelziehen</span>
+          </div>
+          <span class="text-muted" style="font-size: 0.85rem;">Selbsttraining</span>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+          Trainiere das Zerlegen von Radikanden Schritt für Schritt. Decke nach und nach den nächsten Rechenschritt auf oder generiere eine neue Aufgabe:
+        </p>
+
+        <div class="trainer-card" id="module-trainer-card">
+          <div class="trainer-top">
+            <div class="trainer-meta">
+              <span class="trainer-label">Schritt-für-Schritt</span>
+              <span class="trainer-counter" id="m-trainer-counter">Aufgabe 1 von 18</span>
+            </div>
+            <span class="trainer-level level-1" id="m-trainer-level">Stufe 1 – Basis</span>
+          </div>
+
+          <div class="trainer-problem">
+            <div class="trainer-prompt">Vereinfache die Wurzel teilweise so weit wie möglich:</div>
+            <div class="trainer-radical" id="m-trainer-radical">$$\sqrt{50}$$</div>
+          </div>
+
+          <div class="trainer-steps-container" id="m-trainer-steps"></div>
+
+          <div class="trainer-buttons">
+            <button class="btn-trainer btn-next-step" id="m-btn-next" onclick="mNaechsterSchritt()">Nächster Schritt</button>
+            <button class="btn-trainer btn-all-steps" id="m-btn-all" onclick="mAlleSchritte()">Alle Schritte aufdecken</button>
+            <button class="btn-trainer btn-new-task" onclick="mNeueAufgabe()">Neue Aufgabe</button>
           </div>
         </div>
       </section>
 
-      <!-- VORSICHT FALLE -->
-      <div class="conflict-box">
-        <div class="conflict-title">Die häufigste mathematische Falle (Vorsicht bei Summen!):</div>
-        Für Summen und Differenzen gilt das Wurzelgesetz <strong>niemals</strong>:<br>
-        $$\sqrt{a + b} \neq \sqrt{a} + \sqrt{b} \quad \text{und} \quad \sqrt{a - b} \neq \sqrt{a} - \sqrt{b}$$
-        <strong>Gegenbeispiel:</strong> $\sqrt{9 + 16} = \sqrt{25} = 5$. Aber $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$. Da $5 \neq 7$, darf man bei Plus/Minus die Wurzel niemals trennen!
+      <!-- PHASE 5: MERKEINTRAG FÜR DAS REGELHEFT -->
+      <div class="hefteintrag-box">
+        <span class="hefteintrag-ribbon">Merkeintrag für das Regelheft</span>
+        <h3 style="font-size: 1.3rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.75rem;">
+          Wurzelgesetze &amp; Teilweises Wurzelziehen – Auf einen Blick
+        </h3>
+        
+        <p style="margin-bottom: 0.6rem;">
+          1. <strong>Wurzelgesetze:</strong> Gelten <em>nur</em> bei Multiplikation und Division ($a, b \ge 0$):
+          $$\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b} \qquad \text{und} \qquad \sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}} \quad (b > 0)$$
+        </p>
+        
+        <p style="margin-bottom: 0.6rem;">
+          2. <strong>Teilweises Wurzelziehen:</strong>
+          Schreibe den Radikanden als Produkt aus der <em>größtmöglichen</em> Quadratzahl $a^2$ und dem Rest $r$:
+          $$\sqrt{a^2 \cdot r} = a\sqrt{r}$$
+        </p>
+
+        <p style="margin-bottom: 0.6rem;">
+          3. <strong>Termumformungen:</strong>
+          Gleichartige Wurzeln zusammenfassen: $a\sqrt{r} + b\sqrt{r} = (a+b)\sqrt{r}$.
+        </p>
+
+        <p>
+          4. <strong>Falle vermeiden:</strong> Niemals bei Summen/Differenzen trennen: $\sqrt{a + b} \neq \sqrt{a} + \sqrt{b}$!
+        </p>
       </div>
 
-      <!-- MATERIAL-BOX AM ENDE VON TAB 3 -->
+      <!-- MATERIAL-BOX AM ENDE VON TAB 3 (VOLL FREIGESCHALTET) -->
       <div class="material-download-box">
         <div class="mat-dl-info">
-          <span class="mat-badge-ab" style="background: #f1f5f9; color: #64748b;">AB 1.3</span>
+          <span class="mat-badge-ab">AB 1.3</span>
           <div>
             <strong style="font-size: 1rem;">Arbeitsblatt zu dieser Einheit:</strong>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">AB 1.3 Wurzelgesetze, teilweises Wurzelziehen &amp; Termumformungen</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">AB 1.3 Wurzelgesetze, teilweises Wurzelziehen &amp; Termumformungen (Übungsblatt &amp; Zufallstrainer)</p>
           </div>
         </div>
         <div class="mat-dl-actions">
-          <span style="font-size: 0.85rem; font-weight: 700; color: #b45309; background: #fef3c7; border: 1px solid #fde68a; padding: 6px 14px; border-radius: 6px;">
-            Folgt in der nächsten Stunde
-          </span>
+          <a href="arbeitsblatt-wurzelgesetze.html" target="_blank" class="btn-action" style="background: #2563eb; text-decoration: none;">
+            Arbeitsblatt (Web / Druck)
+          </a>
+          <a href="AB_1.3_Wurzelgesetze_Mathe_9b.pdf" target="_blank" class="btn-action" style="background: #dc2626; text-decoration: none;">
+            Arbeitsblatt (PDF)
+          </a>
         </div>
       </div>
 
@@ -1448,8 +1886,11 @@
         renderMathInElement(targetPanel, {
           delimiters: [
             {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false}
-          ]
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
         });
       }
     }
@@ -1460,6 +1901,7 @@
       if (hash && document.getElementById(hash)) {
         switchTab(hash);
       }
+      mNeueAufgabe();
       startQuiz();
     });
 
@@ -1477,18 +1919,27 @@
       const parent = button.closest('.reveal-box');
       const content = parent.querySelector('.revealed-content');
       content.classList.toggle('show');
-      button.innerText = content.classList.contains('show') ? "Antwort verbergen" : "Antwort aufdecken";
+      const isShow = content.classList.contains('show');
+      if (button.innerText.includes("Lösung") || button.innerText.includes("Beispiel")) {
+        button.innerText = isShow ? "Lösung verbergen" : "Lösung aufdecken";
+      } else {
+        button.innerText = isShow ? "Antwort verbergen" : "Antwort aufdecken";
+      }
     }
 
     function revealAll() {
       document.querySelectorAll('.revealed-content').forEach(c => c.classList.add('show'));
-      document.querySelectorAll('.btn-reveal').forEach(b => b.innerText = "Antwort verbergen");
+      document.querySelectorAll('.btn-reveal').forEach(b => {
+        b.innerText = b.innerText.includes("Lösung") ? "Lösung verbergen" : "Antwort verbergen";
+      });
       document.querySelectorAll('.sq-card').forEach(s => s.classList.add('revealed'));
     }
 
     function hideAll() {
       document.querySelectorAll('.revealed-content').forEach(c => c.classList.remove('show'));
-      document.querySelectorAll('.btn-reveal').forEach(b => b.innerText = "Antwort aufdecken");
+      document.querySelectorAll('.btn-reveal').forEach(b => {
+        b.innerText = b.innerText.includes("Lösung") ? "Lösung aufdecken" : "Antwort aufdecken";
+      });
       document.querySelectorAll('.sq-card').forEach(s => s.classList.remove('revealed'));
     }
 
@@ -1524,7 +1975,232 @@
     }
 
     /* ===================================================
-       DIAGNOSE-QUIZ (10 DYNAMISCHE FRAGEN)
+       MODUL-TRAINER FÜR TEILWEISES WURZELZIEHEN (TAB 3)
+       =================================================== */
+    const mAufgabenPool = [
+      // Stufe 1: Basis
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 8,
+        steps: [
+          { f: "\\sqrt{8}", h: "Gegebener Term" },
+          { f: "= \\sqrt{4 \\cdot 2}", h: "Größter Quadratteiler von 8 ist \\(4 = 2^2\\)" },
+          { f: "= \\sqrt{4} \\cdot \\sqrt{2}", h: "Produktregel anwenden" },
+          { f: "= 2\\sqrt{2}", h: "\\(\\sqrt{4} = 2\\) vor die Wurzel ziehen" }
+        ]
+      },
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 12,
+        steps: [
+          { f: "\\sqrt{12}", h: "Gegebener Term" },
+          { f: "= \\sqrt{4 \\cdot 3}", h: "Größter Quadratteiler von 12 ist \\(4 = 2^2\\)" },
+          { f: "= \\sqrt{4} \\cdot \\sqrt{3}", h: "Produktregel anwenden" },
+          { f: "= 2\\sqrt{3}", h: "Vollständig vereinfacht" }
+        ]
+      },
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 18,
+        steps: [
+          { f: "\\sqrt{18}", h: "Gegebener Term" },
+          { f: "= \\sqrt{9 \\cdot 2}", h: "Größter Quadratteiler von 18 ist \\(9 = 3^2\\)" },
+          { f: "= \\sqrt{9} \\cdot \\sqrt{2}", h: "Produktregel anwenden" },
+          { f: "= 3\\sqrt{2}", h: "\\(\\sqrt{9} = 3\\)" }
+        ]
+      },
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 20,
+        steps: [
+          { f: "\\sqrt{20}", h: "Gegebener Term" },
+          { f: "= \\sqrt{4 \\cdot 5}", h: "Größter Quadratteiler von 20 ist \\(4 = 2^2\\)" },
+          { f: "= 2\\sqrt{5}", h: "Ergebnis" }
+        ]
+      },
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 27,
+        steps: [
+          { f: "\\sqrt{27}", h: "Gegebener Term" },
+          { f: "= \\sqrt{9 \\cdot 3}", h: "Größter Quadratteiler ist \\(9 = 3^2\\)" },
+          { f: "= 3\\sqrt{3}", h: "Ergebnis" }
+        ]
+      },
+      { level: 1, lvlText: "Stufe 1 – Basis", n: 50,
+        steps: [
+          { f: "\\sqrt{50}", h: "Gegebener Term" },
+          { f: "= \\sqrt{25 \\cdot 2}", h: "Größter Quadratteiler von 50 ist \\(25 = 5^2\\)" },
+          { f: "= \\sqrt{25} \\cdot \\sqrt{2}", h: "Produktregel anwenden" },
+          { f: "= 5\\sqrt{2}", h: "Ergebnis" }
+        ]
+      },
+      // Stufe 2: Mittel
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 32,
+        steps: [
+          { f: "\\sqrt{32}", h: "Gegebener Term" },
+          { f: "= \\sqrt{16 \\cdot 2}", h: "Quadratteiler: 4 und 16 (größter ist \\(16 = 4^2\\))" },
+          { f: "= \\sqrt{16} \\cdot \\sqrt{2}", h: "Produktregel anwenden" },
+          { f: "= 4\\sqrt{2}", h: "Ergebnis" }
+        ]
+      },
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 45,
+        steps: [
+          { f: "\\sqrt{45}", h: "Gegebener Term" },
+          { f: "= \\sqrt{9 \\cdot 5}", h: "Größter Quadratteiler ist \\(9 = 3^2\\)" },
+          { f: "= 3\\sqrt{5}", h: "Ergebnis" }
+        ]
+      },
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 48,
+        steps: [
+          { f: "\\sqrt{48}", h: "Gegebener Term" },
+          { f: "= \\sqrt{16 \\cdot 3}", h: "Größter Quadratteiler von 48 ist \\(16 = 4^2\\)" },
+          { f: "= \\sqrt{16} \\cdot \\sqrt{3}", h: "Produktregel anwenden" },
+          { f: "= 4\\sqrt{3}", h: "Ergebnis" }
+        ]
+      },
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 72,
+        steps: [
+          { f: "\\sqrt{72}", h: "Gegebener Term" },
+          { f: "= \\sqrt{36 \\cdot 2}", h: "Quadratteiler: 4, 9, 36 (größter ist \\(36 = 6^2\\))" },
+          { f: "= \\sqrt{36} \\cdot \\sqrt{2}", h: "Produktregel anwenden" },
+          { f: "= 6\\sqrt{2}", h: "Ergebnis" }
+        ]
+      },
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 75,
+        steps: [
+          { f: "\\sqrt{75}", h: "Gegebener Term" },
+          { f: "= \\sqrt{25 \\cdot 3}", h: "Größter Quadratteiler ist \\(25 = 5^2\\)" },
+          { f: "= 5\\sqrt{3}", h: "Ergebnis" }
+        ]
+      },
+      { level: 2, lvlText: "Stufe 2 – Mittel", n: 98,
+        steps: [
+          { f: "\\sqrt{98}", h: "Gegebener Term" },
+          { f: "= \\sqrt{49 \\cdot 2}", h: "Größter Quadratteiler ist \\(49 = 7^2\\)" },
+          { f: "= 7\\sqrt{2}", h: "Ergebnis" }
+        ]
+      },
+      // Stufe 3: Anspruchsvoll
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 80,
+        steps: [
+          { f: "\\sqrt{80}", h: "Gegebener Term" },
+          { f: "= \\sqrt{16 \\cdot 5}", h: "Größter Quadratteiler von 80 ist \\(16 = 4^2\\)" },
+          { f: "= 4\\sqrt{5}", h: "Ergebnis" }
+        ]
+      },
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 90,
+        steps: [
+          { f: "\\sqrt{90}", h: "Gegebener Term" },
+          { f: "= \\sqrt{9 \\cdot 10}", h: "Größter Quadratteiler von 90 ist \\(9 = 3^2\\)" },
+          { f: "= 3\\sqrt{10}", h: "Ergebnis" }
+        ]
+      },
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 108,
+        steps: [
+          { f: "\\sqrt{108}", h: "Gegebener Term" },
+          { f: "= \\sqrt{36 \\cdot 3}", h: "Größter Quadratteiler ist \\(36 = 6^2\\) (nicht 4 oder 9!)" },
+          { f: "= \\sqrt{36} \\cdot \\sqrt{3}", h: "Produktregel anwenden" },
+          { f: "= 6\\sqrt{3}", h: "Ergebnis" }
+        ]
+      },
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 112,
+        steps: [
+          { f: "\\sqrt{112}", h: "Gegebener Term" },
+          { f: "= \\sqrt{16 \\cdot 7}", h: "Größter Quadratteiler ist \\(16 = 4^2\\)" },
+          { f: "= 4\\sqrt{7}", h: "Ergebnis" }
+        ]
+      },
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 125,
+        steps: [
+          { f: "\\sqrt{125}", h: "Gegebener Term" },
+          { f: "= \\sqrt{25 \\cdot 5}", h: "Größter Quadratteiler ist \\(25 = 5^2\\)" },
+          { f: "= 5\\sqrt{5}", h: "Ergebnis" }
+        ]
+      },
+      { level: 3, lvlText: "Stufe 3 – Anspruchsvoll", n: 200,
+        steps: [
+          { f: "\\sqrt{200}", h: "Gegebener Term" },
+          { f: "= \\sqrt{100 \\cdot 2}", h: "Größter Quadratteiler von 200 ist \\(100 = 10^2\\)" },
+          { f: "= 10\\sqrt{2}", h: "Ergebnis" }
+        ]
+      }
+    ];
+
+    let mAufgabenIndex = 0;
+    let mSchrittIndex = 0;
+    let mShuffled = [];
+
+    function mShuffle(arr) {
+      return [...arr].sort(() => 0.5 - Math.random());
+    }
+
+    function mNeueAufgabe() {
+      if (mShuffled.length === 0 || mAufgabenIndex >= mShuffled.length) {
+        mShuffled = mShuffle(mAufgabenPool);
+        mAufgabenIndex = 0;
+      }
+      const item = mShuffled[mAufgabenIndex];
+      mAufgabenIndex++;
+      mSchrittIndex = 1;
+
+      const counterEl = document.getElementById('m-trainer-counter');
+      if (counterEl) counterEl.innerText = "Aufgabe " + mAufgabenIndex + " von " + mShuffled.length;
+      
+      const lvlBadge = document.getElementById('m-trainer-level');
+      if (lvlBadge) {
+        lvlBadge.className = "trainer-level level-" + item.level;
+        lvlBadge.innerText = item.lvlText;
+      }
+
+      const radicalEl = document.getElementById('m-trainer-radical');
+      if (radicalEl) radicalEl.innerHTML = "$$\\sqrt{" + item.n + "}$$";
+      
+      const stepsCont = document.getElementById('m-trainer-steps');
+      if (stepsCont) {
+        stepsCont.innerHTML = "";
+        mRenderStep(item.steps[0]);
+      }
+
+      const btnNext = document.getElementById('m-btn-next');
+      if (btnNext) btnNext.disabled = (item.steps.length <= 1);
+      
+      const btnAll = document.getElementById('m-btn-all');
+      if (btnAll) btnAll.disabled = false;
+
+      triggerKaTeX();
+    }
+
+    function mRenderStep(step) {
+      const stepsCont = document.getElementById('m-trainer-steps');
+      if (!stepsCont) return;
+      const div = document.createElement('div');
+      div.className = "trainer-step";
+      div.innerHTML = `<span class="trainer-step-formula">$$${step.f}$$</span><span class="trainer-step-hint">${step.h}</span>`;
+      stepsCont.appendChild(div);
+      triggerKaTeX();
+    }
+
+    function mNaechsterSchritt() {
+      const item = mShuffled[mAufgabenIndex - 1];
+      if (!item) return;
+      if (mSchrittIndex < item.steps.length) {
+        mRenderStep(item.steps[mSchrittIndex]);
+        mSchrittIndex++;
+        if (mSchrittIndex >= item.steps.length) {
+          const btnNext = document.getElementById('m-btn-next');
+          if (btnNext) btnNext.disabled = true;
+          const btnAll = document.getElementById('m-btn-all');
+          if (btnAll) btnAll.disabled = true;
+        }
+      }
+    }
+
+    function mAlleSchritte() {
+      const item = mShuffled[mAufgabenIndex - 1];
+      if (!item) return;
+      while (mSchrittIndex < item.steps.length) {
+        mRenderStep(item.steps[mSchrittIndex]);
+        mSchrittIndex++;
+      }
+      const btnNext = document.getElementById('m-btn-next');
+      if (btnNext) btnNext.disabled = true;
+      const btnAll = document.getElementById('m-btn-all');
+      if (btnAll) btnAll.disabled = true;
+    }
+
+    /* ===================================================
+       DIAGNOSE-QUIZ (DYNAMISCHE FRAGEN AUS DEM FRAGENPOOL)
        =================================================== */
     const QUIZ_POOL = [
       {
@@ -1596,6 +2272,48 @@
         opts: ["√48", "25", "5", "√25 = 25"],
         correct: 2,
         desc: "√(50 / 2) = √25 = 5."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Welche Quadratzahl ist der GRÖSSTE quadratische Teiler von 72?",
+        opts: ["4", "9", "36", "16"],
+        correct: 2,
+        desc: "72 ist teilbar durch 4, 9 und 36. Die größte enthaltene Quadratzahl ist 36 (6²)."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Welches Ergebnis liefert das teilweise Wurzelziehen bei $\\sqrt{72}$?",
+        opts: ["2√6", "3√8", "6√2", "8√3"],
+        correct: 2,
+        desc: "√72 = √(36 · 2) = √36 · √2 = 6√2."
+      },
+      {
+        cat: "Terme vereinfachen",
+        q: "Fasse den Term zusammen: $5\\sqrt{3} + 4\\sqrt{3} - 2\\sqrt{3}$",
+        opts: ["7√3", "7√9 = 21", "9√3", "7"],
+        correct: 0,
+        desc: "(5 + 4 - 2)√3 = 7√3. Gleichartige Wurzeln werden wie Variablen zusammengefasst."
+      },
+      {
+        cat: "Terme vereinfachen",
+        q: "Welchen Wert hat der Term $\\sqrt{2} \\cdot (\\sqrt{8} + \\sqrt{2})$?",
+        opts: ["√20", "6", "8", "√16 + 2 = 18"],
+        correct: 1,
+        desc: "Ausmultiplizieren: √2 · √8 + √2 · √2 = √16 + 2 = 4 + 2 = 6."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Berechne den Quotienten: $\\dfrac{\\sqrt{72}}{\\sqrt{8}}$",
+        opts: ["9", "3", "√64 = 8", "4"],
+        correct: 1,
+        desc: "Unter eine gemeinsame Wurzel ziehen: √(72 / 8) = √9 = 3."
+      },
+      {
+        cat: "Wurzelgesetze",
+        q: "Teilweises Wurzelziehen bei $\\sqrt{48}$: Welcher Term ist vollständig vereinfacht?",
+        opts: ["2√12", "4√3", "3√16", "16√3"],
+        correct: 1,
+        desc: "√48 = √(16 · 3) = 4√3. (2√12 ist noch nicht fertig, weil 12 noch 4 enthält)."
       }
     ];
 
