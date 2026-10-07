@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Zusammenspiel von Objekten &amp; Klasse Bild | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;          /* Fueller-Koenigsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #7c3aed;           /* Informatik-Violett */
+      --accent-light: #f5f3ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;           /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;             /* Fuellertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-scale: 1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 11pt;
+      padding-bottom: 4rem;
+    }
+
+    /* FIXIERTE PRESENTER BAR */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      font-size: 0.88rem;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-back {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-nav-back:hover { background: rgba(255,255,255,0.25); }
+
+    .presenter-title-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presenter-title {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #f8fafc;
+      letter-spacing: -0.2px;
+    }
+
+    .presenter-badge {
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .presenter-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+    .presenter-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+    }
+
+    .container {
+      max-width: 1020px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1.25rem 0 1.75rem 0;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .lead-subtitle {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* TAB PANEL SYSTEM */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    /* GRIDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 1rem 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 1rem 0;
+    }
+    @media (max-width: 820px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+      font-size: 10pt;
+    }
+
+    .sub-card-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-sub {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* CODE PILL & SYNTAX BOX */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+    }
+
+    pre.code-block {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid #334155;
+    }
+
+    .code-comment { color: #94a3b8; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; }
+
+    /* RED MERKKASTEN (GEMINI.md Standard) */
+    .merke-box {
+      background: #ffffff;
+      border: 2.5px solid #dc2626;
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1.75rem;
+      margin: 1.75rem 0;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.08);
+    }
+
+    .merke-tag {
+      display: inline-block;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .merke-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.6rem;
+    }
+
+    .merke-content {
+      color: #111827; /* Zwingend schwarz/dunkel gemass Richtlinie */
+      line-height: 1.6;
+      font-size: 10.5pt;
+    }
+
+    /* KOGNITIVER KONFLIKT BOX */
+    .conflict-box {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-left: 5px solid #dc2626;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .conflict-title {
+      font-weight: 800;
+      color: #991b1b;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* QUESTION / INTERACTIVE REVEAL CARD */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 1.25rem;
+      margin: 1rem 0;
+      transition: all 0.2s;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .question-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed var(--border);
+      font-size: 10pt;
+      color: #1e3a8a;
+      line-height: 1.55;
+    }
+    .question-answer.show { display: block; }
+
+    /* INTERAKTIVER BEGRIFFS-CHECK */
+    .tuev-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tuev-question {
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: #1e3a8a;
+      margin-bottom: 0.85rem;
+    }
+
+    .tuev-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tuev-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 9px 14px;
+      border-radius: 6px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tuev-btn:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .tuev-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #059669 !important;
+      color: #065f46 !important;
+      font-weight: 700;
+    }
+    .tuev-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
+    }
+
+    .tuev-feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* SYNTAX BREAKDOWN BOX */
+    .syntax-box {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .syntax-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .syn-pill {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .syn-type { background: #dbeafe; color: #1e40af; }
+    .syn-name { background: #fef3c7; color: #92400e; }
+    .syn-eq   { background: #e2e8f0; color: #334155; }
+    .syn-new  { background: #fce7f3; color: #9d174d; }
+    .syn-ctor { background: #d1fae5; color: #065f46; }
+
+    /* VERGLEICHSTABELLE */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 9.8pt;
+    }
+    .compare-table th {
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 700;
+      border: 1px solid #1e3a8a;
+    }
+    .compare-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      background: #ffffff;
+    }
+    .compare-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* SCHRITT-FÜR-SCHRITT ANLEITUNG */
+    .step-list {
+      list-style: none;
+      counter-reset: my-step-counter;
+      margin: 1rem 0;
+    }
+    .step-list li {
+      counter-increment: my-step-counter;
+      position: relative;
+      padding-left: 42px;
+      margin-bottom: 1.25rem;
+    }
+    .step-list li::before {
+      content: counter(my-step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: #1e3a8a;
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    /* DOWNLOAD BANNER */
+    .download-card {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn-download {
+      background: #ffffff;
+      color: #1e3a8a;
+      padding: 9px 18px;
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 0.92rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-download:hover { background: #f1f5f9; }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER BAR (GEMINI.md Standard 7)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <div class="presenter-title-box">
+        <span class="presenter-title">Informatik EF • Stunde 3: Zusammenspiel von Objekten</span>
+        <span class="presenter-badge">Thema 2</span>
+      </div>
+    </div>
+    <div class="presenter-tabs">
+      <button class="presenter-tab-btn active" onclick="switchTab('tab-tuev')">
+        1. Begriffs-TÜV
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-syntax')">
+        2. Klick zu Code
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-klasse-bild')">
+        3. Labor: Klasse Bild
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-sicherung')">
+        4. Merkheftsicherung
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Informatik EF • Baustein 3: Objektorientierte Modellierung &amp; Komposition</div>
+      <h1>Zusammenspiel von Objekten &amp; Die Klasse Bild</h1>
+      <p class="lead-subtitle">
+        Vom mühsamen Mausklick auf der Werkbank zur automatisierten Programmierung: Wir schärfen den Unterschied zwischen Konstruktor und Objekt und lassen mehrere Figuren in einer neuen Klasse zusammenarbeiten.
+      </p>
+    </header>
+
+    <!-- ========================================================
+         TAB 1: BEGRIFFS-TÜV (KLASSE vs. KONSTRUKTOR vs. OBJEKT)
+         ======================================================== -->
+    <div id="tab-tuev" class="tab-panel active">
+
+      <!-- Abschnitt 1: Die Drei Säulen -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Der Dreiklang: Klasse, Konstruktor und Objekt</h2>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          In der objektorientierten Programmierung kommt es bei Einsteigern häufig zu einer Verwechslung: 
+          <em>„Ist der Konstruktor nicht einfach das Objekt?“</em> <strong>Nein!</strong> 
+          Um sauberen Programmcode schreiben zu können, müssen wir diese drei Grundbegriffe absolut trennscharf beherrschen:
+        </p>
+
+        <div class="grid-3">
+          <div class="sub-card" style="border-top: 4px solid #1e3a8a;">
+            <div class="sub-card-title">
+              <span class="badge-sub">1. Bauplan</span>
+              Klasse
+            </div>
+            <p><strong>Was ist es?</strong> Der statische Quelltext im Editor (<span class="code-pill">Kreis.java</span>).</p>
+            <p style="margin-top: 6px; color: var(--text-muted);">
+              Sie definiert abstrakt, welche Attribute (z. B. Farbe, Größe) und welche Methoden alle Exemplare dieser Art besitzen werden. Sie verbraucht keinen Platz im Spiel- oder Zeichenbereich.
+            </p>
+          </div>
+
+          <div class="sub-card" style="border-top: 4px solid #d97706;">
+            <div class="sub-card-title">
+              <span class="badge-sub">2. Geburtsstunde</span>
+              Konstruktor
+            </div>
+            <p><strong>Was ist es?</strong> Die Initialisierungs-Routine in der Klasse (<span class="code-pill">public Kreis()</span>).</p>
+            <p style="margin-top: 6px; color: var(--text-muted);">
+              Wird <strong>genau einmal</strong> im Moment der Entstehung aufgerufen. Er weist dem neuen Ding seine Startwerte zu (Startfarbe, Startposition). Der Konstruktor ist die Fabrikaktion, nicht das fertige Ding!
+            </p>
+          </div>
+
+          <div class="sub-card" style="border-top: 4px solid #059669;">
+            <div class="sub-card-title">
+              <span class="badge-sub">3. Einzelstück</span>
+              Objekt (Instanz)
+            </div>
+            <p><strong>Was ist es?</strong> Das lebendige Exemplar im Arbeitsspeicher (rote Box in BlueJ).</p>
+            <p style="margin-top: 6px; color: var(--text-muted);">
+              Es besitzt einen konkreten, veränderlichen Zustand und eine eigene Identität. Aus einer einzigen Klasse können Hunderte verschiedene Objekte gebaut werden.
+            </p>
+          </div>
+        </div>
+
+        <!-- Roter Merksatz nach Standard -->
+        <div class="merke-box">
+          <span class="merke-tag">MERKE</span>
+          <div class="merke-title">Der Unterschied auf den Punkt gebracht</div>
+          <div class="merke-content">
+            Ein <strong>Konstruktor</strong> ist eine spezielle Anweisung zur Erschaffung eines Objekts. 
+            Das <strong>Objekt</strong> ist das lebendige Ergebnis dieser Erschaffung. 
+            Man kann ein fertiges Objekt steuern, aber man kann dessen Konstruktor nicht nachträglich ein zweites Mal aufrufen – ein Lebewesen wird schließlich auch nur einmal geboren!
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 2: Zwei Alltags-Analogien -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Alltags-Analogien zum Mitdenken</h2>
+        </div>
+
+        <div class="grid-2">
+          <!-- Analogie 1: Gaming -->
+          <div class="sub-card">
+            <span class="badge-sub" style="margin-bottom: 6px;">Analogie A: Rollenspiel (Gaming)</span>
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+              Der Charakter-Editor
+            </h3>
+            <ul style="padding-left: 1.25rem; line-height: 1.6; color: var(--text);">
+              <li><strong>Klasse:</strong> Der Code für die Charakterklasse <span class="code-pill">Magier</span> im Spielverzeichnis.</li>
+              <li><strong>Konstruktor:</strong> Der Klick auf <em>„Neuen Helden erschaffen“</em>. Hier setzt das Spiel: <span class="code-pill">lebenspunkte = 100</span>, <span class="code-pill">mana = 50</span>, Start-Robe = „grau“.</li>
+              <li><strong>Objekt:</strong> Dein individueller Magier <em>„Gandalf_01“</em>, der nun durch die Spielwelt läuft, Tränke trinkt und dessen Mana sich im Kampf verändert.</li>
+            </ul>
+          </div>
+
+          <!-- Analogie 2: Auto-Werk -->
+          <div class="sub-card">
+            <span class="badge-sub" style="margin-bottom: 6px;">Analogie B: Fahrzeugbau</span>
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+              Die Endmontage in der Autofabrik
+            </h3>
+            <ul style="padding-left: 1.25rem; line-height: 1.6; color: var(--text);">
+              <li><strong>Klasse:</strong> Die technischen Baupläne und CAD-Dateien des Modells <span class="code-pill">Golf</span>.</li>
+              <li><strong>Konstruktor:</strong> Die Montagestation: Erstbefüllung mit 10 Litern Kraftstoff, Motoröl, Einstellen der Werksuhr und Einprägen der Fahrgestellnummer.</li>
+              <li><strong>Objekt:</strong> Das zugelassene Auto mit Kennzeichen <span class="code-pill">DO-EF-2026</span> auf dem Schulparkplatz mit eigenem Kilometerstand.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Abschnitt 3: Der Interaktive Begriffs-TÜV -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Der Begriffs-TÜV: Diagnose &amp; Selbsttest</h2>
+        </div>
+        <p style="margin-bottom: 1.25rem; color: var(--text-muted);">
+          Klicke auf die richtige Antwort, um dein Verständnis zu testen:
+        </p>
+
+        <!-- Test 1 -->
+        <div class="tuev-card" id="q1">
+          <div class="tuev-question">
+            Frage 1: Du machst in BlueJ einen Rechtsklick auf den gelben Kasten „Kreis“ und wählst „new Kreis()“. Was rufst du in diesem Moment auf?
+          </div>
+          <div class="tuev-options">
+            <button class="tuev-btn" onclick="checkTuev('q1', 1, false, 'Leider falsch. Die Klasse ist die Schablone, auf die du klickst – die Methode, die gestartet wird, ist jedoch der Konstruktor.')">
+              A) Ich rufe die Klasse auf.
+            </button>
+            <button class="tuev-btn" onclick="checkTuev('q1', 2, true, 'Vollkommen richtig! Der Befehl new Kreis() startet die spezielle Methode namens Konstruktor, die das Objekt initialisiert.')">
+              B) Ich rufe den Konstruktor auf.
+            </button>
+            <button class="tuev-btn" onclick="checkTuev('q1', 3, false, 'Nicht ganz. Das Objekt existiert in dieser Millisekunde noch gar nicht – es wird durch den Aufruf erst erzeugt!')">
+              C) Ich rufe das fertige Objekt auf.
+            </button>
+          </div>
+          <div class="tuev-feedback" id="q1-fb"></div>
+        </div>
+
+        <!-- Test 2 -->
+        <div class="tuev-card" id="q2">
+          <div class="tuev-question">
+            Frage 2: Was liegt nach dem erfolgreichen Aufruf von „new Kreis()“ unten auf der roten Werkbank?
+          </div>
+          <div class="tuev-options">
+            <button class="tuev-btn" onclick="checkTuev('q2', 1, false, 'Falsch. Der Konstruktor ist der Vorgang, der bereits beendet ist.')">
+              A) Der Konstruktor.
+            </button>
+            <button class="tuev-btn" onclick="checkTuev('q2', 2, true, 'Exakt! Auf der Werkbank liegt nun eine konkrete Instanz (ein Objekt) mit eigenem Zustand im Speicher.')">
+              B) Ein konkretes Objekt (eine Instanz).
+            </button>
+            <button class="tuev-btn" onclick="checkTuev('q2', 3, false, 'Falsch. Die Klasse bleibt weiterhin oben im Diagramm als Schablone stehen.')">
+              C) Eine Kopie der Klasse.
+            </button>
+          </div>
+          <div class="tuev-feedback" id="q2-fb"></div>
+        </div>
+
+        <!-- Test 3 -->
+        <div class="tuev-card" id="q3">
+          <div class="tuev-question">
+            Frage 3: Kann man an einem roten Kasten auf der Werkbank (z. B. kreis1) nachträglich noch einmal den Konstruktor aufrufen?
+          </div>
+          <div class="tuev-options">
+            <button class="tuev-btn" onclick="checkTuev('q3', 1, false, 'Nein. Rechtsklick auf kreis1 zeigt normale Methoden wie farbeAendern(), aber niemals new Kreis().')">
+              A) Ja, durch Rechtsklick auf das Objekt.
+            </button>
+            <button class="tuev-btn" onclick="checkTuev('q3', 2, true, 'Richtig! Ein Konstruktor läuft ausschließlich beim Erschaffen. Zur späteren Veränderung werden normale Methoden wie sichtbarMachen() oder farbeAendern() verwendet.')">
+              B) Nein, der Konstruktor dient nur der Geburt und Erstausstattung.
+            </button>
+          </div>
+          <div class="tuev-feedback" id="q3-fb"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 2: SYNTAX & VOM MAUSKLICK ZUM JAVA-CODE
+         ======================================================== -->
+    <div id="tab-syntax" class="tab-panel">
+
+      <!-- Abschnitt: Der Kognitive Konflikt -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Das Grundproblem: Das Klick-Dilemma</h2>
+        </div>
+
+        <div class="conflict-box">
+          <div class="conflict-title">Kognitiver Konflikt: Die Grenzen der Werkbank</div>
+          <p>
+            In den vergangenen Stunden haben wir ein einfaches Haus (Wand, Fenster, Dach und Sonne) gebaut. 
+            Dazu musstest du <strong>über 25-mal</strong> mit der rechten Maustaste klicken, Namen eingeben, Methoden aufrufen und Koordinaten eintippen.
+          </p>
+          <p style="margin-top: 8px;">
+            <strong>Das Problem:</strong> Sobald du BlueJ neu startest oder das Projekt zurücksetzt, ist die gesamte Zeichnung verschwunden! 
+            Niemand möchte jedes Mal 25 manuelle Aktionen wiederholen.
+          </p>
+        </div>
+
+        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin: 1rem 0 0.5rem 0;">
+          Die didaktische Leitfrage:
+        </h3>
+        <p style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; background: #eff6ff; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
+          Wie bringen wir dem Computer bei, diese 25 Schritte auf einen einzigen Knopfdruck selbstständig im Quelltext auszuführen?
+        </p>
+      </section>
+
+      <!-- Abschnitt: Übersetzungstabelle -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Die Übersetzung: Mausklick versus Java-Code</h2>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Jede Aktion, die du bisher mit der Maus auf der BlueJ-Oberfläche ausgeführt hast, besitzt eine exakte Entsprechung im Java-Quelltext:
+        </p>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="width: 32%;">Mausaktion in BlueJ</th>
+              <th style="width: 38%;">Äquivalenter Java-Quellcode</th>
+              <th style="width: 30%;">Was passiert im Hintergrund?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Rechtsklick auf Klasse <span class="code-pill">Quadrat</span><br>
+                $\rightarrow$ Klick auf <span class="code-pill">new Quadrat()</span><br>
+                $\rightarrow$ Instanzname <span class="code-pill">wand</span> eingeben
+              </td>
+              <td>
+                <span class="code-pill" style="color: #1e40af;">Quadrat wand = new Quadrat();</span>
+              </td>
+              <td>
+                Eine Variable <span class="code-pill">wand</span> wird reserviert. Der <span class="code-pill">new</span>-Operator ruft den Konstruktor auf und legt das Objekt im Speicher an.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Rechtsklick auf Kasten <span class="code-pill">wand</span><br>
+                $\rightarrow$ Klick auf <span class="code-pill">sichtbarMachen()</span>
+              </td>
+              <td>
+                <span class="code-pill" style="color: #065f46;">wand.sichtbarMachen();</span>
+              </td>
+              <td>
+                <strong>Punktnotation:</strong> Dem Objekt <span class="code-pill">wand</span> wird der Befehl erteilt, seine Methode <span class="code-pill">sichtbarMachen()</span> auszuführen.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Rechtsklick auf Kasten <span class="code-pill">wand</span><br>
+                $\rightarrow$ Klick auf <span class="code-pill">groesseAendern(120)</span>
+              </td>
+              <td>
+                <span class="code-pill" style="color: #9d174d;">wand.groesseAendern(120);</span>
+              </td>
+              <td>
+                Das Argument <span class="code-pill">120</span> wird an den Parameter übergeben. Der Attributwert <span class="code-pill">groesse</span> wird auf 120 gesetzt.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Rechtsklick auf Kasten <span class="code-pill">wand</span><br>
+                $\rightarrow$ Klick auf <span class="code-pill">farbeAendern("rot")</span>
+              </td>
+              <td>
+                <span class="code-pill" style="color: #b45309;">wand.farbeAendern("rot");</span>
+              </td>
+              <td>
+                Der Textwert (String) <span class="code-pill">"rot"</span> wird übergeben und im Attribut <span class="code-pill">farbe</span> des Objekts gespeichert.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Abschnitt: Anatomie der Objekterzeugung & Punktnotation -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Anatomie der Java-Syntax</h2>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">
+          1. Die Objekterzeugung im Quelltext zerlegt:
+        </h3>
+
+        <div class="syntax-box">
+          <div class="syntax-pills">
+            <span class="syn-pill syn-type">Quadrat</span>
+            <span class="syn-pill syn-name">wand</span>
+            <span class="syn-pill syn-eq">=</span>
+            <span class="syn-pill syn-new">new</span>
+            <span class="syn-pill syn-ctor">Quadrat();</span>
+          </div>
+
+          <div class="grid-2" style="margin-top: 10px;">
+            <div>
+              <p><strong><span class="syn-pill syn-type" style="padding:2px 6px;">Quadrat</span> Datentyp (Klasse):</strong> Welcher Typ von Objekt soll hier referenziert werden?</p>
+              <p style="margin-top: 6px;"><strong><span class="syn-pill syn-name" style="padding:2px 6px;">wand</span> Bezeichner (Name):</strong> Unter welchem Namen können wir das Objekt ansprechen?</p>
+            </div>
+            <div>
+              <p><strong><span class="syn-pill syn-new" style="padding:2px 6px;">new</span> Operator:</strong> Befehl an Java, im Arbeitsspeicher Platz für ein neues Objekt zu schaffen.</p>
+              <p style="margin-top: 6px;"><strong><span class="syn-pill syn-ctor" style="padding:2px 6px;">Quadrat()</span> Konstruktor:</strong> Initialisiert das neue Objekt mit Standardwerten.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">
+          2. Die Punktnotation: Objekte steuern:
+        </h3>
+
+        <div class="syntax-box">
+          <div class="syntax-pills">
+            <span class="syn-pill syn-name">wand</span>
+            <span class="syn-pill syn-eq">.</span>
+            <span class="syn-pill syn-ctor">groesseAendern(</span>
+            <span class="syn-pill syn-type">120</span>
+            <span class="syn-pill syn-ctor">);</span>
+          </div>
+          <p style="margin-top: 8px;">
+            Der <strong>Punkt (<span class="code-pill">.</span>)</strong> ist das wichtigste Steuerzeichen: Er bedeutet <em>„Greife auf dieses konkrete Objekt zu und führe dessen Methode aus!“</em>.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 3: PROGRAMMIER-LABOR: KLASSE BILD
+         ======================================================== -->
+    <div id="tab-klasse-bild" class="tab-panel">
+
+      <!-- Abschnitt: Konzept der Komposition -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Das Konzept der Komposition: „Hat-ein“-Beziehung</h2>
+        </div>
+
+        <p style="margin-bottom: 0.85rem;">
+          Statt alle Figuren lose auf der Werkbank herumliegen zu lassen, schaffen wir ein übergeordnetes Steuerungsobjekt: 
+          Eine neue Klasse namens <strong><span class="code-pill">Bild</span></strong>.
+        </p>
+
+        <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-md); padding: 1.25rem; margin: 1rem 0;">
+          <h4 style="color: #1e3a8a; font-size: 1rem; font-weight: 800; margin-bottom: 4px;">Die logische Beziehung:</h4>
+          <p style="color: #1e40af; font-size: 0.95rem;">
+            Ein Objekt der Klasse <strong>Bild</strong> ist selbst kein Kreis und kein Quadrat. Aber das Bild <strong>„hat ein“</strong> Quadrat (Wand), <strong>„hat ein“</strong> Dreieck (Dach), <strong>„hat ein“</strong> zweites Quadrat (Fenster) und <strong>„hat einen“</strong> Kreis (Sonne)!
+          </p>
+        </div>
+
+        <p style="font-size: 0.92rem; color: var(--text-muted);">
+          In der Informatik nennt man dies <strong>Komposition</strong> (bzw. Assoziation). Das Bild besitzt Referenzen auf seine Einzelteile.
+        </p>
+      </section>
+
+      <!-- Abschnitt: Schritt-für-Schritt Bauplan -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Schritt-für-Schritt: Die Klasse Bild in BlueJ erstellen</h2>
+        </div>
+
+        <ol class="step-list">
+          <li>
+            <strong>Neue Klasse anlegen:</strong> Klicke im BlueJ-Hauptfenster auf den Button <em>„Neue Klasse...“</em>. Vergib als Klassennamen exakt: <span class="code-pill">Bild</span> (Großgeschrieben, keine Leerzeichen).
+          </li>
+          <li>
+            <strong>Editor öffnen:</strong> Mache einen Doppelklick auf die neue gelb-schraffierte Kachel <span class="code-pill">Bild</span>. Lösche den vorgegebenen Beispielcode im Editor vollständig (<span class="code-pill">Strg + A</span> $\rightarrow$ <span class="code-pill">Entf</span>).
+          </li>
+          <li>
+            <strong>Attribute deklarieren:</strong> Schreibe die Referenzen auf die vier Figuren als private Attribute ganz oben in die Klasse.
+          </li>
+          <li>
+            <strong>Konstruktor schreiben:</strong> Erzeuge im Konstruktor <span class="code-pill">public Bild()</span> die vier Objekte mit <span class="code-pill">new</span>.
+          </li>
+          <li>
+            <strong>Methode <span class="code-pill">zeichne()</span> definieren:</strong> Rufe an den Objekten die Positionierungs- und Färbemethoden auf und mache sie am Ende sichtbar.
+          </li>
+          <li>
+            <strong>Kompilieren:</strong> Klicke auf <em>„Übersetzen“ (Compile)</em>. Achte darauf, wie BlueJ nun automatisch gestrichelte Pfeile zu den Figuren zeichnet!
+          </li>
+        </ol>
+
+        <!-- Quelltext-Box -->
+        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">
+          Der fertige Quelltext zum Nachvollziehen:
+        </h3>
+
+        <pre class="code-block"><code><span class="code-comment">/**
+ * Ein Bild, das aus mehreren geometrischen Figuren zusammengesetzt ist.
+ */</span>
+<span class="code-keyword">public class</span> <span class="code-type">Bild</span> {
+
+    <span class="code-comment">// --- 1. Attribute: Das Bild besitzt Referenzen auf Figuren ---</span>
+    <span class="code-keyword">private</span> <span class="code-type">Quadrat</span> wand;
+    <span class="code-keyword">private</span> <span class="code-type">Dreieck</span> dach;
+    <span class="code-keyword">private</span> <span class="code-type">Quadrat</span> fenster;
+    <span class="code-keyword">private</span> <span class="code-type">Kreis</span>   sonne;
+
+    <span class="code-comment">/**
+     * Konstruktor: Hier werden alle Figuren im Speicher erzeugt!
+     */</span>
+    <span class="code-keyword">public</span> <span class="code-type">Bild</span>() {
+        wand = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        dach = <span class="code-keyword">new</span> <span class="code-type">Dreieck</span>();
+        fenster = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        sonne = <span class="code-keyword">new</span> <span class="code-type">Kreis</span>();
+    }
+
+    <span class="code-comment">/**
+     * Zeichnet die Gesamtszene auf Knopfdruck auf die Leinwand.
+     */</span>
+    <span class="code-keyword">public void</span> <span class="code-method">zeichne</span>() {
+        <span class="code-comment">// 1. Wand einrichten</span>
+        wand.<span class="code-method">groesseAendern</span>(<span class="code-num">120</span>);
+        wand.<span class="code-method">farbeAendern</span>(<span class="code-string">"rot"</span>);
+        wand.<span class="code-method">horizontalBewegen</span>(-<span class="code-num">50</span>);
+        wand.<span class="code-method">vertikalBewegen</span>(<span class="code-num">80</span>);
+        wand.<span class="code-method">sichtbarMachen</span>();
+
+        <span class="code-comment">// 2. Fenster einrichten</span>
+        fenster.<span class="code-method">farbeAendern</span>(<span class="code-string">"schwarz"</span>);
+        fenster.<span class="code-method">groesseAendern</span>(<span class="code-num">35</span>);
+        fenster.<span class="code-method">horizontalBewegen</span>(-<span class="code-num">15</span>);
+        fenster.<span class="code-method">vertikalBewegen</span>(<span class="code-num">120</span>);
+        fenster.<span class="code-method">sichtbarMachen</span>();
+
+        <span class="code-comment">// 3. Dach einrichten</span>
+        dach.<span class="code-method">farbeAendern</span>(<span class="code-string">"gruen"</span>);
+        dach.<span class="code-method">groesseAendern</span>(<span class="code-num">60</span>, <span class="code-num">150</span>);
+        dach.<span class="code-method">horizontalBewegen</span>(<span class="code-num">20</span>);
+        dach.<span class="code-method">vertikalBewegen</span>(<span class="code-num">45</span>);
+        dach.<span class="code-method">sichtbarMachen</span>();
+
+        <span class="code-comment">// 4. Sonne einrichten</span>
+        sonne.<span class="code-method">farbeAendern</span>(<span class="code-string">"gelb"</span>);
+        sonne.<span class="code-method">groesseAendern</span>(<span class="code-num">65</span>);
+        sonne.<span class="code-method">horizontalBewegen</span>(<span class="code-num">125</span>);
+        sonne.<span class="code-method">vertikalBewegen</span>(-<span class="code-num">30</span>);
+        sonne.<span class="code-method">sichtbarMachen</span>();
+    }
+}</code></pre>
+      </section>
+
+      <!-- Abschnitt: Differenzierungsaufgabe -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">3</span>
+          <h2 class="step-title">Praxis-Herausforderung: Eigene Methoden programmieren</h2>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Wenn dein Bild funktioniert, erweitere die Klasse um interaktive Animationen und Szenenwechsel:
+        </p>
+
+        <div class="grid-2">
+          <!-- Aufgabe A -->
+          <div class="sub-card" style="border-left: 4px solid #d97706;">
+            <div class="sub-card-title">Aufgabe A: Sonnenuntergang</div>
+            <p>
+              Programmiere eine neue Methode <span class="code-pill">public void sonnenuntergang()</span>. 
+              Die Sonne soll langsam nach unten wandern (<span class="code-pill">langsamVertikalBewegen(250)</span>) und anschließend ihre Farbe in Blau ändern.
+            </p>
+            <div class="question-card" style="margin-top: 10px; padding: 10px;">
+              <div class="question-header">
+                <span class="question-title">Musterlösung für Aufgabe A ansehen:</span>
+                <button class="btn-reveal" onclick="toggleReveal('solA', this)">Antwort &amp; Erklärung aufdecken</button>
+              </div>
+              <div class="question-answer" id="solA">
+                <pre class="code-block" style="margin: 6px 0 0 0;"><code><span class="code-keyword">public void</span> <span class="code-method">sonnenuntergang</span>() {
+    sonne.<span class="code-method">langsamVertikalBewegen</span>(<span class="code-num">250</span>);
+    sonne.<span class="code-method">farbeAendern</span>(<span class="code-string">"blau"</span>);
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aufgabe B -->
+          <div class="sub-card" style="border-left: 4px solid #7c3aed;">
+            <div class="sub-card-title">Aufgabe B (Zusatz): Nacht-Modus</div>
+            <p>
+              Programmiere eine Methode <span class="code-pill">public void nachtModus()</span>: 
+              Die Sonne verschwindet (<span class="code-pill">unsichtbarMachen()</span>), die Wand wird dunkelblau und im Fenster geht das Licht an (Farbe ändert sich zu <span class="code-pill">"gelb"</span>)!
+            </p>
+            <div class="question-card" style="margin-top: 10px; padding: 10px;">
+              <div class="question-header">
+                <span class="question-title">Musterlösung für Aufgabe B ansehen:</span>
+                <button class="btn-reveal" onclick="toggleReveal('solB', this)">Antwort &amp; Erklärung aufdecken</button>
+              </div>
+              <div class="question-answer" id="solB">
+                <pre class="code-block" style="margin: 6px 0 0 0;"><code><span class="code-keyword">public void</span> <span class="code-method">nachtModus</span>() {
+    sonne.<span class="code-method">unsichtbarMachen</span>();
+    wand.<span class="code-method">farbeAendern</span>(<span class="code-string">"blau"</span>);
+    fenster.<span class="code-method">farbeAendern</span>(<span class="code-string">"gelb"</span>);
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 4: MERKHEFT-SICHERUNG & ZUSAMMENFASSUNG
+         ======================================================== -->
+    <div id="tab-sicherung" class="tab-panel">
+
+      <!-- Der Grosse Merkkasten -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">1</span>
+          <h2 class="step-title">Merkhefteintrag: Die Kernkonzepte zum Abschreiben</h2>
+        </div>
+
+        <div class="merke-box">
+          <span class="merke-tag">MERKE</span>
+          <div class="merke-title">Zusammenfassung: Konstruktor, Objekterzeugung &amp; Punktnotation</div>
+          <div class="merke-content">
+            <p style="margin-bottom: 0.75rem;">
+              <strong>1. Klasse vs. Konstruktor vs. Objekt:</strong><br>
+              • <strong>Klasse:</strong> Der Bauplan / Typ im Quelltext.<br>
+              • <strong>Konstruktor:</strong> Die Initialisierungsroutine in der Klasse. Heißt exakt wie die Klasse und wird genau einmal bei der Erschaffung aufgerufen.<br>
+              • <strong>Objekt:</strong> Das konkrete Exemplar im Arbeitsspeicher mit eigenem Zustand.
+            </p>
+            <p style="margin-bottom: 0.75rem;">
+              <strong>2. Objekterzeugung mit <span class="code-pill">new</span>:</strong><br>
+              Die Syntax zur Erzeugung eines Objekts im Quelltext lautet:<br>
+              <span class="code-pill">Klassenname objektName = new Klassenname();</span><br>
+              Der <span class="code-pill">new</span>-Operator reserviert Speicherplatz und ruft den Konstruktor auf.
+            </p>
+            <p style="margin-bottom: 0.75rem;">
+              <strong>3. Die Punktnotation:</strong><br>
+              Um ein Objekt zu steuern, sendet man ihm über den Punkt eine Botschaft:<br>
+              <span class="code-pill">objektName.methodenName(parameterWert);</span>
+            </p>
+            <p>
+              <strong>4. Komposition („Hat-ein“-Beziehung):</strong><br>
+              Ein komplexes Objekt kann andere Objekte als Attribute besitzen und steuern. Im BlueJ-Klassendiagramm wird diese Abhängigkeit durch einen gestrichelten Pfeil dargestellt.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Detektiv-Fragen zur Reflexion -->
+      <section class="card">
+        <div class="step-header">
+          <span class="step-badge">2</span>
+          <h2 class="step-title">Abschluss-Reflexion: Detektiv-Fragen</h2>
+        </div>
+
+        <div class="question-card">
+          <div class="question-header">
+            <span class="question-title">Frage 1: Warum stehen die Variablen dach, wand, sonne außerhalb der Methode zeichne(), ganz oben in der Klasse?</span>
+            <button class="btn-reveal" onclick="toggleReveal('ref1', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ref1">
+            Weil sie <strong>Attribute</strong> des Bildes sind! Wenn sie innerhalb einer Methode deklariert würden, wären sie <em>lokale Variablen</em> und würden nach Ende der Methode sofort aus dem Speicher gelöscht. Als Attribute bleiben sie dauerhaft im Bild-Objekt erhalten, sodass auch spätere Methoden wie <span class="code-pill">sonnenuntergang()</span> auf dieselbe Sonne zugreifen können.
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-header">
+            <span class="question-title">Frage 2: Was passiert, wenn man im Konstruktor Bild() die Zeile sonne = new Kreis(); vergisst, aber in zeichne() sonne.sichtbarMachen(); aufruft?</span>
+            <button class="btn-reveal" onclick="toggleReveal('ref2', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ref2">
+            Java stürzt mit einer <span class="code-pill">NullPointerException</span> ab! Die Referenzvariable <span class="code-pill">sonne</span> hat dann den Standardwert <span class="code-pill">null</span> (sie zeigt ins Leere). Wenn man versucht, an einem nicht existierenden Objekt eine Methode aufzurufen, weiß Java nicht, wohin der Befehl geschickt werden soll.
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-header">
+            <span class="question-title">Frage 3: Woran erkennt man im Quelltext sofort, dass eine Methode der Konstruktor ist?</span>
+            <button class="btn-reveal" onclick="toggleReveal('ref3', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ref3">
+            An zwei Merkmalen: 1. Der Konstruktor heißt <strong>haargenau wie die Klasse</strong> (z. B. <span class="code-pill">public Bild()</span> in der Klasse <span class="code-pill">Bild</span>). 2. Er besitzt <strong>keinen Rückgabetyp</strong> – nicht einmal das Schlüsselwort <span class="code-pill">void</span> darf davor stehen!
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================
+       JAVASCRIPT: INTERAKTION & NAVIGATION
+       ======================================================== -->
+  <script>
+    /* TAB UMSCHALTUNG MIT HASH UNTERSTÜTZUNG */
+    function switchTab(tabId) {
+      document.querySelectorAll('.presenter-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+
+      document.querySelectorAll('.presenter-tab-btn').forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes(tabId)) {
+          btn.classList.add('active');
+        }
+      });
+
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      window.location.hash = tabId;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(targetPanel, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    // Beim Laden prüfen ob Hash vorhanden
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById(hash)) {
+        switchTab(hash);
+      }
+    });
+
+    /* INTERAKTIVER BEGRIFFS-CHECK */
+    function checkTuev(cardId, optionNum, isCorrect, feedbackText) {
+      const card = document.getElementById(cardId);
+      const buttons = card.querySelectorAll('.tuev-btn');
+      const feedback = document.getElementById(cardId + '-fb');
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong');
+        if (index + 1 === optionNum) {
+          if (isCorrect) {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+          }
+        }
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#ecfdf5';
+        feedback.style.color = '#065f46';
+        feedback.style.border = '1px solid #a7f3d0';
+        feedback.innerHTML = '<strong>Richtig!</strong> ' + feedbackText;
+      } else {
+        feedback.style.background = '#fef2f2';
+        feedback.style.color = '#991b1b';
+        feedback.style.border = '1px solid #fecaca';
+        feedback.innerHTML = '<strong>Hinweis:</strong> ' + feedbackText;
+      }
+    }
+
+    /* EINZELNE ANTWORT AUFDECKEN / VERBERGEN */
+    function toggleReveal(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const isVisible = el.classList.toggle('show');
+      if (btn) {
+        btn.textContent = isVisible ? 'Antwort verbergen' : 'Antwort & Erklärung aufdecken';
+      }
+    }
+  </script>
+</body>
+</html>
