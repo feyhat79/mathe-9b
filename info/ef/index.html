@@ -4,102 +4,660 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Informatik EF">
   <title>Informatik Einführungsphase (EF) | Schulportal</title>
   
+  <!-- Modern System Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+  
+  <style>
+    :root {
+      --primary: #1e3a8a;          /* Füller-Königsblau */
+      --primary-dark: #172554;
+      --primary-light: #dbeafe;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+      --shadow-hover: 0 10px 25px rgba(30, 58, 138, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0 1rem 3rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      padding: 2.5rem 0 1.5rem 0;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* Info Banner / Alert */
+    .alert-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin: 1.5rem 0 2.5rem 0;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+    }
+
+    .alert-icon {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
+      background: rgba(255,255,255,0.1);
+      color: #60a5fa;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-md);
+      letter-spacing: 0.5px;
+    }
+
+    .alert-content h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-content p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title span {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* Topics Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .topic-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: #cbd5e1;
+    }
+
+    .topic-card.active-topic {
+      border: 2.5px solid #2563eb;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.16);
+    }
+
+    .topic-card.active-topic:hover {
+      border-color: #1d4ed8;
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.24);
+    }
+
+    .topic-card.active-topic::before {
+      content: "AKTUELL";
+      position: absolute;
+      top: 12px;
+      right: -26px;
+      background: #2563eb;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 28px;
+      transform: rotate(45deg);
+      letter-spacing: 0.5px;
+    }
+
+    .topic-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+
+    .badge-current {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    .badge-upcoming {
+      background-color: var(--warning-light);
+      color: #b45309;
+    }
+
+    .topic-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .topic-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
+    }
+
+    .btn-topic {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.8rem 1.25rem;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-topic:hover {
+      background-color: var(--primary-dark);
+      color: white;
+    }
+
+    .btn-topic-secondary {
+      background-color: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+
+    .btn-topic-secondary:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-disabled {
+      background-color: #f1f5f9;
+      color: #94a3b8;
+      cursor: not-allowed;
+      border: 1px solid var(--border);
+    }
+
+    /* Strukturierte Materialliste in der Karte */
+    .card-materials {
+      margin-top: 1.25rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .materials-header {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .material-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .material-item:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+
+    .material-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-width: 0;
+    }
+
+    .mat-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .mat-badge-ab {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .mat-badge-mb {
+      background: var(--success-light);
+      color: #047857;
+    }
+
+    .mat-badge-zip {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .material-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .material-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-mat-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-mat-pill:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-mat-pdf {
+      color: #b91c1c;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    .btn-mat-pdf:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+
+    /* iPad Guide Box */
+    .ipad-guide {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .ipad-guide-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .step-item {
+      background-color: var(--bg);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .step-number {
+      background: var(--primary);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    .step-text strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Software Info Box */
+    .software-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .timestamp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 0.85rem;
+      padding: 5px 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #059669;
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.8rem; }
+      .alert-card { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
 
   <div class="container">
-
     <!-- Header -->
-    <header class="portal-header">
-      <div class="badge-pill badge-diff">Informatik EF • Oberstufe</div>
+    <header>
+      <div class="badge-pill">Informatik EF • Schulportal</div>
       <h1>Informatik Einführungsphase (EF)</h1>
-      <p class="subtitle">Einführung in die Programmierung, algorithmische Grundstrukturen und Objektorientierung.</p>
+      <p class="subtitle">Deine Übersicht für Unterrichtsmodule, Java-Programmierpraxis, Filius-Rechnernetze und Merkblätter.</p>
       <div class="timestamp-pill">
-        Stand: September 2026
+        Aktualisiert: Oktober 2026
       </div>
     </header>
 
-    <!-- Alert / Important Info -->
+    <!-- Important Notice / Current Topic -->
     <div class="alert-card">
-      <div class="alert-icon" style="font-weight: 800; font-size: 1.1rem; color: #60a5fa;">AKTUELL</div>
+      <div class="alert-icon">AKTUELL</div>
       <div class="alert-content">
-        <h3>Aktuelle Einheit: Objektorientierung mit BlueJ &amp; Java</h3>
-        <p>Nach den Grundlagen zu Klassen, Objekten und dem Compiler (Stunden 1 &amp; 2) starten wir in <strong>Stunde 3</strong> mit dem <strong>Begriffs-TÜV</strong> (Unterschied Konstruktor vs. Objekt) und der <strong>Klasse Bild</strong>, in der mehrere Figuren zusammenarbeiten.</p>
+        <h3>Thema 2 • Objektorientierte Programmierung mit Java &amp; BlueJ</h3>
+        <p>Wir arbeiten aktuell im interaktiven Gesamtmodul zu BlueJ &amp; Java. Vom Objektbegriff und der Werkbank über den Compiler bis zum Zusammenspiel in der <strong>Klasse Bild</strong> steht alles im Gesamtmodul mit Karteireitern bereit.</p>
       </div>
     </div>
 
-    <!-- Modules Grid -->
-    <h2 class="section-heading"><span style="font-weight: 800;">1</span> Unterrichtsmodule &amp; Themen</h2>
-    <div class="dashboard-grid">
+    <!-- Topics Grid -->
+    <h2 class="section-title"><span style="font-weight: 800; font-size: 0.9rem;">I</span> Unterrichtsmodule</h2>
+    <div class="grid">
 
-      <!-- Thema 1: Rechnernetze (Gesamtmodul mit Karteireitern) -->
-      <div class="class-card theme-oberstufe" style="border: 2px solid #2563eb;">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#eff6ff; color:#1d4ed8; margin-bottom:0;">Thema 1 • 6 Stufen + Exkurs</span>
-          <span style="font-size:0.75rem; color:#10b981; font-weight:700;">Abgeschlossen</span>
+      <!-- 1. Thema: Rechnernetze & Filius -->
+      <a href="rechnernetze.html" class="topic-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="topic-badge" style="background-color: #f1f5f9; color: #475569; margin-bottom: 0;">Thema 1 • 6 Stufen</span>
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Stand: 30.09.2026</span>
         </div>
-        <h3 class="class-card-title">1. Rechnernetze &amp; Filius</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Von Peer-to-Peer und Binäradressen über Switches, Router und redundante Dreiecksnetze bis zum zentralen DNS-Namensdienst. Alle 6 Praxis-Stufen inklusive Exkurs in einem kompakten Gesamtmodul mit Karteireitern organisiert.
-        </p>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <a href="rechnernetze.html" class="btn-open" style="background:var(--theme-oberstufe); color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1;">Modul öffnen (mit Karteireitern) →</a>
+        <h3 class="topic-title">1. Rechnernetze &amp; Filius</h3>
+        <p class="topic-desc">Von Peer-to-Peer und Binäradressen über Switches, Router und redundante Dreiecksnetze bis zum zentralen DNS-Namensdienst. Alle 6 Praxis-Stufen inklusive Exkurs in einem kompakten Gesamtmodul.</p>
+        
+        <div style="margin-top: auto;">
+          <span class="btn-topic btn-topic-secondary" style="width: 100%; justify-content: center;">
+            Gesamtmodul öffnen
+          </span>
+        </div>
+
+        <!-- Materialliste -->
+        <div class="card-materials">
+          <div class="materials-header">Begleitmaterialien</div>
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-mb">MB</span>
+              <span class="material-title">Merkblatt Binärsystem &amp; IPv4</span>
+            </div>
+            <div class="material-actions">
+              <span class="btn-mat-pill btn-mat-pdf" onclick="event.preventDefault(); window.open('Merkblatt_Binaersystem_IPv4_Informatik_EF.pdf', '_blank')">PDF</span>
+            </div>
+          </div>
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-ab">FLS</span>
+              <span class="material-title">2VR-Neu.fls (Filius Datei)</span>
+            </div>
+            <div class="material-actions">
+              <span class="btn-mat-pill" onclick="event.preventDefault(); window.open('2VR-Neu.fls', '_blank')">Download</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2. Thema: Java & BlueJ (Aktuelles Thema mit hervorgehobenem Rahmen) -->
+      <a href="java-oop.html" class="topic-card active-topic">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="topic-badge badge-current" style="margin-bottom: 0;">Aktuelles Thema</span>
+          <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">Stand: 07.10.2026</span>
+        </div>
+        <h3 class="topic-title">2. Objektorientierte Programmierung mit Java &amp; BlueJ</h3>
+        <p class="topic-desc">Objektorientierte Modellierung, Klassen vs. Objekte, Attribute &amp; Zustand, Übersetzungskette (Quellcode $\to$ Compiler $\to$ Bytecode), Konstruktor und das Zusammenspiel in der Klasse Bild.</p>
+        
+        <div style="margin-top: auto;">
+          <span class="btn-topic" style="width: 100%; justify-content: center; box-shadow: var(--shadow-sm);">
+            Unterrichtsmodul öffnen
+          </span>
+        </div>
+
+        <!-- Materialliste -->
+        <div class="card-materials">
+          <div class="materials-header">Software &amp; Projektdateien</div>
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-zip">ZIP</span>
+              <span class="material-title">Figuren_EF.zip (BlueJ Projekt)</span>
+            </div>
+            <div class="material-actions">
+              <span class="btn-mat-pill" onclick="event.preventDefault(); window.open('Figuren_EF.zip', '_blank')">Download</span>
+            </div>
+          </div>
+          <div class="material-item">
+            <div class="material-info">
+              <span class="mat-badge mat-badge-ab">APP</span>
+              <span class="material-title">BlueJ Portable (Windows ZIP)</span>
+            </div>
+            <div class="material-actions">
+              <span class="btn-mat-pill" onclick="event.preventDefault(); window.open('https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-6.0.1/BlueJ-windows-6.0.1.zip', '_blank')">Download</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 3. Thema: Grundlagen der Algorithmen (Im weiteren Verlauf) -->
+      <div class="topic-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="topic-badge badge-upcoming" style="margin-bottom: 0;">Im weiteren Verlauf</span>
+        </div>
+        <h3 class="topic-title">3. Grundlagen der Algorithmen</h3>
+        <p class="topic-desc">Sequenz, Verzweigung (if/else), Schleifen (while, for), Variablen und algorithmische Problemlösung in Java.</p>
+        <div style="margin-top: auto;">
+          <span class="btn-topic btn-disabled" style="width: 100%; justify-content: center;">Noch nicht freigeschaltet</span>
         </div>
       </div>
 
-      <!-- Thema 2: Einführung in Java & BlueJ (OOP) -->
-      <div class="class-card" style="border: 2px solid var(--theme-oberstufe);">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#ecfdf5; color:#059669; margin-bottom:0;">Thema 2 • Startklar</span>
-          <span style="font-size:0.75rem; color:#059669; font-weight:700;">Neue Einheit</span>
-        </div>
-        <h3 class="class-card-title">2. Objektorientierte Programmierung mit Java &amp; BlueJ</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">
-          Objektorientierte Modellierung, Klassen vs. Objekte, Attribute, Zustand, Methoden und erste Programmierpraxis mit BlueJ.
-        </p>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <a href="bluej-figuren-einstieg.html" class="btn-open" style="background:var(--theme-oberstufe); color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1 1 calc(50% - 4px);">1. Figuren &amp; OOP (Stunde 1) →</a>
-          <a href="quelltext-editor-compiler.html" class="btn-open" style="background:#1e3a8a; color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1 1 calc(50% - 4px);">2. Quellcode &amp; Compiler (Stunde 2) →</a>
-          <a href="zusammenspiel-objekte-klasse-bild.html" class="btn-open" style="background:#059669; color:#ffffff; text-align:center; text-decoration:none; font-weight:700; flex: 1 1 100%;">3. Zusammenspiel von Objekten &amp; Klasse Bild (Stunde 3) →</a>
-          <a href="https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-6.0.1/BlueJ-windows-6.0.1.zip" target="_blank" class="btn-open" style="background:#f1f5f9; color:#1e3a8a; border: 1px solid #cbd5e1; text-align:center; text-decoration:none; font-weight:700; flex: 1 1 100%;">BlueJ für USB-Stick herunterladen (.zip)</a>
-        </div>
-      </div>
-
-      <!-- Thema 3: Grundlagen der Algorithmen -->
-      <div class="class-card">
-        <div class="class-card-header">
-          <span class="badge-pill" style="background:#fef3c7; color:#b45309; margin-bottom:0;">Thema 3 • Im Verlauf</span>
-        </div>
-        <h3 class="class-card-title">3. Grundlagen der Algorithmen</h3>
-        <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.25rem; flex-grow:1;">Sequenz, Verzweigung, Schleifen, Variablen und algorithmische Problemlösung.</p>
-        <span class='btn-open' style='background:#e2e8f0; color:#94a3b8; cursor:not-allowed;'>Noch nicht freigeschaltet</span>
-      </div>
     </div>
 
     <!-- Software & USB-Stick Box -->
-    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 2rem; box-shadow: var(--shadow-sm);">
+    <div class="software-card">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
-          <span class="badge-pill" style="background:#eff6ff; color:#1d4ed8; margin-bottom:0.4rem;">Software für zu Hause &amp; USB-Stick</span>
+          <span class="badge-pill" style="margin-bottom: 0.4rem;">Software für zu Hause &amp; USB-Stick</span>
           <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">BlueJ Portable (Standalone)</h3>
           <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 650px;">
             Ohne Installation und ohne Administrator-Rechte direkt von jedem USB-Stick oder PC startbar (Java JDK ist bereits vollständig integriert).
           </p>
         </div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <a href="https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-6.0.1/BlueJ-windows-6.0.1.zip" target="_blank" class="btn-open" style="background:#1e3a8a; color:#ffffff; padding: 10px 18px; border-radius: var(--radius-sm); text-decoration: none; font-weight: 700; font-size: 0.9rem;">
+        <div>
+          <a href="https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-6.0.1/BlueJ-windows-6.0.1.zip" target="_blank" class="btn-topic" style="text-decoration: none;">
             BlueJ Portable herunterladen (.zip)
           </a>
         </div>
-      </div>
-      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.86rem; color: var(--text-muted);">
-        <strong>Kurzanleitung USB-Stick:</strong> 1. ZIP-Datei auf den USB-Stick entpacken &bull; 2. Projektordner <span class="code-pill">Figuren_EF</span> danebenlegen &bull; 3. <span class="code-pill">BlueJ.exe</span> starten und loslegen!
       </div>
     </div>
 
@@ -108,27 +666,37 @@
       <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
         Tipp für dein iPad: Als Verknüpfung auf den Startbildschirm
       </h3>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Füge diese Seite deinem iPad-Home-Bildschirm hinzu, um jederzeit schnell darauf zuzugreifen:</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Damit du mit einem Klick auf die Informatik-Module zugreifen kannst, füge diese Seite einfach deinem iPad-Home-Bildschirm hinzu:</p>
+      
       <div class="ipad-guide-steps">
         <div class="step-item">
           <div class="step-number">1</div>
-          <div class="step-text"><strong>Teilen-Symbol</strong>Im Safari-Browser oben rechts auf das Viereck mit Pfeil nach oben tippen.</div>
+          <div class="step-text">
+            <strong>Teilen-Symbol</strong>
+            Im Safari-Browser oben rechts auf das Viereck mit Pfeil nach oben tippen.
+          </div>
         </div>
         <div class="step-item">
           <div class="step-number">2</div>
-          <div class="step-text"><strong>Zum Home-Bildschirm</strong>Nach unten scrollen und auf <em>„Zum Home-Bildschirm“</em> tippen.</div>
+          <div class="step-text">
+            <strong>Zum Home-Bildschirm</strong>
+            Nach unten scrollen und auf <em>„Zum Home-Bildschirm“</em> tippen.
+          </div>
         </div>
         <div class="step-item">
           <div class="step-number">3</div>
-          <div class="step-text"><strong>Hinzufügen</strong>Oben rechts auf <em>„Hinzufügen“</em> tippen – fertig!</div>
+          <div class="step-text">
+            <strong>Hinzufügen</strong>
+            Oben rechts auf <em>„Hinzufügen“</em> tippen – fertig ist deine Informatik-App!
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
     <footer>
-      <p><strong>Informatik Einführungsphase (EF)</strong> • Schulportal 2026/2027</p>
-      <p style="margin-top: 4px;">Fragen zum Unterricht oder zu Aufgaben? Melde dich gerne in <strong>Microsoft Teams</strong>!</p>
+      <p>Informatik Einführungsphase (EF) • Erstellt für deinen Lernerfolg.</p>
+      <p style="margin-top: 4px;">Fragen zum Unterricht oder zu den Programmieraufgaben? Schreibe mir gerne in <strong>Microsoft Teams</strong>!</p>
     </footer>
 
   </div>
