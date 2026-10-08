@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Projekt: Das Nimm-Spiel im Netzwerk | Informatik Q2</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;       /* Fueller-Koenigsblau */
+      --primary-focus: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #0284c7;        /* Netzwerk-Cyan */
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;        /* Merkkasten-Rahmen */
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #111827;          /* Fuellertiefes Schwarz */
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 11pt;
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* PRESENTER-LEISTE */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary-focus);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-back {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 13px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-nav-back:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .presenter-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .presenter-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #1e3a8a;
+      color: #bfdbfe;
+      border: 1px solid #3b82f6;
+      font-weight: 600;
+    }
+
+    .presenter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+    .presenter-tab-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 1.5rem auto;
+      padding: 0 1.25rem;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      padding: 1rem 0 1.75rem 0;
+    }
+
+    .badge-chapter {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 14px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+      line-height: 1.25;
+    }
+
+    .lead-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    /* TAB PANEL SYSTEM */
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .step-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-badge {
+      background: var(--primary);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    /* MERKKASTEN (ROTER RAHMEN, SCHWARZER TEXT) */
+    .merke-box {
+      border: 2.5px solid var(--danger);
+      background: #fffafa;
+      border-radius: var(--radius-md);
+      padding: 1.15rem 1.25rem;
+      margin: 1.25rem 0;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: var(--danger);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827 !important;
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    /* CODE & TERMINAL */
+    .code-pill {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid #cbd5e1;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0.75rem 0;
+      border: 1px solid #334155;
+    }
+
+    /* PROTOKOLL TABELLE */
+    .protocol-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    .protocol-table th, .protocol-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .protocol-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .protocol-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    /* SEQUENZDIAGRAMM VISUELL */
+    .seq-diagram {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    .seq-lane-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      text-align: center;
+      font-weight: 700;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .seq-step {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .seq-arrow-right {
+      grid-column: 1 / span 2;
+      background: #eff6ff;
+      border-left: 3px solid #2563eb;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .seq-arrow-left {
+      grid-column: 2 / span 2;
+      background: #f0fdf4;
+      border-left: 3px solid #059669;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .seq-server-broadcast {
+      grid-column: 1 / span 3;
+      background: #fffbeb;
+      border-left: 3px solid #d97706;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    /* BUTTONS */
+    .btn-action {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn-action:hover {
+      background: var(--primary-focus);
+    }
+    .btn-action.btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-action.btn-secondary:hover {
+      background: #e2e8f0;
+    }
+    .btn-action.btn-success {
+      background: var(--success);
+    }
+    .btn-action.btn-success:hover {
+      background: #047857;
+    }
+
+    /* AUFDECK-CONTAINER */
+    .solution-box {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: var(--radius-md);
+    }
+    .solution-box.visible {
+      display: block;
+    }
+
+    .hint-box {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      border-radius: var(--radius-md);
+    }
+    .hint-box.visible {
+      display: block;
+    }
+
+    /* SIMULATOR STYLES */
+    .sim-arena {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 860px) {
+      .sim-arena {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sim-card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .sim-card.active-turn {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+    }
+    .sim-card-header {
+      font-weight: 700;
+      font-size: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid var(--border);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sim-wood-table {
+      background: #fefce8;
+      border: 2px solid #fde047;
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .matchsticks-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 10px 0;
+      min-height: 60px;
+      align-items: center;
+    }
+    .matchstick {
+      width: 14px;
+      height: 52px;
+      background: #b45309;
+      border-radius: 3px;
+      position: relative;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+    .matchstick::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 1px;
+      width: 12px;
+      height: 12px;
+      background: #dc2626;
+      border-radius: 50%;
+    }
+    .matchstick.removed {
+      opacity: 0.15;
+      transform: scale(0.6);
+    }
+    .log-terminal {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 0.78rem;
+      height: 220px;
+      overflow-y: auto;
+      padding: 8px;
+      border-radius: 6px;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .log-line {
+      margin-bottom: 3px;
+      word-break: break-all;
+    }
+    .log-line.c1 { color: #60a5fa; }
+    .log-line.c2 { color: #34d399; }
+    .log-line.srv { color: #fde047; }
+    .log-line.err { color: #f87171; }
+
+    .btn-group-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .btn-draw {
+      flex: 1;
+      padding: 8px 4px;
+      background: #f1f5f9;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .btn-draw:hover:not(:disabled) {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+    .btn-draw:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       PRÄSENTATIONS- & BEREICHSNAVIGATION
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Q2</a>
+      <div class="presenter-title">
+        <span>Informatik Q2 • Praxisprojekt</span>
+        <span class="presenter-badge">Das Nimm-Spiel</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <button class="presenter-tab-btn active" onclick="switchTab('tab-idee')">
+        1. Spielidee &amp; Regeln
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-protokoll')">
+        2. Protokoll-Entwurf
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-bluej')">
+        3. BlueJ-Gerüst &amp; Client
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-meilensteine')">
+        4. Die 4 Meilensteine
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-hilfen')">
+        5. Gestufte Hilfen
+      </button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-simulator')">
+        6. Live-Simulator
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+      <div class="badge-chapter">Q2 Informatik • Rechnernetze &amp; Client-Server</div>
+      <h1>Netzwerk-Praxisprojekt: Das Nimm-Spiel</h1>
+      <p class="lead-subtitle">
+        Implementierung eines rundenbasierten 2-Spieler-Netzwerkspiels mit Socket-Kommunikation, Zustandsverwaltung und den Abiturklassen des Landes NRW.
+      </p>
+    </header>
+
+    <!-- ========================================================
+         TAB 1: SPIELIDEE & FACHKONZEPT
+         ======================================================== -->
+    <div id="tab-idee" class="tab-panel active">
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">1</span>
+            <h2 class="step-title">Das Spielprinzip (Misère-Variante)</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Das Nimm-Spiel ist ein klassisches mathematisches Strategiespiel für zwei Personen. Für unser Netzwerkprojekt gelten folgende verbindliche Rahmenbedingungen:
+        </p>
+
+        <div class="merke-box">
+          <span class="merke-tag">MERKE</span>
+          <div class="merke-content">
+            <strong>Die offiziellen Spielregeln für das Projekt:</strong><br>
+            • <strong>Startbestand:</strong> Es liegen genau $n = 17$ Objekte (z. B. Hölzchen oder Spielsteine) auf dem Tisch.<br>
+            • <strong>Spieleranzahl:</strong> Genau $2$ Spieler treten gegeneinander an (Spieler 1 beginnt).<br>
+            • <strong>Zulässige Züge:</strong> Wer an der Reihe ist, muss mindestens $1$ und darf höchstens $3$ Objekte nehmen ($k \in \{1, 2, 3\}$).<br>
+            • <strong>Misère-Endbedingung:</strong> Wer gezwungen ist, das <strong>letzte verbleibende Objekt</strong> zu nehmen, hat das Spiel <strong>verloren</strong>. Der Gegenspieler gewinnt.
+          </div>
+        </div>
+
+        <div class="sub-card">
+          <h3 style="font-size:1.05rem; font-weight:700; color:var(--primary); margin-bottom:0.5rem;">
+            Warum ein Spielserver im Netzwerk? (Single Source of Truth)
+          </h3>
+          <p style="margin-bottom: 0.75rem;">
+            Würden zwei Clients direkt miteinander sprechen, müsste jeder Client lokal mitzählen, wie viele Hölzchen noch übrig sind. Das führt zu schweren Problemen:
+          </p>
+          <ul style="margin-left: 1.5rem; line-height: 1.6;">
+            <li><strong>Inkonsistenzen:</strong> Wenn Nachrichten verzögert ankommen, könnten beide Clients unterschiedliche Bestände anzeigen.</li>
+            <li><strong>Cheating:</strong> Ein manipulierter Client könnte einfach behaupten: <em>„Ich nehme 10 Hölzchen und habe gewonnen“</em>.</li>
+            <li><strong>Zustandsverlust:</strong> Wer entscheidet neutral, wer gerade am Zug ist?</li>
+          </ul>
+          <p style="margin-top: 0.75rem;">
+            <strong>Lösung:</strong> Der <code>NimmServer</code> verwaltet den <strong>alleinigen Spielzustand</strong> (Attribute <code>anzahlObjekte</code>, <code>aktiverSpieler</code>). Die Clients sind reine Ein- und Ausgabestationen.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================
+         TAB 2: PROTOKOLL-ENTWURF
+         ======================================================== -->
+    <div id="tab-protokoll" class="tab-panel">
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">2</span>
+            <h2 class="step-title">Das Anwendungsprotokoll: Spezifikation vor Code</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          In Rechnernetzen gilt der Leitsatz: <strong>Erst das Protokoll festlegen, dann programmieren!</strong> Ein Netzwerk-Client und ein Server können sich nur verständigen, wenn die Syntax (Befehle) und die Semantik (Bedeutung) millimetergenau geklärt sind.
+        </p>
+
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.25rem 0 0.5rem 0;">
+          Übersicht der Protokollbefehle (Text-basiertes Protokoll)
+        </h3>
+
+        <table class="protocol-table">
+          <thead>
+            <tr>
+              <th>Befehl / Format</th>
+              <th>Absender</th>
+              <th>Empfänger</th>
+              <th>Bedeutung / Auswirkung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="code-pill">START &lt;nr&gt;</span></td>
+              <td>Server</td>
+              <td>Client</td>
+              <td>Eröffnet das Spiel. Teilt dem Client seine Spielernummer (1 oder 2) mit.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">DRAN &lt;n&gt;</span></td>
+              <td>Server</td>
+              <td>Aktiver Client</td>
+              <td>Aufforderung zum Zug. Übermittelt den aktuellen Restbestand $n$.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">WARTEN &lt;n&gt;</span></td>
+              <td>Server</td>
+              <td>Passiver Client</td>
+              <td>Informiert den wartenden Spieler über den aktuellen Restbestand $n$.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">NIMM &lt;k&gt;</span></td>
+              <td>Client</td>
+              <td>Server</td>
+              <td>Der aktive Spieler zieht $k$ Objekte ($k \in \{1, 2, 3\}$).</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">GEWONNEN</span></td>
+              <td>Server</td>
+              <td>Sieger</td>
+              <td>Der Gegenspieler hat das letzte Objekt genommen. Du hast gewonnen!</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">VERLOREN</span></td>
+              <td>Server</td>
+              <td>Verlierer</td>
+              <td>Du hast das letzte Objekt genommen und somit verloren.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">FEHLER &lt;grund&gt;</span></td>
+              <td>Server</td>
+              <td>Client</td>
+              <td>Ungültiger Zug (z. B. falscher Spieler, $k &gt; 3$ oder $k &gt; n$).</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">INFO &lt;text&gt;</span></td>
+              <td>Server</td>
+              <td>Client</td>
+              <td>Allgemeine Statusmeldungen (z. B. beim Warten auf Spieler 2).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin: 1.5rem 0 0.5rem 0;">
+          Visuelles Sequenzdiagramm des Spielablaufs
+        </h3>
+
+        <div class="seq-diagram">
+          <div class="seq-lane-header">
+            <div>Client 1 (Spieler 1)</div>
+            <div>NimmServer</div>
+            <div>Client 2 (Spieler 2)</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-arrow-right">connect() ➔ Registriert Spieler 1</div>
+            <div></div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-arrow-right" style="border-left-color: #64748b;">INFO Warte auf Gegenspieler... ➔</div>
+            <div></div>
+          </div>
+          <div class="seq-step">
+            <div></div>
+            <div class="seq-arrow-left">connect() ➔ Registriert Spieler 2</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-server-broadcast">Server startet Spiel ($n = 17$)</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-arrow-right" style="border-left-color:#059669;">START 1 &amp; DRAN 17 ➔</div>
+            <div></div>
+          </div>
+          <div class="seq-step">
+            <div></div>
+            <div class="seq-arrow-left" style="border-left-color:#d97706;">START 2 &amp; WARTEN 17 ➔</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-arrow-right">NIMM 2 ➔ (Server berechnet: $17 - 2 = 15$)</div>
+            <div></div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-arrow-right" style="border-left-color:#d97706;">WARTEN 15 ➔</div>
+            <div></div>
+          </div>
+          <div class="seq-step">
+            <div></div>
+            <div class="seq-arrow-left" style="border-left-color:#059669;">DRAN 15 ➔</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================
+         TAB 3: BLUEJ-GERÜST & CLIENT
+         ======================================================== -->
+    <div id="tab-bluej" class="tab-panel">
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">3</span>
+            <h2 class="step-title">Projekt-Setup in BlueJ</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Das Projekt baut direkt auf den offiziellen <strong>Abitur-Klassen des Landes NRW</strong> auf. Du findest alle Klassen vorbereitet im Ordner:
+        </p>
+        <p style="margin-bottom: 1rem;">
+          <span class="code-pill">Q2-Info / 1. Halbjahr / 04_Client_Server_Netzwerke / BlueJ_Client_Server</span>
+        </p>
+
+        <div style="margin: 1.25rem 0;">
+          <a href="BlueJ_Client_Server.zip" download class="btn-action btn-success">
+            Download: BlueJ-Starterpaket (ZIP-Archiv)
+          </a>
+        </div>
+
+        <div class="sub-card">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">
+            Der fertige NimmClient: Wie funktioniert er?
+          </h3>
+          <p style="margin-bottom: 0.75rem;">
+            Um dich ganz auf die anspruchsvolle Netzwerk- und Spiellogik des Servers zu konzentrieren, ist die Klasse <code>NimmClient</code> bereits vollständig für dich vorbereitet.
+          </p>
+          <ul style="margin-left: 1.5rem; line-height: 1.6;">
+            <li><strong>Verbindung:</strong> Erzeugt man ein Objekt via <code>new NimmClient()</code>, verbindet er sich automatisch mit <code>127.0.0.1:50000</code>.</li>
+            <li><strong>Zug ausführen:</strong> Die Methode <code>ziehe(int pAnzahl)</code> validiert lokal, ob $1 \le pAnzahl \le 3$ gilt, und sendet anschließend <code>send("NIMM " + pAnzahl)</code>.</li>
+            <li><strong>Antworten darstellen:</strong> Die geerbte Methode <code>processMessage(String pMessage)</code> zerlegt die Server-Befehle und gibt verständliche Konsolentexte aus.</li>
+          </ul>
+        </div>
+
+        <div class="sub-card" style="margin-top: 1.25rem;">
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">
+            Der NimmServer: Deine Programmieraufgabe
+          </h3>
+          <p>
+            Die Klasse <code>NimmServer extends Server</code> besitzt bereits das Attribut-Gerüst und praktische Hilfsmethoden (z. B. <code>sendeAnSpieler</code>, <code>sendeAnBeide</code>, <code>zuruecksetzen</code>). Deine Aufgabe ist es nun, die geerbten Methoden Schritt für Schritt auszufüllen.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================
+         TAB 4: DIE 4 MEILENSTEINE
+         ======================================================== -->
+    <div id="tab-meilensteine" class="tab-panel">
+
+      <!-- MEILENSTEIN 1 -->
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">M1</span>
+            <h2 class="step-title">Meilenstein 1: Spielerverwaltung &amp; Verbindungsannahme</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Methode:</strong> <span class="code-pill">public void processNewConnection(String pClientIP, int pClientPort)</span>
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          Sobald ein Client anklopft, ruft der Server-Hintergrundthread diese Methode auf. Der Server muss sich merken, wer Spieler 1 und wer Spieler 2 ist.
+        </p>
+
+        <div class="sub-card">
+          <strong>Aufgabenstellung für Meilenstein 1:</strong>
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li>Prüfe, ob der Platz für Spieler 1 frei ist (<code>spieler1IP == null</code>). Falls ja: IP und Port abspeichern und dem Client eine Begrüßung via <code>send(...)</code> schicken.</li>
+            <li>Falls Spieler 1 schon da ist, prüfe, ob Spieler 2 frei ist. Falls ja: Abspeichern und <code>starteSpiel()</code> aufrufen!</li>
+            <li>Falls bereits 2 Spieler verbunden sind und ein dritter Client anklopft: Sende eine Fehlermeldung und trenne ihn mit <code>closeConnection(pClientIP, pClientPort)</code>.</li>
+          </ol>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-action btn-secondary" onclick="toggleBox('sol-m1')">
+            Musterlösung für Meilenstein 1 aufdecken
+          </button>
+        </div>
+
+        <div id="sol-m1" class="solution-box">
+          <strong style="color: var(--success);">Musterlösung Meilenstein 1:</strong>
+          <pre><code>@Override
+public void processNewConnection(String pClientIP, int pClientPort) {
+    if (spieler1IP == null) {
+        spieler1IP = pClientIP;
+        spieler1Port = pClientPort;
+        send(pClientIP, pClientPort, "INFO Du bist Spieler 1. Warte auf Gegenspieler...");
+    } else if (spieler2IP == null) {
+        spieler2IP = pClientIP;
+        spieler2Port = pClientPort;
+        send(pClientIP, pClientPort, "INFO Du bist Spieler 2. Spiel startet sofort!");
+        starteSpiel();
+    } else {
+        send(pClientIP, pClientPort, "FEHLER Das Spiel ist bereits voll (2/2 Spieler).");
+        closeConnection(pClientIP, pClientPort);
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- MEILENSTEIN 2 -->
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">M2</span>
+            <h2 class="step-title">Meilenstein 2: Der Protokoll-Parser &amp; Zugrecht</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Methode:</strong> <span class="code-pill">public void processMessage(String pClientIP, int pClientPort, String pMessage)</span>
+        </p>
+        <p style="margin-bottom: 0.75rem;">
+          Diese Methode empfängt den vom Client gesendeten Text (z. B. <span class="code-pill">"NIMM 2"</span>). Vor jeder Berechnung muss streng geprüft werden, ob der Absender überhaupt spielberechtigt ist!
+        </p>
+
+        <div class="sub-card">
+          <strong>Aufgabenstellung für Meilenstein 2:</strong>
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li>Prüfe, ob das Spiel überhaupt aktiv ist (<code>!spielAktiv</code>).</li>
+            <li>Ermittle anhand der IP und des Ports, ob die Nachricht von Spieler 1 oder Spieler 2 stammt (Nutze <code>istSpieler1(...)</code> bzw. <code>istSpieler2(...)</code>).</li>
+            <li>Prüfe, ob dieser Spieler an der Reihe ist (<code>absenderNummer == aktiverSpieler</code>). Wenn nicht: Sende <code>"FEHLER Du bist nicht an der Reihe!"</code>.</li>
+            <li>Prüfe, ob der Text mit <code>"NIMM "</code> beginnt. Extrahiere die Zahl mit <code>Integer.parseInt(...)</code> und rufe <code>fuehreZugAus(...)</code> auf.</li>
+          </ol>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-action btn-secondary" onclick="toggleBox('sol-m2')">
+            Musterlösung für Meilenstein 2 aufdecken
+          </button>
+        </div>
+
+        <div id="sol-m2" class="solution-box">
+          <strong style="color: var(--success);">Musterlösung Meilenstein 2:</strong>
+          <pre><code>@Override
+public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+    if (!spielAktiv) {
+        send(pClientIP, pClientPort, "FEHLER Kein Spiel aktiv.");
+        return;
+    }
+
+    int absender = 0;
+    if (istSpieler1(pClientIP, pClientPort)) absender = 1;
+    else if (istSpieler2(pClientIP, pClientPort)) absender = 2;
+
+    if (absender != aktiverSpieler) {
+        send(pClientIP, pClientPort, "FEHLER Du bist nicht an der Reihe! Bitte warten.");
+        return;
+    }
+
+    if (pMessage.startsWith("NIMM ")) {
+        try {
+            int anzahl = Integer.parseInt(pMessage.substring(5).trim());
+            fuehreZugAus(absender, anzahl);
+        } catch (NumberFormatException e) {
+            send(pClientIP, pClientPort, "FEHLER Ungueltige Zahl nach NIMM.");
+        }
+    } else {
+        send(pClientIP, pClientPort, "FEHLER Unbekannter Befehl.");
+    }
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- MEILENSTEIN 3 -->
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">M3</span>
+            <h2 class="step-title">Meilenstein 3: Spielstand aktualisieren &amp; Rollenwechsel</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 0.75rem;">
+          <strong>Methode:</strong> <span class="code-pill">public void fuehreZugAus(int pSpielerNr, int pAnzahl)</span>
+        </p>
+
+        <div class="sub-card">
+          <strong>Aufgabenstellung für Meilenstein 3:</strong>
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li>Prüfe, ob $pAnzahl$ zwischen $1$ und $3$ liegt. Falls nicht: Fehlermeldung senden und den Spieler erneut auffordern.</li>
+            <li>Prüfe, ob $pAnzahl \le anzahlObjekte$. Man darf nicht mehr Hölzchen nehmen, als auf dem Tisch liegen!</li>
+            <li>Ziehe $pAnzahl$ von <code>anzahlObjekte</code> ab.</li>
+            <li>Wechsle das Zugrecht: Wenn <code>aktiverSpieler == 1</code> war, ist jetzt Spieler 2 dran (und umgekehrt).</li>
+            <li>Sende an den neuen aktiven Spieler <code>"DRAN " + anzahlObjekte</code> und an den anderen <code>"WARTEN " + anzahlObjekte</code>.</li>
+          </ol>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-action btn-secondary" onclick="toggleBox('sol-m3')">
+            Musterlösung für Meilenstein 3 aufdecken
+          </button>
+        </div>
+
+        <div id="sol-m3" class="solution-box">
+          <strong style="color: var(--success);">Musterlösung Meilenstein 3 (Zwischenstand ohne Spielende):</strong>
+          <pre><code>public void fuehreZugAus(int pSpielerNr, int pAnzahl) {
+    if (pAnzahl < 1 || pAnzahl > 3) {
+        sendeAnSpieler(pSpielerNr, "FEHLER Nur 1 bis 3 Objekte erlaubt!");
+        sendeAnSpieler(pSpielerNr, "DRAN " + anzahlObjekte);
+        return;
+    }
+    if (pAnzahl > anzahlObjekte) {
+        sendeAnSpieler(pSpielerNr, "FEHLER Es sind nur noch " + anzahlObjekte + " Objekte da!");
+        sendeAnSpieler(pSpielerNr, "DRAN " + anzahlObjekte);
+        return;
+    }
+
+    anzahlObjekte -= pAnzahl;
+
+    // Rollenwechsel
+    aktiverSpieler = (aktiverSpieler == 1) ? 2 : 1;
+    int wartender = (aktiverSpieler == 1) ? 2 : 1;
+
+    sendeAnSpieler(aktiverSpieler, "DRAN " + anzahlObjekte);
+    sendeAnSpieler(wartender, "WARTEN " + anzahlObjekte);
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- MEILENSTEIN 4 -->
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">M4</span>
+            <h2 class="step-title">Meilenstein 4: Misère-Spielende &amp; Verbindungsabbruch</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 0.75rem;">
+          Nun wird die Misère-Regel in <code>fuehreZugAus</code> integriert und das vorzeitige Verlassen eines Spielers in <code>processClosingConnection</code> abgefangen.
+        </p>
+
+        <div class="sub-card">
+          <strong>Aufgabenstellung für Meilenstein 4:</strong>
+          <ol style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+            <li><strong>Spielende auswerten:</strong> Wenn nach dem Abzug <code>anzahlObjekte &lt;= 0</code> gilt, hat der ziehende Spieler das letzte Objekt genommen:
+              <br>➔ Sende an den Ziehenden <code>"VERLOREN"</code>.
+              <br>➔ Sende an den Gegenspieler <code>"GEWONNEN"</code>.
+              <br>➔ Setze <code>spielAktiv = false;</code>.
+            </li>
+            <li><strong>Verbindungsabbruch:</strong> Verlässt ein Spieler während des Spiels den Server (<code>processClosingConnection</code>), muss der verbliebene Spieler eine Abbruchmeldung erhalten und der Server zurückgesetzt werden.</li>
+          </ol>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <button class="btn-action btn-secondary" onclick="toggleBox('sol-m4')">
+            Musterlösung für Meilenstein 4 aufdecken
+          </button>
+        </div>
+
+        <div id="sol-m4" class="solution-box">
+          <strong style="color: var(--success);">Musterlösung Meilenstein 4:</strong>
+          <pre><code>// In fuehreZugAus(...) direkt nach anzahlObjekte -= pAnzahl:
+if (anzahlObjekte <= 0) {
+    int sieger = (pSpielerNr == 1) ? 2 : 1;
+    sendeAnSpieler(pSpielerNr, "VERLOREN");
+    sendeAnSpieler(sieger, "GEWONNEN");
+    spielAktiv = false;
+} else {
+    aktiverSpieler = (aktiverSpieler == 1) ? 2 : 1;
+    sendeAnSpieler(aktiverSpieler, "DRAN " + anzahlObjekte);
+    sendeAnSpieler((aktiverSpieler == 1 ? 2 : 1), "WARTEN " + anzahlObjekte);
+}
+
+// In processClosingConnection(...):
+@Override
+public void processClosingConnection(String pClientIP, int pClientPort) {
+    if (istSpieler1(pClientIP, pClientPort)) {
+        if (spielAktiv && spieler2IP != null) {
+            sendeAnSpieler(2, "INFO Spieler 1 hat das Spiel verlassen.");
+        }
+        zuruecksetzen();
+    } else if (istSpieler2(pClientIP, pClientPort)) {
+        if (spielAktiv && spieler1IP != null) {
+            sendeAnSpieler(1, "INFO Spieler 2 hat das Spiel verlassen.");
+        }
+        zuruecksetzen();
+    }
+}</code></pre>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================
+         TAB 5: GESTUFTE HILFEN
+         ======================================================== -->
+    <div id="tab-hilfen" class="tab-panel">
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">5</span>
+            <h2 class="step-title">Gestufte Hilfekarten</h2>
+          </div>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Wähle genau die Hilfestufe, die du gerade benötigst. Versuche zunächst immer mit Stufe 1 weiterzukommen, bevor du Code nachschlägst.
+        </p>
+
+        <!-- HILFE 1 -->
+        <div class="sub-card">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary);">
+            Hilfekarte A: Wie unterscheidet der Server Spieler 1 und Spieler 2?
+          </h3>
+          <div style="margin-top: 0.5rem; display: flex; gap: 6px;">
+            <button class="btn-action btn-secondary" onclick="toggleBox('h1-1')">Stufe 1: Denkanstoß</button>
+            <button class="btn-action btn-secondary" onclick="toggleBox('h1-2')">Stufe 2: Kontrollstruktur</button>
+          </div>
+          <div id="h1-1" class="hint-box">
+            <strong>Stufe 1 (Logik):</strong> Jedes Netzwerkpaket bringt <code>pClientIP</code> und <code>pClientPort</code> mit. Vergleiche diese beiden Werte einfach mit den Attributen <code>spieler1IP</code> und <code>spieler1Port</code>.
+          </div>
+          <div id="h1-2" class="hint-box">
+            <strong>Stufe 2 (Code-Gerüst):</strong>
+            <pre><code>if (pClientIP.equals(spieler1IP) &amp;&amp; pClientPort == spieler1Port) {
+    // Absender ist Spieler 1!
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- HILFE 2 -->
+        <div class="sub-card" style="margin-top: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary);">
+            Hilfekarte B: Wie zerlege ich "NIMM 2" in Java?
+          </h3>
+          <div style="margin-top: 0.5rem; display: flex; gap: 6px;">
+            <button class="btn-action btn-secondary" onclick="toggleBox('h2-1')">Stufe 1: Denkanstoß</button>
+            <button class="btn-action btn-secondary" onclick="toggleBox('h2-2')">Stufe 2: String-Methoden</button>
+          </div>
+          <div id="h2-1" class="hint-box">
+            <strong>Stufe 1 (Logik):</strong> Das Wort "NIMM " hat 5 Zeichen (Index 0 bis 4). Alles ab Index 5 ist die gewünschte Zahl.
+          </div>
+          <div id="h2-2" class="hint-box">
+            <strong>Stufe 2 (Code-Gerüst):</strong>
+            <pre><code>String zifferText = pMessage.substring(5).trim();
+int anzahl = Integer.parseInt(zifferText);</code></pre>
+          </div>
+        </div>
+
+        <!-- HILFE 3 -->
+        <div class="sub-card" style="margin-top: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary);">
+            Hilfekarte C: Wie wechsle ich elegant zwischen Spieler 1 und 2?
+          </h3>
+          <div style="margin-top: 0.5rem; display: flex; gap: 6px;">
+            <button class="btn-action btn-secondary" onclick="toggleBox('h3-1')">Stufe 1: Denkanstoß</button>
+            <button class="btn-action btn-secondary" onclick="toggleBox('h3-2')">Stufe 2: Ternärer Operator</button>
+          </div>
+          <div id="h3-1" class="hint-box">
+            <strong>Stufe 1 (Logik):</strong> Wenn <code>aktiverSpieler == 1</code> ist, wird er zu 2. Ansonsten wird er wieder zu 1.
+          </div>
+          <div id="h3-2" class="hint-box">
+            <strong>Stufe 2 (Code-Gerüst):</strong>
+            <pre><code>// Klassisch mit if-else:
+if (aktiverSpieler == 1) {
+    aktiverSpieler = 2;
+} else {
+    aktiverSpieler = 1;
+}
+
+// Oder kurz als Einzeiler:
+aktiverSpieler = (aktiverSpieler == 1) ? 2 : 1;</code></pre>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================
+         TAB 6: LIVE-SIMULATOR
+         ======================================================== -->
+    <div id="tab-simulator" class="tab-panel">
+      <section class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">6</span>
+            <h2 class="step-title">Interaktiver Spiel- &amp; Protokoll-Simulator</h2>
+          </div>
+          <button class="btn-action btn-secondary" onclick="resetSim()">Neustart ($n = 17$)</button>
+        </div>
+
+        <p style="margin-bottom: 1rem;">
+          Teste hier das Verhalten von zwei verbundenen Clients und dem Server direkt im Browser. Im mittleren Konsolenfenster siehst du exakt die <strong>übertragenen TCP-Protokollnachrichten</strong>.
+        </p>
+
+        <!-- SPIELTISCH MIT OBJEKTEN -->
+        <div class="sim-wood-table">
+          <div style="font-weight: 800; font-size: 1.1rem; color: #854d0e;">
+            Spieltisch: <span id="sim-count-display">17</span> Objekt(e) verbleibend
+          </div>
+          <div class="matchsticks-container" id="sim-matchsticks">
+            <!-- 17 Hölzchen per JS generiert -->
+          </div>
+          <div id="sim-status-banner" style="font-weight: 700; color: #1e3a8a; margin-top: 6px;">
+            Spieler 1 ist am Zug.
+          </div>
+        </div>
+
+        <!-- 3-SPALTIGE ARENA -->
+        <div class="sim-arena">
+          
+          <!-- CLIENT 1 -->
+          <div class="sim-card active-turn" id="sim-c1-card">
+            <div class="sim-card-header">
+              <span>Client 1 (Spieler 1)</span>
+              <span id="sim-c1-badge" class="code-pill" style="background:#eff6ff; color:#1e3a8a;">AM ZUG</span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
+              Wähle deine Zugmenge $k$:
+            </p>
+            <div class="btn-group-row">
+              <button class="btn-draw" id="btn-c1-1" onclick="simMove(1, 1)">NIMM 1</button>
+              <button class="btn-draw" id="btn-c1-2" onclick="simMove(1, 2)">NIMM 2</button>
+              <button class="btn-draw" id="btn-c1-3" onclick="simMove(1, 3)">NIMM 3</button>
+            </div>
+          </div>
+
+          <!-- SERVER & PROTOKOLL-LOG -->
+          <div class="sim-card">
+            <div class="sim-card-header">
+              <span>NimmServer (Log)</span>
+              <span class="code-pill">Port 50000</span>
+            </div>
+            <div class="log-terminal" id="sim-log">
+              <!-- Logs hier -->
+            </div>
+          </div>
+
+          <!-- CLIENT 2 -->
+          <div class="sim-card" id="sim-c2-card">
+            <div class="sim-card-header">
+              <span>Client 2 (Spieler 2)</span>
+              <span id="sim-c2-badge" class="code-pill" style="background:#f1f5f9; color:#64748b;">WARTET</span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px;">
+              Wähle deine Zugmenge $k$:
+            </p>
+            <div class="btn-group-row">
+              <button class="btn-draw" id="btn-c2-1" disabled onclick="simMove(2, 1)">NIMM 1</button>
+              <button class="btn-draw" id="btn-c2-2" disabled onclick="simMove(2, 2)">NIMM 2</button>
+              <button class="btn-draw" id="btn-c2-3" disabled onclick="simMove(2, 3)">NIMM 3</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <script>
+    // TAB-STEUERUNG
+    function switchTab(tabId) {
+      document.querySelectorAll('.presenter-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick')?.includes(tabId)) {
+          btn.classList.add('active');
+        }
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+      triggerKaTeX();
+    }
+
+    // LÖSUNG / HINWEIS TOGGLE
+    function toggleBox(boxId) {
+      const el = document.getElementById(boxId);
+      if (!el) return;
+      el.classList.toggle('visible');
+      triggerKaTeX();
+    }
+
+    // ========================================================
+    // SIMULATOR LOGIK
+    // ========================================================
+    let simCount = 17;
+    let simTurn = 1; // 1 oder 2
+    let simActive = true;
+
+    function initSim() {
+      const container = document.getElementById('sim-matchsticks');
+      if (!container) return;
+      container.innerHTML = '';
+      for (let i = 0; i < 17; i++) {
+        const stick = document.createElement('div');
+        stick.className = 'matchstick';
+        stick.id = 'stick-' + i;
+        container.appendChild(stick);
+      }
+      logSim('[SERVER] NimmServer gestartet auf Port 50000', 'srv');
+      logSim('[SERVER] Spieler 1 & Spieler 2 verbunden.', 'srv');
+      logSim('[S -> C1]: START 1 | DRAN 17', 'c1');
+      logSim('[S -> C2]: START 2 | WARTEN 17', 'c2');
+    }
+
+    function logSim(text, type) {
+      const log = document.getElementById('sim-log');
+      if (!log) return;
+      const line = document.createElement('div');
+      line.className = 'log-line ' + (type || '');
+      line.textContent = text;
+      log.prepend(line);
+    }
+
+    function simMove(playerNr, amount) {
+      if (!simActive) return;
+      if (playerNr !== simTurn) {
+        logSim(`[FEHLER]: Spieler ${playerNr} ist nicht am Zug!`, 'err');
+        return;
+      }
+      if (amount > simCount) {
+        logSim(`[FEHLER]: Nur noch ${simCount} Objekte vorhanden!`, 'err');
+        return;
+      }
+
+      // Client sendet Befehl
+      logSim(`[C${playerNr} -> S]: NIMM ${amount}`, playerNr === 1 ? 'c1' : 'c2');
+
+      // Server zieht ab
+      simCount -= amount;
+      updateVisualSticks();
+      document.getElementById('sim-count-display').textContent = simCount;
+
+      // Misere-Endbedingung pruefen
+      if (simCount <= 0) {
+        simActive = false;
+        const loser = playerNr;
+        const winner = playerNr === 1 ? 2 : 1;
+
+        logSim(`[S -> C${loser}]: VERLOREN (letztes Objekt genommen)`, 'err');
+        logSim(`[S -> C${winner}]: GEWONNEN!`, 'srv');
+
+        document.getElementById('sim-status-banner').innerHTML = 
+          `<span style="color:var(--danger)">Spiel vorbei!</span> Spieler ${loser} verliert (letztes Objekt). Spieler ${winner} hat gewonnen!`;
+        
+        disableSimButtons();
+        return;
+      }
+
+      // Rollenwechsel
+      simTurn = simTurn === 1 ? 2 : 1;
+      const waiting = simTurn === 1 ? 2 : 1;
+
+      logSim(`[S -> C${simTurn}]: DRAN ${simCount}`, simTurn === 1 ? 'c1' : 'c2');
+      logSim(`[S -> C${waiting}]: WARTEN ${simCount}`, waiting === 1 ? 'c1' : 'c2');
+
+      updateSimTurnUI();
+    }
+
+    function updateVisualSticks() {
+      for (let i = 0; i < 17; i++) {
+        const stick = document.getElementById('stick-' + i);
+        if (!stick) continue;
+        if (i >= simCount) {
+          stick.classList.add('removed');
+        } else {
+          stick.classList.remove('removed');
+        }
+      }
+    }
+
+    function updateSimTurnUI() {
+      const c1Card = document.getElementById('sim-c1-card');
+      const c2Card = document.getElementById('sim-c2-card');
+      const c1Badge = document.getElementById('sim-c1-badge');
+      const c2Badge = document.getElementById('sim-c2-badge');
+      const banner = document.getElementById('sim-status-banner');
+
+      banner.textContent = `Spieler ${simTurn} ist am Zug. (${simCount} verbleibend)`;
+
+      if (simTurn === 1) {
+        c1Card.classList.add('active-turn');
+        c2Card.classList.remove('active-turn');
+        c1Badge.textContent = 'AM ZUG';
+        c1Badge.style.background = '#eff6ff';
+        c1Badge.style.color = '#1e3a8a';
+        c2Badge.textContent = 'WARTET';
+        c2Badge.style.background = '#f1f5f9';
+        c2Badge.style.color = '#64748b';
+
+        enablePlayerButtons(1);
+        disablePlayerButtons(2);
+      } else {
+        c2Card.classList.add('active-turn');
+        c1Card.classList.remove('active-turn');
+        c2Badge.textContent = 'AM ZUG';
+        c2Badge.style.background = '#ecfdf5';
+        c2Badge.style.color = '#059669';
+        c1Badge.textContent = 'WARTET';
+        c1Badge.style.background = '#f1f5f9';
+        c1Badge.style.color = '#64748b';
+
+        enablePlayerButtons(2);
+        disablePlayerButtons(1);
+      }
+    }
+
+    function enablePlayerButtons(pNr) {
+      for (let k = 1; k <= 3; k++) {
+        const btn = document.getElementById(`btn-c${pNr}-${k}`);
+        if (btn) btn.disabled = (k > simCount);
+      }
+    }
+
+    function disablePlayerButtons(pNr) {
+      for (let k = 1; k <= 3; k++) {
+        const btn = document.getElementById(`btn-c${pNr}-${k}`);
+        if (btn) btn.disabled = true;
+      }
+    }
+
+    function disableSimButtons() {
+      disablePlayerButtons(1);
+      disablePlayerButtons(2);
+      document.getElementById('sim-c1-card').classList.remove('active-turn');
+      document.getElementById('sim-c2-card').classList.remove('active-turn');
+    }
+
+    function resetSim() {
+      simCount = 17;
+      simTurn = 1;
+      simActive = true;
+      document.getElementById('sim-count-display').textContent = '17';
+      document.getElementById('sim-status-banner').textContent = 'Spieler 1 ist am Zug.';
+      document.getElementById('sim-log').innerHTML = '';
+      initSim();
+      updateVisualSticks();
+      updateSimTurnUI();
+    }
+
+    // Initialisierung beim Laden
+    window.addEventListener('DOMContentLoaded', () => {
+      initSim();
+      updateSimTurnUI();
+    });
+  </script>
+</body>
+</html>
