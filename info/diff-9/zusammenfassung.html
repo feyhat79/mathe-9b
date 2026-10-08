@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infos zur 1. Klassenarbeit: Kompetenzen, Handout &amp; Aufgaben | Informatik Diff-9</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische und logische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.45;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #0d9488;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #0f766e;
+    }
+
+    /* ========================================================
+       PAGE WRAPPER & SEITENAUFBAU (DIN A4 NACH STANDARD)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 11mm 14mm 10mm 14mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* ========================================================
+       HEADER (Tafel- / Schulheft-Stil)
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 5px;
+      margin-bottom: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-meta {
+      font-size: 8pt;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .doc-title {
+      font-size: 15pt;
+      font-weight: 700;
+      color: #1e3a8a; /* Füller-Königsblau */
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #334155;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* ========================================================
+       ABSCHNITTSÜBERSCHRIFTEN (12pt, Königsblau mit Ziffer)
+       ======================================================== */
+    .section-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 10px 0 6px 0;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 2px;
+    }
+
+    .section-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ========================================================
+       KOMPETENZEN-CHECKLISTE (TABELLE)
+       ======================================================== */
+    .check-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin: 6px 0 10px 0;
+    }
+
+    .check-table th {
+      background: #f1f5f9;
+      color: #1e3a8a;
+      padding: 4px 6px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+    }
+
+    .check-table td {
+      border: 1px solid #e2e8f0;
+      padding: 4px 6px;
+      vertical-align: middle;
+    }
+
+    .check-box-col {
+      width: 26px;
+      text-align: center;
+    }
+
+    .check-box-square {
+      width: 13px;
+      height: 13px;
+      border: 1.5px solid #64748b;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .check-cat {
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      width: 25%;
+    }
+
+    /* ========================================================
+       DER ROTE MERKSATZ-KASTEN (GEMINI.md Standard)
+       ======================================================== */
+    .merke-box {
+      border: 2.5px solid #dc2626; /* Roter Rand */
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 9px 13px;
+      margin: 9px 0 7px 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #dc2626;
+      color: white;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .merke-content {
+      color: #111827; /* Schwarz / dunkel, niemals rot! */
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    /* ========================================================
+       THEORIE-KARTEN & TABELLEN (10pt)
+       ======================================================== */
+    .theory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 7px;
+    }
+
+    .theory-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 7px 10px;
+      background: #ffffff;
+      font-size: 10pt;
+    }
+
+    .theory-card-header {
+      font-weight: 700;
+      font-size: 10.5pt;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .theory-tag {
+      font-size: 7.5pt;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    /* Tabellen im Kompakt-Format */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .calc-table th {
+      background: #f8fafc;
+      color: #1e3a8a;
+      padding: 3px 5px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+    }
+
+    .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Gatter-Übersichtstabelle */
+    .gates-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 6px 0 8px 0;
+    }
+
+    .gates-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 4px 6px;
+      font-weight: 700;
+      border: 1px solid #bfdbfe;
+      text-align: center;
+    }
+
+    .gates-table td {
+      border: 1px solid #cbd5e1;
+      padding: 4px 6px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .gate-icon-cell {
+      padding: 2px !important;
+    }
+
+    /* ========================================================
+       AUFGABEN & LÖSUNGEN (STATISCH, NICHT INTERAKTIV!)
+       ======================================================== */
+    .task-block {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 8px 12px;
+      margin-bottom: 9px;
+      background: #ffffff;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .task-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .task-label {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .task-pts {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 1px 7px;
+      border-radius: 3px;
+    }
+
+    .task-desc {
+      font-size: 10pt;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    /* Musterlösung (Lehrer-Rot / Klar hervorgehoben) */
+    .solution-box {
+      border-left: 3px solid #b91c1c;
+      background: #fdf2f2;
+      padding: 6px 10px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 5px;
+      font-size: 9.5pt;
+    }
+
+    .solution-title {
+      font-weight: 700;
+      font-size: 8.5pt;
+      color: #991b1b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .solution-content {
+      color: #111827;
+      line-height: 1.4;
+    }
+
+    .sol-highlight {
+      color: #b91c1c;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ========================================================
+       PRINT MEDIA QUERY (EXAKTER DIN-A4-EXPORT)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 11pt !important;
+        font-family: 'Calibri', 'Segoe UI', Arial, sans-serif !important;
+      }
+
+      .no-print, .screen-toolbar {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        height: 275mm !important;
+        min-height: 275mm !important;
+        max-height: 275mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP SCREEN TOOLBAR (Browser-Ansicht)
+       ======================================================== -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-btn-nav">← Übersicht Diff-9</a>
+      <a href="logikgatter.html" class="toolbar-btn-nav">Zum Lernmodul</a>
+      <div class="toolbar-title">
+        <span>Infos zur 1. Klassenarbeit • Handout &amp; Aufgaben</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / PDF speichern (Strg+P)
+      </button>
+      <a href="Zusammenfassung_Handout_Informatik_Diff9.pdf" download class="btn-action btn-download-pdf">
+        PDF herunterladen
+      </a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ========================================================
+         SEITE 1: KOMPETENZENLISTE & HANDOUT TEIL 1 (ZAHLENSYSTEME)
+         ======================================================== -->
+    <div class="page" id="page1">
+      <div>
+        <!-- HEADER -->
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Städtisches Gymnasium • Informatik Differenzierung 9 (Diff-9) • 1. Halbjahr</div>
+            <h1 class="doc-title">1. Klassenarbeit: Kompetenzen, Merkblatt &amp; Aufgaben</h1>
+            <div class="doc-subtitle">Themen: Binäres Zahlensystem, Schriftliche Addition, Logikgatter &amp; Der Halbaddierer</div>
+          </div>
+          <div class="badge-doc">
+            <strong>Prüfungsinfos</strong><br>
+            Stand: Oktober 2026
+          </div>
+        </header>
+
+        <!-- 1. KOMPETENZENLISTE -->
+        <div class="section-title">
+          <span class="section-num">1</span>
+          Kompetenzenliste: Das kann ich für die Klassenarbeit („Ich kann...“)
+        </div>
+        <p style="font-size: 9pt; color: #475569; margin-bottom: 4px;">
+          Nutze diese Checkliste zur gezielten Selbstkontrolle bei der Prüfungsvorbereitung:
+        </p>
+
+        <table class="check-table">
+          <thead>
+            <tr>
+              <th class="check-box-col">✓</th>
+              <th class="check-cat">Themenbereich</th>
+              <th>Konkrete Anforderung / Kompetenz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">1. Stellenwertsysteme</td>
+              <td>Ich kann den Unterschied zwischen Basis 10 und Basis 2 erklären und die Zweierpotenzen ($1, 2, 4, 8, 16, 32, 64, 128$) sicher als Stellenwerte anwenden.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">2. Binär → Dezimal</td>
+              <td>Ich kann beliebige Binärzahlen durch Addition der aktiven Stellenwerte in Dezimalzahlen umrechnen (führende Nullen ignorieren).</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">3. Divisionsalgorithmus</td>
+              <td>Ich kann beliebige Dezimalzahlen mit der fortgesetzten Division durch 2 mit Rest umwandeln und die Reste korrekt von <strong>unten nach oben</strong> notieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">4. Binäre Addition</td>
+              <td>Ich beherrsche die 4 Grundregeln der 1-Bit-Addition ($1+1=10_2$) und kann mehrstellige Zahlen mit Übertragszeile (auch $1+1+1=11_2$) schriftlich addieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">5. Die 4 Grundgatter</td>
+              <td>Ich kenne Schaltermodelle, Schaltsymbole, Formelzeichen ($\land, \lor, \neg, \oplus$) und Schalttafeln für UND, ODER, NICHT und XOR.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">6. Schaltungsanalyse</td>
+              <td>Ich kann aus einem gegebenen Schaltplan über Zwischenvariablen ($Z_1, Z_2$) systematisch die vollständige Wahrheitstabelle aufstellen.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">7. Schaltungssynthese</td>
+              <td>Ich kann aus einer Sachaufgabe (z. B. Alarmanlage) den logischen Term formulieren und die passende Schaltung zeichnen.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">8. Der Halbaddierer</td>
+              <td>Ich kann erklären, warum der Halbaddierer aus XOR ($S$) und UND ($C$) besteht, und begründen, warum er nur „Halb“-Addierer heißt.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 2. THEORIE-KOMPAKT TEIL A -->
+        <div class="section-title">
+          <span class="section-num">2</span>
+          Handout: Zahlensysteme &amp; Schriftliche Addition
+        </div>
+
+        <div class="theory-grid">
+
+          <!-- Kachel 1: Stellenwerte & Umrechnung -->
+          <div class="theory-card">
+            <div class="theory-card-header">
+              <span>A. Stellenwerttafel &amp; Binär → Dezimal</span>
+              <span class="theory-tag">Basis 2</span>
+            </div>
+            <p style="font-size: 9.5pt; margin-bottom: 4px;">
+              Jede Stelle verdoppelt ihren Wert von rechts nach links ($2^0, 2^1, 2^2 \dots$):
+            </p>
+            <table class="calc-table">
+              <thead>
+                <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th><th>Dezimal</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td><strong>53</strong></td></tr>
+              </tbody>
+            </table>
+            <p style="font-size: 8.5pt; color: #475569; margin-top: 4px;">
+              Rechnung: $32 + 16 + 4 + 1 = 53_{10}$.
+            </p>
+          </div>
+
+          <!-- Kachel 2: Divisionsalgorithmus -->
+          <div class="theory-card">
+            <div class="theory-card-header">
+              <span>B. Dezimal → Binär (Divisionsalgorithmus)</span>
+              <span class="theory-tag">: 2 mit Rest</span>
+            </div>
+            <p style="font-size: 9pt; line-height: 1.35;">
+              Fortgesetzte Division durch 2. Die Reste werden von <strong>unten nach oben</strong> gelesen:<br>
+              <span style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                25 : 2 = 12 &nbsp;R <strong>1</strong> &nbsp;▲ &nbsp;(LSB: Einerstelle)<br>
+                12 : 2 = &nbsp;6 &nbsp;R <strong>0</strong> &nbsp;│<br>
+                &nbsp;6 : 2 = &nbsp;3 &nbsp;R <strong>0</strong> &nbsp;│<br>
+                &nbsp;3 : 2 = &nbsp;1 &nbsp;R <strong>1</strong> &nbsp;│<br>
+                &nbsp;1 : 2 = &nbsp;0 &nbsp;R <strong>1</strong> &nbsp;│ &nbsp;(MSB: Höchste Stelle)
+              </span><br>
+              <strong>Ergebnis:</strong> $25_{10} = 11001_2$.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Schriftliche Addition -->
+        <div class="theory-card" style="margin-top: 4px;">
+          <div class="theory-card-header">
+            <span>C. Schriftliche binäre Addition</span>
+            <span class="theory-tag">Überträge</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9.5pt;">
+            <div>
+              <strong>Die 4 Grundfälle:</strong><br>
+              • $0 + 0 = 0$<br>
+              • $0 + 1 = 1$<br>
+              • $1 + 0 = 1$<br>
+              • $1 + 1 = 10_2$ (0 schreiben, <strong>1 Übertrag</strong>)<br>
+              • $1 + 1 + 1 = 11_2$ (1 schreiben, <strong>1 Übertrag</strong>)
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 14px; font-family: 'JetBrains Mono'; font-size: 9pt;">
+              &nbsp;&nbsp;1 1 0 1 1₂ &nbsp;(27)<br>
+              + 1 0 1 1 0₂ &nbsp;(22)<br>
+              Ü <strong>1 1 1 &nbsp; &nbsp;</strong><br>
+              -------------<br>
+              <strong>1 1 0 0 0 1₂</strong> &nbsp;(49)
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================
+         SEITE 2: HANDOUT TEIL 2 (GATTER, ANALYSE & HALBADDIERER)
+         ======================================================== -->
+    <div class="page" id="page2">
+      <div>
+
+        <div class="section-title">
+          <span class="section-num">3</span>
+          Handout: Die 4 Grundgatter, Formelsymbole &amp; Schaltungsanalyse
+        </div>
+
+        <table class="gates-table">
+          <thead>
+            <tr>
+              <th style="width: 18%;">Gatter &amp; Name</th>
+              <th style="width: 14%;">Formelzeichen</th>
+              <th style="width: 20%;">Schaltsymbol (US)</th>
+              <th style="width: 26%;">Schalttafel</th>
+              <th style="width: 22%;">Funktionsregel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- AND -->
+            <tr>
+              <td><strong>UND</strong><br><small>(AND)</small></td>
+              <td><span style="font-family:'JetBrains Mono'; font-size:11pt; font-weight:700;">∧</span><br><small>A ∧ B</small></td>
+              <td class="gate-icon-cell">
+                <svg width="60" height="26" viewBox="0 0 100 45">
+                  <line x1="5" y1="12" x2="30" y2="12" stroke="#0f172a" stroke-width="3" />
+                  <line x1="5" y1="33" x2="30" y2="33" stroke="#0f172a" stroke-width="3" />
+                  <path d="M 30,5 L 55,5 A 17.5,17.5 0 0,1 55,40 L 30,40 Z" fill="#fff" stroke="#0f172a" stroke-width="3" />
+                  <line x1="72" y1="22.5" x2="95" y2="22.5" stroke="#0f172a" stroke-width="3" />
+                </svg>
+              </td>
+              <td style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                0,0→<strong>0</strong> | 0,1→<strong>0</strong><br>
+                1,0→<strong>0</strong> | 1,1→<strong>1</strong>
+              </td>
+              <td style="font-size:8.5pt;">Ausgang 1 nur, wenn <strong>beide 1</strong> sind (Reihenschaltung).</td>
+            </tr>
+            <!-- OR -->
+            <tr>
+              <td><strong>ODER</strong><br><small>(OR)</small></td>
+              <td><span style="font-family:'JetBrains Mono'; font-size:11pt; font-weight:700;">∨</span><br><small>A ∨ B</small></td>
+              <td class="gate-icon-cell">
+                <svg width="60" height="26" viewBox="0 0 100 45">
+                  <line x1="5" y1="12" x2="30" y2="12" stroke="#0f172a" stroke-width="3" />
+                  <line x1="5" y1="33" x2="30" y2="33" stroke="#0f172a" stroke-width="3" />
+                  <path d="M 28,5 Q 52,5 75,22.5 Q 52,40 28,40 Q 40,22.5 28,5 Z" fill="#fff" stroke="#0f172a" stroke-width="3" />
+                  <line x1="75" y1="22.5" x2="95" y2="22.5" stroke="#0f172a" stroke-width="3" />
+                </svg>
+              </td>
+              <td style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                0,0→<strong>0</strong> | 0,1→<strong>1</strong><br>
+                1,0→<strong>1</strong> | 1,1→<strong>1</strong>
+              </td>
+              <td style="font-size:8.5pt;">Ausgang 1, wenn <strong>mindestens einer 1</strong> ist (Parallelschaltung).</td>
+            </tr>
+            <!-- NOT -->
+            <tr>
+              <td><strong>NICHT</strong><br><small>(Inverter)</small></td>
+              <td><span style="font-family:'JetBrains Mono'; font-size:11pt; font-weight:700;">¬</span><br><small>¬A oder Ā</small></td>
+              <td class="gate-icon-cell">
+                <svg width="60" height="26" viewBox="0 0 100 45">
+                  <line x1="10" y1="22.5" x2="35" y2="22.5" stroke="#0f172a" stroke-width="3" />
+                  <polygon points="35,8 65,22.5 35,37" fill="#fff" stroke="#0f172a" stroke-width="3" />
+                  <circle cx="70" cy="22.5" r="4" fill="#fff" stroke="#0f172a" stroke-width="3" />
+                  <line x1="74" y1="22.5" x2="95" y2="22.5" stroke="#0f172a" stroke-width="3" />
+                </svg>
+              </td>
+              <td style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                0 → <strong>1</strong><br>
+                1 → <strong>0</strong>
+              </td>
+              <td style="font-size:8.5pt;">Kehrt Signal exakt um (Negation / Signalumkehr).</td>
+            </tr>
+            <!-- XOR -->
+            <tr>
+              <td><strong>XOR</strong><br><small>(Exklusiv ODER)</small></td>
+              <td><span style="font-family:'JetBrains Mono'; font-size:11pt; font-weight:700;">⊕</span><br><small>A ⊕ B</small></td>
+              <td class="gate-icon-cell">
+                <svg width="60" height="26" viewBox="0 0 100 45">
+                  <line x1="5" y1="12" x2="26" y2="12" stroke="#0f172a" stroke-width="3" />
+                  <line x1="5" y1="33" x2="26" y2="33" stroke="#0f172a" stroke-width="3" />
+                  <path d="M 23,5 Q 35,22.5 23,40" fill="none" stroke="#0f172a" stroke-width="3" />
+                  <path d="M 30,5 Q 54,5 77,22.5 Q 54,40 30,40 Q 42,22.5 30,5 Z" fill="#fff" stroke="#0f172a" stroke-width="3" />
+                  <line x1="77" y1="22.5" x2="95" y2="22.5" stroke="#0f172a" stroke-width="3" />
+                </svg>
+              </td>
+              <td style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                0,0→<strong>0</strong> | 0,1→<strong>1</strong><br>
+                1,0→<strong>1</strong> | 1,1→<strong>0</strong>
+              </td>
+              <td style="font-size:8.5pt;">Ausgang 1, wenn <strong>genau ein Eingang 1</strong> ist (Antivalenz: $A \neq B$).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- DER ROTE MERKSATZ-KASTEN -->
+        <div class="merke-box">
+          <span class="merke-tag">MERKE</span>
+          <div class="merke-content">
+            <strong>Der fundamentale Unterschied zwischen ODER ($\lor$) und XOR ($\oplus$):</strong><br>
+            Beim normalen <strong>ODER (OR, $\lor$)</strong> ist der Ausgang auch dann $1$, wenn <em>beide</em> Eingänge $1$ sind ($1 \lor 1 = 1$).<br>
+            Beim <strong>exklusiven ODER (XOR, $\oplus$, „Plus mit Kringel“)</strong> schaltet der Ausgang ab, wenn beide $1$ sind ($1 \oplus 1 = 0$). 
+            Daher entspricht XOR exakt der <strong>Summenspalte</strong> bei der binären Addition!
+          </div>
+        </div>
+
+        <!-- 4. DER HALBADDIERER -->
+        <div class="section-title">
+          <span class="section-num">4</span>
+          Handout: Der Halbaddierer (Half Adder, HA)
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; align-items: center; margin-top: 4px;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 9.5pt;">
+            <p style="margin-bottom: 4px;">
+              Der Halbaddierer addiert zwei Bits $A$ und $B$ und besitzt zwei Ausgänge:
+            </p>
+            <table class="calc-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>Übertrag C = A ∧ B</th><th>Summe S = A ⊕ B</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+                <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                <tr><td>1</td><td>1</td><td><strong>1 (UND)</strong></td><td><strong>0 (XOR)</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 9pt; background: #f8fafc;">
+            <strong>Warum nur „Halb“-Addierer?</strong><br>
+            Er hat <strong>keinen Eingang für einen Übertrag ($C_{in}$)</strong> aus der vorherigen Stelle!<br>
+            Für mehrstellige Zahlen braucht man den <strong>Volladdierer (Full Adder)</strong> mit 3 Eingängen ($A, B, C_{in}$).
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================
+         SEITE 3: PRÜFUNGS-ÜBUNGSAUFGABEN MIT MUSTERLÖSUNGEN (STATISCH)
+         ======================================================== -->
+    <div class="page" id="page3">
+      <div>
+
+        <div class="section-title">
+          <span class="section-num">5</span>
+          Klassenarbeits-Training: Aufgaben &amp; Musterlösungen (Teil 1)
+        </div>
+        <p style="font-size: 9pt; color: #475569; margin-bottom: 6px;">
+          Alle Aufgaben sind mit vollständigen Rechenwegen und Lösungen abgedruckt. Decke die Lösung beim Üben zunächst mit einem Blatt ab!
+        </p>
+
+        <!-- AUFGABE 1 -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 1: Zahlensysteme &amp; Umrechnung</span>
+            <span class="task-pts">6 Punkte</span>
+          </div>
+          <div class="task-desc">
+            a) Wandle die Binärzahlen <strong>$101101_2$</strong> und <strong>$11100010_2$</strong> in das Dezimalsystem um.<br>
+            b) Wandle die Dezimalzahl <strong>$77_{10}$</strong> mit dem Divisionsalgorithmus in das Binärsystem um.
+          </div>
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
+            <div class="solution-content">
+              <strong>a)</strong> $101101_2 = 32 + 8 + 4 + 1 = \mathbf{45_{10}}$.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;$11100010_2 = 128 + 64 + 32 + 2 = \mathbf{226_{10}}$.<br>
+              <strong>b)</strong> Divisionsalgorithmus für $77$ (Reste von unten nach oben lesen):<br>
+              <span style="font-family:'JetBrains Mono'; font-size:8.5pt;">
+                77 : 2 = 38 R 1 &nbsp;▲ | &nbsp;38 : 2 = 19 R 0 &nbsp;│ | &nbsp;19 : 2 = 9 R 1 &nbsp;│ | &nbsp;9 : 2 = 4 R 1 &nbsp;│<br>
+                4 : 2 = 2 R 0 &nbsp;│ | &nbsp;2 : 2 = 1 R 0 &nbsp;│ | &nbsp;1 : 2 = 0 R 1 &nbsp;│ &nbsp;$\rightarrow$ Ergebnis: <span class="sol-highlight">1001101₂</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUFGABE 2 -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 2: Schriftliche binäre Addition</span>
+            <span class="task-pts">5 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Addiere die Zahlen schriftlich im Binärsystem. Notiere die Übertragszeile ($\text{Ü}$) vollständig:<br>
+            a) $11011_2 + 10110_2$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b) $11101_2 + 10111_2 + 1101_2$ (drei Summanden)
+          </div>
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
+            <div class="solution-content">
+              <div style="display:flex; gap:30px; font-family:'JetBrains Mono'; font-size:9pt;">
+                <div>
+                  <strong>a)</strong><br>
+                  &nbsp;&nbsp;1 1 0 1 1₂ &nbsp;(27)<br>
+                  + 1 0 1 1 0₂ &nbsp;(22)<br>
+                  Ü 1 1 1<br>
+                  ----------<br>
+                  <span class="sol-highlight">1 1 0 0 0 1₂</span> &nbsp;(Probe: 49 dezimal)
+                </div>
+                <div>
+                  <strong>b)</strong><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;1 1 1 0 1₂ &nbsp;(29)<br>
+                  + &nbsp;&nbsp;1 0 1 1 1₂ &nbsp;(23)<br>
+                  + &nbsp;&nbsp;&nbsp;&nbsp;1 1 0 1₂ &nbsp;(13)<br>
+                  Ü 1 1 1 1 1<br>
+                  ------------<br>
+                  <span class="sol-highlight">1 0 0 0 0 0 1₂</span> &nbsp;(Probe: 65 dezimal)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUFGABE 3 -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 3: Logikgatter &amp; Fachsprache</span>
+            <span class="task-pts">5 Punkte</span>
+          </div>
+          <div class="task-desc">
+            a) Welches Gatter wird im Halbaddierer für die Summe $S$ verwendet und welches für den Übertrag $C$? Begründe kurz.<br>
+            b) Was bedeuten die Symbole $\land, \lor, \neg, \oplus$?
+          </div>
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
+            <div class="solution-content">
+              <strong>a)</strong> Für die <strong>Summe $S$</strong> wird das <strong>XOR-Gatter ($\oplus$)</strong> verwendet, weil $1+1=0$ ergibt (genau ein Eingang muss 1 sein). 
+              Für den <strong>Übertrag $C$</strong> wird das <strong>UND-Gatter ($\land$)</strong> verwendet, weil ein Übertrag nur entsteht, wenn beide Eingänge $1$ sind ($1 \land 1 = 1$).<br>
+              <strong>b)</strong> $\land$ = logisches UND (Konjunktion) | $\lor$ = logisches ODER (Disjunktion) | $\neg$ = logisches NICHT (Inverter) | $\oplus$ = exklusives ODER (XOR, Plus mit Kringel).
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================
+         SEITE 4: PRÜFUNGS-ÜBUNGSAUFGABEN (SCHALTUNGEN & SYNTHESE)
+         ======================================================== -->
+    <div class="page" id="page4">
+      <div>
+
+        <div class="section-title">
+          <span class="section-num">6</span>
+          Klassenarbeits-Training: Aufgaben &amp; Musterlösungen (Teil 2)
+        </div>
+
+        <!-- AUFGABE 4: Schaltungsanalyse -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 4: Schaltungsanalyse (Schaltplan → Schalttafel)</span>
+            <span class="task-pts">8 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Gegeben ist folgende Schaltung mit den drei Eingängen $A, B, C$. 
+            Leite die Zwischenergebnisse $Z_1, Z_2$ her und vervollständige die Schalttafel:
+          </div>
+
+          <div style="text-align: center; margin: 4px 0 6px 0;">
+            <svg width="360" height="95" viewBox="0 0 360 95">
+              <!-- Inputs -->
+              <text x="10" y="24" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">A</text>
+              <text x="10" y="52" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">B</text>
+              <text x="10" y="80" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">C</text>
+              <!-- Lines to AND -->
+              <line x1="25" y1="20" x2="65" y2="20" stroke="#0f172a" stroke-width="2" />
+              <line x1="25" y1="48" x2="65" y2="48" stroke="#0f172a" stroke-width="2" />
+              <!-- AND Gate -->
+              <path d="M 65,10 L 90,10 A 19,19 0 0,1 90,58 L 65,58 Z" fill="#fff" stroke="#0f172a" stroke-width="2" />
+              <text x="70" y="38" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="bold" fill="#64748b">UND</text>
+              <line x1="109" y1="34" x2="190" y2="34" stroke="#0f172a" stroke-width="2" />
+              <text x="130" y="28" font-family="'JetBrains Mono'" font-size="9" font-weight="bold" fill="#0d9488">Z₁ = A ∧ B</text>
+              <!-- NOT Gate on C -->
+              <line x1="25" y1="76" x2="85" y2="76" stroke="#0f172a" stroke-width="2" />
+              <polygon points="85,64 110,76 85,88" fill="#fff" stroke="#0f172a" stroke-width="2" />
+              <circle cx="114" cy="76" r="3.5" fill="#fff" stroke="#0f172a" stroke-width="2" />
+              <line x1="118" y1="76" x2="190" y2="76" stroke="#0f172a" stroke-width="2" />
+              <line x1="190" y1="76" x2="205" y2="52" stroke="#0f172a" stroke-width="2" />
+              <text x="135" y="88" font-family="'JetBrains Mono'" font-size="9" font-weight="bold" fill="#2563eb">Z₂ = ¬C</text>
+              <!-- OR Gate -->
+              <path d="M 195,20 Q 220,20 245,43 Q 220,66 195,66 Q 207,43 195,20 Z" fill="#fff" stroke="#0f172a" stroke-width="2" />
+              <text x="208" y="47" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="bold" fill="#64748b">ODER</text>
+              <!-- Output Y -->
+              <line x1="245" y1="43" x2="300" y2="43" stroke="#0f172a" stroke-width="2" />
+              <circle cx="308" cy="43" r="7" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
+              <text x="325" y="47" font-family="'JetBrains Mono'" font-size="12" font-weight="bold">Y</text>
+            </svg>
+          </div>
+
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung: Schalttabelle</div>
+            <div class="solution-content">
+              <table class="calc-table" style="font-size: 8.5pt;">
+                <thead>
+                  <tr>
+                    <th>A</th><th>B</th><th>C</th>
+                    <th style="color:#0f766e;">Z₁ = A ∧ B</th>
+                    <th style="color:#1e40af;">Z₂ = ¬C</th>
+                    <th style="background:#fef2f2; color:#991b1b;">Y = Z₁ ∨ Z₂</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                  <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                  <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                  <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                  <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                  <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                  <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                  <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td><strong class="sol-highlight">1</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUFGABE 5: Schaltungssynthese -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 5: Schaltungssynthese (Sachaufgabe → Schaltung)</span>
+            <span class="task-pts">6 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Eine Bandsäge in der Holzwerkstatt darf nur starten ($M=1$), wenn der <strong>Hauptschalter</strong> eingeschaltet ist ($H=1$) 
+            <strong>UND</strong> mindestens <strong>eine der beiden Schutzhauben</strong> ($S_1=1$ ODER $S_2=1$) geschlossen ist.<br>
+            a) Notiere den logischen Term mit Formelsymbolen.<br>
+            b) Skizziere die Schaltung mit den passenden Grundgattern.
+          </div>
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
+            <div class="solution-content">
+              <strong>a) Logischer Funktionsterm:</strong> &nbsp;<span class="sol-highlight">M = H ∧ (S₁ ∨ S₂)</span> &nbsp;(Klammern beachten!)<br>
+              <strong>b) Schaltungsaufbau:</strong> Die Eingänge $S_1$ und $S_2$ werden auf ein <strong>ODER-Gatter</strong> geführt. 
+              Dessen Ausgang wird zusammen mit $H$ auf ein nachgeschaltetes <strong>UND-Gatter</strong> gelegt, dessen Ausgang den Motor $M$ steuert.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
