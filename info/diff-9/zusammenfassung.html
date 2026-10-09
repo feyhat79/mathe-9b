@@ -557,7 +557,7 @@
           <div>
             <div class="doc-meta">Städtisches Gymnasium • Informatik Differenzierung 9 (Diff-9) • 1. Halbjahr</div>
             <h1 class="doc-title">1. Klassenarbeit: Kompetenzen, Merkblatt &amp; Aufgaben</h1>
-            <div class="doc-subtitle">Themen: Binäres Zahlensystem, Schriftliche Addition, Logikgatter &amp; Der Halbaddierer</div>
+            <div class="doc-subtitle">Themen: Binäres Zahlensystem, Schriftliche Addition, Logikgatter &amp; Schaltungsentwurf</div>
           </div>
           <div class="badge-doc">
             <strong>Prüfungsinfos</strong><br>
@@ -620,8 +620,8 @@
             </tr>
             <tr>
               <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">8. Der Halbaddierer</td>
-              <td>Ich kann erklären, warum der Halbaddierer aus XOR ($S$) und UND ($C$) besteht, und begründen, warum er nur „Halb“-Addierer heißt.</td>
+              <td class="check-cat">8. Schaltungsentwurf aus Formeln</td>
+              <td>Ich kann zu einer gegebenen logischen Formel (mit $\land, \lor, \neg, \oplus$) die passende Schaltung mit Verzweigungen und Zwischenwerten systematisch zeichnen.</td>
             </tr>
           </tbody>
         </table>
@@ -706,7 +706,7 @@
     </div>
 
     <!-- ========================================================
-         SEITE 2: HANDOUT TEIL 2 (GATTER, ANALYSE & HALBADDIERER)
+         SEITE 2: HANDOUT TEIL 2 (GATTER, ANALYSE & SCHALTUNGSENTWURF)
          ======================================================== -->
     <div class="page" id="page2">
       <div>
@@ -814,34 +814,26 @@
           </div>
         </div>
 
-        <!-- 4. DER HALBADDIERER -->
+        <!-- 4. SCHALTUNGSENTWURF AUS FORMELN -->
         <div class="section-title">
           <span class="section-num">4</span>
-          Handout: Der Halbaddierer (Half Adder, HA)
+          Handout: Schaltungsentwurf aus logischen Formeln
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 10px; align-items: center; margin-top: 4px;">
-          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 9.5pt;">
-            <p style="margin-bottom: 4px;">
-              Der Halbaddierer addiert zwei Bits $A$ und $B$ und besitzt zwei Ausgänge:
-            </p>
-            <table class="calc-table">
-              <thead>
-                <tr><th>A</th><th>B</th><th>Übertrag C = A ∧ B</th><th>Summe S = A ⊕ B</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-                <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
-                <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
-                <tr><td>1</td><td>1</td><td><strong>1 (UND)</strong></td><td><strong>0 (XOR)</strong></td></tr>
-              </tbody>
-            </table>
+        <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 10px; align-items: center; margin-top: 4px;">
+          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 9pt;">
+            <strong>Schrittweises Vorgehen beim Zeichnen:</strong><br>
+            <strong>1. Klammern zuerst:</strong> Innere Terme zuerst verschalten (z. B. $A \lor B$ oder $\neg A \oplus B$).<br>
+            <strong>2. Rangfolge beachten:</strong> $\neg$ vor $\land$ vor $\lor / \oplus$.<br>
+            <strong>3. Verzweigungen:</strong> Wird ein Eingang mehrfach genutzt (wie $A$ bei $\dots \land A$), Leitung mit Abzweigpunkt ($\bullet$) versehen und sauber nach außen führen.
           </div>
 
-          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 9pt; background: #f8fafc;">
-            <strong>Warum nur „Halb“-Addierer?</strong><br>
-            Er hat <strong>keinen Eingang für einen Übertrag ($C_{in}$)</strong> aus der vorherigen Stelle!<br>
-            Für mehrstellige Zahlen braucht man den <strong>Volladdierer (Full Adder)</strong> mit 3 Eingängen ($A, B, C_{in}$).
+          <div style="border: 1px solid #cbd5e1; border-radius: 5px; padding: 7px 10px; font-size: 8.8pt; background: #f8fafc;">
+            <strong>Musterbeispiel aus dem Unterricht:</strong><br>
+            Term: $Y = (A \lor B) \land C$<br>
+            • $A$ und $B$ werden über ein <strong>ODER-Gatter</strong> verknüpft.<br>
+            • Dessen Ausgang wird zusammen mit $C$ auf ein <strong>UND-Gatter</strong> gelegt.<br>
+            $\rightarrow$ Die Lampe leuchtet nur, wenn $C=1$ ist UND mindestens ein Eingang $A$ oder $B$ den Wert $1$ hat.
           </div>
         </div>
 
@@ -929,14 +921,14 @@
             <span class="task-pts">5 Punkte</span>
           </div>
           <div class="task-desc">
-            a) Welches Gatter wird im Halbaddierer für die Summe $S$ verwendet und welches für den Übertrag $C$? Begründe kurz.<br>
+            a) Erkläre den Unterschied zwischen einem ODER-Gatter ($\lor$) und einem XOR-Gatter ($\oplus$) anhand ihrer Schalttafel.<br>
             b) Was bedeuten die Symbole $\land, \lor, \neg, \oplus$?
           </div>
           <div class="solution-box">
             <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
             <div class="solution-content">
-              <strong>a)</strong> Für die <strong>Summe $S$</strong> wird das <strong>XOR-Gatter ($\oplus$)</strong> verwendet, weil $1+1=0$ ergibt (genau ein Eingang muss 1 sein). 
-              Für den <strong>Übertrag $C$</strong> wird das <strong>UND-Gatter ($\land$)</strong> verwendet, weil ein Übertrag nur entsteht, wenn beide Eingänge $1$ sind ($1 \land 1 = 1$).<br>
+              <strong>a)</strong> Beim <strong>ODER-Gatter ($\lor$)</strong> ist der Ausgang auch dann $1$, wenn <em>beide</em> Eingänge $1$ sind ($1 \lor 1 = 1$). 
+              Beim <strong>XOR-Gatter ($\oplus$, exklusives ODER)</strong> schaltet der Ausgang nur dann durch, wenn <em>genau ein</em> Eingang $1$ ist. Sind beide Eingänge $1$, ist der Ausgang $0$ ($1 \oplus 1 = 0$).<br>
               <strong>b)</strong> $\land$ = logisches UND (Konjunktion) | $\lor$ = logisches ODER (Disjunktion) | $\neg$ = logisches NICHT (Inverter) | $\oplus$ = exklusives ODER (XOR, Plus mit Kringel).
             </div>
           </div>

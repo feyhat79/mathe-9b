@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Logikgatter, Schaltnetze &amp; Halbaddierer | Informatik Diff-9</title>
+  <title>Logikgatter, Schaltnetze &amp; Schaltungsentwurf | Informatik Diff-9</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -891,7 +891,7 @@
     <div class="presenter-left">
       <a href="index.html" class="btn-nav-back">← Übersicht Diff-9</a>
       <div class="presenter-title-box">
-        <span class="presenter-title">Informatik Diff-9 • Thema 2: Logikgatter &amp; Halbaddierer</span>
+        <span class="presenter-title">Informatik Diff-9 • Thema 2: Logikgatter &amp; Schaltungsentwurf</span>
         <span class="presenter-badge">Thema 2</span>
       </div>
     </div>
@@ -905,8 +905,8 @@
       <button class="presenter-tab-btn" onclick="switchTab('tab-training')">
         3. Klausur-Training
       </button>
-      <button class="presenter-tab-btn" onclick="switchTab('tab-halbaddierer')">
-        4. Der Halbaddierer
+      <button class="presenter-tab-btn" onclick="switchTab('tab-uebungen')">
+        4. Schalttafeln &amp; Entwurf (Unterricht)
       </button>
       <a href="zusammenfassung.html" class="presenter-tab-btn" style="background:#059669; color:#ffffff; border-color:#34d399; text-decoration:none;">
         Infos zur Arbeit &amp; Handout →
@@ -919,9 +919,9 @@
     <!-- HERO HEADER -->
     <header class="hero-header">
       <div class="badge-topic">Informatik Differenzierung • WPII Klasse 9</div>
-      <h1>Logikgatter, Schaltnetze &amp; Der Halbaddierer</h1>
+      <h1>Logikgatter, Schaltnetze &amp; Schaltungsentwurf</h1>
       <p class="lead-subtitle">
-        Von mechanischen Schaltern über boolesche Gatter (UND, ODER, NICHT, XOR) bis zur ersten echten Rechenschaltung: Wie Computer aus Nullen und Einsen mathematische Entscheidungen treffen.
+        Von mechanischen Schaltern über boolesche Gatter (UND, ODER, NICHT, XOR) bis zur systematischen Schaltungsanalyse und dem Schaltungsentwurf aus logischen Formeln.
       </p>
     </header>
 
@@ -1559,160 +1559,397 @@
     </section>
 
     <!-- ======================================================
-         TAB 4: DER HALBADDIERER
+         TAB 4: UNTERRICHTS-ÜBUNGEN (SCHALTTAFEL & ENTWURF)
          ====================================================== -->
-    <section id="tab-halbaddierer" class="tab-panel">
+    <section id="tab-uebungen" class="tab-panel">
       
       <div class="content-card">
         <div class="section-title">
           <span class="section-badge">4</span>
-          <h2>Der Halbaddierer: Wie der Computer das Rechnen lernt</h2>
+          <h2>Unterrichts-Übungen: Schalttafeln &amp; Schaltungsentwurf</h2>
         </div>
-        <p>
-          Wie baut man aus Gattern einen Taschenrechner oder Prozessor? 
-          Erinnern wir uns an die <strong>binäre schriftliche Addition</strong> zweier einzelner Bits $A$ und $B$:
+        <p style="margin-bottom: 1.5rem;">
+          In der Doppelstunde haben wir die beiden zentralen Grundfertigkeiten der Digitaltechnik intensiv geübt:
+          <br><strong>1. Schaltungsanalyse:</strong> Aus einem gegebenen Schaltplan über Zwischenergebnisse systematisch die vollständige Wahrheitstabelle (Schalttafel) aufstellen.
+          <br><strong>2. Schaltungssynthese / Entwurf:</strong> Zu einer vorgegebenen booleschen Formel eine saubere elektronische Schaltung mit Gattern und Leitungsverzweigungen konstruieren.
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.25rem 0;">
-          
-          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:1.25rem;">
-            <h3 style="font-size:1.05rem; font-weight:700; margin-bottom:0.75rem;">1-Bit-Addition &amp; Wertetabelle:</h3>
-            <table class="truth-table">
-              <thead>
-                <tr>
-                  <th>A</th>
-                  <th>B</th>
-                  <th style="background:#eff6ff; color:#1e40af;">Übertrag C<br><small>(Carry: A ∧ B)</small></th>
-                  <th style="background:#f0fdfa; color:#0f766e;">Summe S<br><small>(Sum: A ⊕ B)</small></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>0</td><td>0</td><td><strong>0</strong></td><td><strong>0</strong></td></tr>
-                <tr><td>0</td><td>1</td><td><strong>0</strong></td><td><strong>1</strong></td></tr>
-                <tr><td>1</td><td>0</td><td><strong>0</strong></td><td><strong>1</strong></td></tr>
-                <tr><td>1</td><td>1</td><td><strong>1</strong></td><td><strong>0</strong></td></tr>
-              </tbody>
-            </table>
+        <!-- ====================================================
+             ÜBUNG 1: ENTWURFE EINE SCHALTTAFEL
+             ==================================================== -->
+        <div class="task-card">
+          <div class="task-badge-row">
+            <span class="task-type-badge">Übung 1 aus dem Unterricht</span>
+            <span class="task-points">Schaltplan → Schalttafel</span>
           </div>
-
-          <div style="display:flex; flex-direction:column; justify-content:center; gap:0.75rem;">
-            <div style="background:#f0fdfa; border:1.5px solid #99f6e4; border-radius:8px; padding:12px;">
-              <strong style="color:#0f766e; display:block; margin-bottom:2px;">Entdeckung 1: Die Summe S (XOR, ⊕)</strong>
-              Die Werte der Spalte $S$ ($0, 1, 1, 0$) entsprechen exakt dem <strong>XOR-Gatter</strong> ($S = A \oplus B$, Plus mit Kringel)!
-            </div>
-            <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:8px; padding:12px;">
-              <strong style="color:#1e40af; display:block; margin-bottom:2px;">Entdeckung 2: Der Übertrag C (UND, ∧)</strong>
-              Die Werte der Spalte $C$ ($0, 0, 0, 1$) entsprechen exakt dem <strong>UND-Gatter</strong> ($C = A \land B$, Dach)!
-            </div>
-          </div>
-
-        </div>
-
-        <div class="merke-box">
-          <span class="merke-tag">DEFINITION</span>
-          <div class="merke-content">
-            Ein <strong>Halbaddierer (Half Adder, HA)</strong> ist eine elektronische Schaltung aus genau einem <strong>XOR-Gatter</strong> 
-            ($S = A \oplus B$ für das Summenbit) und einem <strong>UND-Gatter</strong> ($C = A \land B$ für das Übertragsbit). Er kann zwei 1-Bit-Zahlen addieren.
-          </div>
-        </div>
-
-        <!-- Interaktiver Simulator mit stromführenden Leitungen -->
-        <h3 style="font-size:1.15rem; font-weight:800; margin-top:2rem; margin-bottom:0.5rem; color:#0f172a;">
-          Interaktiver Halbaddierer-Simulator:
-        </h3>
-        <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:1rem;">
-          Klicke auf Schalter A und B, um deren Zustand zwischen 0 und 1 umzuschalten. Beobachte, wie der Strom durch die Leitungen fließt (Grün für Summe, Blau für Übertrag):
-        </p>
-
-        <div class="simulator-box">
-          
-          <div class="sim-controls">
-            <div class="sim-switch-group">
-              <span style="font-weight:700; font-size:0.95rem;">Eingang A:</span>
-              <button class="sim-switch-btn" id="sim-btn-a" onclick="toggleSimInput('a')">0</button>
-            </div>
-            <div class="sim-switch-group">
-              <span style="font-weight:700; font-size:0.95rem;">Eingang B:</span>
-              <button class="sim-switch-btn" id="sim-btn-b" onclick="toggleSimInput('b')">0</button>
-            </div>
-            <div style="font-family:'JetBrains Mono', monospace; font-size:1.1rem; font-weight:700; color:#334155; background:white; padding:8px 16px; border-radius:8px; border:1.5px solid var(--border);">
-              Rechnung: <span id="sim-calc-text">0 + 0 = 0 (dezimal: 0)</span>
-            </div>
-          </div>
-
-          <!-- Interaktive SVG-Schaltung mit stromführenden Leitungen -->
-          <div style="background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center;">
-            <svg width="500" height="210" viewBox="0 0 500 210" class="circuit-svg">
-              <!-- Inputs -->
-              <text x="25" y="45" font-family="'JetBrains Mono'" font-size="14" font-weight="bold">A</text>
-              <text x="25" y="105" font-family="'JetBrains Mono'" font-size="14" font-weight="bold">B</text>
-
-              <!-- Wire A to XOR -->
-              <line id="wire-a1" x1="45" y1="40" x2="230" y2="40" class="circuit-wire" />
-              <!-- Wire A branch to AND -->
-              <circle cx="95" cy="40" r="4" fill="#0f172a" />
-              <line id="wire-a2" x1="95" y1="40" x2="95" y2="150" class="circuit-wire" />
-              <line id="wire-a3" x1="95" y1="150" x2="230" y2="150" class="circuit-wire" />
-
-              <!-- Wire B to XOR -->
-              <line id="wire-b1" x1="45" y1="100" x2="140" y2="100" class="circuit-wire" />
-              <!-- Wire B branch to AND -->
-              <circle cx="140" cy="100" r="4" fill="#0f172a" />
-              <line id="wire-b2" x1="140" y1="100" x2="230" y2="70" class="circuit-wire" />
-              <line id="wire-b3" x1="140" y1="100" x2="140" y2="185" class="circuit-wire" />
-              <line id="wire-b4" x1="140" y1="185" x2="230" y2="185" class="circuit-wire" />
-
-              <!-- XOR Gate (Sum S) -->
-              <path d="M 224,25 Q 237,55 224,85" fill="none" stroke="#0f172a" stroke-width="2" />
-              <path d="M 230,25 Q 255,25 285,55 Q 255,85 230,85 Q 243,55 230,25 Z" class="gate-shape" />
-              <text x="242" y="60" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="800" fill="#64748b">XOR</text>
-
-              <!-- Wire Out S -->
-              <line id="wire-out-s" x1="285" y1="55" x2="400" y2="55" class="circuit-wire" />
-              <text x="420" y="60" font-family="'JetBrains Mono'" font-size="13" font-weight="bold" fill="#0d9488">S = A ⊕ B</text>
-
-              <!-- AND Gate (Carry C) -->
-              <path d="M 230,140 L 260,140 A 25,25 0 0,1 260,195 L 230,195 Z" class="gate-shape" />
-              <text x="238" y="172" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="800" fill="#64748b">UND</text>
-
-              <!-- Wire Out C -->
-              <line id="wire-out-c" x1="285" y1="168" x2="400" y2="168" class="circuit-wire" />
-              <text x="420" y="173" font-family="'JetBrains Mono'" font-size="13" font-weight="bold" fill="#2563eb">C = A ∧ B</text>
-            </svg>
-          </div>
-
-          <div class="sim-outputs">
-            <div class="output-card">
-              <div class="lamp-circle" id="lamp-s">0</div>
-              <div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">SUMME (S)</div>
-                <div style="font-weight:800; font-size:1.05rem;" id="txt-s">0 (AUS)</div>
-              </div>
-            </div>
-            <div class="output-card">
-              <div class="lamp-circle" id="lamp-c">0</div>
-              <div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">ÜBERTRAG (C)</div>
-                <div style="font-weight:800; font-size:1.05rem;" id="txt-c">0 (AUS)</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Didaktischer Ausblick: Warum HALB-Addierer? -->
-        <div class="info-callout" style="border-left-color: #f59e0b; background:#fffbeb; margin-top:2rem;">
-          <h3 style="font-size:1.05rem; font-weight:800; color:#92400e; margin-bottom:4px;">
-            Typische Klassenarbeitsfrage: Warum heißt er nur „Halbaddierer“?
-          </h3>
-          <p style="color:#78350f; font-size:0.92rem; line-height:1.5;">
-            Ein Halbaddierer kann zwar zwei Bits $A$ und $B$ addieren und einen Übertrag erzeugen, er hat aber 
-            <strong>keinen dritten Eingang für einen Übertrag aus einer vorherigen Stelle ($C_{in}$)</strong>! 
-            <br><br>
-            Wenn wir mehrstellige Zahlen schriftlich zusammenrechnen (z. B. $1101_2 + 1011_2$), müssen wir an jeder Stelle 
-            drei Bits auf einmal zusammenzählen können ($A + B + \text{Übertrag}$). Dazu benötigt man einen 
-            <strong>Volladdierer (Full Adder)</strong>, der aus zwei Halbaddierern und einem ODER-Gatter zusammengesetzt wird.
+          <div class="task-title">Übung 1: Entwerfe eine Schalttafel</div>
+          <p style="font-size:0.95rem; color: #475569; margin-bottom: 0.75rem;">
+            Gegeben ist die Schaltung aus der Stunde mit den Eingängen $A, B, C$. 
+            Bestimme die zugehörige logische Formel und erstelle die Schalttafel (Wahrheitstabelle) für alle 8 Eingangskombinationen.
           </p>
+
+          <!-- Interaktiver Simulator für Übung 1 -->
+          <div style="background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; margin-bottom: 1rem;">
+            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+              <button class="toggle-bit-btn" id="btn-u1-a" onclick="toggleU1Input('a')">Eingang A = <span id="val-u1-a">0</span></button>
+              <button class="toggle-bit-btn" id="btn-u1-b" onclick="toggleU1Input('b')">Eingang B = <span id="val-u1-b">0</span></button>
+              <button class="toggle-bit-btn" id="btn-u1-c" onclick="toggleU1Input('c')">Eingang C = <span id="val-u1-c">0</span></button>
+              <div class="output-indicator">
+                <span class="led-dot" id="led-u1-y"></span>
+                Ausgang Y = <span id="val-u1-y">0</span>
+              </div>
+            </div>
+
+            <!-- SVG Circuit Diagram for Übung 1 -->
+            <svg width="530" height="210" viewBox="0 0 530 210" class="circuit-svg">
+              <!-- Inputs -->
+              <text x="12" y="38" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">A</text>
+              <text x="12" y="88" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">B</text>
+              <text x="12" y="158" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">C</text>
+
+              <!-- Line A to AND -->
+              <line id="wire-u1-a" x1="30" y1="34" x2="135" y2="34" class="circuit-wire" />
+
+              <!-- Line B with Branch -->
+              <line id="wire-u1-b1" x1="30" y1="84" x2="65" y2="84" class="circuit-wire" />
+              <circle cx="65" cy="84" r="3.5" fill="#0f172a" />
+              <!-- Branch upward to AND -->
+              <line id="wire-u1-b-up1" x1="65" y1="84" x2="65" y2="54" class="circuit-wire" />
+              <line id="wire-u1-b-up2" x1="65" y1="54" x2="135" y2="54" class="circuit-wire" />
+              <!-- Branch to XOR -->
+              <line id="wire-u1-b-xor" x1="65" y1="84" x2="160" y2="84" class="circuit-wire" />
+
+              <!-- Line C to NOT -->
+              <line id="wire-u1-c1" x1="30" y1="154" x2="65" y2="154" class="circuit-wire" />
+              <!-- NOT Gate on C -->
+              <polygon points="65,142 90,154 65,166" class="gate-shape" />
+              <circle cx="94" cy="154" r="3.5" class="gate-shape" />
+              <text x="68" y="157" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">NICHT</text>
+              <!-- Wire after NOT to XOR -->
+              <line id="wire-u1-notc" x1="98" y1="154" x2="125" y2="154" class="circuit-wire" />
+              <line id="wire-u1-notc2" x1="125" y1="154" x2="125" y2="114" class="circuit-wire" />
+              <line id="wire-u1-notc3" x1="125" y1="114" x2="160" y2="114" class="circuit-wire" />
+
+              <!-- AND Gate -->
+              <path d="M 135,24 L 160,24 A 20,20 0 0,1 160,64 L 135,64 Z" class="gate-shape" />
+              <text x="142" y="48" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="700" fill="#64748b">UND</text>
+              <!-- Wire Z1 out of AND -->
+              <line id="wire-u1-z1" x1="180" y1="44" x2="250" y2="44" class="circuit-wire" />
+              <line id="wire-u1-z1b" x1="250" y1="44" x2="275" y2="78" class="circuit-wire" />
+              <text x="190" y="36" font-family="'JetBrains Mono'" font-size="10" font-weight="bold" fill="#0d9488">Z₁ = A ∧ B</text>
+
+              <!-- XOR Gate -->
+              <path d="M 154,74 Q 167,99 154,124" fill="none" stroke="#0f172a" stroke-width="2" />
+              <path d="M 160,74 Q 185,74 215,99 Q 185,124 160,124 Q 173,99 160,74 Z" class="gate-shape" />
+              <text x="172" y="103" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="700" fill="#64748b">XOR</text>
+              <!-- Wire Z3 out of XOR -->
+              <line id="wire-u1-z3" x1="215" y1="99" x2="250" y2="99" class="circuit-wire" />
+              <line id="wire-u1-z3b" x1="250" y1="99" x2="275" y2="98" class="circuit-wire" />
+              <text x="180" y="142" font-family="'JetBrains Mono'" font-size="10" font-weight="bold" fill="#2563eb">Z₃ = B ⊕ ¬C</text>
+
+              <!-- OR Gate -->
+              <path d="M 270,66 Q 295,66 325,88 Q 295,110 270,110 Q 282,88 270,66 Z" class="gate-shape" />
+              <text x="282" y="92" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="700" fill="#64748b">ODER</text>
+              <!-- Wire Z4 out of OR into final NOT -->
+              <line id="wire-u1-z4" x1="325" y1="88" x2="360" y2="88" class="circuit-wire" />
+
+              <!-- Final NOT Gate -->
+              <polygon points="360,76 385,88 360,100" class="gate-shape" />
+              <circle cx="389" cy="88" r="3.5" class="gate-shape" />
+              <text x="361" y="91" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">NICHT</text>
+
+              <!-- Wire out to lamp -->
+              <line id="wire-u1-y" x1="393" y1="88" x2="445" y2="88" class="circuit-wire" />
+              <!-- Lamp -->
+              <circle id="lamp-u1-svg" cx="456" cy="88" r="10" class="lamp-symbol-svg" />
+              <line x1="449" y1="81" x2="463" y2="95" stroke="#0f172a" stroke-width="1.5" />
+              <line x1="449" y1="95" x2="463" y2="81" stroke="#0f172a" stroke-width="1.5" />
+              <text x="475" y="92" font-family="'JetBrains Mono'" font-size="12" font-weight="bold">Y</text>
+            </svg>
+            <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem;">
+              Klicke oben auf A, B und C: Beobachte den Signalfluss durch Gatter und Zwischenleitungen!
+            </div>
+          </div>
+
+          <!-- Formel-Badge -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin-bottom:1rem; font-family:'JetBrains Mono'; font-size:1.05rem;">
+            <strong>Zugehöriger logischer Term:</strong> &nbsp;
+            <span style="color:#0f766e; font-weight:700;">¬((A ∧ B) ∨ (B ⊕ ¬C))</span>
+          </div>
+
+          <!-- Reveal Solution -->
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleReveal('sol-u1', this)">Antwort &amp; Schalttafel aufdecken</button>
+            <div id="sol-u1" class="reveal-content">
+              <p><strong>Schrittweise Herleitung der Teilsignale:</strong></p>
+              <ul style="margin-left: 1.5rem; font-size: 0.92rem; color: #334155; margin-bottom: 0.75rem;">
+                <li>$Z_1 = A \land B$ (Ausgang des oberen UND-Gatters)</li>
+                <li>$Z_2 = \neg C$ (Invertiertes Signal von Eingang $C$)</li>
+                <li>$Z_3 = B \oplus Z_2 = B \oplus \neg C$ (Ausgang des XOR-Gatters)</li>
+                <li>$Z_4 = Z_1 \lor Z_3 = (A \land B) \lor (B \oplus \neg C)$ (Ausgang des ODER-Gatters)</li>
+                <li>$Y = \neg Z_4 = \neg((A \land B) \lor (B \oplus \neg C))$ (Invertierung am Ausgang)</li>
+              </ul>
+
+              <strong>Vollständige Schalttabelle (Wahrheitstabelle):</strong>
+              <div class="truth-table-wrap" style="margin-top: 0.75rem;">
+                <table class="truth-table" id="table-u1">
+                  <thead>
+                    <tr>
+                      <th>A</th><th>B</th><th>C</th>
+                      <th style="color:#0f766e;">Z₁ = A ∧ B</th>
+                      <th style="color:#64748b;">¬C</th>
+                      <th style="color:#2563eb;">Z₃ = B ⊕ ¬C</th>
+                      <th style="color:#b45309;">Z₄ = Z₁ ∨ Z₃</th>
+                      <th style="background:#ccfbf1; color:#0f766e; font-weight:800;">Ausgang Y = ¬Z₄</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr id="row-u1-000" class="active-row"><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr id="row-u1-001"><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="res-col">1</td></tr>
+                    <tr id="row-u1-010"><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="res-col">1</td></tr>
+                    <tr id="row-u1-011"><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr id="row-u1-100"><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr id="row-u1-101"><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="res-col">1</td></tr>
+                    <tr id="row-u1-110"><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr id="row-u1-111"><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size: 0.88rem; color: #475569; margin-top: 0.75rem;">
+                <em>Ergebnis-Spalte:</em> Die Lampe leuchtet genau bei den drei Kombinationen $001_2$, $010_2$ und $101_2$ (Ausgang $1$). Bei allen anderen Kombinationen schaltet der Ausgang auf $0$ ab.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================================================
+             ÜBUNG 2: ENTWURFE ZU DER FORMEL EINE SCHALTUNG
+             ==================================================== -->
+        <div class="task-card" style="margin-top: 2rem;">
+          <div class="task-badge-row">
+            <span class="task-type-badge" style="background:#eff6ff; border-color:#bfdbfe; color:#1e40af;">Übung 2 aus dem Unterricht</span>
+            <span class="task-points">Formel → Schaltplan</span>
+          </div>
+          <div class="task-title">Übung 2: Entwerfe zu der Formel eine Schaltung</div>
+          <p style="font-size:0.95rem; color: #475569; margin-bottom: 1rem;">
+            Konstruiere für die beiden gegebenen Formeln jeweils eine vollständige Schaltung mit den passenden Grundgattern.
+          </p>
+
+          <!-- Merke-Box: Methodik zum Schaltungsentwurf -->
+          <div class="merke-box" style="margin-bottom: 1.5rem;">
+            <span class="merke-tag">METHODIK</span>
+            <div class="merke-content">
+              <strong>Das 4-Schritte-Rezept für den Schaltungsentwurf aus Formeln:</strong><br>
+              <strong>1. Klammern zuerst:</strong> Innere Klammerausdrücke müssen immer als erstes durch das entsprechende Gatter verknüpft werden.<br>
+              <strong>2. Rangfolge beachten:</strong> $\neg$ (Inverter) bindet am stärksten, gefolgt von $\land$ (UND), danach $\lor$ (ODER) und $\oplus$ (XOR).<br>
+              <strong>3. Eingänge links anordnen:</strong> Zeichne die Signalquellen $A, B, C$ links sauber untereinander.<br>
+              <strong>4. Verzweigungen markieren:</strong> Wird ein Eingang mehrfach benötigt (wie $A$ in Aufgabe 2b), zweige die Leitung mit einem deutlichen Knotenpunkt ($\bullet$) vor dem nächsten Bauteil ab!
+            </div>
+          </div>
+
+          <!-- TEILAUFGABE 2a -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:1.25rem; margin-bottom: 1.5rem;">
+            <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">
+              a) Formel: $(A \lor B) \land C$
+            </h3>
+            <p style="font-size:0.92rem; color:#475569; margin-bottom:0.75rem;">
+              Entwirf die Schaltung. Die Klammer $(A \lor B)$ wird durch ein <strong>ODER-Gatter</strong> gebildet. 
+              Dessen Ausgang wird mit $C$ über ein <strong>UND-Gatter</strong> verknüpft.
+            </p>
+
+            <!-- Interaktiver Simulator für 2a -->
+            <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; margin-bottom: 0.75rem;">
+              <div style="display:flex; justify-content:center; gap:8px; margin-bottom:0.75rem; flex-wrap:wrap;">
+                <button class="toggle-bit-btn" id="btn-u2a-a" onclick="toggleU2aInput('a')">A = <span id="val-u2a-a">0</span></button>
+                <button class="toggle-bit-btn" id="btn-u2a-b" onclick="toggleU2aInput('b')">B = <span id="val-u2a-b">0</span></button>
+                <button class="toggle-bit-btn" id="btn-u2a-c" onclick="toggleU2aInput('c')">C = <span id="val-u2a-c">0</span></button>
+                <div class="output-indicator">
+                  <span class="led-dot" id="led-u2a-y"></span>
+                  Y = <span id="val-u2a-y">0</span>
+                </div>
+              </div>
+
+              <svg width="440" height="150" viewBox="0 0 440 150" class="circuit-svg">
+                <!-- Inputs -->
+                <text x="15" y="34" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">A</text>
+                <text x="15" y="74" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">B</text>
+                <text x="15" y="124" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">C</text>
+
+                <!-- Wire A to OR -->
+                <line id="wire-u2a-a" x1="35" y1="30" x2="110" y2="30" class="circuit-wire" />
+                <!-- Wire B to OR -->
+                <line id="wire-u2a-b" x1="35" y1="70" x2="110" y2="70" class="circuit-wire" />
+
+                <!-- OR Gate -->
+                <path d="M 110,18 Q 138,18 170,50 Q 138,82 110,82 Q 123,50 110,18 Z" class="gate-shape" />
+                <text x="124" y="54" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="700" fill="#64748b">ODER</text>
+
+                <!-- Wire out of OR to AND -->
+                <line id="wire-u2a-or" x1="170" y1="50" x2="235" y2="50" class="circuit-wire" />
+                <text x="180" y="42" font-family="'JetBrains Mono'" font-size="10" font-weight="bold" fill="#0d9488">A ∨ B</text>
+
+                <!-- Wire C to AND -->
+                <line id="wire-u2a-c1" x1="35" y1="120" x2="210" y2="120" class="circuit-wire" />
+                <line id="wire-u2a-c2" x1="210" y1="120" x2="235" y2="76" class="circuit-wire" />
+
+                <!-- AND Gate -->
+                <path d="M 235,38 L 265,38 A 22,22 0 0,1 265,88 L 235,88 Z" class="gate-shape" />
+                <text x="242" y="66" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="700" fill="#64748b">UND</text>
+
+                <!-- Output Lamp -->
+                <line id="wire-u2a-y" x1="290" y1="63" x2="350" y2="63" class="circuit-wire" />
+                <circle id="lamp-u2a-svg" cx="362" cy="63" r="10" class="lamp-symbol-svg" />
+                <line x1="355" y1="56" x2="369" y2="70" stroke="#0f172a" stroke-width="1.5" />
+                <line x1="355" y1="70" x2="369" y2="56" stroke="#0f172a" stroke-width="1.5" />
+                <text x="382" y="67" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">Y</text>
+              </svg>
+            </div>
+
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleReveal('sol-u2a', this)">Erklärung &amp; Schalttafel aufdecken</button>
+              <div id="sol-u2a" class="reveal-content">
+                <p style="font-size:0.9rem; color:#334155;">
+                  <strong>Logische Funktionsweise:</strong> Das abschließende UND verlangt, dass <strong>$C=1$</strong> ist UND das ODER-Gatter eine $1$ liefert. 
+                  Ist $C=0$, ist der Ausgang immer $0$.
+                </p>
+                <table class="truth-table" style="max-width:320px; margin-top:0.5rem; font-size:0.85rem;">
+                  <thead>
+                    <tr><th>A</th><th>B</th><th>C</th><th>A ∨ B</th><th class="res-col">Y = (A ∨ B) ∧ C</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>0</td><td>0</td><td>0</td><td>0</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>0</td><td>1</td><td>0</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td><td>1</td><td class="res-col">1</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td><td>1</td><td class="res-col">1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td class="res-col">1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TEILAUFGABE 2b -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:1.25rem;">
+            <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">
+              b) Formel: $((¬A \oplus B) \lor C) \land A$
+            </h3>
+            <p style="font-size:0.92rem; color:#475569; margin-bottom:0.75rem;">
+              Entwirf die Schaltung mit Leitungsverzweigung für Eingang $A$. 
+              Beachte: $A$ wird vor dem Inverter abgezweigt und direkt zum abschließenden UND-Gatter geführt!
+            </p>
+
+            <!-- Interaktiver Simulator für 2b -->
+            <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; margin-bottom: 0.75rem;">
+              <div style="display:flex; justify-content:center; gap:8px; margin-bottom:0.75rem; flex-wrap:wrap;">
+                <button class="toggle-bit-btn" id="btn-u2b-a" onclick="toggleU2bInput('a')">A = <span id="val-u2b-a">0</span></button>
+                <button class="toggle-bit-btn" id="btn-u2b-b" onclick="toggleU2bInput('b')">B = <span id="val-u2b-b">0</span></button>
+                <button class="toggle-bit-btn" id="btn-u2b-c" onclick="toggleU2bInput('c')">C = <span id="val-u2b-c">0</span></button>
+                <div class="output-indicator">
+                  <span class="led-dot" id="led-u2b-y"></span>
+                  Y = <span id="val-u2b-y">0</span>
+                </div>
+              </div>
+
+              <svg width="510" height="210" viewBox="0 0 510 210" class="circuit-svg">
+                <!-- Inputs -->
+                <text x="15" y="34" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">A</text>
+                <text x="15" y="94" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">B</text>
+                <text x="15" y="164" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">C</text>
+
+                <!-- Input A with junction -->
+                <line id="wire-u2b-a1" x1="35" y1="30" x2="65" y2="30" class="circuit-wire" />
+                <circle cx="65" cy="30" r="3.5" fill="#0f172a" />
+
+                <!-- Branch 1: Top bypass to final AND gate -->
+                <line id="wire-u2b-a-bypass1" x1="65" y1="30" x2="385" y2="30" class="circuit-wire" />
+                <line id="wire-u2b-a-bypass2" x1="385" y1="30" x2="385" y2="84" class="circuit-wire" />
+                <line id="wire-u2b-a-bypass3" x1="385" y1="84" x2="410" y2="84" class="circuit-wire" />
+
+                <!-- Branch 2: Down to NOT gate -->
+                <line id="wire-u2b-a-not1" x1="65" y1="30" x2="65" y2="65" class="circuit-wire" />
+                <line id="wire-u2b-a-not2" x1="65" y1="65" x2="85" y2="65" class="circuit-wire" />
+
+                <!-- NOT Gate on A -->
+                <polygon points="85,55 110,65 85,75" class="gate-shape" />
+                <circle cx="114" cy="65" r="3.5" class="gate-shape" />
+                <text x="87" y="68" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">NICHT</text>
+
+                <!-- Line from NOT to XOR -->
+                <line id="wire-u2b-nota" x1="118" y1="65" x2="160" y2="65" class="circuit-wire" />
+
+                <!-- Wire B to XOR -->
+                <line id="wire-u2b-b" x1="35" y1="90" x2="160" y2="90" class="circuit-wire" />
+
+                <!-- XOR Gate -->
+                <path d="M 154,55 Q 167,78 154,101" fill="none" stroke="#0f172a" stroke-width="2" />
+                <path d="M 160,55 Q 185,55 212,78 Q 185,101 160,101 Q 173,78 160,55 Z" class="gate-shape" />
+                <text x="172" y="82" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="700" fill="#64748b">XOR</text>
+
+                <!-- Wire from XOR to OR -->
+                <line id="wire-u2b-xor" x1="212" y1="78" x2="255" y2="78" class="circuit-wire" />
+                <line id="wire-u2b-xor2" x1="255" y1="78" x2="270" y2="94" class="circuit-wire" />
+                <text x="210" y="68" font-family="'JetBrains Mono'" font-size="9" font-weight="bold" fill="#2563eb">¬A ⊕ B</text>
+
+                <!-- Wire C to OR -->
+                <line id="wire-u2b-c" x1="35" y1="160" x2="245" y2="160" class="circuit-wire" />
+                <line id="wire-u2b-c2" x1="245" y1="160" x2="270" y2="114" class="circuit-wire" />
+
+                <!-- OR Gate -->
+                <path d="M 270,84 Q 298,84 330,104 Q 298,124 270,124 Q 283,104 270,84 Z" class="gate-shape" />
+                <text x="284" y="108" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="700" fill="#64748b">ODER</text>
+
+                <!-- Wire from OR to final AND -->
+                <line id="wire-u2b-or" x1="330" y1="104" x2="410" y2="104" class="circuit-wire" />
+
+                <!-- Final AND Gate -->
+                <path d="M 410,74 L 438,74 A 20,20 0 0,1 438,114 L 410,114 Z" class="gate-shape" />
+                <text x="416" y="98" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="700" fill="#64748b">UND</text>
+
+                <!-- Output Lamp -->
+                <line id="wire-u2b-y" x1="460" y1="94" x2="480" y2="94" class="circuit-wire" />
+                <circle id="lamp-u2b-svg" cx="490" cy="94" r="9" class="lamp-symbol-svg" />
+                <line x1="484" y1="88" x2="496" y2="100" stroke="#0f172a" stroke-width="1.5" />
+                <line x1="484" y1="100" x2="496" y2="88" stroke="#0f172a" stroke-width="1.5" />
+              </svg>
+            </div>
+
+            <div class="reveal-box">
+              <button class="btn-reveal" onclick="toggleReveal('sol-u2b', this)">Erklärung &amp; Schalttafel aufdecken</button>
+              <div id="sol-u2b" class="reveal-content">
+                <p style="font-size:0.9rem; color:#334155; margin-bottom:0.5rem;">
+                  <strong>Schritt-für-Schritt-Entwurf:</strong>
+                </p>
+                <ol style="margin-left:1.5rem; font-size:0.9rem; color:#334155; margin-bottom:0.75rem;">
+                  <li><strong>Innere Klammer $(\neg A \oplus B)$:</strong> Signal $A$ durch ein NICHT-Gatter führen und mit $B$ auf ein XOR-Gatter legen.</li>
+                  <li><strong>Äußere Klammer $((\dots) \lor C)$:</strong> Den Ausgang des XOR-Gatters mit Signal $C$ auf ein ODER-Gatter führen.</li>
+                  <li><strong>Abschluss $(\dots) \land A$:</strong> Den Ausgang des ODER-Gatters mit dem <em>ursprünglichen Signal $A$</em> (vor dem NICHT-Gatter abgezweigt) auf ein UND-Gatter legen.</li>
+                </ol>
+                <p style="font-size:0.88rem; color:#475569; margin-bottom:0.5rem;">
+                  <strong>Mathematische Besonderheit:</strong> Wegen $\dots \land A$ muss $A=1$ sein, damit der Ausgang überhaupt $1$ werden kann. Für $A=0$ ist das Ergebnis sofort $0$.
+                  Wenn $A=1$ ist, gilt $\neg A = 0$, also $0 \oplus B = B$. Der Gesamtausdruck vereinfacht sich dann zu $B \lor C$!
+                </p>
+                <table class="truth-table" style="max-width:380px; font-size:0.85rem;">
+                  <thead>
+                    <tr><th>A</th><th>B</th><th>C</th><th>¬A ⊕ B</th><th>(¬A ⊕ B) ∨ C</th><th class="res-col">Y = (...) ∧ A</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="res-col">0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="res-col">0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="res-col">0</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td class="res-col">1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="res-col">1</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td class="res-col">1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -1877,63 +2114,168 @@
       });
     }
 
-    // Half Adder Simulator State
-    let simA = 0;
-    let simB = 0;
+    // ========================================================
+    // INTERAKTIVE SIMULATOREN FÜR TAB 4 (UNTERRICHTS-ÜBUNGEN)
+    // ========================================================
 
-    function toggleSimInput(inp) {
-      if (inp === 'a') simA = simA === 0 ? 1 : 0;
-      if (inp === 'b') simB = simB === 0 ? 1 : 0;
-      updateSimUI();
+    // ÜBUNG 1: ¬((A ∧ B) ∨ (B ⊕ ¬C))
+    let u1A = 0;
+    let u1B = 0;
+    let u1C = 0;
+
+    function toggleU1Input(inp) {
+      if (inp === 'a') u1A = u1A === 0 ? 1 : 0;
+      if (inp === 'b') u1B = u1B === 0 ? 1 : 0;
+      if (inp === 'c') u1C = u1C === 0 ? 1 : 0;
+      updateU1UI();
     }
 
-    function updateSimUI() {
-      const btnA = document.getElementById('sim-btn-a');
-      const btnB = document.getElementById('sim-btn-b');
-      btnA.textContent = simA;
-      btnB.textContent = simB;
-      btnA.classList.toggle('active', simA === 1);
-      btnB.classList.toggle('active', simB === 1);
+    function updateU1UI() {
+      document.getElementById('val-u1-a').textContent = u1A;
+      document.getElementById('val-u1-b').textContent = u1B;
+      document.getElementById('val-u1-c').textContent = u1C;
 
-      const sum = (simA !== simB) ? 1 : 0;
-      const carry = (simA === 1 && simB === 1) ? 1 : 0;
+      document.getElementById('btn-u1-a').classList.toggle('active', u1A === 1);
+      document.getElementById('btn-u1-b').classList.toggle('active', u1B === 1);
+      document.getElementById('btn-u1-c').classList.toggle('active', u1C === 1);
 
-      // Update Wires
-      const setWire = (id, active, isCarry = false) => {
+      // Zwischensignale
+      const z1 = (u1A === 1 && u1B === 1) ? 1 : 0;
+      const notC = u1C === 0 ? 1 : 0;
+      const z3 = (u1B !== notC) ? 1 : 0;
+      const z4 = (z1 === 1 || z3 === 1) ? 1 : 0;
+      const y = z4 === 0 ? 1 : 0;
+
+      document.getElementById('val-u1-y').textContent = y;
+      document.getElementById('led-u1-y').classList.toggle('on', y === 1);
+
+      // SVG Wires
+      const setWire = (id, active) => {
         const el = document.getElementById(id);
-        if (!el) return;
-        el.classList.remove('active', 'active-carry');
-        if (active) {
-          el.classList.add(isCarry ? 'active-carry' : 'active');
-        }
+        if (el) el.classList.toggle('active', active);
       };
 
-      setWire('wire-a1', simA === 1);
-      setWire('wire-a2', simA === 1);
-      setWire('wire-a3', simA === 1);
+      setWire('wire-u1-a', u1A === 1);
+      setWire('wire-u1-b1', u1B === 1);
+      setWire('wire-u1-b-up1', u1B === 1);
+      setWire('wire-u1-b-up2', u1B === 1);
+      setWire('wire-u1-b-xor', u1B === 1);
+      setWire('wire-u1-c1', u1C === 1);
+      setWire('wire-u1-notc', notC === 1);
+      setWire('wire-u1-notc2', notC === 1);
+      setWire('wire-u1-notc3', notC === 1);
+      setWire('wire-u1-z1', z1 === 1);
+      setWire('wire-u1-z1b', z1 === 1);
+      setWire('wire-u1-z3', z3 === 1);
+      setWire('wire-u1-z3b', z3 === 1);
+      setWire('wire-u1-z4', z4 === 1);
+      setWire('wire-u1-y', y === 1);
 
-      setWire('wire-b1', simB === 1);
-      setWire('wire-b2', simB === 1);
-      setWire('wire-b3', simB === 1);
-      setWire('wire-b4', simB === 1);
+      const lamp = document.getElementById('lamp-u1-svg');
+      if (lamp) lamp.classList.toggle('on', y === 1);
 
-      setWire('wire-out-s', sum === 1);
-      setWire('wire-out-c', carry === 1, true);
+      // Highlight Table Row in sol-u1
+      const key = `${u1A}${u1B}${u1C}`;
+      ['000','001','010','011','100','101','110','111'].forEach(k => {
+        const row = document.getElementById(`row-u1-${k}`);
+        if (row) row.classList.toggle('active-row', k === key);
+      });
+    }
 
-      // Lamps
-      const lampS = document.getElementById('lamp-s');
-      const lampC = document.getElementById('lamp-c');
-      lampS.textContent = sum;
-      lampC.textContent = carry;
-      lampS.classList.toggle('on', sum === 1);
-      lampC.classList.toggle('on-carry', carry === 1);
+    // ÜBUNG 2a: (A ∨ B) ∧ C
+    let u2aA = 0;
+    let u2aB = 0;
+    let u2aC = 0;
 
-      document.getElementById('txt-s').textContent = sum === 1 ? '1 (LEUCHTET)' : '0 (AUS)';
-      document.getElementById('txt-c').textContent = carry === 1 ? '1 (LEUCHTET)' : '0 (AUS)';
+    function toggleU2aInput(inp) {
+      if (inp === 'a') u2aA = u2aA === 0 ? 1 : 0;
+      if (inp === 'b') u2aB = u2aB === 0 ? 1 : 0;
+      if (inp === 'c') u2aC = u2aC === 0 ? 1 : 0;
+      updateU2aUI();
+    }
 
-      const totalDec = simA + simB;
-      const binStr = carry === 1 ? `1${sum}₂` : `${sum}₂`;
-      document.getElementById('sim-calc-text').textContent = `${simA} + ${simB} = ${binStr} (dezimal: ${totalDec})`;
+    function updateU2aUI() {
+      document.getElementById('val-u2a-a').textContent = u2aA;
+      document.getElementById('val-u2a-b').textContent = u2aB;
+      document.getElementById('val-u2a-c').textContent = u2aC;
+
+      document.getElementById('btn-u2a-a').classList.toggle('active', u2aA === 1);
+      document.getElementById('btn-u2a-b').classList.toggle('active', u2aB === 1);
+      document.getElementById('btn-u2a-c').classList.toggle('active', u2aC === 1);
+
+      const orVal = (u2aA === 1 || u2aB === 1) ? 1 : 0;
+      const y = (orVal === 1 && u2aC === 1) ? 1 : 0;
+
+      document.getElementById('val-u2a-y').textContent = y;
+      document.getElementById('led-u2a-y').classList.toggle('on', y === 1);
+
+      const setWire = (id, active) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', active);
+      };
+
+      setWire('wire-u2a-a', u2aA === 1);
+      setWire('wire-u2a-b', u2aB === 1);
+      setWire('wire-u2a-or', orVal === 1);
+      setWire('wire-u2a-c1', u2aC === 1);
+      setWire('wire-u2a-c2', u2aC === 1);
+      setWire('wire-u2a-y', y === 1);
+
+      const lamp = document.getElementById('lamp-u2a-svg');
+      if (lamp) lamp.classList.toggle('on', y === 1);
+    }
+
+    // ÜBUNG 2b: ((¬A ⊕ B) ∨ C) ∧ A
+    let u2bA = 0;
+    let u2bB = 0;
+    let u2bC = 0;
+
+    function toggleU2bInput(inp) {
+      if (inp === 'a') u2bA = u2bA === 0 ? 1 : 0;
+      if (inp === 'b') u2bB = u2bB === 0 ? 1 : 0;
+      if (inp === 'c') u2bC = u2bC === 0 ? 1 : 0;
+      updateU2bUI();
+    }
+
+    function updateU2bUI() {
+      document.getElementById('val-u2b-a').textContent = u2bA;
+      document.getElementById('val-u2b-b').textContent = u2bB;
+      document.getElementById('val-u2b-c').textContent = u2bC;
+
+      document.getElementById('btn-u2b-a').classList.toggle('active', u2bA === 1);
+      document.getElementById('btn-u2b-b').classList.toggle('active', u2bB === 1);
+      document.getElementById('btn-u2b-c').classList.toggle('active', u2bC === 1);
+
+      const notA = u2bA === 0 ? 1 : 0;
+      const xorVal = (notA !== u2bB) ? 1 : 0;
+      const orVal = (xorVal === 1 || u2bC === 1) ? 1 : 0;
+      const y = (orVal === 1 && u2bA === 1) ? 1 : 0;
+
+      document.getElementById('val-u2b-y').textContent = y;
+      document.getElementById('led-u2b-y').classList.toggle('on', y === 1);
+
+      const setWire = (id, active) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', active);
+      };
+
+      setWire('wire-u2b-a1', u2bA === 1);
+      setWire('wire-u2b-a-bypass1', u2bA === 1);
+      setWire('wire-u2b-a-bypass2', u2bA === 1);
+      setWire('wire-u2b-a-bypass3', u2bA === 1);
+      setWire('wire-u2b-a-not1', u2bA === 1);
+      setWire('wire-u2b-a-not2', u2bA === 1);
+      setWire('wire-u2b-nota', notA === 1);
+      setWire('wire-u2b-b', u2bB === 1);
+      setWire('wire-u2b-xor', xorVal === 1);
+      setWire('wire-u2b-xor2', xorVal === 1);
+      setWire('wire-u2b-c', u2bC === 1);
+      setWire('wire-u2b-c2', u2bC === 1);
+      setWire('wire-u2b-or', orVal === 1);
+      setWire('wire-u2b-y', y === 1);
+
+      const lamp = document.getElementById('lamp-u2b-svg');
+      if (lamp) lamp.classList.toggle('on', y === 1);
     }
 
     // Initialize interactive gates on start
@@ -1942,7 +2284,9 @@
         const row = document.getElementById(`row-${g}-00`);
         if (row) row.classList.add('active-row');
       });
-      updateSimUI();
+      updateU1UI();
+      updateU2aUI();
+      updateU2bUI();
     });
   </script>
 </body>
