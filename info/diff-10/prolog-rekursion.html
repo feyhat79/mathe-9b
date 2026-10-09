@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Prolog Stunde 4: Rekursion in Wissensbasen | Informatik Diff-10</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #0f172a;
+      --primary-light: #eff6ff;
+      --accent: #0284c7;
+      --accent-light: #f0f9ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius-lg: 14px;
+      --radius-md: 8px;
+      --radius-sm: 5px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0 0 4rem 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* PRESENTER-BAR (GEMINI.md Richtlinie 7) */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-back {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .btn-nav-back:hover {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+    }
+
+    .presenter-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presenter-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .presenter-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.18);
+      color: #ffffff;
+    }
+    .presenter-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+    }
+
+    .step-marker {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Code & Badges */
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .var-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .code-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 0.85rem 0;
+    }
+
+    .code-box .comment { color: #94a3b8; font-style: italic; }
+    .code-box .keyword { color: #38bdf8; font-weight: 700; }
+    .code-box .atom { color: #86efac; }
+    .code-box .variable { color: #fde047; font-weight: 700; }
+    .code-box .operator { color: #f472b6; }
+
+    /* Visualizer Box */
+    .vis-container {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .vis-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      background: #ffffff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-vis {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-vis-primary { background: #1e3a8a; color: #ffffff; }
+    .btn-vis-primary:hover { background: #172554; }
+    .btn-vis-secondary { background: #e2e8f0; color: #334155; }
+    .btn-vis-secondary:hover { background: #cbd5e1; }
+
+    .vis-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .vis-layout { grid-template-columns: 1fr; }
+    }
+
+    .tree-display {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tree-node {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      transition: all 0.3s;
+    }
+    .tree-node.active {
+      background: #dbeafe;
+      border-color: #3b82f6;
+      font-weight: 700;
+      transform: scale(1.02);
+    }
+    .tree-node.goal {
+      background: #dcfce7;
+      border-color: #22c55e;
+      font-weight: 700;
+    }
+
+    .stack-display {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stack-item {
+      background: #f8fafc;
+      border-left: 4px solid #94a3b8;
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      transition: all 0.3s;
+    }
+    .stack-item.current {
+      background: #eff6ff;
+      border-left-color: #1e3a8a;
+    }
+    .stack-item.success {
+      background: #ecfdf5;
+      border-left-color: #059669;
+    }
+
+    /* Comparison Box */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1rem 0;
+    }
+    @media (max-width: 768px) {
+      .comparison-grid { grid-template-columns: 1fr; }
+    }
+
+    .comp-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      border: 1px solid #e2e8f0;
+    }
+    .comp-correct { border-top: 4px solid #059669; }
+    .comp-wrong { border-top: 4px solid #dc2626; }
+
+    /* Task Card */
+    .exam-task {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .exam-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .exam-badge {
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      margin-top: 0.75rem;
+      transition: all 0.2s;
+    }
+    .btn-reveal:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .reveal-box {
+      display: none;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #059669;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-top: 0.75rem;
+      font-size: 0.92rem;
+    }
+
+    .btn-copy {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      float: right;
+      margin-top: -4px;
+    }
+    .btn-copy:hover {
+      background: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRESENTER-BAR (STANDARDIcon-freie, fixierte Kopfzeilennavigation) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Diff-10</a>
+      <div class="presenter-title">
+        <span>Stunde 4: Rekursion in Prolog</span>
+        <span class="presenter-badge">Klausurrelevant</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="#abschnitt-problem" class="presenter-tab-btn active" onclick="activateTab(this)">1. Problem &amp; Grenze</a>
+      <a href="#abschnitt-prinzip" class="presenter-tab-btn" onclick="activateTab(this)">2. Das 2-Säulen-Prinzip</a>
+      <a href="#abschnitt-visualizer" class="presenter-tab-btn" onclick="activateTab(this)">3. Interaktives Tracing</a>
+      <a href="#abschnitt-fallen" class="presenter-tab-btn" onclick="activateTab(this)">4. Klausur-Fallen</a>
+      <a href="#abschnitt-uebung" class="presenter-tab-btn" onclick="activateTab(this)">5. Klausur-Trainer</a>
+      <a href="AB04_Rekursion_Prolog.pdf" class="presenter-tab-btn" style="background:#059669; border-color:#059669;" target="_blank">AB 04 als PDF</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HEADER-BEREICH -->
+    <header style="margin-bottom: 2rem;">
+      <span class="code-pill" style="font-weight:700;">Informatik Differenzierung 10 • Doppelstunde vor der Klassenarbeit</span>
+      <h1 style="font-size: clamp(1.6rem, 3.5vw, 2.3rem); font-weight: 800; color: var(--text); margin: 0.5rem 0;">
+        Rekursion: Beliebige Tiefen in Stammbäumen &amp; Netzen
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 820px;">
+        Wie befragt man eine Wissensbasis über 10, 50 oder beliebig viele Generationen hinweg? Wir erschließen die Eleganz der Rekursion, visualisieren den Aufrufstapel und wappnen uns gegen die tückischsten Klausurfallen.
+      </p>
+    </header>
+
+    <!-- ABSCHNITT 1: PROBLEM & KOGNITIVER KONFLIKT -->
+    <section id="abschnitt-problem" class="section-card">
+      <div class="section-header">
+        <div class="step-marker">1</div>
+        <h2 class="section-title">Kognitiver Konflikt: Das Scheitern starrer Regeln</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Aus Stunde 2 und 3 kennen wir die Regel für den Großvater:
+      </p>
+
+      <div class="code-box">
+<span class="comment">% Regel aus Stunde 2 (überbrückt exakt 2 Generationen):</span>
+<span class="keyword">grossvater</span>(G, K) :- 
+    <span class="keyword">vater</span>(G, E), 
+    <span class="keyword">elternteil</span>(E, K).
+      </div>
+
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:1rem; margin:1rem 0;">
+        <h4 style="color:#92400e; font-size:1rem; font-weight:700; margin-bottom:4px;">Die Impulsfrage: Was passiert bei tieferen Generationen?</h4>
+        <p style="color:#78350f; font-size:0.92rem;">
+          Wenn wir wissen wollen, ob <strong>Uranos</strong> der Urahn von <strong>Ares</strong> oder der Ur-Urahn von <strong>Harmonia</strong> ist, stoßen starre Regeln an ihre Grenzen:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-top: 6px; font-size: 0.92rem; color: #78350f;">
+          <li>Für Urgroßvater bräuchten wir 3 Teilziele: <code class="code-pill">urgrossvater(U, K) :- vater(U, A), elternteil(A, B), elternteil(B, K).</code></li>
+          <li>Für Ur-Urgroßvater bräuchten wir 4 Teilziele.</li>
+          <li>Für 20 Generationen bräuchten wir 20 verschiedene Regeln mit 20 Teilzielen!</li>
+        </ul>
+        <p style="font-weight: 700; color: #92400e; margin-top: 8px;">
+          Erkenntnis: Eine Wissensbasis muss flexibel sein. Wir brauchen eine Regel, die für jede beliebige Generationentiefe funktioniert!
+        </p>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 2: DAS 2-SÄULEN-PRINZIP -->
+    <section id="abschnitt-prinzip" class="section-card">
+      <div class="section-header">
+        <div class="step-marker">2</div>
+        <h2 class="section-title">Das 2-Säulen-Prinzip der Rekursion</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Die Lösung lautet: <strong>Selbstreferenz (Rekursion)</strong>. Das Prädikat <code class="code-pill">vorfahre(X, Y)</code> wird über zwei fundamentale Säulen definiert:
+      </p>
+
+      <div class="comparison-grid">
+        <div class="comp-card comp-correct">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #059669; text-transform: uppercase; margin-bottom: 4px;">Säule 1: Der Basisfall</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px;">Die Abbruchbedingung</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
+            Jeder direkte Elternteil ist sofort und ohne Umwege auch ein Vorfahre.
+          </p>
+          <div class="code-box" style="margin: 0; padding: 8px 12px; font-size: 0.88rem;">
+<span class="keyword">vorfahre</span>(X, Y) :- 
+    <span class="keyword">elternteil</span>(X, Y).
+          </div>
+        </div>
+
+        <div class="comp-card comp-correct">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase; margin-bottom: 4px;">Säule 2: Der Rekursionsschritt</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px;">Der Staffelstab (Kette)</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">
+            X ist Vorfahre von Y, wenn X Elternteil eines Kindes Z ist UND Z seinerseits Vorfahre von Y ist.
+          </p>
+          <div class="code-box" style="margin: 0; padding: 8px 12px; font-size: 0.88rem;">
+<span class="keyword">vorfahre</span>(X, Y) :- 
+    <span class="keyword">elternteil</span>(X, <span class="variable">Z</span>), 
+    <span class="keyword">vorfahre</span>(<span class="variable">Z</span>, Y).
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #1e3a8a; margin-bottom: 4px;">Das Kettenglied-Modell (Wie das Problem schrumpft)</h4>
+        <p style="font-size: 0.92rem; color: var(--text);">
+          In jedem Rekursionsschritt macht Prolog <strong>einen echten Faktenschritt</strong> vorwärts ($X \to Z$). Der restliche Weg ($Z \to Y$) ist um genau eine Generation kürzer. Irgendwann ist das Kind $Z$ der direkte Elternteil des Ziels $Y$ &ndash; und der Basisfall schlägt zu!
+        </p>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 3: INTERAKTIVER REKURSIONS-VISUALISIERER -->
+    <section id="abschnitt-visualizer" class="section-card">
+      <div class="section-header">
+        <div class="step-marker">3</div>
+        <h2 class="section-title">Interaktiver Rekursions-Visualisierer</h2>
+      </div>
+
+      <p style="margin-bottom: 0.75rem;">
+        Verfolge die Anfrage <code class="code-pill">?- vorfahre(uranos, ares).</code> live auf dem Call-Stack. Nutze die Steuerungselemente, um den algorithmischen Ablauf Schritt für Schritt nachzuvollziehen:
+      </p>
+
+      <div class="vis-container">
+        <div class="vis-controls">
+          <button class="btn-vis btn-vis-primary" onclick="visNext()">Nächster Schritt →</button>
+          <button class="btn-vis btn-vis-secondary" onclick="visPrev()">← Schritt zurück</button>
+          <button class="btn-vis btn-vis-secondary" onclick="visReset()">Zurücksetzen</button>
+          <span id="vis-status-label" style="margin-left: auto; font-size: 0.88rem; font-weight: 700; color: #1e3a8a;">
+            Bereit: Klicke auf „Nächster Schritt“
+          </span>
+        </div>
+
+        <div class="vis-layout">
+          <!-- Stammbaum-Kette -->
+          <div>
+            <h4 style="font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase;">
+              Generationen-Kette im Speicher:
+            </h4>
+            <div class="tree-display">
+              <div id="node-uranos" class="tree-node">
+                <span>1. Uranos (Urahn)</span>
+                <span class="code-pill">Start</span>
+              </div>
+              <div style="text-align: center; color: #94a3b8; font-size: 0.8rem;">↓ elternteil(uranos, kronos)</div>
+              <div id="node-kronos" class="tree-node">
+                <span>2. Kronos (Titan)</span>
+                <span id="tag-kronos" class="badge-tag">-</span>
+              </div>
+              <div style="text-align: center; color: #94a3b8; font-size: 0.8rem;">↓ elternteil(kronos, zeus)</div>
+              <div id="node-zeus" class="tree-node">
+                <span>3. Zeus (Göttervater)</span>
+                <span id="tag-zeus" class="badge-tag">-</span>
+              </div>
+              <div style="text-align: center; color: #94a3b8; font-size: 0.8rem;">↓ elternteil(zeus, ares)</div>
+              <div id="node-ares" class="tree-node goal">
+                <span>4. Ares (Ziel-Person)</span>
+                <span class="code-pill" style="background:#ecfdf5; border-color:#86efac; color:#059669;">Ziel Y</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Call Stack -->
+          <div>
+            <h4 style="font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase;">
+              Aufrufstapel (Call Stack):
+            </h4>
+            <div id="stack-box" class="stack-display">
+              <div class="stack-item" style="color: #64748b; font-style: italic;">
+                Noch kein Aufruf aktiv.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Erklärungstext zum Schritt -->
+        <div id="vis-explanation" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 0.92rem; color: #0f172a;">
+          <strong>Startzustand:</strong> Der Benutzer sendet die Anfrage <code class="code-pill">?- vorfahre(uranos, ares).</code> an Prolog. Klicke auf „Nächster Schritt“, um die Auswertung zu starten.
+        </div>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 4: KLAUSUR-FALLEN -->
+    <section id="abschnitt-fallen" class="section-card">
+      <div class="section-header">
+        <div class="step-marker">4</div>
+        <h2 class="section-title">Die zwei tödlichen Klausur-Fallen</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        In Klassenarbeiten treten regelmäßig zwei fundamentale Fehler auf, die den Prolog-Interpreter sofort in die Knie zwingen. Präge dir diese beiden Fälle genau ein:
+      </p>
+
+      <div class="comparison-grid">
+        <div class="comp-card comp-wrong">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #dc2626; text-transform: uppercase; margin-bottom: 4px;">Klausurfalle 1</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #dc2626; margin-bottom: 6px;">Linksrekursion (Left Recursion)</h3>
+          <div class="code-box" style="margin: 6px 0; padding: 8px 10px; font-size: 0.85rem;">
+<span class="comment">% FALSCH: Der Selbstaufruf steht ganz links!</span>
+vorfahre(X, Y) :- 
+    <span style="color:#ef4444; font-weight:700;">vorfahre(X, Z)</span>, 
+    elternteil(Z, Y).
+          </div>
+          <p style="font-size: 0.88rem; color: #475569;">
+            <strong>Warum das tödlich ist:</strong> Prolog arbeitet strikt von links nach rechts. Das erste Teilziel ist sofort wieder <code class="code-pill">vorfahre(X, Z)</code> mit einer ungebundenen Variable $Z$. Prolog verkleinert das Problem nicht, sondern ruft sich endlos selbst auf!
+          </p>
+          <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:4px; padding:6px 8px; margin-top:8px; font-size:0.82rem; font-family:'JetBrains Mono', monospace; color:#991b1b;">
+            ERROR: Out of local stack (Endlosschleife &amp; Absturz)
+          </div>
+        </div>
+
+        <div class="comp-card comp-wrong">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #d97706; text-transform: uppercase; margin-bottom: 4px;">Klausurfalle 2</div>
+          <h3 style="font-size: 1.05rem; font-weight: 700; color: #d97706; margin-bottom: 6px;">Vergessener Basisfall</h3>
+          <div class="code-box" style="margin: 6px 0; padding: 8px 10px; font-size: 0.85rem;">
+<span class="comment">% FALSCH: Säule 1 fehlt komplett!</span>
+vorfahre(X, Y) :- 
+    elternteil(X, Z), 
+    vorfahre(Z, Y).
+          </div>
+          <p style="font-size: 0.88rem; color: #475569;">
+            <strong>Warum das scheitert:</strong> Bei direkten Elternbeziehungen (z. B. <code class="code-pill">?- vorfahre(zeus, ares).</code>) findet Prolog keinen Zwischenknoten $Z$, der selbst Vorfahre von Ares ist. Die Inferenz antwortet fälschlicherweise mit <code class="code-pill" style="color:#dc2626;">false.</code>!
+          </p>
+          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:4px; padding:6px 8px; margin-top:8px; font-size:0.82rem; font-family:'JetBrains Mono', monospace; color:#92400e;">
+            ?- vorfahre(zeus, ares). -> false. (Direkte Eltern nicht erkannt!)
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #ecfdf5; border: 1.5px solid #059669; border-radius: 8px; padding: 12px 16px; margin-top: 1rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #065f46; margin-bottom: 4px;">
+          • Die eiserne Klausur-Regel für Rekursion
+        </h4>
+        <p style="font-size: 0.92rem; color: #065f46;">
+          1. Zuerst notierst du immer <strong>Säule 1 (Basisfall)</strong>.<br>
+          2. In <strong>Säule 2 (Rekursionsschritt)</strong> steht <u>immer zuerst das Fakten-Prädikat</u> (<code class="code-pill">elternteil(X, Z)</code>), das die Zwischenvariable $Z$ an ein reales Objekt bindet, und <u>erst danach der rekursive Aufruf</u> (<code class="code-pill">vorfahre(Z, Y)</code>)!
+        </p>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 5: KLAUSUR-TRAINER & WISSENSBASIS -->
+    <section id="abschnitt-uebung" class="section-card">
+      <div class="section-header">
+        <div class="step-marker">5</div>
+        <h2 class="section-title">Klausur-Trainer: Interaktive Aufgaben &amp; Wissensbasis</h2>
+      </div>
+
+      <p style="margin-bottom: 1rem;">
+        Teste dein Verständnis vor der Klassenarbeit an diesen typischen Prüfungsaufgaben:
+      </p>
+
+      <!-- Aufgabe 1 -->
+      <div class="exam-task">
+        <div class="exam-header">
+          <strong style="font-size: 1rem; color: #1e3a8a;">Aufgabe 1: Das Staffelstab-Prinzip erklären</strong>
+          <span class="exam-badge">Anforderungsbereich I</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Erkläre in zwei präzisen Sätzen, welche Funktion die Variable <span class="var-pill">Z</span> im Regelkörper von <code class="code-pill">vorfahre(X, Y) :- elternteil(X, Z), vorfahre(Z, Y).</code> übernimmt.
+        </p>
+        <button class="btn-reveal" onclick="toggleAnswer('ans-1', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="ans-1" class="reveal-box">
+          <strong>Musterantwort:</strong> Die Variable $Z$ fungiert als Bindeglied (Zwischenvariable bzw. Staffelstab). Sie bindet im ersten Teilziel an ein direktes Kind von $X$ und wird im rekursiven Aufruf als neuer Ausgangspunkt eingesetzt, sodass das Problem um eine Generation schrumpft.
+        </div>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="exam-task">
+        <div class="exam-header">
+          <strong style="font-size: 1rem; color: #1e3a8a;">Aufgabe 2: Code-Diagnose bei Fehlverhalten</strong>
+          <span class="exam-badge">Anforderungsbereich II</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Ein Mitschüler schreibt: <code class="code-pill">vorfahre(X, Y) :- vorfahre(X, Z), elternteil(Z, Y).</code><br>
+          Beim Ausführen friert die SWISH-Oberfläche ein. Benenne den Fachbegriff für diesen Programmierfehler und erläutere die Ursache.
+        </p>
+        <button class="btn-reveal" onclick="toggleAnswer('ans-2', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="ans-2" class="reveal-box">
+          <strong>Musterantwort:</strong> Es handelt sich um <strong>Linksrekursion (Left Recursion)</strong>. Prolog wertet Ziele streng von links nach rechts aus. Da der rekursive Selbstaufruf an erster Stelle steht, ruft sich das Prädikat unendlich oft auf, ohne dass zuvor eine Variable an einen realen Fakt gebunden oder das Problem verkleinert wurde. Dies führt zu einem Stack Overflow.
+        </div>
+      </div>
+
+      <!-- Aufgabe 3 -->
+      <div class="exam-task">
+        <div class="exam-header">
+          <strong style="font-size: 1rem; color: #1e3a8a;">Aufgabe 3: Transfer &ndash; Erreichbarkeit im Rechnernetz</strong>
+          <span class="exam-badge">Anforderungsbereich III</span>
+        </div>
+        <p style="font-size: 0.92rem;">
+          Gegeben sind Kabelverbindungen zwischen Servern: <code class="code-pill">kabel(s1, s2).</code>, <code class="code-pill">kabel(s2, s3).</code>, <code class="code-pill">kabel(s3, s4).</code><br>
+          Formuliere das rekursive Prädikat <code class="code-pill">verbunden(A, B)</code> über zwei Regeln nach dem 2-Säulen-Prinzip.
+        </p>
+        <button class="btn-reveal" onclick="toggleAnswer('ans-3', this)">Antwort &amp; Erklärung aufdecken</button>
+        <div id="ans-3" class="reveal-box">
+          <strong>Musterlösung:</strong>
+          <pre style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; background:#f8fafc; padding:8px; border-radius:4px; margin-top:6px;">
+% Säule 1: Basisfall (Direktes Kabel)
+verbunden(A, B) :- kabel(A, B).
+
+% Säule 2: Rekursionsschritt (Über Zwischenstation Z)
+verbunden(A, B) :- kabel(A, Z), verbunden(Z, B).</pre>
+        </div>
+      </div>
+
+      <!-- Vollständige SWISH-Wissensbasis zum Kopieren -->
+      <div style="margin-top: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text);">
+            Vollständige Wissensbasis für SWISH (4 Generationen)
+          </h3>
+          <div>
+            <button class="btn-copy" onclick="copyKnowledgeBase()">Code kopieren</button>
+            <a href="https://swish.swi-prolog.org/" target="_blank" class="code-pill" style="text-decoration:none; background:#1e3a8a; color:#fff; border-color:#1e3a8a; margin-left:6px; font-weight:700;">SWISH öffnen ↗</a>
+          </div>
+        </div>
+
+        <div class="code-box" id="kb-code" style="max-height: 280px;">
+<span class="comment">% =========================================================</span>
+<span class="comment">% Götterstammbaum (Diff-10 • Stunde 4: Rekursion)</span>
+<span class="comment">% =========================================================</span>
+
+<span class="comment">% 0. Ur-Ahnen (Generation 0)</span>
+vater(uranos, kronos).
+mutter(gaia, kronos).
+
+<span class="comment">% 1. Titanen (Generation 1)</span>
+vater(kronos, zeus).
+mutter(rhea, zeus).
+
+<span class="comment">% 2. Olympier (Generation 2)</span>
+vater(zeus, ares).
+mutter(hera, ares).
+vater(zeus, hephaistos).
+mutter(hera, hephaistos).
+
+<span class="comment">% 3. Urenkel (Generation 3)</span>
+vater(ares, harmonia).
+
+<span class="comment">% Regeln für Elternteil</span>
+elternteil(E, K) :- vater(E, K).
+elternteil(E, K) :- mutter(E, K).
+
+<span class="comment">% DAS 2-SÄULEN-PRINZIP DER REKURSION:</span>
+<span class="comment">% Säule 1: Basisfall</span>
+vorfahre(X, Y) :- 
+    elternteil(X, Y).
+
+<span class="comment">% Säule 2: Rekursionsschritt</span>
+vorfahre(X, Y) :- 
+    elternteil(X, Z), 
+    vorfahre(Z, Y).
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Tab Activation
+    function activateTab(btn) {
+      document.querySelectorAll('.presenter-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Toggle Answer
+    function toggleAnswer(id, btn) {
+      const box = document.getElementById(id);
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+        btn.textContent = 'Antwort & Erklärung aufdecken';
+      } else {
+        box.style.display = 'block';
+        btn.textContent = 'Antwort verbergen';
+      }
+    }
+
+    // Copy Code
+    function copyKnowledgeBase() {
+      const text = document.getElementById('kb-code').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Code erfolgreich in die Zwischenablage kopiert! Du kannst ihn direkt in SWISH einfügen.');
+      });
+    }
+
+    // Visualizer Logic
+    let visStep = 0;
+    const maxVisSteps = 6;
+
+    const visStepsData = [
+      {
+        label: "Startzustand",
+        status: "Anfrage empfangen: ?- vorfahre(uranos, ares).",
+        activeNode: "node-uranos",
+        tagKronos: "-",
+        tagZeus: "-",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "Prolog empfängt Benutzeranfrage.", state: "current" }
+        ],
+        expl: "<strong>Start:</strong> Prolog erhält die Anfrage <code class='code-pill'>?- vorfahre(uranos, ares).</code>. Es beginnt die Prüfung der deklarierten Regeln von oben nach unten."
+      },
+      {
+        label: "Schritt 1: Ebene 1 Basisfall scheitert",
+        status: "Ebene 1: Prüfe Basisfall elternteil(uranos, ares)",
+        activeNode: "node-uranos",
+        tagKronos: "-",
+        tagZeus: "-",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "Säule 1: elternteil(uranos, ares) -> false (kein Fakt)", state: "current" }
+        ],
+        expl: "<strong>Säule 1 scheitert:</strong> Uranos ist kein direkter Elternteil von Ares. Prolog wechselt automatisch zur zweiten Regel: <strong>Säule 2 (Rekursionsschritt)</strong>."
+      },
+      {
+        label: "Schritt 2: Bindung Z = kronos",
+        status: "Ebene 1 Rekursionsschritt: Z bindet an kronos",
+        activeNode: "node-kronos",
+        tagKronos: "Z = kronos",
+        tagZeus: "-",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "elternteil(uranos, Z) -> Treffer: Z = kronos.<br>Rufe rekursiv auf: vorfahre(kronos, ares)", state: "" },
+          { title: "Ebene 2: vorfahre(kronos, ares)", text: "Neuer Aufruf auf dem Stack abgelegt.", state: "current" }
+        ],
+        expl: "<strong>Zwischenvariable bindet:</strong> Prolog findet <code class='code-pill'>elternteil(uranos, kronos)</code>. Die Variable <span class='var-pill'>Z</span> bindet an <strong>kronos</strong>. Nun folgt der Selbstaufruf mit dem neuen Startpunkt: <code class='code-pill'>vorfahre(kronos, ares)</code>!"
+      },
+      {
+        label: "Schritt 3: Ebene 2 Bindung Z = zeus",
+        status: "Ebene 2 Rekursionsschritt: Z bindet an zeus",
+        activeNode: "node-zeus",
+        tagKronos: "Z = kronos",
+        tagZeus: "Z = zeus",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "Wartet auf Rückmeldung...", state: "" },
+          { title: "Ebene 2: vorfahre(kronos, ares)", text: "Basisfall scheitert. elternteil(kronos, Z) -> Z = zeus.<br>Rufe rekursiv auf: vorfahre(zeus, ares)", state: "" },
+          { title: "Ebene 3: vorfahre(zeus, ares)", text: "Neuer Aufruf auf dem Stack abgelegt.", state: "current" }
+        ],
+        expl: "<strong>Ebene 2:</strong> Auch für Kronos scheitert Säule 1 (<code class='code-pill'>elternteil(kronos, ares)</code> ist falsch). Säule 2 findet <code class='code-pill'>elternteil(kronos, zeus)</code>. Staffelstab wird weitergereicht an <strong>zeus</strong>!"
+      },
+      {
+        label: "Schritt 4: Basisfall schlägt zu!",
+        status: "Ebene 3 Basisfall ERFOLG: elternteil(zeus, ares) ist Fakt!",
+        activeNode: "node-ares",
+        tagKronos: "Z = kronos",
+        tagZeus: "Z = zeus",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "Wartet...", state: "" },
+          { title: "Ebene 2: vorfahre(kronos, ares)", text: "Wartet...", state: "" },
+          { title: "Ebene 3: vorfahre(zeus, ares)", text: "Säule 1: elternteil(zeus, ares) -> <strong>ERFOLG (Fakt existiert!)</strong>", state: "success" }
+        ],
+        expl: "<strong>Der Durchbruch (Basisfall greift!):</strong> In Ebene 3 prüft Prolog Säule 1: <code class='code-pill'>elternteil(zeus, ares)</code>. Dies ist als Fakt in der Wissensbasis hinterlegt! Die Abbruchbedingung greift: Ebene 3 meldet <strong>true</strong>!"
+      },
+      {
+        label: "Schritt 5: Rücklauf (Synthese)",
+        status: "Beweiskette geschlossen: Prolog antwortet: true.",
+        activeNode: "node-ares",
+        tagKronos: "Kette validiert",
+        tagZeus: "Kette validiert",
+        stack: [
+          { title: "Ebene 1: vorfahre(uranos, ares)", text: "Ergebnis: <strong>true.</strong>", state: "success" },
+          { title: "Beweiskette:", text: "uranos → kronos → zeus → ares", state: "success" }
+        ],
+        expl: "<strong>Erfolg & Rücklauf:</strong> Die Erfolgsmeldung wandert den Stack wieder hinauf: Ebene 3 → Ebene 2 → Ebene 1. Prolog gibt an den Benutzer aus: <code class='code-pill' style='color:#059669; font-weight:700;'>true.</code>"
+      }
+    ];
+
+    function updateVis() {
+      const data = visStepsData[visStep];
+      document.getElementById('vis-status-label').textContent = data.status;
+      document.getElementById('vis-explanation').innerHTML = data.expl;
+
+      // Update nodes
+      ['node-uranos', 'node-kronos', 'node-zeus', 'node-ares'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+      document.getElementById(data.activeNode).classList.add('active');
+
+      document.getElementById('tag-kronos').textContent = data.tagKronos;
+      document.getElementById('tag-zeus').textContent = data.tagZeus;
+
+      // Update Stack
+      const stackBox = document.getElementById('stack-box');
+      stackBox.innerHTML = '';
+      data.stack.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `stack-item ${item.state}`;
+        div.innerHTML = `<strong>${item.title}</strong><br><span style="font-size:0.82rem;">${item.text}</span>`;
+        stackBox.appendChild(div);
+      });
+    }
+
+    function visNext() {
+      if (visStep < maxVisSteps - 1) {
+        visStep++;
+        updateVis();
+      }
+    }
+
+    function visPrev() {
+      if (visStep > 0) {
+        visStep--;
+        updateVis();
+      }
+    }
+
+    function visReset() {
+      visStep = 0;
+      updateVis();
+    }
+  </script>
+</body>
+</html>
