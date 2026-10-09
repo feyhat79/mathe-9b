@@ -810,7 +810,7 @@
             <strong>Der fundamentale Unterschied zwischen ODER ($\lor$) und XOR ($\oplus$):</strong><br>
             Beim normalen <strong>ODER (OR, $\lor$)</strong> ist der Ausgang auch dann $1$, wenn <em>beide</em> Eingänge $1$ sind ($1 \lor 1 = 1$).<br>
             Beim <strong>exklusiven ODER (XOR, $\oplus$, „Plus mit Kringel“)</strong> schaltet der Ausgang ab, wenn beide $1$ sind ($1 \oplus 1 = 0$). 
-            Daher entspricht XOR exakt der <strong>Summenspalte</strong> bei der binären Addition!
+            Daher liefert XOR genau dann eine $1$, wenn sich die beiden Eingangswerte unterscheiden ($A \neq B$).
           </div>
         </div>
 
@@ -948,93 +948,225 @@
           Klassenarbeits-Training: Aufgaben &amp; Musterlösungen (Teil 2)
         </div>
 
-        <!-- AUFGABE 4: Schaltungsanalyse -->
+        <!-- AUFGABE 4: Schaltungsanalyse 1 -->
         <div class="task-block">
           <div class="task-header-row">
-            <span class="task-label">Aufgabe 4: Schaltungsanalyse (Schaltplan → Schalttafel)</span>
-            <span class="task-pts">8 Punkte</span>
+            <span class="task-label">Aufgabe 4: Schaltungsanalyse (Schaltplan → Formel &amp; Schalttafel)</span>
+            <span class="task-pts">7 Punkte</span>
           </div>
           <div class="task-desc">
-            Gegeben ist folgende Schaltung mit den drei Eingängen $A, B, C$. 
-            Leite die Zwischenergebnisse $Z_1, Z_2$ her und vervollständige die Schalttafel:
+            Gegeben ist folgende Schaltung mit den drei Eingängen $A, B, C$.<br>
+            a) Lies die Zwischenterme $Z_1, Z_2$ ab und notiere die <strong>vollständige logische Formel</strong> für den Ausgang $Y$.<br>
+            b) Fülle die Schalttafel (Wahrheitstabelle) für alle 8 Eingangskombinationen aus.
           </div>
 
-          <div style="text-align: center; margin: 4px 0 6px 0;">
-            <svg width="360" height="95" viewBox="0 0 360 95">
-              <!-- Inputs -->
-              <text x="10" y="24" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">A</text>
-              <text x="10" y="52" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">B</text>
-              <text x="10" y="80" font-family="'JetBrains Mono'" font-size="11" font-weight="bold">C</text>
-              <!-- Lines to AND -->
-              <line x1="25" y1="20" x2="65" y2="20" stroke="#0f172a" stroke-width="2" />
-              <line x1="25" y1="48" x2="65" y2="48" stroke="#0f172a" stroke-width="2" />
-              <!-- AND Gate -->
-              <path d="M 65,10 L 90,10 A 19,19 0 0,1 90,58 L 65,58 Z" fill="#fff" stroke="#0f172a" stroke-width="2" />
-              <text x="70" y="38" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="bold" fill="#64748b">UND</text>
-              <line x1="109" y1="34" x2="190" y2="34" stroke="#0f172a" stroke-width="2" />
-              <text x="130" y="28" font-family="'JetBrains Mono'" font-size="9" font-weight="bold" fill="#0d9488">Z₁ = A ∧ B</text>
-              <!-- NOT Gate on C -->
-              <line x1="25" y1="76" x2="85" y2="76" stroke="#0f172a" stroke-width="2" />
-              <polygon points="85,64 110,76 85,88" fill="#fff" stroke="#0f172a" stroke-width="2" />
-              <circle cx="114" cy="76" r="3.5" fill="#fff" stroke="#0f172a" stroke-width="2" />
-              <line x1="118" y1="76" x2="190" y2="76" stroke="#0f172a" stroke-width="2" />
-              <line x1="190" y1="76" x2="205" y2="52" stroke="#0f172a" stroke-width="2" />
-              <text x="135" y="88" font-family="'JetBrains Mono'" font-size="9" font-weight="bold" fill="#2563eb">Z₂ = ¬C</text>
-              <!-- OR Gate -->
-              <path d="M 195,20 Q 220,20 245,43 Q 220,66 195,66 Q 207,43 195,20 Z" fill="#fff" stroke="#0f172a" stroke-width="2" />
-              <text x="208" y="47" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="bold" fill="#64748b">ODER</text>
-              <!-- Output Y -->
-              <line x1="245" y1="43" x2="300" y2="43" stroke="#0f172a" stroke-width="2" />
-              <circle cx="308" cy="43" r="7" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
-              <text x="325" y="47" font-family="'JetBrains Mono'" font-size="12" font-weight="bold">Y</text>
-            </svg>
-          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1.15fr; gap: 12px; align-items: center; margin: 4px 0;">
+            <div style="text-align: center;">
+              <svg width="270" height="85" viewBox="0 0 270 85">
+                <!-- Inputs -->
+                <text x="6" y="20" font-family="'JetBrains Mono'" font-size="10" font-weight="bold">A</text>
+                <text x="6" y="44" font-family="'JetBrains Mono'" font-size="10" font-weight="bold">B</text>
+                <text x="6" y="70" font-family="'JetBrains Mono'" font-size="10" font-weight="bold">C</text>
+                <!-- Lines to AND -->
+                <line x1="20" y1="16" x2="50" y2="16" stroke="#0f172a" stroke-width="1.8" />
+                <line x1="20" y1="40" x2="50" y2="40" stroke="#0f172a" stroke-width="1.8" />
+                <!-- AND Gate -->
+                <path d="M 50,8 L 70,8 A 16,16 0 0,1 70,48 L 50,48 Z" fill="#fff" stroke="#0f172a" stroke-width="1.8" />
+                <text x="54" y="32" font-family="'Plus Jakarta Sans'" font-size="8" font-weight="bold" fill="#64748b">UND</text>
+                <line x1="86" y1="28" x2="145" y2="28" stroke="#0f172a" stroke-width="1.8" />
+                <text x="95" y="22" font-family="'JetBrains Mono'" font-size="8" font-weight="bold" fill="#0d9488">Z₁=A∧B</text>
+                <!-- NOT Gate on C -->
+                <line x1="20" y1="66" x2="60" y2="66" stroke="#0f172a" stroke-width="1.8" />
+                <polygon points="60,56 80,66 60,76" fill="#fff" stroke="#0f172a" stroke-width="1.8" />
+                <circle cx="83" cy="66" r="3" fill="#fff" stroke="#0f172a" stroke-width="1.8" />
+                <line x1="86" y1="66" x2="145" y2="66" stroke="#0f172a" stroke-width="1.8" />
+                <line x1="145" y1="66" x2="158" y2="46" stroke="#0f172a" stroke-width="1.8" />
+                <text x="95" y="60" font-family="'JetBrains Mono'" font-size="8" font-weight="bold" fill="#2563eb">Z₂=¬C</text>
+                <!-- OR Gate -->
+                <path d="M 150,18 Q 170,18 190,37 Q 170,56 150,56 Q 160,37 150,18 Z" fill="#fff" stroke="#0f172a" stroke-width="1.8" />
+                <text x="160" y="41" font-family="'Plus Jakarta Sans'" font-size="8" font-weight="bold" fill="#64748b">ODER</text>
+                <!-- Output Y -->
+                <line x1="190" y1="37" x2="230" y2="37" stroke="#0f172a" stroke-width="1.8" />
+                <circle cx="236" cy="37" r="6" fill="#f8fafc" stroke="#0f172a" stroke-width="1.8" />
+                <text x="248" y="40" font-family="'JetBrains Mono'" font-size="10" font-weight="bold">Y</text>
+              </svg>
+            </div>
 
-          <div class="solution-box">
-            <div class="solution-title">Musterlösung: Schalttabelle</div>
-            <div class="solution-content">
-              <table class="calc-table" style="font-size: 8.5pt;">
-                <thead>
-                  <tr>
-                    <th>A</th><th>B</th><th>C</th>
-                    <th style="color:#0f766e;">Z₁ = A ∧ B</th>
-                    <th style="color:#1e40af;">Z₂ = ¬C</th>
-                    <th style="background:#fef2f2; color:#991b1b;">Y = Z₁ ∨ Z₂</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
-                  <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
-                  <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
-                  <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
-                  <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
-                  <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
-                  <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
-                  <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td><strong class="sol-highlight">1</strong></td></tr>
-                </tbody>
-              </table>
+            <div class="solution-box" style="margin-top:0;">
+              <div class="solution-title">Musterlösung: Formel &amp; Schalttabelle</div>
+              <div class="solution-content">
+                <strong>a) Logische Formel:</strong> &nbsp;<span class="sol-highlight">Y = (A ∧ B) ∨ ¬C</span> &nbsp;($Z_1 = A \land B$, $Z_2 = \neg C$)<br>
+                <strong>b) Wahrheitstabelle:</strong>
+                <table class="calc-table" style="font-size: 7.5pt; margin-top: 2px;">
+                  <thead>
+                    <tr><th>A</th><th>B</th><th>C</th><th>Z₁</th><th>Z₂</th><th style="background:#fef2f2; color:#991b1b;">Y</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                    <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong class="sol-highlight">0</strong></td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td><strong class="sol-highlight">1</strong></td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td><strong class="sol-highlight">1</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- AUFGABE 5: Schaltungssynthese -->
+        <!-- AUFGABE 5: Schaltungsanalyse 2 (Unterrichts-Schaltung) -->
         <div class="task-block">
           <div class="task-header-row">
-            <span class="task-label">Aufgabe 5: Schaltungssynthese (Sachaufgabe → Schaltung)</span>
+            <span class="task-label">Aufgabe 5: Schaltungsanalyse (Unterrichts-Schaltung → Formel)</span>
             <span class="task-pts">6 Punkte</span>
           </div>
           <div class="task-desc">
-            Eine Bandsäge in der Holzwerkstatt darf nur starten ($M=1$), wenn der <strong>Hauptschalter</strong> eingeschaltet ist ($H=1$) 
-            <strong>UND</strong> mindestens <strong>eine der beiden Schutzhauben</strong> ($S_1=1$ ODER $S_2=1$) geschlossen ist.<br>
-            a) Notiere den logischen Term mit Formelsymbolen.<br>
-            b) Skizziere die Schaltung mit den passenden Grundgattern.
+            Gegeben ist die Schaltung aus der Unterrichtsstunde mit den Eingängen $A, B, C$.<br>
+            Leite die Formeln an den Zwischenstufen her und gib die <strong>vollständige logische Formel</strong> für den Ausgang $Y$ an:
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1.15fr; gap: 12px; align-items: center; margin: 4px 0;">
+            <div style="text-align: center;">
+              <svg width="270" height="90" viewBox="0 0 270 90">
+                <!-- Inputs -->
+                <text x="5" y="16" font-family="'JetBrains Mono'" font-size="9" font-weight="bold">A</text>
+                <text x="5" y="40" font-family="'JetBrains Mono'" font-size="9" font-weight="bold">B</text>
+                <text x="5" y="70" font-family="'JetBrains Mono'" font-size="9" font-weight="bold">C</text>
+                <!-- A to AND -->
+                <line x1="16" y1="14" x2="58" y2="14" stroke="#0f172a" stroke-width="1.6" />
+                <!-- B with branch -->
+                <line x1="16" y1="38" x2="30" y2="38" stroke="#0f172a" stroke-width="1.6" />
+                <circle cx="30" cy="38" r="2.5" fill="#0f172a" />
+                <line x1="30" y1="38" x2="30" y2="24" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="30" y1="24" x2="58" y2="24" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="30" y1="38" x2="70" y2="38" stroke="#0f172a" stroke-width="1.6" />
+                <!-- C to NOT -->
+                <line x1="16" y1="68" x2="32" y2="68" stroke="#0f172a" stroke-width="1.6" />
+                <polygon points="32,60 48,68 32,76" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <circle cx="51" cy="68" r="2.5" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="54" y1="68" x2="62" y2="68" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="62" y1="68" x2="62" y2="52" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="62" y1="52" x2="70" y2="52" stroke="#0f172a" stroke-width="1.6" />
+                <!-- AND Gate -->
+                <path d="M 58,8 L 74,8 A 12,12 0 0,1 74,30 L 58,30 Z" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <text x="61" y="21" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">UND</text>
+                <line x1="86" y1="19" x2="128" y2="19" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="128" y1="19" x2="138" y2="36" stroke="#0f172a" stroke-width="1.6" />
+                <!-- XOR Gate -->
+                <path d="M 68,34 Q 74,45 68,56" fill="none" stroke="#0f172a" stroke-width="1.6" />
+                <path d="M 72,34 Q 85,34 100,45 Q 85,56 72,56 Q 78,45 72,34 Z" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <text x="76" y="48" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">XOR</text>
+                <line x1="100" y1="45" x2="128" y2="45" stroke="#0f172a" stroke-width="1.6" />
+                <line x1="128" y1="45" x2="138" y2="44" stroke="#0f172a" stroke-width="1.6" />
+                <!-- OR Gate -->
+                <path d="M 134,30 Q 150,30 166,40 Q 150,50 134,50 Q 142,40 134,30 Z" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <text x="142" y="43" font-family="'Plus Jakarta Sans'" font-size="7" font-weight="bold" fill="#64748b">ODER</text>
+                <line x1="166" y1="40" x2="182" y2="40" stroke="#0f172a" stroke-width="1.6" />
+                <!-- Final NOT -->
+                <polygon points="182,34 196,40 182,46" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <circle cx="199" cy="40" r="2.5" fill="#fff" stroke="#0f172a" stroke-width="1.6" />
+                <!-- Lamp -->
+                <line x1="202" y1="40" x2="225" y2="40" stroke="#0f172a" stroke-width="1.6" />
+                <circle cx="232" cy="40" r="6" fill="#f8fafc" stroke="#0f172a" stroke-width="1.6" />
+                <text x="244" y="43" font-family="'JetBrains Mono'" font-size="10" font-weight="bold">Y</text>
+              </svg>
+            </div>
+
+            <div class="solution-box" style="margin-top:0;">
+              <div class="solution-title">Musterlösung &amp; Herleitung:</div>
+              <div class="solution-content">
+                <strong>1. Oberer Zweig:</strong> $A \land B$ (UND-Gatter).<br>
+                <strong>2. Unterer Zweig:</strong> $B \oplus \neg C$ (XOR mit invertiertem $C$).<br>
+                <strong>3. ODER-Verknüpfung:</strong> $(A \land B) \lor (B \oplus \neg C)$.<br>
+                <strong>4. Inverter am Ausgang:</strong> &nbsp;<span class="sol-highlight">Y = ¬((A ∧ B) ∨ (B ⊕ ¬C))</span><br>
+                <em>Ergebnis:</em> $Y=1$ für die Zeilen $001_2, 010_2, 101_2$; sonst immer $0$.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUFGABE 6: Schaltungsentwurf aus Formeln -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 6: Schaltungsentwurf (Formel → Schaltplan)</span>
+            <span class="task-pts">7 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Entwirf zu den beiden Formeln aus dem Unterricht jeweils den vollständigen Schaltplan mit passenden Grundgattern:<br>
+            a) $\mathbf{Y = (A \lor B) \land C}$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            b) $\mathbf{Y = (( \neg A \oplus B ) \lor C ) \land A}$
           </div>
           <div class="solution-box">
-            <div class="solution-title">Musterlösung &amp; Rechenweg:</div>
+            <div class="solution-title">Musterlösung &amp; Schaltungsaufbau:</div>
             <div class="solution-content">
-              <strong>a) Logischer Funktionsterm:</strong> &nbsp;<span class="sol-highlight">M = H ∧ (S₁ ∨ S₂)</span> &nbsp;(Klammern beachten!)<br>
-              <strong>b) Schaltungsaufbau:</strong> Die Eingänge $S_1$ und $S_2$ werden auf ein <strong>ODER-Gatter</strong> geführt. 
-              Dessen Ausgang wird zusammen mit $H$ auf ein nachgeschaltetes <strong>UND-Gatter</strong> gelegt, dessen Ausgang den Motor $M$ steuert.
+              <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 14px;">
+                <div>
+                  <strong>a) Zu $Y = (A \lor B) \land C$:</strong><br>
+                  • $A$ und $B$ werden im <strong>ODER-Gatter</strong> verknüpft.<br>
+                  • Dessen Ausgang geht zusammen mit $C$ in das <strong>UND-Gatter</strong>.
+                  <div style="text-align:center; margin-top:3px;">
+                    <svg width="200" height="55" viewBox="0 0 200 55">
+                      <text x="4" y="14" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">A</text>
+                      <text x="4" y="32" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">B</text>
+                      <text x="4" y="50" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">C</text>
+                      <line x1="14" y1="12" x2="42" y2="12" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="14" y1="30" x2="42" y2="30" stroke="#0f172a" stroke-width="1.5" />
+                      <path d="M 42,6 Q 56,6 68,21 Q 56,36 42,36 Q 48,21 42,6 Z" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="68" y1="21" x2="105" y2="21" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="14" y1="48" x2="95" y2="48" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="95" y1="48" x2="105" y2="33" stroke="#0f172a" stroke-width="1.5" />
+                      <path d="M 105,14 L 120,14 A 12,12 0 0,1 120,38 L 105,38 Z" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="132" y1="26" x2="160" y2="26" stroke="#0f172a" stroke-width="1.5" />
+                      <circle cx="166" cy="26" r="5" fill="#f8fafc" stroke="#0f172a" stroke-width="1.5" />
+                      <text x="176" y="29" font-family="'JetBrains Mono'" font-size="9" font-weight="bold">Y</text>
+                    </svg>
+                  </div>
+                </div>
+                <div>
+                  <strong>b) Zu $Y = (( \neg A \oplus B ) \lor C ) \land A$:</strong><br>
+                  • $A$ vor dem Inverter abzweigen ($\bullet$); oberer Strang direkt zum UND-Gatter.<br>
+                  • $\neg A$ und $B$ auf XOR-Gatter $\rightarrow$ mit $C$ auf ODER-Gatter $\rightarrow$ mit $A$ auf UND.
+                  <div style="text-align:center; margin-top:3px;">
+                    <svg width="240" height="55" viewBox="0 0 240 55">
+                      <text x="4" y="10" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">A</text>
+                      <text x="4" y="30" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">B</text>
+                      <text x="4" y="50" font-family="'JetBrains Mono'" font-size="8" font-weight="bold">C</text>
+                      <line x1="14" y1="8" x2="26" y2="8" stroke="#0f172a" stroke-width="1.5" />
+                      <circle cx="26" cy="8" r="2" fill="#0f172a" />
+                      <!-- Top line to AND -->
+                      <line x1="26" y1="8" x2="175" y2="8" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="175" y1="8" x2="175" y2="24" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="175" y1="24" x2="185" y2="24" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- NOT A -->
+                      <line x1="26" y1="8" x2="26" y2="20" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="26" y1="20" x2="35" y2="20" stroke="#0f172a" stroke-width="1.5" />
+                      <polygon points="35,15 45,20 35,25" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <circle cx="47" cy="20" r="1.8" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="49" y1="20" x2="68" y2="20" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- B to XOR -->
+                      <line x1="14" y1="29" x2="68" y2="29" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- XOR Gate -->
+                      <path d="M 66,16 Q 71,25 66,34" fill="none" stroke="#0f172a" stroke-width="1.5" />
+                      <path d="M 69,16 Q 79,16 90,25 Q 79,34 69,34 Q 74,25 69,16 Z" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="90" y1="25" x2="118" y2="25" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="118" y1="25" x2="125" y2="30" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- C to OR -->
+                      <line x1="14" y1="48" x2="115" y2="48" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="115" y1="48" x2="125" y2="38" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- OR Gate -->
+                      <path d="M 125,24 Q 137,24 148,34 Q 137,44 125,44 Q 130,34 125,24 Z" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="148" y1="34" x2="185" y2="34" stroke="#0f172a" stroke-width="1.5" />
+                      <!-- Final AND -->
+                      <path d="M 185,18 L 198,18 A 10,10 0 0,1 198,38 L 185,38 Z" fill="#fff" stroke="#0f172a" stroke-width="1.5" />
+                      <line x1="208" y1="28" x2="220" y2="28" stroke="#0f172a" stroke-width="1.5" />
+                      <circle cx="225" cy="28" r="4.5" fill="#f8fafc" stroke="#0f172a" stroke-width="1.5" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
