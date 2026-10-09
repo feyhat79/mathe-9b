@@ -596,77 +596,63 @@
           <thead>
             <tr>
               <th class="check-box-col">Status</th>
-              <th style="width: 25%;">Themenbereich</th>
+              <th style="width: 27%;">Kompetenzbereich</th>
               <th>Konkrete Kompetenzbeschreibung („Ich kann...“)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">1. Fakten &amp; CWA<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 1</span></td>
-              <td>Ich kann den Unterschied zwischen <strong>Atomen</strong> (Kleinbuchstabe) und <strong>Variablen</strong> (Großbuchstabe) erklären und Fakten mit korrekter Stelligkeit (z. B. <code class="code-pill">vater/2</code>) fehlerfrei deklarieren.</td>
+              <td class="check-cat">
+                1. Fachbegriffe &amp; Grundlagen<br>
+                <span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Begriffs-TÜV</span>
+              </td>
+              <td style="line-height: 1.45;">
+                Ich kenne und erkläre die zentralen Fachbegriffe der logischen Programmierung: <strong>Fakten</strong>, <strong>Atome</strong> (beginnen klein), <strong>Variablen</strong> (beginnen groß), <strong>Regeln</strong> (<code class="code-pill">:-</code>), <strong>Prädikate &amp; Stelligkeit</strong> (z. B. <code class="code-pill">vater/2</code>), <strong>Inferenz</strong> (automatisches logisches Schließen) sowie die <strong>Closed World Assumption (CWA)</strong>.
+              </td>
             </tr>
             <tr>
               <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">1. Fakten &amp; CWA</td>
-              <td>Ich kann das Prinzip der <strong>Closed World Assumption (CWA)</strong> definieren und begründen, warum Prolog bei unvollständigem oder fehlendem Wissen stets mit <code class="code-pill">false.</code> antwortet.</td>
+              <td class="check-cat">
+                2. Wissensbasis anlegen &amp; erweitern<br>
+                <span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Fakten &amp; Anfragen</span>
+              </td>
+              <td style="line-height: 1.45;">
+                Ich kann reale Sachverhalte und Beziehungen fehlerfrei als logische <strong>Fakten</strong> deklarieren, eine bestehende Wissensbasis gezielt erweitern und durch präzise <strong>Ja/Nein-Anfragen</strong> sowie <strong>Variablen-Anfragen</strong> (samt Backtracking mit <code class="code-pill">;</code>) abfragen und die Ausgabe vorhersagen.
+              </td>
             </tr>
             <tr>
               <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">1. Fakten &amp; CWA</td>
-              <td>Ich kann einfache <strong>Ja/Nein-Anfragen</strong> und <strong>Variablen-Anfragen</strong> formulieren und die Ergebnisse samt Backtracking (Taste <code class="code-pill">;</code>) vorhersagen.</td>
+              <td class="check-cat">
+                3. Regeln erstellen &amp; anwenden<br>
+                <span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Inferenz &amp; Datenfluss</span>
+              </td>
+              <td style="line-height: 1.45;">
+                Ich kann eigene Regeln mit Kopf und Körper formulieren, <strong>logisches UND</strong> (Komma <code class="code-pill">,</code>) und <strong>logisches ODER</strong> (mehrere Regeln) einsetzen, den <strong>Datenfluss über Zwischenvariablen</strong> (Stafetten-Prinzip) steuern und Schutzschranken (<code class="code-pill">\=</code>) sowie die <strong>anonyme Variable</strong> (<code class="code-pill">_</code>) gezielt platzieren.
+              </td>
             </tr>
             <tr>
               <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">2. Regeln &amp; Logik<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 2</span></td>
-              <td>Ich kann den Aufbau einer Inferenzregel (<code class="code-pill">Kopf :- Körper.</code>) erklären und alltagssprachliche Sachverhalte in logische Regeln übersetzen.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">2. Regeln &amp; Logik</td>
-              <td>Ich kann logische <strong>UND-Verknüpfungen</strong> (Komma <code class="code-pill">,</code>) und logische <strong>ODER-Verknüpfungen</strong> (mehrere Regeln mit identischem Kopf) fehlerfrei implementieren.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">3. Datenfluss &amp; Schranken<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 3</span></td>
-              <td>Ich kann das <strong>Stafetten-Prinzip</strong> erklären: Daten fließen ohne <code class="code-pill">return</code> ausschließlich über gleiche Variablennamen von links nach rechts durch den Regelkörper.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">3. Datenfluss &amp; Schranken</td>
-              <td>Ich kann das <strong>Identitätsproblem</strong> erläutern (Prolog darf zwei verschiedenen Variablen denselben Wert zuweisen) und die Schutzschranke <code class="code-pill">\=</code> gezielt am Ende des Regelkörpers platzieren.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">3. Datenfluss &amp; Schranken</td>
-              <td>Ich kann die <strong>anonyme Variable <code class="code-pill">_</code></strong> für reine Existenzprüfungen einsetzen und begründen, warum zwei Unterstriche im Gegensatz zu Variablen keine Gleichheit erzwingen.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">4. Rekursion &amp; Pfade<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 4</span></td>
-              <td>Ich kann begründen, warum starre Regeln bei beliebigen Generationentiefen versagen und das <strong>2-Säulen-Prinzip</strong> (Basisfall &amp; Rekursionsschritt) fehlerfrei deklarieren.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">4. Rekursion &amp; Pfade</td>
-              <td>Ich kann rekursive Anfragen in einer <strong>Tracing-Tabelle</strong> Schritt für Schritt protokollieren (Aufruf-Ebene, Teilziel-Prüfung, Variablenbindung von $Z$ und Rücklauf).</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">4. Rekursion &amp; Pfade</td>
-              <td>Ich kann die verheerende Wirkung einer <strong>Linksrekursion</strong> (Endlosschleife / Stack Overflow) fachsprachlich analysieren und den Code korrigieren.</td>
-            </tr>
-            <tr>
-              <td class="check-box-col"><span class="check-box-square"></span></td>
-              <td class="check-cat">4. Rekursion &amp; Pfade</td>
-              <td>Ich kann das rekursive Muster von Stammbäumen auf unbekannte Netze (z. B. Schienen-, U-Bahn- oder Datennetze mit <code class="code-pill">kante/2</code>) transferieren.</td>
+              <td class="check-cat">
+                4. Rekursion<br>
+                <span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Beliebige Tiefen &amp; Netze</span>
+              </td>
+              <td style="line-height: 1.45;">
+                Ich kann das <strong>2-Säulen-Prinzip</strong> (Basisfall &amp; Rekursionsschritt) anwenden, um beliebige Stammbaumtiefen oder Netzwerkpfade zu durchlaufen, Anfragen in <strong>Tracing-Tabellen</strong> schrittweise nachvollziehen, <strong>Linksrekursion</strong> (Stack Overflow) vermeiden und das Prinzip auf neue Netze übertragen.
+              </td>
             </tr>
           </tbody>
         </table>
 
+        <!-- BEGRIFFS-CHECK BOX -->
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:5px; padding:7px 11px; margin-top:8px; font-size:8.8pt; color:#1e3a8a;">
+          <strong>Begriffs-Check:</strong> 
+          <strong>Fakten</strong> sind das Grundwissen • <strong>Regeln</strong> sind die Denkgesetze • <strong>Inferenz</strong> ist der automatische Denkprozess der Engine, der aus beidem neues Wissen ableitet!
+        </div>
+
         <!-- TIPP-BOX -->
-        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:5px; padding:6px 10px; font-size:8.8pt; color:#065f46;">
-          <strong>Lerntipp für die Vorbereitung:</strong> Gehe diese Checkliste durch. Wenn du bei einem Punkt unsicher bist, nutze das interaktive Webmodul auf dem iPad oder teste den Code direkt in SWISH!
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:5px; padding:7px 11px; margin-top:8px; font-size:8.8pt; color:#065f46;">
+          <strong>Lerntipp für die Vorbereitung:</strong> Gehe diese vier Bereiche durch. Wenn du bei einem Punkt unsicher bist, nutze das interaktive Webmodul auf dem iPad oder teste den Code direkt in SWISH!
         </div>
       </div>
     </div>
@@ -817,7 +803,7 @@
         <div class="task-block">
           <div class="task-header-row">
             <span class="task-label">Aufgabe 1: Fakten, Wissensbasen &amp; Closed World Assumption</span>
-            <span class="task-pts">AFB I • 5 Punkte</span>
+            <span class="task-pts">AFB I • Grundlagen</span>
           </div>
           <div class="task-desc">
             Gegeben ist folgende Wissensbasis eines Sportvereins:
@@ -848,7 +834,7 @@ trainer(meier, fussball).</div>
         <div class="task-block">
           <div class="task-header-row">
             <span class="task-label">Aufgabe 2: Regeln modellieren (Stafette, Schutzschranke &amp; Scheuklappe)</span>
-            <span class="task-pts">AFB II • 7 Punkte</span>
+            <span class="task-pts">AFB II • Modellierung</span>
           </div>
           <div class="task-desc">
             Erweitere die obige Vereins-Wissensbasis um drei neue Regeln. Beachte die Regeln für Datenfluss und Schranken:
@@ -899,7 +885,7 @@ trainer(meier, fussball).</div>
         <div class="task-block">
           <div class="task-header-row">
             <span class="task-label">Aufgabe 3: Algorithmisches Tracing-Protokoll der Rekursion</span>
-            <span class="task-pts">AFB II • 6 Punkte</span>
+            <span class="task-pts">AFB II • Tracing</span>
           </div>
           <div class="task-desc">
             Gegeben sind die 2 Säulen der Rekursion und folgende Fakten:
@@ -975,7 +961,7 @@ vorfahre(X, Y) :- elternteil(X, Z), vorfahre(Z, Y).</div>
         <div class="task-block">
           <div class="task-header-row">
             <span class="task-label">Aufgabe 4: Fehlerdiagnose &amp; Rekursions-Transfer (Netzwerke)</span>
-            <span class="task-pts">AFB III • 7 Punkte</span>
+            <span class="task-pts">AFB III • Transfer &amp; Debugging</span>
           </div>
           <div class="task-desc">
             <strong>a) Fehlerdetektive:</strong> Ein Schüler notiert zur Wegfindung im Netzwerk:<br>
