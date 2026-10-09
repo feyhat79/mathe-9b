@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infos zur 1. Kursarbeit: Kompetenzen, Handout &amp; Übungsaufgaben | Informatik Diff-10</title>
+
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische und logische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.45;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       PAGE WRAPPER & SEITENAUFBAU (DIN A4 NACH STANDARD)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm 9mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* ========================================================
+       HEADER (Tafel- / Schulheft-Stil)
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 4px;
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-meta {
+      font-size: 8pt;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .doc-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e3a8a; /* Füller-Königsblau */
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #334155;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* ========================================================
+       ABSCHNITTSÜBERSCHRIFTEN (12pt, Königsblau mit Ziffer)
+       ======================================================== */
+    .section-title {
+      font-size: 11.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 8px 0 5px 0;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 2px;
+    }
+
+    .section-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ========================================================
+       KOMPETENZEN-CHECKLISTE (TABELLE)
+       ======================================================== */
+    .check-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 5px 0 8px 0;
+    }
+
+    .check-table th {
+      background: #f1f5f9;
+      color: #1e3a8a;
+      padding: 3px 6px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+    }
+
+    .check-table td {
+      border: 1px solid #e2e8f0;
+      padding: 3px 6px;
+      vertical-align: middle;
+    }
+
+    .check-box-col {
+      width: 24px;
+      text-align: center;
+    }
+
+    .check-box-square {
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid #64748b;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .check-cat {
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      width: 24%;
+      font-size: 8.8pt;
+    }
+
+    /* ========================================================
+       DER ROTE MERKSATZ-KASTEN (GEMINI.md Standard)
+       ======================================================== */
+    .merke-box {
+      border: 2.5px solid #dc2626; /* Roter Rand */
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 7px 11px;
+      margin: 7px 0 6px 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -9px;
+      left: 12px;
+      background: #dc2626;
+      color: white;
+      font-size: 7pt;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .merke-content {
+      color: #111827; /* Schwarz / dunkel, niemals rot! */
+      font-size: 9.5pt;
+      line-height: 1.35;
+    }
+
+    /* ========================================================
+       THEORIE-KARTEN & CODEBOXEN
+       ======================================================== */
+    .theory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .theory-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 9px;
+      background: #ffffff;
+      font-size: 9.2pt;
+      line-height: 1.35;
+    }
+
+    .theory-card-header {
+      font-weight: 700;
+      font-size: 9.8pt;
+      color: #1e3a8a;
+      margin-bottom: 3px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .theory-tag {
+      font-size: 7.2pt;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      font-weight: 600;
+    }
+
+    .var-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      font-weight: 700;
+    }
+
+    .code-box-mini {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.2pt;
+      padding: 4px 7px;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 4px 0;
+      white-space: pre-wrap;
+    }
+
+    /* Tabellen */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.8pt;
+      margin: 4px 0;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 3px 5px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+    }
+
+    .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 5px;
+      vertical-align: middle;
+      line-height: 1.3;
+    }
+
+    /* ========================================================
+       AUFGABEN & LÖSUNGEN (STATISCH LESBAR NACH GEMINI.md 7.5)
+       ======================================================== */
+    .task-block {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 7px 10px;
+      margin-bottom: 7px;
+      background: #ffffff;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .task-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .task-label {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .task-pts {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    .task-desc {
+      font-size: 9.3pt;
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    /* Musterlösung (Lehrer-Rot / Klar hervorgehoben) */
+    .solution-box {
+      border-left: 3px solid #b91c1c;
+      background: #fdf2f2;
+      padding: 5px 9px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 4px;
+      font-size: 9pt;
+    }
+
+    .solution-title {
+      font-weight: 700;
+      font-size: 8pt;
+      color: #991b1b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .solution-content {
+      color: #111827;
+      line-height: 1.35;
+    }
+
+    .sol-highlight {
+      color: #b91c1c;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ========================================================
+       PRINT MEDIA QUERY (EXAKTER DIN-A4-EXPORT OHNE FUSSZEILEN)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 11pt !important;
+        font-family: 'Calibri', 'Segoe UI', Arial, sans-serif !important;
+      }
+
+      .no-print, .screen-toolbar {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        height: 275mm !important;
+        min-height: 275mm !important;
+        max-height: 275mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP SCREEN TOOLBAR (Browser-Ansicht)
+       ======================================================== -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-btn-nav">← Übersicht Diff-10</a>
+      <a href="prolog-rekursion.html" class="toolbar-btn-nav">Zum Rekursionsmodul</a>
+      <div class="toolbar-title">
+        <span>Infos zur 1. Kursarbeit • Handout &amp; Übungsaufgaben</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / PDF speichern (Strg+P)
+      </button>
+      <a href="Zusammenfassung_Handout_Informatik_Diff10.pdf" download class="btn-action btn-download-pdf">
+        PDF herunterladen
+      </a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- =======================================================================
+         SEITE 1: RAHMENDATEN & KOMPETENZEN-CHECKLISTE ("ICH KANN...")
+         ======================================================================= -->
+    <div class="page" id="page1">
+      <div>
+        <!-- HEADER -->
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Informatik Differenzierung • Klasse 10 • Schuljahr 2026/27</div>
+            <h1 class="doc-title">1. Kursarbeit: Vorbereitung, Kompetenzen &amp; Handout</h1>
+            <div class="doc-subtitle">Deklarative Programmierung in Prolog: Fakten, Inferenzregeln, Datenfluss &amp; Rekursion</div>
+          </div>
+          <div class="badge-doc">
+            <strong>Prüfungsleitfaden</strong><br>
+            90 Minuten
+          </div>
+        </header>
+
+        <!-- RAHMENDATEN-BOX -->
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:5px; padding:6px 10px; margin-bottom:8px; font-size:9pt; display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+          <div><strong>Dauer:</strong> 90 Min. (Doppelstunde)</div>
+          <div><strong>Termin:</strong> Nächste Woche</div>
+          <div><strong>Hilfsmittel:</strong> Stift, Konzeptpapier (keine Spickzettel)</div>
+        </div>
+
+        <div style="font-size:8.8pt; color:#475569; margin-bottom:6px;">
+          <strong>Aufbau der Arbeit:</strong> Die Kursarbeit deckt die drei Anforderungsbereiche ab: <strong>AFB I</strong> (Wissen wiedergeben &amp; Syntax), <strong>AFB II</strong> (Modellieren von Regeln, Datenfluss &amp; Tracing-Tabellen) sowie <strong>AFB III</strong> (Fehlerdiagnose / Debugging von Rekursionsfallen &amp; Transfer).
+        </div>
+
+        <!-- ABSCHNITT 1: KOMPETENZENRASTER ("ICH KANN...") -->
+        <div class="section-title">
+          <span class="section-num">1</span>
+          <span>Offizielle Kompetenzenliste („Ich kann...“) zur Prüfungsvorbereitung</span>
+        </div>
+
+        <table class="check-table">
+          <thead>
+            <tr>
+              <th class="check-box-col">Status</th>
+              <th style="width: 25%;">Themenbereich</th>
+              <th>Konkrete Kompetenzbeschreibung („Ich kann...“)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">1. Fakten &amp; CWA<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 1</span></td>
+              <td>Ich kann den Unterschied zwischen <strong>Atomen</strong> (Kleinbuchstabe) und <strong>Variablen</strong> (Großbuchstabe) erklären und Fakten mit korrekter Stelligkeit (z. B. <code class="code-pill">vater/2</code>) fehlerfrei deklarieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">1. Fakten &amp; CWA</td>
+              <td>Ich kann das Prinzip der <strong>Closed World Assumption (CWA)</strong> definieren und begründen, warum Prolog bei unvollständigem oder fehlendem Wissen stets mit <code class="code-pill">false.</code> antwortet.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">1. Fakten &amp; CWA</td>
+              <td>Ich kann einfache <strong>Ja/Nein-Anfragen</strong> und <strong>Variablen-Anfragen</strong> formulieren und die Ergebnisse samt Backtracking (Taste <code class="code-pill">;</code>) vorhersagen.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">2. Regeln &amp; Logik<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 2</span></td>
+              <td>Ich kann den Aufbau einer Inferenzregel (<code class="code-pill">Kopf :- Körper.</code>) erklären und alltagssprachliche Sachverhalte in logische Regeln übersetzen.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">2. Regeln &amp; Logik</td>
+              <td>Ich kann logische <strong>UND-Verknüpfungen</strong> (Komma <code class="code-pill">,</code>) und logische <strong>ODER-Verknüpfungen</strong> (mehrere Regeln mit identischem Kopf) fehlerfrei implementieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">3. Datenfluss &amp; Schranken<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 3</span></td>
+              <td>Ich kann das <strong>Stafetten-Prinzip</strong> erklären: Daten fließen ohne <code class="code-pill">return</code> ausschließlich über gleiche Variablennamen von links nach rechts durch den Regelkörper.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">3. Datenfluss &amp; Schranken</td>
+              <td>Ich kann das <strong>Identitätsproblem</strong> erläutern (Prolog darf zwei verschiedenen Variablen denselben Wert zuweisen) und die Schutzschranke <code class="code-pill">\=</code> gezielt am Ende des Regelkörpers platzieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">3. Datenfluss &amp; Schranken</td>
+              <td>Ich kann die <strong>anonyme Variable <code class="code-pill">_</code></strong> für reine Existenzprüfungen einsetzen und begründen, warum zwei Unterstriche im Gegensatz zu Variablen keine Gleichheit erzwingen.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">4. Rekursion &amp; Pfade<br><span style="font-size:7.5pt; color:#64748b; font-weight:normal;">Stunde 4</span></td>
+              <td>Ich kann begründen, warum starre Regeln bei beliebigen Generationentiefen versagen und das <strong>2-Säulen-Prinzip</strong> (Basisfall &amp; Rekursionsschritt) fehlerfrei deklarieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">4. Rekursion &amp; Pfade</td>
+              <td>Ich kann rekursive Anfragen in einer <strong>Tracing-Tabelle</strong> Schritt für Schritt protokollieren (Aufruf-Ebene, Teilziel-Prüfung, Variablenbindung von $Z$ und Rücklauf).</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">4. Rekursion &amp; Pfade</td>
+              <td>Ich kann die verheerende Wirkung einer <strong>Linksrekursion</strong> (Endlosschleife / Stack Overflow) fachsprachlich analysieren und den Code korrigieren.</td>
+            </tr>
+            <tr>
+              <td class="check-box-col"><span class="check-box-square"></span></td>
+              <td class="check-cat">4. Rekursion &amp; Pfade</td>
+              <td>Ich kann das rekursive Muster von Stammbäumen auf unbekannte Netze (z. B. Schienen-, U-Bahn- oder Datennetze mit <code class="code-pill">kante/2</code>) transferieren.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TIPP-BOX -->
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:5px; padding:6px 10px; font-size:8.8pt; color:#065f46;">
+          <strong>Lerntipp für die Vorbereitung:</strong> Gehe diese Checkliste durch. Wenn du bei einem Punkt unsicher bist, nutze das interaktive Webmodul auf dem iPad oder teste den Code direkt in SWISH!
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         SEITE 2: THEORETISCHES MERKE-HANDOUT (DER WISSENS-SPICKZETTEL)
+         ======================================================================= -->
+    <div class="page" id="page2">
+      <div>
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Informatik Differenzierung 10 • Handout zur 1. Kursarbeit</div>
+            <h1 class="doc-title">Das kompakte Prolog-Merkblatt (Kernkonzepte)</h1>
+          </div>
+          <div class="badge-doc">Theorie-Kompendium</div>
+        </header>
+
+        <!-- ABSCHNITT 2: DIE GRUNDLAGEN -->
+        <div class="section-title">
+          <span class="section-num">2</span>
+          <span>Syntax-Grundregeln &amp; Vokabular</span>
+        </div>
+
+        <div class="theory-grid">
+          <div class="theory-card">
+            <div class="theory-card-header">
+              <span>Atome vs. Variablen</span>
+              <span class="theory-tag">Syntax</span>
+            </div>
+            • <strong>Atome (Konstanten):</strong> Beginnen zwingend mit <u>Kleinbuchstaben</u>: <code class="code-pill">zeus</code>, <code class="code-pill">ares</code>, <code class="code-pill">diff10</code>.<br>
+            • <strong>Variablen (Platzhalter):</strong> Beginnen zwingend mit <u>Großbuchstaben</u>: <code class="var-pill">X</code>, <code class="var-pill">Wer</code>, <code class="var-pill">Kind</code>.<br>
+            • <strong>Prädikate &amp; Stelligkeit:</strong> Name klein, Anzahl Argumente in Klammern: <code class="code-pill">vater/2</code>, <code class="code-pill">weiblich/1</code>.
+          </div>
+
+          <div class="theory-card">
+            <div class="theory-card-header">
+              <span>Operatoren &amp; Satzzeichen</span>
+              <span class="theory-tag">Logik</span>
+            </div>
+            • <code class="code-pill">:-</code> bedeutet <em>„WENN“</em> (trennt Regelkopf von Körper).<br>
+            • Komma <code class="code-pill">,</code> bedeutet logisches <strong>UND</strong> (Konjunktion).<br>
+            • Mehrere Regeln mit gleichem Kopf bedeuten logisches <strong>ODER</strong>.<br>
+            • Jeder Satz endet mit einem <strong>Punkt <code class="code-pill">.</code></strong>!
+          </div>
+        </div>
+
+        <!-- ABSCHNITT 3: DIE DREI INFERENZ-GESETZE -->
+        <div class="section-title">
+          <span class="section-num">3</span>
+          <span>Die 3 Goldenen Inferenz-Gesetze</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:7px;">
+          <div class="theory-card" style="border-top:3px solid #1e3a8a;">
+            <div style="font-weight:700; color:#1e3a8a; font-size:9pt; margin-bottom:3px;">1. Stafetten-Gesetz</div>
+            <div style="font-size:8.3pt; color:#475569; margin-bottom:3px;">Datenfluss über gleiche Variablen:</div>
+            <div class="code-box-mini">grossvater(G, K) :-
+    vater(G, <span class="var-pill">E</span>),
+    elternteil(<span class="var-pill">E</span>, K).</div>
+            <div style="font-size:8.2pt; color:#0f172a;">Variable <span class="var-pill">E</span> bindet bei Ziel 1 und übergibt den Wert als Stafette an Ziel 2.</div>
+          </div>
+
+          <div class="theory-card" style="border-top:3px solid #d97706;">
+            <div style="font-weight:700; color:#d97706; font-size:9pt; margin-bottom:3px;">2. Schranken-Gesetz</div>
+            <div style="font-size:8.3pt; color:#475569; margin-bottom:3px;">Schutz vor Selbstreferenz (\=):</div>
+            <div class="code-box-mini">geschwister(X, Y) :-
+    elternteil(E, X),
+    elternteil(E, Y),
+    <span style="color:#d97706; font-weight:700;">X \= Y</span>.</div>
+            <div style="font-size:8.2pt; color:#0f172a;">Operator <code class="code-pill">\=</code> steht <u>immer am Ende</u>, wenn X und Y gebunden sind!</div>
+          </div>
+
+          <div class="theory-card" style="border-top:3px solid #059669;">
+            <div style="font-weight:700; color:#059669; font-size:9pt; margin-bottom:3px;">3. Scheuklappen-Gesetz</div>
+            <div style="font-size:8.3pt; color:#475569; margin-bottom:3px;">Anonyme Variable (_):</div>
+            <div class="code-box-mini">hat_kinder(X) :-
+    elternteil(X, <span style="font-weight:700; color:#059669;">_</span>).</div>
+            <div style="font-size:8.2pt; color:#0f172a;">Name des Kindes ist egal – nur die Existenz zählt. Jeder Unterstrich ist unabhängig!</div>
+          </div>
+        </div>
+
+        <!-- ABSCHNITT 4: DAS 2-SÄULEN-PRINZIP DER REKURSION -->
+        <div class="section-title">
+          <span class="section-num">4</span>
+          <span>Das 2-Säulen-Prinzip der Rekursion</span>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:5px; padding:7px 10px; margin-bottom:7px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div style="background:#ffffff; border:1px solid #94a3b8; border-radius:4px; padding:5px 8px;">
+              <strong style="color:#059669; font-size:9.2pt;">Säule 1: Der Basisfall (Abbruchbedingung)</strong><br>
+              <span style="font-size:8.5pt; color:#475569;">„Jeder direkte Elternteil ist sofort auch Vorfahre.“</span>
+              <div class="code-box-mini" style="margin-top:3px;">vorfahre(X, Y) :- elternteil(X, Y).</div>
+            </div>
+
+            <div style="background:#ffffff; border:1px solid #94a3b8; border-radius:4px; padding:5px 8px;">
+              <strong style="color:#1e3a8a; font-size:9.2pt;">Säule 2: Der Rekursionsschritt (Kette / Staffelstab)</strong><br>
+              <span style="font-size:8.5pt; color:#475569;">„X ist Vorfahre von Y, wenn X Elternteil von Z ist UND Z Vorfahre von Y ist.“</span>
+              <div class="code-box-mini" style="margin-top:3px;">vorfahre(X, Y) :- elternteil(X, <span class="var-pill">Z</span>), vorfahre(<span class="var-pill">Z</span>, Y).</div>
+            </div>
+          </div>
+          <div style="font-size:8.2pt; color:#334155; margin-top:4px;">
+            • <strong>Kettenglied-Modell:</strong> $X \xrightarrow{\text{elternteil}} Z \xrightarrow{\text{vorfahre (Restkette)}} Y$. In jedem Schritt wird das Problem um eine Generation kleiner!
+          </div>
+        </div>
+
+        <!-- DER ROTE MERKSATZ-KASTEN: KLAUSURFALLEN -->
+        <div class="merke-box">
+          <div class="merke-tag">MERKE</div>
+          <div style="font-weight:700; color:#dc2626; font-size:10pt; margin-bottom:2px;">
+            Die zwei tödlichen Klausurfallen (Fehlervermeidung!)
+          </div>
+          <div class="merke-content">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:3px;">
+              <div>
+                <strong>1. Linksrekursion (Left Recursion):</strong><br>
+                <code class="code-pill" style="color:#dc2626; font-size:8.2pt;">vorfahre(X, Y) :- vorfahre(X, Z), elternteil(Z, Y).</code><br>
+                <em>Fehler:</em> Prolog ruft sich sofort wieder selbst auf, bevor $Z$ gebunden ist &rarr; <strong>Endlosschleife / Stack Overflow!</strong>
+              </div>
+              <div>
+                <strong>2. Vergessener Basisfall:</strong><br>
+                Wer Säule 1 weglässt, verhindert das Erkennen direkter Elternbeziehungen &rarr; direkte Anfragen liefern fälschlicherweise <code class="code-pill" style="color:#dc2626;">false.</code>!
+              </div>
+            </div>
+            <div style="margin-top:4px; font-weight:700; color:#111827; font-size:8.8pt;">
+              • Die eiserne Klausur-Regel: Im Rekursionsschritt bindet das Fakten-Prädikat (<code class="code-pill">elternteil(X, Z)</code>) <u>immer zuerst</u> die Variable $Z$, bevor der rekursive Aufruf folgt!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         SEITE 3: PRÜFUNGS-ÜBUNGSAUFGABEN MIT LÖSUNGEN (TEIL 1)
+         ======================================================================= -->
+    <div class="page" id="page3">
+      <div>
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Informatik Differenzierung 10 • Kursarbeit Generalprobe</div>
+            <h1 class="doc-title">Prüfungs-Übungsaufgaben mit Musterlösungen (Teil 1)</h1>
+          </div>
+          <div class="badge-doc">Aufgaben &amp; Lösungen</div>
+        </header>
+
+        <!-- AUFGABE 1: FAKTEN, ANFRAGEN & CWA -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 1: Fakten, Wissensbasen &amp; Closed World Assumption</span>
+            <span class="task-pts">AFB I • 5 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Gegeben ist folgende Wissensbasis eines Sportvereins:
+          </div>
+          <div class="code-box-mini">mitglied(anna, tennis).
+mitglied(ben, fussball).
+mitglied(clara, tennis).
+trainer(huber, tennis).
+trainer(meier, fussball).</div>
+
+          <div style="font-size:9pt; margin-top:4px;">
+            <strong>a)</strong> Was antwortet Prolog auf die Anfrage <code class="code-pill">?- mitglied(clara, tennis).</code>?<br>
+            <strong>b)</strong> Was liefert die Anfrage <code class="code-pill">?- mitglied(Wer, tennis).</code> bei Tastendruck auf <code class="code-pill">;</code>?<br>
+            <strong>c)</strong> Erkläre, warum die Anfrage <code class="code-pill">?- mitglied(felix, schach).</code> mit <code class="code-pill">false.</code> beantwortet wird, obwohl Felix tatsächlich Schach spielt. Welches Prinzip liegt vor?
+          </div>
+
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung Aufgabe 1:</div>
+            <div class="solution-content">
+              <strong>a)</strong> <span class="sol-highlight">true.</span> (Der Fakt existiert wortwörtlich in der Wissensbasis).<br>
+              <strong>b)</strong> 1. Treffer: <span class="sol-highlight">Wer = anna ;</span> 2. Treffer: <span class="sol-highlight">Wer = clara.</span> (Backtracking durchsucht alle Fakten).<br>
+              <strong>c)</strong> Prolog antwortet mit <span class="sol-highlight">false.</span> aufgrund der <strong>Closed World Assumption (CWA)</strong> (Geschlossene-Welt-Annahme). Prolog geht davon aus, dass alles, was nicht in der Wissensbasis explizit steht oder logisch daraus abgeleitet werden kann, in dieser Welt nicht wahr (falsch) ist.
+            </div>
+          </div>
+        </div>
+
+        <!-- AUFGABE 2: REGELN MIT DATENFLUSS & SCHRANKEN -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 2: Regeln modellieren (Stafette, Schutzschranke &amp; Scheuklappe)</span>
+            <span class="task-pts">AFB II • 7 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Erweitere die obige Vereins-Wissensbasis um drei neue Regeln. Beachte die Regeln für Datenfluss und Schranken:
+          </div>
+
+          <div style="font-size:9pt; margin-top:3px;">
+            <strong>a)</strong> Formuliere die Regel <code class="code-pill">trainingspartner(A, B)</code>: Zwei Personen $A$ und $B$ sind Trainingspartner, wenn sie dasselbe Mitgliedsfach belegen, aber <u>nicht dieselbe Person</u> sind.<br>
+            <strong>b)</strong> Formuliere die Regel <code class="code-pill">trainer_von(T, S)</code>: $T$ ist Trainer von $S$, wenn $T$ dieselbe Sportart trainiert, die $S$ als Mitglied betreibt (nutze eine Zwischenvariable).<br>
+            <strong>c)</strong> Formuliere die Regel <code class="code-pill">ist_sportlich(X)</code> unter Verwendung der <strong>anonymen Variable</strong> <code class="code-pill">_</code>: Wahr, wenn $X$ irgendeine Sportart betreibt.
+          </div>
+
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung Aufgabe 2:</div>
+            <div class="solution-content">
+              <strong>a)</strong> Schutzschranke <code class="code-pill">\=</code> verhindert, dass Anna ihre eigene Trainingspartnerin ist:
+              <div class="code-box-mini" style="background:#ffffff; border-color:#fca5a5;">trainingspartner(A, B) :- 
+    mitglied(A, S), 
+    mitglied(B, S), 
+    <span class="sol-highlight">A \= B</span>.</div>
+              <strong>b)</strong> Datenfluss über die Zwischenvariable <span class="var-pill">Sport</span>:
+              <div class="code-box-mini" style="background:#ffffff; border-color:#fca5a5;">trainer_von(T, S) :- 
+    trainer(T, <span class="var-pill">Sport</span>), 
+    mitglied(S, <span class="var-pill">Sport</span>).</div>
+              <strong>c)</strong> Anonyme Variable <code class="code-pill">_</code> ignoriert den konkreten Sportartnamen:
+              <div class="code-box-mini" style="background:#ffffff; border-color:#fca5a5;">ist_sportlich(X) :- 
+    mitglied(X, <span class="sol-highlight">_</span>).</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         SEITE 4: PRÜFUNGS-ÜBUNGSAUFGABEN MIT LÖSUNGEN (TEIL 2)
+         ======================================================================= -->
+    <div class="page" id="page4">
+      <div>
+        <header class="doc-header">
+          <div>
+            <div class="doc-meta">Informatik Differenzierung 10 • Kursarbeit Generalprobe</div>
+            <h1 class="doc-title">Prüfungs-Übungsaufgaben mit Musterlösungen (Teil 2)</h1>
+          </div>
+          <div class="badge-doc">Rekursion &amp; Transfer</div>
+        </header>
+
+        <!-- AUFGABE 3: TRACING-PROTOKOLL -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 3: Algorithmisches Tracing-Protokoll der Rekursion</span>
+            <span class="task-pts">AFB II • 6 Punkte</span>
+          </div>
+          <div class="task-desc">
+            Gegeben sind die 2 Säulen der Rekursion und folgende Fakten:
+          </div>
+          <div class="code-box-mini">elternteil(gaia, kronos).   elternteil(kronos, zeus).   elternteil(zeus, herakles).
+vorfahre(X, Y) :- elternteil(X, Y).
+vorfahre(X, Y) :- elternteil(X, Z), vorfahre(Z, Y).</div>
+
+          <div style="font-size:8.8pt; margin-top:3px;">
+            Ein Benutzer stellt die Anfrage: <code class="code-pill">?- vorfahre(gaia, herakles).</code><br>
+            Protokolliere den Ablauf der Inferenz-Engine Schritt für Schritt in der Tracing-Tabelle:
+          </div>
+
+          <table class="calc-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">Ebene / Aufruf</th>
+                <th style="width: 48%;">Was prüft Prolog? (Regel &amp; Teilziel)</th>
+                <th style="width: 38%;">Ergebnis &amp; Variablenbindung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Ebene 1:</strong><br><code class="code-pill">vorfahre(gaia, herakles)</code></td>
+                <td>
+                  1. Säule 1 (Basisfall): <code class="code-pill">elternteil(gaia, herakles)</code>.<br>
+                  2. Säule 2 (Rekursion): Suche Kind $Z$: <code class="code-pill">elternteil(gaia, Z)</code>.
+                </td>
+                <td>
+                  1. Scheitert (<span class="sol-highlight">false</span>)<br>
+                  2. Treffer: <span class="var-pill">Z</span> = <span class="sol-highlight">kronos</span><br>
+                  &rarr; Neuer Aufruf: <code class="code-pill">vorfahre(kronos, herakles)</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Ebene 2:</strong><br><code class="code-pill">vorfahre(kronos, herakles)</code></td>
+                <td>
+                  1. Säule 1 (Basisfall): <code class="code-pill">elternteil(kronos, herakles)</code>.<br>
+                  2. Säule 2 (Rekursion): Suche Kind $Z$: <code class="code-pill">elternteil(kronos, Z)</code>.
+                </td>
+                <td>
+                  1. Scheitert (<span class="sol-highlight">false</span>)<br>
+                  2. Treffer: <span class="var-pill">Z</span> = <span class="sol-highlight">zeus</span><br>
+                  &rarr; Neuer Aufruf: <code class="code-pill">vorfahre(zeus, herakles)</code>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Ebene 3:</strong><br><code class="code-pill">vorfahre(zeus, herakles)</code></td>
+                <td>
+                  1. Säule 1 (Basisfall): <code class="code-pill">elternteil(zeus, herakles)</code>.<br>
+                  <em>(Greift der Basisfall bereits?)</em>
+                </td>
+                <td>
+                  <strong>Erfolg!</strong> Treffer als Fakt in Wissensbasis!<br>
+                  Säule 1 liefert: <span class="sol-highlight">true. (Basisfall greift!)</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Rücklauf:</strong><br>Synthese</td>
+                <td>
+                  Die Erfolgsmeldung wandert den Aufruf-Stack nach oben zurück (Ebene 3 &rarr; Ebene 2 &rarr; Ebene 1).
+                </td>
+                <td>
+                  Gesamtergebnis: <span class="sol-highlight"><strong>true.</strong></span><br>
+                  Beweiskette: gaia &rarr; kronos &rarr; zeus &rarr; herakles
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- AUFGABE 4: FEHLERDIAGNOSE & REKURSIVER TRANSFER -->
+        <div class="task-block">
+          <div class="task-header-row">
+            <span class="task-label">Aufgabe 4: Fehlerdiagnose &amp; Rekursions-Transfer (Netzwerke)</span>
+            <span class="task-pts">AFB III • 7 Punkte</span>
+          </div>
+          <div class="task-desc">
+            <strong>a) Fehlerdetektive:</strong> Ein Schüler notiert zur Wegfindung im Netzwerk:<br>
+            <code class="code-pill">verbunden(A, B) :- verbunden(A, Z), leitung(Z, B).</code><br>
+            Benenne den Fehler, erkläre das Speicherverhalten beim Ausführen und korrigiere den Code.<br>
+            <strong>b) Transfer:</strong> Modellierung eines Router-Netzwerks mit Fakten: <code class="code-pill">kabel(r1, r2). kabel(r2, r3). kabel(r3, r4).</code><br>
+            Formuliere das vollständige rekursive Prädikat <code class="code-pill">erreichbar(Von, Nach)</code> nach dem 2-Säulen-Prinzip.
+          </div>
+
+          <div class="solution-box">
+            <div class="solution-title">Musterlösung Aufgabe 4:</div>
+            <div class="solution-content">
+              <strong>a) Fehleranalyse:</strong> Es liegt eine unzulässige <strong>Linksrekursion (Left Recursion)</strong> vor. Da Prolog Ziele strikt von links nach rechts auswertet, ruft sich <code class="code-pill">verbunden(A, Z)</code> endlos selbst auf, ohne dass die Variable $Z$ vorher gebunden oder das Problem verkleinert wurde. Der Aufrufstapel füllt sich unendlich bis zum Absturz (<span class="sol-highlight">ERROR: Out of local stack</span>).<br>
+              <strong>Korrektur:</strong> Der Faktenschritt muss links stehen:<br>
+              <code class="code-pill">verbunden(A, B) :- leitung(A, Z), verbunden(Z, B).</code> (zusätzlich Basisfall nötig!).<br><br>
+              <strong>b) Vollständiges 2-Säulen-Prädikat für das Router-Netzwerk:</strong>
+              <div class="code-box-mini" style="background:#ffffff; border-color:#fca5a5;">% Säule 1: Basisfall (Direktes Kabel)
+erreichbar(Von, Nach) :- 
+    kabel(Von, Nach).
+
+% Säule 2: Rekursionsschritt (Verbindung über Zwischen-Router Z)
+erreichbar(Von, Nach) :- 
+    kabel(Von, <span class="var-pill">Z</span>), 
+    erreichbar(<span class="var-pill">Z</span>, Nach).</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
