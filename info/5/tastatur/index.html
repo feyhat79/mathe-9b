@@ -473,10 +473,59 @@
       color: var(--text);
     }
 
+    /* ── KINDGERECHTE ANLEITUNG ── */
+    .kid-guide-bar {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 12px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .guide-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+    .step-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ── TRAINER-STAGE & LIVE-INPUT-BOX ── */
     .trainer-stage {
       display: flex;
       align-items: center;
       gap: 20px;
+    }
+
+    .target-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .target-badge-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .target-char-box {
@@ -492,7 +541,6 @@
       font-size: 3.6rem;
       font-weight: 800;
       color: var(--primary);
-      flex-shrink: 0;
       line-height: 1;
     }
 
@@ -500,11 +548,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .target-name {
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 800;
       color: var(--text);
     }
@@ -514,14 +562,83 @@
       color: var(--muted);
     }
 
-    .trainer-input-hint {
+    .live-input-box {
+      background: var(--surface-2);
+      border: 2px dashed var(--primary);
+      border-radius: 10px;
+      padding: 9px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .live-input-box.ok {
+      border-color: #059669;
+      background: #f0fdf4;
+    }
+    .live-input-box.hint {
+      border-color: var(--shift-border);
+      background: #fffbeb;
+    }
+
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .live-status-pill::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #059669;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.25);
+    }
+
+    .live-prompt-text {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .live-echo-slot {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
+      gap: 10px;
+      font-size: 0.84rem;
       color: var(--muted);
-      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .echo-char {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 1px 10px;
+      min-width: 44px;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      line-height: 1.2;
+    }
+    .echo-char.ok {
+      color: #059669;
+      border-color: #059669;
+      background: #d1fae5;
+    }
+    .echo-char.wrong {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
     }
 
     .kbd-tag {
@@ -583,9 +700,21 @@
       font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
     }
     .btn-action:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .btn-action.btn-next-always {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+    }
+    .btn-action.btn-next-always.btn-success {
+      background: #059669 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+    }
 
     .btn-secondary {
       background: var(--surface-2);
@@ -793,19 +922,47 @@
         </div>
 
         <div class="trainer-stats">
-          <span class="badge-stat" id="train-progress">Zeichen 1 von 6</span>
+          <span class="badge-stat" id="train-progress">Zeichen 1 von 7</span>
           <span class="badge-stat" id="train-score">Punkte: 0</span>
         </div>
       </div>
 
+      <!-- Kurzanleitung für 5.-Klässler (immer sichtbar) -->
+      <div class="kid-guide-bar">
+        <div class="guide-item">
+          <span class="step-badge">1</span>
+          <span><strong>Zeichen ansehen:</strong> Großes Zeichen links beachten.</span>
+        </div>
+        <div class="guide-item">
+          <span class="step-badge">2</span>
+          <span><strong>Sofort tippen:</strong> Kein Mausklick nötig &ndash; tippe einfach auf deiner echten Tastatur!</span>
+        </div>
+        <div class="guide-item">
+          <span class="step-badge">3</span>
+          <span><strong>Steuertaste halten:</strong> Bei <kbd class="kbd-tag">Shift</kbd> oder <kbd class="kbd-tag">AltGr</kbd> Taste festhalten + Zeichentaste tippen.</span>
+        </div>
+      </div>
+
       <div class="trainer-stage">
-        <div class="target-char-box" id="target-char-display">@</div>
+        <div class="target-col">
+          <div class="target-char-box" id="target-char-display">@</div>
+          <span class="target-badge-label">Gesucht</span>
+        </div>
         <div class="target-details">
           <div class="target-name" id="target-name-display">At-Zeichen (Klammeraffe)</div>
           <div class="target-desc" id="target-desc-display">Wichtig für E-Mail-Adressen und Benutzernamen.</div>
-          <div class="trainer-input-hint" id="trainer-instruction">
-            <span>Tippe das Zeichen auf deiner Tastatur</span>
-            <span style="font-weight:normal;color:var(--muted);">(oder klicke die Tasten an)</span>
+
+          <!-- Großes Live-Eingabefeld -->
+          <div class="live-input-box" id="live-input-box">
+            <div class="live-status-pill" id="live-status-pill">Tastatur empfangsbereit &bull; Hört zu</div>
+            <div class="live-prompt-text" id="live-prompt-text">
+              Tippe jetzt direkt auf deiner Tastatur:
+            </div>
+            <div class="live-echo-slot">
+              <span>Zuletzt gedrückt:</span>
+              <span class="echo-char" id="echo-char">&mdash;</span>
+              <span id="echo-explanation" style="font-size:0.8rem; color:var(--muted);">(Noch keine Taste gedrückt &ndash; tippe jetzt!)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -813,8 +970,12 @@
       <div class="trainer-feedback" id="trainer-feedback-box"></div>
 
       <div class="trainer-actions">
-        <button class="btn-action btn-secondary" id="btn-show-hint" onclick="toggleHint()">Tipp anzeigen</button>
-        <button class="btn-action" id="btn-train-next" onclick="nextTrainChar()" style="display:none;">Nächstes Zeichen →</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action btn-secondary" id="btn-show-hint" onclick="toggleHint()">Tipp anzeigen</button>
+        </div>
+        <div>
+          <button class="btn-action btn-next-always" id="btn-train-next" onclick="nextTrainChar()" title="Zum nächsten Zeichen wechseln">Nächstes Zeichen &rarr;</button>
+        </div>
       </div>
     </section>
 
@@ -1316,8 +1477,11 @@
     }
   }
 
+  let trainCountdownInterval = null;
+
   function showTrainQuestion() {
     clearTimeout(trainAutoTimer);
+    clearInterval(trainCountdownInterval);
     trainFirstAttempt = true;
 
     const item = trainDeck[trainIndex];
@@ -1332,8 +1496,22 @@
     fb.className = 'trainer-feedback';
     fb.innerHTML = '';
 
+    const echoChar = document.getElementById('echo-char');
+    echoChar.textContent = '—';
+    echoChar.className = 'echo-char';
+
+    const echoExp = document.getElementById('echo-explanation');
+    echoExp.textContent = '(Noch keine Taste gedrückt – tippe jetzt!)';
+
+    const liveBox = document.getElementById('live-input-box');
+    liveBox.className = 'live-input-box';
+
     document.getElementById('btn-show-hint').textContent = 'Tipp anzeigen';
-    document.getElementById('btn-train-next').style.display = 'none';
+    
+    const nextBtn = document.getElementById('btn-train-next');
+    nextBtn.className = 'btn-action btn-next-always';
+    nextBtn.textContent = 'Nächstes Zeichen →';
+    nextBtn.title = 'Dieses Zeichen überspringen';
 
     // Ebene visuell auf normal zurücksetzen
     setLayer('normal');
@@ -1359,6 +1537,11 @@
     const item = trainDeck[trainIndex];
     const fb = document.getElementById('trainer-feedback-box');
     const nextBtn = document.getElementById('btn-train-next');
+    const echoChar = document.getElementById('echo-char');
+    const echoExp = document.getElementById('echo-explanation');
+    const liveBox = document.getElementById('live-input-box');
+
+    echoChar.textContent = typedChar || '?';
 
     if (typedChar === item.char) {
       // ── RICHTIGE EINGABE ──
@@ -1367,20 +1550,42 @@
       }
       document.getElementById('train-score').textContent = `Punkte: ${trainScore}`;
 
+      echoChar.className = 'echo-char ok';
+      echoExp.innerHTML = `<strong style="color:#059669;">Richtig!</strong> ${item.combo} = ${item.char}`;
+      liveBox.className = 'live-input-box ok';
+
       fb.className = 'trainer-feedback active ok';
       fb.innerHTML = `Perfekt! <kbd class="kbd-tag">${item.combo}</kbd> ergibt <kbd class="kbd-tag">${item.char}</kbd>.` +
         (trainFirstAttempt ? ' (Volle Punktzahl)' : '');
 
       flashSuccessKey(item);
 
-      nextBtn.style.display = 'inline-block';
+      // Button hervorheben & Countdown anbieten
+      nextBtn.className = 'btn-action btn-next-always btn-success';
+      let countdown = 4;
+      nextBtn.textContent = `Weiter (${countdown}s) →`;
+
+      clearInterval(trainCountdownInterval);
+      trainCountdownInterval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          nextBtn.textContent = `Weiter (${countdown}s) →`;
+        } else {
+          clearInterval(trainCountdownInterval);
+        }
+      }, 1000);
+
       clearTimeout(trainAutoTimer);
-      trainAutoTimer = setTimeout(nextTrainChar, TRAIN_AUTO_DELAY);
+      trainAutoTimer = setTimeout(() => {
+        clearInterval(trainCountdownInterval);
+        nextTrainChar();
+      }, 4000);
 
     } else {
       // ── FEHLER / ANALYSE ──
       trainFirstAttempt = false;
-      const targetBaseKey = ROWS.flat().find(k => k.id === item.baseId);
+      echoChar.className = 'echo-char wrong';
+      liveBox.className = 'live-input-box hint';
 
       // Animation auf der falsch geklickten Taste
       if (keyObj) {
@@ -1395,24 +1600,29 @@
       // Spezifisches Coaching
       if (keyObj && keyObj.id === item.baseId) {
         if (item.layer === 'altgr' && usedLayer !== 'altgr') {
+          echoExp.innerHTML = `Taste stimmt (${keyObj.n.toUpperCase()})! Halte <strong>AltGr</strong> gedrückt.`;
           fb.className = 'trainer-feedback active hint';
           fb.innerHTML = `Die Taste stimmt (${keyObj.n.toUpperCase()})! Halte aber zusätzlich die <strong>AltGr-Taste</strong> gedrückt.`;
         } else if (item.layer === 'shift' && usedLayer !== 'shift') {
+          echoExp.innerHTML = `Taste stimmt (${keyObj.n.toUpperCase()})! Halte <strong>Shift</strong> gedrückt.`;
           fb.className = 'trainer-feedback active hint';
           fb.innerHTML = `Die Taste stimmt (${keyObj.n.toUpperCase()})! Halte aber zusätzlich die <strong>Shift-Taste (Umschalttaste)</strong> gedrückt.`;
         } else {
+          echoExp.innerHTML = `Falsche Ebene. Gesucht ist ${item.char}`;
           fb.className = 'trainer-feedback active error';
           fb.innerHTML = `Falsche Ebene. Gesucht ist <kbd class="kbd-tag">${item.char}</kbd> mit <strong>${item.combo}</strong>.`;
         }
       } else {
+        echoExp.innerHTML = `Getippt: ${typedChar || '—'}. Gesucht ist: ${item.char}`;
         fb.className = 'trainer-feedback active error';
-        fb.innerHTML = `Das war <kbd class="kbd-tag">${typedChar || 'falsch'}</kbd>. Suche die Taste mit der Beschriftung <kbd class="kbd-tag">${item.baseName}</kbd> (${item.combo}).`;
+        fb.innerHTML = `Das war <kbd class="kbd-tag">${typedChar || 'falsch'}</kbd>. Gesucht: <kbd class="kbd-tag">${item.char}</kbd> &ndash; suche die Taste mit <kbd class="kbd-tag">${item.baseName}</kbd> (${item.combo}).`;
       }
     }
   }
 
   function nextTrainChar() {
     clearTimeout(trainAutoTimer);
+    clearInterval(trainCountdownInterval);
     trainIndex++;
     if (trainIndex >= trainDeck.length) {
       showTrainerResults();
@@ -1476,9 +1686,17 @@
     if (isAltGr) {
       physicalAltGrDown = true;
       setLayer('altgr', true);
+      const echoExp = document.getElementById('echo-explanation');
+      if (currentView === 'trainer' && echoExp && !echoExp.innerHTML.includes('Richtig')) {
+        echoExp.textContent = '(AltGr wird gehalten... drücke jetzt die Zieltaste!)';
+      }
     } else if (isShift && !physicalAltGrDown) {
       physicalShiftDown = true;
       setLayer('shift', true);
+      const echoExp = document.getElementById('echo-explanation');
+      if (currentView === 'trainer' && echoExp && !echoExp.innerHTML.includes('Richtig')) {
+        echoExp.textContent = '(Shift wird gehalten... drücke jetzt die Zieltaste!)';
+      }
     }
 
     // 3. Tastaturkürzel zum Umschalten (nur im Explorer)
@@ -1497,12 +1715,9 @@
 
       // Enter zum Weiterspringen
       if (e.key === 'Enter') {
-        const nextBtn = document.getElementById('btn-train-next');
-        if (nextBtn.style.display !== 'none') {
-          e.preventDefault();
-          nextTrainChar();
-          return;
-        }
+        e.preventDefault();
+        nextTrainChar();
+        return;
       }
 
       // Reines getipptes Zeichen auswerten
@@ -1544,6 +1759,10 @@
     // Ebene zurücksetzen, falls kein Klick-Latch aktiv ist
     if (!physicalAltGrDown && !physicalShiftDown && !latchedModifier) {
       setLayer('normal', true);
+      const echoExp = document.getElementById('echo-explanation');
+      if (currentView === 'trainer' && echoExp && !echoExp.innerHTML.includes('Richtig')) {
+        echoExp.textContent = '(Noch keine Taste gedrückt – tippe jetzt!)';
+      }
     } else if (physicalShiftDown && !physicalAltGrDown) {
       setLayer('shift', true);
     }
