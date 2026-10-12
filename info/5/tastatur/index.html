@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Die QWERTZ-Tastatur – Informatik 5</title>
+  <title>Tastatur & Sonderzeichen – Informatik Klasse 5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,19 +15,27 @@
       --surface: #ffffff;
       --surface-2: #f1f5f9;
       --border: #e2e8f0;
+      --border-dark: #cbd5e1;
       --text: #0f172a;
       --muted: #64748b;
       --primary: #1d4ed8;
+      --primary-dark: #1e40af;
       --primary-l: #dbeafe;
       --shift-c: #b45309;
       --shift-bg: #fef3c7;
+      --shift-border: #f59e0b;
       --altgr-c: #065f46;
       --altgr-bg: #d1fae5;
+      --altgr-border: #10b981;
+      --success: #059669;
+      --success-bg: #d1fae5;
+      --danger: #dc2626;
+      --danger-bg: #fee2e2;
       --key-bg: #ffffff;
       --key-border: #94a3b8;
       --key-shadow: 0 2px 0 0 #94a3b8;
       --key-sp-bg: #f1f5f9;
-      --ku: 54px;
+      --ku: 52px;
       --gap: 5px;
     }
 
@@ -36,8 +44,14 @@
       --surface: #1e293b;
       --surface-2: #0f172a;
       --border: #334155;
+      --border-dark: #475569;
       --text: #f1f5f9;
       --muted: #94a3b8;
+      --primary-l: #1e3a8a;
+      --shift-bg: #451a03;
+      --shift-c: #fcd34d;
+      --altgr-bg: #064e3b;
+      --altgr-c: #6ee7b7;
       --key-bg: #1e293b;
       --key-border: #475569;
       --key-shadow: 0 2px 0 0 #0f172a;
@@ -51,106 +65,110 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    /* ── TOPBAR ── */
-    #topbar {
+    /* ── PRESENTER-BAR / KOPFZEILE ── */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
       background: var(--surface);
       border-bottom: 1.5px solid var(--border);
-      padding: 0 18px;
+      padding: 0 16px;
+      height: 56px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       flex-shrink: 0;
-      height: 56px;
     }
 
-    #topbar h1 {
-      font-size: 1rem;
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .nav-back:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .presenter-title {
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--primary);
       white-space: nowrap;
       letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-stage {
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--primary-l);
+      color: var(--primary);
     }
 
-    #layer-tabs {
+    .presenter-tabs {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       flex: 1;
       align-items: center;
+      margin-left: 8px;
     }
 
-    .layer-tab {
-      padding: 5px 14px;
+    .presenter-tab-btn {
+      padding: 6px 14px;
       border-radius: 6px;
       border: 1.5px solid var(--border);
       background: var(--surface-2);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: inherit;
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--muted);
       cursor: pointer;
       transition: all 0.15s;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
     }
-
-    .layer-tab:hover { border-color: var(--primary); color: var(--primary); }
-
-    .layer-tab.active-normal {
-      background: var(--primary-l);
+    .presenter-tab-btn:hover {
       border-color: var(--primary);
       color: var(--primary);
     }
-
-    .layer-tab.active-shift {
-      background: var(--shift-bg);
-      border-color: var(--shift-c);
-      color: var(--shift-c);
-    }
-
-    .layer-tab.active-altgr {
-      background: var(--altgr-bg);
-      border-color: var(--altgr-c);
-      color: var(--altgr-c);
-    }
-
-    .tab-badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 4px;
+    .presenter-tab-btn.active {
       background: var(--primary);
-      color: #fff;
+      border-color: var(--primary);
+      color: #ffffff;
     }
-
-    .layer-tab.active-shift .tab-badge { background: var(--shift-c); }
-    .layer-tab.active-altgr .tab-badge { background: var(--altgr-c); }
+    .presenter-tab-btn.active-trainer {
+      background: #059669;
+      border-color: #059669;
+      color: #ffffff;
+    }
 
     .top-actions {
       display: flex;
       gap: 8px;
       align-items: center;
+      margin-left: auto;
     }
-
-    .btn-quiz {
-      padding: 6px 16px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      letter-spacing: 0.01em;
-    }
-    .btn-quiz:hover { background: #1e40af; transform: translateY(-1px); }
 
     .btn-dark {
       width: 36px;
@@ -162,31 +180,112 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
-      transition: border-color 0.15s;
+      font-size: 0.95rem;
       color: var(--text);
+      transition: border-color 0.15s;
     }
     .btn-dark:hover { border-color: var(--primary); }
 
-    /* ── MAIN ── */
-    #main {
+    /* ── HAUPTBEREICH ── */
+    #main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 14px 12px 8px;
-      overflow-y: auto;
+      padding: 12px 14px 16px;
       gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
     }
 
-    /* ── KEYBOARD ── */
+    /* ── STEUERLEISTE (FILTER & EBENEN) ── */
+    #control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .control-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 2px;
+    }
+
+    .layer-pill {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .layer-pill:hover { border-color: var(--primary); color: var(--primary); }
+    .layer-pill.active-normal {
+      background: var(--primary-l);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .layer-pill.active-shift {
+      background: var(--shift-bg);
+      border-color: var(--shift-border);
+      color: var(--shift-c);
+    }
+    .layer-pill.active-altgr {
+      background: var(--altgr-bg);
+      border-color: var(--altgr-border);
+      color: var(--altgr-c);
+    }
+
+    .filter-chip {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-chip.active {
+      background: var(--surface);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    /* ── TASTATUR-CONTAINER ── */
     #keyboard-wrap {
       display: flex;
       flex-direction: column;
       gap: var(--gap);
       align-items: center;
+      user-select: none;
       flex-shrink: 0;
+      padding: 6px 0;
     }
 
     .kb-row {
@@ -194,100 +293,342 @@
       gap: var(--gap);
     }
 
-    /* ── KEY ── */
+    /* ── TASTEN ── */
     .k {
-      height: calc(var(--ku) * 0.85);
+      height: calc(var(--ku) * 0.86);
       background: var(--key-bg);
       border: 1.5px solid var(--key-border);
       border-radius: 6px;
       box-shadow: var(--key-shadow);
       cursor: pointer;
       position: relative;
-      transition: transform 0.1s, border-color 0.1s, background 0.1s;
+      transition: transform 0.08s, border-color 0.1s, background 0.1s, box-shadow 0.08s;
       flex-shrink: 0;
       overflow: hidden;
-      user-select: none;
     }
 
     .k:hover { border-color: var(--primary); transform: translateY(-1px); }
+    .k:active, .k.physical-down {
+      transform: translateY(2px);
+      box-shadow: none;
+      border-color: var(--primary);
+      background: var(--primary-l);
+    }
+
     .k.selected {
       border-color: var(--primary);
       border-width: 2px;
       box-shadow: 0 0 0 2px var(--primary-l), var(--key-shadow);
     }
 
-    .k.dim { opacity: 0.28; pointer-events: none; }
+    .k.sp { background: var(--key-sp-bg); }
 
-    .k.sp {
-      background: var(--key-sp-bg);
+    .k.dim { opacity: 0.22; }
+
+    /* Modifikatoren gedrückt */
+    .k.mod-active-shift {
+      background: var(--shift-bg) !important;
+      border-color: var(--shift-border) !important;
+      box-shadow: 0 0 0 2px var(--shift-border), var(--key-shadow) !important;
+    }
+    .k.mod-active-altgr {
+      background: var(--altgr-bg) !important;
+      border-color: var(--altgr-border) !important;
+      box-shadow: 0 0 0 2px var(--altgr-border), var(--key-shadow) !important;
     }
 
-    .k.flash {
-      animation: kflash 0.75s ease forwards;
+    /* Treffer / Fehler Animationen */
+    .k.flash-success {
+      animation: ksuccess 0.7s ease forwards;
     }
-
-    @keyframes kflash {
+    @keyframes ksuccess {
       0%   { background: #bbf7d0; border-color: #059669; box-shadow: 0 0 0 3px #6ee7b7; transform: translateY(-2px); }
       60%  { background: #bbf7d0; border-color: #059669; }
       100% { background: var(--key-bg); border-color: var(--key-border); box-shadow: var(--key-shadow); transform: none; }
     }
 
-    .k-g {
-      position: absolute; bottom: 4px; right: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: calc(var(--ku) * 0.17);
+    .k.flash-wrong {
+      animation: kwrong 0.5s ease;
+    }
+    @keyframes kwrong {
+      0%, 100% { transform: none; }
+      20%, 60% { transform: translateX(-3px); border-color: var(--danger); background: var(--danger-bg); }
+      40%, 80% { transform: translateX(3px);  border-color: var(--danger); background: var(--danger-bg); }
+    }
+
+    /* Zeichen-Positionen auf den Tasten */
+    .k-lbl {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: calc(var(--ku) * 0.16);
       font-weight: 700;
-      color: var(--altgr-c);
+      color: var(--muted);
+      padding: 0 4px;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .k-n {
+      position: absolute; bottom: 3px; left: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: calc(var(--ku) * 0.28);
+      font-weight: 700;
+      color: var(--text);
       line-height: 1;
-      transition: font-size 0.12s, font-weight 0.12s;
+      transition: font-size 0.1s, color 0.1s;
     }
 
     .k-s {
       position: absolute; top: 3px; left: 4px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: calc(var(--ku) * 0.17);
+      font-size: calc(var(--ku) * 0.18);
       font-weight: 700;
       color: var(--shift-c);
       line-height: 1;
-      transition: font-size 0.12s, font-weight 0.12s;
+      transition: font-size 0.1s, font-weight 0.1s;
     }
 
-    .k-n {
-      position: absolute; bottom: 4px; left: 4px;
+    .k-g {
+      position: absolute; bottom: 3px; right: 4px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: calc(var(--ku) * 0.27);
+      font-size: calc(var(--ku) * 0.18);
       font-weight: 700;
-      color: var(--text);
+      color: var(--altgr-c);
       line-height: 1;
-      transition: font-size 0.12s, font-weight 0.12s;
+      transition: font-size 0.1s, font-weight 0.1s;
     }
 
-    .k-lbl {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: calc(var(--ku) * 0.15);
+    /* Hervorhebungen je nach Ebene */
+    body.l-normal .k-n { font-size: calc(var(--ku) * 0.32); color: var(--primary); }
+    body.l-shift  .k-s { font-size: calc(var(--ku) * 0.29); font-weight: 800; }
+    body.l-altgr  .k-g { font-size: calc(var(--ku) * 0.29); font-weight: 800; }
+
+    /* Sonderzeichen-Filter Hervorhebungen */
+    body.filter-shift .k:not(.has-shift-symbol) { opacity: 0.22; }
+    body.filter-altgr .k:not(.has-altgr-symbol) { opacity: 0.22; }
+
+    /* ── TRAINER-CARD (IM TRAINING-MODUS) ── */
+    #training-card {
+      display: none;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      flex-direction: column;
+      gap: 12px;
+    }
+    #training-card.active { display: flex; }
+
+    .trainer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .level-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .level-pill-btn {
+      padding: 4px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-family: inherit;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--muted);
-      padding: 0 6px;
-      text-align: center;
-      line-height: 1.2;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .level-pill-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .level-pill-btn.active {
+      background: #059669;
+      border-color: #059669;
+      color: #ffffff;
     }
 
-    /* Layer highlighting */
-    body.l-normal .k-n { font-size: calc(var(--ku) * 0.31); color: var(--primary); }
-    body.l-shift  .k-s { font-size: calc(var(--ku) * 0.28); font-weight: 800; }
-    body.l-altgr  .k-g { font-size: calc(var(--ku) * 0.28); font-weight: 800; }
+    .trainer-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .badge-stat {
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-    /* ── INFO PANEL ── */
+    .trainer-stage {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .target-char-box {
+      width: 90px;
+      height: 90px;
+      border-radius: 12px;
+      background: var(--surface-2);
+      border: 2px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .target-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .target-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .target-desc {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .trainer-input-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .kbd-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--key-border);
+      box-shadow: 0 1px 0 var(--key-border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Feedback Box */
+    .trainer-feedback {
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      display: none;
+    }
+    .trainer-feedback.active { display: block; }
+    .trainer-feedback.ok {
+      background: var(--success-bg);
+      border: 1.5px solid #059669;
+      color: #065f46;
+      font-weight: 600;
+    }
+    .trainer-feedback.hint {
+      background: var(--shift-bg);
+      border: 1.5px solid var(--shift-border);
+      color: #78350f;
+      font-weight: 600;
+    }
+    .trainer-feedback.error {
+      background: var(--danger-bg);
+      border: 1.5px solid var(--danger);
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    .trainer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 8px 18px;
+      border-radius: 7px;
+      border: none;
+      background: var(--primary);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-action:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--surface-2); }
+
+    /* ── ERGEBNIS-CARD ── */
+    #result-view {
+      display: none;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      width: 100%;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    #result-view.active { display: flex; }
+
+    .result-score {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #059669;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .result-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      max-width: 500px;
+    }
+
+    /* ── INFO-PANEL (IM ERKUNDUNGS-MODUS) ── */
     #info-panel {
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 12px 18px;
-      min-height: 72px;
       width: 100%;
-      max-width: 980px;
       display: flex;
       align-items: center;
       gap: 18px;
@@ -296,10 +637,10 @@
 
     #info-char {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 2.5rem;
-      font-weight: 700;
+      font-size: 2.4rem;
+      font-weight: 800;
       color: var(--primary);
-      min-width: 52px;
+      min-width: 54px;
       text-align: center;
       flex-shrink: 0;
     }
@@ -313,7 +654,7 @@
 
     #info-title {
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text);
     }
 
@@ -324,19 +665,6 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 5px;
-    }
-
-    kbd {
-      display: inline-block;
-      background: var(--surface-2);
-      border: 1.5px solid var(--key-border);
-      border-radius: 4px;
-      padding: 1px 7px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text);
-      box-shadow: 0 1px 0 0 var(--key-border);
     }
 
     #info-layers {
@@ -354,34 +682,10 @@
       font-family: 'JetBrains Mono', monospace;
       white-space: nowrap;
     }
-
     .lc-normal { background: var(--primary-l); color: var(--primary); }
     .lc-shift  { background: var(--shift-bg);  color: var(--shift-c);  }
     .lc-altgr  { background: var(--altgr-bg);  color: var(--altgr-c);  }
 
-    #info-default {
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    /* ── SHORTCUTS BAR ── */
-    #shortcuts-bar {
-      background: var(--surface-2);
-      border-top: 1px solid var(--border);
-      padding: 5px 18px;
-      font-size: 0.73rem;
-      color: var(--muted);
-      flex-shrink: 0;
-      text-align: center;
-    }
-
-    #shortcuts-bar kbd {
-      font-size: 0.7rem;
-      padding: 0px 5px;
-      box-shadow: 0 1px 0 var(--key-border);
-    }
-
-    /* ── LEGENDE (Standardanzeige) ── */
     #info-default {
       display: flex;
       flex-direction: column;
@@ -392,203 +696,161 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       color: var(--text);
     }
-    .lg .layer-chip { min-width: 170px; text-align: center; }
-    .lg-hint { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .lg .layer-chip { min-width: 175px; text-align: center; }
+    .lg-hint { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
 
-    /* ── EBENEN-TRAINING ── */
-    #train-panel {
-      display: none;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 18px 14px;
-      width: 100%;
-      max-width: 980px;
-      flex-shrink: 0;
-      flex-direction: column;
-      gap: 10px;
-    }
-    #train-panel.active { display: flex; }
-
-    #train-head {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    #train-head .spacer { flex: 1; }
-
-    #train-body {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-    }
-
-    #train-char {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 3.6rem;
-      font-weight: 700;
-      color: var(--text);
-      min-width: 110px;
-      height: 84px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* ── FUSSZEILE SHORTCUTS ── */
+    #shortcuts-bar {
       background: var(--surface-2);
-      border: 2px solid var(--border);
-      border-radius: 12px;
+      border-top: 1px solid var(--border);
+      padding: 6px 18px;
+      font-size: 0.74rem;
+      color: var(--muted);
       flex-shrink: 0;
-      line-height: 1;
-    }
-    #train-char.small { font-size: 1.5rem; }
-
-    #train-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      text-align: center;
+      margin-top: auto;
     }
 
-    #train-question { font-size: 0.95rem; font-weight: 700; color: var(--text); }
-
-    #train-layers { display: flex; gap: 8px; }
-
-    .train-layer-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      padding: 7px 10px;
-      border-radius: 8px;
-      border: 2px solid var(--border);
-      background: var(--surface-2);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      cursor: pointer;
-      transition: transform 0.1s, border-color 0.15s, background 0.15s;
-    }
-    .train-layer-btn:hover:not(:disabled) { transform: translateY(-1px); }
-    .train-layer-btn .tl-name { font-size: 0.85rem; font-weight: 800; }
-    .train-layer-btn .tl-how  { font-size: 0.74rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-
-    .train-layer-btn[data-layer="normal"] { color: var(--primary); }
-    .train-layer-btn[data-layer="shift"]  { color: var(--shift-c); }
-    .train-layer-btn[data-layer="altgr"]  { color: var(--altgr-c); }
-    .train-layer-btn[data-layer="normal"]:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-l); }
-    .train-layer-btn[data-layer="shift"]:hover:not(:disabled)  { border-color: var(--shift-c); background: var(--shift-bg); }
-    .train-layer-btn[data-layer="altgr"]:hover:not(:disabled)  { border-color: var(--altgr-c); background: var(--altgr-bg); }
-
-    .train-layer-btn.right { border-color: #059669; background: #d1fae5; }
-    .train-layer-btn.wrong { border-color: #dc2626; background: #fee2e2; opacity: 0.7; }
-    .train-layer-btn:disabled { cursor: default; }
-
-    #train-feedback {
-      font-size: 0.85rem;
-      color: var(--muted);
-      min-height: 2.6em;
-      line-height: 1.4;
-    }
-    #train-feedback.ok  { color: #047857; font-weight: 600; }
-    #train-feedback.bad { color: #b91c1c; font-weight: 600; }
-
-    .btn-quiz-action {
-      padding: 10px 28px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      white-space: nowrap;
-    }
-    .btn-quiz-action:hover { background: #1e40af; transform: translateY(-1px); }
-
-    .btn-quiz-close {
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--muted);
-      padding: 4px 14px;
-      border-radius: 7px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .btn-quiz-close:hover { border-color: var(--primary); color: var(--primary); }
-
-    .k.wrong { animation: kwrong 0.5s ease; }
-    @keyframes kwrong {
-      0%, 100% { transform: none; }
-      20%, 60% { transform: translateX(-3px); border-color: #dc2626; background: #fee2e2; }
-      40%, 80% { transform: translateX(3px);  border-color: #dc2626; background: #fee2e2; }
-    }
-
-    /* ── RESPONSIVE SCALE ── */
     #KU { width: var(--ku); height: 0; position: absolute; visibility: hidden; }
 
     @media (max-width: 1100px) {
-      :root { --ku: 46px; }
+      :root { --ku: 45px; }
     }
     @media (max-width: 900px) {
-      :root { --ku: 38px; }
+      :root { --ku: 37px; }
+      .presenter-bar { padding: 0 10px; gap: 8px; }
+      .target-stage { flex-direction: column; align-items: flex-start; }
+      .target-char-box { width: 70px; height: 70px; font-size: 2.6rem; }
     }
   </style>
 </head>
 <body class="l-normal">
 
-  <!-- Hidden key-unit measurement div -->
   <div id="KU"></div>
 
-  <!-- ── TOPBAR ── -->
-  <div id="topbar">
-    <h1>QWERTZ-Tastatur</h1>
+  <!-- ── PRESENTER-BAR ── -->
+  <nav class="presenter-bar">
+    <a href="../" class="nav-back">← Übersicht 5</a>
 
-    <div id="layer-tabs">
-      <button class="layer-tab active-normal" data-layer="normal" onclick="setLayer('normal')">
-        Normale Ebene
-        <span class="tab-badge">1</span>
+    <div class="presenter-title">
+      Tastatur &amp; Sonderzeichen
+      <span class="badge-stage">Klasse 5</span>
+    </div>
+
+    <div class="presenter-tabs">
+      <button class="presenter-tab-btn active" id="tab-explore" onclick="switchView('explore')">
+        Tastatur erkunden
       </button>
-      <button class="layer-tab" data-layer="shift" onclick="setLayer('shift')">
-        Hochgestellte Ebene (Shift)
-        <span class="tab-badge">2</span>
-      </button>
-      <button class="layer-tab" data-layer="altgr" onclick="setLayer('altgr')">
-        Tiefgestellte Ebene (AltGr)
-        <span class="tab-badge">3</span>
+      <button class="presenter-tab-btn" id="tab-trainer" onclick="switchView('trainer')">
+        Sonderzeichen-Trainer
       </button>
     </div>
 
     <div class="top-actions">
-      <button class="btn-quiz" onclick="openTrain()">Ebenen-Training starten</button>
       <button class="btn-dark" onclick="toggleDark()" title="Hell/Dunkel wechseln" id="dark-btn">☀</button>
     </div>
-  </div>
+  </nav>
 
-  <!-- ── MAIN ── -->
-  <div id="main">
-    <!-- Keyboard -->
+  <!-- ── HAUPTBEREICH ── -->
+  <main id="main-content">
+
+    <!-- STEUERLEISTE (IM ERKUNDUNGS-MODUS) -->
+    <div id="control-bar">
+      <div class="control-group">
+        <span class="control-label">Ebene:</span>
+        <button class="layer-pill active-normal" id="pill-normal" onclick="setLayer('normal')">
+          Normale Ebene
+        </button>
+        <button class="layer-pill" id="pill-shift" onclick="setLayer('shift')">
+          Shift-Ebene
+        </button>
+        <button class="layer-pill" id="pill-altgr" onclick="setLayer('altgr')">
+          AltGr-Ebene
+        </button>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">Hervorheben:</span>
+        <button class="filter-chip active" id="flt-all" onclick="setFilter('all')">Alle Tasten</button>
+        <button class="filter-chip" id="flt-shift" onclick="setFilter('shift')">Shift-Sonderzeichen</button>
+        <button class="filter-chip" id="flt-altgr" onclick="setFilter('altgr')">AltGr-Sonderzeichen</button>
+      </div>
+    </div>
+
+    <!-- SONDERZEICHEN-TRAINER CARD -->
+    <section id="training-card">
+      <div class="trainer-header">
+        <div class="level-select-wrap">
+          <span class="control-label">Thema:</span>
+          <button class="level-pill-btn active" data-lvl="1" onclick="startLevel(1)">1. Satzzeichen</button>
+          <button class="level-pill-btn" data-lvl="2" onclick="startLevel(2)">2. E-Mail &amp; Web (@, €)</button>
+          <button class="level-pill-btn" data-lvl="3" onclick="startLevel(3)">3. Klammern &amp; Rechnen</button>
+          <button class="level-pill-btn" data-lvl="4" onclick="startLevel(4)">4. Code &amp; Pfade</button>
+          <button class="level-pill-btn" data-lvl="5" onclick="startLevel(5)">5. Passwort-Mix</button>
+        </div>
+
+        <div class="trainer-stats">
+          <span class="badge-stat" id="train-progress">Zeichen 1 von 6</span>
+          <span class="badge-stat" id="train-score">Punkte: 0</span>
+        </div>
+      </div>
+
+      <div class="trainer-stage">
+        <div class="target-char-box" id="target-char-display">@</div>
+        <div class="target-details">
+          <div class="target-name" id="target-name-display">At-Zeichen (Klammeraffe)</div>
+          <div class="target-desc" id="target-desc-display">Wichtig für E-Mail-Adressen und Benutzernamen.</div>
+          <div class="trainer-input-hint" id="trainer-instruction">
+            <span>Tippe das Zeichen auf deiner Tastatur</span>
+            <span style="font-weight:normal;color:var(--muted);">(oder klicke die Tasten an)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer-feedback" id="trainer-feedback-box"></div>
+
+      <div class="trainer-actions">
+        <button class="btn-action btn-secondary" id="btn-show-hint" onclick="toggleHint()">Tipp anzeigen</button>
+        <button class="btn-action" id="btn-train-next" onclick="nextTrainChar()" style="display:none;">Nächstes Zeichen →</button>
+      </div>
+    </section>
+
+    <!-- ERGEBNIS-CARD -->
+    <section id="result-view">
+      <div style="font-size:1.1rem; font-weight:800; color:var(--text);">Runde beendet!</div>
+      <div class="result-score" id="result-score-text">6 / 6</div>
+      <div class="result-text" id="result-desc-text">Klasse! Du hast alle Sonderzeichen dieser Stufe richtig eingetippt.</div>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button class="btn-action" onclick="restartCurrentLevel()">Level wiederholen</button>
+        <button class="btn-action btn-secondary" onclick="nextLevelOrExplore()">Nächstes Level</button>
+      </div>
+    </section>
+
+    <!-- TASTATUR -->
     <div id="keyboard-wrap"></div>
 
-    <!-- Info Panel -->
-    <div id="info-panel">
+    <!-- INFO-PANEL (ERKUNDEN) -->
+    <section id="info-panel">
       <div id="info-default">
-        <div class="lg"><span class="layer-chip lc-normal">Normale Ebene</span><span><strong>Taste drücken</strong>: Kleinbuchstaben, Zahlen und einige Sonderzeichen (auf der Taste unten links)</span></div>
-        <div class="lg"><span class="layer-chip lc-shift">Hochgestellte Ebene</span><span><strong>SHIFT + Taste</strong>: Großbuchstaben und die hochgestellten Zeichen (oben links)</span></div>
-        <div class="lg"><span class="layer-chip lc-altgr">Tiefgestellte Ebene</span><span><strong>ALT GR + Taste</strong>: die tiefgestellten Zeichen (unten rechts)</span></div>
-        <div class="lg-hint">Klicke eine Taste an, um Details zu sehen.</div>
+        <div class="lg">
+          <span class="layer-chip lc-normal">Normale Ebene</span>
+          <span><strong>Taste drücken</strong>: Kleinbuchstaben, Zahlen und direkte Sonderzeichen (unten links)</span>
+        </div>
+        <div class="lg">
+          <span class="layer-chip lc-shift">Shift-Ebene</span>
+          <span><strong>Shift gedrückt halten + Taste</strong>: Großbuchstaben und hochgestellte Zeichen (oben links)</span>
+        </div>
+        <div class="lg">
+          <span class="layer-chip lc-altgr">AltGr-Ebene</span>
+          <span><strong>AltGr gedrückt halten + Taste</strong>: tiefgestellte Sonderzeichen (unten rechts)</span>
+        </div>
+        <div class="lg-hint">Tippe auf deiner echten Tastatur oder klicke eine Taste an, um Details zu sehen.</div>
       </div>
-      <div id="info-content" style="display:none; width:100%; display:none; align-items:center; gap:18px; flex:1;">
+
+      <div id="info-content" style="display:none; width:100%; align-items:center; gap:18px;">
         <div id="info-char"></div>
         <div id="info-body">
           <div id="info-title"></div>
@@ -596,151 +858,173 @@
         </div>
         <div id="info-layers"></div>
       </div>
-    </div>
-    <!-- Ebenen-Training -->
-    <div id="train-panel">
-      <div id="train-head">
-        <span id="train-title">Ebenen-Training</span>
-        <span id="train-progress"></span>
-        <span class="spacer"></span>
-        <button class="btn-quiz-close" onclick="closeTrain()">Training beenden</button>
-      </div>
-      <div id="train-body">
-        <div id="train-char"></div>
-        <div id="train-main">
-          <div id="train-question"></div>
-          <div id="train-layers">
-            <button class="train-layer-btn" data-layer="normal" onclick="trainChooseLayer('normal')">
-              <span class="tl-name">Normale Ebene</span>
-              <span class="tl-how">Taste drücken</span>
-            </button>
-            <button class="train-layer-btn" data-layer="shift" onclick="trainChooseLayer('shift')">
-              <span class="tl-name">Hochgestellte Ebene</span>
-              <span class="tl-how">SHIFT + Taste</span>
-            </button>
-            <button class="train-layer-btn" data-layer="altgr" onclick="trainChooseLayer('altgr')">
-              <span class="tl-name">Tiefgestellte Ebene</span>
-              <span class="tl-how">ALT GR + Taste</span>
-            </button>
-          </div>
-          <div id="train-feedback"></div>
-        </div>
-        <button class="btn-quiz-action" id="train-next" onclick="trainNext()" style="display:none;">Weiter</button>
-      </div>
-    </div>
-  </div>
+    </section>
+
+  </main>
 
   <!-- ── SHORTCUTS BAR ── -->
-  <div id="shortcuts-bar">
-    Tastaturkürzel:&nbsp;
-    <kbd>1</kbd> Normale Ebene &nbsp;·&nbsp;
-    <kbd>2</kbd> Hochgestellte Ebene &nbsp;·&nbsp;
-    <kbd>3</kbd> Tiefgestellte Ebene &nbsp;·&nbsp;
-    <kbd>Leertaste</kbd> / <kbd>Enter</kbd> Weiter im Training &nbsp;·&nbsp;
-    <kbd>Esc</kbd> Training beenden
-  </div>
+  <footer id="shortcuts-bar">
+    Live-Tastaturspiegel aktiv: Drücke <kbd class="kbd-tag">Shift</kbd> oder <kbd class="kbd-tag">AltGr</kbd> auf deiner echten Tastatur, um die Ebene direkt umzuschalten.
+  </footer>
 
 
   <script>
-  // ── DATA ──────────────────────────────────────────────────────────────────
+  // ── DATEN DER TASTATUR ───────────────────────────────────────────────────
 
   const ROWS = [
-    [ // Zahlenreihe
-      {id:'hat',   n:'^', s:'°',  g:'',    w:1},
-      {id:'k1',    n:'1', s:'!',  g:'',    w:1},
-      {id:'k2',    n:'2', s:'"',  g:'²',   w:1},
-      {id:'k3',    n:'3', s:'§',  g:'³',   w:1},
-      {id:'k4',    n:'4', s:'$',  g:'',    w:1},
-      {id:'k5',    n:'5', s:'%',  g:'',    w:1},
-      {id:'k6',    n:'6', s:'&',  g:'',    w:1},
-      {id:'k7',    n:'7', s:'/',  g:'{',   w:1},
-      {id:'k8',    n:'8', s:'(',  g:'[',   w:1},
-      {id:'k9',    n:'9', s:')',  g:']',   w:1},
-      {id:'k0',    n:'0', s:'=',  g:'}',   w:1},
-      {id:'sz',    n:'ß', s:'?',  g:'\\',  w:1},
-      {id:'acu',   n:'´', s:'`',  g:'',    w:1},
-      {id:'bs',    n:'',  s:'',   g:'',    w:2,    sp:true, lbl:'⌫ Rücktaste'},
+    [ // Reihe 1: Zahlen
+      {id:'hat', n:'^', s:'°', g:'',   w:1,   code:'Backquote'},
+      {id:'k1',  n:'1', s:'!', g:'',   w:1,   code:'Digit1'},
+      {id:'k2',  n:'2', s:'"', g:'²',  w:1,   code:'Digit2'},
+      {id:'k3',  n:'3', s:'§', g:'³',  w:1,   code:'Digit3'},
+      {id:'k4',  n:'4', s:'$', g:'',   w:1,   code:'Digit4'},
+      {id:'k5',  n:'5', s:'%', g:'',   w:1,   code:'Digit5'},
+      {id:'k6',  n:'6', s:'&', g:'',   w:1,   code:'Digit6'},
+      {id:'k7',  n:'7', s:'/', g:'{',  w:1,   code:'Digit7'},
+      {id:'k8',  n:'8', s:'(', g:'[',  w:1,   code:'Digit8'},
+      {id:'k9',  n:'9', s:')', g:']',  w:1,   code:'Digit9'},
+      {id:'k0',  n:'0', s:'=', g:'}',  w:1,   code:'Digit0'},
+      {id:'sz',  n:'ß', s:'?', g:'\\', w:1,   code:'Minus'},
+      {id:'acu', n:'´', s:'`', g:'',   w:1,   code:'Equal'},
+      {id:'bs',  n:'',  s:'',  g:'',   w:2,   sp:true, lbl:'⌫ Rücktaste', code:'Backspace'},
     ],
-    [ // QWERTZ
-      {id:'tab',   n:'',  s:'',   g:'',    w:1.5,  sp:true, lbl:'⇥ Tab'},
-      {id:'q',     n:'q', s:'Q',  g:'@',   w:1},
-      {id:'w',     n:'w', s:'W',  g:'',    w:1},
-      {id:'e',     n:'e', s:'E',  g:'€',   w:1},
-      {id:'r',     n:'r', s:'R',  g:'',    w:1},
-      {id:'t',     n:'t', s:'T',  g:'',    w:1},
-      {id:'z',     n:'z', s:'Z',  g:'',    w:1},
-      {id:'u',     n:'u', s:'U',  g:'',    w:1},
-      {id:'i',     n:'i', s:'I',  g:'',    w:1},
-      {id:'o',     n:'o', s:'O',  g:'',    w:1},
-      {id:'p',     n:'p', s:'P',  g:'',    w:1},
-      {id:'ue',    n:'ü', s:'Ü',  g:'',    w:1},
-      {id:'plu',   n:'+', s:'*',  g:'~',   w:1},
-      {id:'ent',   n:'',  s:'',   g:'',    w:1.5,  sp:true, lbl:'↵ Enter'},
+    [ // Reihe 2: QWERTZ
+      {id:'tab', n:'',  s:'',  g:'',   w:1.5, sp:true, lbl:'⇥ Tab', code:'Tab'},
+      {id:'q',   n:'q', s:'Q', g:'@',  w:1,   code:'KeyQ'},
+      {id:'w',   n:'w', s:'W', g:'',   w:1,   code:'KeyW'},
+      {id:'e',   n:'e', s:'E', g:'€',  w:1,   code:'KeyE'},
+      {id:'r',   n:'r', s:'R', g:'',   w:1,   code:'KeyR'},
+      {id:'t',   n:'t', s:'T', g:'',   w:1,   code:'KeyT'},
+      {id:'z',   n:'z', s:'Z', g:'',   w:1,   code:'KeyZ'},
+      {id:'u',   n:'u', s:'U', g:'',   w:1,   code:'KeyU'},
+      {id:'i',   n:'i', s:'I', g:'',   w:1,   code:'KeyI'},
+      {id:'o',   n:'o', s:'O', g:'',   w:1,   code:'KeyO'},
+      {id:'p',   n:'p', s:'P', g:'',   w:1,   code:'KeyP'},
+      {id:'ue',  n:'ü', s:'Ü', g:'',   w:1,   code:'BracketLeft'},
+      {id:'plu', n:'+', s:'*', g:'~',  w:1,   code:'BracketRight'},
+      {id:'ent', n:'',  s:'',  g:'',   w:1.5, sp:true, lbl:'↵ Enter', code:'Enter'},
     ],
-    [ // ASDF
-      {id:'cap',   n:'',  s:'',   g:'',    w:1.75, sp:true, lbl:'⇪ Feststelltaste'},
-      {id:'a',     n:'a', s:'A',  g:'',    w:1},
-      {id:'s',     n:'s', s:'S',  g:'',    w:1},
-      {id:'d',     n:'d', s:'D',  g:'',    w:1},
-      {id:'f',     n:'f', s:'F',  g:'',    w:1},
-      {id:'g',     n:'g', s:'G',  g:'',    w:1},
-      {id:'h',     n:'h', s:'H',  g:'',    w:1},
-      {id:'j',     n:'j', s:'J',  g:'',    w:1},
-      {id:'k',     n:'k', s:'K',  g:'',    w:1},
-      {id:'l',     n:'l', s:'L',  g:'',    w:1},
-      {id:'oe',    n:'ö', s:'Ö',  g:'',    w:1},
-      {id:'ae',    n:'ä', s:'Ä',  g:'',    w:1},
-      {id:'hsh',   n:'#', s:"'",  g:'',    w:1.25},
+    [ // Reihe 3: ASDF
+      {id:'cap', n:'',  s:'',  g:'',   w:1.75, sp:true, lbl:'⇪ Feststelltaste', code:'CapsLock'},
+      {id:'a',   n:'a', s:'A', g:'',   w:1,   code:'KeyA'},
+      {id:'s',   n:'s', s:'S', g:'',   w:1,   code:'KeyS'},
+      {id:'d',   n:'d', s:'D', g:'',   w:1,   code:'KeyD'},
+      {id:'f',   n:'f', s:'F', g:'',   w:1,   code:'KeyF'},
+      {id:'g',   n:'g', s:'G', g:'',   w:1,   code:'KeyG'},
+      {id:'h',   n:'h', s:'H', g:'',   w:1,   code:'KeyH'},
+      {id:'j',   n:'j', s:'J', g:'',   w:1,   code:'KeyJ'},
+      {id:'k',   n:'k', s:'K', g:'',   w:1,   code:'KeyK'},
+      {id:'l',   n:'l', s:'L', g:'',   w:1,   code:'KeyL'},
+      {id:'oe',  n:'ö', s:'Ö', g:'',   w:1,   code:'Semicolon'},
+      {id:'ae',  n:'ä', s:'Ä', g:'',   w:1,   code:'Quote'},
+      {id:'hsh', n:'#', s:"'", g:'',   w:1.25, code:'Backslash'},
     ],
-    [ // YXCV
-      {id:'shl',   n:'',  s:'',   g:'',    w:2.25, sp:true, lbl:'⇧ Shift', isShift:true},
-      {id:'lt',    n:'<', s:'>',  g:'|',   w:1},
-      {id:'y',     n:'y', s:'Y',  g:'',    w:1},
-      {id:'x',     n:'x', s:'X',  g:'',    w:1},
-      {id:'c',     n:'c', s:'C',  g:'',    w:1},
-      {id:'v',     n:'v', s:'V',  g:'',    w:1},
-      {id:'b',     n:'b', s:'B',  g:'',    w:1},
-      {id:'n',     n:'n', s:'N',  g:'',    w:1},
-      {id:'m',     n:'m', s:'M',  g:'µ',   w:1},
-      {id:'com',   n:',', s:';',  g:'',    w:1},
-      {id:'dot',   n:'.', s:':',  g:'',    w:1},
-      {id:'min',   n:'-', s:'_',  g:'',    w:1},
-      {id:'shr',   n:'',  s:'',   g:'',    w:2.75, sp:true, lbl:'⇧ Shift', isShift:true},
+    [ // Reihe 4: YXCV
+      {id:'shl', n:'',  s:'',  g:'',   w:2.25, sp:true, lbl:'⇧ Shift', isShift:true, code:'ShiftLeft'},
+      {id:'lt',  n:'<', s:'>', g:'|',  w:1,   code:'IntlBackslash'},
+      {id:'y',   n:'y', s:'Y', g:'',   w:1,   code:'KeyY'},
+      {id:'x',   n:'x', s:'X', g:'',   w:1,   code:'KeyX'},
+      {id:'c',   n:'c', s:'C', g:'',   w:1,   code:'KeyC'},
+      {id:'v',   n:'v', s:'V', g:'',   w:1,   code:'KeyV'},
+      {id:'b',   n:'b', s:'B', g:'',   w:1,   code:'KeyB'},
+      {id:'n',   n:'n', s:'N', g:'',   w:1,   code:'KeyN'},
+      {id:'m',   n:'m', s:'M', g:'µ',  w:1,   code:'KeyM'},
+      {id:'com', n:',', s:';', g:'',   w:1,   code:'Comma'},
+      {id:'dot', n:'.', s:':', g:'',   w:1,   code:'Period'},
+      {id:'min', n:'-', s:'_', g:'',   w:1,   code:'Slash'},
+      {id:'shr', n:'',  s:'',  g:'',   w:2.75, sp:true, lbl:'⇧ Shift', isShift:true, code:'ShiftRight'},
     ],
-    [ // Unterste Reihe
-      {id:'ctl',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Strg'},
-      {id:'win',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Win'},
-      {id:'alt',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Alt'},
-      {id:'spc',   n:'',  s:'',   g:'',    w:5.75, sp:true, lbl:'Leertaste'},
-      {id:'agr',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'AltGr', isAltGr:true},
-      {id:'wnr',   n:'',  s:'',   g:'',    w:1,    sp:true, lbl:'Win'},
-      {id:'men',   n:'',  s:'',   g:'',    w:1,    sp:true, lbl:'Menü'},
-      {id:'ctr',   n:'',  s:'',   g:'',    w:1.25, sp:true, lbl:'Strg'},
+    [ // Reihe 5: Unterste Reihe
+      {id:'ctl', n:'',  s:'',  g:'',   w:1.25, sp:true, lbl:'Strg', code:'ControlLeft'},
+      {id:'win', n:'',  s:'',  g:'',   w:1.25, sp:true, lbl:'Win', code:'MetaLeft'},
+      {id:'alt', n:'',  s:'',  g:'',   w:1.25, sp:true, lbl:'Alt', code:'AltLeft'},
+      {id:'spc', n:'',  s:'',  g:'',   w:5.75, sp:true, lbl:'Leertaste', code:'Space'},
+      {id:'agr', n:'',  s:'',  g:'',   w:1.25, sp:true, lbl:'AltGr', isAltGr:true, code:'AltRight'},
+      {id:'wnr', n:'',  s:'',  g:'',   w:1,    sp:true, lbl:'Win', code:'MetaRight'},
+      {id:'men', n:'',  s:'',  g:'',   w:1,    sp:true, lbl:'Menü', code:'ContextMenu'},
+      {id:'ctr', n:'',  s:'',  g:'',   w:1.25, sp:true, lbl:'Strg', code:'ControlRight'},
     ],
   ];
 
+  // ── SONDERZEICHEN KATALOG ───────────────────────────────────────────────
 
-  // ── STATE ─────────────────────────────────────────────────────────────────
+  const SPECIAL_CHARS = [
+    // Level 1: Satzzeichen
+    { char:'!', name:'Ausrufezeichen', desc:'Satzende bei Ausrufen; sehr wichtig in Passwörtern', level:1, baseId:'k1', baseName:'1', layer:'shift', keys:['shl','k1'], combo:'Shift + 1' },
+    { char:'?', name:'Fragezeichen', desc:'Satzende bei Fragen', level:1, baseId:'sz', baseName:'ß', layer:'shift', keys:['shl','sz'], combo:'Shift + ß' },
+    { char:':', name:'Doppelpunkt', desc:'Vor wörtlicher Rede, Aufzählungen oder Uhrzeiten', level:1, baseId:'dot', baseName:'.', layer:'shift', keys:['shl','dot'], combo:'Shift + .' },
+    { char:';', name:'Semikolon (Strichpunkt)', desc:'Trennt eng zusammenhängende Sätze', level:1, baseId:'com', baseName:',', layer:'shift', keys:['shl','com'], combo:'Shift + ,' },
+    { char:'-', name:'Bindestrich / Minus', desc:'Worttrennung oder Minus-Rechnen', level:1, baseId:'min', baseName:'-', layer:'normal', keys:['min'], combo:'Taste -' },
+    { char:'_', name:'Unterstrich', desc:'Verbindet Wörter in Benutzernamen ohne Leerzeichen', level:1, baseId:'min', baseName:'-', layer:'shift', keys:['shl','min'], combo:'Shift + -' },
+    { char:'"', name:'Anführungszeichen', desc:'Für wörtliche Rede und Zitate', level:1, baseId:'k2', baseName:'2', layer:'shift', keys:['shl','k2'], combo:'Shift + 2' },
 
-  let currentLayer = 'normal';
-  let selectedKeyId = null;
+    // Level 2: E-Mail & Internet
+    { char:'@', name:'At-Zeichen (Klammeraffe)', desc:'Unverzichtbar für jede E-Mail-Adresse und Benutzernamen', level:2, baseId:'q', baseName:'Q', layer:'altgr', keys:['agr','q'], combo:'AltGr + Q' },
+    { char:'€', name:'Euro-Zeichen', desc:'Währungszeichen für Geldbeträge in Europa', level:2, baseId:'e', baseName:'E', layer:'altgr', keys:['agr','e'], combo:'AltGr + E' },
+    { char:'/', name:'Schrägstrich (Slash)', desc:'In Webadressen (https://...) und Pfaden', level:2, baseId:'k7', baseName:'7', layer:'shift', keys:['shl','k7'], combo:'Shift + 7' },
+    { char:'#', name:'Raute / Hashtag', desc:'Für Schlagwörter und Programmierzeilen', level:2, baseId:'hsh', baseName:'#', layer:'normal', keys:['hsh'], combo:'Taste #' },
+    { char:'~', name:'Tilde (Wellenlinie)', desc:'In Webadressen und manchen Betriebssystemen', level:2, baseId:'plu', baseName:'+', layer:'altgr', keys:['agr','plu'], combo:'AltGr + +' },
+
+    // Level 3: Klammern & Rechnen
+    { char:'(', name:'Runde Klammer auf', desc:'Öffnet einen Einschub oder eine Rechenklammer', level:3, baseId:'k8', baseName:'8', layer:'shift', keys:['shl','k8'], combo:'Shift + 8' },
+    { char:')', name:'Runde Klammer zu', desc:'Schließt den Einschub oder die Rechenklammer', level:3, baseId:'k9', baseName:'9', layer:'shift', keys:['shl','k9'], combo:'Shift + 9' },
+    { char:'[', name:'Eckige Klammer auf', desc:'Wichtig in Tabellen und Programmiersprachen', level:3, baseId:'k8', baseName:'8', layer:'altgr', keys:['agr','k8'], combo:'AltGr + 8' },
+    { char:']', name:'Eckige Klammer zu', desc:'Schließt eine eckige Klammer', level:3, baseId:'k9', baseName:'9', layer:'altgr', keys:['agr','k9'], combo:'AltGr + 9' },
+    { char:'{', name:'Geschweifte Klammer auf', desc:'Wird in vielen Programmiersprachen für Codeblöcke genutzt', level:3, baseId:'k7', baseName:'7', layer:'altgr', keys:['agr','k7'], combo:'AltGr + 7' },
+    { char:'}', name:'Geschweifte Klammer zu', desc:'Schließt einen Codeblock in der Programmierung', level:3, baseId:'k0', baseName:'0', layer:'altgr', keys:['agr','k0'], combo:'AltGr + 0' },
+    { char:'=', name:'Gleichheitszeichen', desc:'Für mathematische Berechnungen', level:3, baseId:'k0', baseName:'0', layer:'shift', keys:['shl','k0'], combo:'Shift + 0' },
+    { char:'+', name:'Plus-Zeichen', desc:'Addition in der Mathematik', level:3, baseId:'plu', baseName:'+', layer:'normal', keys:['plu'], combo:'Taste +' },
+    { char:'*', name:'Sternchen / Malzeichen', desc:'Multiplikationszeichen am Computer', level:3, baseId:'plu', baseName:'+', layer:'shift', keys:['shl','plu'], combo:'Shift + +' },
+    { char:'%', name:'Prozent-Zeichen', desc:'Für Anteile, Rabatte und Berechnungen', level:3, baseId:'k5', baseName:'5', layer:'shift', keys:['shl','k5'], combo:'Shift + 5' },
+
+    // Level 4: Nerd- & Informatiksymbole
+    { char:'\\', name:'Backslash (Rückwärtiger Schrägstrich)', desc:'Für Dateipfade auf Windows-Computern', level:4, baseId:'sz', baseName:'ß', layer:'altgr', keys:['agr','sz'], combo:'AltGr + ß' },
+    { char:'|',  name:'Pipe (Senkrechter Strich)', desc:'Trennzeichen in Betriebssystemen und Tabellen', level:4, baseId:'lt', baseName:'<', layer:'altgr', keys:['agr','lt'], combo:'AltGr + <' },
+    { char:'<',  name:'Kleiner-als-Zeichen', desc:'Vergleichszeichen in Mathe und HTML-Befehlen', level:4, baseId:'lt', baseName:'<', layer:'normal', keys:['lt'], combo:'Taste <' },
+    { char:'>',  name:'Größer-als-Zeichen', desc:'Vergleichszeichen in Mathe und HTML-Befehlen', level:4, baseId:'lt', baseName:'<', layer:'shift', keys:['shl','lt'], combo:'Shift + <' },
+    { char:'&',  name:'Et-Zeichen (Ampersand)', desc:'Bedeutet „und“ in Namen und Programmcode', level:4, baseId:'k6', baseName:'6', layer:'shift', keys:['shl','k6'], combo:'Shift + 6' },
+    { char:'$',  name:'Dollar-Zeichen', desc:'Währung und Codezeichen in Programmen', level:4, baseId:'k4', baseName:'4', layer:'shift', keys:['shl','k4'], combo:'Shift + 4' },
+    { char:'§',  name:'Paragrafen-Zeichen', desc:'Für Absätze in Gesetzen und Ordnungen', level:4, baseId:'k3', baseName:'3', layer:'shift', keys:['shl','k3'], combo:'Shift + 3' }
+  ];
+
+  const LEVEL_CONFIGS = {
+    1: { title: 'Level 1: Satzzeichen', chars: ['!', '?', ':', ';', '-', '_', '"'] },
+    2: { title: 'Level 2: E-Mail & Web', chars: ['@', '€', '/', '#', '~'] },
+    3: { title: 'Level 3: Klammern & Rechnen', chars: ['(', ')', '[', ']', '{', '}', '=', '+', '*', '%'] },
+    4: { title: 'Level 4: Code & Pfade', chars: ['\\', '|', '<', '>', '&', '$', '§'] },
+    5: { title: 'Level 5: Passwort-Mix', chars: ['!', '?', '$', '%', '&', '@', '#', '_', '=', '*'] }
+  };
+
+  // ── APP-STATE ────────────────────────────────────────────────────────────
+
+  let currentView = 'explore';     // 'explore' | 'trainer'
+  let currentLayer = 'normal';     // 'normal' | 'shift' | 'altgr'
+  let currentFilter = 'all';       // 'all' | 'shift' | 'altgr'
   let isDark = false;
+  let selectedKeyId = null;
 
-  // Training state
-  let trainActive = false;
+  // Modifikator-Status (für Klick-Bedienung & Physisches Halten)
+  let latchedModifier = null;     // 'shift' | 'altgr' | null (wenn per Mausklick eingerastet)
+  let physicalShiftDown = false;
+  let physicalAltGrDown = false;
+
+  // Trainer State
+  let currentLevel = 1;
   let trainDeck = [];
   let trainIndex = 0;
-  let trainStep = 0;       // 1 = Ebene wählen, 2 = Taste klicken, 3 = fertig, 4 = Ergebnis
-  let trainFirstTry = true;
-  let trainAutoTimer = null;
-  const TRAIN_AUTO_MS = 3000;   // Pause bis zum automatischen Weiterspringen
   let trainScore = 0;
-  const TRAIN_PER_LAYER = 4;
+  let trainFirstAttempt = true;
+  let trainAutoTimer = null;
+  const TRAIN_AUTO_DELAY = 2200;
 
-  // ── BUILD KEYBOARD ────────────────────────────────────────────────────────
+  // ── TASTATUR RENDERN ─────────────────────────────────────────────────────
 
   function getKU() {
-    return document.getElementById('KU').getBoundingClientRect().width || 54;
+    return document.getElementById('KU').getBoundingClientRect().width || 52;
+  }
+
+  function isShiftSymbol(c) {
+    return c && !/^[A-ZÄÖÜ]$/.test(c);
   }
 
   function buildKeyboard() {
@@ -757,21 +1041,24 @@
         const el = document.createElement('div');
         el.className = 'k' + (key.sp ? ' sp' : '');
         el.dataset.id = key.id;
+        if (key.code) el.dataset.code = key.code;
         if (key.isShift) el.dataset.isshift = '1';
         if (key.isAltGr) el.dataset.isaltgr = '1';
+
+        // Filter-Klassen für CSS
+        if (key.s && isShiftSymbol(key.s)) el.classList.add('has-shift-symbol');
+        if (key.g) el.classList.add('has-altgr-symbol');
 
         const w = key.w || 1;
         const px = K * w + GAP * (w - 1);
         el.style.minWidth = el.style.width = px + 'px';
 
         if (key.sp) {
-          // Special key: show label
           const lbl = document.createElement('span');
           lbl.className = 'k-lbl';
           lbl.textContent = key.lbl || '';
           el.appendChild(lbl);
         } else {
-          // Normal key: show g, s, n layers
           if (key.g) {
             const gEl = document.createElement('span');
             gEl.className = 'k-g';
@@ -792,80 +1079,172 @@
           }
         }
 
-        el.addEventListener('click', () => handleKeyClick(key));
+        el.addEventListener('click', () => onVirtualKeyClick(key));
         rowEl.appendChild(el);
       });
 
       wrap.appendChild(rowEl);
     });
 
-    applyLayerDim();
+    updateLayerVisuals();
+    updateFilterVisuals();
     if (selectedKeyId) {
       const el = document.querySelector(`.k[data-id="${selectedKeyId}"]`);
       if (el) el.classList.add('selected');
     }
   }
 
-  // ── LAYER ─────────────────────────────────────────────────────────────────
+  // ── EBENEN- & FILTER-LOGIK ───────────────────────────────────────────────
 
-  function setLayer(layer) {
+  function setLayer(layer, isTempFromPhysical = false) {
     currentLayer = layer;
     document.body.classList.remove('l-normal', 'l-shift', 'l-altgr');
     document.body.classList.add('l-' + layer);
 
-    // Update tabs
-    document.querySelectorAll('.layer-tab').forEach(tab => {
-      tab.classList.remove('active-normal', 'active-shift', 'active-altgr');
-      if (tab.dataset.layer === layer) {
-        tab.classList.add('active-' + layer);
-      }
-    });
+    if (!isTempFromPhysical) {
+      document.querySelectorAll('.layer-pill').forEach(b => {
+        b.classList.remove('active-normal', 'active-shift', 'active-altgr');
+      });
+      const targetPill = document.getElementById('pill-' + layer);
+      if (targetPill) targetPill.classList.add('active-' + layer);
+    }
 
-    applyLayerDim();
+    updateLayerVisuals();
   }
 
-  function applyLayerDim() {
-    if (currentLayer !== 'altgr') {
-      document.querySelectorAll('.k').forEach(el => el.classList.remove('dim'));
+  function updateLayerVisuals() {
+    // Modifier Key Highlightings
+    document.querySelectorAll('.k[data-isshift]').forEach(el => {
+      el.classList.toggle('mod-active-shift', currentLayer === 'shift' || latchedModifier === 'shift');
+    });
+    document.querySelectorAll('.k[data-isaltgr]').forEach(el => {
+      el.classList.toggle('mod-active-altgr', currentLayer === 'altgr' || latchedModifier === 'altgr');
+    });
+
+    // Dimming bei AltGr
+    if (currentLayer === 'altgr') {
+      ROWS.flat().forEach(k => {
+        const el = document.querySelector(`.k[data-id="${k.id}"]`);
+        if (!el) return;
+        if (!k.sp && !k.g) el.classList.add('dim');
+        else el.classList.remove('dim');
+      });
+    } else {
+      document.querySelectorAll('.k.dim').forEach(el => el.classList.remove('dim'));
+    }
+  }
+
+  function setFilter(filter) {
+    currentFilter = filter;
+    document.body.classList.remove('filter-shift', 'filter-altgr');
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+
+    const btn = document.getElementById('flt-' + filter);
+    if (btn) btn.classList.add('active');
+
+    if (filter === 'shift') {
+      document.body.classList.add('filter-shift');
+      setLayer('shift');
+    } else if (filter === 'altgr') {
+      document.body.classList.add('filter-altgr');
+      setLayer('altgr');
+    } else {
+      setLayer('normal');
+    }
+  }
+
+  function updateFilterVisuals() {
+    // nichts zusätzliches nötig, läuft über CSS Klassen auf Body
+  }
+
+  // ── VIEW-WECHSEL (ERKUNDEN vs. TRAINER) ───────────────────────────────────
+
+  function switchView(view) {
+    currentView = view;
+    clearTimeout(trainAutoTimer);
+
+    const btnExplore = document.getElementById('tab-explore');
+    const btnTrainer = document.getElementById('tab-trainer');
+    const controlBar = document.getElementById('control-bar');
+    const trainingCard = document.getElementById('training-card');
+    const resultView = document.getElementById('result-view');
+    const infoPanel = document.getElementById('info-panel');
+
+    if (view === 'explore') {
+      btnExplore.classList.add('active');
+      btnTrainer.classList.remove('active', 'active-trainer');
+      controlBar.style.display = 'flex';
+      trainingCard.classList.remove('active');
+      resultView.classList.remove('active');
+      infoPanel.style.display = 'flex';
+      setLayer('normal');
+    } else {
+      btnExplore.classList.remove('active');
+      btnTrainer.classList.add('active', 'active-trainer');
+      controlBar.style.display = 'none';
+      infoPanel.style.display = 'none';
+      startLevel(currentLevel);
+    }
+  }
+
+  // ── VIRTUELLE TASTENKLICKS ────────────────────────────────────────────────
+
+  function onVirtualKeyClick(key) {
+    // Falls der Klick auf eine Modifikatortaste erfolgt:
+    if (key.isShift) {
+      if (latchedModifier === 'shift') {
+        latchedModifier = null;
+        setLayer('normal');
+      } else {
+        latchedModifier = 'shift';
+        setLayer('shift');
+      }
       return;
     }
-    // In AltGr mode: dim keys with no AltGr character
-    ROWS.flat().forEach(key => {
-      const el = document.querySelector(`.k[data-id="${key.id}"]`);
-      if (!el) return;
-      if (key.sp) {
-        el.classList.remove('dim');
+    if (key.isAltGr) {
+      if (latchedModifier === 'altgr') {
+        latchedModifier = null;
+        setLayer('normal');
       } else {
-        if (!key.g) {
-          el.classList.add('dim');
-        } else {
-          el.classList.remove('dim');
-        }
+        latchedModifier = 'altgr';
+        setLayer('altgr');
       }
-    });
-  }
+      return;
+    }
 
-  // ── KEY CLICK ─────────────────────────────────────────────────────────────
+    // Wenn Training aktiv ist: Auswertung des Zeichens
+    if (currentView === 'trainer' && trainDeck.length > 0) {
+      let charProduced = key.n || '';
+      let usedLayer = 'normal';
 
-  function handleKeyClick(key) {
-    if (trainActive) { trainKeyClick(key); return; }
-    // Deselect previous
+      if (latchedModifier === 'shift' || currentLayer === 'shift') {
+        charProduced = key.s || key.n;
+        usedLayer = 'shift';
+      } else if (latchedModifier === 'altgr' || currentLayer === 'altgr') {
+        charProduced = key.g || key.n;
+        usedLayer = 'altgr';
+      }
+
+      evaluateTrainedInput(charProduced, key, usedLayer);
+
+      // Latched modifier nach Tastendruck zurücksetzen
+      if (latchedModifier) {
+        latchedModifier = null;
+        setLayer('normal');
+      }
+      return;
+    }
+
+    // Erkundungs-Modus
     document.querySelectorAll('.k.selected').forEach(el => el.classList.remove('selected'));
-
     const el = document.querySelector(`.k[data-id="${key.id}"]`);
     if (el) el.classList.add('selected');
     selectedKeyId = key.id;
 
-    showInfo(key);
+    showExplorerInfo(key);
   }
 
-  function layerChar(key) {
-    if (currentLayer === 'shift') return key.s || key.n || '';
-    if (currentLayer === 'altgr') return key.g || key.n || '';
-    return key.n || '';
-  }
-
-  function showInfo(key) {
+  function showExplorerInfo(key) {
     const def = document.getElementById('info-default');
     const content = document.getElementById('info-content');
     const charEl = document.getElementById('info-char');
@@ -876,134 +1255,303 @@
     def.style.display = 'none';
     content.style.display = 'flex';
 
-    // Special key explanations
     if (key.sp) {
-      switch(key.id) {
-        case 'bs':
-          charEl.textContent = '⌫';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = 'Rücktaste (Backspace)';
-          subEl.innerHTML = 'Löscht das Zeichen <strong>links</strong> vom Cursor. Tipp: Gedrückt halten löscht kontinuierlich.';
-          layersEl.innerHTML = '';
-          return;
-        case 'ent':
-          charEl.textContent = '↵';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = 'Enter (Eingabetaste)';
-          subEl.innerHTML = 'Bestätigt Eingaben oder beginnt eine <strong>neue Zeile</strong> in einem Text.';
-          layersEl.innerHTML = '';
-          return;
-        case 'tab':
-          charEl.textContent = '⇥';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = 'Tabulator-Taste (Tab)';
-          subEl.innerHTML = 'Springt zum nächsten <strong>Tabulatorsprung</strong>, z. B. in Tabellen oder Formularen.';
-          layersEl.innerHTML = '';
-          return;
-        case 'cap':
-          charEl.textContent = '⇪';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = 'Feststelltaste (Caps Lock)';
-          subEl.innerHTML = 'Schaltet <strong>Großbuchstaben dauerhaft ein</strong>. Drücke erneut, um auszuschalten. Eine Kontrolllampe zeigt den Zustand an.';
-          layersEl.innerHTML = '';
-          return;
-        case 'spc':
-          charEl.textContent = '⎵';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = 'Leertaste (Space)';
-          subEl.innerHTML = 'Fügt ein <strong>Leerzeichen</strong> zwischen Wörter ein. Die längste Taste auf der Tastatur.';
-          layersEl.innerHTML = '';
-          return;
-        case 'shl':
-        case 'shr':
-          charEl.textContent = '⇧';
-          charEl.style.color = 'var(--shift-c)';
-          titleEl.textContent = 'Shift-Taste (Umschalttaste)';
-          subEl.innerHTML = 'Gedrückt halten + Buchstabe → <strong>Großbuchstabe</strong>.<br>Gedrückt halten + Zifferntaste → Sonderzeichen (<kbd>Shift</kbd>+<kbd>1</kbd> = <kbd>!</kbd>, <kbd>Shift</kbd>+<kbd>2</kbd> = <kbd>"</kbd> …)';
-          layersEl.innerHTML = '';
-          return;
-        case 'agr':
-          charEl.textContent = 'AltGr';
-          charEl.style.fontSize = '1rem';
-          charEl.style.color = 'var(--altgr-c)';
-          titleEl.textContent = 'AltGr-Taste (Alternativ-Grafik)';
-          subEl.innerHTML = 'Drücke <kbd>AltGr</kbd> + eine Taste, um <strong>grüne Sonderzeichen</strong> einzugeben.<br>Beispiele: <kbd>AltGr</kbd>+<kbd>Q</kbd> = <kbd>@</kbd>&nbsp; <kbd>AltGr</kbd>+<kbd>E</kbd> = <kbd>€</kbd>&nbsp; <kbd>AltGr</kbd>+<kbd>7</kbd> = <kbd>{</kbd>';
-          layersEl.innerHTML = '';
-          charEl.style.fontSize = '';
-          return;
-        default:
-          charEl.textContent = key.lbl || '—';
-          charEl.style.color = 'var(--muted)';
-          titleEl.textContent = key.lbl || 'Sondertaste';
-          subEl.innerHTML = 'Steuertaste ohne direkte Zeicheneingabe.';
-          layersEl.innerHTML = '';
-          return;
-      }
+      charEl.textContent = key.lbl.charAt(0);
+      titleEl.textContent = key.lbl;
+      subEl.innerHTML = `Funktionstaste der Tastatur`;
+      layersEl.innerHTML = '';
+      return;
     }
 
-    // Normal character key
-    const activeChar = layerChar(key);
-    charEl.textContent = activeChar || key.n || '?';
-    charEl.style.color = 'var(--primary)';
-    charEl.style.fontSize = '';
+    const activeChar = currentLayer === 'shift' ? (key.s || key.n) :
+                       currentLayer === 'altgr' ? (key.g || key.n) : key.n;
 
-    // Title based on layer
-    let titleText = '';
-    if (currentLayer === 'normal') {
-      titleText = `„${key.n}" – Normale Ebene (Taste drÃ¼cken)`;
-    } else if (currentLayer === 'shift') {
-      titleText = `„${key.s || key.n}" – Shift-Ebene`;
+    charEl.textContent = activeChar;
+    titleEl.textContent = `Taste „${key.n.toUpperCase()}“`;
+
+    let combo = `<kbd class="kbd-tag">${key.n}</kbd>`;
+    if (currentLayer === 'shift') combo = `<kbd class="kbd-tag">Shift</kbd> + <kbd class="kbd-tag">${key.n.toUpperCase()}</kbd>`;
+    if (currentLayer === 'altgr') combo = `<kbd class="kbd-tag">AltGr</kbd> + <kbd class="kbd-tag">${key.n.toUpperCase()}</kbd>`;
+
+    subEl.innerHTML = `Aktuelle Eingabe: ${combo} → <strong>${activeChar}</strong>`;
+
+    layersEl.innerHTML = `
+      <span class="layer-chip lc-normal">Normal: ${key.n}</span>
+      <span class="layer-chip lc-shift">Shift: ${key.s || '—'}</span>
+      <span class="layer-chip lc-altgr">AltGr: ${key.g || '—'}</span>
+    `;
+  }
+
+  // ── SONDERZEICHEN-TRAINER LOGIK ──────────────────────────────────────────
+
+  function startLevel(lvl) {
+    currentLevel = lvl;
+    document.querySelectorAll('.level-pill-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.lvl) === lvl);
+    });
+
+    const cfg = LEVEL_CONFIGS[lvl];
+    const pool = cfg.chars.map(c => SPECIAL_CHARS.find(item => item.char === c)).filter(Boolean);
+
+    // Mischen
+    trainDeck = shuffleArray([...pool]);
+    trainIndex = 0;
+    trainScore = 0;
+
+    document.getElementById('result-view').classList.remove('active');
+    document.getElementById('training-card').classList.add('active');
+
+    showTrainQuestion();
+  }
+
+  function restartCurrentLevel() {
+    startLevel(currentLevel);
+  }
+
+  function nextLevelOrExplore() {
+    if (currentLevel < 5) {
+      startLevel(currentLevel + 1);
     } else {
-      titleText = key.g ? `„${key.g}" – AltGr-Ebene` : `Keine AltGr-Belegung auf dieser Taste`;
-    }
-    titleEl.textContent = titleText;
-
-    // Combination chips
-    let comboHtml = '';
-    if (currentLayer === 'normal') {
-      comboHtml = `Eingabe: <kbd>${key.n}</kbd>`;
-    } else if (currentLayer === 'shift') {
-      comboHtml = `Kombination: <kbd>⇧ Shift</kbd> + <kbd>${key.n || key.id}</kbd> → <kbd>${key.s || '—'}</kbd>`;
-    } else if (currentLayer === 'altgr') {
-      if (key.g) {
-        comboHtml = `Kombination: <kbd>AltGr</kbd> + <kbd>${key.n || key.id}</kbd> → <kbd>${key.g}</kbd>`;
-      } else {
-        comboHtml = `Diese Taste hat keine AltGr-Belegung.`;
-      }
-    }
-    subEl.innerHTML = comboHtml;
-
-    // Layer chips
-    layersEl.innerHTML = '';
-    if (key.n) {
-      const c = document.createElement('span');
-      c.className = 'layer-chip lc-normal';
-      c.textContent = `Normale Ebene: ${key.n}`;
-      layersEl.appendChild(c);
-    }
-    if (key.s) {
-      const c = document.createElement('span');
-      c.className = 'layer-chip lc-shift';
-      c.textContent = `Hochgestellt: ${key.s}`;
-      layersEl.appendChild(c);
-    }
-    if (key.g) {
-      const c = document.createElement('span');
-      c.className = 'layer-chip lc-altgr';
-      c.textContent = `Tiefgestellt: ${key.g}`;
-      layersEl.appendChild(c);
+      switchView('explore');
     }
   }
 
-  // ── EBENEN-TRAINING ───────────────────────────────────────────────────────
+  function showTrainQuestion() {
+    clearTimeout(trainAutoTimer);
+    trainFirstAttempt = true;
 
-  const LAYER_INFO = {
-    normal: { name: 'Normale Ebene',       how: 'Taste drücken' },
-    shift:  { name: 'Hochgestellte Ebene', how: 'SHIFT + Taste' },
-    altgr:  { name: 'Tiefgestellte Ebene', how: 'ALT GR + Taste' },
-  };
+    const item = trainDeck[trainIndex];
+    document.getElementById('target-char-display').textContent = item.char;
+    document.getElementById('target-name-display').textContent = item.name;
+    document.getElementById('target-desc-display').textContent = item.desc;
 
-  function shuffle(arr) {
+    document.getElementById('train-progress').textContent = `Zeichen ${trainIndex + 1} von ${trainDeck.length}`;
+    document.getElementById('train-score').textContent = `Punkte: ${trainScore}`;
+
+    const fb = document.getElementById('trainer-feedback-box');
+    fb.className = 'trainer-feedback';
+    fb.innerHTML = '';
+
+    document.getElementById('btn-show-hint').textContent = 'Tipp anzeigen';
+    document.getElementById('btn-train-next').style.display = 'none';
+
+    // Ebene visuell auf normal zurücksetzen
+    setLayer('normal');
+  }
+
+  function toggleHint() {
+    const item = trainDeck[trainIndex];
+    const btn = document.getElementById('btn-show-hint');
+    const fb = document.getElementById('trainer-feedback-box');
+
+    if (fb.classList.contains('active') && fb.classList.contains('hint')) {
+      fb.className = 'trainer-feedback';
+      btn.textContent = 'Tipp anzeigen';
+    } else {
+      fb.className = 'trainer-feedback active hint';
+      fb.innerHTML = `Tipp: Das Zeichen <kbd class="kbd-tag">${item.char}</kbd> tippst du mit der Tastenkombination <strong>${item.combo}</strong>.`;
+      btn.textContent = 'Tipp ausblenden';
+      flashKeyHelp(item);
+    }
+  }
+
+  function evaluateTrainedInput(typedChar, keyObj, usedLayer) {
+    const item = trainDeck[trainIndex];
+    const fb = document.getElementById('trainer-feedback-box');
+    const nextBtn = document.getElementById('btn-train-next');
+
+    if (typedChar === item.char) {
+      // ── RICHTIGE EINGABE ──
+      if (trainFirstAttempt) {
+        trainScore++;
+      }
+      document.getElementById('train-score').textContent = `Punkte: ${trainScore}`;
+
+      fb.className = 'trainer-feedback active ok';
+      fb.innerHTML = `Perfekt! <kbd class="kbd-tag">${item.combo}</kbd> ergibt <kbd class="kbd-tag">${item.char}</kbd>.` +
+        (trainFirstAttempt ? ' (Volle Punktzahl)' : '');
+
+      flashSuccessKey(item);
+
+      nextBtn.style.display = 'inline-block';
+      clearTimeout(trainAutoTimer);
+      trainAutoTimer = setTimeout(nextTrainChar, TRAIN_AUTO_DELAY);
+
+    } else {
+      // ── FEHLER / ANALYSE ──
+      trainFirstAttempt = false;
+      const targetBaseKey = ROWS.flat().find(k => k.id === item.baseId);
+
+      // Animation auf der falsch geklickten Taste
+      if (keyObj) {
+        const el = document.querySelector(`.k[data-id="${keyObj.id}"]`);
+        if (el) {
+          el.classList.remove('flash-wrong');
+          void el.offsetWidth;
+          el.classList.add('flash-wrong');
+        }
+      }
+
+      // Spezifisches Coaching
+      if (keyObj && keyObj.id === item.baseId) {
+        if (item.layer === 'altgr' && usedLayer !== 'altgr') {
+          fb.className = 'trainer-feedback active hint';
+          fb.innerHTML = `Die Taste stimmt (${keyObj.n.toUpperCase()})! Halte aber zusätzlich die <strong>AltGr-Taste</strong> gedrückt.`;
+        } else if (item.layer === 'shift' && usedLayer !== 'shift') {
+          fb.className = 'trainer-feedback active hint';
+          fb.innerHTML = `Die Taste stimmt (${keyObj.n.toUpperCase()})! Halte aber zusätzlich die <strong>Shift-Taste (Umschalttaste)</strong> gedrückt.`;
+        } else {
+          fb.className = 'trainer-feedback active error';
+          fb.innerHTML = `Falsche Ebene. Gesucht ist <kbd class="kbd-tag">${item.char}</kbd> mit <strong>${item.combo}</strong>.`;
+        }
+      } else {
+        fb.className = 'trainer-feedback active error';
+        fb.innerHTML = `Das war <kbd class="kbd-tag">${typedChar || 'falsch'}</kbd>. Suche die Taste mit der Beschriftung <kbd class="kbd-tag">${item.baseName}</kbd> (${item.combo}).`;
+      }
+    }
+  }
+
+  function nextTrainChar() {
+    clearTimeout(trainAutoTimer);
+    trainIndex++;
+    if (trainIndex >= trainDeck.length) {
+      showTrainerResults();
+    } else {
+      showTrainQuestion();
+    }
+  }
+
+  function showTrainerResults() {
+    document.getElementById('training-card').classList.remove('active');
+    const res = document.getElementById('result-view');
+    res.classList.add('active');
+
+    const total = trainDeck.length;
+    document.getElementById('result-score-text').textContent = `${trainScore} / ${total}`;
+
+    const desc = document.getElementById('result-desc-text');
+    if (trainScore === total) {
+      desc.textContent = `Hervorragend! Du hast alle Sonderzeichen auf Anhieb richtig mit der Tastatur getippt!`;
+    } else if (trainScore >= total * 0.7) {
+      desc.textContent = `Sehr gut gemacht! Wiederhole das Level kurz, um die Tastenkombinationen perfekt zu verinnerlichen.`;
+    } else {
+      desc.textContent = `Guter Anfang! Mit etwas Übung prägen sich die Kombinationen mit Shift und AltGr schnell ein.`;
+    }
+  }
+
+  function flashSuccessKey(item) {
+    document.querySelectorAll('.k.flash-success').forEach(el => el.classList.remove('flash-success'));
+    setTimeout(() => {
+      item.keys.forEach(kid => {
+        const el = document.querySelector(`.k[data-id="${kid}"]`);
+        if (el) {
+          el.classList.add('flash-success');
+          el.addEventListener('animationend', () => el.classList.remove('flash-success'), {once:true});
+        }
+      });
+    }, 10);
+  }
+
+  function flashKeyHelp(item) {
+    item.keys.forEach(kid => {
+      const el = document.querySelector(`.k[data-id="${kid}"]`);
+      if (el) {
+        el.classList.add('flash-success');
+        setTimeout(() => el.classList.remove('flash-success'), 1200);
+      }
+    });
+  }
+
+  // ── PHYSISCHE TASTATUR-LISTENER (ECHTE EINGABE & LIVE-SPIEGEL) ───────────
+
+  window.addEventListener('keydown', (e) => {
+    // 1. Physische Taste visuell herunterdrücken
+    const keyEl = document.querySelector(`.k[data-code="${e.code}"]`);
+    if (keyEl) keyEl.classList.add('physical-down');
+
+    // 2. Modifikatoren erkennen & Ebene live spiegeln
+    const isAltGr = (e.key === 'AltGraph' || e.code === 'AltRight' || (e.ctrlKey && e.altKey));
+    const isShift = (e.key === 'Shift' || e.shiftKey);
+
+    if (isAltGr) {
+      physicalAltGrDown = true;
+      setLayer('altgr', true);
+    } else if (isShift && !physicalAltGrDown) {
+      physicalShiftDown = true;
+      setLayer('shift', true);
+    }
+
+    // 3. Tastaturkürzel zum Umschalten (nur im Explorer)
+    if (currentView === 'explore') {
+      if (e.key === '1' && !e.ctrlKey && !e.altKey) { setLayer('normal'); return; }
+      if (e.key === '2' && !e.ctrlKey && !e.altKey) { setLayer('shift'); return; }
+      if (e.key === '3' && !e.ctrlKey && !e.altKey) { setLayer('altgr'); return; }
+    }
+
+    // 4. Sonderzeichen-Trainer Eingabe auswerten
+    if (currentView === 'trainer') {
+      // Modifikatoren selbst nicht als falsche Eingabe werten
+      if (['Shift', 'Control', 'Alt', 'AltGraph', 'Meta', 'CapsLock', 'Tab'].includes(e.key)) {
+        return;
+      }
+
+      // Enter zum Weiterspringen
+      if (e.key === 'Enter') {
+        const nextBtn = document.getElementById('btn-train-next');
+        if (nextBtn.style.display !== 'none') {
+          e.preventDefault();
+          nextTrainChar();
+          return;
+        }
+      }
+
+      // Reines getipptes Zeichen auswerten
+      const typedChar = e.key;
+      const matchedKeyObj = ROWS.flat().find(k => k.code === e.code);
+      const usedLayer = isAltGr ? 'altgr' : (isShift ? 'shift' : 'normal');
+
+      // Browser-Standard für Tastaturkürzel unterbinden (z. B. '/' in Firefox)
+      if (typedChar.length === 1) {
+        e.preventDefault();
+      }
+
+      evaluateTrainedInput(typedChar, matchedKeyObj, usedLayer);
+      return;
+    }
+
+    // 5. Explorer Live-Spiegelung bei normalem Tippen
+    if (currentView === 'explore' && e.key.length === 1) {
+      const matchedKeyObj = ROWS.flat().find(k => k.code === e.code);
+      if (matchedKeyObj) {
+        onVirtualKeyClick(matchedKeyObj);
+      }
+    }
+  });
+
+  window.addEventListener('keyup', (e) => {
+    // Physische Taste visuell loslassen
+    const keyEl = document.querySelector(`.k[data-code="${e.code}"]`);
+    if (keyEl) keyEl.classList.remove('physical-down');
+
+    // Modifikatoren zurücksetzen
+    if (e.code === 'AltRight' || e.key === 'AltGraph' || (!e.altKey && !e.ctrlKey)) {
+      physicalAltGrDown = false;
+    }
+    if (e.code.startsWith('Shift') || !e.shiftKey) {
+      physicalShiftDown = false;
+    }
+
+    // Ebene zurücksetzen, falls kein Klick-Latch aktiv ist
+    if (!physicalAltGrDown && !physicalShiftDown && !latchedModifier) {
+      setLayer('normal', true);
+    } else if (physicalShiftDown && !physicalAltGrDown) {
+      setLayer('shift', true);
+    }
+  });
+
+  // ── HELPER ───────────────────────────────────────────────────────────────
+
+  function shuffleArray(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -1012,228 +1560,19 @@
     return a;
   }
 
-  function layerPool(layer) {
-    const seen = new Set();
-    const out = [];
-    ROWS.flat().forEach(key => {
-      if (key.sp) return;
-      const c = layer === 'normal' ? key.n : layer === 'shift' ? key.s : key.g;
-      if (c && !seen.has(c)) { seen.add(c); out.push({ c, layer, key }); }
-    });
-    return out;
-  }
-
-  function keyName(key) {
-    return /^[a-zäöü]$/.test(key.n) ? key.n.toUpperCase() : key.n;
-  }
-
-  function comboHtml(item) {
-    const k = keyName(item.key);
-    if (item.layer === 'normal') return `<kbd>${item.c}</kbd>`;
-    if (item.layer === 'shift')  return `<kbd>Shift</kbd> + <kbd>${k}</kbd> ergibt <kbd>${item.c}</kbd>`;
-    return `<kbd>Alt Gr</kbd> + <kbd>${k}</kbd> ergibt <kbd>${item.c}</kbd>`;
-  }
-
-  function openTrain() {
-    trainActive = true;
-    trainDeck = shuffle([
-      ...shuffle(layerPool('normal')).slice(0, TRAIN_PER_LAYER),
-      ...shuffle(layerPool('shift')).slice(0, TRAIN_PER_LAYER),
-      ...shuffle(layerPool('altgr')).slice(0, TRAIN_PER_LAYER),
-    ]);
-    trainIndex = 0;
-    trainScore = 0;
-    document.getElementById('info-panel').style.display = 'none';
-    document.getElementById('train-panel').classList.add('active');
-    document.querySelectorAll('.k.selected').forEach(el => el.classList.remove('selected'));
-    selectedKeyId = null;
-    setLayer('normal');
-    showTrainItem();
-  }
-
-  function closeTrain() {
-    trainActive = false;
-    trainStep = 0;
-    clearTimeout(trainAutoTimer);
-    document.getElementById('train-panel').classList.remove('active');
-    document.getElementById('info-panel').style.display = '';
-    document.querySelectorAll('.k.flash, .k.wrong').forEach(el => el.classList.remove('flash', 'wrong'));
-  }
-
-  function setTrainFeedback(html, cls) {
-    const fb = document.getElementById('train-feedback');
-    fb.innerHTML = html;
-    fb.className = cls || '';
-  }
-
-  function showTrainItem() {
-    const item = trainDeck[trainIndex];
-    trainStep = 1;
-    trainFirstTry = true;
-
-    const ch = document.getElementById('train-char');
-    ch.textContent = item.c;
-    ch.classList.remove('small');
-    document.getElementById('train-progress').textContent =
-      `Zeichen ${trainIndex + 1} von ${trainDeck.length}  ·  Punkte: ${trainScore}`;
-    document.getElementById('train-question').textContent =
-      'Schritt 1: Auf welcher Ebene der Tastatur liegt dieses Zeichen?';
-    setTrainFeedback('Suche das Zeichen auf der Tastatur. Steht es unten links, oben links oder unten rechts auf der Taste?');
-    document.getElementById('train-next').style.display = 'none';
-    document.querySelectorAll('.train-layer-btn').forEach(b => {
-      b.disabled = false;
-      b.classList.remove('right', 'wrong');
-    });
-    document.getElementById('train-layers').style.display = 'flex';
-  }
-
-  function trainChooseLayer(layer) {
-    if (!trainActive || trainStep !== 1) return;
-    const item = trainDeck[trainIndex];
-    const btn = document.querySelector(`.train-layer-btn[data-layer="${layer}"]`);
-
-    if (layer === item.layer) {
-      trainStep = 2;
-      btn.classList.add('right');
-      document.querySelectorAll('.train-layer-btn').forEach(b => b.disabled = true);
-      setLayer(item.layer);
-      document.getElementById('train-question').textContent =
-        'Schritt 2: Klicke auf der Tastatur die Taste an, mit der du dieses Zeichen schreibst.';
-      setTrainFeedback(
-        `Richtig: Das Zeichen <kbd>${item.c}</kbd> liegt auf der <strong>${LAYER_INFO[item.layer].name}</strong> (${LAYER_INFO[item.layer].how}).`,
-        'ok'
-      );
-    } else {
-      trainFirstTry = false;
-      btn.classList.add('wrong');
-      btn.disabled = true;
-      setTrainFeedback('Nicht ganz. Schau noch einmal genau hin, wo das Zeichen auf der Taste steht, und versuche eine andere Ebene.', 'bad');
-    }
-  }
-
-  function trainKeyClick(key) {
-    if (trainStep !== 2) return;
-    const item = trainDeck[trainIndex];
-    const el = document.querySelector(`.k[data-id="${key.id}"]`);
-
-    if (key.id === item.key.id) {
-      trainStep = 3;
-      if (trainFirstTry) trainScore++;
-      flashKeys({ keys: [item.key.id], mod: item.layer });
-      document.getElementById('train-question').textContent = 'Geschafft!';
-      setTrainFeedback(
-        `So gibst du das Zeichen ein: ${comboHtml(item)}` +
-        (trainFirstTry ? '' : '<br>Diesmal gab es noch Fehlversuche, dafür gibt es keinen Punkt.'),
-        'ok'
-      );
-      document.getElementById('train-progress').textContent =
-        `Zeichen ${trainIndex + 1} von ${trainDeck.length}  ·  Punkte: ${trainScore}`;
-      const next = document.getElementById('train-next');
-      next.textContent = trainIndex + 1 >= trainDeck.length ? 'Ergebnis ansehen' : 'Weiter';
-      next.style.display = '';
-      clearTimeout(trainAutoTimer);
-      trainAutoTimer = setTimeout(trainNext, TRAIN_AUTO_MS);
-    } else {
-      trainFirstTry = false;
-      if (el) {
-        el.classList.remove('wrong');
-        void el.offsetWidth;
-        el.classList.add('wrong');
-      }
-      setTrainFeedback(`Das ist nicht die richtige Taste. Auf welcher Taste steht <kbd>${item.c}</kbd> in dieser Ebene?`, 'bad');
-    }
-  }
-
-  function trainNext() {
-    if (!trainActive || trainStep !== 3) return;
-    clearTimeout(trainAutoTimer);
-    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
-    trainIndex++;
-    if (trainIndex >= trainDeck.length) {
-      showTrainResult();
-    } else {
-      showTrainItem();
-    }
-  }
-
-  function showTrainResult() {
-    trainStep = 4;
-    const total = trainDeck.length;
-    const ch = document.getElementById('train-char');
-    ch.textContent = `${trainScore} / ${total}`;
-    ch.classList.add('small');
-    document.getElementById('train-question').textContent =
-      `Du hast ${trainScore} von ${total} Zeichen auf Anhieb richtig zugeordnet.`;
-    document.getElementById('train-layers').style.display = 'none';
-    setTrainFeedback(
-      'Merke: Normale Ebene = Taste drücken. Hochgestellte Ebene = SHIFT + Taste. Tiefgestellte Ebene = ALT GR + Taste.'
-    );
-    document.getElementById('train-progress').textContent = 'Ergebnis';
-    const next = document.getElementById('train-next');
-    next.textContent = 'Neue Runde';
-    next.style.display = '';
-    next.onclick = () => { next.onclick = trainNext; openTrain(); };
-  }
-
-  function flashKeys(item) {
-    document.querySelectorAll('.k.flash').forEach(el => el.classList.remove('flash'));
-
-    setTimeout(() => {
-      item.keys.forEach(kid => {
-        const el = document.querySelector(`.k[data-id="${kid}"]`);
-        if (el) {
-          el.classList.add('flash');
-          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
-        }
-      });
-
-      if (item.mod === 'shift') {
-        document.querySelectorAll('.k[data-isshift]').forEach(el => {
-          el.classList.add('flash');
-          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
-        });
-      } else if (item.mod === 'altgr') {
-        document.querySelectorAll('.k[data-isaltgr]').forEach(el => {
-          el.classList.add('flash');
-          el.addEventListener('animationend', () => el.classList.remove('flash'), {once: true});
-        });
-      }
-    }, 20);
-  }
-
-  // ── DARK MODE ─────────────────────────────────────────────────────────────
-
   function toggleDark() {
     isDark = !isDark;
     document.body.classList.toggle('dark', isDark);
     document.getElementById('dark-btn').textContent = isDark ? '☾' : '☀';
   }
 
-  // ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '1' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('normal'); }
-    if (e.key === '2' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('shift'); }
-    if (e.key === '3' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); setLayer('altgr'); }
-
-    if (trainActive) {
-      if (e.key === 'Escape') { closeTrain(); }
-      if ((e.key === ' ' || e.key === 'Enter') && (trainStep === 3 || trainStep === 4)) {
-        e.preventDefault();
-        document.getElementById('train-next').click();
-      }
-    }
-  });
-
-  // ── RESIZE ────────────────────────────────────────────────────────────────
+  // ── INIT & RESIZE ────────────────────────────────────────────────────────
 
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(buildKeyboard, 200);
+    resizeTimer = setTimeout(buildKeyboard, 180);
   });
-
-  // ── INIT ──────────────────────────────────────────────────────────────────
 
   document.addEventListener('DOMContentLoaded', () => {
     buildKeyboard();
