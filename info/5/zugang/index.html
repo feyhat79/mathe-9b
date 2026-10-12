@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Schulzugänge einrichten | WebUntis & Teams | Info 5</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #dbeafe;
+      --primary-dark: #172554;
+      --accent: #2563eb;
+      --success: #059669;
+      --success-light: #d1fae5;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 4rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PRESENTER-BAR / KOPFZEILE (Standard) ── */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1.5px solid var(--border);
+      padding: 0 16px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .nav-back:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .presenter-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presenter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      overflow-x: auto;
+    }
+
+    .presenter-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .presenter-tab-btn:hover {
+      color: var(--primary);
+      background: var(--surface-2);
+    }
+    .presenter-tab-btn.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: #bfdbfe;
+    }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 0 1rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 1.5rem 0 2rem 0;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ── ZUGANGSDATEN-CARD ── */
+    .account-card {
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .account-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    .account-card-header h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .account-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+    }
+
+    .account-box-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .account-box-val {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+
+    .account-box-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-head {
+      margin: 2.5rem 0 1.25rem 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    .section-head h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* ── STEPS ── */
+    .step-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 1.35rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-body {
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .step-desc {
+      font-size: 0.95rem;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    .code-pill {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .btn-pill {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ── CALLOUT / MERKE BOX ── */
+    .callout-box {
+      border: 2px solid var(--danger);
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-top: 2.5rem;
+      position: relative;
+    }
+
+    .callout-tag {
+      position: absolute;
+      top: -12px;
+      left: 16px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 2px 10px;
+      border-radius: 4px;
+    }
+
+    .callout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 0.35rem;
+    }
+
+    .callout-item h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .callout-item p {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.7rem; }
+      .presenter-tabs { display: none; }
+      .step-card { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRESENTER-BAR -->
+  <nav class="presenter-bar">
+    <a href="../" class="nav-back">&larr; &Uuml;bersicht Info 5</a>
+    <div class="presenter-title">
+      <span>Schulzug&auml;nge</span>
+    </div>
+    <div class="presenter-tabs">
+      <a href="#konto" class="presenter-tab-btn active">Zugangsdaten</a>
+      <a href="#webuntis" class="presenter-tab-btn">1. WebUntis</a>
+      <a href="#teams" class="presenter-tab-btn">2. MS Teams</a>
+      <a href="#support" class="presenter-tab-btn">Hilfe</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="badge-pill">St&auml;dtisches Gymnasium L&ouml;hne &bull; Klasse 5</div>
+      <h1>Digitale Schulzug&auml;nge zu Hause einrichten</h1>
+      <p class="subtitle">
+        Schritt-f&uuml;r-Schritt-Anleitung f&uuml;r <strong>WebUntis</strong> (Stunden- und Vertretungsplan) und <strong>Microsoft Teams</strong> (Aufgaben und Klassenteam).
+      </p>
+    </header>
+
+    <!-- ZUGANGSDATEN-CARD -->
+    <section id="konto" class="account-card">
+      <div class="account-card-header">
+        <h2>Die Zugangsdaten Ihres Kindes</h2>
+      </div>
+      <p style="font-size: 0.95rem; color: #334155;">
+        Die Sch&uuml;lerinnen und Sch&uuml;ler haben ihre Computerzug&auml;nge im Informatikunterricht erhalten und ihr pers&ouml;nliches, sicheres Kennwort eingerichtet. Mit diesen Daten melden Sie sich bei allen digitalen Schuldiensten an:
+      </p>
+      <div class="account-grid">
+        <div class="account-box">
+          <div class="account-box-label">Benutzername / E-Mail-Adresse</div>
+          <div class="account-box-val">vorname.nachname@sgl.schule</div>
+          <div class="account-box-note">Das pers&ouml;nliche Schulkonto am Gymnasium L&ouml;hne</div>
+        </div>
+        <div class="account-box">
+          <div class="account-box-label">Kennwort (Passwort)</div>
+          <div class="account-box-val">Eigenes Passwort des Kindes</div>
+          <div class="account-box-note">Im Unterricht nach den 5 Sicherheits-Kriterien vergeben</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEIL 1: WEBUNTIS -->
+    <section id="webuntis">
+      <div class="section-head">
+        <div class="section-badge">1</div>
+        <h2>WebUntis: Stunden- &amp; Vertretungsplan (Kopplung per QR-Code)</h2>
+      </div>
+
+      <div class="step-card-list">
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 1</span>
+          <div class="step-body">
+            <div class="step-title">Am PC/Laptop im Internet-Browser anmelden</div>
+            <div class="step-desc">
+              &Ouml;ffnen Sie am Computer den Browser (z. B. Edge, Chrome, Safari oder Firefox) und rufen Sie <span class="code-pill">webuntis.com</span> auf. Tippen Sie bei der Schulauswahl auf <em>„Schule suchen“</em>, geben Sie <span class="code-pill">St&auml;dtisches Gymnasium L&ouml;hne</span> (oder Ort <span class="code-pill">L&ouml;hne</span>) ein und w&auml;hlen Sie unsere Schule aus.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 2</span>
+          <div class="step-body">
+            <div class="step-title">Login &uuml;ber Microsoft w&auml;hlen</div>
+            <div class="step-desc">
+              Klicken Sie auf die Schaltfl&auml;che <span class="btn-pill">Mit Microsoft anmelden</span> (nicht das herk&ouml;mmliche Benutzername/Passwort-Feld nutzen). Geben Sie dort die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) sowie das neue Kennwort Ihres Kindes ein.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 3</span>
+          <div class="step-body">
+            <div class="step-title">QR-Code f&uuml;r das Smartphone aufrufen</div>
+            <div class="step-desc">
+              Klicken Sie in WebUntis oben rechts auf das <strong>Profil-Symbol</strong> (Benutzername Ihres Kindes) &rarr; wechseln Sie in den Reiter <strong>&bdquo;Freigaben&ldquo;</strong> &rarr; klicken Sie bei <strong>&bdquo;Zugriff per App&ldquo;</strong> auf <em>Anzeigen</em>. Auf dem Bildschirm erscheint nun der pers&ouml;nliche QR-Code.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 4</span>
+          <div class="step-body">
+            <div class="step-title">Mit der Untis Mobile App auf dem Smartphone scannen</div>
+            <div class="step-desc">
+              Installieren Sie die kostenlose App <strong>&bdquo;Untis Mobile&ldquo;</strong> (oranges Symbol mit wei&szlig;em U) aus dem App Store (iOS) oder Google Play Store (Android) auf Ihrem Smartphone. &Ouml;ffnen Sie die App, w&auml;hlen Sie <strong>&bdquo;QR-Code scannen&ldquo;</strong> und richten Sie die Handykamera auf den PC-Monitor. Das Smartphone ist sofort dauerhaft gekoppelt &ndash; ohne weitere Passworteingabe auf dem Handy!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TEIL 2: MICROSOFT TEAMS -->
+    <section id="teams">
+      <div class="section-head">
+        <div class="section-badge">2</div>
+        <h2>Microsoft Teams: Aufgaben &amp; Klassenorganisation</h2>
+      </div>
+
+      <div class="step-card-list">
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 1</span>
+          <div class="step-body">
+            <div class="step-title">App oder Programm herunterladen</div>
+            <div class="step-desc">
+              Installieren Sie <strong>&bdquo;Microsoft Teams&ldquo;</strong> aus dem App Store auf dem Smartphone oder Tablet, oder laden Sie das Desktop-Programm auf Ihren PC/Laptop herunter (am Computer auch direkt im Browser &uuml;ber <span class="code-pill">teams.microsoft.com</span> erreichbar).
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 2</span>
+          <div class="step-body">
+            <div class="step-title">Anmeldung mit dem Schulkonto</div>
+            <div class="step-desc">
+              Geben Sie die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) und das im Unterricht vergebene Kennwort des Kindes ein.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num-badge">Schritt 3</span>
+          <div class="step-body">
+            <div class="step-title">Kontoart best&auml;tigen</div>
+            <div class="step-desc">
+              Falls Microsoft nach der Kontoart fragt, w&auml;hlen Sie immer <strong>&bdquo;Gesch&auml;fts-, Schul- oder Unikonto&ldquo;</strong> (kein privates Konto). Nach dem Login sind das Klassenteam und das Fach Informatik direkt einsatzbereit.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MERKE / SUPPORT KASTEN -->
+    <section id="support" class="callout-box">
+      <div class="callout-tag">Wichtig &bull; Hinweise</div>
+      <div class="callout-grid">
+        <div class="callout-item">
+          <h4>Datenschutz &amp; Passwort-Schutz</h4>
+          <p>
+            Das Kennwort bleibt innerhalb der Familie und darf niemals an Mitsch&uuml;ler weitergegeben werden. Notieren Sie sich das Kennwort zu Hause an einem sicheren Ort.
+          </p>
+        </div>
+        <div class="callout-item">
+          <h4>Hilfe bei technischen Problemen</h4>
+          <p>
+            Bei technischen Problemen k&ouml;nnen die Sch&uuml;lerinnen und Sch&uuml;ler das <strong>Medienteam der Schule</strong> ansprechen (jeden <strong>Montag und Donnerstag in der 2. gro&szlig;en Pause</strong>). Dort kann bei Bedarf auch das Kennwort zur&uuml;ckgesetzt werden.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>St&auml;dtisches Gymnasium L&ouml;hne &bull; Informatik Klasse 5 &bull; Schulportal 2026/27</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Sticky Tab Active-State beim Scrollen
+    const sections = document.querySelectorAll('section[id]');
+    const tabBtns = document.querySelectorAll('.presenter-tab-btn');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 80;
+        if (window.scrollY >= top) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      tabBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('href') === '#' + current) {
+          btn.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
