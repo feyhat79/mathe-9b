@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Praxis-Labor: Die Klasse Auto | Informatik EF</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Zentrales Web-Modul Stylesheet -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    /* Ergänzende Modul-Stile im Schulheft- & Tafel-Design */
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --border-soft: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+
+    /* Tab-Umschaltung */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.15rem 1.35rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid #334155;
+    }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+    }
+
+    /* Arbeitsauftrag-Box (Allseitiger Rahmen, kein border-left) */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+    }
+    .auftrag-badge {
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .auftrag-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+
+    /* Fehler-Warnbox (Sanft rot, rundum geschlossen) */
+    .bug-box {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .bug-tag {
+      display: inline-block;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Interaktive Frage- & Aufdeck-Karten */
+    .question-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .question-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .question-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      flex: 1;
+      min-width: 260px;
+    }
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ink-blue);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .btn-reveal:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    .btn-reveal.active {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #1e3a8a;
+    }
+    .question-answer {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--paper-border);
+      color: var(--ink-black);
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+    .question-answer.show {
+      display: block;
+    }
+
+    /* Checklisten */
+    .check-list {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    .check-list li {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.96rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .check-list li:hover {
+      background: #f8fafc;
+    }
+    .check-list input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--ink-blue);
+    }
+
+    /* Interaktiver Canvas-Simulator */
+    .sim-container {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .sim-screen {
+      width: 100%;
+      max-width: 540px;
+      height: 280px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      margin: 0 auto 1rem auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .sim-controls {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-sim {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-sim:hover {
+      background: #eff6ff;
+      border-color: #60a5fa;
+      color: var(--ink-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXIERTE PRESENTER-BAR (SCHULTAFEL-DESIGN) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <div class="presenter-title">
+        <span>Projekt-Labor: Klasse Auto</span>
+        <span class="presenter-tag">Komposition</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <button class="presenter-tab-btn active" onclick="switchTab('tab-diagnose')">1. Code-Detektiv</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-bauplan')">2. Konstruktion</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-methoden')">3. Steuerung &amp; Fahrt</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-experten')">4. Experten-Werkstatt</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-sicherung')">5. Merkheft-Check</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- DECKBLATT-HEADER -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik • Einführungsphase (EF)</span>
+        <span>Praxis-Labor (Doppelstunde 90 Min.)</span>
+        <span>Thema: Java &amp; BlueJ</span>
+      </div>
+      <h1>Projekt-Labor: Die Klasse Auto</h1>
+      <p class="sheet-intro">
+        Vom unvollständigen Entwurf zum fahrbereiten Objekt: In dieser Doppelstunde arbeitet ihr selbstständig als Software-Entwickler. 
+        Ihr diagnostiziert typische Syntax- und Logikfehler, konstruiert ein vollständiges Fahrzeug auf der BlueJ-Leinwand und steuert 
+        alle Bauteile synchron über die objektorientierte Punktnotation.
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.25rem;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Start-Anleitung</span>
+          <span class="auftrag-title">Vorbereitung am Schüler-Arbeitsplatz</span>
+        </div>
+        <p style="font-size: 0.98rem; line-height: 1.6;">
+          1. Öffne BlueJ und lade das bekannte Projekt <strong>Figuren_EF</strong>.<br>
+          2. Doppelklicke auf die gelbe Klasse <strong>Auto</strong>, um den Quelltext im Editor zu öffnen.<br>
+          3. Bearbeite die nachfolgenden fünf Phasen Schritt für Schritt. Hinter den Schaltflächen 
+          <em>„Hinweis / Erklärung aufdecken“</em> findest du bei Unklarheiten gezielte Unterstützung zur Selbstkontrolle.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         TAB 1: DIAGNOSE & FEHLERANALYSE (CODE-DETEKTIV)
+         ======================================================== -->
+    <div id="tab-diagnose" class="tab-panel active">
+
+      <section class="sheet-card">
+        <div class="task-title">
+          <span class="task-number">1</span>
+          <span>Phase 1: Der Code-Detektiv – Warum bleibt die Leinwand weiß?</span>
+        </div>
+
+        <p>
+          Ein Schüler hat begonnen, die Klasse <span class="code-pill">Auto</span> zu programmieren. 
+          Klickt er in BlueJ auf <em>„Übersetzen“</em>, meldet der Compiler zwar keine Syntaxfehler – erzeugt er 
+          jedoch ein Objekt auf der Werkbank und ruft die Methode auf, 
+          <strong>erscheint absolut nichts auf der Leinwand!</strong> Öffnet man zudem per Rechtsklick den Objekt-Inspektor, 
+          steht bei allen Variablen enttäuschend <span class="code-pill">&lt;null&gt;</span>.
+        </p>
+
+        <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0;">
+          Der aktuelle Quelltext in Auto.java:
+        </h3>
+
+        <pre class="code-block"><code><span class="code-keyword">public class</span> <span class="code-type">Auto</span> {
+
+    <span class="code-comment">// Attribute der Klasse Auto</span>
+    <span class="code-type">Quadrat</span> tuer1; 
+    <span class="code-type">Quadrat</span> tuer2; 
+    <span class="code-type">Quadrat</span> dach; 
+    <span class="code-type">Kreis</span>   reifenLinks; 
+    <span class="code-type">Kreis</span>   reifenRechts; 
+    
+    <span class="code-keyword">void</span> <span class="code-method">zeichen</span>() {
+        <span class="code-type">Quadrat</span> tuer1 = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>(); 
+        <span class="code-type">Quadrat</span> tuer2 = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        <span class="code-type">Quadrat</span> dach = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        <span class="code-type">Kreis</span> reifenLinks = <span class="code-keyword">new</span> <span class="code-type">Kreis</span>();
+        <span class="code-type">Kreis</span> reifenRechts = <span class="code-keyword">new</span> <span class="code-type">Kreis</span>();
+    }
+}</code></pre>
+
+        <div class="bug-box">
+          <span class="bug-tag">Diagnose-Aufgabe</span>
+          <p style="font-size: 0.98rem; line-height: 1.6;">
+            Finde die <strong>drei grundlegenden Fehler</strong> in diesem Entwurf, bevor du eine einzige Zeile korrigierst. 
+            Überlege zuerst selbst, bevor du die Analyse-Karten aufdeckst!
+          </p>
+        </div>
+
+        <!-- Frage 1 -->
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Detektiv-Frage A: Warum steht im Objekt-Inspektor überall &lt;null&gt;, obwohl new Quadrat() ausgeführt wurde?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('ans-shadow', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ans-shadow">
+            <strong>Das Problem der Schattenvariablen (Variable Shadowing):</strong><br>
+            In Zeile 10 steht: <span class="code-pill">Quadrat tuer1 = new Quadrat();</span>.<br>
+            Durch die Wiederholung des Datentyps <span class="code-pill">Quadrat</span> wird eine <strong>neue, lokale Variable</strong> erzeugt, 
+            die nur innerhalb der geschweiften Klammern von <span class="code-pill">zeichen()</span> existiert! 
+            Sie verdeckt („beschattet“) das eigentliche Attribut ganz oben.<br>
+            Sobald die Methode beendet ist, wird die lokale Variable im Arbeitsspeicher vernichtet. 
+            Das dauerhafte Attribut <span class="code-pill">tuer1</span> der Klasse Auto blieb unberührt und zeigt weiterhin auf <span class="code-pill">null</span>!
+            <br><br>
+            <strong>Richtige Zuweisung an das Attribut:</strong><br>
+            <span class="code-pill">tuer1 = new Quadrat();</span> (ohne nochmaligen Datentyp vorneweg!).
+          </div>
+        </div>
+
+        <!-- Frage 2 -->
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Detektiv-Frage B: Warum gehört die Objekterzeugung mit new in einen Konstruktor und nicht in eine Zeichenmethode?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('ans-constructor', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ans-constructor">
+            <strong>Lebenszyklus von Objekten:</strong><br>
+            Ein Auto wird in der Fabrik <strong>genau einmal zusammengebaut</strong> (im Konstruktor <span class="code-pill">public Auto()</span>). 
+            Würde man die Teile in einer Zeichenmethode erzeugen, würde bei jedem Neuzeichnen ein komplett neuer Satz Reifen und Türen 
+            im Speicher reserviert werden. Zudem sollte ein Auto nach dem Erschaffen sofort einsatzbereit sein.
+          </div>
+        </div>
+
+        <!-- Frage 3 -->
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Detektiv-Frage C: Was fehlt im Quelltext völlig, damit auf dem Bildschirm ein echtes Auto zu sehen ist?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('ans-visible', this)">Antwort &amp; Erklärung aufdecken</button>
+          </div>
+          <div class="question-answer" id="ans-visible">
+            <strong>Zustand und Positionierung:</strong><br>
+            1. Alle Figuren sind nach dem Aufruf von <span class="code-pill">new</span> standardmäßig <strong>unsichtbar</strong>. 
+            Es fehlt für jedes Teil der Aufruf <span class="code-pill">sichtbarMachen()</span>.<br>
+            2. Alle Teile liegen momentan an ihren Standardkoordinaten übereinander. Sie müssen mit 
+            <span class="code-pill">horizontalBewegen(...)</span> und <span class="code-pill">vertikalBewegen(...)</span> 
+            zu einem echten Fahrzeug zusammengesetzt werden.<br>
+            3. Auch der Methodenname enthält einen Tippfehler: <span class="code-pill">zeichen()</span> statt <span class="code-pill">zeichne()</span>.
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 2: KONSTRUKTION & BAUPLAN
+         ======================================================== -->
+    <div id="tab-bauplan" class="tab-panel">
+
+      <section class="sheet-card">
+        <div class="task-title">
+          <span class="task-number">2</span>
+          <span>Phase 2: Die Konstruktion – Geometrie &amp; BlueJ-Realisierung</span>
+        </div>
+
+        <p>
+          Damit aus den fünf Einzelteilen ein harmonisches Auto entsteht, planen wir die Geometrie auf der 
+          <strong>600 × 500 Pixel großen Leinwand</strong>. Unser Fahrzeug besteht aus einem stabilen Unterbau (zwei Quadrate), 
+          einer Fahrerkabine (Dach-Quadrat oben auf) und zwei Reifen (Kreise).
+        </p>
+
+        <!-- SVG Vektor-Bauplan -->
+        <div style="background: #ffffff; border: 1.5px solid var(--paper-border); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; text-align: center;">
+          <h4 style="color: var(--ink-blue); margin-bottom: 0.75rem; font-size: 1.05rem;">
+            Der Bauplan des Fahrzeugs auf der BlueJ-Leinwand (Maße in Pixeln)
+          </h4>
+
+          <svg viewBox="0 0 460 260" style="max-width: 440px; width: 100%; height: auto; display: inline-block;">
+            <!-- Hintergrund Raster -->
+            <defs>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="460" height="260" fill="#f8fafc" stroke="#cbd5e1" rx="6" />
+            <rect width="460" height="260" fill="url(#grid)" />
+
+            <!-- Bodenlinie Straße -->
+            <line x1="20" y1="210" x2="440" y2="210" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4" />
+            <text x="30" y="225" font-family="'Calibri', sans-serif" font-size="12" fill="#64748b">Fahrbahn (y ≈ 210)</text>
+
+            <!-- Dach (Fahrerkabine): Quadrat oben, z.B. x=190, y=85, 50x50 -->
+            <rect x="195" y="95" width="55" height="50" fill="#2563eb" stroke="#1e3a8a" stroke-width="2" />
+            <!-- Fenster im Dach -->
+            <rect x="205" y="105" width="35" height="30" fill="#dbeafe" stroke="#1e3a8a" stroke-width="1.5" />
+            <text x="222" y="125" font-family="'Calibri', sans-serif" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">dach</text>
+
+            <!-- Karosserie links (tuer1 / Front): Quadrat, x=155, y=145, 60x60 -->
+            <rect x="150" y="145" width="70" height="45" fill="#dc2626" stroke="#991b1b" stroke-width="2" />
+            <text x="185" y="172" font-family="'Calibri', sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">tuer1 (Heck)</text>
+
+            <!-- Karosserie rechts (tuer2 / Heck): Quadrat, x=220, y=145, 60x60 -->
+            <rect x="220" y="145" width="75" height="45" fill="#dc2626" stroke="#991b1b" stroke-width="2" />
+            <text x="257" y="172" font-family="'Calibri', sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">tuer2 (Front)</text>
+
+            <!-- Scheinwerfer vorne gelb -->
+            <rect x="288" y="152" width="7" height="14" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+
+            <!-- Rad links: Kreis, x=165, y=178, D=32 -->
+            <circle cx="175" cy="195" r="16" fill="#111827" stroke="#374151" stroke-width="3" />
+            <circle cx="175" cy="195" r="6" fill="#cbd5e1" />
+            <text x="175" y="228" font-family="'Calibri', sans-serif" font-size="11" font-weight="bold" fill="#111827" text-anchor="middle">reifenLinks</text>
+
+            <!-- Rad rechts: Kreis, x=265, y=178, D=32 -->
+            <circle cx="265" cy="195" r="16" fill="#111827" stroke="#374151" stroke-width="3" />
+            <circle cx="265" cy="195" r="6" fill="#cbd5e1" />
+            <text x="265" y="228" font-family="'Calibri', sans-serif" font-size="11" font-weight="bold" fill="#111827" text-anchor="middle">reifenRechts</text>
+
+            <!-- Pfeil Richtung -->
+            <path d="M 330 170 L 370 170 M 360 165 L 370 170 L 360 175" stroke="#2563eb" stroke-width="2" fill="none" />
+            <text x="350" y="158" font-family="'Calibri', sans-serif" font-size="11" font-weight="bold" fill="#2563eb">Fahrtrichtung</text>
+          </svg>
+        </div>
+
+        <!-- Rechen-Tabelle für die Verschiebung -->
+        <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0;">
+          Berechnungs-Tabelle: Von den Standardwerten zur Zielposition
+        </h3>
+        <p style="font-size: 0.95rem; margin-bottom: 0.75rem;">
+          In BlueJ starten Figuren beim Erzeugen mit <span class="code-pill">new</span> an festen Standardkoordinaten 
+          (Quadrat: $x=80, y=140$; Kreis: $x=230, y=90$). Um sie passend anzuordnen, verschieben wir sie relativ dazu:
+        </p>
+
+        <div class="table-responsive">
+          <table class="sheet-calc-table">
+            <thead>
+              <tr>
+                <th>Bauteil</th>
+                <th>Typ</th>
+                <th>Größe</th>
+                <th>Farbe</th>
+                <th>Horizontale Verschiebung</th>
+                <th>Vertikale Verschiebung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>tuer1</strong> (Karosserie links)</td>
+                <td><span class="code-pill">Quadrat</span></td>
+                <td><span class="code-pill">50</span></td>
+                <td><span class="code-pill">"rot"</span></td>
+                <td><span class="code-pill">horizontalBewegen(40)</span></td>
+                <td><span class="code-pill">vertikalBewegen(60)</span></td>
+              </tr>
+              <tr>
+                <td><strong>tuer2</strong> (Karosserie rechts)</td>
+                <td><span class="code-pill">Quadrat</span></td>
+                <td><span class="code-pill">50</span></td>
+                <td><span class="code-pill">"rot"</span></td>
+                <td><span class="code-pill">horizontalBewegen(90)</span></td>
+                <td><span class="code-pill">vertikalBewegen(60)</span></td>
+              </tr>
+              <tr>
+                <td><strong>dach</strong> (Fahrerkabine)</td>
+                <td><span class="code-pill">Quadrat</span></td>
+                <td><span class="code-pill">40</span></td>
+                <td><span class="code-pill">"blau"</span></td>
+                <td><span class="code-pill">horizontalBewegen(65)</span></td>
+                <td><span class="code-pill">vertikalBewegen(20)</span></td>
+              </tr>
+              <tr>
+                <td><strong>reifenLinks</strong> (Rad links)</td>
+                <td><span class="code-pill">Kreis</span></td>
+                <td><span class="code-pill">30</span></td>
+                <td><span class="code-pill">"schwarz"</span></td>
+                <td><span class="code-pill">horizontalBewegen(-100)</span></td>
+                <td><span class="code-pill">vertikalBewegen(150)</span></td>
+              </tr>
+              <tr>
+                <td><strong>reifenRechts</strong> (Rad rechts)</td>
+                <td><span class="code-pill">Kreis</span></td>
+                <td><span class="code-pill">30</span></td>
+                <td><span class="code-pill">"schwarz"</span></td>
+                <td><span class="code-pill">horizontalBewegen(-50)</span></td>
+                <td><span class="code-pill">vertikalBewegen(150)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Arbeitsauftrag Phase 2 -->
+        <div class="auftrag-box" style="margin-top: 1.5rem;">
+          <div class="auftrag-header">
+            <span class="auftrag-badge">Programmier-Auftrag 2</span>
+            <span class="auftrag-title">Klasse Auto in BlueJ implementieren</span>
+          </div>
+          <ol style="padding-left: 1.25rem; line-height: 1.7; font-size: 0.98rem;">
+            <li>Deklariere alle fünf Attribute ganz oben als <span class="code-pill">private</span> und ergänze ein Attribut <span class="code-pill">private boolean istGezeichnet;</span>.</li>
+            <li>Schreibe den Konstruktor <span class="code-pill">public Auto()</span>: Erzeuge alle 5 Objekte mit <span class="code-pill">new</span> und setze <span class="code-pill">istGezeichnet = false;</span>.</li>
+            <li>Schreibe die Methode <span class="code-pill">public void zeichne()</span>: Passe Größen, Farben und Positionen an und rufe für alle 5 Teile <span class="code-pill">sichtbarMachen()</span> auf.</li>
+            <li>Schreibe die Methode <span class="code-pill">public void loesche()</span>: Rufe für alle 5 Teile <span class="code-pill">unsichtbarMachen()</span> auf und setze <span class="code-pill">istGezeichnet = false;</span>.</li>
+            <li><strong>Testen:</strong> Kompiliere, erzeuge ein Objekt <span class="code-pill">auto1</span> auf der Werkbank und rufe <span class="code-pill">zeichne()</span> auf!</li>
+          </ol>
+        </div>
+
+        <!-- Aufdeckbare Musterlösung Phase 2 -->
+        <div class="question-card" style="margin-top: 1.5rem;">
+          <div class="question-head">
+            <div class="question-title">
+              Selbstkontrolle: Quelltext-Musterlösung für Konstruktor, zeichne() und loesche() ansehen
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('ans-phase2', this)">Musterquelltext aufdecken</button>
+          </div>
+          <div class="question-answer" id="ans-phase2">
+            <pre class="code-block"><code><span class="code-keyword">public class</span> <span class="code-type">Auto</span> {
+
+    <span class="code-comment">// 1. Attribute: Das Auto besitzt 5 grafische Teilobjekte ("Hat-ein"-Beziehung)</span>
+    <span class="code-keyword">private</span> <span class="code-type">Quadrat</span> tuer1;
+    <span class="code-keyword">private</span> <span class="code-type">Quadrat</span> tuer2;
+    <span class="code-keyword">private</span> <span class="code-type">Quadrat</span> dach;
+    <span class="code-keyword">private</span> <span class="code-type">Kreis</span>   reifenLinks;
+    <span class="code-keyword">private</span> <span class="code-type">Kreis</span>   reifenRechts;
+    <span class="code-keyword">private boolean</span> istGezeichnet;
+
+    <span class="code-comment">/**
+     * Konstruktor: Baut das Auto im Arbeitsspeicher zusammen.
+     */</span>
+    <span class="code-keyword">public</span> <span class="code-type">Auto</span>() {
+        tuer1 = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        tuer2 = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        dach = <span class="code-keyword">new</span> <span class="code-type">Quadrat</span>();
+        reifenLinks = <span class="code-keyword">new</span> <span class="code-type">Kreis</span>();
+        reifenRechts = <span class="code-keyword">new</span> <span class="code-type">Kreis</span>();
+        istGezeichnet = <span class="code-keyword">false</span>;
+    }
+
+    <span class="code-comment">/**
+     * Richtet alle Figuren passend aus und macht das Auto sichtbar.
+     */</span>
+    <span class="code-keyword">public void</span> <span class="code-method">zeichne</span>() {
+        <span class="code-keyword">if</span> (!istGezeichnet) {
+            <span class="code-comment">// 1. Karosserie links</span>
+            tuer1.<span class="code-method">groesseAendern</span>(<span class="code-num">50</span>);
+            tuer1.<span class="code-method">farbeAendern</span>(<span class="code-string">"rot"</span>);
+            tuer1.<span class="code-method">horizontalBewegen</span>(<span class="code-num">40</span>);
+            tuer1.<span class="code-method">vertikalBewegen</span>(<span class="code-num">60</span>);
+            tuer1.<span class="code-method">sichtbarMachen</span>();
+
+            <span class="code-comment">// 2. Karosserie rechts</span>
+            tuer2.<span class="code-method">groesseAendern</span>(<span class="code-num">50</span>);
+            tuer2.<span class="code-method">farbeAendern</span>(<span class="code-string">"rot"</span>);
+            tuer2.<span class="code-method">horizontalBewegen</span>(<span class="code-num">90</span>);
+            tuer2.<span class="code-method">vertikalBewegen</span>(<span class="code-num">60</span>);
+            tuer2.<span class="code-method">sichtbarMachen</span>();
+
+            <span class="code-comment">// 3. Dach (Fahrerkabine)</span>
+            dach.<span class="code-method">groesseAendern</span>(<span class="code-num">40</span>);
+            dach.<span class="code-method">farbeAendern</span>(<span class="code-string">"blau"</span>);
+            dach.<span class="code-method">horizontalBewegen</span>(<span class="code-num">65</span>);
+            dach.<span class="code-method">vertikalBewegen</span>(<span class="code-num">20</span>);
+            dach.<span class="code-method">sichtbarMachen</span>();
+
+            <span class="code-comment">// 4. Räder</span>
+            reifenLinks.<span class="code-method">groesseAendern</span>(<span class="code-num">30</span>);
+            reifenLinks.<span class="code-method">farbeAendern</span>(<span class="code-string">"schwarz"</span>);
+            reifenLinks.<span class="code-method">horizontalBewegen</span>(-<span class="code-num">100</span>);
+            reifenLinks.<span class="code-method">vertikalBewegen</span>(<span class="code-num">150</span>);
+            reifenLinks.<span class="code-method">sichtbarMachen</span>();
+
+            reifenRechts.<span class="code-method">groesseAendern</span>(<span class="code-num">30</span>);
+            reifenRechts.<span class="code-method">farbeAendern</span>(<span class="code-string">"schwarz"</span>);
+            reifenRechts.<span class="code-method">horizontalBewegen</span>(-<span class="code-num">50</span>);
+            reifenRechts.<span class="code-method">vertikalBewegen</span>(<span class="code-num">150</span>);
+            reifenRechts.<span class="code-method">sichtbarMachen</span>();
+
+            istGezeichnet = <span class="code-keyword">true</span>;
+        }
+    }
+
+    <span class="code-comment">/**
+     * Entfernt das gesamte Auto von der Leinwand.
+     */</span>
+    <span class="code-keyword">public void</span> <span class="code-method">loesche</span>() {
+        <span class="code-keyword">if</span> (istGezeichnet) {
+            tuer1.<span class="code-method">unsichtbarMachen</span>();
+            tuer2.<span class="code-method">unsichtbarMachen</span>();
+            dach.<span class="code-method">unsichtbarMachen</span>();
+            reifenLinks.<span class="code-method">unsichtbarMachen</span>();
+            reifenRechts.<span class="code-method">unsichtbarMachen</span>();
+            istGezeichnet = <span class="code-keyword">false</span>;
+        }
+    }
+}</code></pre>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 3: STEUERUNG & FAHRT (METHODEN MIT PARAMETERN)
+         ======================================================== -->
+    <div id="tab-methoden" class="tab-panel">
+
+      <section class="sheet-card">
+        <div class="task-title">
+          <span class="task-number">3</span>
+          <span>Phase 3: Steuerung &amp; Fahrt – Dynamische Methoden programmieren</span>
+        </div>
+
+        <p>
+          Ein Auto, das nur statisch steht, ist langweilig! Jetzt erweitern wir die Klasse um <strong>eigene Steuerungsmethoden</strong>. 
+          Das Kernprinzip der Objektorientierung lautet: <em>Wenn das übergeordnete Auto fährt, müssen alle fünf Einzelteile synchron bewegt werden.</em>
+        </p>
+
+        <!-- Interaktiver Web-Simulator -->
+        <div class="sim-container">
+          <h4 style="color: var(--ink-blue); text-align: center; margin-bottom: 0.5rem; font-size: 1.05rem;">
+            Interaktiver Funktions-Simulator
+          </h4>
+          <p style="text-align: center; font-size: 0.92rem; color: var(--ink-muted); margin-bottom: 0.85rem;">
+            Probiere die Methoden hier im Browser aus, bevor du sie in Java codierst:
+          </p>
+
+          <div class="sim-screen" id="simScreen">
+            <div id="simCar" style="position: absolute; left: 120px; top: 90px; width: 140px; height: 90px; transition: transform 0.4s ease, left 0.4s ease;">
+              <!-- Dach -->
+              <div id="simRoof" style="position: absolute; left: 45px; top: 0px; width: 45px; height: 35px; background: #2563eb; border: 1.5px solid #1e3a8a; border-radius: 3px;">
+                <div style="position: absolute; left: 8px; top: 6px; width: 28px; height: 20px; background: #dbeafe; border-radius: 2px;"></div>
+              </div>
+              <!-- Karosserie -->
+              <div id="simBody1" style="position: absolute; left: 10px; top: 35px; width: 55px; height: 35px; background: #dc2626; border: 1.5px solid #991b1b; border-radius: 3px 0 0 3px;"></div>
+              <div id="simBody2" style="position: absolute; left: 65px; top: 35px; width: 55px; height: 35px; background: #dc2626; border: 1.5px solid #991b1b; border-radius: 0 3px 3px 0;"></div>
+              <!-- Scheinwerfer -->
+              <div id="simLight" style="position: absolute; left: 118px; top: 42px; width: 6px; height: 12px; background: #fbbf24; border-radius: 1px;"></div>
+              <!-- Reifen -->
+              <div style="position: absolute; left: 25px; top: 65px; width: 24px; height: 24px; background: #111827; border-radius: 50%; border: 2px solid #374151;">
+                <div style="position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%;"></div>
+              </div>
+              <div style="position: absolute; left: 85px; top: 65px; width: 24px; height: 24px; background: #111827; border-radius: 50%; border: 2px solid #374151;">
+                <div style="position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%;"></div>
+              </div>
+            </div>
+            <!-- Fahrbahnmarkierung -->
+            <div style="position: absolute; left: 0; bottom: 85px; width: 100%; border-bottom: 2px dashed #cbd5e1;"></div>
+          </div>
+
+          <div class="sim-controls">
+            <button class="btn-sim" onclick="moveSimCar(60)">fahreRechts(60)</button>
+            <button class="btn-sim" onclick="moveSimCar(-60)">fahreLinks(60)</button>
+            <button class="btn-sim" onclick="changeSimColor('blau')">lackieren("blau")</button>
+            <button class="btn-sim" onclick="changeSimColor('gruen')">lackieren("gruen")</button>
+            <button class="btn-sim" onclick="changeSimColor('rot')">lackieren("rot")</button>
+            <button class="btn-sim" onclick="resetSimCar()">Zurücksetzen</button>
+          </div>
+        </div>
+
+        <!-- Programmierauftrag 3 -->
+        <div class="auftrag-box" style="margin-top: 1.5rem;">
+          <div class="auftrag-header">
+            <span class="auftrag-badge">Programmier-Auftrag 3</span>
+            <span class="auftrag-title">Fahrmethoden in Auto.java einbauen</span>
+          </div>
+          <ol style="padding-left: 1.25rem; line-height: 1.7; font-size: 0.98rem;">
+            <li>
+              <strong>Methode 1: Fahren nach rechts mit Distanz-Parameter</strong><br>
+              Schreibe die Methode <span class="code-pill">public void nachRechtsFahren(int distanz)</span>.<br>
+              Rufe auf <em>allen fünf Figuren</em> die Methode <span class="code-pill">horizontalBewegen(distanz)</span> auf.
+            </li>
+            <li>
+              <strong>Methode 2: Schnelles Fahren nach links</strong><br>
+              Schreibe die Methode <span class="code-pill">public void nachLinksFahren(int distanz)</span>.<br>
+              <em>Tipp:</em> Nutze einfach <span class="code-pill">horizontalBewegen(-distanz)</span>!
+            </li>
+            <li>
+              <strong>Methode 3: Neue Lackierung (Farbwechsel)</strong><br>
+              Schreibe die Methode <span class="code-pill">public void lackieren(String neueFarbe)</span>.<br>
+              Übergebe den Parameter <span class="code-pill">neueFarbe</span> an <span class="code-pill">tuer1</span> und <span class="code-pill">tuer2</span>.
+            </li>
+            <li>
+              <strong>Methode 4: Langsame Animation</strong><br>
+              Schreibe die Methode <span class="code-pill">public void langsamFahren(int distanz)</span>.<br>
+              Rufe nacheinander auf allen Teilen <span class="code-pill">langsamHorizontalBewegen(distanz)</span> auf. Was beobachtest du? (Siehe Experten-Tipp!).
+            </li>
+          </ol>
+        </div>
+
+        <!-- Aufdeckbare Lösung Phase 3 -->
+        <div class="question-card" style="margin-top: 1.5rem;">
+          <div class="question-head">
+            <div class="question-title">
+              Musterlösung für die Fahrmethoden und Lackierung aufdecken
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('ans-phase3', this)">Code aufdecken</button>
+          </div>
+          <div class="question-answer" id="ans-phase3">
+            <pre class="code-block"><code><span class="code-comment">/**
+ * Bewegt das gesamte Auto um die angegebene Strecke nach rechts.
+ * @param distanz Die zurueckzulegende Distanz in Pixeln
+ */</span>
+<span class="code-keyword">public void</span> <span class="code-method">nachRechtsFahren</span>(<span class="code-type">int</span> distanz) {
+    <span class="code-keyword">if</span> (istGezeichnet) {
+        tuer1.<span class="code-method">horizontalBewegen</span>(distanz);
+        tuer2.<span class="code-method">horizontalBewegen</span>(distanz);
+        dach.<span class="code-method">horizontalBewegen</span>(distanz);
+        reifenLinks.<span class="code-method">horizontalBewegen</span>(distanz);
+        reifenRechts.<span class="code-method">horizontalBewegen</span>(distanz);
+    }
+}
+
+<span class="code-comment">/**
+ * Bewegt das gesamte Auto um die angegebene Strecke nach links.
+ */</span>
+<span class="code-keyword">public void</span> <span class="code-method">nachLinksFahren</span>(<span class="code-type">int</span> distanz) {
+    nachRechtsFahren(-distanz); <span class="code-comment">// Wiederverwendung mit negativem Vorzeichen!</span>
+}
+
+<span class="code-comment">/**
+ * Aendert die Lackierung der Karosserie in eine neue Wunschfarbe.
+ * @param neueFarbe Z.B. "blau", "gelb", "schwarz", "gruen"
+ */</span>
+<span class="code-keyword">public void</span> <span class="code-method">lackieren</span>(<span class="code-type">String</span> neueFarbe) {
+    <span class="code-keyword">if</span> (istGezeichnet) {
+        tuer1.<span class="code-method">farbeAendern</span>(neueFarbe);
+        tuer2.<span class="code-method">farbeAendern</span>(neueFarbe);
+    }
+}</code></pre>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 4: EXPERTEN-WERKSTATT (DIFFERENZIERUNG)
+         ======================================================== -->
+    <div id="tab-experten" class="tab-panel">
+
+      <section class="sheet-card">
+        <div class="task-title">
+          <span class="task-number">4</span>
+          <span>Phase 4: Experten-Werkstatt – Herausforderungen für Schnelle</span>
+        </div>
+
+        <p>
+          Du bist bereits mit Phase 1 bis 3 fertig und dein Auto fährt zuverlässig? 
+          Wähle mindestens zwei der folgenden Meister-Aufgaben und baue dein Fahrzeug zu einem Spezialmodell aus!
+        </p>
+
+        <div class="note-columns">
+          <!-- Level 1: Blaulicht -->
+          <div class="notebook-column col-blue">
+            <div class="col-title">Level 1: Das Einsatzfahrzeug (Blaulicht)</div>
+            <div class="col-description">
+              Programmiere eine Methode <span class="code-pill">public void blaulicht()</span>.<br>
+              Das Dach soll die Farbe zu <span class="code-pill">"blau"</span> wechseln. 
+              Wenn du die Leinwand-Pause nutzt (<span class="code-pill">Leinwand.getLeinwand().warte(250)</span>), 
+              kannst du das Dach zwischen Blau und Rot blinken lassen!
+            </div>
+            <div class="question-card" style="margin: 0; padding: 10px;">
+              <button class="btn-reveal" onclick="toggleReveal('exp1', this)" style="width: 100%;">Tipp für Level 1 aufdecken</button>
+              <div class="question-answer" id="exp1">
+                <pre class="code-block" style="margin: 6px 0 0 0; font-size: 0.82rem;"><code>dach.<span class="code-method">farbeAendern</span>(<span class="code-string">"blau"</span>);
+<span class="code-type">Leinwand</span>.<span class="code-method">getLeinwand</span>().<span class="code-method">warte</span>(<span class="code-num">300</span>);
+dach.<span class="code-method">farbeAendern</span>(<span class="code-string">"rot"</span>);</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 2: Cabriolet -->
+          <div class="notebook-column col-purple">
+            <div class="col-title">Level 2: Das Cabriolet (Dach abnehmen)</div>
+            <div class="col-description">
+              Programmiere zwei Methoden:<br>
+              • <span class="code-pill">public void dachOeffnen()</span>: Macht nur das Dach unsichtbar.<br>
+              • <span class="code-pill">public void dachSchliessen()</span>: Macht das Dach wieder sichtbar.
+            </div>
+            <div class="question-card" style="margin: 0; padding: 10px;">
+              <button class="btn-reveal" onclick="toggleReveal('exp2', this)" style="width: 100%;">Tipp für Level 2 aufdecken</button>
+              <div class="question-answer" id="exp2">
+                <pre class="code-block" style="margin: 6px 0 0 0; font-size: 0.82rem;"><code><span class="code-keyword">public void</span> <span class="code-method">dachOeffnen</span>() {
+    dach.<span class="code-method">unsichtbarMachen</span>();
+}
+<span class="code-keyword">public void</span> <span class="code-method">dachSchliessen</span>() {
+    dach.<span class="code-method">sichtbarMachen</span>();
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-columns" style="margin-top: 1rem;">
+          <!-- Level 3: Konstruktor-Überladung -->
+          <div class="notebook-column col-blue">
+            <div class="col-title">Level 3: Zweiter Konstruktor mit Lackierung</div>
+            <div class="col-description">
+              In Java kann eine Klasse mehrere Konstruktoren besitzen (<em>Überladung</em>).<br>
+              Schreibe einen zweiten Konstruktor:<br>
+              <span class="code-pill">public Auto(String startFarbe)</span><br>
+              Erzeuge auch hier alle fünf Teile mit <span class="code-pill">new</span>, färbe aber die Türen direkt in der Wunschfarbe ein!
+            </div>
+            <div class="question-card" style="margin: 0; padding: 10px;">
+              <button class="btn-reveal" onclick="toggleReveal('exp3', this)" style="width: 100%;">Tipp für Level 3 aufdecken</button>
+              <div class="question-answer" id="exp3">
+                Rufe im neuen Konstruktor einfach <span class="code-pill">this();</span> auf (ruft den Standardkonstruktor auf) 
+                und führe danach <span class="code-pill">lackieren(startFarbe);</span> aus!
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 4: Das 2-Fahrzeuge-Rennen -->
+          <div class="notebook-column col-purple">
+            <div class="col-title">Level 4: Zwei Autos auf der Werkbank</div>
+            <div class="col-description">
+              Erzeuge in BlueJ zwei unterschiedliche Objekte:<br>
+              <span class="code-pill">auto1 = new Auto();</span> und <span class="code-pill">auto2 = new Auto();</span>.<br>
+              Zeichne beide Autos. Verschiebe eines nach unten (<span class="code-pill">hebeBühne(80)</span>) und lackiere es gelb. 
+              Lasse beide unabhängig voneinander fahren!
+            </div>
+            <div class="question-card" style="margin: 0; padding: 10px;">
+              <button class="btn-reveal" onclick="toggleReveal('exp4', this)" style="width: 100%;">Tipp für Level 4 aufdecken</button>
+              <div class="question-answer" id="exp4">
+                Programmiere in <span class="code-pill">Auto</span> eine Hilfsmethode 
+                <span class="code-pill">public void vertikalVersetzen(int deltaY)</span>, 
+                damit das zweite Auto auf eine zweite Fahrspur gesetzt werden kann.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ========================================================
+         TAB 5: MERKHEFT-SICHERUNG & WISSENS-CHECK
+         ======================================================== -->
+    <div id="tab-sicherung" class="tab-panel">
+
+      <section class="sheet-card">
+        <div class="task-title">
+          <span class="task-number">5</span>
+          <span>Phase 5: Merkheft-Sicherung &amp; Wissens-TÜV</span>
+        </div>
+
+        <p>
+          Sichere die wichtigsten Erkenntnisse der heutigen Doppelstunde in deinem Merkheft bzw. deiner OneNote-Mappe.
+        </p>
+
+        <!-- DER ROTE MERKSATZ-KASTEN (GEMINI.md Standard) -->
+        <div class="merke-box">
+          <span class="merke-tag">MERKE</span>
+          <div class="merke-title">Die 4 Kernregeln der Objektorientierten Komposition („Hat-ein“-Beziehung)</div>
+          <div class="merke-content">
+            <p style="margin-bottom: 0.85rem;">
+              <strong>1. Komposition im Quelltext:</strong><br>
+              Ein zusammengesetztes Objekt (z. B. ein Auto) besitzt andere Objekte als <strong>Attribute</strong>. 
+              Im BlueJ-Klassendiagramm wird diese Abhängigkeit durch gestrichelte Pfeile dargestellt.
+            </p>
+            <p style="margin-bottom: 0.85rem;">
+              <strong>2. Erzeugung im Konstruktor:</strong><br>
+              Die Teilobjekte werden <strong>im Konstruktor der übergeordneten Klasse</strong> mit dem Schlüsselwort 
+              <span class="code-pill">new</span> erschaffen. Der Konstruktor heißt haargenau wie die Klasse und besitzt keinen Rückgabetyp.
+            </p>
+            <p style="margin-bottom: 0.85rem;">
+              <strong>3. Niemals Datentypen in Methoden wiederholen:</strong><br>
+              Schreibt man in einer Methode <span class="code-pill">Quadrat tuer1 = new Quadrat();</span>, erzeugt man eine kurzlebige 
+              <em>Schattenvariable</em>. Das Attribut bleibt <span class="code-pill">null</span>! 
+              Richtig ist die reine Zuweisung an das bestehende Attribut: <span class="code-pill">tuer1 = new Quadrat();</span>.
+            </p>
+            <p>
+              <strong>4. Delegieren über Punktnotation:</strong><br>
+              Um das Gesamtsystem zu steuern, sendet die Hauptklasse über den Punkt Befehle an ihre Teilobjekte 
+              (<span class="code-pill">tuer1.horizontalBewegen(distanz);</span>). Jedes Teilobjekt behält dabei seinen eigenen Zustand.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 Detektiv-Reflexionsfragen -->
+        <h3 style="font-size: 1.15rem; color: var(--ink-blue); margin: 1.75rem 0 0.75rem 0;">
+          Abschluss-TÜV: Teste dein Verständnis
+        </h3>
+
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Frage 1: Was würde passieren, wenn man im Konstruktor Auto() die Zeile reifenLinks = new Kreis(); löscht und dann zeichne() aufruft?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('tuev1', this)">Antwort aufdecken</button>
+          </div>
+          <div class="question-answer" id="tuev1">
+            Das Programm stürzt mit einer <span class="code-pill">NullPointerException</span> ab! 
+            Weil die Variable <span class="code-pill">reifenLinks</span> dann den Standardwert <span class="code-pill">null</span> besitzt, 
+            kann Java den Befehl <span class="code-pill">sichtbarMachen()</span> an kein reales Objekt im Speicher übermitteln.
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Frage 2: Warum kann man einem Objekt der Klasse Auto nicht direkt den Befehl auto1.sichtbarMachen() schicken?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('tuev2', this)">Antwort aufdecken</button>
+          </div>
+          <div class="question-answer" id="tuev2">
+            Weil die Klasse <span class="code-pill">Auto</span> keine Methode namens <span class="code-pill">sichtbarMachen()</span> besitzt! 
+            Nur die Basisfiguren (<span class="code-pill">Quadrat</span>, <span class="code-pill">Kreis</span>, <span class="code-pill">Dreieck</span>) 
+            kennen diese Methode direkt. Die Klasse Auto hat dafür ihre eigene Methode <span class="code-pill">zeichne()</span>, 
+            die die Sichtbarkeit ihrer Teilfiguren intern steuert.
+          </div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-head">
+            <div class="question-title">
+              Frage 3: Welchen großen Vorteil hat es, Methoden wie nachRechtsFahren(int distanz) mit einem Parameter zu programmieren?
+            </div>
+            <button class="btn-reveal" onclick="toggleReveal('tuev3', this)">Antwort aufdecken</button>
+          </div>
+          <div class="question-answer" id="tuev3">
+            <strong>Maximale Flexibilität:</strong> Statt für jede Schrittweite eine feste Methode schreiben zu müssen 
+            (<span class="code-pill">fahre10()</span>, <span class="code-pill">fahre20()</span>), kann der Aufrufer frei bestimmen, 
+            wie weit das Auto rollt (z. B. <span class="code-pill">nachRechtsFahren(150)</span>). 
+            Zudem kann man durch Übergabe eines negativen Werts (<span class="code-pill">-50</span>) sofort rückwärts fahren!
+          </div>
+        </div>
+
+        <!-- Checkliste zum Stundenende -->
+        <div class="auftrag-box" style="margin-top: 1.5rem;">
+          <div class="auftrag-header">
+            <span class="auftrag-badge">Stunden-Abschluss</span>
+            <span class="auftrag-title">Checkliste vor dem Verlassen des Raumes</span>
+          </div>
+          <ul class="check-list">
+            <li>
+              <input type="checkbox" id="c1">
+              <label for="c1">1. Mein Quelltext in <strong>Auto.java</strong> ist fehlerfrei kompiliert (keine roten Fehlerbalken).</label>
+            </li>
+            <li>
+              <input type="checkbox" id="c2">
+              <label for="c2">2. Ein erzeugtes Auto erscheint auf Knopfdruck vollständig auf der Leinwand und fährt synchron.</label>
+            </li>
+            <li>
+              <input type="checkbox" id="c3">
+              <label for="c3">3. Ich habe mindestens eine Expertenaufgabe erfolgreich ausprobiert.</label>
+            </li>
+            <li>
+              <input type="checkbox" id="c4">
+              <label for="c4">4. Ich habe das BlueJ-Projekt gespeichert (Strg + S) und meinen Rechner ordnungsgemäß heruntergefahren.</label>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT: NAVIGATION & INTERAKTIVITÄT -->
+  <script>
+    // Tab-Umschaltung
+    function switchTab(tabId) {
+      document.querySelectorAll('.presenter-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick')?.includes(tabId)) {
+          btn.classList.add('active');
+        }
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      const activePanel = document.getElementById(tabId);
+      if (activePanel) {
+        activePanel.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // Antwort/Hinweis aufdecken
+    function toggleReveal(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.classList.contains('show')) {
+        el.classList.remove('show');
+        btn.textContent = 'Hinweis / Lösung aufdecken';
+        btn.classList.remove('active');
+      } else {
+        el.classList.add('show');
+        btn.textContent = 'Antwort verbergen';
+        btn.classList.add('active');
+      }
+    }
+
+    // Interaktiver Simulator
+    let simPos = 120;
+    function moveSimCar(delta) {
+      simPos += delta;
+      if (simPos < 20) simPos = 20;
+      if (simPos > 360) simPos = 360;
+      const car = document.getElementById('simCar');
+      if (car) car.style.left = simPos + 'px';
+    }
+
+    function changeSimColor(color) {
+      const b1 = document.getElementById('simBody1');
+      const b2 = document.getElementById('simBody2');
+      let hex = '#dc2626';
+      let border = '#991b1b';
+      if (color === 'blau') { hex = '#2563eb'; border = '#1e3a8a'; }
+      if (color === 'gruen') { hex = '#059669'; border = '#065f46'; }
+      if (color === 'rot') { hex = '#dc2626'; border = '#991b1b'; }
+      if (b1) { b1.style.background = hex; b1.style.borderColor = border; }
+      if (b2) { b2.style.background = hex; b2.style.borderColor = border; }
+    }
+
+    function resetSimCar() {
+      simPos = 120;
+      const car = document.getElementById('simCar');
+      if (car) car.style.left = simPos + 'px';
+      changeSimColor('rot');
+    }
+  </script>
+
+</body>
+</html>

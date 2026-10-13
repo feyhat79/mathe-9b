@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AB 2.2: Verschiebung der Parabel & Scheitelpunktform | Mathe 9b</title>
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Lokale Schriftart & Schulblatt-Design -->
+  <style>
+    @font-face {
+      font-family: 'LehrerHandschrift';
+      src: url('../../../assets/fonts/LehrerHandschrift.ttf') format('truetype'),
+           url('../../assets/fonts/LehrerHandschrift.ttf') format('truetype'),
+           url('../../../LehrerHandschrift.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.4;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       MODUS: ALLES IN EIGENER HANDSCHRIFT
+       ======================================================== */
+    body.all-handwriting {
+      font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
+      font-size: 12.5pt;
+      line-height: 1.48;
+    }
+
+    body.all-handwriting h1,
+    body.all-handwriting h2,
+    body.all-handwriting .sheet-title-group h1,
+    body.all-handwriting .task-title,
+    body.all-handwriting .task-desc,
+    body.all-handwriting .merke-content,
+    body.all-handwriting .calc-table th,
+    body.all-handwriting .calc-table td,
+    body.all-handwriting .sheet-subtitle,
+    body.all-handwriting .sheet-meta-box,
+    body.all-handwriting p,
+    body.all-handwriting li,
+    body.all-handwriting text,
+    body.all-handwriting strong,
+    body.all-handwriting b {
+      font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
+      letter-spacing: 0.015em;
+    }
+
+    body.all-handwriting .sheet-title-group h1 {
+      font-size: 17pt;
+      letter-spacing: 0.02em;
+    }
+
+    body.all-handwriting .task-title {
+      font-size: 13.5pt;
+    }
+
+    body.all-handwriting .calc-table th {
+      font-size: 11.5pt;
+    }
+
+    body.all-handwriting .calc-table td {
+      font-size: 13pt;
+    }
+
+    body.all-handwriting .sheet-subtitle {
+      font-size: 10pt;
+    }
+
+    body.all-handwriting .merke-content {
+      font-size: 12pt;
+    }
+
+    /* ========================================================
+       HERVORHEBUNGEN: FETT, KURSIV & TEXTMARKER
+       ======================================================== */
+    strong, b,
+    body.all-handwriting strong,
+    body.all-handwriting b {
+      font-weight: 700;
+      -webkit-text-stroke: 0.6px currentColor;
+      letter-spacing: 0.02em;
+    }
+
+    em, i,
+    body.all-handwriting em,
+    body.all-handwriting i {
+      font-style: italic;
+      display: inline-block;
+      transform: skewX(-9deg);
+    }
+
+    .highlight-marker {
+      background: #fef08a;
+      padding: 1px 5px;
+      border-radius: 3px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      font-weight: 700;
+    }
+
+    .hand-underline {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+
+    /* Screen Toolbar (beim Drucken ausgeblendet) */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-toggle-solution {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      padding: 7px 15px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-toggle-solution:hover {
+      background: #b91c1c;
+    }
+
+    .btn-print {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 7px 13px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* DIN-A4 Bogen */
+    .sheet-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 0 50px 0;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 12mm 15mm 12mm 15mm;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      position: relative;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    /* Header & Metadaten */
+    .sheet-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .sheet-title-group h1 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: #1e3a8a; /* Füller-Königsblau */
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .sheet-subtitle {
+      font-size: 9.5pt;
+      color: #475569;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .sheet-meta-box {
+      display: flex;
+      gap: 15px;
+      font-size: 8.5pt;
+      color: #334155;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .meta-line {
+      display: inline-block;
+      border-bottom: 1px dotted #64748b;
+      min-width: 65px;
+      height: 12px;
+    }
+
+    /* Aufgaben-Struktur */
+    .task-card {
+      margin-bottom: 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 9px 12px;
+      background: #ffffff;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+
+    .task-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 9pt;
+      font-weight: 700;
+    }
+
+    .task-points {
+      font-size: 8pt;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .task-desc {
+      font-size: 11pt;
+      margin-bottom: 7px;
+      color: #111827;
+      line-height: 1.42;
+    }
+
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 8px 0;
+      font-size: 10pt;
+      table-layout: fixed;
+    }
+
+    .calc-table th, .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 4px 3px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .calc-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .calc-table th:first-child,
+    .calc-table td:first-child {
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    /* Roter Merksatz-Kasten nach GEMINI.md */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 6px;
+      padding: 9px 12px;
+      margin: 10px 0;
+      background: #fffafa;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.08em;
+    }
+
+    .merke-content {
+      color: #111827; /* Zwingend schwarz/dunkel gemäss GEMINI.md */
+      font-size: 10.5pt;
+      line-height: 1.45;
+    }
+
+    .merke-content ul {
+      margin-left: 18px;
+      margin-top: 4px;
+    }
+
+    .merke-content li {
+      margin-bottom: 2px;
+    }
+
+    /* Handschriftliche Musterlösung (Lehrer-Rot) */
+    .sol-entry {
+      font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
+      color: #dc2626;
+      font-weight: 600;
+      display: none;
+      letter-spacing: 0.02em;
+    }
+
+    .blank-entry {
+      display: inline-block;
+      border-bottom: 1.5px dotted #94a3b8;
+      min-width: 32px;
+      height: 14px;
+    }
+
+    body.teacher-mode .sol-entry {
+      display: inline-block;
+    }
+
+    body.teacher-mode .blank-entry {
+      display: none;
+    }
+
+    /* Hinweisfeld mit allseitigem zarten Rahmen */
+    .info-card-box {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin-top: 6px;
+      font-size: 9.5pt;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-badge {
+      font-size: 7.5pt;
+      font-weight: 700;
+      background: #1e3a8a;
+      color: #ffffff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    /* Koordinatensystem-Skizzenbox */
+    .skizze-container {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .skizze-svg-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Print Setup */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .screen-toolbar {
+        display: none !important;
+      }
+      .sheet-wrapper {
+        padding: 0;
+      }
+      .page {
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        page-break-after: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="teacher-mode all-handwriting"> <!-- Standardmäßig komplett in Lehrer-Handschrift -->
+
+  <!-- Top-Toolbar zur Steuerung -->
+  <aside class="screen-toolbar">
+    <div class="toolbar-left">
+      <a href="../index.html" class="toolbar-btn-nav">← Übersicht 9b</a>
+      <span class="toolbar-title">AB 2.2: Verschiebung der Parabel & Scheitelpunktform</span>
+    </div>
+
+    <div class="toolbar-actions">
+      <button class="btn-toggle-handwriting" id="btnToggleHandwriting" onclick="toggleAllHandwriting()" style="background: #1e3a8a; color: #ffffff; border: 1px solid rgba(255,255,255,0.2); padding: 7px 14px; border-radius: 6px; font-size: 0.86rem; font-weight: 700; cursor: pointer;">
+        <span>Ansicht: 100% Handschrift (Aktiv)</span>
+      </button>
+
+      <button class="btn-toggle-solution" id="btnToggleSolution" onclick="toggleSolution()">
+        <span>Musterlösung: Aktiv</span>
+      </button>
+
+      <button class="btn-print" onclick="window.print()">
+        <span>Drucken / PDF</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="sheet-wrapper">
+    <main class="page">
+
+      <!-- Dokument-Header -->
+      <header class="sheet-header">
+        <div class="sheet-title-group">
+          <h1>Verschobene Parabeln & Scheitelpunktform</h1>
+          <div class="sheet-subtitle">Mathematik 9b • Arbeitsblatt 2.2 • Vertikale & Horizontale Verschiebung</div>
+        </div>
+        <div class="sheet-meta-box">
+          <div class="meta-item"><span>Name:</span> <span class="meta-line"></span></div>
+          <div class="meta-item"><span>Datum:</span> <span class="meta-line"></span></div>
+        </div>
+      </header>
+
+      <!-- Aufgabe 1: Vertikale Verschiebung (y = x² + e) -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-number">1</span>
+            Vertikale Verschiebung: $f(x) = x^2 + e$
+          </h2>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Gegeben sind $f_1(x) = x^2 + 1$ und $f_2(x) = x^2 - 2$. Berechne die Werte und bestimme den <strong>Scheitelpunkt</strong> $S$:
+        </p>
+
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Funktion</th>
+              <th style="width: 7%;">$x=-2$</th>
+              <th style="width: 7%;">-1</th>
+              <th style="width: 7%;">0</th>
+              <th style="width: 7%;">1</th>
+              <th style="width: 7%;">2</th>
+              <th style="width: 40%;">Scheitelpunkt $S$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>$f_1(x) = x^2 + 1$</strong></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">5</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">2</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">1</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">2</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">5</span></td>
+              <td><span class="blank-entry" style="min-width:60px;"></span><span class="sol-entry"><strong>$S_1(0 \mid 1)$</strong></span></td>
+            </tr>
+            <tr>
+              <td><strong>$f_2(x) = x^2 - 2$</strong></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">2</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">-1</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">-2</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">-1</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">2</span></td>
+              <td><span class="blank-entry" style="min-width:60px;"></span><span class="sol-entry"><strong>$S_2(0 \mid -2)$</strong></span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-card-box">
+          <span class="info-badge">Erkenntnis</span>
+          <span>Der Parameter $e$ verschiebt die Normalparabel entlang der $y$-Achse: $+e$ nach <span class="highlight-marker">oben</span>, $-e$ nach <span class="highlight-marker">unten</span>.</span>
+        </div>
+      </section>
+
+      <!-- Aufgabe 2: Horizontale Verschiebung (y = (x - d)²) -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-number">2</span>
+            Horizontale Verschiebung: $g(x) = (x - d)^2$
+          </h2>
+          <span class="task-points">4 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Untersuche $g_1(x) = (x - 2)^2$ und $g_2(x) = (x + 3)^2$. Wann wird der Klammerausdruck null?
+        </p>
+
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Funktion</th>
+              <th style="width: 28%;">Nullstelle des Terms</th>
+              <th style="width: 24%;">Verschiebung</th>
+              <th style="width: 23%;">Scheitelpunkt $S$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>$g_1(x) = (x - 2)^2$</strong></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">$x = 2$, da $(2 - 2)^2 = 0$</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">um 2 nach <em>rechts</em></span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry"><strong>$S_1(2 \mid 0)$</strong></span></td>
+            </tr>
+            <tr>
+              <td><strong>$g_2(x) = (x + 3)^2$</strong></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">$x = -3$, da $(-3 + 3)^2 = 0$</span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry">um 3 nach <em>links</em></span></td>
+              <td><span class="blank-entry"></span><span class="sol-entry"><strong>$S_2(-3 \mid 0)$</strong></span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-card-box" style="border-color: #fca5a5; background: #fef2f2; color: #991b1b;">
+          <span class="info-badge" style="background: #dc2626;">Achtung Vorzeichen!</span>
+          <span>In der Klammer steht $(x - d)$: Ein <strong>Minus</strong> verschiebt nach <strong>rechts</strong>, ein <strong>Plus</strong> verschiebt nach <strong>links</strong>!</span>
+        </div>
+      </section>
+
+      <!-- Roter Merksatz-Kasten gemäss GEMINI.md -->
+      <section class="merke-box">
+        <div class="merke-tag">MERKE</div>
+        <div class="merke-content">
+          Jede um $d$ (horizontal) und $e$ (vertikal) verschobene Normalparabel besitzt die <span class="highlight-marker">Scheitelpunktform</span>:
+          <div style="text-align: center; margin: 5px 0; font-size: 13pt;">
+            <strong>$$f(x) = (x - d)^2 + e \quad \Longrightarrow \quad S(d \mid e)$$</strong>
+          </div>
+          <ul>
+            <li>Der <span class="hand-underline">Scheitelpunkt</span> $S(d \mid e)$ kann <span class="highlight-marker">direkt ohne Rechnung</span> abgelesen werden!</li>
+            <li><strong>Wichtig:</strong> Die $x$-Koordinate $d$ wechselt das Vorzeichen, die $y$-Koordinate $e$ behält ihr Vorzeichen.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Aufgabe 3: Graph & Scheitelpunktform kombiniert -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-number">3</span>
+            Kombinierte Verschiebung & Graphenskizze
+          </h2>
+          <span class="task-points">5 Punkte</span>
+        </div>
+        <p class="task-desc">
+          Gegeben ist die Funktionsgleichung $f(x) = (x - 2)^2 - 1$.
+        </p>
+
+        <div class="skizze-container">
+          <!-- Vektor-Koordinatensystem im Schulheft-Stil -->
+          <div class="skizze-svg-box">
+            <svg width="220" height="150" viewBox="-30 -10 260 170" xmlns="http://www.w3.org/2000/svg">
+              <!-- Gitter -->
+              <defs>
+                <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+                  <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect x="-20" y="0" width="240" height="150" fill="url(#grid)" />
+
+              <!-- Achsen: Ursprung bei (75, 115) -> x0=75, y0=115, Schritt=25px -->
+              <!-- x-Achse -->
+              <line x1="-15" y1="115" x2="215" y2="115" stroke="#334155" stroke-width="1.5" />
+              <polygon points="215,115 208,111 208,119" fill="#334155" />
+              <text x="210" y="130" font-family="'LehrerHandschrift', 'Calibri'" font-size="11" fill="#334155">x</text>
+
+              <!-- y-Achse -->
+              <line x1="75" y1="145" x2="75" y2="5" stroke="#334155" stroke-width="1.5" />
+              <polygon points="75,5 71,12 79,12" fill="#334155" />
+              <text x="60" y="14" font-family="'LehrerHandschrift', 'Calibri'" font-size="11" fill="#334155">y</text>
+
+              <!-- Ticks & Beschriftung -->
+              <text x="70" y="128" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#64748b">0</text>
+              <text x="123" y="128" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#64748b">2</text>
+              <text x="173" y="128" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#64748b">4</text>
+              <text x="56" y="142" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#64748b">-1</text>
+              <text x="56" y="42" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#64748b">3</text>
+
+              <!-- Ausgangs-Normalparabel y = x² (grau gestrichelt) -->
+              <!-- x in [-2, 2]: x=-2 -> 25, y=15; x=-1 -> 50, y=90; x=0 -> 75, y=115; x=1 -> 100, y=90; x=2 -> 125, y=15 -->
+              <path d="M 25 15 Q 75 165 125 15" fill="none" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="3,3" />
+              <text x="26" y="11" font-family="'LehrerHandschrift', 'Calibri'" font-size="9" fill="#94a3b8">y = x²</text>
+
+              <!-- Verschobene Parabel: S(2 | -1) -> Sx = 75 + 2*25 = 125, Sy = 115 - (-1)*(-25) -> Sy = 115 + 25 = 140 -->
+              <!-- x=0 -> y=3 (75, 40); x=2 -> y=-1 (125, 140); x=4 -> y=3 (175, 40) -->
+              <path d="M 75 40 Q 125 190 175 40" fill="none" stroke="#dc2626" stroke-width="2.2" />
+              <!-- Scheitelpunkt Dot -->
+              <circle cx="125" cy="140" r="3.5" fill="#dc2626" />
+              <text x="132" y="146" font-family="'LehrerHandschrift', 'Calibri'" font-size="10" font-weight="bold" fill="#dc2626">S(2 | -1)</text>
+            </svg>
+          </div>
+
+          <!-- Aufgabenfragen rechts -->
+          <div style="flex: 1; font-size: 10.5pt; line-height: 1.45;">
+            <p><strong>a) Scheitelpunkt ablesen:</strong></p>
+            <p style="margin-left: 10px;">
+              $S($ <span class="blank-entry" style="min-width: 25px;"></span><span class="sol-entry"><strong>2</strong></span> $\mid$ 
+              <span class="blank-entry" style="min-width: 25px;"></span><span class="sol-entry"><strong>-1</strong></span> $)$
+            </p>
+
+            <p style="margin-top: 6px;"><strong>b) Punktprobe für $P(4 \mid 3)$:</strong></p>
+            <p style="margin-left: 10px;">
+              <span class="blank-entry" style="min-width: 140px;"></span>
+              <span class="sol-entry">$f(4) = (4 - 2)^2 - 1 = 2^2 - 1 = 4 - 1 = 3 = y_P$ ✓</span>
+            </p>
+            <p style="margin-left: 10px; margin-top: 2px;">
+              <span class="sol-entry" style="color: #1e3a8a;"><strong>Antwort:</strong> Der Punkt $P(4 \mid 3)$ liegt auf der Parabel!</span>
+            </p>
+
+            <p style="margin-top: 6px;"><strong>c) Nullstellen berechnen:</strong> Setze $f(x) = 0$:</p>
+            <p style="margin-left: 10px;">
+              <span class="blank-entry" style="min-width: 140px;"></span>
+              <span class="sol-entry">$(x - 2)^2 - 1 = 0 \iff (x - 2)^2 = 1 \iff x - 2 = \pm 1 \Rightarrow x_1 = 3, \, x_2 = 1$</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function toggleSolution() {
+      document.body.classList.toggle('teacher-mode');
+      const isTeacher = document.body.classList.contains('teacher-mode');
+      const btn = document.getElementById('btnToggleSolution');
+      btn.innerHTML = isTeacher ? '<span>Musterlösung: Aktiv</span>' : '<span>Musterlösung: Versteckt</span>';
+      btn.style.background = isTeacher ? '#dc2626' : '#475569';
+    }
+
+    function toggleAllHandwriting() {
+      document.body.classList.toggle('all-handwriting');
+      const isAll = document.body.classList.contains('all-handwriting');
+      const btn = document.getElementById('btnToggleHandwriting');
+      btn.innerHTML = isAll ? '<span>Ansicht: 100% Handschrift (Aktiv)</span>' : '<span>Ansicht: Standard (Calibri)</span>';
+      btn.style.background = isAll ? '#1e3a8a' : '#475569';
+    }
+  </script>
+</body>
+</html>
