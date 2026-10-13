@@ -9,6 +9,13 @@
   margin: 10mm 13mm 10mm 13mm;
 }
 
+@font-face {
+  font-family: 'LehrerHandschrift';
+  src: url('../fonts/LehrerHandschrift.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -422,12 +429,28 @@ body.teacher-mode .btn-toggle-teacher {
 }
 
 /* ========================================================
-   MUSTERLÖSUNG (LEHRER-ROT)
+   MUSTERLÖSUNG (LEHRER-ROT & ECHTE HANDSCHRIFT)
    ======================================================== */
 .sol-val, .sol-text, .sol-step, .sol-inline {
   display: none;
+  font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
   color: #dc2626 !important;
-  font-weight: 700;
+  font-size: 1.14em;
+  letter-spacing: 0.02em;
+}
+
+.handwritten-blue {
+  font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
+  color: #1e3a8a !important;
+  font-size: 1.14em;
+  letter-spacing: 0.02em;
+}
+
+.handwritten-red {
+  font-family: 'LehrerHandschrift', 'Calibri', cursive !important;
+  color: #dc2626 !important;
+  font-size: 1.14em;
+  letter-spacing: 0.02em;
 }
 
 body.teacher-mode .sol-val {

@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Einführung: Lineares vs. Quadratisches Wachstum | Mathe 9b</title>
 
-  <!-- Modern System Font & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Zentrales Schulheft- & Tafelbild-Designsystem gemäss GEMINI.md -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
 
   <!-- KaTeX für mathematische Formeln -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -37,698 +35,16 @@
     }
     window.addEventListener('load', triggerKaTeX);
   </script>
-
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --primary-light: #eff6ff;
-      --accent: #d97706;
-      --accent-light: #fef3c7;
-      --success: #059669;
-      --success-light: #ecfdf5;
-      --danger: #dc2626;
-      --purple: #7c3aed;
-      --purple-light: #f5f3ff;
-      --purple-dark: #6d28d9;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #475569;
-      --border: #e2e8f0;
-      --radius-lg: 16px;
-      --radius-md: 10px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 14px rgba(0,0,0,0.07);
-      --font-scale: 1;
-    }
-
-    /* Beamer-Modus */
-    body.beamer-mode {
-      --font-scale: 1.15;
-      background-color: #0f172a;
-      color: #f8fafc;
-    }
-    body.beamer-mode .card,
-    body.beamer-mode .module-header {
-      background-color: #1e293b;
-      border-color: #334155;
-      color: #f8fafc;
-    }
-    body.beamer-mode .text-muted {
-      color: #94a3b8;
-    }
-    body.beamer-mode .model-card-felix {
-      background-color: #0f2347;
-      border-color: #3b82f6;
-    }
-    body.beamer-mode .model-card-samira {
-      background-color: #261447;
-      border-color: #a855f7;
-    }
-    body.beamer-mode .calc-table th {
-      background-color: #334155;
-      color: #f8fafc;
-    }
-    body.beamer-mode .calc-table td {
-      border-color: #334155;
-      color: #f8fafc;
-    }
-    body.beamer-mode .interactive-panel,
-    body.beamer-mode .sub-card {
-      background-color: #162032;
-      border-color: #334155;
-      color: #f8fafc;
-    }
-    body.beamer-mode .slider-control-bar,
-    body.beamer-mode .kpi-card,
-    body.beamer-mode .graph-stage-wrapper {
-      background-color: #1e293b;
-      border-color: #334155;
-      color: #f8fafc;
-    }
-    body.beamer-mode .merke-box {
-      background-color: #1a2332;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.65;
-      font-size: calc(1rem * var(--font-scale));
-      padding-bottom: 5rem;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* PRÄSENTATIONS-LEISTE (STANDARD GEM. GEMINI.MD) */
-    .presenter-bar {
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 16px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-      border-bottom: 2px solid var(--primary);
-    }
-
-    .presenter-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn-nav-back {
-      color: #94a3b8;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.88rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.08);
-      transition: all 0.2s;
-    }
-    .btn-nav-back:hover {
-      background: rgba(255,255,255,0.18);
-      color: #ffffff;
-    }
-
-    .presenter-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .presenter-badge {
-      background: var(--primary);
-      color: white;
-      font-size: 0.72rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .presenter-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .presenter-tab-btn {
-      background: rgba(255,255,255,0.08);
-      color: #cbd5e1;
-      border: 1px solid rgba(255,255,255,0.18);
-      padding: 6px 13px;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-    .presenter-tab-btn:hover {
-      background: rgba(255,255,255,0.2);
-      color: #ffffff;
-      border-color: rgba(255,255,255,0.35);
-    }
-    .presenter-tab-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: #60a5fa;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.4);
-    }
-    .presenter-tab-btn.btn-summary {
-      background: #059669;
-      color: #ffffff;
-      border-color: #34d399;
-    }
-    .presenter-tab-btn.btn-summary:hover {
-      background: #047857;
-      border-color: #10b981;
-    }
-
-    /* Container */
-    .container {
-      max-width: 980px;
-      margin: 1.75rem auto 0 auto;
-      padding: 0 1rem;
-    }
-
-    /* Modul Header */
-    .module-header {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 2rem 2.25rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.75rem;
-    }
-    body.beamer-mode .header-badge {
-      background: rgba(37,99,235,0.25);
-      color: #93c5fd;
-    }
-
-    .module-header h1 {
-      font-size: calc(2.1rem * var(--font-scale));
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.5px;
-      line-height: 1.25;
-      margin-bottom: 0.65rem;
-    }
-    body.beamer-mode .module-header h1 {
-      color: #ffffff;
-    }
-
-    .module-subtitle {
-      color: var(--text-muted);
-      font-size: calc(1.05rem * var(--font-scale));
-      line-height: 1.6;
-    }
-
-    /* Karten */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 2rem 2.25rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-sm);
-      scroll-margin-top: 75px;
-    }
-
-    .card-title {
-      font-size: calc(1.35rem * var(--font-scale));
-      font-weight: 800;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.65rem;
-      border-bottom: 1.5px solid var(--border);
-    }
-    body.beamer-mode .card-title {
-      color: #ffffff;
-    }
-
-    .step-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #ffffff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.95rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .section-intro {
-      font-size: calc(1.02rem * var(--font-scale));
-      margin-bottom: 1.25rem;
-      line-height: 1.65;
-    }
-
-    /* Grids */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-    @media (max-width: 780px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Modell-Karten (Nebeneinander) */
-    .model-card {
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      border-width: 2.5px;
-      border-style: solid;
-      background: #ffffff;
-    }
-
-    .model-card-felix {
-      border-color: #2563eb;
-      background: #f8fafc;
-    }
-
-    .model-card-samira {
-      border-color: #7c3aed;
-      background: #faf5ff;
-    }
-
-    .model-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.5rem;
-    }
-    .tag-felix { background: #dbeafe; color: #1e40af; }
-    .tag-samira { background: #ede9fe; color: #6d28d9; }
-
-    .model-heading {
-      font-size: calc(1.25rem * var(--font-scale));
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-    .heading-felix { color: #1e40af; }
-    .heading-samira { color: #6d28d9; }
-    body.beamer-mode .heading-felix { color: #93c5fd; }
-    body.beamer-mode .heading-samira { color: #c4b5fd; }
-
-    .model-summary-box {
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 0.9rem 1.1rem;
-      margin: 1rem 0;
-      text-align: center;
-    }
-    body.beamer-mode .model-summary-box {
-      background: #0f172a;
-      border-color: #334155;
-    }
-
-    .formula-large {
-      font-size: calc(1.6rem * var(--font-scale));
-      font-weight: 800;
-      margin: 4px 0;
-    }
-
-    .herleitung-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-      font-size: calc(0.92rem * var(--font-scale));
-    }
-    .herleitung-table th, .herleitung-table td {
-      padding: 6px 10px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-    .herleitung-table th {
-      font-weight: 700;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .herleitung-table tr.highlight-row td {
-      font-weight: 800;
-      background: rgba(0,0,0,0.03);
-    }
-
-    /* Sub-Cards & Infoboxen */
-    .sub-card {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1.15rem 1.35rem;
-      font-size: calc(0.96rem * var(--font-scale));
-      line-height: 1.6;
-    }
-
-    /* Vergleichstabelle */
-    .table-container {
-      overflow-x: auto;
-      margin: 1.25rem 0;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-    }
-
-    .calc-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: calc(0.95rem * var(--font-scale));
-      text-align: center;
-      background: #ffffff;
-    }
-    .calc-table th {
-      background: #f1f5f9;
-      color: var(--text);
-      font-weight: 700;
-      padding: 10px 14px;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
-    }
-    .calc-table td {
-      padding: 9px 14px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-    .col-felix { color: #1d4ed8; font-weight: 700; }
-    .col-samira { color: #6d28d9; font-weight: 700; }
-
-    .lead-badge {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    .badge-felix-lead { background: #dbeafe; color: #1e40af; }
-    .badge-samira-lead { background: #ede9fe; color: #6d28d9; }
-    .badge-tie { background: #fef3c7; color: #92400e; }
-
-    /* Interaktives Dashboard */
-    .interactive-panel {
-      background: #f8fafc;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin: 1.25rem 0;
-    }
-
-    .slider-control-bar {
-      margin-bottom: 1.5rem;
-      padding: 1.1rem 1.35rem;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .slider-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.85rem;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .slider-title {
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--text);
-    }
-    body.beamer-mode .slider-title {
-      color: #ffffff;
-    }
-
-    .slider-day-pill {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--primary);
-      background: var(--primary-light);
-      padding: 4px 14px;
-      border-radius: 999px;
-    }
-
-    .range-input {
-      width: 100%;
-      height: 8px;
-      border-radius: 4px;
-      background: #cbd5e1;
-      outline: none;
-      -webkit-appearance: none;
-      cursor: pointer;
-    }
-    .range-input::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--primary);
-      cursor: pointer;
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-      transition: transform 0.1s;
-    }
-    .range-input::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
-
-    .day-quick-buttons {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn-quick-day {
-      background: #f1f5f9;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-quick-day:hover {
-      background: var(--primary-light);
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-    .btn-quick-day.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-
-    /* KPI Row */
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 1.5rem;
-    }
-    @media (max-width: 768px) {
-      .kpi-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .kpi-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .kpi-label {
-      font-size: 0.76rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-
-    .kpi-val {
-      font-size: 1.4rem;
-      font-weight: 800;
-    }
-    .val-felix { color: #1d4ed8; }
-    .val-samira { color: #6d28d9; }
-    body.beamer-mode .val-felix { color: #93c5fd; }
-    body.beamer-mode .val-samira { color: #c4b5fd; }
-
-    .kpi-calc {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .graph-stage-wrapper {
-      background: #ffffff;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 1rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .graph-legend {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 0.75rem;
-      font-size: 0.88rem;
-      font-weight: 700;
-      flex-wrap: wrap;
-    }
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .line-indicator {
-      width: 22px;
-      height: 4px;
-      border-radius: 2px;
-    }
-
-    /* Der rote Merksatz-Kasten (Standard gem. GEMINI.md) */
-    .merke-box {
-      border: 2.5px solid #dc2626;
-      border-radius: var(--radius-md);
-      background: #ffffff;
-      padding: 1.35rem 1.6rem;
-      margin: 1.5rem 0;
-      position: relative;
-    }
-
-    .merke-tag {
-      position: absolute;
-      top: -12px;
-      left: 18px;
-      background: #dc2626;
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 2px 10px;
-      border-radius: 4px;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-    }
-
-    .merke-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #1e3a8a;
-      margin-bottom: 0.65rem;
-    }
-    body.beamer-mode .merke-title {
-      color: #93c5fd;
-    }
-
-    .merke-content {
-      color: #111827 !important; /* Streng Füllerschwarz! */
-      font-size: 0.98rem;
-      line-height: 1.65;
-    }
-    body.beamer-mode .merke-content {
-      color: #f1f5f9 !important;
-    }
-
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 0.75rem 0 1rem 0;
-      font-size: 0.95rem;
-    }
-    .summary-table th, .summary-table td {
-      padding: 7px 10px;
-      border-bottom: 1px solid #e2e8f0;
-      text-align: left;
-    }
-    .summary-table th {
-      border-bottom: 2px solid #dc2626;
-      font-weight: 800;
-    }
-  </style>
 </head>
 <body>
 
-  <!-- Top Navigation (Presenter-Bar) -->
+  <!-- Top Navigation (Presenter-Bar im Tafel-Look) -->
   <nav class="presenter-bar">
     <div class="presenter-left">
       <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
       <div class="presenter-title">
         <span>Mathe 9b • Kapitel II: Quadratische Funktionen</span>
-        <span class="presenter-badge">Unterrichtsrückblick</span>
+        <span class="presenter-tag">Unterrichtsrückblick</span>
       </div>
     </div>
     <div class="presenter-actions">
@@ -742,64 +58,72 @@
 
   <main class="container">
 
-    <!-- Modul-Kopf -->
-    <section class="module-header">
-      <div class="header-badge">Einführung in das neue Kapitel</div>
+    <!-- Deckblatt-Kopfzeile -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Klasse 9b · Mathematik</span>
+        <span>Themenbereich: Funktionen &amp; Modellieren</span>
+        <span>Kapitel II: Quadratische Funktionen</span>
+      </div>
       <h1>Lineares vs. Quadratisches Wachstum</h1>
-      <p class="module-subtitle">
-        Hier kannst du den Einstieg in die quadratischen Funktionen noch einmal in Ruhe nachlesen: Wie entstehen die Funktionsgleichungen aus dem Alltag, warum überholt die Kurve die Gerade und was bedeutet das mathematisch?
+      <p class="sheet-intro">
+        In dieser Lerneinheit stellen wir zwei unterschiedliche Wachstumsmodelle anhand eines 6-tägigen Ferienjobs gegenüber: Warum startet das quadratische Modell zögerlicher und überholt das lineare Modell dennoch unausweichlich?
       </p>
-    </section>
+    </header>
 
     <!-- 1. Der Sachkontext -->
-    <article class="card" id="sec-ausgangslage">
-      <h2 class="card-title">
-        <span class="step-circle">1</span>
+    <article class="sheet-card" id="sec-ausgangslage">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
         Die Ausgangslage: Der Ferienjob-Wettstreit
       </h2>
-      
-      <p class="section-intro">
-        Um zu verstehen, was quadratisches Wachstum ist und wie es sich von linearem Wachstum unterscheidet, betrachten wir zwei Schüler bei einem <strong>6-tägigen Ferienjob</strong>:
+
+      <p style="margin-bottom: 1.25rem;">
+        Zwei Neuntklässler treten einen <strong>6-tägigen Ferienjob</strong> an und können zwischen zwei Bezahlungsmodellen wählen:
       </p>
 
-      <div class="grid-2">
-        <div class="sub-card" style="border-left: 4px solid #2563eb;">
-          <strong style="color: #1e40af; font-size: 1.05rem;">Modell A (Felix): Das lineare Modell</strong><br>
-          Felix entscheidet sich für die sichere Variante: Er erhält für jeden gearbeiteten Tag eine feste Prämie von <strong>$4\text{ €}$</strong>.
+      <div class="note-columns">
+        <div class="notebook-column col-felix">
+          <div class="col-title">Modell A (Felix): Der Sicherheitstarif</div>
+          <div class="col-description">
+            Felix wählt die sichere Variante: Er erhält für jeden gearbeiteten Tag eine feste Prämie von genau <span class="highlighter">4 € pro Tag</span>.
+          </div>
         </div>
-        <div class="sub-card" style="border-left: 4px solid #7c3aed;">
-          <strong style="color: #6d28d9; font-size: 1.05rem;">Modell B (Samira): Das quadratische Modell</strong><br>
-          Samira wählt den Risikotarif: Ihre Prämie berechnet sich als <strong>Quadrat der bisherigen Arbeitstage</strong> ($x \cdot x\text{ €}$).
+
+        <div class="notebook-column col-samira">
+          <div class="col-title">Modell B (Samira): Das Wagnis der Quadrate</div>
+          <div class="col-description">
+            Samira entscheidet sich für den Risikotarif: Ihre Prämie berechnet sich als <span class="highlighter">Quadrat der bisherigen Arbeitstage</span> ($x \cdot x\text{ €}$).
+          </div>
         </div>
       </div>
     </article>
 
-    <!-- 2. Zustandekommen der Funktionsgleichungen nebeneinander -->
-    <article class="card" id="sec-herleitung">
-      <h2 class="card-title">
-        <span class="step-circle">2</span>
+    <!-- 2. Zustandekommen der Funktionsgleichungen -->
+    <article class="sheet-card" id="sec-herleitung">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
         Wie kommen die Funktionsgleichungen zustande?
       </h2>
 
-      <p class="section-intro">
-        Wie gelangen wir von der Textbeschreibung zu einer exakten mathematischen Formel? Betrachte die schrittweise Herleitung für beide Modelle direkt nebeneinander:
+      <p style="margin-bottom: 1.25rem;">
+        Hier siehst du die schrittweise Herleitung der mathematischen Terme für beide Modelle im direkten Vergleich:
       </p>
 
-      <div class="grid-2">
+      <div class="note-columns">
 
-        <!-- LINKE SPALTE: FELIX -->
-        <div class="model-card model-card-felix">
-          <span class="model-tag tag-felix">Modell A • Felix</span>
-          <h3 class="model-heading heading-felix">Lineares Wachstum</h3>
-          <p style="color: var(--text-muted); font-size: 0.92rem;">
-            Felix bekommt an jedem gearbeiteten Tag genau $4\text{ €}$ hinzu.
+        <!-- Felix Spalte -->
+        <div class="notebook-column col-felix">
+          <div class="col-title">Felix · Lineares Wachstum</div>
+          <p class="col-description">
+            An jedem vollendeten Arbeitstag kommen verlässlich genau $4\text{ €}$ hinzu.
           </p>
 
-          <table class="herleitung-table">
+          <table class="calc-grid-table">
             <thead>
               <tr>
                 <th>Arbeitstag</th>
-                <th>Rechnung</th>
+                <th>Berechnung</th>
                 <th>Verdienst</th>
               </tr>
             </thead>
@@ -824,7 +148,7 @@
                 <td>$4 \cdot 4\text{ €}$</td>
                 <td><strong>$16\text{ €}$</strong></td>
               </tr>
-              <tr class="highlight-row" style="color: #1e40af;">
+              <tr class="total-row">
                 <td><strong>Tag $x$</strong></td>
                 <td><strong>$x \cdot 4\text{ €}$</strong></td>
                 <td><strong>$4x\text{ €}$</strong></td>
@@ -832,31 +156,30 @@
             </tbody>
           </table>
 
-          <div class="model-summary-box">
-            <div style="font-size: 0.78rem; font-weight: 800; color: #1e40af; text-transform: uppercase;">Lineare Funktionsgleichung</div>
-            <div class="formula-large" style="color: #1e40af;">$$f(x) = 4x$$</div>
+          <div class="formula-notebook-box">
+            <div class="formula-tag">Lineare Funktionsgleichung</div>
+            <div class="formula-val">$$f(x) = 4x$$</div>
           </div>
 
-          <div style="font-size: 0.92rem; line-height: 1.6;">
-            • <strong>Warum linear?</strong> Die Variable $x$ wird mit einer festen Zahl multipliziert ($y = m \cdot x$).<br>
-            • <strong>Steigung:</strong> Die Änderungsrate ist konstant ($m = 4$). Jeder Tag bringt denselben Betrag.<br>
-            • <strong>Graph:</strong> Eine exakte, gerade Linie (<strong>Gerade</strong>).
-          </div>
+          <ul class="rule-list">
+            <li><strong>Formtyp:</strong> $y = m \cdot x$ (Proportionale Zuordnung).</li>
+            <li><strong>Steigung:</strong> Die Zunahme ist an jedem Tag exakt gleich ($m = 4$).</li>
+            <li><strong>Graph:</strong> Eine saubere <strong>Gerade</strong> (mit dem Lineal gezeichnet).</li>
+          </ul>
         </div>
 
-        <!-- RECHTE SPALTE: SAMIRA -->
-        <div class="model-card model-card-samira">
-          <span class="model-tag tag-samira">Modell B • Samira</span>
-          <h3 class="model-heading heading-samira">Quadratisches Wachstum</h3>
-          <p style="color: var(--text-muted); font-size: 0.92rem;">
-            Samiras Prämie berechnet sich aus den Tagen multipliziert mit sich selbst.
+        <!-- Samira Spalte -->
+        <div class="notebook-column col-samira">
+          <div class="col-title">Samira · Quadratisches Wachstum</div>
+          <p class="col-description">
+            Samiras Betrag berechnet sich aus der Tageszahl multipliziert mit sich selbst.
           </p>
 
-          <table class="herleitung-table">
+          <table class="calc-grid-table">
             <thead>
               <tr>
                 <th>Arbeitstag</th>
-                <th>Rechnung</th>
+                <th>Berechnung</th>
                 <th>Verdienst</th>
               </tr>
             </thead>
@@ -881,7 +204,7 @@
                 <td>$4 \cdot 4 = 4^2\text{ €}$</td>
                 <td><strong>$16\text{ €}$</strong></td>
               </tr>
-              <tr class="highlight-row" style="color: #6d28d9;">
+              <tr class="total-row">
                 <td><strong>Tag $x$</strong></td>
                 <td><strong>$x \cdot x = x^2\text{ €}$</strong></td>
                 <td><strong>$x^2\text{ €}$</strong></td>
@@ -889,42 +212,42 @@
             </tbody>
           </table>
 
-          <div class="model-summary-box">
-            <div style="font-size: 0.78rem; font-weight: 800; color: #6d28d9; text-transform: uppercase;">Quadratische Funktionsgleichung</div>
-            <div class="formula-large" style="color: #6d28d9;">$$g(x) = x^2$$</div>
+          <div class="formula-notebook-box">
+            <div class="formula-tag">Quadratische Funktionsgleichung</div>
+            <div class="formula-val">$$g(x) = x^2$$</div>
           </div>
 
-          <div style="font-size: 0.92rem; line-height: 1.6;">
-            • <strong>Warum quadratisch?</strong> Die Variable $x$ steht im Quadrat ($x^2$).<br>
-            • <strong>Steigung:</strong> Keine feste Steigung! Die Zunahme wächst von Tag zu Tag immer stärker an.<br>
-            • <strong>Graph:</strong> Eine nach oben gekrümmte Kurve (<strong>Parabelbogen</strong>).
-          </div>
+          <ul class="rule-list">
+            <li><strong>Formtyp:</strong> Die Variable $x$ steht im Quadrat ($x^2$).</li>
+            <li><strong>Steigung:</strong> Die Zunahme steigt von Schritt zu Schritt weiter an.</li>
+            <li><strong>Graph:</strong> Eine nach oben gekrümmte <strong>Parabelkurve</strong>.</li>
+          </ul>
         </div>
 
       </div>
     </article>
 
     <!-- 3. Wertevergleich & Zuwachsanalyse -->
-    <article class="card" id="sec-zuwachs">
-      <h2 class="card-title">
-        <span class="step-circle">3</span>
+    <article class="sheet-card" id="sec-zuwachs">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
         Wertevergleich &amp; Die Zuwachsanalyse ($\Delta y$)
       </h2>
 
-      <p class="section-intro">
-        Warum überholt Samira Felix, obwohl sie so langsam startet? Das Geheimnis liegt im <strong>täglichen Zuwachs ($\Delta y$)</strong>:
+      <p style="margin-bottom: 1.25rem;">
+        Warum kippt der Punktestand an Tag 4? Der mathematische Grund liegt im <strong>täglichen Zuwachs ($\Delta y$)</strong>:
       </p>
 
-      <div class="table-container">
-        <table class="calc-table">
+      <div class="table-responsive">
+        <table class="sheet-calc-table">
           <thead>
             <tr>
               <th>Tag $x$</th>
-              <th>Felix: $f(x) = 4x$</th>
-              <th style="background: #e0f2fe;">Täglicher Zuwachs ($\Delta y$)</th>
-              <th>Samira: $g(x) = x^2$</th>
-              <th style="background: #f3e8ff;">Täglicher Zuwachs ($\Delta y$)</th>
-              <th>Spielstand</th>
+              <th style="color: var(--model-blue);">Felix: $f(x) = 4x$</th>
+              <th style="background: #eff6ff; color: var(--model-blue);">Zuwachs ($\Delta y$)</th>
+              <th style="color: var(--model-purple);">Samira: $g(x) = x^2$</th>
+              <th style="background: #faf5ff; color: var(--model-purple);">Zuwachs ($\Delta y$)</th>
+              <th>Vergleich</th>
             </tr>
           </thead>
           <tbody>
@@ -934,164 +257,163 @@
               <td>–</td>
               <td>$0\text{ €}$</td>
               <td>–</td>
-              <td><span class="lead-badge badge-tie">Start (0 €)</span></td>
+              <td><span class="badge-lead badge-equal">Start (0 €)</span></td>
             </tr>
             <tr>
               <td><strong>Tag 1</strong></td>
-              <td class="col-felix">$4\text{ €}$</td>
-              <td style="background: #f0f9ff; font-weight: 700; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$1\text{ €}$</td>
-              <td style="background: #faf5ff; font-weight: 700; color: #7c3aed;">+1 €</td>
-              <td><span class="lead-badge badge-felix-lead">Felix (+3 €)</span></td>
+              <td style="color: var(--model-blue); font-weight: 700;">$4\text{ €}$</td>
+              <td style="background: #eff6ff; font-weight: 700; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 700;">$1\text{ €}$</td>
+              <td style="background: #faf5ff; font-weight: 700; color: var(--model-purple);">+1 €</td>
+              <td><span class="badge-lead badge-felix">Felix (+3 €)</span></td>
             </tr>
             <tr>
               <td><strong>Tag 2</strong></td>
-              <td class="col-felix">$8\text{ €}$</td>
-              <td style="background: #f0f9ff; font-weight: 700; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$4\text{ €}$</td>
-              <td style="background: #faf5ff; font-weight: 700; color: #7c3aed;">+3 €</td>
-              <td><span class="lead-badge badge-felix-lead">Felix (+4 €)</span></td>
+              <td style="color: var(--model-blue); font-weight: 700;">$8\text{ €}$</td>
+              <td style="background: #eff6ff; font-weight: 700; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 700;">$4\text{ €}$</td>
+              <td style="background: #faf5ff; font-weight: 700; color: var(--model-purple);">+3 €</td>
+              <td><span class="badge-lead badge-felix">Felix (+4 €)</span></td>
             </tr>
             <tr>
               <td><strong>Tag 3</strong></td>
-              <td class="col-felix">$12\text{ €}$</td>
-              <td style="background: #f0f9ff; font-weight: 700; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$9\text{ €}$</td>
-              <td style="background: #faf5ff; font-weight: 700; color: #7c3aed;">+5 €</td>
-              <td><span class="lead-badge badge-felix-lead">Felix (+3 €)</span></td>
+              <td style="color: var(--model-blue); font-weight: 700;">$12\text{ €}$</td>
+              <td style="background: #eff6ff; font-weight: 700; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 700;">$9\text{ €}$</td>
+              <td style="background: #faf5ff; font-weight: 700; color: var(--model-purple);">+5 €</td>
+              <td><span class="badge-lead badge-felix">Felix (+3 €)</span></td>
             </tr>
-            <tr style="background: #fefce8; font-weight: 800;">
+            <tr style="background: #fef9c3; font-weight: 700;">
               <td><strong>Tag 4</strong></td>
-              <td class="col-felix">$16\text{ €}$</td>
-              <td style="background: #e0f2fe; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$16\text{ €}$</td>
-              <td style="background: #ede9fe; color: #7c3aed;">+7 €</td>
-              <td><span class="lead-badge badge-tie">Gleichstand! S(4|16)</span></td>
+              <td style="color: var(--model-blue); font-weight: 800;">$16\text{ €}$</td>
+              <td style="background: #dbeafe; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 800;">$16\text{ €}$</td>
+              <td style="background: #ede9fe; color: var(--model-purple);">+7 €</td>
+              <td><span class="badge-lead badge-equal">Gleichstand! S(4|16)</span></td>
             </tr>
             <tr>
               <td><strong>Tag 5</strong></td>
-              <td class="col-felix">$20\text{ €}$</td>
-              <td style="background: #f0f9ff; font-weight: 700; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$25\text{ €}$</td>
-              <td style="background: #faf5ff; font-weight: 700; color: #7c3aed;">+9 €</td>
-              <td><span class="lead-badge badge-samira-lead">Samira (+5 €)</span></td>
+              <td style="color: var(--model-blue); font-weight: 700;">$20\text{ €}$</td>
+              <td style="background: #eff6ff; font-weight: 700; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 700;">$25\text{ €}$</td>
+              <td style="background: #faf5ff; font-weight: 700; color: var(--model-purple);">+9 €</td>
+              <td><span class="badge-lead badge-samira">Samira (+5 €)</span></td>
             </tr>
             <tr>
               <td><strong>Tag 6</strong></td>
-              <td class="col-felix">$24\text{ €}$</td>
-              <td style="background: #f0f9ff; font-weight: 700; color: #0284c7;">+4 €</td>
-              <td class="col-samira">$36\text{ €}$</td>
-              <td style="background: #faf5ff; font-weight: 700; color: #7c3aed;">+11 €</td>
-              <td><span class="lead-badge badge-samira-lead">Samira (+12 €)</span></td>
+              <td style="color: var(--model-blue); font-weight: 700;">$24\text{ €}$</td>
+              <td style="background: #eff6ff; font-weight: 700; color: var(--model-blue);">+4 €</td>
+              <td style="color: var(--model-purple); font-weight: 700;">$36\text{ €}$</td>
+              <td style="background: #faf5ff; font-weight: 700; color: var(--model-purple);">+11 €</td>
+              <td><span class="badge-lead badge-samira">Samira (+12 €)</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="grid-2">
-        <div class="sub-card">
-          <strong style="color: #1e40af;">Erkenntnis zu Felix (Linear):</strong><br>
+      <div class="insight-columns">
+        <div class="insight-card card-felix">
+          <strong style="color: var(--model-blue);">Erkenntnis bei Felix (Linear):</strong><br>
           Der Zuwachs bleibt an jedem Tag exakt gleich: <strong>immer $+4\text{ €}$</strong>.<br>
-          Man spricht von einer <strong>konstanten Zunahme</strong>.
+          Man nennt dies eine <strong>konstante Zunahme</strong>.
         </div>
-        <div class="sub-card">
-          <strong style="color: #6d28d9;">Erkenntnis zu Samira (Quadratisch):</strong><br>
-          Der Zuwachs ist nicht konstant, sondern wird mit jedem Tag um genau $+2\text{ €}$ größer ($+1, +3, +5, +7, +9, +11$).<br>
-          Man spricht von einer <strong>beschleunigten Zunahme</strong>.
+        <div class="insight-card card-samira">
+          <strong style="color: var(--model-purple);">Erkenntnis bei Samira (Quadratisch):</strong><br>
+          Der Zuwachs vergrößert sich an jedem Tag um $+2\text{ €}$ ($+1, +3, +5, +7, +9, +11$).<br>
+          Man nennt dies eine <strong>beschleunigte Zunahme</strong>.
         </div>
       </div>
     </article>
 
-    <!-- 4. Grafische Veranschaulichung mit Slider -->
-    <article class="card" id="sec-graph">
-      <h2 class="card-title">
-        <span class="step-circle">4</span>
+    <!-- 4. Graphen-Labor im Koordinatensystem -->
+    <article class="sheet-card" id="sec-graph">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
         Grafische Veranschaulichung im Koordinatensystem
       </h2>
 
-      <p class="section-intro">
-        Bewege den Schieberegler von Tag 0 bis 6. Beobachte im Koordinatensystem, wie Felix zunächst vorne liegt, Samira an Tag 4 gleichzieht und ab Tag 5 davoneilt:
+      <p style="margin-bottom: 1.25rem;">
+        Bewege den Schieberegler von Tag 0 bis 6. Verfolge im Koordinatensystem, wie der Schnittpunkt $S(4 \mid 16)$ die Wende markiert:
       </p>
 
-      <div class="interactive-panel">
+      <div class="lab-box">
 
         <!-- Schieberegler -->
-        <div class="slider-control-bar">
-          <div class="slider-header-row">
-            <span class="slider-title">Arbeitstag auswählen:</span>
-            <span class="slider-day-pill" id="lblCurrentDay">Tag 4 (Schnittpunkt)</span>
+        <div class="slider-shelf">
+          <div class="slider-row">
+            <span class="slider-label">Tag einstellen:</span>
+            <span class="day-badge" id="lblCurrentDay">Tag 4 (Schnittpunkt)</span>
           </div>
           <input type="range" id="daySlider" class="range-input" min="0" max="6" step="1" value="4" oninput="showDay(parseInt(this.value))">
-          
-          <div class="day-quick-buttons">
-            <button class="btn-quick-day" onclick="setSlider(0)">Tag 0</button>
-            <button class="btn-quick-day" onclick="setSlider(1)">Tag 1</button>
-            <button class="btn-quick-day" onclick="setSlider(2)">Tag 2</button>
-            <button class="btn-quick-day" onclick="setSlider(3)">Tag 3</button>
-            <button class="btn-quick-day active" id="btnPill4" onclick="setSlider(4)">Tag 4 (Schnittpunkt)</button>
-            <button class="btn-quick-day" onclick="setSlider(5)">Tag 5 (Überholpunkt)</button>
-            <button class="btn-quick-day" onclick="setSlider(6)">Tag 6</button>
+
+          <div class="button-selector-row">
+            <button class="btn-day" onclick="setSlider(0)">Tag 0</button>
+            <button class="btn-day" onclick="setSlider(1)">Tag 1</button>
+            <button class="btn-day" onclick="setSlider(2)">Tag 2</button>
+            <button class="btn-day" onclick="setSlider(3)">Tag 3</button>
+            <button class="btn-day active" id="btnPill4" onclick="setSlider(4)">Tag 4 (Schnittpunkt)</button>
+            <button class="btn-day" onclick="setSlider(5)">Tag 5 (Überholpunkt)</button>
+            <button class="btn-day" onclick="setSlider(6)">Tag 6</button>
           </div>
         </div>
 
-        <!-- Live KPI Dashboard -->
-        <div class="kpi-row">
-          <div class="kpi-card">
-            <div class="kpi-label">Gewählter Tag</div>
-            <div class="kpi-val" id="kpiTagTitle">Tag 4</div>
-            <div class="kpi-calc" id="kpiTagSub">$x = 4$</div>
+        <!-- 4 Kennzahlen -->
+        <div class="kpi-grid">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Arbeitstag</div>
+            <div class="kpi-number" id="kpiTagTitle">Tag 4</div>
+            <div class="kpi-subtext" id="kpiTagSub">$x = 4$</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Felix (Linear)</div>
-            <div class="kpi-val val-felix" id="kpiFelixVal">16 €</div>
-            <div class="kpi-calc" id="kpiFelixSub">$f(4) = 4 \cdot 4$</div>
+          <div class="kpi-tile">
+            <div class="kpi-caption">Felix (Linear)</div>
+            <div class="kpi-number felix-text" id="kpiFelixVal">16 €</div>
+            <div class="kpi-subtext" id="kpiFelixSub">$f(4) = 4 \cdot 4$</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Samira (Quadratisch)</div>
-            <div class="kpi-val val-samira" id="kpiSamiraVal">16 €</div>
-            <div class="kpi-calc" id="kpiSamiraSub">$g(4) = 4^2$</div>
+          <div class="kpi-tile">
+            <div class="kpi-caption">Samira (Quadratisch)</div>
+            <div class="kpi-number samira-text" id="kpiSamiraVal">16 €</div>
+            <div class="kpi-subtext" id="kpiSamiraSub">$g(4) = 4^2$</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Führung / Differenz</div>
-            <div class="kpi-val" id="kpiLeaderTitle" style="font-size: 1.15rem; color: #b45309;">Gleichstand</div>
-            <div class="kpi-calc" id="kpiDiffVal">Differenz: 0 €</div>
+          <div class="kpi-tile">
+            <div class="kpi-caption">Führung</div>
+            <div class="kpi-number" id="kpiLeaderTitle" style="color: #d97706; font-size: 1.25rem;">Gleichstand</div>
+            <div class="kpi-subtext" id="kpiDiffVal">Differenz: 0 €</div>
           </div>
         </div>
 
-        <!-- Erläuterungstext zum gewählten Tag -->
-        <div id="dayCommentBox" class="sub-card" style="margin-bottom: 1.25rem; background: #ffffff; border-left: 4px solid #d97706;">
+        <!-- Banner-Kommentar -->
+        <div id="dayCommentBox" class="comment-notebook-banner">
           <strong>Tag 4 – Der mathematische Schnittpunkt:</strong> An diesem Tag haben beide genau $16\text{ €}$ verdient. Im Koordinatensystem schneiden sich die blaue Gerade und die violette Kurve exakt im Punkt $\mathbf{S(4 \mid 16)}$. Ab morgen zieht Samira uneinholbar davon!
         </div>
 
-        <!-- Koordinatensystem SVG -->
-        <div class="graph-stage-wrapper">
-          <div class="graph-legend">
-            <div class="legend-item">
-              <span class="line-indicator" style="background: #2563eb;"></span>
+        <!-- SVG Koordinatensystem -->
+        <div class="svg-wrapper">
+          <div class="svg-legend">
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: var(--model-blue);"></span>
               <span>Felix: $f(x) = 4x$ (Gerade)</span>
             </div>
-            <div class="legend-item">
-              <span class="line-indicator" style="background: #7c3aed;"></span>
-              <span>Samira: $g(x) = x^2$ (Gekrümmte Kurve)</span>
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: var(--model-purple);"></span>
+              <span>Samira: $g(x) = x^2$ (Kurve)</span>
             </div>
-            <div class="legend-item">
-              <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:#d97706;"></span>
+            <div class="svg-legend-item">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background: #d97706;"></span>
               <span>Schnittpunkt $S(4 \mid 16)$</span>
             </div>
           </div>
 
-          <!-- SVG 680x400 -->
           <svg id="graphSvg" viewBox="0 0 680 400" width="100%" height="auto" style="display: block; max-height: 480px;">
             <defs>
-              <pattern id="grid-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+              <pattern id="grid-pattern-heft" width="20" height="20" patternUnits="userSpaceOnUse">
                 <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="0.8"/>
               </pattern>
             </defs>
 
             <!-- Karo Hintergrund -->
-            <rect x="70" y="30" width="560" height="320" fill="url(#grid-pattern)" />
+            <rect x="70" y="30" width="560" height="320" fill="url(#grid-pattern-heft)" />
 
-            <!-- Y-Gitterlinien (alle 5 € = 37.5px) -->
+            <!-- Y-Gitterlinien -->
             <g stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3">
               <line x1="70" y1="312.5" x2="630" y2="312.5"/>
               <line x1="70" y1="275" x2="630" y2="275"/>
@@ -1104,7 +426,7 @@
             </g>
 
             <!-- Y-Beschriftungen -->
-            <g font-size="11" fill="#64748b" text-anchor="end" font-family="'JetBrains Mono', monospace">
+            <g font-size="11" fill="#64748b" text-anchor="end" font-weight="600">
               <text x="62" y="354">0 €</text>
               <text x="62" y="316">5 €</text>
               <text x="62" y="279">10 €</text>
@@ -1116,7 +438,7 @@
               <text x="62" y="54">40 €</text>
             </g>
 
-            <!-- X-Gitterlinien (Tage 0 bis 6) -->
+            <!-- X-Gitterlinien -->
             <g stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3">
               <line x1="150" y1="30" x2="150" y2="350"/>
               <line x1="230" y1="30" x2="230" y2="350"/>
@@ -1127,7 +449,7 @@
             </g>
 
             <!-- X-Beschriftungen -->
-            <g font-size="12" fill="#334155" text-anchor="middle" font-weight="700">
+            <g font-size="12" fill="#1e293b" text-anchor="middle" font-weight="700">
               <text x="70" y="372">Tag 0</text>
               <text x="150" y="372">Tag 1</text>
               <text x="230" y="372">Tag 2</text>
@@ -1138,60 +460,60 @@
             </g>
 
             <!-- Koordinatenachsen -->
-            <line x1="50" y1="350" x2="640" y2="350" stroke="#0f172a" stroke-width="2.2"/>
-            <polygon points="640,346 648,350 640,354" fill="#0f172a"/>
-            <text x="635" y="372" font-size="12" font-weight="800" fill="#0f172a">Arbeitstage x</text>
+            <line x1="50" y1="350" x2="640" y2="350" stroke="#111827" stroke-width="2.2"/>
+            <polygon points="640,346 648,350 640,354" fill="#111827"/>
+            <text x="635" y="372" font-size="12" font-weight="700" fill="#111827">Arbeitstage x</text>
 
-            <line x1="70" y1="365" x2="70" y2="25" stroke="#0f172a" stroke-width="2.2"/>
-            <polygon points="66,25 70,17 74,25" fill="#0f172a"/>
-            <text x="75" y="22" font-size="12" font-weight="800" fill="#0f172a">Prämie in € (y)</text>
+            <line x1="70" y1="365" x2="70" y2="25" stroke="#111827" stroke-width="2.2"/>
+            <polygon points="66,25 70,17 74,25" fill="#111827"/>
+            <text x="75" y="22" font-size="12" font-weight="700" fill="#111827">Prämie in € (y)</text>
 
             <!-- Graph 1: Felix Gerade y = 4x -->
             <line x1="70" y1="350" x2="610" y2="146" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
-            <text x="615" y="142" font-size="13" font-weight="800" fill="#2563eb">f(x) = 4x</text>
+            <text x="615" y="142" font-size="13" font-weight="700" fill="#2563eb">f(x) = 4x</text>
 
             <!-- Graph 2: Samira Kurve y = x² -->
             <path d="M 70 350 C 130 348, 190 335, 230 320 C 270 305, 350 255, 390 230 C 430 205, 510 125, 550 80 C 560 68, 570 54, 580 40" 
                   fill="none" stroke="#7c3aed" stroke-width="3.5" stroke-linecap="round"/>
-            <text x="585" y="45" font-size="13" font-weight="800" fill="#7c3aed">g(x) = x²</text>
+            <text x="585" y="45" font-size="13" font-weight="700" fill="#7c3aed">g(x) = x²</text>
 
             <!-- Feste Punkte auf Felix Gerade -->
             <g fill="#2563eb">
-              <circle cx="70" cy="350" r="3.5"/>
-              <circle cx="150" cy="320" r="3.5"/>
-              <circle cx="230" cy="290" r="3.5"/>
-              <circle cx="310" cy="260" r="3.5"/>
-              <circle cx="470" cy="200" r="3.5"/>
-              <circle cx="550" cy="170" r="3.5"/>
+              <circle cx="70" cy="350" r="3"/>
+              <circle cx="150" cy="320" r="3"/>
+              <circle cx="230" cy="290" r="3"/>
+              <circle cx="310" cy="260" r="3"/>
+              <circle cx="470" cy="200" r="3"/>
+              <circle cx="550" cy="170" r="3"/>
             </g>
 
             <!-- Feste Punkte auf Samira Kurve -->
             <g fill="#7c3aed">
-              <circle cx="70" cy="350" r="3.5"/>
-              <circle cx="150" cy="342.5" r="3.5"/>
-              <circle cx="230" cy="320" r="3.5"/>
-              <circle cx="310" cy="282.5" r="3.5"/>
-              <circle cx="470" cy="162.5" r="3.5"/>
-              <circle cx="550" cy="80" r="3.5"/>
+              <circle cx="70" cy="350" r="3"/>
+              <circle cx="150" cy="342.5" r="3"/>
+              <circle cx="230" cy="320" r="3"/>
+              <circle cx="310" cy="282.5" r="3"/>
+              <circle cx="470" cy="162.5" r="3"/>
+              <circle cx="550" cy="80" r="3"/>
             </g>
 
             <!-- Fester Schnittpunkt S(4|16) -->
             <circle cx="390" cy="230" r="6" fill="#d97706" stroke="#ffffff" stroke-width="2"/>
             <rect x="402" y="218" width="80" height="24" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
-            <text x="442" y="234" font-size="11" font-weight="800" fill="#b45309" text-anchor="middle">S(4 | 16 €)</text>
+            <text x="442" y="234" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">S(4 | 16 €)</text>
 
             <!-- Dynamischer Marker Layer -->
             <g id="dynLayer">
-              <line id="dynLineX" x1="390" y1="30" x2="390" y2="350" stroke="#0f172a" stroke-width="2" stroke-dasharray="4,4"/>
+              <line id="dynLineX" x1="390" y1="30" x2="390" y2="350" stroke="#111827" stroke-width="2" stroke-dasharray="4,4"/>
               <line id="dynDiffLine" x1="390" y1="230" x2="390" y2="230" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
-              <circle id="dynDotFelix" cx="390" cy="230" r="7" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>
-              <circle id="dynDotSamira" cx="390" cy="230" r="7" fill="#7c3aed" stroke="#ffffff" stroke-width="2.5"/>
+              <circle id="dynDotFelix" cx="390" cy="230" r="6.5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"/>
+              <circle id="dynDotSamira" cx="390" cy="230" r="6.5" fill="#7c3aed" stroke="#ffffff" stroke-width="2.5"/>
 
               <rect id="dynFelixBg" x="320" y="218" width="60" height="22" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
-              <text id="dynFelixTxt" x="350" y="233" font-size="11" font-weight="800" fill="#1e40af" text-anchor="middle">16 €</text>
+              <text id="dynFelixTxt" x="350" y="233" font-size="11" font-weight="700" fill="#1e40af" text-anchor="middle">16 €</text>
 
               <rect id="dynSamiraBg" x="400" y="218" width="60" height="22" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1"/>
-              <text id="dynSamiraTxt" x="430" y="233" font-size="11" font-weight="800" fill="#6d28d9" text-anchor="middle">16 €</text>
+              <text id="dynSamiraTxt" x="430" y="233" font-size="11" font-weight="700" fill="#6d28d9" text-anchor="middle">16 €</text>
             </g>
           </svg>
         </div>
@@ -1199,10 +521,10 @@
       </div>
     </article>
 
-    <!-- 5. Merkheft-Sicherung (Der Merksatz) -->
-    <article class="card" id="sec-merksatz">
-      <h2 class="card-title">
-        <span class="step-circle">5</span>
+    <!-- 5. Merkheft-Sicherung -->
+    <article class="sheet-card" id="sec-merksatz">
+      <h2 class="task-title">
+        <span class="task-number">5</span>
         Zusammenfassung fürs Merkheft
       </h2>
 
@@ -1211,12 +533,12 @@
         <div class="merke-tag">Merke</div>
         <div class="merke-title">Lineares und Quadratisches Wachstum im direkten Vergleich</div>
         <div class="merke-content">
-          <table class="summary-table">
+          <table class="summary-grid-table">
             <thead>
               <tr>
                 <th style="width: 28%;">Merkmal</th>
-                <th style="width: 36%; color: #1e40af;">Lineare Funktion $f(x) = 4x$</th>
-                <th style="width: 36%; color: #6d28d9;">Quadratische Funktion $g(x) = x^2$</th>
+                <th style="width: 36%; color: var(--ink-blue);">Lineare Funktion $f(x) = 4x$</th>
+                <th style="width: 36%; color: var(--model-purple);">Quadratische Funktion $g(x) = x^2$</th>
               </tr>
             </thead>
             <tbody>
@@ -1248,7 +570,7 @@
         </div>
       </div>
 
-      <div class="sub-card" style="border-left: 4px solid #059669; margin-top: 1.5rem;">
+      <div class="future-note">
         <strong style="color: #047857;">Ausblick auf die nächste Unterrichtsstunde:</strong><br>
         Bisher haben wir Samiras Kurve nur für positive Tage ($x \ge 0$) betrachtet. Im nächsten Schritt erforschen wir in der Mathematik, was passiert, wenn wir für $x$ negative Zahlen einsetzen: Wie sieht der Graph links von der $y$-Achse aus? Was bedeutet $(-3)^2 = +9$ für die Symmetrie?<br>
         $\implies$ <em>Das führt uns direkt zur <strong>Normalparabel</strong> mit ihrem Scheitelpunkt im Ursprung!</em>
@@ -1280,7 +602,7 @@
 
       // Label & Buttons updaten
       document.getElementById('lblCurrentDay').innerText = `Tag ${d}${d === 4 ? ' (Schnittpunkt)' : (d === 5 ? ' (Überholpunkt)' : '')}`;
-      document.querySelectorAll('.btn-quick-day').forEach((btn, idx) => {
+      document.querySelectorAll('.btn-day').forEach((btn, idx) => {
         btn.classList.toggle('active', idx === d);
       });
 
@@ -1297,11 +619,11 @@
       const leaderEl = document.getElementById('kpiLeaderTitle');
       leaderEl.innerText = data.leader;
       if (d === 4) {
-        leaderEl.style.color = '#b45309';
+        leaderEl.style.color = '#d97706';
       } else if (d < 4) {
-        leaderEl.style.color = '#1d4ed8';
+        leaderEl.style.color = 'var(--model-blue)';
       } else {
-        leaderEl.style.color = '#6d28d9';
+        leaderEl.style.color = 'var(--model-purple)';
       }
 
       document.getElementById('kpiDiffVal').innerText = `Differenz: ${data.diff} €`;
