@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Verschiebung der Normalparabel entlang der y-Achse: f(x) = x² + e | Mathe 9b</title>
+
+  <!-- Zentrales Schulheft- & Tafelbild-Designsystem gemäss GEMINI.md -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Modulspezifische Erweiterungen im Rahmen des Designstandards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 820px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Kacheln mit allseitig geschlossenen zarten Rahmen (keine asymmetrischen border-left Striche!) */
+    .case-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .case-card.case-pos {
+      border-color: #bfdbfe;
+      background: #f8fbff;
+    }
+    .case-card.case-zero {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+    .case-card.case-neg {
+      border-color: #fed7aa;
+      background: #fffbf5;
+    }
+
+    .case-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.65rem;
+      width: fit-content;
+    }
+    .case-pos .case-badge { background: #dbeafe; color: #1e40af; }
+    .case-zero .case-badge { background: #e2e8f0; color: #334155; }
+    .case-neg .case-badge { background: #ffedd5; color: #c2410c; }
+
+    .case-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .case-list {
+      list-style-type: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .case-list li {
+      margin-bottom: 0.4rem;
+      padding-left: 18px;
+      position: relative;
+    }
+    .case-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--ink-blue);
+      font-weight: bold;
+    }
+
+    /* Interaktive Klapp-Boxen für Aufgaben (Aufdecken / Verbergen) */
+    .task-interactive-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .task-interactive-card:hover {
+      border-color: #94a3b8;
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .task-card-pill {
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .task-question {
+      font-size: 0.98rem;
+      color: var(--ink-black);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .reveal-box {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--paper-border);
+    }
+
+    .btn-reveal {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      color: var(--ink-blue);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    .btn-reveal:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+    }
+    .btn-reveal.active {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #1e3a8a;
+    }
+
+    .revealed-content {
+      display: none;
+      margin-top: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-size: 0.93rem;
+      line-height: 1.55;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Live-Labor Feinschliff */
+    .lab-coordinate-box {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .highlight-delta {
+      font-weight: 700;
+      color: #b45309;
+      background: #fef3c7;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAVIGATION (PRESENTER-BAR IM SCHULTAFEL-LOOK)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
+      <div class="presenter-title">
+        <span>Mathe 9b • Kapitel II: Quadratische Funktionen</span>
+        <span class="presenter-tag">Verschiebung: Parameter e</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="#sec-ausgangslage" class="presenter-tab-btn active">1. Ausgangslage</a>
+      <a href="#sec-labor" class="presenter-tab-btn">2. Live-Labor (e)</a>
+      <a href="#sec-faelle" class="presenter-tab-btn">3. Die 3 Fälle</a>
+      <a href="#sec-training" class="presenter-tab-btn">4. Verständnis-Check</a>
+      <a href="#sec-merksatz" class="presenter-tab-btn btn-summary">Merkheft</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ======================================================
+         DECKBLATT-KOPFZEILE
+         ====================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Klasse 9b · Mathematik</span>
+        <span>Kapitel II: Quadratische Funktionen</span>
+        <span>Transformationen der Normalparabel</span>
+      </div>
+      <h1>Die verschobene Normalparabel: $f(x) = x^2 + e$</h1>
+      <p class="sheet-intro">
+        Wie verändert sich der Graph der Normalparabel, wenn wir zum Funktionsterm eine feste Zahl $e$ addieren? 
+        In diesem Modul erforschst du rechnerisch und grafisch, wie der Parameter $e$ den Scheitelpunkt senkrecht entlang der $y$-Achse verschiebt, warum die Form der Parabel dabei absolut starr bleibt und wie sich die Anzahl der Nullstellen ändert.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         1. AUSGANGSLAGE & TABELLEN-VERGLEICH
+         ====================================================== -->
+    <article class="sheet-card" id="sec-ausgangslage">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        Ausgangslage: Wertetabellen im Vergleich
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Wir kennen bereits die <strong>unveränderte Normalparabel</strong> $g(x) = x^2$ mit ihrem Scheitelpunkt im Koordinatenursprung $S(0 \mid 0)$. 
+        Nun betrachten wir zwei neue Funktionen, bei denen wir eine feste Zahl $e$ addieren bzw. subtrahieren:
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">Funktion 1: $f_1(x) = x^2 + 2$ &nbsp; ($e = +2$)</div>
+          <div class="col-description">
+            Zu jedem berechneten Quadratwert $x^2$ wird die Zahl <span class="highlighter">$+2$</span> addiert.
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">Funktion 2: $f_2(x) = x^2 - 3$ &nbsp; ($e = -3$)</div>
+          <div class="col-description">
+            Von jedem berechneten Quadratwert $x^2$ wird die Zahl <span class="highlighter">$-3$</span> subtrahiert.
+          </div>
+        </div>
+      </div>
+
+      <!-- Vergleichende Wertetabelle -->
+      <div class="table-responsive">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%; text-align: left;">Stelle $x$</th>
+              <th style="width: 10%;">$-3$</th>
+              <th style="width: 10%;">$-2$</th>
+              <th style="width: 10%;">$-1$</th>
+              <th style="width: 10%; background: #e0e7ff; color: #1e3a8a;">$0$ (Scheitel)</th>
+              <th style="width: 10%;">$1$</th>
+              <th style="width: 10%;">$2$</th>
+              <th style="width: 10%;">$3$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; font-weight: 700;">Normalparabel: $g(x) = x^2$</td>
+              <td>$9$</td>
+              <td>$4$</td>
+              <td>$1$</td>
+              <td style="font-weight: 800; background: #f8fafc;">$0$</td>
+              <td>$1$</td>
+              <td>$4$</td>
+              <td>$9$</td>
+            </tr>
+            <tr style="background: #f0f7ff;">
+              <td style="text-align: left; font-weight: 700; color: #1e40af;">
+                $f_1(x) = x^2 + 2$
+              </td>
+              <td>$11$ <span class="highlight-delta">+2</span></td>
+              <td>$6$ <span class="highlight-delta">+2</span></td>
+              <td>$3$ <span class="highlight-delta">+2</span></td>
+              <td style="font-weight: 800; background: #dbeafe; color: #1e3a8a;">$2$</td>
+              <td>$3$ <span class="highlight-delta">+2</span></td>
+              <td>$6$ <span class="highlight-delta">+2</span></td>
+              <td>$11$ <span class="highlight-delta">+2</span></td>
+            </tr>
+            <tr style="background: #faf5ff;">
+              <td style="text-align: left; font-weight: 700; color: #6d28d9;">
+                $f_2(x) = x^2 - 3$
+              </td>
+              <td>$6$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+              <td>$1$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+              <td>$-2$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+              <td style="font-weight: 800; background: #ede9fe; color: #6d28d9;">$-3$</td>
+              <td>$-2$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+              <td>$1$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+              <td>$6$ <span class="highlight-delta" style="background: #fed7aa; color: #9a3412;">-3</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Didaktische Erkenntniskacheln -->
+      <div class="insight-columns">
+        <div class="insight-card card-blue">
+          <strong>1. Rechnerische Beobachtung:</strong><br>
+          Ganz gleich, welche Zahl man für $x$ einsetzt: Der Term $x^2$ wird berechnet und anschließend wird das feste $e$ addiert. 
+          Das bedeutet: <em>Jeder einzelne Funktionswert (die $y$-Koordinate) vergrößert oder verkleinert sich um genau denselben Wert $e$.</em>
+        </div>
+
+        <div class="insight-card card-purple">
+          <strong>2. Geometrische Konsequenz:</strong><br>
+          Jeder einzelne Punkt der Parabel wandert senkrecht um $|e|$ Einheiten entlang der $y$-Achse – für $e > 0$ nach oben, für $e < 0$ nach unten. 
+          Insbesondere wandert der tiefste Punkt, der Scheitelpunkt, von $S(0 \mid 0)$ auf <span class="highlighter">$S(0 \mid e)$</span>.
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================
+         2. INTERAKTIVES GRAPHEN-LABOR
+         ====================================================== -->
+    <article class="sheet-card" id="sec-labor">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        Interaktives Graphen-Labor: Der Parameter $e$ in Echtzeit
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Bewege den Schieberegler oder klicke auf die Schnellwahltasten, um den Wert von $e$ stufenlos zu verändern. Beobachte live, wie sich die Parabel und ihre Kenngrößen verhalten:
+      </p>
+
+      <div class="lab-box">
+        <!-- Schieberegler-Leiste -->
+        <div class="slider-shelf">
+          <div class="slider-row">
+            <span class="slider-label">Parameter $e$ einstellen:</span>
+            <span class="day-badge" id="lblCurrentE">e = +2.0</span>
+          </div>
+          <input type="range" class="range-input" id="paramSlider" min="-4.5" max="4.5" step="0.5" value="2" oninput="setParamE(parseFloat(this.value))">
+          
+          <div class="button-selector-row">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); align-self: center; margin-right: 4px;">Schnellwahl:</span>
+            <button class="btn-day" onclick="setParamE(-4)">e = -4</button>
+            <button class="btn-day" onclick="setParamE(-2.5)">e = -2.5</button>
+            <button class="btn-day" onclick="setParamE(-1)">e = -1</button>
+            <button class="btn-day" onclick="setParamE(0)">e = 0 (Normalparabel)</button>
+            <button class="btn-day active" onclick="setParamE(2)">e = +2</button>
+            <button class="btn-day" onclick="setParamE(3)">e = +3</button>
+            <button class="btn-day" onclick="setParamE(4)">e = +4</button>
+          </div>
+        </div>
+
+        <!-- 4 Live-KPI Kacheln -->
+        <div class="kpi-grid">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Funktionsgleichung</div>
+            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$f(x) = x^2 + 2$</div>
+            <div class="kpi-subtext" id="kpiEqSub">Typ: $x^2 + e$</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Scheitelpunkt</div>
+            <div class="kpi-number purple-text" id="kpiVertex" style="font-size: 1.35rem;">$S(0 \mid 2)$</div>
+            <div class="kpi-subtext">auf der $y$-Achse ($x=0$)</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Verschiebung</div>
+            <div class="kpi-number" id="kpiShift" style="font-size: 1.15rem; color: #1e3a8a;">2 nach oben ↑</div>
+            <div class="kpi-subtext" id="kpiShiftDir">entlang der $y$-Achse</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Schnitt mit x-Achse</div>
+            <div class="kpi-number" id="kpiRoots" style="font-size: 1.15rem; color: #047857;">Keine Nullstellen</div>
+            <div class="kpi-subtext" id="kpiRootsSub">$x^2 + 2 = 0$ unlösbar</div>
+          </div>
+        </div>
+
+        <!-- Kommentar-Banner -->
+        <div class="comment-notebook-banner" id="paramCommentBox">
+          <strong>Beobachtung bei $e = +2$:</strong> Der Graph ist eine nach oben geöffnete Normalparabel, die um genau $2$ Einheiten nach oben verschoben wurde. Ihr Scheitelpunkt liegt bei $S(0 \mid 2)$. Da der Scheitelpunkt über der $x$-Achse liegt, schneidet oder berührt der Graph die $x$-Achse nie (keine Nullstellen).
+        </div>
+
+        <!-- Interaktives SVG-Koordinatensystem -->
+        <div class="lab-coordinate-box">
+          <div class="svg-legend">
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: #94a3b8; border: 1px dashed #64748b;"></span>
+              <span>Ausgangs-Normalparabel $y = x^2$ (Referenz)</span>
+            </div>
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: #1e3a8a; height: 4px;"></span>
+              <span>Verschobene Parabel $f(x) = x^2 + e$</span>
+            </div>
+            <div class="svg-legend-item">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
+              <span>Scheitelpunkt $S(0 \mid e)$</span>
+            </div>
+          </div>
+
+          <div class="svg-wrapper" style="padding: 4px; overflow: hidden;">
+            <svg id="parabelSvg" viewBox="0 0 600 440" width="100%" height="auto" style="display: block; background: #ffffff;">
+              <defs>
+                <!-- Pfeilspitze für Achsen und Verschiebung -->
+                <marker id="axisArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+                </marker>
+                <marker id="shiftArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+                </marker>
+              </defs>
+
+              <!-- Gitterlinien -->
+              <g stroke="#e2e8f0" stroke-width="1">
+                <!-- Vertikale Gitterlinien (x = -5 bis +5, Abstand 40px, Zentrum 300) -->
+                <line x1="100" y1="20" x2="100" y2="420" />
+                <line x1="140" y1="20" x2="140" y2="420" />
+                <line x1="180" y1="20" x2="180" y2="420" />
+                <line x1="220" y1="20" x2="220" y2="420" />
+                <line x1="260" y1="20" x2="260" y2="420" />
+                <line x1="340" y1="20" x2="340" y2="420" />
+                <line x1="380" y1="20" x2="380" y2="420" />
+                <line x1="420" y1="20" x2="420" y2="420" />
+                <line x1="460" y1="20" x2="460" y2="420" />
+                <line x1="500" y1="20" x2="500" y2="420" />
+
+                <!-- Horizontale Gitterlinien (y = -4 bis +7, Abstand 30px, Ursprung bei Y=260) -->
+                <line x1="80" y1="50" x2="520" y2="50" />
+                <line x1="80" y1="80" x2="520" y2="80" />
+                <line x1="80" y1="110" x2="520" y2="110" />
+                <line x1="80" y1="140" x2="520" y2="140" />
+                <line x1="80" y1="170" x2="520" y2="170" />
+                <line x1="80" y1="200" x2="520" y2="200" />
+                <line x1="80" y1="230" x2="520" y2="230" />
+                <line x1="80" y1="290" x2="520" y2="290" />
+                <line x1="80" y1="320" x2="520" y2="320" />
+                <line x1="80" y1="350" x2="520" y2="350" />
+                <line x1="80" y1="380" x2="520" y2="380" />
+                <line x1="80" y1="410" x2="520" y2="410" />
+              </g>
+
+              <!-- Hauptachsen mit Pfeilen -->
+              <!-- x-Achse (Y = 260) -->
+              <line x1="70" y1="260" x2="530" y2="260" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="535" y="264" font-size="13" font-weight="700" fill="#334155">x</text>
+
+              <!-- y-Achse (X = 300) -->
+              <line x1="300" y1="420" x2="300" y2="30" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="306" y="24" font-size="13" font-weight="700" fill="#334155">y</text>
+
+              <!-- Achsenbeschriftungen -->
+              <g font-size="11" fill="#64748b" text-anchor="middle">
+                <!-- x-Ticks -->
+                <text x="140" y="276">-4</text>
+                <text x="180" y="276">-3</text>
+                <text x="220" y="276">-2</text>
+                <text x="260" y="276">-1</text>
+                <text x="340" y="276">1</text>
+                <text x="380" y="276">2</text>
+                <text x="420" y="276">3</text>
+                <text x="460" y="276">4</text>
+
+                <!-- y-Ticks -->
+                <text x="286" y="384" text-anchor="end">-4</text>
+                <text x="286" y="354" text-anchor="end">-3</text>
+                <text x="286" y="324" text-anchor="end">-2</text>
+                <text x="286" y="294" text-anchor="end">-1</text>
+                <text x="288" y="275" text-anchor="end" font-weight="700">0</text>
+                <text x="286" y="234" text-anchor="end">1</text>
+                <text x="286" y="204" text-anchor="end">2</text>
+                <text x="286" y="174" text-anchor="end">3</text>
+                <text x="286" y="144" text-anchor="end">4</text>
+                <text x="286" y="114" text-anchor="end">5</text>
+                <text x="286" y="84" text-anchor="end">6</text>
+                <text x="286" y="54" text-anchor="end">7</text>
+              </g>
+
+              <!-- 1. Feste Referenz: Normalparabel y = x² (gestrichelt) -->
+              <path id="refParabolaPath" d="" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4" />
+              <circle cx="300" cy="260" r="4.5" fill="#94a3b8" />
+              <text x="312" y="254" font-size="11" font-weight="600" fill="#64748b">Ursprung (0|0)</text>
+
+              <!-- 2. Dynamische Parabel f(x) = x² + e -->
+              <path id="dynParabolaPath" d="" fill="none" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round" />
+
+              <!-- 3. Verschiebungspfeil entlang der y-Achse -->
+              <line id="dynShiftLine" x1="300" y1="260" x2="300" y2="200" stroke="#dc2626" stroke-width="2.5" marker-end="url(#shiftArrow)" />
+
+              <!-- 4. Scheitelpunkt & Label -->
+              <g id="dynVertexGroup">
+                <circle id="dynVertexDot" cx="300" cy="200" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
+                <rect id="dynVertexBg" x="312" y="188" width="80" height="24" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2" />
+                <text id="dynVertexTxt" x="352" y="204" font-size="11" font-weight="800" fill="#b91c1c" text-anchor="middle">S(0 | 2)</text>
+              </g>
+
+              <!-- 5. Nullstellen Marker (bei e <= 0) -->
+              <g id="dynRootsGroup" style="display: none;">
+                <circle id="dynRootDot1" cx="300" cy="260" r="5.5" fill="#d97706" stroke="#ffffff" stroke-width="2" />
+                <rect id="dynRootBg1" x="220" y="278" width="60" height="20" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1" />
+                <text id="dynRootTxt1" x="250" y="292" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">N₁(-1.4|0)</text>
+
+                <circle id="dynRootDot2" cx="300" cy="260" r="5.5" fill="#d97706" stroke="#ffffff" stroke-width="2" />
+                <rect id="dynRootBg2" x="320" y="278" width="60" height="20" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1" />
+                <text id="dynRootTxt2" x="350" y="292" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">N₂(1.4|0)</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         3. DIE DREI FÄLLE IM DETAIL (GRID-3 KACHELN)
+         ====================================================== -->
+    <article class="sheet-card" id="sec-faelle">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        Systematische Fallunterscheidung: Die 3 Gesichter von $e$
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Je nachdem, welches Vorzeichen der Parameter $e$ besitzt, ergeben sich drei grundlegend unterschiedliche Lagen im Koordinatensystem:
+      </p>
+
+      <div class="grid-3">
+
+        <!-- Kachel 1: e > 0 -->
+        <div class="case-card case-pos">
+          <div>
+            <span class="case-badge">1. Fall: $e > 0$</span>
+            <div class="case-title">Nach oben verschoben</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Beispiel: $f(x) = x^2 + 3$
+            </p>
+            <ul class="case-list">
+              <li><strong>Scheitelpunkt:</strong> $S(0 \mid e)$ liegt <em>oberhalb</em> der $x$-Achse.</li>
+              <li><strong>Lage:</strong> Die gesamte Parabel „schwebt“ im oberen Halbraum.</li>
+              <li><strong>Wertebereich:</strong> $W = [e; \infty[$, d.&nbsp;h. alle $y \ge e$.</li>
+              <li>
+                <strong>Nullstellen:</strong> <strong>Keine!</strong><br>
+                Rechnerisch: $x^2 + e = 0 \iff x^2 = -e$. Da $-e < 0$ ist, existiert keine reelle Wurzel.
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(37,99,235,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #1e40af; text-align: center;">
+            Kein Schnittpunkt mit der x-Achse
+          </div>
+        </div>
+
+        <!-- Kachel 2: e = 0 -->
+        <div class="case-card case-zero">
+          <div>
+            <span class="case-badge">2. Fall: $e = 0$</span>
+            <div class="case-title">Die reine Normalparabel</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Funktionsgleichung: $f(x) = x^2$
+            </p>
+            <ul class="case-list">
+              <li><strong>Scheitelpunkt:</strong> $S(0 \mid 0)$ liegt exakt im <em>Koordinatenursprung</em>.</li>
+              <li><strong>Lage:</strong> Die Parabel berührt die $x$-Achse in genau einem Punkt.</li>
+              <li><strong>Wertebereich:</strong> $W = [0; \infty[$, d.&nbsp;h. alle $y \ge 0$.</li>
+              <li>
+                <strong>Nullstellen:</strong> <strong>Genau eine Berührstelle:</strong><br>
+                $x^2 = 0 \implies x_0 = 0$.
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(51,65,85,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #334155; text-align: center;">
+            Genau 1 Berührpunkt im Ursprung
+          </div>
+        </div>
+
+        <!-- Kachel 3: e < 0 -->
+        <div class="case-card case-neg">
+          <div>
+            <span class="case-badge">3. Fall: $e < 0$</span>
+            <div class="case-title">Nach unten verschoben</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Beispiel: $f(x) = x^2 - 4$
+            </p>
+            <ul class="case-list">
+              <li><strong>Scheitelpunkt:</strong> $S(0 \mid e)$ liegt <em>unterhalb</em> der $x$-Achse.</li>
+              <li><strong>Lage:</strong> Der Scheitelpunkt taucht in den negativen $y$-Bereich ein.</li>
+              <li><strong>Wertebereich:</strong> $W = [e; \infty[$, d.&nbsp;h. alle $y \ge e$.</li>
+              <li>
+                <strong>Nullstellen:</strong> <strong>Genau 2 symmetrische Schnittpunkte:</strong><br>
+                $$x^2 + e = 0 \iff x_{1,2} = \pm \sqrt{-e}$$
+                Für $e = -4$: $x_{1,2} = \pm \sqrt{4} = \pm 2$.
+              </li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(234,88,12,0.1); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #c2410c; text-align: center;">
+            Genau 2 symmetrische Nullstellen: ±√|e|
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         4. VERSTÄNDNIS-TRAINING & AUFGABEN-KACHELN
+         ====================================================== -->
+    <article class="sheet-card" id="sec-training">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        Verständnis-Check: Typische Aufgaben &amp; Stolperfallen
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Teste dein Wissen über den Parameter $e$. Klicke auf die jeweilige Schaltfläche, um die schrittweise Lösung und didaktische Erklärung aufzudecken:
+      </p>
+
+      <div class="grid-2">
+
+        <!-- Aufgabe 1 -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 1</span>
+              <span>Gleichung aus Scheitelpunkt aufstellen</span>
+            </div>
+            <p class="task-question">
+              Eine Normalparabel wurde entlang der $y$-Achse verschoben. Ihr Scheitelpunkt liegt bei <strong>$S(0 \mid -7)$</strong>.<br>
+              Wie lautet die Funktionsgleichung der Parabel?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Funktionsgleichung:</strong> $f(x) = x^2 - 7$<br>
+              <strong>Erklärung:</strong> Bei einer entlang der $y$-Achse verschobenen Normalparabel lautet die allgemeine Form $f(x) = x^2 + e$. 
+              Der Scheitelpunkt hat immer die Koordinaten $S(0 \mid e)$. Da die $y$-Koordinate $-7$ ist, gilt $e = -7$.
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 2 -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 2</span>
+              <span>Nullstellen rechnerisch bestimmen</span>
+            </div>
+            <p class="task-question">
+              Gegeben ist die Parabel <strong>$f(x) = x^2 - 25$</strong>.<br>
+              Bestimme rechnerisch die Schnittpunkte des Graphen mit der $x$-Achse (die Nullstellen).
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Ansatz für Nullstellen:</strong> $f(x) = 0$<br>
+              $$x^2 - 25 = 0 \quad | + 25$$
+              $$x^2 = 25 \quad | \sqrt{\phantom{a}}$$
+              $$x_1 = +5 \quad \text{und} \quad x_2 = -5$$
+              <strong>Antwort:</strong> Die Schnittpunkte mit der $x$-Achse lauten $N_1(-5 \mid 0)$ und $N_2(5 \mid 0)$.
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 3 -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 3</span>
+              <span>Begründen ohne zu zeichnen</span>
+            </div>
+            <p class="task-question">
+              Begründe rechnerisch und geometrisch, warum der Graph von <strong>$f(x) = x^2 + 9$</strong> keinen einzigen Schnittpunkt mit der $x$-Achse besitzt.
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>1. Rechnerische Begründung:</strong><br>
+              $x^2 + 9 = 0 \iff x^2 = -9$. Da das Quadrat einer reellen Zahl niemals negativ sein kann (aus negativen Zahlen existiert in $\mathbb{R}$ keine Quadratwurzel), besitzt die Gleichung keine Lösung.<br><br>
+              <strong>2. Geometrische Begründung:</strong><br>
+              Der Scheitelpunkt liegt bei $S(0 \mid 9)$. Da die Normalparabel nach oben geöffnet ist, ist $y = 9$ der tiefste Punkt. Alle Punkte des Graphen liegen oberhalb der $x$-Achse ($y \ge 9$).
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 4: Stolperfalle -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill" style="background: #fee2e2; color: #b91c1c;">Stolperfalle</span>
+              <span>Verändert $e$ die Form der Parabel?</span>
+            </div>
+            <p class="task-question">
+              Ein Schüler schaut sich den Graphen von $f(x) = x^2 + 4$ an und behauptet: <em>„Weil die Parabel weiter oben liegt, ist sie viel schmaler geworden als die normale Normalparabel.“</em> Hat er recht?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Nein, der Schüler irrt sich gewaltig!</strong><br>
+              Das ist eine der häufigsten optischen Täuschungen in der Mathematik. Der Parameter $e$ verschiebt die Normalparabel lediglich <strong>starr als Ganzes</strong> nach oben oder unten.<br>
+              <strong>Der Schablonen-Beweis:</strong> Wenn du deine normale Plastik-Parabelschablone nimmst, passt sie auch bei $f(x) = x^2 + 4$ zu 100 % exakt auf die Kurve! Die Krümmung, Steilheit und Öffnungsweite sind absolut unverändert.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         5. MERKHEFT-SICHERUNG (STANDARD GEMÄSS GEMINI.MD)
+         ====================================================== -->
+    <article class="sheet-card" id="sec-merksatz">
+      <h2 class="task-title">
+        <span class="task-number">5</span>
+        Zusammenfassung fürs Merkheft
+      </h2>
+
+      <!-- DER ROTE MERKSATZ-KASTEN (GEMÄSS GEMINI.MD) -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke</div>
+        <div class="merke-title">Verschiebung der Normalparabel entlang der y-Achse</div>
+        <div class="merke-content">
+          <p style="margin-bottom: 0.75rem;">
+            Der Graph der quadratischen Funktion <strong>$f(x) = x^2 + e$</strong> entsteht durch eine <strong>senkrechte Verschiebung</strong> der Normalparabel $y = x^2$ entlang der $y$-Achse um $|e|$ Einheiten:
+          </p>
+
+          <table class="summary-grid-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Eigenschaft</th>
+                <th style="width: 75%;">Mathematische Regelung &amp; Bedeutung</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Funktionsgleichung</strong></td>
+                <td><strong>$f(x) = x^2 + e$</strong> (feste Zahl $e$ hinter dem Quadrat)</td>
+              </tr>
+              <tr>
+                <td><strong>Scheitelpunkt</strong></td>
+                <td><strong>$S(0 \mid e)$</strong> — liegt stets auf der senkrechten $y$-Achse ($x=0$)</td>
+              </tr>
+              <tr>
+                <td><strong>Richtung der Verschiebung</strong></td>
+                <td>
+                  • Für <strong>$e > 0$</strong>: Verschiebung um $e$ Einheiten <strong>nach oben</strong><br>
+                  • Für <strong>$e < 0$</strong>: Verschiebung um $|e|$ Einheiten <strong>nach unten</strong>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Form &amp; Öffnung</strong></td>
+                <td>
+                  Die Parabel bleibt <strong>nach oben geöffnet</strong> und behält die exakte Form der Normalparabel. Sie kann immer mit der <strong>Parabelschablone</strong> gezeichnet werden.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Symmetrieachse</strong></td>
+                <td>
+                  Bleibt unverändert die <strong>$y$-Achse</strong> (Gleichung: $x = 0$), denn es gilt $f(-x) = (-x)^2 + e = x^2 + e = f(x)$.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Nullstellen</strong></td>
+                <td>
+                  • Für $e > 0$: <strong>Keine Nullstelle</strong> (Parabel liegt über der $x$-Achse)<br>
+                  • Für $e = 0$: <strong>1 Nullstelle</strong> im Ursprung: $x_0 = 0$<br>
+                  • Für $e < 0$: <strong>2 Nullstellen</strong>: $x_{1,2} = \pm \sqrt{-e} = \pm \sqrt{|e|}$
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <strong>Goldene Merkregel für Klassenarbeiten:</strong><br>
+          Steht die Zahl $e$ als Summand ohne Klammer hinter dem $x^2$, wandert die Parabel starr nach <strong>oben ($+e$)</strong> bzw. <strong>unten ($-e$)</strong>. Die $y$-Koordinate des Scheitelpunkts ist immer genau $e$!
+        </div>
+      </div>
+
+      <!-- Ausblick auf die nächste Stunde -->
+      <div class="future-note">
+        <strong style="color: #047857;">Ausblick auf die nächste Unterrichtsstunde:</strong><br>
+        Jetzt wissen wir genau, wie man die Normalparabel nach oben und unten schiebt ($f(x) = x^2 + e$).<br>
+        Was passiert aber, wenn wir die Normalparabel nach <strong>links oder rechts</strong> auf der $x$-Achse verschieben möchten (horizontale Verschiebung)?<br>
+        Wie muss die Funktionsgleichung aussehen, damit der Scheitelpunkt z.&nbsp;B. bei $S(3 \mid 0)$ liegt?<br>
+        $\implies$ <em>Das führt uns zum Parameter $d$ und der Klammerform $f(x) = (x - d)^2$!</em>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ========================================================
+       JAVASCRIPT: LIVE-LABOR, SVG-UPDATE & AUFDECK-FUNKTION
+       ======================================================== -->
+  <script>
+    // Aktueller Zustand
+    let currentE = 2.0;
+
+    // SVG-Koordinaten-Konstanten
+    // viewBox: 0 0 600 440
+    // Ursprung (0|0) bei pxX = 300, pxY = 260
+    // 1 Einheit in x = 40 Pixel
+    // 1 Einheit in y = 30 Pixel
+    const ORIGIN_X = 300;
+    const ORIGIN_Y = 260;
+    const SCALE_X = 40;
+    const SCALE_Y = 30;
+
+    // Erzeugt einen SVG-Pfadstring für y = x² + e
+    function calcParabolaPath(e) {
+      const points = [];
+      // Bereich für x: von -3.4 bis +3.4 in feinen Schritten
+      for (let x = -3.4; x <= 3.401; x += 0.05) {
+        const y = x * x + e;
+        // Begrenze auf sichtbaren y-Bereich (-4.5 bis 7.5)
+        if (y >= -4.5 && y <= 7.5) {
+          const px = ORIGIN_X + (x * SCALE_X);
+          const py = ORIGIN_Y - (y * SCALE_Y);
+          points.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+        }
+      }
+      if (points.length === 0) return "";
+      return "M " + points.join(" L ");
+    }
+
+    // Setzt Parameter e und aktualisiert alles
+    function setParamE(e) {
+      currentE = e;
+      document.getElementById('paramSlider').value = e;
+      updateUI();
+    }
+
+    // Update der gesamten Oberfläche
+    function updateUI() {
+      const e = currentE;
+
+      // 1. Label am Slider
+      const signStr = e > 0 ? `+${e.toFixed(1)}` : (e === 0 ? "0.0" : `${e.toFixed(1)}`);
+      document.getElementById('lblCurrentE').innerText = `e = ${signStr}`;
+
+      // 2. Buttons synchronisieren
+      document.querySelectorAll('.button-selector-row .btn-day').forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick') || "";
+        const match = onclickAttr.match(/setParamE\(([^)]+)\)/);
+        if (match && parseFloat(match[1]) === e) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // 3. KPI Kacheln aktualisieren
+      const eqEl = document.getElementById('kpiEquation');
+      const vtxEl = document.getElementById('kpiVertex');
+      const shiftEl = document.getElementById('kpiShift');
+      const shiftDirEl = document.getElementById('kpiShiftDir');
+      const rootsEl = document.getElementById('kpiRoots');
+      const rootsSubEl = document.getElementById('kpiRootsSub');
+      const commentEl = document.getElementById('paramCommentBox');
+
+      // Funktionsgleichung
+      if (e === 0) {
+        eqEl.innerText = `$f(x) = x^2$`;
+      } else if (e > 0) {
+        eqEl.innerText = `$f(x) = x^2 + ${e % 1 === 0 ? e : e.toFixed(1)}$`;
+      } else {
+        eqEl.innerText = `$f(x) = x^2 - ${Math.abs(e) % 1 === 0 ? Math.abs(e) : Math.abs(e).toFixed(1)}$`;
+      }
+
+      // Scheitelpunkt
+      const eFormatted = (e % 1 === 0) ? e : e.toFixed(1);
+      vtxEl.innerText = `$S(0 \\mid ${eFormatted})$`;
+
+      // Verschiebung
+      const absE = Math.abs(e);
+      const absEStr = absE % 1 === 0 ? absE : absE.toFixed(1);
+      if (e > 0) {
+        shiftEl.innerText = `${absEStr} nach oben ↑`;
+        shiftEl.style.color = '#1e3a8a';
+        shiftDirEl.innerText = `positive y-Richtung (+${absEStr})`;
+      } else if (e < 0) {
+        shiftEl.innerText = `${absEStr} nach unten ↓`;
+        shiftEl.style.color = '#c2410c';
+        shiftDirEl.innerText = `negative y-Richtung (-${absEStr})`;
+      } else {
+        shiftEl.innerText = `Keine Verschiebung`;
+        shiftEl.style.color = '#334155';
+        shiftDirEl.innerText = `Scheitelpunkt im Ursprung`;
+      }
+
+      // Nullstellen
+      if (e > 0) {
+        rootsEl.innerText = `Keine Nullstellen`;
+        rootsEl.style.color = '#64748b';
+        rootsSubEl.innerText = `Parabel schwebt über x-Achse`;
+        commentEl.innerHTML = `<strong>Beobachtung bei $e = +${absEStr}$:</strong> Die Parabel ist um $${absEStr}$ Einheiten <strong>nach oben</strong> verschoben. Ihr Scheitelpunkt liegt bei $S(0 \\mid ${absEStr})$. Da der tiefste Punkt über der $x$-Achse liegt ($y \\ge ${absEStr}$), gibt es <strong>keine Nullstellen</strong> ($x^2 + ${absEStr} = 0$ hat keine reelle Lösung).`;
+      } else if (e === 0) {
+        rootsEl.innerText = `1 Nullstelle: x = 0`;
+        rootsEl.style.color = '#334155';
+        rootsSubEl.innerText = `Berührpunkt im Ursprung`;
+        commentEl.innerHTML = `<strong>Beobachtung bei $e = 0$:</strong> Dies ist die unveränderte <strong>Normalparabel</strong> $f(x) = x^2$. Ihr Scheitelpunkt liegt genau im Koordinatenursprung $S(0 \\mid 0)$. Sie berührt die $x$-Achse in genau einem Punkt ($x_0 = 0$).`;
+      } else {
+        const rootVal = Math.sqrt(absE);
+        const rootStr = (rootVal % 1 === 0) ? rootVal.toString() : rootVal.toFixed(2);
+        rootsEl.innerText = `2 Nullstellen: ±${rootStr}`;
+        rootsEl.style.color = '#047857';
+        rootsSubEl.innerText = `$x_{1,2} = \\pm \\sqrt{${absEStr}}$`;
+        commentEl.innerHTML = `<strong>Beobachtung bei $e = -${absEStr}$:</strong> Die Parabel ist um $${absEStr}$ Einheiten <strong>nach unten</strong> verschoben. Ihr Scheitelpunkt liegt bei $S(0 \\mid -${absEStr})$. Sie schneidet die $x$-Achse in zwei symmetrischen Punkten bei <strong>$x_1 = -${rootStr}$</strong> und <strong>$x_2 = +${rootStr}$</strong> ($x^2 = ${absEStr} \\implies x = \\pm \\sqrt{${absEStr}}$).`;
+      }
+
+      // 4. SVG dynamisch aktualisieren
+      const dynPath = document.getElementById('dynParabolaPath');
+      dynPath.setAttribute('d', calcParabolaPath(e));
+
+      // Scheitelpunkt Dot & Label
+      const pyVertex = ORIGIN_Y - (e * SCALE_Y);
+      const dot = document.getElementById('dynVertexDot');
+      dot.setAttribute('cx', ORIGIN_X);
+      dot.setAttribute('cy', pyVertex);
+
+      const vBg = document.getElementById('dynVertexBg');
+      const vTxt = document.getElementById('dynVertexTxt');
+
+      // Scheitelpunkt-Text setzen
+      vTxt.textContent = `S(0 | ${eFormatted})`;
+
+      // Box-Positionierung (falls e nahe am oberen oder unteren Rand ist)
+      if (e >= 6) {
+        vBg.setAttribute('x', ORIGIN_X + 12);
+        vBg.setAttribute('y', pyVertex + 6);
+        vTxt.setAttribute('x', ORIGIN_X + 52);
+        vTxt.setAttribute('y', pyVertex + 22);
+      } else {
+        vBg.setAttribute('x', ORIGIN_X + 12);
+        vBg.setAttribute('y', pyVertex - 12);
+        vTxt.setAttribute('x', ORIGIN_X + 52);
+        vTxt.setAttribute('y', pyVertex + 4);
+      }
+
+      // Verschiebungspfeil
+      const shiftLine = document.getElementById('dynShiftLine');
+      if (Math.abs(e) < 0.2) {
+        shiftLine.style.display = 'none';
+      } else {
+        shiftLine.style.display = 'block';
+        shiftLine.setAttribute('x1', ORIGIN_X);
+        shiftLine.setAttribute('y1', ORIGIN_Y);
+        shiftLine.setAttribute('x2', ORIGIN_X);
+        shiftLine.setAttribute('y2', pyVertex);
+      }
+
+      // Nullstellen anzeigen/ausblenden
+      const rootsGroup = document.getElementById('dynRootsGroup');
+      if (e < 0) {
+        rootsGroup.style.display = 'block';
+        const rootVal = Math.sqrt(Math.abs(e));
+        const rootStr = (rootVal % 1 === 0) ? rootVal.toString() : rootVal.toFixed(1);
+
+        const pxRoot1 = ORIGIN_X - (rootVal * SCALE_X);
+        const pxRoot2 = ORIGIN_X + (rootVal * SCALE_X);
+
+        document.getElementById('dynRootDot1').setAttribute('cx', pxRoot1);
+        document.getElementById('dynRootDot1').setAttribute('cy', ORIGIN_Y);
+        document.getElementById('dynRootDot2').setAttribute('cx', pxRoot2);
+        document.getElementById('dynRootDot2').setAttribute('cy', ORIGIN_Y);
+
+        const bg1 = document.getElementById('dynRootBg1');
+        const txt1 = document.getElementById('dynRootTxt1');
+        bg1.setAttribute('x', pxRoot1 - 35);
+        bg1.setAttribute('y', ORIGIN_Y + 12);
+        txt1.setAttribute('x', pxRoot1);
+        txt1.setAttribute('y', ORIGIN_Y + 26);
+        txt1.textContent = `N₁(-${rootStr}|0)`;
+
+        const bg2 = document.getElementById('dynRootBg2');
+        const txt2 = document.getElementById('dynRootTxt2');
+        bg2.setAttribute('x', pxRoot2 - 35);
+        bg2.setAttribute('y', ORIGIN_Y + 12);
+        txt2.setAttribute('x', pxRoot2);
+        txt2.setAttribute('y', ORIGIN_Y + 26);
+        txt2.textContent = `N₂(${rootStr}|0)`;
+      } else {
+        rootsGroup.style.display = 'none';
+      }
+
+      // KaTeX nach DOM-Änderung anstoßen
+      triggerKaTeX();
+    }
+
+    // Toggle-Funktion für Antwort-Klappboxen
+    function toggleSection(btn) {
+      const box = btn.closest('.reveal-box');
+      const content = box.querySelector('.revealed-content');
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        btn.textContent = 'Antwort & Erklärung aufdecken';
+        btn.classList.remove('active');
+      } else {
+        content.style.display = 'block';
+        btn.textContent = 'Antwort verbergen';
+        btn.classList.add('active');
+        triggerKaTeX();
+      }
+    }
+
+    // Initialisierung bei DOMContentLoaded
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Referenz-Normalparabel y = x² fest zeichnen
+      document.getElementById('refParabolaPath').setAttribute('d', calcParabolaPath(0));
+
+      // 2. Startzustand mit e = 2.0 setzen
+      setParamE(2.0);
+
+      // 3. Scroll-Highlighting für Presenter-Bar
+      const navLinks = document.querySelectorAll('.presenter-actions .presenter-tab-btn');
+      const secIds = ['sec-ausgangslage', 'sec-labor', 'sec-faelle', 'sec-training', 'sec-merksatz'];
+      const sections = secIds.map(id => document.getElementById(id)).filter(Boolean);
+
+      window.addEventListener('scroll', () => {
+        let currentId = 'sec-ausgangslage';
+        const scrollPos = window.scrollY + 120;
+        sections.forEach(sec => {
+          if (sec && sec.offsetTop <= scrollPos) {
+            currentId = sec.id;
+          }
+        });
+        navLinks.forEach(link => {
+          if (link.getAttribute('href') === '#' + currentId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }, { passive: true });
+    });
+  </script>
+
+</body>
+</html>
