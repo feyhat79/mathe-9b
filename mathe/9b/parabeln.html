@@ -48,11 +48,8 @@
       </div>
     </div>
     <div class="presenter-actions">
-      <a href="#sec-ausgangslage" class="presenter-tab-btn active">1. Kontext</a>
-      <a href="#sec-herleitung" class="presenter-tab-btn">2. Herleitung</a>
-      <a href="#sec-zuwachs" class="presenter-tab-btn">3. Zuwachsanalyse</a>
-      <a href="#sec-graph" class="presenter-tab-btn">4. Graphen-Labor</a>
-      <a href="#sec-merksatz" class="presenter-tab-btn btn-summary">Zusammenfassung</a>
+      <a href="parabeln.html" class="presenter-tab-btn active">1. Einstieg &amp; Normalparabel</a>
+      <a href="parabeln-verschiebung-y.html" class="presenter-tab-btn">2. Verschiebung y-Achse ($x^2+e$)</a>
     </div>
   </nav>
 
@@ -698,28 +695,6 @@
     // Initialisierung bei Start
     window.addEventListener('DOMContentLoaded', () => {
       showDay(4);
-
-      // Scroll-Highlighting für Presenter-Navigation
-      const navLinks = document.querySelectorAll('.presenter-actions .presenter-tab-btn');
-      const secIds = ['sec-ausgangslage', 'sec-herleitung', 'sec-zuwachs', 'sec-graph', 'sec-merksatz'];
-      const sections = secIds.map(id => document.getElementById(id)).filter(Boolean);
-
-      window.addEventListener('scroll', () => {
-        let currentId = 'sec-ausgangslage';
-        const scrollPos = window.scrollY + 120;
-        sections.forEach(sec => {
-          if (sec && sec.offsetTop <= scrollPos) {
-            currentId = sec.id;
-          }
-        });
-        navLinks.forEach(link => {
-          if (link.getAttribute('href') === '#' + currentId) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-      }, { passive: true });
     });
   </script>
 

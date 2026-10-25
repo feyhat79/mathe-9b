@@ -244,11 +244,8 @@
       </div>
     </div>
     <div class="presenter-actions">
-      <a href="#sec-ausgangslage" class="presenter-tab-btn active">1. Ausgangslage</a>
-      <a href="#sec-labor" class="presenter-tab-btn">2. Live-Labor (e)</a>
-      <a href="#sec-faelle" class="presenter-tab-btn">3. Die 3 Fälle</a>
-      <a href="#sec-training" class="presenter-tab-btn">4. Verständnis-Check</a>
-      <a href="#sec-merksatz" class="presenter-tab-btn btn-summary">Merkheft</a>
+      <a href="parabeln.html" class="presenter-tab-btn">1. Einstieg &amp; Normalparabel</a>
+      <a href="parabeln-verschiebung-y.html" class="presenter-tab-btn active">2. Verschiebung y-Achse ($x^2+e$)</a>
     </div>
   </nav>
 
@@ -832,10 +829,9 @@
       <!-- Ausblick auf die nächste Stunde -->
       <div class="future-note">
         <strong style="color: #047857;">Ausblick auf die nächste Unterrichtsstunde:</strong><br>
-        Jetzt wissen wir genau, wie man die Normalparabel nach oben und unten schiebt ($f(x) = x^2 + e$).<br>
-        Was passiert aber, wenn wir die Normalparabel nach <strong>links oder rechts</strong> auf der $x$-Achse verschieben möchten (horizontale Verschiebung)?<br>
-        Wie muss die Funktionsgleichung aussehen, damit der Scheitelpunkt z.&nbsp;B. bei $S(3 \mid 0)$ liegt?<br>
-        $\implies$ <em>Das führt uns zum Parameter $d$ und der Klammerform $f(x) = (x - d)^2$!</em>
+        Jetzt wissen wir genau, wie man die Normalparabel entlang der $y$-Achse nach oben und unten verschiebt ($f(x) = x^2 + e$).<br>
+        Was passiert aber, wenn wir die <strong>Form der Parabel</strong> verändern möchten? Wie macht man eine Parabel schmaler (gestreckt) oder breiter (gestaucht)? Und wie drehen wir sie um, sodass sie nach unten geöffnet ist?<br>
+        $\implies$ <em>Das führt uns zur <strong>Streckung und Stauchung</strong> mit dem Streckfaktor $a$: <strong>$f(x) = a \cdot x^2$</strong>!</em>
       </div>
     </article>
 
@@ -1062,28 +1058,6 @@
 
       // 2. Startzustand mit e = 2.0 setzen
       setParamE(2.0);
-
-      // 3. Scroll-Highlighting für Presenter-Bar
-      const navLinks = document.querySelectorAll('.presenter-actions .presenter-tab-btn');
-      const secIds = ['sec-ausgangslage', 'sec-labor', 'sec-faelle', 'sec-training', 'sec-merksatz'];
-      const sections = secIds.map(id => document.getElementById(id)).filter(Boolean);
-
-      window.addEventListener('scroll', () => {
-        let currentId = 'sec-ausgangslage';
-        const scrollPos = window.scrollY + 120;
-        sections.forEach(sec => {
-          if (sec && sec.offsetTop <= scrollPos) {
-            currentId = sec.id;
-          }
-        });
-        navLinks.forEach(link => {
-          if (link.getAttribute('href') === '#' + currentId) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-      }, { passive: true });
     });
   </script>
 
