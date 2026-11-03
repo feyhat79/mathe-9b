@@ -381,8 +381,8 @@
       </p>
 
       <div class="lab-box">
-        <!-- Schieberegler-Leiste -->
-        <div class="slider-shelf">
+        <!-- Schieberegler-Leiste (direkt über dem Schaubild) -->
+        <div class="slider-shelf" style="margin-bottom: 0.75rem;">
           <div class="slider-row">
             <span class="slider-label">Parameter $e$ einstellen:</span>
             <span class="day-badge" id="lblCurrentE">e = +2.0</span>
@@ -401,40 +401,8 @@
           </div>
         </div>
 
-        <!-- 4 Live-KPI Kacheln -->
-        <div class="kpi-grid">
-          <div class="kpi-tile">
-            <div class="kpi-caption">Funktionsgleichung</div>
-            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$f(x) = x^2 + 2$</div>
-            <div class="kpi-subtext" id="kpiEqSub">Typ: $x^2 + e$</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Scheitelpunkt</div>
-            <div class="kpi-number purple-text" id="kpiVertex" style="font-size: 1.35rem;">$S(0 \mid 2)$</div>
-            <div class="kpi-subtext">auf der $y$-Achse ($x=0$)</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Verschiebung</div>
-            <div class="kpi-number" id="kpiShift" style="font-size: 1.15rem; color: #1e3a8a;">2 nach oben ↑</div>
-            <div class="kpi-subtext" id="kpiShiftDir">entlang der $y$-Achse</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Schnitt mit x-Achse</div>
-            <div class="kpi-number" id="kpiRoots" style="font-size: 1.15rem; color: #047857;">Keine Nullstellen</div>
-            <div class="kpi-subtext" id="kpiRootsSub">$x^2 + 2 = 0$ unlösbar</div>
-          </div>
-        </div>
-
-        <!-- Kommentar-Banner -->
-        <div class="comment-notebook-banner" id="paramCommentBox">
-          <strong>Beobachtung bei $e = +2$:</strong> Der Graph ist eine nach oben geöffnete Normalparabel, die um genau $2$ Einheiten nach oben verschoben wurde. Ihr Scheitelpunkt liegt bei $S(0 \mid 2)$. Da der Scheitelpunkt über der $x$-Achse liegt, schneidet oder berührt der Graph die $x$-Achse nie (keine Nullstellen).
-        </div>
-
-        <!-- Interaktives SVG-Koordinatensystem -->
-        <div class="lab-coordinate-box">
+        <!-- Interaktives SVG-Koordinatensystem (direkt unter dem Regler) -->
+        <div class="lab-coordinate-box" style="margin-bottom: 1.25rem;">
           <div class="svg-legend">
             <div class="svg-legend-item">
               <span class="legend-bar" style="background: #94a3b8; border: 1px dashed #64748b;"></span>
@@ -557,6 +525,38 @@
               </g>
             </svg>
           </div>
+        </div>
+
+        <!-- 4 Live-KPI Kacheln (unter dem Schaubild) -->
+        <div class="kpi-grid" style="margin-bottom: 1.25rem;">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Funktionsgleichung</div>
+            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$f(x) = x^2 + 2$</div>
+            <div class="kpi-subtext" id="kpiEqSub">Typ: $x^2 + e$</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Scheitelpunkt</div>
+            <div class="kpi-number purple-text" id="kpiVertex" style="font-size: 1.35rem;">$S(0 \mid 2)$</div>
+            <div class="kpi-subtext">auf der $y$-Achse ($x=0$)</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Verschiebung</div>
+            <div class="kpi-number" id="kpiShift" style="font-size: 1.15rem; color: #1e3a8a;">2 nach oben ↑</div>
+            <div class="kpi-subtext" id="kpiShiftDir">entlang der $y$-Achse</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Schnitt mit x-Achse</div>
+            <div class="kpi-number" id="kpiRoots" style="font-size: 1.15rem; color: #047857;">Keine Nullstellen</div>
+            <div class="kpi-subtext" id="kpiRootsSub">$x^2 + 2 = 0$ unlösbar</div>
+          </div>
+        </div>
+
+        <!-- Kommentar-Banner -->
+        <div class="comment-notebook-banner" id="paramCommentBox" style="margin-bottom: 0;">
+          <strong>Beobachtung bei $e = +2$:</strong> Der Graph ist eine nach oben geöffnete Normalparabel, die um genau $2$ Einheiten nach oben verschoben wurde. Ihr Scheitelpunkt liegt bei $S(0 \mid 2)$. Da der Scheitelpunkt über der $x$-Achse liegt, schneidet oder berührt der Graph die $x$-Achse nie (keine Nullstellen).
         </div>
 
       </div>

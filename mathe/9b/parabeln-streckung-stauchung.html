@@ -425,11 +425,14 @@
       </p>
 
       <div class="lab-box">
-        <!-- Schieberegler-Leiste -->
-        <div class="slider-shelf">
+        <!-- Schieberegler-Leiste (direkt über dem Schaubild) -->
+        <div class="slider-shelf" style="margin-bottom: 0.75rem;">
           <div class="slider-row">
-            <span class="slider-label">Schieberegler $a$ einstellen:</span>
-            <span class="day-badge" id="lblCurrentA">a = +2.0</span>
+            <span class="slider-label">GeoGebra-Schieberegler $a$:</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="day-badge" id="lblCurrentA" style="font-size: 0.95rem; padding: 4px 12px;">a = +2.0</span>
+              <span class="day-badge" id="lblCurrentEqBadge" style="background: #eff6ff; color: #1e3a8a; border: 1px solid #bfdbfe; font-size: 0.95rem; padding: 4px 12px;">$h(x) = 2x^2$</span>
+            </div>
           </div>
           <input type="range" class="range-input" id="paramSlider" min="-3.0" max="3.0" step="0.1" value="2.0" oninput="setParamA(parseFloat(this.value))">
           
@@ -445,40 +448,8 @@
           </div>
         </div>
 
-        <!-- 4 Live-KPI Kacheln -->
-        <div class="kpi-grid">
-          <div class="kpi-tile">
-            <div class="kpi-caption">Funktionsgleichung</div>
-            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$h(x) = 2x^2$</div>
-            <div class="kpi-subtext" id="kpiEqSub">Streckfaktor $a = 2$</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Form der Parabel</div>
-            <div class="kpi-number purple-text" id="kpiForm" style="font-size: 1.25rem;">Gestreckt</div>
-            <div class="kpi-subtext" id="kpiFormSub">Äste laufen enger zusammen</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Öffnungsrichtung</div>
-            <div class="kpi-number" id="kpiOpening" style="font-size: 1.2rem; color: #1e3a8a;">Nach oben geöffnet ↑</div>
-            <div class="kpi-subtext" id="kpiOpeningSub">$a > 0$ (keine Spiegelung)</div>
-          </div>
-
-          <div class="kpi-tile">
-            <div class="kpi-caption">Scheitelpunkt</div>
-            <div class="kpi-number" id="kpiVertex" style="font-size: 1.25rem; color: #b91c1c;">$S(0 \mid 0)$</div>
-            <div class="kpi-subtext" id="kpiVertexSub">Tiefster Punkt (Minimum)</div>
-          </div>
-        </div>
-
-        <!-- Kommentar-Banner -->
-        <div class="comment-notebook-banner" id="paramCommentBox">
-          <strong>Beobachtung bei $a = +2{,}0$:</strong> Da der Betrag $|a| = 2 > 1$ ist, ist die Parabel <strong>gestreckt</strong> (schmaler und steiler als die Normalparabel). Weil $a$ positiv ist, ist sie <strong>nach oben geöffnet</strong>. Der Scheitelpunkt verharrt bei $S(0 \mid 0)$ als tiefster Punkt.
-        </div>
-
-        <!-- Interaktives SVG-Koordinatensystem -->
-        <div class="lab-coordinate-box">
+        <!-- Interaktives SVG-Koordinatensystem (direkt unter dem Regler) -->
+        <div class="lab-coordinate-box" style="margin-bottom: 1.25rem;">
           <div class="svg-legend">
             <div class="svg-legend-item">
               <span class="legend-bar" style="background: #94a3b8; border: 1px dashed #64748b;"></span>
@@ -605,6 +576,38 @@
               </g>
             </svg>
           </div>
+        </div>
+
+        <!-- 4 Live-KPI Kacheln (unter dem Schaubild) -->
+        <div class="kpi-grid" style="margin-bottom: 1.25rem;">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Funktionsgleichung</div>
+            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$h(x) = 2x^2$</div>
+            <div class="kpi-subtext" id="kpiEqSub">Streckfaktor $a = 2$</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Form der Parabel</div>
+            <div class="kpi-number purple-text" id="kpiForm" style="font-size: 1.25rem;">Gestreckt</div>
+            <div class="kpi-subtext" id="kpiFormSub">Äste laufen enger zusammen</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Öffnungsrichtung</div>
+            <div class="kpi-number" id="kpiOpening" style="font-size: 1.2rem; color: #1e3a8a;">Nach oben geöffnet ↑</div>
+            <div class="kpi-subtext" id="kpiOpeningSub">$a > 0$ (keine Spiegelung)</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Scheitelpunkt</div>
+            <div class="kpi-number" id="kpiVertex" style="font-size: 1.25rem; color: #b91c1c;">$S(0 \mid 0)$</div>
+            <div class="kpi-subtext" id="kpiVertexSub">Tiefster Punkt (Minimum)</div>
+          </div>
+        </div>
+
+        <!-- Kommentar-Banner -->
+        <div class="comment-notebook-banner" id="paramCommentBox" style="margin-bottom: 0;">
+          <strong>Beobachtung bei $a = +2{,}0$:</strong> Da der Betrag $|a| = 2 > 1$ ist, ist die Parabel <strong>gestreckt</strong> (schmaler und steiler als die Normalparabel). Weil $a$ positiv ist, ist sie <strong>nach oben geöffnet</strong>. Der Scheitelpunkt verharrt bei $S(0 \mid 0)$ als tiefster Punkt.
         </div>
 
       </div>
@@ -993,6 +996,11 @@
       }
       document.getElementById('kpiEquation').innerHTML = eqStr;
       document.getElementById('kpiEqSub').innerHTML = `Streckfaktor $a = ${currentA.toFixed(1).replace('.', ',')}$`;
+
+      const eqBadge = document.getElementById('lblCurrentEqBadge');
+      if (eqBadge) {
+        eqBadge.innerHTML = eqStr;
+      }
 
       // Form
       const kpiForm = document.getElementById('kpiForm');
