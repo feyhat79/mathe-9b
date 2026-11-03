@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Streckung, Stauchung &amp; Spiegelung: h(x) = ax² | Mathe 9b</title>
+
+  <!-- Zentrales Schulheft- & Tafelbild-Designsystem gemäss GEMINI.md -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Modulspezifische Erweiterungen im Rahmen des Designstandards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 820px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Kacheln mit allseitig geschlossenen zarten Rahmen (keine asymmetrischen border-left Striche!) */
+    .case-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .case-card.case-stretch {
+      border-color: #bfdbfe;
+      background: #f8fbff;
+    }
+    .case-card.case-normal {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+    .case-card.case-shrink {
+      border-color: #fed7aa;
+      background: #fffbf5;
+    }
+
+    .case-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.65rem;
+      width: fit-content;
+    }
+    .case-stretch .case-badge { background: #dbeafe; color: #1e40af; }
+    .case-normal .case-badge { background: #e2e8f0; color: #334155; }
+    .case-shrink .case-badge { background: #ffedd5; color: #c2410c; }
+
+    .case-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .case-list {
+      list-style-type: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .case-list li {
+      margin-bottom: 0.4rem;
+      padding-left: 18px;
+      position: relative;
+    }
+    .case-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--ink-blue);
+      font-weight: bold;
+    }
+
+    /* Interaktive Klapp-Boxen für Aufgaben (Aufdecken / Verbergen) */
+    .task-interactive-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .task-interactive-card:hover {
+      border-color: #94a3b8;
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .task-card-pill {
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .task-question {
+      font-size: 0.98rem;
+      color: var(--ink-black);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .reveal-box {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--paper-border);
+    }
+
+    .btn-reveal {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      color: var(--ink-blue);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    .btn-reveal:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+    }
+    .btn-reveal.active {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #1e3a8a;
+    }
+
+    .revealed-content {
+      display: none;
+      margin-top: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-size: 0.93rem;
+      line-height: 1.55;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Live-Labor Feinschliff */
+    .lab-coordinate-box {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .highlight-mult {
+      font-weight: 700;
+      color: #1e40af;
+      background: #dbeafe;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.82rem;
+    }
+
+    .highlight-neg {
+      font-weight: 700;
+      color: #b91c1c;
+      background: #fee2e2;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.82rem;
+    }
+
+    .badge-term {
+      font-family: monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #1e293b;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAVIGATION (PRESENTER-BAR IM SCHULTAFEL-LOOK)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
+      <div class="presenter-title">
+        <span>Mathe 9b • Kapitel II: Quadratische Funktionen</span>
+        <span class="presenter-tag">Unterricht 03.11.2026: Streckfaktor a</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="parabeln.html" class="presenter-tab-btn">1. Einstieg &amp; Normalparabel</a>
+      <a href="parabeln-verschiebung-y.html" class="presenter-tab-btn">2. Verschiebung y-Achse ($x^2+e$)</a>
+      <a href="parabeln-streckung-stauchung.html" class="presenter-tab-btn active">3. Streckung &amp; Stauchung ($ax^2$)</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ======================================================
+         DECKBLATT-KOPFZEILE
+         ====================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Klasse 9b · Mathematik</span>
+        <span>Kapitel II: Quadratische Funktionen</span>
+        <span>Unterrichtsstunde vom 03.11.2026</span>
+      </div>
+      <h1>Streckung, Stauchung und Spiegelung: $h(x) = a \cdot x^2$</h1>
+      <p class="sheet-intro">
+        In der Unterrichtsstunde vom 03.11.2026 haben wir in <strong>GeoGebra</strong> erforscht, wie sich die Form der Normalparabel verändert, wenn man vor das $x^2$ einen Streckfaktor $a$ setzt. 
+        In diesem Modul kannst du den Schieberegler interaktiv bedienen, die Fachbegriffe <em>Strecken</em>, <em>Stauchen</em> und <em>Spiegeln</em> nachvollziehen und verstehen, warum der Scheitelpunkt immer fest im Ursprung $S(0 \mid 0)$ verankert bleibt.
+      </p>
+    </header>
+
+    <!-- ======================================================
+         1. DIE GEOGEBRA-FORSCHUNGSAUFGABE & TABELLEN-VERGLEICH
+         ====================================================== -->
+    <article class="sheet-card" id="sec-ausgangslage">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        Die GeoGebra-Aufgabe &amp; Wertetabellen im Vergleich
+      </h2>
+
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
+        <strong style="color: var(--ink-blue);">Aufgabenstellung aus dem Unterricht:</strong><br>
+        <em>„Erstelle in GeoGebra einen Schieberegler und beobachte, wie sich der Graph der Normalparabel verändert. Nenne den Schieberegler $a$ und die Funktionsgleichung lautet: $h(x) = a \cdot x^2$.“</em>
+      </div>
+
+      <p style="margin-bottom: 1.25rem;">
+        Während der Parameter $e$ die Parabel starr nach oben oder unten geschoben hat ($x^2 + e$), wird beim Parameter $a$ der Term $x^2$ mit der Zahl $a$ <strong>multipliziert</strong>. 
+        Wir vergleichen die Normalparabel $y = x^2$ mit drei typischen Beispielen:
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">1. Streckung: $h_1(x) = 2x^2$ &nbsp; ($a = 2$)</div>
+          <div class="col-description">
+            Jeder Quadratwert $x^2$ wird <span class="highlighter">verdoppelt</span>. Der Graph schießt steiler empor, die Äste laufen enger zusammen.
+          </div>
+        </div>
+
+        <div class="notebook-column col-orange">
+          <div class="col-title">2. Stauchung: $h_2(x) = 0{,}5x^2$ &nbsp; ($a = 0{,}5$)</div>
+          <div class="col-description">
+            Jeder Quadratwert $x^2$ wird <span class="highlighter">halbiert</span>. Der Graph steigt gemächlicher an, die Öffnung wird breiter.
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">3. Spiegelung: $h_3(x) = -x^2$ &nbsp; ($a = -1$)</div>
+          <div class="col-description">
+            Jeder Quadratwert erhält ein <span class="highlighter">negatives Vorzeichen</span>. Die Parabel klappt nach unten um (Spiegelung an der $x$-Achse).
+          </div>
+        </div>
+      </div>
+
+      <!-- Vergleichende Wertetabelle -->
+      <div class="table-responsive">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%; text-align: left;">Stelle $x$</th>
+              <th style="width: 10%;">$-3$</th>
+              <th style="width: 10%;">$-2$</th>
+              <th style="width: 10%;">$-1$</th>
+              <th style="width: 10%; background: #e0e7ff; color: #1e3a8a;">$0$ (Scheitel)</th>
+              <th style="width: 10%;">$1$</th>
+              <th style="width: 10%;">$2$</th>
+              <th style="width: 10%;">$3$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; font-weight: 700;">Normalparabel: $y = x^2$</td>
+              <td>$9$</td>
+              <td>$4$</td>
+              <td>$1$</td>
+              <td style="font-weight: 800; background: #f8fafc;">$0$</td>
+              <td>$1$</td>
+              <td>$4$</td>
+              <td>$9$</td>
+            </tr>
+            <tr style="background: #f0f7ff;">
+              <td style="text-align: left; font-weight: 700; color: #1e40af;">
+                $h_1(x) = 2x^2$ &nbsp; <span class="highlight-mult">· 2</span>
+              </td>
+              <td>$18$</td>
+              <td>$8$</td>
+              <td>$2$</td>
+              <td style="font-weight: 800; background: #dbeafe; color: #1e3a8a;">$0$</td>
+              <td>$2$</td>
+              <td>$8$</td>
+              <td>$18$</td>
+            </tr>
+            <tr style="background: #fffbf5;">
+              <td style="text-align: left; font-weight: 700; color: #c2410c;">
+                $h_2(x) = 0{,}5x^2$ &nbsp; <span class="highlight-mult" style="background: #fed7aa; color: #9a3412;">· 0,5</span>
+              </td>
+              <td>$4{,}5$</td>
+              <td>$2$</td>
+              <td>$0{,}5$</td>
+              <td style="font-weight: 800; background: #ffedd5; color: #c2410c;">$0$</td>
+              <td>$0{,}5$</td>
+              <td>$2$</td>
+              <td>$4{,}5$</td>
+            </tr>
+            <tr style="background: #fef2f2;">
+              <td style="text-align: left; font-weight: 700; color: #b91c1c;">
+                $h_3(x) = -x^2$ &nbsp; <span class="highlight-neg">· (-1)</span>
+              </td>
+              <td>$-9$</td>
+              <td>$-4$</td>
+              <td>$-1$</td>
+              <td style="font-weight: 800; background: #fee2e2; color: #b91c1c;">$0$</td>
+              <td>$-1$</td>
+              <td>$-4$</td>
+              <td>$-9$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Didaktische Erkenntniskacheln -->
+      <div class="insight-columns">
+        <div class="insight-card card-blue">
+          <strong>1. Rechnerische Multiplikation:</strong><br>
+          Der Faktor $a$ multipliziert jeden einzelnen Funktionswert $x^2$. Bei $|a| > 1$ werden die Funktionswerte betragsmäßig größer (Graph steigt steiler), bei $|a| < 1$ werden sie kleiner (Graph verläuft flacher).
+        </div>
+
+        <div class="insight-card card-purple">
+          <strong>2. Warum der Scheitelpunkt immer $S(0 \mid 0)$ bleibt:</strong><br>
+          Setzt man $x = 0$ ein, rechnet man: $h(0) = a \cdot 0^2 = a \cdot 0 = 0$. 
+          Ganz egal, welchen Wert der Schieberegler $a$ annimmt: Der Graph geht <strong>immer zwingend durch den Punkt $(0 \mid 0)$</strong>! Er wandert weder nach oben/unten noch nach links/rechts.
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================
+         2. INTERAKTIVES GRAPHEN-LABOR (GEOGEBRA-SIMULATOR)
+         ====================================================== -->
+    <article class="sheet-card" id="sec-labor">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        Interaktives GeoGebra-Labor: Der Schieberegler $a$ in Echtzeit
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Bewege den Schieberegler oder nutze die Schnellwahltasten, um den Wert von $a$ zu verändern. Beobachte live, wie sich die Parabel streckt, staucht oder an der $x$-Achse spiegelt:
+      </p>
+
+      <div class="lab-box">
+        <!-- Schieberegler-Leiste -->
+        <div class="slider-shelf">
+          <div class="slider-row">
+            <span class="slider-label">Schieberegler $a$ einstellen:</span>
+            <span class="day-badge" id="lblCurrentA">a = +2.0</span>
+          </div>
+          <input type="range" class="range-input" id="paramSlider" min="-3.0" max="3.0" step="0.1" value="2.0" oninput="setParamA(parseFloat(this.value))">
+          
+          <div class="button-selector-row">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); align-self: center; margin-right: 4px;">Schnellwahl:</span>
+            <button class="btn-day" onclick="setParamA(-2.0)">a = -2 (stark gestreckt, ↓)</button>
+            <button class="btn-day" onclick="setParamA(-1.0)">a = -1 (Normalparabel ↓)</button>
+            <button class="btn-day" onclick="setParamA(-0.5)">a = -0.5 (gestaucht ↓)</button>
+            <button class="btn-day" onclick="setParamA(0.5)">a = +0.5 (gestaucht ↑)</button>
+            <button class="btn-day" onclick="setParamA(1.0)">a = +1 (Normalparabel ↑)</button>
+            <button class="btn-day active" onclick="setParamA(2.0)">a = +2 (gestreckt ↑)</button>
+            <button class="btn-day" onclick="setParamA(3.0)">a = +3 (stark gestreckt ↑)</button>
+          </div>
+        </div>
+
+        <!-- 4 Live-KPI Kacheln -->
+        <div class="kpi-grid">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Funktionsgleichung</div>
+            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.35rem;">$h(x) = 2x^2$</div>
+            <div class="kpi-subtext" id="kpiEqSub">Streckfaktor $a = 2$</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Form der Parabel</div>
+            <div class="kpi-number purple-text" id="kpiForm" style="font-size: 1.25rem;">Gestreckt</div>
+            <div class="kpi-subtext" id="kpiFormSub">Äste laufen enger zusammen</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Öffnungsrichtung</div>
+            <div class="kpi-number" id="kpiOpening" style="font-size: 1.2rem; color: #1e3a8a;">Nach oben geöffnet ↑</div>
+            <div class="kpi-subtext" id="kpiOpeningSub">$a > 0$ (keine Spiegelung)</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Scheitelpunkt</div>
+            <div class="kpi-number" id="kpiVertex" style="font-size: 1.25rem; color: #b91c1c;">$S(0 \mid 0)$</div>
+            <div class="kpi-subtext" id="kpiVertexSub">Tiefster Punkt (Minimum)</div>
+          </div>
+        </div>
+
+        <!-- Kommentar-Banner -->
+        <div class="comment-notebook-banner" id="paramCommentBox">
+          <strong>Beobachtung bei $a = +2{,}0$:</strong> Da der Betrag $|a| = 2 > 1$ ist, ist die Parabel <strong>gestreckt</strong> (schmaler und steiler als die Normalparabel). Weil $a$ positiv ist, ist sie <strong>nach oben geöffnet</strong>. Der Scheitelpunkt verharrt bei $S(0 \mid 0)$ als tiefster Punkt.
+        </div>
+
+        <!-- Interaktives SVG-Koordinatensystem -->
+        <div class="lab-coordinate-box">
+          <div class="svg-legend">
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: #94a3b8; border: 1px dashed #64748b;"></span>
+              <span>Normalparabel $y = x^2$ (Referenz)</span>
+            </div>
+            <div class="svg-legend-item">
+              <span class="legend-bar" id="legendDynBar" style="background: #1e3a8a; height: 4px;"></span>
+              <span id="legendDynLabel">Dynamischer Graph $h(x) = a \cdot x^2$</span>
+            </div>
+            <div class="svg-legend-item">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
+              <span>Scheitelpunkt $S(0 \mid 0)$</span>
+            </div>
+            <div class="svg-legend-item">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #2563eb; display: inline-block;"></span>
+              <span>Ablesepunkt bei $x = 1$: $(1 \mid a)$</span>
+            </div>
+          </div>
+
+          <div class="svg-wrapper" style="padding: 4px; overflow: hidden;">
+            <svg id="parabelSvg" viewBox="0 0 600 460" width="100%" height="auto" style="display: block; background: #ffffff;">
+              <defs>
+                <!-- Pfeilspitze für Achsen -->
+                <marker id="axisArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+                </marker>
+                <marker id="guideArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+                </marker>
+              </defs>
+
+              <!-- Gitterlinien (Ursprung bei X=300, Y=230) -->
+              <g stroke="#e2e8f0" stroke-width="1">
+                <!-- Vertikale Linien x = -4 bis +4, step = 38px -->
+                <!-- x=-4: 148, x=-3: 186, x=-2: 224, x=-1: 262, x=0: 300, x=1: 338, x=2: 376, x=3: 414, x=4: 452 -->
+                <line x1="148" y1="20" x2="148" y2="440" />
+                <line x1="186" y1="20" x2="186" y2="440" />
+                <line x1="224" y1="20" x2="224" y2="440" />
+                <line x1="262" y1="20" x2="262" y2="440" />
+                <line x1="338" y1="20" x2="338" y2="440" />
+                <line x1="376" y1="20" x2="376" y2="440" />
+                <line x1="414" y1="20" x2="414" y2="440" />
+                <line x1="452" y1="20" x2="452" y2="440" />
+
+                <!-- Horizontale Linien y = -6 bis +6, step = 32px -->
+                <!-- y=6: 38, y=5: 70, y=4: 102, y=3: 134, y=2: 166, y=1: 198, y=0: 230, y=-1: 262, y=-2: 294, y=-3: 326, y=-4: 358, y=-5: 390, y=-6: 422 -->
+                <line x1="100" y1="38" x2="500" y2="38" />
+                <line x1="100" y1="70" x2="500" y2="70" />
+                <line x1="100" y1="102" x2="500" y2="102" />
+                <line x1="100" y1="134" x2="500" y2="134" />
+                <line x1="100" y1="166" x2="500" y2="166" />
+                <line x1="100" y1="198" x2="500" y2="198" />
+                <line x1="100" y1="262" x2="500" y2="262" />
+                <line x1="100" y1="294" x2="500" y2="294" />
+                <line x1="100" y1="326" x2="500" y2="326" />
+                <line x1="100" y1="358" x2="500" y2="358" />
+                <line x1="100" y1="390" x2="500" y2="390" />
+                <line x1="100" y1="422" x2="500" y2="422" />
+              </g>
+
+              <!-- Achsen mit Pfeilen -->
+              <!-- x-Achse (Y = 230) -->
+              <line x1="80" y1="230" x2="520" y2="230" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="526" y="234" font-size="13" font-weight="700" fill="#334155">x</text>
+
+              <!-- y-Achse (X = 300) -->
+              <line x1="300" y1="440" x2="300" y2="20" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="306" y="16" font-size="13" font-weight="700" fill="#334155">y</text>
+
+              <!-- Achsenbeschriftungen -->
+              <g font-size="11" fill="#64748b" text-anchor="middle">
+                <!-- x-Ticks -->
+                <text x="148" y="246">-4</text>
+                <text x="186" y="246">-3</text>
+                <text x="224" y="246">-2</text>
+                <text x="262" y="246">-1</text>
+                <text x="338" y="246">1</text>
+                <text x="376" y="246">2</text>
+                <text x="414" y="246">3</text>
+                <text x="452" y="246">4</text>
+
+                <!-- y-Ticks -->
+                <text x="286" y="426" text-anchor="end">-6</text>
+                <text x="286" y="394" text-anchor="end">-5</text>
+                <text x="286" y="362" text-anchor="end">-4</text>
+                <text x="286" y="330" text-anchor="end">-3</text>
+                <text x="286" y="298" text-anchor="end">-2</text>
+                <text x="286" y="266" text-anchor="end">-1</text>
+                <text x="288" y="244" text-anchor="end" font-weight="700">0</text>
+                <text x="286" y="202" text-anchor="end">1</text>
+                <text x="286" y="170" text-anchor="end">2</text>
+                <text x="286" y="138" text-anchor="end">3</text>
+                <text x="286" y="106" text-anchor="end">4</text>
+                <text x="286" y="74" text-anchor="end">5</text>
+                <text x="286" y="42" text-anchor="end">6</text>
+              </g>
+
+              <!-- 1. Referenz: Normalparabel y = x² (gestrichelt) -->
+              <path id="refParabolaPath" d="" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4,4" />
+
+              <!-- 2. Dynamische Parabel h(x) = a * x² -->
+              <path id="dynParabolaPath" d="" fill="none" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round" />
+
+              <!-- 3. Ablesehilfe bei x = 1 (Schlüsselpunkt (1 | a)) -->
+              <g id="dynGuideGroup">
+                <!-- Senkrechte gestrichelte Linie von (1|0) zu (1|a) -->
+                <line id="guideLineV" x1="338" y1="230" x2="338" y2="166" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3,3" />
+                <!-- Waagerechte gestrichelte Linie von (1|a) zu (0|a) -->
+                <line id="guideLineH" x1="338" y1="166" x2="300" y2="166" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3,3" />
+                
+                <!-- Punkt bei (1 | a) -->
+                <circle id="guidePoint" cx="338" cy="166" r="5" fill="#2563eb" stroke="#ffffff" stroke-width="1.5" />
+                
+                <!-- Badge für Punkt P(1 | a) -->
+                <rect id="guideBadgeBg" x="348" y="154" width="70" height="22" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1" />
+                <text id="guideBadgeTxt" x="383" y="169" font-size="10.5" font-weight="700" fill="#1e40af" text-anchor="middle">P(1 | 2)</text>
+              </g>
+
+              <!-- 4. Scheitelpunkt im Ursprung S(0 | 0) -->
+              <g id="dynVertexGroup">
+                <circle cx="300" cy="230" r="6" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
+                <rect x="250" y="218" width="44" height="22" rx="3" fill="#fef2f2" stroke="#dc2626" stroke-width="1" />
+                <text x="272" y="233" font-size="10" font-weight="800" fill="#b91c1c" text-anchor="middle">S(0|0)</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         3. FACHBEGRIFFE & SYSTEMATISCHE FALLUNTERSCHIEDUNG
+         ====================================================== -->
+    <article class="sheet-card" id="sec-faelle">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        Wichtige Fachbegriffe &amp; Die drei Fälle von $a$
+      </h2>
+
+      <!-- Begriffsdefinitionen aus dem Heft -->
+      <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin-bottom: 0.75rem;">Zentrale Fachbegriffe aus dem Unterricht:</h3>
+        <ul style="list-style: none; line-height: 1.7; font-size: 1rem;">
+          <li style="margin-bottom: 0.5rem;">
+            • <strong>Scheitelpunkt:</strong> Der <em>höchste</em> (bei $a < 0$) oder <em>tiefste</em> (bei $a > 0$) Punkt einer Parabel.
+          </li>
+          <li style="margin-bottom: 0.5rem;">
+            • <strong>Strecken:</strong> Die Parabeläste laufen zusammen (die Öffnung wird enger / der Graph wird schmaler und steiler).
+          </li>
+          <li>
+            • <strong>Stauchen:</strong> Die Parabeläste laufen auseinander (die Öffnung wird weiter / der Graph wird breiter und flacher).
+          </li>
+        </ul>
+      </div>
+
+      <p style="margin-bottom: 1.25rem;">
+        Je nachdem, wie groß der <strong>Betrag $|a|$</strong> (die Zahl ohne Vorzeichen) ist, unterscheidet man mathematisch drei Fälle:
+      </p>
+
+      <div class="grid-3">
+
+        <!-- Kachel 1: Streckung -->
+        <div class="case-card case-stretch">
+          <div>
+            <span class="case-badge">1. Fall: $|a| > 1$</span>
+            <div class="case-title">Streckung (enger)</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Bedingung: $a > 1$ &nbsp;oder&nbsp; $a < -1$
+            </p>
+            <ul class="case-list">
+              <li><strong>Form:</strong> Parabeläste laufen enger zusammen (schmaler und steiler).</li>
+              <li><strong>Beispiele:</strong> $h(x) = 2x^2$, $h(x) = 4x^2$, $h(x) = -3x^2$.</li>
+              <li><strong>Schablonen-Test:</strong> Die normale Parabelschablone ist <em>zu breit</em> – der Graph liegt komplett innerhalb der Schablone.</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(37,99,235,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #1e40af; text-align: center;">
+            Gestreckte Parabel: schmaler als normal
+          </div>
+        </div>
+
+        <!-- Kachel 2: Normalparabel -->
+        <div class="case-card case-normal">
+          <div>
+            <span class="case-badge">2. Fall: $|a| = 1$</span>
+            <div class="case-title">Reine Normalparabel</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Bedingung: $a = 1$ &nbsp;oder&nbsp; $a = -1$
+            </p>
+            <ul class="case-list">
+              <li><strong>Form:</strong> Originalform der Normalparabel.</li>
+              <li><strong>$a = 1$:</strong> $h(x) = x^2$ (nach oben geöffnet).</li>
+              <li><strong>$a = -1$:</strong> $h(x) = -x^2$ (nach unten geöffnet).</li>
+              <li><strong>Schablonen-Test:</strong> Passt zu 100 % exakt auf die Plastik-Parabelschablone.</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(51,65,85,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #334155; text-align: center;">
+            Exakte Normalparabel-Form
+          </div>
+        </div>
+
+        <!-- Kachel 3: Stauchung -->
+        <div class="case-card case-shrink">
+          <div>
+            <span class="case-badge">3. Fall: $0 < |a| < 1$</span>
+            <div class="case-title">Stauchung (weiter)</div>
+            <p style="font-size: 0.95rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Bedingung: $-1 < a < 1$ &nbsp;mit&nbsp; $a \neq 0$
+            </p>
+            <ul class="case-list">
+              <li><strong>Form:</strong> Parabeläste laufen auseinander (breiter und flacher).</li>
+              <li><strong>Beispiele:</strong> $h(x) = 0{,}5x^2$, $h(x) = \frac{1}{4}x^2$, $h(x) = -0{,}2x^2$.</li>
+              <li><strong>Schablonen-Test:</strong> Die Parabelschablone ist <em>zu eng</em> – der Graph verläuft außerhalb der Schablone.</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(234,88,12,0.1); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #c2410c; text-align: center;">
+            Gestauchte Parabel: breiter als normal
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Vorzeichen-Regel Kasten -->
+      <div style="background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 8px; padding: 1.1rem 1.25rem; margin-top: 1rem;">
+        <h3 style="font-size: 1.05rem; color: #9d174d; margin-bottom: 0.4rem;">Das Vorzeichen von $a$: Spiegelung an der $x$-Achse</h3>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: #831843;">
+          • <strong>$a > 0$ (positiv):</strong> Die Parabel ist <strong>nach oben geöffnet</strong>. Der Scheitelpunkt $S(0 \mid 0)$ ist der <em>tiefste Punkt</em> (Tiefpunkt / Minimum).<br>
+          • <strong>$a < 0$ (negativ):</strong> Die Parabel wird an der $x$-Achse gespiegelt (gekippt) und ist <strong>nach unten geöffnet</strong>. Der Scheitelpunkt $S(0 \mid 0)$ ist der <em>höchste Punkt</em> (Hochpunkt / Maximum).<br>
+          • <strong>Sonderfall $a = 0$:</strong> Für $a = 0$ lautet die Funktion $h(x) = 0 \cdot x^2 = 0$. Das ist keine Parabel mehr, sondern die flache waagerechte Gerade der $x$-Achse!
+        </p>
+      </div>
+    </article>
+
+    <!-- ======================================================
+         4. VERSTÄNDNIS-TRAINING & AUFGABEN-KACHELN
+         ====================================================== -->
+    <article class="sheet-card" id="sec-training">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        Verständnis-Check: Typische Aufgaben &amp; Stolperfallen
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Teste dein Wissen über den Streckfaktor $a$. Klicke auf die jeweilige Schaltfläche, um die schrittweise Lösung und didaktische Erklärung aufzudecken:
+      </p>
+
+      <div class="grid-2">
+
+        <!-- Aufgabe 1 -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 1</span>
+              <span>Gestreckt oder gestaucht?</span>
+            </div>
+            <p class="task-question">
+              Beurteile für folgende Funktionsgleichungen, ob der Graph <strong>gestreckt</strong> oder <strong>gestaucht</strong> ist und in welche Richtung er geöffnet ist:<br>
+              a) $f(x) = 3{,}5x^2$<br>
+              b) $g(x) = -0{,}4x^2$<br>
+              c) $h(x) = -\frac{7}{2}x^2$
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>a) $f(x) = 3{,}5x^2$:</strong><br>
+              $a = 3{,}5 > 1 \implies$ <strong>Gestreckt</strong> (schmaler) und <strong>nach oben geöffnet</strong>.<br><br>
+              <strong>b) $g(x) = -0{,}4x^2$:</strong><br>
+              $|a| = |-0{,}4| = 0{,}4 < 1 \implies$ <strong>Gestaucht</strong> (breiter). Da $a < 0$ ist, ist sie <strong>nach unten geöffnet</strong> (an der $x$-Achse gespiegelt).<br><br>
+              <strong>c) $h(x) = -\frac{7}{2}x^2$:</strong><br>
+              $|a| = |-\frac{7}{2}| = 3{,}5 > 1 \implies$ <strong>Gestreckt</strong> (schmaler) und <strong>nach unten geöffnet</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 2 -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 2</span>
+              <span>Streckfaktor $a$ rechnerisch ermitteln</span>
+            </div>
+            <p class="task-question">
+              Eine Parabel der Form $h(x) = ax^2$ verläuft durch den Punkt <strong>$P(2 \mid 12)$</strong>.<br>
+              Berechne den Streckfaktor $a$ und gib die vollständige Funktionsgleichung an!
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Punktprobe durchführen:</strong> Setze $x = 2$ und $y = 12$ in die Gleichung ein:<br>
+              $$12 = a \cdot 2^2$$
+              $$12 = a \cdot 4 \quad | : 4$$
+              $$a = 3$$
+              <strong>Funktionsgleichung:</strong> $h(x) = 3x^2$<br>
+              <strong>Bedeutung:</strong> Die Parabel ist um den Faktor 3 gestreckt und nach oben geöffnet.
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 3: Der 1-Schritt-Trick -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 3</span>
+              <span>Der „1-Schritt-Trick“ zum Ablesen</span>
+            </div>
+            <p class="task-question">
+              Wie kann man den Wert von $a$ direkt aus einer Zeichnung im Koordinatensystem ablesen, ohne eine Gleichung umstellen zu müssen?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Der 1-Schritt-Trick:</strong><br>
+              1. Starte im Scheitelpunkt $S(0 \mid 0)$.<br>
+              2. Gehe genau <strong>$1$ Einheit nach rechts</strong> ($x = 1$).<br>
+              3. Zähle nach, wie viele Einheiten du senkrecht zum Graphen gehen musst:<br>
+              • Gehst du nach oben, ist $a$ positiv.<br>
+              • Gehst du nach unten, ist $a$ negativ.<br>
+              <strong>Mathematischer Grund:</strong> $h(1) = a \cdot 1^2 = a \cdot 1 = a$. An der Stelle $x = 1$ entspricht der Funktionswert immer exakt dem Parameter $a$!
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 4: Stolperfalle -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill" style="background: #fee2e2; color: #b91c1c;">Stolperfalle</span>
+              <span>Wandert der Scheitelpunkt mit?</span>
+            </div>
+            <p class="task-question">
+              Ein Schüler sieht den Graphen von $h(x) = -5x^2$ und behauptet: <em>„Weil der Faktor $-5$ beträgt, liegt der Scheitelpunkt bei $(0 \mid -5)$.“</em> Hat er recht?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Nein, das ist eine gefährliche Verwechslung!</strong><br>
+              Der Schüler verwechselt den Streckfaktor $a$ mit dem Verschiebungsparameter $e$!<br>
+              • Bei $f(x) = x^2 - 5$ ($e = -5$) wandert der Scheitelpunkt tatsächlich nach $S(0 \mid -5)$.<br>
+              • Bei $h(x) = -5x^2$ wird jedoch multipliziert: $h(0) = -5 \cdot 0^2 = 0$. Der Scheitelpunkt bleibt <strong>immer bei $S(0 \mid 0)$</strong>!<br>
+              Der Faktor $-5$ bewirkt lediglich, dass die Parabel extrem schmal gestreckt ist und nach unten zeigt.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         5. MERKHEFT-SICHERUNG (STANDARD GEMÄSS GEMINI.MD)
+         ====================================================== -->
+    <article class="sheet-card" id="sec-merksatz">
+      <h2 class="task-title">
+        <span class="task-number">5</span>
+        Zusammenfassung fürs Merkheft (Tafelbild vom 03.11.2026)
+      </h2>
+
+      <!-- DER ROTE MERKSATZ-KASTEN (GEMÄSS GEMINI.MD) -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke</div>
+        <div class="merke-title">Streckung, Stauchung und Spiegelung: $h(x) = a \cdot x^2$</div>
+        <div class="merke-content">
+          <p style="margin-bottom: 0.75rem;">
+            Der Parameter $a$ in der Funktionsgleichung <strong>$h(x) = a \cdot x^2$</strong> wird als <strong>Streckfaktor</strong> bezeichnet. Er bestimmt die Form der Parabel und ihre Öffnungsrichtung:
+          </p>
+
+          <table class="summary-grid-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Bedingung</th>
+                <th style="width: 75%;">Wirkung auf den Graphen &amp; Fachbegriff</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Scheitelpunkt</strong></td>
+                <td>
+                  Bleibt stets <strong>$S(0 \mid 0)$</strong> im Ursprung (da $h(0) = a \cdot 0^2 = 0$).<br>
+                  • Bei $a > 0$: Tiefster Punkt der Parabel (Minimum)<br>
+                  • Bei $a < 0$: Höchster Punkt der Parabel (Maximum)
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Streckung</strong><br>$a > 1$ oder $a < -1$<br>kurz: <strong>$|a| > 1$</strong></td>
+                <td>
+                  <strong>Gestreckt:</strong> Die Parabeläste laufen enger zusammen (die Öffnung wird schmaler, der Graph verläuft steiler als die Normalparabel).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Normalform</strong><br><strong>$|a| = 1$</strong></td>
+                <td>
+                  <strong>Reine Normalparabel:</strong> Form bleibt unverändert (passt exakt in die Parabelschablone).<br>
+                  • $a = 1$: nach oben geöffnet &nbsp;|&nbsp; $a = -1$: nach unten geöffnet.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stauchung</strong><br>$-1 < a < 1$ ($a \neq 0$)<br>kurz: <strong>$0 < |a| < 1$</strong></td>
+                <td>
+                  <strong>Gestaucht:</strong> Die Parabeläste laufen auseinander (die Öffnung wird weiter, der Graph verläuft flacher als die Normalparabel).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Spiegelung</strong><br><strong>$a < 0$</strong></td>
+                <td>
+                  <strong>Spiegelung an der $x$-Achse:</strong> Die Parabel wird am Scheitelpunkt gekippt und ist <strong>nach unten geöffnet</strong>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 1rem;">
+            <strong>Goldene Faustregel für Klassenarbeiten:</strong><br>
+            • Das <strong>Vorzeichen</strong> von $a$ entscheidet über die <em>Richtung</em> ($+$ = nach oben, $-$ = nach unten).<br>
+            • Der <strong>Betrag</strong> $|a|$ entscheidet über die <em>Breite</em> ($> 1$ = schmal/gestreckt, $< 1$ = weit/gestaucht).<br>
+            • An der Stelle <strong>$x = 1$</strong> lässt sich der Wert von $a$ direkt als $y$-Koordinate ablesen!
+          </div>
+        </div>
+      </div>
+
+      <!-- Ausblick auf die nächste Stunde -->
+      <div class="future-note">
+        <strong style="color: #047857;">Ausblick auf die nächste Unterrichtsstunde:</strong><br>
+        Bisher können wir die Normalparabel senkrecht entlang der $y$-Achse verschieben ($f(x) = x^2 + e$) und ihre Form strecken, stauchen sowie umdrehen ($h(x) = ax^2$).<br>
+        Was geschieht, wenn wir die Parabel nun waagerecht nach links oder rechts entlang der $x$-Achse verschieben wollen?<br>
+        $\implies$ <em>Das führt uns zur <strong>Verschiebung entlang der $x$-Achse</strong> mit dem Parameter $d$: <strong>$f(x) = (x - d)^2$</strong>!</em>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ========================================================
+       JAVASCRIPT: LIVE-LABOR, SVG-UPDATE & AUFDECK-FUNKTION
+       ======================================================== -->
+  <script>
+    // Aktueller Zustand
+    let currentA = 2.0;
+
+    // SVG-Koordinaten-Konstanten
+    // viewBox: 0 0 600 460
+    // Ursprung (0|0) bei pxX = 300, pxY = 230
+    // 1 Einheit in x = 38 Pixel
+    // 1 Einheit in y = 32 Pixel
+    const ORIGIN_X = 300;
+    const ORIGIN_Y = 230;
+    const SCALE_X = 38;
+    const SCALE_Y = 32;
+
+    // Erzeugt einen SVG-Pfadstring für h(x) = a * x²
+    function calcParabolaPath(a) {
+      const points = [];
+      // Bereich für x: von -4.0 bis +4.0 in feinen Schritten
+      for (let x = -4.0; x <= 4.001; x += 0.05) {
+        const y = a * x * x;
+        const pxX = ORIGIN_X + x * SCALE_X;
+        const pxY = ORIGIN_Y - y * SCALE_Y;
+
+        // Begrenzung auf sichtbaren SVG-Ausschnitt (y zwischen -10 und 480)
+        if (pxY >= -10 && pxY <= 480) {
+          points.push({ x: pxX, y: pxY });
+        }
+      }
+
+      if (points.length === 0) return "";
+      let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+      for (let i = 1; i < points.length; i++) {
+        d += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
+      }
+      return d;
+    }
+
+    // Setzt den Parameter a und aktualisiert alle UI-Elemente
+    function setParamA(newA) {
+      currentA = Math.round(newA * 10) / 10;
+
+      // 1. Slider & Label aktualisieren
+      const slider = document.getElementById('paramSlider');
+      if (slider) slider.value = currentA;
+
+      const lbl = document.getElementById('lblCurrentA');
+      if (lbl) {
+        lbl.textContent = `a = ${currentA > 0 ? '+' : ''}${currentA.toFixed(1)}`;
+      }
+
+      // 2. Buttons Active-State umschalten
+      const buttons = document.querySelectorAll('.button-selector-row .btn-day');
+      buttons.forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        const match = onclickAttr.match(/setParamA\(([-\d.]+)\)/);
+        if (match && parseFloat(match[1]) === currentA) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      // 3. KPIs aktualisieren
+      const absA = Math.abs(currentA);
+
+      // Gleichung
+      let eqStr = "";
+      if (currentA === 0) {
+        eqStr = "$h(x) = 0$";
+      } else if (currentA === 1) {
+        eqStr = "$h(x) = x^2$";
+      } else if (currentA === -1) {
+        eqStr = "$h(x) = -x^2$";
+      } else {
+        eqStr = `$h(x) = ${currentA.toFixed(1).replace('.', ',')}x^2$`;
+      }
+      document.getElementById('kpiEquation').innerHTML = eqStr;
+      document.getElementById('kpiEqSub').innerHTML = `Streckfaktor $a = ${currentA.toFixed(1).replace('.', ',')}$`;
+
+      // Form
+      const kpiForm = document.getElementById('kpiForm');
+      const kpiFormSub = document.getElementById('kpiFormSub');
+      if (currentA === 0) {
+        kpiForm.textContent = "Gerade (x-Achse)";
+        kpiForm.style.color = "#475569";
+        kpiFormSub.textContent = "Keine quadratische Funktion";
+      } else if (absA > 1) {
+        kpiForm.textContent = "Gestreckt";
+        kpiForm.style.color = "#1e40af";
+        kpiFormSub.textContent = "Äste laufen enger zusammen (schmaler)";
+      } else if (absA === 1) {
+        kpiForm.textContent = "Normalparabel";
+        kpiForm.style.color = "#0f172a";
+        kpiFormSub.textContent = "Exakte Schablonenform";
+      } else {
+        kpiForm.textContent = "Gestaucht";
+        kpiForm.style.color = "#c2410c";
+        kpiFormSub.textContent = "Äste laufen auseinander (breiter)";
+      }
+
+      // Öffnung
+      const kpiOpening = document.getElementById('kpiOpening');
+      const kpiOpeningSub = document.getElementById('kpiOpeningSub');
+      if (currentA > 0) {
+        kpiOpening.textContent = "Nach oben geöffnet ↑";
+        kpiOpening.style.color = "#1e3a8a";
+        kpiOpeningSub.innerHTML = "$a > 0$ (Normalstellung)";
+      } else if (currentA < 0) {
+        kpiOpening.textContent = "Nach unten geöffnet ↓";
+        kpiOpening.style.color = "#b91c1c";
+        kpiOpeningSub.innerHTML = "$a < 0$ (an x-Achse gespiegelt)";
+      } else {
+        kpiOpening.textContent = "Keine Öffnung";
+        kpiOpening.style.color = "#475569";
+        kpiOpeningSub.textContent = "Steigung 0";
+      }
+
+      // Scheitelpunkt
+      const kpiVertex = document.getElementById('kpiVertex');
+      const kpiVertexSub = document.getElementById('kpiVertexSub');
+      kpiVertex.innerHTML = "$S(0 \\mid 0)$";
+      if (currentA > 0) {
+        kpiVertexSub.textContent = "Tiefster Punkt (Minimum)";
+      } else if (currentA < 0) {
+        kpiVertexSub.textContent = "Höchster Punkt (Maximum)";
+      } else {
+        kpiVertexSub.textContent = "Jeder Punkt hat y = 0";
+      }
+
+      // Kommentar-Banner
+      let comment = "";
+      if (currentA === 0) {
+        comment = `<strong>Sonderfall $a = 0$:</strong> Für $a = 0$ lautet die Gleichung $h(x) = 0 \\cdot x^2 = 0$. Das ist keine gekrümmte Parabel mehr, sondern die vollkommen ebene Gerade der $x$-Achse!`;
+      } else {
+        const formWord = absA > 1 ? "gestreckt (schmaler)" : (absA === 1 ? "normal geformt" : "gestaucht (breiter)");
+        const dirWord = currentA > 0 ? "nach oben geöffnet" : "nach unten geöffnet (an der x-Achse gespiegelt)";
+        const vertexRole = currentA > 0 ? "tiefster Punkt (Tiefpunkt)" : "höchster Punkt (Hochpunkt)";
+        comment = `<strong>Beobachtung bei $a = ${currentA > 0 ? '+' : ''}${currentA.toFixed(1).replace('.', ',')}$:</strong> Da $|a| = ${absA.toFixed(1).replace('.', ',')}$ ist, ist der Graph <strong>${formWord}</strong>. Durch das ${currentA > 0 ? 'positive' : 'negative'} Vorzeichen ist er <strong>${dirWord}</strong>. Der Scheitelpunkt verharrt fest bei $S(0 \\mid 0)$ als ${vertexRole}.`;
+      }
+      document.getElementById('paramCommentBox').innerHTML = comment;
+
+      // 4. SVG Dynamische Parabel aktualisieren
+      const dynPath = document.getElementById('dynParabolaPath');
+      if (dynPath) {
+        dynPath.setAttribute('d', calcParabolaPath(currentA));
+        dynPath.setAttribute('stroke', currentA < 0 ? '#b91c1c' : '#1e3a8a');
+      }
+
+      // Legend Bar aktualisieren
+      const legBar = document.getElementById('legendDynBar');
+      if (legBar) {
+        legBar.style.background = currentA < 0 ? '#b91c1c' : '#1e3a8a';
+      }
+
+      // 5. Ablesepunkt bei x = 1 (P(1 | a)) aktualisieren
+      const guideGroup = document.getElementById('dynGuideGroup');
+      if (currentA === 0) {
+        if (guideGroup) guideGroup.style.display = 'none';
+      } else {
+        if (guideGroup) guideGroup.style.display = 'block';
+
+        const p1X = ORIGIN_X + 1 * SCALE_X; // 338
+        const p1Y = ORIGIN_Y - currentA * SCALE_Y;
+
+        const lineV = document.getElementById('guideLineV');
+        if (lineV) {
+          lineV.setAttribute('x1', p1X);
+          lineV.setAttribute('y1', ORIGIN_Y);
+          lineV.setAttribute('x2', p1X);
+          lineV.setAttribute('y2', p1Y);
+        }
+
+        const lineH = document.getElementById('guideLineH');
+        if (lineH) {
+          lineH.setAttribute('x1', p1X);
+          lineH.setAttribute('y1', p1Y);
+          lineH.setAttribute('x2', ORIGIN_X);
+          lineH.setAttribute('y2', p1Y);
+        }
+
+        const pt = document.getElementById('guidePoint');
+        if (pt) {
+          pt.setAttribute('cx', p1X);
+          pt.setAttribute('cy', p1Y);
+        }
+
+        const bg = document.getElementById('guideBadgeBg');
+        const txt = document.getElementById('guideBadgeTxt');
+        if (bg && txt) {
+          bg.setAttribute('x', p1X + 10);
+          bg.setAttribute('y', p1Y - 11);
+          txt.setAttribute('x', p1X + 45);
+          txt.setAttribute('y', p1Y + 4);
+          txt.textContent = `P(1 | ${currentA.toFixed(1).replace('.', ',')})`;
+        }
+      }
+
+      // KaTeX nach DOM-Änderungen anstoßen
+      triggerKaTeX();
+    }
+
+    // Interaktive Klapp-Boxen für Aufgaben
+    function toggleSection(btn) {
+      const content = btn.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        btn.textContent = "Antwort & Erklärung aufdecken";
+        btn.classList.remove("active");
+      } else {
+        content.style.display = "block";
+        btn.textContent = "Antwort verbergen";
+        btn.classList.add("active");
+        triggerKaTeX();
+      }
+    }
+
+    // Initiale Ausführung beim Laden
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Feste Referenz-Parabel y = x² zeichnen
+      const refPath = document.getElementById('refParabolaPath');
+      if (refPath) {
+        refPath.setAttribute('d', calcParabolaPath(1.0));
+      }
+
+      // 2. Initial mit a = 2.0 starten
+      setParamA(2.0);
+    });
+  </script>
+
+</body>
+</html>
