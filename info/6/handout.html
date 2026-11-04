@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handout &amp; Kompetenzen: Farben, RGB &amp; Hex-Zahlen | Informatik 6</title>
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Schulblatt- & Lehrwerk-Standard (Calibri, Füller-Königsblau) */
+    :root {
+      --font-main: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      --color-blue: #1e3a8a;       /* Füller-Königsblau */
+      --color-blue-dark: #172554;
+      --color-blue-light: #eff6ff;
+      --color-text: #111827;       /* Füllertiefes Schwarz */
+      --color-text-muted: #4b5563;
+      --color-border: #cbd5e1;
+      --color-border-light: #e2e8f0;
+      --color-merke: #dc2626;      /* Lehrer-Rot für Merkkasten */
+      --color-bg-page: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--color-text);
+      background-color: var(--color-bg-page);
+      line-height: 1.38;
+      font-size: 10.5pt;
+      -webkit-font-smoothing: antialiased;
+      padding: 15px 0;
+    }
+
+    /* Exakte DIN-A4-Seiten (210mm x 297mm) */
+    .page {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      padding: 10mm 13mm;
+      margin: 0 auto 18px auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
+      }
+      body {
+        background: #ffffff;
+        padding: 0;
+        margin: 0;
+      }
+      .page {
+        width: 100% !important;
+        height: 277mm !important;
+        max-height: 277mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        overflow: hidden;
+      }
+      .page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Druck-Leiste oben (nur Screen) */
+    .screen-toolbar {
+      max-width: 210mm;
+      margin: 0 auto 12px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1f2937;
+      color: #f8fafc;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .screen-toolbar .btn-print {
+      background: var(--color-blue);
+      color: #ffffff;
+      border: 1px solid #3b82f6;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 10pt;
+      cursor: pointer;
+    }
+    .screen-toolbar .btn-print:hover {
+      background: #2563eb;
+    }
+
+    /* Dokumenten-Kopf */
+    .doc-header {
+      border-bottom: 2px solid var(--color-blue);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+    .doc-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8pt;
+      color: var(--color-text-muted);
+      margin-bottom: 2px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .doc-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .doc-title {
+      font-size: 14pt;
+      font-weight: 800;
+      color: var(--color-blue);
+      line-height: 1.15;
+    }
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    /* Schüler-Namenszeile */
+    .student-fields {
+      display: flex;
+      gap: 20px;
+      font-size: 9.5pt;
+      margin-top: 4px;
+      padding-top: 3px;
+      border-top: 1px dashed var(--color-border);
+    }
+    .student-field {
+      display: flex;
+      gap: 5px;
+      align-items: baseline;
+    }
+    .student-field .dots {
+      display: inline-block;
+      border-bottom: 1px dotted var(--color-text);
+      min-width: 140px;
+      height: 13px;
+    }
+
+    /* Abschnitts-Überschriften */
+    .section-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--color-blue);
+      margin: 8px 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--color-blue);
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 8.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Boxen & Kacheln */
+    .info-card {
+      border: 1px solid var(--color-border);
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 6px 10px;
+      margin: 4px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .info-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 4px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* Merkkasten (Rot, Text dunkel) */
+    .merke-box {
+      border: 2px solid var(--color-merke);
+      border-radius: 5px;
+      background: #fffafa;
+      padding: 6px 10px;
+      margin: 6px 0 2px 0;
+      position: relative;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .merke-tag {
+      display: inline-block;
+      background: var(--color-merke);
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+    .merke-content {
+      font-size: 9.5pt;
+      color: var(--color-text);
+      line-height: 1.35;
+    }
+
+    /* Tabellen */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 4px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .calc-table th, .calc-table td {
+      border: 1px solid var(--color-border);
+      padding: 3px 6px;
+      text-align: left;
+    }
+    .calc-table th {
+      background: #f1f5f9;
+      color: var(--color-blue);
+      font-weight: 700;
+      font-size: 8.5pt;
+    }
+    .calc-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+    .text-center { text-align: center !important; }
+
+    /* Code-Pills & Hex */
+    .code-pill {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9pt;
+      font-weight: 700;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #0f172a;
+    }
+    .code-hex {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 800;
+      color: var(--color-blue);
+      letter-spacing: 0.8px;
+    }
+
+    /* Farbfelder */
+    .color-swatch {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      border: 1px solid #94a3b8;
+      vertical-align: middle;
+      margin-right: 3px;
+    }
+
+    /* Umrechnungs-Schablone */
+    .conversion-step {
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 5px;
+      padding: 6px 8px;
+      font-size: 9pt;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .conversion-step strong {
+      color: var(--color-blue);
+    }
+
+    /* Kompetenzen-Tabelle */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin: 4px 0 8px 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .comp-table th, .comp-table td {
+      border: 1px solid var(--color-border);
+      padding: 4px 8px;
+      vertical-align: middle;
+    }
+    .comp-table th {
+      background: #f1f5f9;
+      color: var(--color-blue);
+      font-weight: 700;
+    }
+
+    /* Aufgaben & Linien */
+    .task-item {
+      margin-bottom: 7px;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .task-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: var(--color-blue);
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 8.5pt;
+      font-weight: 700;
+      margin-right: 3px;
+    }
+    .dotted-lines {
+      margin-top: 3px;
+      line-height: 18px;
+      background-image: radial-gradient(circle, #94a3b8 1px, transparent 1px);
+      background-size: 5px 18px;
+      height: 36px;
+      border-bottom: 1px dotted #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Toolbar -->
+  <div class="screen-toolbar no-print">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="index.html" style="color:#93c5fd; text-decoration:none; font-weight:700; font-size:9.5pt;">← Zur Übersicht</a>
+      <span><strong>Informatik 6:</strong> Handout &amp; Kompetenzen zur Lernzielkontrolle</span>
+    </div>
+    <button class="btn-print" onclick="window.print()">Dokument drucken / Als PDF speichern</button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SEITE 1: Farbmodelle, Subpixel & RGB-Codes -->
+  <!-- ========================================== -->
+  <div class="page">
+    
+    <header class="doc-header">
+      <div class="doc-meta">
+        <span>Gymnasium • Fachbereich Informatik</span>
+        <span>Klasse 6 • Vorbereitung Lernzielkontrolle</span>
+      </div>
+      <div class="doc-title-row">
+        <h1 class="doc-title">Handout: Farben &amp; Farbmodelle im Computer</h1>
+        <span class="doc-subtitle">Teil 1: Bildschirmtechnik &amp; RGB-Modell</span>
+      </div>
+      <div class="student-fields">
+        <div class="student-field"><span>Name:</span> <span class="dots" style="min-width:210px;"></span></div>
+        <div class="student-field"><span>Klasse:</span> <span class="dots" style="min-width:55px;"></span></div>
+        <div class="student-field"><span>Datum:</span> <span class="dots" style="min-width:90px;"></span></div>
+      </div>
+    </header>
+
+    <!-- 1. Lichtfarben vs. Körperfarben & Subpixel -->
+    <h2 class="section-title"><span class="section-num">1</span> Lichtfarben vs. Körperfarben &amp; Subpixel-Aufbau</h2>
+    <div class="info-grid-2">
+      <div class="info-card">
+        <strong style="color:var(--color-blue);">Bildschirm (Lichtfarben / Additiv)</strong>
+        <p style="font-size:9pt; margin-top:2px;">
+          Der Bildschirm ist im Ruhezustand <strong>schwarz</strong>. Farben entstehen durch direktes <strong>Licht</strong>. Je mehr Licht eingeschaltet wird, desto heller wird das Bild: <strong>Rot + Grün + Blau = Weiß</strong>.
+        </p>
+      </div>
+      <div class="info-card">
+        <strong style="color:var(--color-text-muted);">Malkasten (Körperfarben / Subtraktiv)</strong>
+        <p style="font-size:9pt; margin-top:2px;">
+          Das Papier ist <strong>weiß</strong>. Farbpigmente filtern (schlucken) Licht. Je mehr Farben gemischt werden, desto dunkler wird es (schmutziges Dunkelbraun/Schwarz).
+        </p>
+      </div>
+    </div>
+
+    <!-- Subpixel Kachel -->
+    <div class="info-card" style="margin-top:2px;">
+      <p style="font-size:9.5pt;">
+        <strong>Der Subpixel-Aufbau:</strong> Ein Bildschirmpunkt (<strong>Pixel</strong>) besteht aus drei winzigen Leuchtstreifen, den <strong>Subpixeln</strong>:
+      </p>
+      <div style="display:flex; justify-content:center; gap:25px; margin:4px 0; font-weight:700; font-size:9pt;">
+        <span><span class="color-swatch" style="background:#ef4444;"></span> Rot (R)</span>
+        <span><span class="color-swatch" style="background:#22c55e;"></span> Grün (G)</span>
+        <span><span class="color-swatch" style="background:#3b82f6;"></span> Blau (B)</span>
+      </div>
+      <p style="font-size:8.5pt; color:var(--color-text-muted);">
+        Weil die Subpixel mikroskopisch klein sind, verschmelzen ihre Lichtstrahlen im menschlichen Auge zu einer Mischfarbe.
+      </p>
+    </div>
+
+    <!-- 2. Additive Mischregeln -->
+    <h2 class="section-title"><span class="section-num">2</span> Der additive Farbraum: Mischregeln des Lichts</h2>
+    <table class="calc-table">
+      <thead>
+        <tr>
+          <th>Eingeschaltete Leuchtpunkte</th>
+          <th style="width:130px;">Ergebnis-Lichtfarbe</th>
+          <th>Merkhilfe / Erklärung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Rot + Grün</strong></td>
+          <td><span class="color-swatch" style="background:#ffff00;"></span> <strong>Gelb</strong></td>
+          <td>Überraschung bei Licht: Rot und Grün zusammen leuchten hellgelb!</td>
+        </tr>
+        <tr>
+          <td><strong>Grün + Blau</strong></td>
+          <td><span class="color-swatch" style="background:#00ffff;"></span> <strong>Cyan</strong></td>
+          <td>Helles Türkisblau (Druckerblau).</td>
+        </tr>
+        <tr>
+          <td><strong>Rot + Blau</strong></td>
+          <td><span class="color-swatch" style="background:#ff00ff;"></span> <strong>Magenta</strong></td>
+          <td>Leuchtendes Purpur / Pink.</td>
+        </tr>
+        <tr>
+          <td><strong>Rot + Grün + Blau (alle an)</strong></td>
+          <td><span class="color-swatch" style="background:#ffffff; border:1px solid #000;"></span> <strong>Weiß</strong></td>
+          <td>Volle Lichtenergie aller drei Farben.</td>
+        </tr>
+        <tr>
+          <td><strong>Kein Licht (alle aus)</strong></td>
+          <td><span class="color-swatch" style="background:#000000;"></span> <strong>Schwarz</strong></td>
+          <td>Der Bildschirm bleibt komplett dunkel.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Das RGB-Dezimalsystem -->
+    <h2 class="section-title"><span class="section-num">3</span> Der Farbcode im RGB-Modell: <span class="code-pill">rgb(R, G, B)</span></h2>
+    <div class="info-card">
+      <p style="font-size:9.5pt;">
+        Damit der Computer Millionen Nuancen darstellen kann, wird jedes Subpixel in seiner Helligkeit geregelt:
+      </p>
+      <ul style="margin:3px 0 3px 18px; font-size:9pt;">
+        <li>Zahlenbereich für jeden der drei Kanäle: <strong>0 bis 255</strong></li>
+        <li><strong>0</strong> = Subpixel ist komplett <strong>aus</strong> (kein Licht) &nbsp;|&nbsp; <strong>255</strong> = <strong>maximale Helligkeit</strong></li>
+        <li>Zusammen mit der Null ergibt das genau <strong>256 Helligkeitsstufen</strong> pro Farbkanal.</li>
+      </ul>
+      <p style="font-size:8.5pt; color:var(--color-text-muted); margin-top:2px;">
+        Beispiele: <code>rgb(255, 0, 0)</code> = Rot &nbsp;|&nbsp; <code>rgb(255, 255, 0)</code> = Gelb &nbsp;|&nbsp; <code>rgb(0, 255, 255)</code> = Cyan
+      </p>
+    </div>
+
+    <!-- Merkkasten Graustufen -->
+    <div class="merke-box">
+      <span class="merke-tag">Merke: Graustufen-Regel</span>
+      <div class="merke-content">
+        Sind alle drei Zahlen im RGB-Code <strong>exakt gleich groß</strong>, neutralisieren sich die Farben:
+        <ul style="margin:2px 0 1px 16px;">
+          <li><code>rgb(0, 0, 0)</code> = Schwarz (Dunkelheit)</li>
+          <li><code>rgb(80, 80, 80)</code> = Dunkelgrau &nbsp;|&nbsp; <code>rgb(180, 180, 180)</code> = Hellgrau</li>
+          <li><code>rgb(255, 255, 255)</code> = Weiß (strahlendes Maximum)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SEITE 2: Hexadezimalsystem, Umrechnung & Hex-Farbcodes  -->
+  <!-- ======================================================== -->
+  <div class="page">
+    
+    <header class="doc-header">
+      <div class="doc-meta">
+        <span>Gymnasium • Fachbereich Informatik</span>
+        <span>Klasse 6 • Vorbereitung Lernzielkontrolle</span>
+      </div>
+      <div class="doc-title-row">
+        <h1 class="doc-title">Handout: Farben &amp; Farbmodelle im Computer</h1>
+        <span class="doc-subtitle">Teil 2: Hexadezimalsystem &amp; Hex-Farbcodes</span>
+      </div>
+    </header>
+
+    <!-- 4. Das Hexadezimalsystem -->
+    <h2 class="section-title"><span class="section-num">4</span> Das Hexadezimalsystem (Basis 16)</h2>
+    <div class="info-card">
+      <p style="font-size:9pt;">
+        Das Hexadezimalsystem rechnet mit <strong>16 Ziffern</strong>. Ab der Zehn werden Buchstaben verwendet:
+      </p>
+      <table class="calc-table text-center" style="margin-top:4px;">
+        <thead>
+          <tr>
+            <th>Wert</th>
+            <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+            <th style="background:#e0f2fe; color:var(--color-blue);">10</th>
+            <th style="background:#e0f2fe; color:var(--color-blue);">11</th>
+            <th style="background:#e0f2fe; color:var(--color-blue);">12</th>
+            <th style="background:#e0f2fe; color:var(--color-blue);">13</th>
+            <th style="background:#e0f2fe; color:var(--color-blue);">14</th>
+            <th style="background:#e0f2fe; color:var(--color-blue);">15</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Hex</th>
+            <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+            <td><strong>A</strong></td><td><strong>B</strong></td><td><strong>C</strong></td><td><strong>D</strong></td><td><strong>E</strong></td><td><strong>F</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. Umrechnung Hex <-> Dezimal -->
+    <h2 class="section-title"><span class="section-num">5</span> Umrechnung zwischen Hexadezimal und Dezimal</h2>
+    
+    <div class="info-grid-2">
+      <!-- Hex in Dezimal -->
+      <div class="conversion-step">
+        <strong>A) Hex-Zahl $\rightarrow$ Dezimalzahl</strong>
+        <p style="margin:2px 0; font-size:8.5pt;">Nutze die Stellenwerttafel von links nach rechts:</p>
+        <p style="text-align:center; font-weight:700; color:var(--color-blue); margin:3px 0; font-size:8.5pt;">
+          $\text{256er-Stelle} \quad\Big\vert\quad \text{16er-Stelle} \quad\Big\vert\quad \text{1er-Stelle}$
+        </p>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:3px; padding:4px 6px; margin-top:3px;">
+          <strong>Beispiel 1:</strong> <span class="code-hex">a10</span> in Dezimal:
+          <ul style="margin:2px 0 0 14px; font-size:8.5pt;">
+            <li>256er-Stelle: $a = 10 \rightarrow 10 \cdot 256 = 2560$</li>
+            <li>16er-Stelle: $1 \rightarrow 1 \cdot 16 = 16$</li>
+            <li>1er-Stelle: $0 \rightarrow 0 \cdot 1 = 0$</li>
+            <li><strong>Summe:</strong> $2560 + 16 + 0 = \mathbf{2576}$</li>
+          </ul>
+        </div>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:3px; padding:4px 6px; margin-top:3px;">
+          <strong>Beispiel 2 (zweistellig):</strong> <span class="code-hex">3B</span> in Dezimal:
+          <p style="font-size:8.5pt; margin-top:1px;">
+            $3 \cdot 16 + \text{B} = 3 \cdot 16 + 11 = 48 + 11 = \mathbf{59}$
+          </p>
+        </div>
+      </div>
+
+      <!-- Dezimal in Hex (Abziehmethode) -->
+      <div class="conversion-step">
+        <strong>B) Dezimalzahl $\rightarrow$ Hex-Zahl (Abziehmethode)</strong>
+        <p style="margin:2px 0; font-size:8.5pt;">Größte passende Stelle finden, abziehen und Rest weiterführen:</p>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:3px; padding:4px 6px; margin-top:3px;">
+          <strong>Beispiel 1:</strong> <span class="code-pill">153</span> als Hex-Zahl:
+          <ol style="margin:2px 0 0 14px; font-size:8.5pt;">
+            <li>Wie oft passt 16 hinein? $\rightarrow$ <strong>9-mal</strong> ($9 \cdot 16 = 144$).<br>
+                $\rightarrow$ An die <strong>16er-Stelle</strong> kommt eine <strong>9</strong>.</li>
+            <li>Abziehen: $153 - 144 = \mathbf{9}$.</li>
+            <li>Rest für die <strong>1er-Stelle</strong> ist <strong>9</strong> $\rightarrow$ Hex: <span class="code-hex">99</span></li>
+          </ol>
+        </div>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:3px; padding:4px 6px; margin-top:3px;">
+          <strong>Beispiel 2:</strong> <span class="code-pill">45</span> als Hex-Zahl:
+          <ol style="margin:2px 0 0 14px; font-size:8.5pt;">
+            <li>Wie oft passt 16 hinein? $\rightarrow$ <strong>2-mal</strong> ($2 \cdot 16 = 32$).<br>
+                $\rightarrow$ An die <strong>16er-Stelle</strong> kommt eine <strong>2</strong>.</li>
+            <li>Abziehen: $45 - 32 = \mathbf{13}$ ($13 = \mathbf{D}$).<br>
+                $\rightarrow$ Hex: <span class="code-hex">2D</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Hex-Farbcodes (ohne Raute) -->
+    <h2 class="section-title"><span class="section-num">6</span> Farbcodes im Hex-System: <span class="code-hex">RR GG BB</span></h2>
+    <div class="info-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span class="code-hex" style="background:#fee2e2; padding:2px 6px; border-radius:3px;">RR</span> &nbsp;
+          <span class="code-hex" style="background:#dcfce7; padding:2px 6px; border-radius:3px;">GG</span> &nbsp;
+          <span class="code-hex" style="background:#dbeafe; padding:2px 6px; border-radius:3px;">BB</span>
+          <span style="font-size:8.5pt; color:var(--color-text-muted); margin-left:8px;">
+            (2 Stellen Rot, 2 Stellen Grün, 2 Stellen Blau)
+          </span>
+        </div>
+        <div style="font-size:8.5pt;">
+          <strong>Warum 2 Stellen?</strong> Weil <span class="code-hex">FF</span> genau $15 \cdot 16 + 15 = \mathbf{255}$ ist!
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Referenztabelle der Standardfarben (OHNE Raute) -->
+    <h2 class="section-title"><span class="section-num">7</span> Spickzettel: Die wichtigsten Farbcodes im Vergleich</h2>
+    <table class="calc-table">
+      <thead>
+        <tr>
+          <th>Farbname</th>
+          <th style="width:40px;" class="text-center">Farbe</th>
+          <th>RGB-Dezimalcode</th>
+          <th>Hex-Code</th>
+          <th>Was leuchtet auf dem Display?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Rot</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#ff0000;"></span></td>
+          <td><code>rgb(255, 0, 0)</code></td>
+          <td><span class="code-hex">FF 00 00</span></td>
+          <td>Nur Rot auf Maximum</td>
+        </tr>
+        <tr>
+          <td><strong>Grün</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#00ff00;"></span></td>
+          <td><code>rgb(0, 255, 0)</code></td>
+          <td><span class="code-hex">00 FF 00</span></td>
+          <td>Nur Grün auf Maximum</td>
+        </tr>
+        <tr>
+          <td><strong>Blau</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#0000ff;"></span></td>
+          <td><code>rgb(0, 0, 255)</code></td>
+          <td><span class="code-hex">00 00 FF</span></td>
+          <td>Nur Blau auf Maximum</td>
+        </tr>
+        <tr>
+          <td><strong>Gelb</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#ffff00;"></span></td>
+          <td><code>rgb(255, 255, 0)</code></td>
+          <td><span class="code-hex">FF FF 00</span></td>
+          <td>Rot und Grün leuchten zusammen</td>
+        </tr>
+        <tr>
+          <td><strong>Cyan</strong> (Türkis)</td>
+          <td class="text-center"><span class="color-swatch" style="background:#00ffff;"></span></td>
+          <td><code>rgb(0, 255, 255)</code></td>
+          <td><span class="code-hex">00 FF FF</span></td>
+          <td>Grün und Blau leuchten zusammen</td>
+        </tr>
+        <tr>
+          <td><strong>Magenta</strong> (Pink)</td>
+          <td class="text-center"><span class="color-swatch" style="background:#ff00ff;"></span></td>
+          <td><code>rgb(255, 0, 255)</code></td>
+          <td><span class="code-hex">FF 00 FF</span></td>
+          <td>Rot und Blau leuchten zusammen</td>
+        </tr>
+        <tr>
+          <td><strong>Weiß</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#ffffff; border:1px solid #000;"></span></td>
+          <td><code>rgb(255, 255, 255)</code></td>
+          <td><span class="code-hex">FF FF FF</span></td>
+          <td>Alle drei Subpixel leuchten voll</td>
+        </tr>
+        <tr>
+          <td><strong>Schwarz</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#000000;"></span></td>
+          <td><code>rgb(0, 0, 0)</code></td>
+          <td><span class="code-hex">00 00 00</span></td>
+          <td>Alle drei Subpixel sind aus (Bildschirm dunkel)</td>
+        </tr>
+        <tr>
+          <td><strong>Mittelgrau</strong></td>
+          <td class="text-center"><span class="color-swatch" style="background:#808080;"></span></td>
+          <td><code>rgb(128, 128, 128)</code></td>
+          <td><span class="code-hex">80 80 80</span></td>
+          <td>Alle drei Subpixel auf mittlerer Helligkeit</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- SEITE 3: Kompetenzen-Übersicht & Trainingsaufgaben      -->
+  <!-- ======================================================= -->
+  <div class="page">
+    
+    <header class="doc-header">
+      <div class="doc-meta">
+        <span>Gymnasium • Fachbereich Informatik</span>
+        <span>Klasse 6 • Vorbereitung Lernzielkontrolle</span>
+      </div>
+      <div class="doc-title-row">
+        <h1 class="doc-title">Kompetenzen &amp; Trainingsaufgaben</h1>
+        <span class="doc-subtitle">Das musst du für die Lernzielkontrolle können</span>
+      </div>
+    </header>
+
+    <!-- Teil A: Kompetenzen-Liste (ohne Selbsteinschätzung) -->
+    <h2 class="section-title"><span class="section-num">A</span> Was du für den Test können musst</h2>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="width:26%;">Themenbereich</th>
+          <th>Kompetenzbeschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Farbmodelle</strong></td>
+          <td>Ich kann den Unterschied zwischen Lichtfarben (Bildschirm) und Körperfarben (Tuschkasten) erklären.</td>
+        </tr>
+        <tr>
+          <td><strong>Bildschirm &amp; Subpixel</strong></td>
+          <td>Ich kann erklären, wie ein Pixel aus drei Subpixeln (Rot, Grün, Blau) aufgebaut ist.</td>
+        </tr>
+        <tr>
+          <td><strong>Mischregeln</strong></td>
+          <td>Ich kann die additiven Mischfarben (Gelb, Cyan, Magenta, Weiß, Schwarz) angeben.</td>
+        </tr>
+        <tr>
+          <td><strong>RGB-Dezimalcode</strong></td>
+          <td>Ich kann den Aufbau von <code>rgb(R, G, B)</code> und den Zahlenbereich 0 bis 255 erklären.</td>
+        </tr>
+        <tr>
+          <td><strong>Graustufen-Regel</strong></td>
+          <td>Ich kann an einem Code erkennen, ob es sich um eine Graustufe handelt (alle drei Werte gleich).</td>
+        </tr>
+        <tr>
+          <td><strong>Hexadezimalsystem</strong></td>
+          <td>Ich kann die 16 Ziffern aufzählen und weiß, für welche Werte die Buchstaben A bis F stehen.</td>
+        </tr>
+        <tr>
+          <td><strong>Hex in Dezimal</strong></td>
+          <td>Ich kann Hex-Zahlen (wie <span class="code-hex">3B</span> oder <span class="code-hex">a10</span>) mit den Stellenwerten (256, 16, 1) in Dezimal umrechnen.</td>
+        </tr>
+        <tr>
+          <td><strong>Dezimal in Hex</strong></td>
+          <td>Ich kann Dezimalzahlen (wie <span class="code-pill">153</span> oder <span class="code-pill">45</span>) mit der Abziehmethode in eine Hex-Zahl umwandeln.</td>
+        </tr>
+        <tr>
+          <td><strong>Hex-Farbcodes</strong></td>
+          <td>Ich kann Farbcodes im Schema <span class="code-hex">RR GG BB</span> (ohne Raute) zerlegen und die Farbe bestimmen.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Teil B: Typische Test-Aufgaben zum Üben -->
+    <h2 class="section-title"><span class="section-num">B</span> Typische Test-Aufgaben zum Ausprobieren</h2>
+    
+    <div class="task-item">
+      <p><strong><span class="task-num">1</span> Mischfarben bestimmen:</strong> Welche Farbe siehst du auf dem iPad, wenn...</p>
+      <div style="font-size:9pt; margin:3px 0 0 6px;">
+        a) nur das rote und das grüne Subpixel voll leuchten: ____________________<br>
+        b) alle drei Subpixel auf maximale Helligkeit geschaltet sind: ____________________<br>
+        c) nur das grüne und das blaue Subpixel leuchten: ____________________
+      </div>
+    </div>
+
+    <div class="task-item">
+      <p><strong><span class="task-num">2</span> Hex-Zahlen in Dezimalzahlen umrechnen:</strong></p>
+      <div style="font-size:9pt; margin:3px 0 0 6px;">
+        a) Berechne den Dezimalwert der Hex-Zahl <span class="code-hex">2C</span> mit Rechnung:
+        <div class="dotted-lines" style="height:22px;"></div>
+        b) Berechne den Dezimalwert der dreistelligen Hex-Zahl <span class="code-hex">b05</span> (256er-Stelle ist $b=11$):
+        <div class="dotted-lines" style="height:22px;"></div>
+      </div>
+    </div>
+
+    <div class="task-item">
+      <p><strong><span class="task-num">3</span> Dezimalzahlen in Hex-Zahlen umwandeln:</strong></p>
+      <div style="font-size:9pt; margin:3px 0 0 6px;">
+        Wandle die Zahl <strong>178</strong> mit der Abziehmethode in eine Hex-Zahl um:
+        <div class="dotted-lines" style="height:28px;"></div>
+      </div>
+    </div>
+
+    <div class="task-item">
+      <p><strong><span class="task-num">4</span> Hex-Farbcodes deuten (ohne Raute):</strong></p>
+      <div style="font-size:9pt; margin:3px 0 0 6px;">
+        a) Welche Farbe erzeugt der Code <span class="code-hex">00 FF FF</span>? &nbsp; Antwort: ____________________<br>
+        b) Wie lautet der Hex-Farbcode für reines Gelb? &nbsp; Antwort: <span class="code-hex">___ ___ ___</span><br>
+        c) Ist <span class="code-hex">40 40 40</span> eine bunte Farbe oder ein Grauton? Begründung:
+        <div class="dotted-lines" style="height:22px;"></div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

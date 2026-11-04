@@ -168,6 +168,21 @@
       margin: 0 auto;
     }
 
+    /* ── NOTICE CARD (ÜBERGANGSPHASE) ── */
+    .notice-card {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 1.1rem 1.35rem;
+      margin-bottom: 1.75rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #1e3a8a;
+    }
+    .notice-card strong {
+      color: #1e3a8a;
+    }
+
     /* ── ZUGANGSDATEN-CARD ── */
     .account-card {
       background: #ffffff;
@@ -405,31 +420,38 @@
 
     <!-- HERO -->
     <header class="hero">
-      <div class="badge-pill">St&auml;dtisches Gymnasium L&ouml;hne &bull; Klasse 5</div>
+      <div class="badge-pill">St&auml;dtisches Gymnasium L&ouml;hne &bull; Klasse 5 &bull; Stand: November 2026</div>
       <h1>Digitale Schulzug&auml;nge zu Hause einrichten</h1>
       <p class="subtitle">
-        Schritt-f&uuml;r-Schritt-Anleitung f&uuml;r <strong>WebUntis</strong> (Stunden- und Vertretungsplan) und <strong>Microsoft Teams</strong> (Aufgaben und Klassenteam).
+        Schritt-f&uuml;r-Schritt-Anleitung f&uuml;r <strong>WebUntis</strong> (Stunden- und Vertretungsplan) und <strong>Microsoft Teams</strong> (&Uuml;bergangsphase iServ-Einf&uuml;hrung).
       </p>
     </header>
+
+    <!-- HINWEISBOX ÜBERGANGSPHASE -->
+    <div class="notice-card">
+      <strong>Wichtiger Hinweis zur aktuellen &Uuml;bergangsphase (iServ-Einf&uuml;hrung):</strong><br>
+      In den Herbstferien hat unsere Schule auf die neue Schulplattform <strong>iServ</strong> umgestellt. Gestern haben die Sch&uuml;lerinnen und Sch&uuml;ler im Informatikunterricht ihr pers&ouml;nliches iServ-Kennwort vergeben.<br>
+      Das iServ-System wird <strong>erst in ca. zwei Wochen technisch mit Microsoft synchronisiert</strong>. F&uuml;r die Einrichtung von <strong>WebUntis</strong> (und Microsoft Teams) m&uuml;ssen Sie aktuell daher <u>unbedingt die Zugangsdaten vom urspr&uuml;nglichen Passwortk&auml;rtchen</u> verwenden, das vor den Herbstferien ausgeteilt wurde (Initialkennwort) &ndash; noch <em>nicht</em> das neue iServ-Passwort!
+    </div>
 
     <!-- ZUGANGSDATEN-CARD -->
     <section id="konto" class="account-card">
       <div class="account-card-header">
-        <h2>Die Zugangsdaten Ihres Kindes</h2>
+        <h2>Aktuelle Zugangsdaten f&uuml;r WebUntis &amp; Teams (Passwortk&auml;rtchen vor den Ferien)</h2>
       </div>
       <p style="font-size: 0.95rem; color: #334155;">
-        Die Sch&uuml;lerinnen und Sch&uuml;ler haben ihre Computerzug&auml;nge im Informatikunterricht erhalten und ihr pers&ouml;nliches, sicheres Kennwort eingerichtet. Mit diesen Daten melden Sie sich bei allen digitalen Schuldiensten an:
+        Bitte nutzen Sie f&uuml;r WebUntis und Microsoft aktuell die Daten von dem vor den Ferien ausgeteilten K&auml;rtchen:
       </p>
       <div class="account-grid">
         <div class="account-box">
           <div class="account-box-label">Benutzername / E-Mail-Adresse</div>
           <div class="account-box-val">vorname.nachname@sgl.schule</div>
-          <div class="account-box-note">Das pers&ouml;nliche Schulkonto am Gymnasium L&ouml;hne</div>
+          <div class="account-box-note">Das pers&ouml;nliche Schulkonto am Gymnasium L&ouml;hne (vom K&auml;rtchen)</div>
         </div>
         <div class="account-box">
           <div class="account-box-label">Kennwort (Passwort)</div>
-          <div class="account-box-val">Eigenes Passwort des Kindes</div>
-          <div class="account-box-note">Im Unterricht nach den 5 Sicherheits-Kriterien vergeben</div>
+          <div class="account-box-val">Initialkennwort vom Passwortk&auml;rtchen</div>
+          <div class="account-box-note">Wichtig: Das Kennwort vor den Ferien nutzen (noch NICHT das neue iServ-Passwort!)</div>
         </div>
       </div>
     </section>
@@ -458,7 +480,7 @@
           <div class="step-body">
             <div class="step-title">Login &uuml;ber Microsoft w&auml;hlen</div>
             <div class="step-desc">
-              Klicken Sie auf die Schaltfl&auml;che <span class="btn-pill">Mit Microsoft anmelden</span> (nicht das herk&ouml;mmliche Benutzername/Passwort-Feld nutzen). Geben Sie dort die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) sowie das neue Kennwort Ihres Kindes ein.
+              Klicken Sie auf die Schaltfl&auml;che <span class="btn-pill">Mit Microsoft anmelden</span> (nicht das herk&ouml;mmliche Benutzername/Passwort-Feld nutzen). Geben Sie dort die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) sowie das <strong>Initialkennwort vom Passwortk&auml;rtchen</strong> (vor den Ferien) ein.
             </div>
           </div>
         </div>
@@ -510,7 +532,7 @@
           <div class="step-body">
             <div class="step-title">Anmeldung mit dem Schulkonto</div>
             <div class="step-desc">
-              Geben Sie die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) und das im Unterricht vergebene Kennwort des Kindes ein.
+              Geben Sie die Schul-E-Mail (<span class="code-pill">...@sgl.schule</span>) und das <strong>Initialkennwort vom Passwortk&auml;rtchen</strong> des Kindes ein.
             </div>
           </div>
         </div>
@@ -533,15 +555,15 @@
       <div class="callout-tag">Wichtig &bull; Hinweise</div>
       <div class="callout-grid">
         <div class="callout-item">
-          <h4>Datenschutz &amp; Passwort-Schutz</h4>
+          <h4>&Uuml;bergangsphase &amp; spätere Neuanmeldung (in ca. 2 Wochen)</h4>
           <p>
-            Das Kennwort bleibt innerhalb der Familie und darf niemals an Mitsch&uuml;ler weitergegeben werden. Notieren Sie sich das Kennwort zu Hause an einem sicheren Ort.
+            Sobald iServ in ca. zwei Wochen technisch mit Microsoft synchronisiert wird, gilt einheitlich nur noch ein einziges Passwort f&uuml;r alle Dienste (das neue iServ-Kennwort). Zu diesem Zeitpunkt muss die WebUntis-Kopplung in der App einmalig neu vorgenommen werden.
           </p>
         </div>
         <div class="callout-item">
-          <h4>Hilfe bei technischen Problemen</h4>
+          <h4>Passwortk&auml;rtchen aufbewahren &amp; Medienteam</h4>
           <p>
-            Bei technischen Problemen k&ouml;nnen die Sch&uuml;lerinnen und Sch&uuml;ler das <strong>Medienteam der Schule</strong> ansprechen (jeden <strong>Montag und Donnerstag in der 2. gro&szlig;en Pause</strong>). Dort kann bei Bedarf auch das Kennwort zur&uuml;ckgesetzt werden.
+            Bitte bewahren Sie das urspr&uuml;ngliche K&auml;rtchen bis zum Abschluss der Synchronisation gut auf. Bei technischen Fragen oder Login-Problemen hilft das Medienteam der Schule (jeden <strong>Montag und Donnerstag in der 2. gro&szlig;en Pause</strong>).
           </p>
         </div>
       </div>
