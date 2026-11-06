@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Rechenwerke: Halbaddierer &amp; Volladdierer | Informatik Diff-9</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/main.css">
+
+  <!-- KaTeX für mathematische und logische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #f0fdfa;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --signal-on: #10b981;
+      --signal-off: #94a3b8;
+      --wire-inactive: #cbd5e1;
+      --wire-active: #10b981;
+      --wire-carry: #2563eb;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 4rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* PRESENTER TOOLBAR (Kopfzeile) */
+    .presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-back {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-nav-back:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .presenter-title-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .presenter-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #f8fafc;
+    }
+
+    .presenter-badge {
+      background: rgba(13, 148, 136, 0.35);
+      border: 1px solid #14b8a6;
+      color: #5eead4;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .presenter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+
+    .presenter-tab-btn {
+      background: rgba(255,255,255,0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .presenter-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.35);
+    }
+    .presenter-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: #2dd4bf;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.45);
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Header */
+    .hero-header {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem 2rem 1.75rem 2rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      margin-bottom: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #0d9488, #2563eb);
+    }
+
+    .badge-topic {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      border: 1px solid #99f6e4;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    .lead-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 860px;
+    }
+
+    /* Tab Panels */
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+      margin-bottom: 1.75rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.98rem;
+    }
+
+    /* Info Callouts */
+    .callout {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .callout-blue {
+      border-left-color: var(--accent);
+      background: #f0f7ff;
+    }
+
+    /* Interactive Simulation Layout */
+    .sim-container {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+      margin-top: 1rem;
+    }
+    @media (max-width: 860px) {
+      .sim-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sim-circuit-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .circuit-svg-wrap {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
+    }
+
+    .circuit-svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .circuit-wire {
+      stroke: var(--wire-inactive);
+      stroke-width: 2.5;
+      fill: none;
+      transition: stroke 0.2s, stroke-width 0.2s, filter 0.2s;
+    }
+    .circuit-wire.active {
+      stroke: var(--wire-active) !important;
+      stroke-width: 3.5 !important;
+      filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.75));
+    }
+    .circuit-wire.active-carry {
+      stroke: var(--wire-carry) !important;
+      stroke-width: 3.5 !important;
+      filter: drop-shadow(0 0 3px rgba(37, 99, 235, 0.75));
+    }
+
+    .gate-shape {
+      fill: #ffffff;
+      stroke: #0f172a;
+      stroke-width: 2;
+    }
+    .box-shape {
+      fill: #f1f5f9;
+      stroke: #0f172a;
+      stroke-width: 2;
+    }
+
+    .lamp-symbol-svg {
+      fill: #f8fafc;
+      stroke: #0f172a;
+      stroke-width: 2;
+      transition: all 0.2s;
+    }
+    .lamp-symbol-svg.on {
+      fill: #10b981;
+      stroke: #059669;
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.8));
+    }
+    .lamp-symbol-svg.on-carry {
+      fill: #2563eb;
+      stroke: #1d4ed8;
+      filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.8));
+    }
+
+    /* Control Controls */
+    .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .toggle-bit-btn {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      color: #0f172a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .toggle-bit-btn:hover {
+      border-color: #94a3b8;
+    }
+    .toggle-bit-btn.active {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    .toggle-bit-btn.active-carry {
+      background: #eff6ff;
+      border-color: #2563eb;
+      color: #1e40af;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .calc-indicator {
+      margin-top: 1rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .calc-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+    }
+
+    /* Schalttafel */
+    .truth-table-wrap {
+      overflow-x: auto;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 1rem;
+    }
+
+    .truth-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    .truth-table th {
+      background: #f8fafc;
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .truth-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+    }
+
+    .truth-table tr.active-row {
+      background: #f0fdf4 !important;
+      font-weight: 800;
+    }
+    .truth-table tr.active-row td {
+      border-top: 2px solid #10b981;
+      border-bottom: 2px solid #10b981;
+      color: #065f46;
+    }
+
+    .col-sum {
+      color: #059669;
+      font-weight: 700;
+    }
+    .col-carry {
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    /* Step Cards / Bauanleitung */
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .instruction-step {
+      display: flex;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: all 0.2s ease;
+    }
+    .instruction-step:hover {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: #0f172a;
+    }
+
+    .step-text {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    /* CircuitVerse External CTA Box */
+    .cv-banner {
+      background: linear-gradient(135deg, #042f2e, #0f172a);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 1.75rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 8px 24px rgba(4, 47, 46, 0.25);
+    }
+
+    .cv-banner-left {
+      max-width: 620px;
+    }
+
+    .cv-badge {
+      display: inline-block;
+      background: rgba(45, 212, 191, 0.2);
+      border: 1px solid #2dd4bf;
+      color: #5eead4;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+
+    .cv-banner h2 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .cv-banner p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .btn-launch-cv {
+      background: #14b8a6;
+      color: #042f2e;
+      font-weight: 800;
+      font-size: 0.98rem;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(20, 184, 166, 0.4);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-launch-cv:hover {
+      background: #2dd4bf;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(20, 184, 166, 0.55);
+    }
+
+    /* Training & Interactive Questions */
+    .qa-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .qa-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    .qa-tag {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .qa-question {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .qa-solution-box {
+      display: none;
+      background: #f8fafc;
+      border-left: 3px solid #10b981;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .qa-solution-box.visible {
+      display: block;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .btn-reveal-solution {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .btn-reveal-solution:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 3.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRESENTER HEADER BAR -->
+  <header class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Portal</a>
+      <div class="presenter-title-box">
+        <span class="presenter-title">Rechenwerke: Addierer</span>
+        <span class="presenter-badge">Thema 3</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="presenter-tabs" aria-label="Unterrichts-Reiter">
+      <button class="presenter-tab-btn active" onclick="switchTab('tab-bruecke')">1. Didaktische Brücke</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-halbaddierer')">2. Halbaddierer (HA)</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-volladdierer')">3. Volladdierer (VA)</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-circuitverse')">4. CircuitVerse Labor</button>
+      <button class="presenter-tab-btn" onclick="switchTab('tab-training')">5. Aufgaben &amp; Training</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO HEADER -->
+    <section class="hero-header">
+      <span class="badge-topic">Informatik Differenzierung 9 • Technische Informatik</span>
+      <h1>Vom Logikgatter zum Rechenwerk: Halb- &amp; Volladdierer</h1>
+      <p class="lead-subtitle">
+        Wie rechnet ein Computer aus Silizium und Strom? Aus den logischen Grundgattern (XOR, UND, ODER) bauen wir Schritt für Schritt digitale Schaltungen, die Binärzahlen blitzschnell addieren können.
+      </p>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: BRÜCKE & MOTIVATION                -->
+    <!-- ========================================== -->
+    <section id="tab-bruecke" class="tab-panel active">
+      <div class="content-card">
+        <h2 class="section-title">
+          <span class="section-num">1</span>
+          Die Brücke: Von der schriftlichen Addition zur Schalttafel
+        </h2>
+        <p class="section-desc">
+          Aus der Einheit zum Binärsystem wissen wir, wie die schriftliche Addition zweier einzelner Bits funktioniert:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:1rem; text-align:center;">
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">Fall 1</div>
+            <div style="font-size:1.25rem; font-family:'JetBrains Mono'; font-weight:800; margin:6px 0;">$0_2 + 0_2 = 0_2$</div>
+            <div style="font-size:0.88rem; color:var(--text-muted);">Summe $0$, Übertrag $0$</div>
+          </div>
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:1rem; text-align:center;">
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">Fall 2</div>
+            <div style="font-size:1.25rem; font-family:'JetBrains Mono'; font-weight:800; margin:6px 0;">$0_2 + 1_2 = 1_2$</div>
+            <div style="font-size:0.88rem; color:var(--text-muted);">Summe $1$, Übertrag $0$</div>
+          </div>
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:1rem; text-align:center;">
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">Fall 3</div>
+            <div style="font-size:1.25rem; font-family:'JetBrains Mono'; font-weight:800; margin:6px 0;">$1_2 + 0_2 = 1_2$</div>
+            <div style="font-size:0.88rem; color:var(--text-muted);">Summe $1$, Übertrag $0$</div>
+          </div>
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:1rem; text-align:center;">
+            <div style="font-size:0.85rem; color:#1e40af; font-weight:700;">Fall 4 (Übertrag!)</div>
+            <div style="font-size:1.25rem; font-family:'JetBrains Mono'; font-weight:800; margin:6px 0; color:#1e3a8a;">$1_2 + 1_2 = 10_2$</div>
+            <div style="font-size:0.88rem; color:#1e40af;">Summe $0$, Übertrag $1$</div>
+          </div>
+        </div>
+
+        <div class="callout callout-blue">
+          <strong>Schlüsselerkenntnis der Technischen Informatik:</strong><br>
+          Wenn wir die beiden Ausgangsbits (Summe $S$ und Übertrag $C$) getrennt als Schalttafel betrachten, erkennen wir sofort unsere bekannten Logikgatter wieder:
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-top:1.25rem;">
+          <div class="truth-table-wrap">
+            <h3 style="font-size:1rem; margin-bottom:0.75rem; color:#059669; font-weight:700;">1. Das Summenbit $S$ (XOR-Gatter)</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:0.5rem;">
+              Das Summenbit $S$ ist genau dann $1$, wenn <strong>genau einer</strong> der beiden Summanden $1$ ist:
+            </p>
+            <table class="truth-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>Summe S</th><th>Logische Formel</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td class="col-sum">0</td><td rowspan="4" style="vertical-align:middle; font-weight:700; color:#059669;">$S = A \oplus B$</td></tr>
+                <tr><td>0</td><td>1</td><td class="col-sum">1</td></tr>
+                <tr><td>1</td><td>0</td><td class="col-sum">1</td></tr>
+                <tr><td>1</td><td>1</td><td class="col-sum">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="truth-table-wrap">
+            <h3 style="font-size:1rem; margin-bottom:0.75rem; color:#2563eb; font-weight:700;">2. Das Übertragsbit $C$ (Carry / UND-Gatter)</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:0.5rem;">
+              Ein Übertrag zur nächsten Stelle entsteht genau dann, wenn <strong>beide</strong> Summanden $1$ sind:
+            </p>
+            <table class="truth-table">
+              <thead>
+                <tr><th>A</th><th>B</th><th>Übertrag C</th><th>Logische Formel</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td class="col-carry">0</td><td rowspan="4" style="vertical-align:middle; font-weight:700; color:#2563eb;">$C = A \land B$</td></tr>
+                <tr><td>0</td><td>1</td><td class="col-carry">0</td></tr>
+                <tr><td>1</td><td>0</td><td class="col-carry">0</td></tr>
+                <tr><td>1</td><td>1</td><td class="col-carry">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem; text-align:right;">
+          <button class="presenter-tab-btn" style="background:var(--primary); color:white; border-color:var(--primary);" onclick="switchTab('tab-halbaddierer')">
+            Weiter zum Halbaddierer-Simulator →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: HALBADDIERER                       -->
+    <!-- ========================================== -->
+    <section id="tab-halbaddierer" class="tab-panel">
+      <div class="content-card">
+        <h2 class="section-title">
+          <span class="section-num">2</span>
+          Der Halbaddierer (Half Adder)
+        </h2>
+        <p class="section-desc">
+          Ein Halbaddierer schaltet ein <strong>XOR-Gatter</strong> und ein <strong>UND-Gatter</strong> parallel an dieselben beiden Eingänge $A$ und $B$. Klicke auf die Schalter, um die Schaltung interaktiv zu testen!
+        </p>
+
+        <div class="sim-container">
+          <!-- Linke Spalte: Interaktive Schaltung -->
+          <div class="sim-circuit-box">
+            <div class="circuit-svg-wrap">
+              <svg width="440" height="230" viewBox="0 0 440 230" class="circuit-svg">
+                <!-- Eingangsleitungen A & B -->
+                <!-- A Leitungen -->
+                <line id="ha-wire-a-main" x1="40" y1="50" x2="160" y2="50" class="circuit-wire" />
+                <line id="ha-wire-a-branch" x1="100" y1="50" x2="100" y2="150" class="circuit-wire" />
+                <line id="ha-wire-a-to-and" x1="100" y1="150" x2="170" y2="150" class="circuit-wire" />
+                <circle cx="100" cy="50" r="3.5" fill="#0f172a" />
+
+                <!-- B Leitungen -->
+                <line id="ha-wire-b-main" x1="40" y1="80" x2="160" y2="80" class="circuit-wire" />
+                <line id="ha-wire-b-branch" x1="130" y1="80" x2="130" y2="180" class="circuit-wire" />
+                <line id="ha-wire-b-to-and" x1="130" y1="180" x2="170" y2="180" class="circuit-wire" />
+                <circle cx="130" cy="80" r="3.5" fill="#0f172a" />
+
+                <!-- Beschriftung Eingänge -->
+                <text x="18" y="55" font-family="'JetBrains Mono'" font-size="14" font-weight="bold">A</text>
+                <text x="18" y="85" font-family="'JetBrains Mono'" font-size="14" font-weight="bold">B</text>
+
+                <!-- XOR-Gatter (Oben) -->
+                <!-- XOR Bogen vorn -->
+                <path d="M 152,40 Q 165,65 152,90" fill="none" stroke="#0f172a" stroke-width="2" />
+                <!-- XOR Körper -->
+                <path d="M 160,40 Q 173,65 160,90 Q 200,90 220,65 Q 200,40 160,40 Z" class="gate-shape" />
+                <text x="175" y="69" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="800" fill="#64748b">XOR</text>
+
+                <!-- Ausgang S (Summe) -->
+                <line id="ha-wire-s" x1="220" y1="65" x2="350" y2="65" class="circuit-wire" />
+                <circle id="ha-lamp-s" cx="365" cy="65" r="10" class="lamp-symbol-svg" />
+                <text x="385" y="70" font-family="'JetBrains Mono'" font-size="14" font-weight="bold" fill="#059669">S (Summe)</text>
+
+                <!-- AND-Gatter (Unten) -->
+                <path d="M 170,140 L 195,140 A 25,25 0 0,1 195,190 L 170,190 Z" class="gate-shape" />
+                <text x="178" y="169" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="800" fill="#64748b">UND</text>
+
+                <!-- Ausgang C (Übertrag) -->
+                <line id="ha-wire-c" x1="220" y1="165" x2="350" y2="165" class="circuit-wire" />
+                <circle id="ha-lamp-c" cx="365" cy="165" r="10" class="lamp-symbol-svg" />
+                <text x="385" y="170" font-family="'JetBrains Mono'" font-size="14" font-weight="bold" fill="#2563eb">C (Übertrag)</text>
+              </svg>
+            </div>
+
+            <!-- Interaktive Schalter -->
+            <div class="sim-controls">
+              <span class="control-label">Schalter umlegen:</span>
+              <button class="toggle-bit-btn" id="btn-ha-a" onclick="toggleHA('a')">A = <span id="val-ha-a">0</span></button>
+              <button class="toggle-bit-btn" id="btn-ha-b" onclick="toggleHA('b')">B = <span id="val-ha-b">0</span></button>
+            </div>
+
+            <!-- Live Rechnung -->
+            <div class="calc-indicator">
+              <span style="font-size:0.9rem; color:var(--text-muted); font-weight:600;">Rechnung:</span>
+              <span class="calc-pill" id="ha-calc-text">0 + 0 = 0 (Binär: 00)</span>
+            </div>
+          </div>
+
+          <!-- Rechte Spalte: Live Schalttafel & Erklärung -->
+          <div>
+            <div class="truth-table-wrap">
+              <h3 style="font-size:1.05rem; font-weight:700; margin-bottom:0.75rem;">Schalttafel des Halbaddierers</h3>
+              <table class="truth-table" id="table-ha">
+                <thead>
+                  <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th class="col-sum">S (Summe)</th>
+                    <th class="col-carry">C (Carry)</th>
+                    <th>Dezimal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="row-ha-00" class="active-row"><td>0</td><td>0</td><td class="col-sum">0</td><td class="col-carry">0</td><td>0</td></tr>
+                  <tr id="row-ha-01"><td>0</td><td>1</td><td class="col-sum">1</td><td class="col-carry">0</td><td>1</td></tr>
+                  <tr id="row-ha-10"><td>1</td><td>0</td><td class="col-sum">1</td><td class="col-carry">0</td><td>1</td></tr>
+                  <tr id="row-ha-11"><td>1</td><td>1</td><td class="col-sum">0</td><td class="col-carry">1</td><td>2 ($10_2$)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout" style="margin-top:1.25rem;">
+              <strong>Warum heißt die Schaltung nur HALB-Addierer?</strong><br>
+              Der Halbaddierer kann zwei Bits $A$ und $B$ korrekt addieren. Er hat jedoch <strong>keinen dritten Eingang für einen Übertrag</strong> aus einer vorhergehenden niederwertigen Stelle.<br><br>
+              Für mehrstellige Additionen (z. B. $11_2 + 01_2$) reicht ein Halbaddierer daher nur für die allererste Stelle (LSB). Ab der zweiten Stelle brauchen wir den <strong>Volladdierer</strong>!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: VOLLADDIERER                        -->
+    <!-- ========================================== -->
+    <section id="tab-volladdierer" class="tab-panel">
+      <div class="content-card">
+        <h2 class="section-title">
+          <span class="section-num">3</span>
+          Der Volladdierer (Full Adder)
+        </h2>
+        <p class="section-desc">
+          Der Volladdierer besitzt <strong>drei Eingänge</strong> ($A$, $B$ und den ankommenden Übertrag $C_{in}$) sowie <strong>zwei Ausgänge</strong> (Summe $S$ und neuer Übertrag $C_{out}$). Er wird elegant aus <strong>zwei Halbaddierern</strong> und einem <strong>ODER-Gatter</strong> aufgebaut.
+        </p>
+
+        <div class="sim-container">
+          <!-- Interaktive Schaltung Volladdierer -->
+          <div class="sim-circuit-box">
+            <div class="circuit-svg-wrap">
+              <svg width="490" height="280" viewBox="0 0 490 280" class="circuit-svg">
+                <!-- HA 1 Block (Links oben) -->
+                <rect x="90" y="30" width="105" height="95" rx="8" class="box-shape" stroke="#0d9488" stroke-width="2" />
+                <text x="142" y="75" font-family="'Plus Jakarta Sans'" font-size="13" font-weight="800" text-anchor="middle" fill="#0f766e">HA 1</text>
+                <text x="142" y="93" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="700" text-anchor="middle" fill="#64748b">Halbaddierer</text>
+
+                <!-- HA 2 Block (Rechts mittig) -->
+                <rect x="250" y="70" width="105" height="95" rx="8" class="box-shape" stroke="#0d9488" stroke-width="2" />
+                <text x="302" y="115" font-family="'Plus Jakarta Sans'" font-size="13" font-weight="800" text-anchor="middle" fill="#0f766e">HA 2</text>
+                <text x="302" y="133" font-family="'Plus Jakarta Sans'" font-size="9" font-weight="700" text-anchor="middle" fill="#64748b">Halbaddierer</text>
+
+                <!-- OR Gatter (Unten rechts) -->
+                <path d="M 380,185 Q 395,210 380,235 Q 420,235 440,210 Q 420,185 380,185 Z" class="gate-shape" />
+                <text x="395" y="214" font-family="'Plus Jakarta Sans'" font-size="10" font-weight="800" fill="#64748b">ODER</text>
+
+                <!-- Eingänge A, B zu HA1 -->
+                <line id="va-wire-a" x1="20" y1="55" x2="90" y2="55" class="circuit-wire" />
+                <text x="10" y="60" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">A</text>
+
+                <line id="va-wire-b" x1="20" y1="90" x2="90" y2="90" class="circuit-wire" />
+                <text x="10" y="95" font-family="'JetBrains Mono'" font-size="13" font-weight="bold">B</text>
+
+                <!-- Eingang Cin zu HA2 -->
+                <line id="va-wire-cin" x1="20" y1="135" x2="250" y2="135" class="circuit-wire" />
+                <text x="5" y="140" font-family="'JetBrains Mono'" font-size="12" font-weight="bold" fill="#2563eb">Cin</text>
+
+                <!-- Verbindung HA1 Summe zu HA2 Eingang -->
+                <line id="va-wire-s1" x1="195" y1="55" x2="225" y2="55" class="circuit-wire" />
+                <line id="va-wire-s1-down" x1="225" y1="55" x2="225" y2="95" class="circuit-wire" />
+                <line id="va-wire-s1-in" x1="225" y1="95" x2="250" y2="95" class="circuit-wire" />
+                <text x="210" y="47" font-family="'JetBrains Mono'" font-size="10" fill="#64748b">S₁</text>
+
+                <!-- Verbindung HA1 Übertrag C1 nach unten zum OR-Gatter -->
+                <line id="va-wire-c1" x1="195" y1="100" x2="215" y2="100" class="circuit-wire" />
+                <line id="va-wire-c1-down" x1="215" y1="100" x2="215" y2="200" class="circuit-wire" />
+                <line id="va-wire-c1-to-or" x1="215" y1="200" x2="385" y2="200" class="circuit-wire" />
+                <text x="220" y="193" font-family="'JetBrains Mono'" font-size="10" fill="#2563eb">C₁</text>
+
+                <!-- Verbindung HA2 Übertrag C2 zum OR-Gatter -->
+                <line id="va-wire-c2" x1="355" y1="140" x2="370" y2="140" class="circuit-wire" />
+                <line id="va-wire-c2-down" x1="370" y1="140" x2="370" y2="220" class="circuit-wire" />
+                <line id="va-wire-c2-to-or" x1="370" y1="220" x2="385" y2="220" class="circuit-wire" />
+                <text x="355" y="170" font-family="'JetBrains Mono'" font-size="10" fill="#2563eb">C₂</text>
+
+                <!-- Ausgang S (Endergebnis Summe) -->
+                <line id="va-wire-s" x1="355" y1="95" x2="435" y2="95" class="circuit-wire" />
+                <circle id="va-lamp-s" cx="445" cy="95" r="9" class="lamp-symbol-svg" />
+                <text x="460" y="100" font-family="'JetBrains Mono'" font-size="13" font-weight="bold" fill="#059669">S</text>
+
+                <!-- Ausgang Cout (End-Übertrag) -->
+                <line id="va-wire-cout" x1="440" y1="210" x2="455" y2="210" class="circuit-wire" />
+                <circle id="va-lamp-cout" cx="465" cy="210" r="9" class="lamp-symbol-svg" />
+                <text x="455" y="235" font-family="'JetBrains Mono'" font-size="12" font-weight="bold" fill="#2563eb">Cout</text>
+              </svg>
+            </div>
+
+            <!-- Interaktive Schalter Volladdierer -->
+            <div class="sim-controls">
+              <span class="control-label">Eingänge:</span>
+              <button class="toggle-bit-btn" id="btn-va-a" onclick="toggleVA('a')">A = <span id="val-va-a">0</span></button>
+              <button class="toggle-bit-btn" id="btn-va-b" onclick="toggleVA('b')">B = <span id="val-va-b">0</span></button>
+              <button class="toggle-bit-btn" id="btn-va-cin" onclick="toggleVA('cin')">Cin = <span id="val-va-cin">0</span></button>
+            </div>
+
+            <!-- Live Rechnung -->
+            <div class="calc-indicator">
+              <span style="font-size:0.9rem; color:var(--text-muted); font-weight:600;">Rechnung:</span>
+              <span class="calc-pill" id="va-calc-text">A + B + Cin: 0 + 0 + 0 = 0 (Binär: 00)</span>
+            </div>
+          </div>
+
+          <!-- Rechte Spalte: Volladdierer Schalttafel -->
+          <div>
+            <div class="truth-table-wrap">
+              <h3 style="font-size:1.05rem; font-weight:700; margin-bottom:0.75rem;">Volladdierer Schalttafel (8 Fälle)</h3>
+              <table class="truth-table" id="table-va">
+                <thead>
+                  <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>Cin</th>
+                    <th class="col-sum">S</th>
+                    <th class="col-carry">Cout</th>
+                    <th>Summe (Dez)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="row-va-000" class="active-row"><td>0</td><td>0</td><td>0</td><td class="col-sum">0</td><td class="col-carry">0</td><td>0 ($00_2$)</td></tr>
+                  <tr id="row-va-001"><td>0</td><td>0</td><td>1</td><td class="col-sum">1</td><td class="col-carry">0</td><td>1 ($01_2$)</td></tr>
+                  <tr id="row-va-010"><td>0</td><td>1</td><td>0</td><td class="col-sum">1</td><td class="col-carry">0</td><td>1 ($01_2$)</td></tr>
+                  <tr id="row-va-011"><td>0</td><td>1</td><td>1</td><td class="col-sum">0</td><td class="col-carry">1</td><td>2 ($10_2$)</td></tr>
+                  <tr id="row-va-100"><td>1</td><td>0</td><td>0</td><td class="col-sum">1</td><td class="col-carry">0</td><td>1 ($01_2$)</td></tr>
+                  <tr id="row-va-101"><td>1</td><td>0</td><td>1</td><td class="col-sum">0</td><td class="col-carry">1</td><td>2 ($10_2$)</td></tr>
+                  <tr id="row-va-110"><td>1</td><td>1</td><td>0</td><td class="col-sum">0</td><td class="col-carry">1</td><td>2 ($10_2$)</td></tr>
+                  <tr id="row-va-111"><td>1</td><td>1</td><td>1</td><td class="col-sum">1</td><td class="col-carry">1</td><td>3 ($11_2$)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout callout-blue" style="margin-top:1.25rem;">
+              <strong>Mathematisch-logische Formeln:</strong><br>
+              $$S = A \oplus B \oplus C_{in}$$
+              $$C_{out} = C_1 \lor C_2 = (A \land B) \lor ((A \oplus B) \land C_{in})$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: CIRCUITVERSE ONLINE-LABOR          -->
+    <!-- ========================================== -->
+    <section id="tab-circuitverse" class="tab-panel">
+      <!-- CircuitVerse Launch CTA Card -->
+      <div class="cv-banner">
+        <div class="cv-banner-left">
+          <span class="cv-badge">Online-Labor • Keine Installation</span>
+          <h2>Schaltungssimulator CircuitVerse</h2>
+          <p>
+            CircuitVerse ist ein browserbasierter Simulator wie Logisim. Baue deine eigenen Schaltungen per Drag &amp; Drop, erstelle modulare Bausteine (Subcircuits) und teste Schaltungen live auf deinem iPad oder PC.
+          </p>
+        </div>
+        <div>
+          <a href="https://circuitverse.org/simulator" target="_blank" rel="noopener noreferrer" class="btn-launch-cv">
+            CircuitVerse Simulator öffnen ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2 class="section-title">
+          <span class="section-num">4</span>
+          Schritt-für-Schritt Laboranleitung für CircuitVerse
+        </h2>
+        <p class="section-desc">
+          So setzt du den Halbaddierer und anschließend den Volladdierer modular in CircuitVerse um:
+        </p>
+
+        <div class="step-grid">
+          <!-- Schritt 1 -->
+          <div class="instruction-step">
+            <div class="step-badge">1</div>
+            <div class="step-content">
+              <div class="step-title">Eingänge und Gatter für den Halbaddierer platzieren</div>
+              <p class="step-text">
+                Öffne CircuitVerse. Wähle in der linken Leiste unter <strong>„Input“</strong> zwei Eingänge (<em>Input</em>) und beschrifte sie mit <code>A</code> und <code>B</code>. Wähle unter <strong>„Gates“</strong> ein <strong>XOR-Gatter</strong> und ein <strong>AND-Gatter</strong>. Unter <strong>„Output“</strong> nimmst du zwei Ausgänge (<em>Output</em>) mit den Namen <code>S</code> und <code>C</code>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Schritt 2 -->
+          <div class="instruction-step">
+            <div class="step-badge">2</div>
+            <div class="step-content">
+              <div class="step-title">Leitungen ziehen und Schalttafel prüfen</div>
+              <p class="step-text">
+                Verbinde $A$ und $B$ jeweils mit den beiden Gattern. Den Ausgang des XOR-Gatters führst du zu $S$, den Ausgang des AND-Gatters zu $C$. Klicke auf die Eingänge $A$ und $B$ und teste alle 4 Kombinationen ($00, 01, 10, 11$).
+              </p>
+            </div>
+          </div>
+
+          <!-- Schritt 3 -->
+          <div class="instruction-step">
+            <div class="step-badge">3</div>
+            <div class="step-content">
+              <div class="step-title">Halbaddierer als Subcircuit (Teilschaltung) speichern</div>
+              <p class="step-text">
+                Klicke oben im Menü auf <strong>„Project“ → „Add Circuit“</strong> und erstelle eine neue Schaltung namens <em>„Volladdierer“</em>. Deine Halbaddierer-Schaltung erscheint nun links im Komponentenmenü unter <strong>„Circuit“</strong> als fertiger Baustein mit zwei Eingängen und zwei Ausgängen!
+              </p>
+            </div>
+          </div>
+
+          <!-- Schritt 4 -->
+          <div class="instruction-step">
+            <div class="step-badge">4</div>
+            <div class="step-content">
+              <div class="step-title">Volladdierer aus 2× HA und 1× OR zusammensetzen</div>
+              <p class="step-text">
+                Ziehe zwei deiner Halbaddierer-Blöcke auf die Arbeitsfläche. Ergänze drei Eingänge ($A, B, C_{in}$), ein <strong>OR-Gatter</strong> für die beiden Überträge ($C_1$ und $C_2$) sowie zwei Ausgänge ($S$ und $C_{out}$). Fertig ist der vollständige 1-Bit-Addierer!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>Tipp zur iPad-Bedienung in CircuitVerse:</strong><br>
+          • Leitungen ziehst du einfach mit dem Finger oder Apple Pencil von Kontaktpunkt zu Kontaktpunkt.<br>
+          • Mit zwei Fingern kannst du die Arbeitsfläche verschieben (Pan) und vergrößern (Zoom).
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: TRAINING & AUFGABEN                 -->
+    <!-- ========================================== -->
+    <section id="tab-training" class="tab-panel">
+      <div class="content-card">
+        <h2 class="section-title">
+          <span class="section-num">5</span>
+          Übungsaufgaben &amp; Verständnisfragen
+        </h2>
+        <p class="section-desc">
+          Teste dein Verständnis zu Schalttafeln und Signalpfaden. Klicke auf <em>„Musterlösung anzeigen“</em>, um deine Überlegung zu überprüfen.
+        </p>
+
+        <!-- Frage 1 -->
+        <div class="qa-card">
+          <div class="qa-header">
+            <span class="qa-tag">Frage 1</span>
+            <div class="qa-question">Signalanalyse am Volladdierer</div>
+          </div>
+          <p style="font-size:0.95rem; color:var(--text-muted);">
+            An einem Volladdierer liegen die Signale $A = 1$, $B = 1$ und $C_{in} = 1$ an. Welche Zwischensignale entstehen an $S_1$, $C_1$, $C_2$ und welche Endsignale an $S$ und $C_{out}$?
+          </p>
+          <button class="btn-reveal-solution" onclick="toggleSolution('sol-1', this)">Musterlösung anzeigen</button>
+          <div id="sol-1" class="qa-solution-box">
+            <strong>Schritt-für-Schritt Signalweg:</strong><br>
+            1. HA 1 verarbeitet $A=1$ und $B=1$:<br>
+            &nbsp;&nbsp;• $S_1 = 1 \oplus 1 = \mathbf{0}$<br>
+            &nbsp;&nbsp;• $C_1 = 1 \land 1 = \mathbf{1}$<br>
+            2. HA 2 verarbeitet $S_1=0$ und $C_{in}=1$:<br>
+            &nbsp;&nbsp;• Endsumme $S = 0 \oplus 1 = \mathbf{1}$<br>
+            &nbsp;&nbsp;• $C_2 = 0 \land 1 = \mathbf{0}$<br>
+            3. ODER-Gatter verarbeitet $C_1=1$ und $C_2=0$:<br>
+            &nbsp;&nbsp;• Endübertrag $C_{out} = 1 \lor 0 = \mathbf{1}$<br>
+            <strong>Ergebnis:</strong> $S = 1$ und $C_{out} = 1$ (entspricht $1+1+1 = 3 = 11_2$).
+          </div>
+        </div>
+
+        <!-- Frage 2 -->
+        <div class="qa-card">
+          <div class="qa-header">
+            <span class="qa-tag">Frage 2</span>
+            <div class="qa-question">Warum reicht beim Volladdierer ein ODER-Gatter für die Überträge?</div>
+          </div>
+          <p style="font-size:0.95rem; color:var(--text-muted);">
+            Beim Zusammenführen der beiden Überträge $C_1$ und $C_2$ nutzt man ein normales ODER-Gatter ($C_1 \lor C_2$). Warum benötigt man hier kein XOR-Gatter?
+          </p>
+          <button class="btn-reveal-solution" onclick="toggleSolution('sol-2', this)">Musterlösung anzeigen</button>
+          <div id="sol-2" class="qa-solution-box">
+            <strong>Begründung:</strong><br>
+            Die beiden Überträge $C_1$ und $C_2$ können <strong>niemals gleichzeitig $1$</strong> sein!<br>
+            • $C_1 = 1$ entsteht nur, wenn $A=1$ und $B=1$ sind. In diesem Fall ist aber das Zwischensummenbit $S_1 = A \oplus B = 0$.<br>
+            • Da $S_1 = 0$ ist, muss der zweite Übertrag $C_2 = S_1 \land C_{in} = 0 \land C_{in} = 0$ sein.<br>
+            Der Fall $C_1 = 1$ und $C_2 = 1$ tritt also in der Schaltung niemals auf. Ein normales ODER-Gatter liefert daher exakt das gleiche Ergebnis wie ein XOR-Gatter und ist in der Praxis einfacher.
+          </div>
+        </div>
+
+        <!-- Frage 3: Ausblick -->
+        <div class="qa-card">
+          <div class="qa-header">
+            <span class="qa-tag">Ausblick</span>
+            <div class="qa-question">Wie rechnet eine echte CPU? (Der 4-Bit-Ripple-Carry-Addierer)</div>
+          </div>
+          <p style="font-size:0.95rem; color:var(--text-muted);">
+            Um zwei 4-Bit-Binärzahlen (z. B. $A = a_3 a_2 a_1 a_0$ und $B = b_3 b_2 b_1 b_0$) zu addieren, schaltet man 4 Addierer in Kette:
+          </p>
+          <div style="background:#f8fafc; border:1px solid var(--border); padding:1rem; border-radius:6px; margin:0.75rem 0; font-family:'JetBrains Mono'; font-size:0.9rem;">
+            Stelle 0 (2⁰): 1× Halbaddierer (oder Volladdierer mit Cin = 0)<br>
+            Stelle 1 (2¹): 1× Volladdierer (erhält Übertrag aus Stelle 0)<br>
+            Stelle 2 (2²): 1× Volladdierer (erhält Übertrag aus Stelle 1)<br>
+            Stelle 3 (2³): 1× Volladdierer (erhält Übertrag aus Stelle 2)<br>
+            → Das Ausgangsübertragsbit Cout der Stelle 3 bildet das 5. Bit (Overflow / 2⁴)!
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-muted);">
+            Weil der Übertrag wie eine Welle („Ripple“) von Stelle zu Stelle weitergereicht werden muss, nennt man diese Schaltung einen <strong>Ripple-Carry-Addierer</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Informatik Differenzierung 9 (Diff-9)</strong> • Schuljahr 2026/27</p>
+      <p style="margin-top:4px;">Städtisches Gymnasium • Technische Informatik &amp; Schaltungsentwurf</p>
+    </footer>
+
+  </main>
+
+  <script>
+    // Tab Umschaltung
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.querySelectorAll('.presenter-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      const activePanel = document.getElementById(tabId);
+      if (activePanel) {
+        activePanel.classList.add('active');
+      }
+
+      const activeBtn = Array.from(document.querySelectorAll('.presenter-tab-btn'))
+        .find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+
+      // KaTeX nach Tab-Wechsel triggern falls nötig
+      if (window.triggerKaTeX) triggerKaTeX();
+    }
+
+    // Toggle Solution
+    function toggleSolution(id, btn) {
+      const box = document.getElementById(id);
+      if (!box) return;
+      if (box.classList.contains('visible')) {
+        box.classList.remove('visible');
+        btn.textContent = 'Musterlösung anzeigen';
+      } else {
+        box.classList.add('visible');
+        btn.textContent = 'Musterlösung verbergen';
+        if (window.triggerKaTeX) triggerKaTeX();
+      }
+    }
+
+    // ==========================================
+    // HALBADDIERER LOGIK & INTERAKTION
+    // ==========================================
+    const haState = { a: 0, b: 0 };
+
+    function toggleHA(input) {
+      haState[input] = haState[input] === 0 ? 1 : 0;
+      updateHA();
+    }
+
+    function updateHA() {
+      const a = haState.a;
+      const b = haState.b;
+      const s = a ^ b;      // XOR
+      const c = a & b;      // AND
+
+      // Buttons aktualisieren
+      const btnA = document.getElementById('btn-ha-a');
+      const btnB = document.getElementById('btn-ha-b');
+      document.getElementById('val-ha-a').textContent = a;
+      document.getElementById('val-ha-b').textContent = b;
+      btnA.classList.toggle('active', a === 1);
+      btnB.classList.toggle('active', b === 1);
+
+      // Leitungen A
+      const wireAClass = a === 1 ? 'circuit-wire active' : 'circuit-wire';
+      document.getElementById('ha-wire-a-main').setAttribute('class', wireAClass);
+      document.getElementById('ha-wire-a-branch').setAttribute('class', wireAClass);
+      document.getElementById('ha-wire-a-to-and').setAttribute('class', wireAClass);
+
+      // Leitungen B
+      const wireBClass = b === 1 ? 'circuit-wire active' : 'circuit-wire';
+      document.getElementById('ha-wire-b-main').setAttribute('class', wireBClass);
+      document.getElementById('ha-wire-b-branch').setAttribute('class', wireBClass);
+      document.getElementById('ha-wire-b-to-and').setAttribute('class', wireBClass);
+
+      // Ausgang S (Summe)
+      const wireS = document.getElementById('ha-wire-s');
+      const lampS = document.getElementById('ha-lamp-s');
+      if (s === 1) {
+        wireS.setAttribute('class', 'circuit-wire active');
+        lampS.setAttribute('class', 'lamp-symbol-svg on');
+      } else {
+        wireS.setAttribute('class', 'circuit-wire');
+        lampS.setAttribute('class', 'lamp-symbol-svg');
+      }
+
+      // Ausgang C (Carry)
+      const wireC = document.getElementById('ha-wire-c');
+      const lampC = document.getElementById('ha-lamp-c');
+      if (c === 1) {
+        wireC.setAttribute('class', 'circuit-wire active-carry');
+        lampC.setAttribute('class', 'lamp-symbol-svg on-carry');
+      } else {
+        wireC.setAttribute('class', 'circuit-wire');
+        lampC.setAttribute('class', 'lamp-symbol-svg');
+      }
+
+      // Schalttafel Zeile hervorheben
+      ['00', '01', '10', '11'].forEach(comb => {
+        const row = document.getElementById('row-ha-' + comb);
+        if (row) row.classList.remove('active-row');
+      });
+      const activeRow = document.getElementById(`row-ha-${a}${b}`);
+      if (activeRow) activeRow.classList.add('active-row');
+
+      // Live Rechentext
+      const sumDez = a + b;
+      const binStr = (c === 1 ? '1' : '0') + (s === 1 ? '1' : '0');
+      document.getElementById('ha-calc-text').textContent =
+        `${a} + ${b} = ${sumDez} (Summe S: ${s}, Carry C: ${c} → Binär: ${binStr}₂)`;
+    }
+
+    // ==========================================
+    // VOLLADDIERER LOGIK & INTERAKTION
+    // ==========================================
+    const vaState = { a: 0, b: 0, cin: 0 };
+
+    function toggleVA(input) {
+      vaState[input] = vaState[input] === 0 ? 1 : 0;
+      updateVA();
+    }
+
+    function updateVA() {
+      const a = vaState.a;
+      const b = vaState.b;
+      const cin = vaState.cin;
+
+      // Stufe 1: HA1
+      const s1 = a ^ b;
+      const c1 = a & b;
+
+      // Stufe 2: HA2
+      const s = s1 ^ cin;
+      const c2 = s1 & cin;
+
+      // Stufe 3: OR
+      const cout = c1 | c2;
+
+      // Buttons
+      const btnA = document.getElementById('btn-va-a');
+      const btnB = document.getElementById('btn-va-b');
+      const btnCin = document.getElementById('btn-va-cin');
+      document.getElementById('val-va-a').textContent = a;
+      document.getElementById('val-va-b').textContent = b;
+      document.getElementById('val-va-cin').textContent = cin;
+      btnA.classList.toggle('active', a === 1);
+      btnB.classList.toggle('active', b === 1);
+      btnCin.classList.toggle('active-carry', cin === 1);
+
+      // SVG Leitungen Eingänge
+      document.getElementById('va-wire-a').setAttribute('class', a === 1 ? 'circuit-wire active' : 'circuit-wire');
+      document.getElementById('va-wire-b').setAttribute('class', b === 1 ? 'circuit-wire active' : 'circuit-wire');
+      document.getElementById('va-wire-cin').setAttribute('class', cin === 1 ? 'circuit-wire active-carry' : 'circuit-wire');
+
+      // SVG Zwischenleitungen
+      const s1Class = s1 === 1 ? 'circuit-wire active' : 'circuit-wire';
+      document.getElementById('va-wire-s1').setAttribute('class', s1Class);
+      document.getElementById('va-wire-s1-down').setAttribute('class', s1Class);
+      document.getElementById('va-wire-s1-in').setAttribute('class', s1Class);
+
+      const c1Class = c1 === 1 ? 'circuit-wire active-carry' : 'circuit-wire';
+      document.getElementById('va-wire-c1').setAttribute('class', c1Class);
+      document.getElementById('va-wire-c1-down').setAttribute('class', c1Class);
+      document.getElementById('va-wire-c1-to-or').setAttribute('class', c1Class);
+
+      const c2Class = c2 === 1 ? 'circuit-wire active-carry' : 'circuit-wire';
+      document.getElementById('va-wire-c2').setAttribute('class', c2Class);
+      document.getElementById('va-wire-c2-down').setAttribute('class', c2Class);
+      document.getElementById('va-wire-c2-to-or').setAttribute('class', c2Class);
+
+      // Ausgänge
+      const wireS = document.getElementById('va-wire-s');
+      const lampS = document.getElementById('va-lamp-s');
+      if (s === 1) {
+        wireS.setAttribute('class', 'circuit-wire active');
+        lampS.setAttribute('class', 'lamp-symbol-svg on');
+      } else {
+        wireS.setAttribute('class', 'circuit-wire');
+        lampS.setAttribute('class', 'lamp-symbol-svg');
+      }
+
+      const wireCout = document.getElementById('va-wire-cout');
+      const lampCout = document.getElementById('va-lamp-cout');
+      if (cout === 1) {
+        wireCout.setAttribute('class', 'circuit-wire active-carry');
+        lampCout.setAttribute('class', 'lamp-symbol-svg on-carry');
+      } else {
+        wireCout.setAttribute('class', 'circuit-wire');
+        lampCout.setAttribute('class', 'lamp-symbol-svg');
+      }
+
+      // Schalttafel Zeile hervorheben
+      ['000', '001', '010', '011', '100', '101', '110', '111'].forEach(comb => {
+        const row = document.getElementById('row-va-' + comb);
+        if (row) row.classList.remove('active-row');
+      });
+      const activeRow = document.getElementById(`row-va-${a}${b}${cin}`);
+      if (activeRow) activeRow.classList.add('active-row');
+
+      // Live Rechentext
+      const sumDez = a + b + cin;
+      const binStr = (cout === 1 ? '1' : '0') + (s === 1 ? '1' : '0');
+      document.getElementById('va-calc-text').textContent =
+        `${a} + ${b} + Cin(${cin}) = ${sumDez} (Summe S: ${s}, Cout: ${cout} → Binär: ${binStr}₂)`;
+    }
+
+    // Initiale Initialisierung
+    document.addEventListener('DOMContentLoaded', () => {
+      updateHA();
+      updateVA();
+    });
+  </script>
+</body>
+</html>
