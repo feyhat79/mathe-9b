@@ -314,17 +314,28 @@
       box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
     }
 
-    .color-preview-swatch {
-      width: 100%;
-      height: 64px;
-      border-radius: 6px;
-      border: 1.5px solid #94a3b8;
+    .color-sample-row {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 700;
+      gap: 14px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 14px;
       margin-top: 0.75rem;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.08);
+    }
+    .color-sample-box {
+      width: 48px;
+      height: 32px;
+      border-radius: 4px;
+      border: 1.5px solid #475569;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+    }
+    .color-sample-text {
+      font-size: 0.94rem;
+      color: #111827;
+      line-height: 1.35;
     }
   </style>
 </head>
@@ -734,12 +745,12 @@
           Interaktiver Erklär-Rechner (Dezimal $\rightarrow$ Hexadezimal)
         </div>
         <p style="font-size: 0.94rem; color: var(--ink-muted); margin-bottom: 0.85rem;">
-          Gib eine beliebige Dezimalzahl (von $0$ bis $4095$, also bis zu 3 Hex-Stellen) ein – der Rechner zeigt dir sofort die passende <strong>Kästchen-Zerlegung</strong> und die <strong>schriftliche Abzieh-Rechnung</strong>:
+          Gib eine beliebige Dezimalzahl (von $0$ bis $4095$, also bis zu 3 Hex-Stellen) ein – der Rechner zeigt dir sofort die passende <strong>Zerlegung</strong> und die <strong>schriftliche Abzieh-Rechnung</strong>:
         </p>
 
         <div class="trainer-controls">
           <input type="number" id="decToHexInput" class="trainer-input" min="0" max="4095" value="201">
-          <button type="button" class="btn-action" onclick="calcDecToHex()">Kästchen &amp; Nebenrechnung anzeigen</button>
+          <button type="button" class="btn-action" onclick="calcDecToHex()">Zerlegung &amp; Nebenrechnung anzeigen</button>
         </div>
 
         <div id="decToHexResult"></div>
@@ -872,8 +883,11 @@
               <span style="color:#dc2626;">20</span><span style="color:#16a34a;">64</span><span style="color:#2563eb;">ff</span>
             </div>
           </div>
-          <div class="color-preview-swatch" style="background: #2064ff; color: #ffffff;">
-            Vorschau: (32, 100, 255) = 2064ff
+          <div class="color-sample-row">
+            <div class="color-sample-box" style="background: #2064ff;"></div>
+            <div class="color-sample-text">
+              <strong>Dargestellte Farbe:</strong> <span class="code-mono">(32, 100, 255)</span> = <span class="code-hex-badge">2064ff</span>
+            </div>
           </div>
         </div>
 
@@ -902,8 +916,11 @@
               (163, 75, 253)
             </div>
           </div>
-          <div class="color-preview-swatch" style="background: #a34bfd; color: #ffffff;">
-            Vorschau: a34bfd = (163, 75, 253)
+          <div class="color-sample-row">
+            <div class="color-sample-box" style="background: #a34bfd;"></div>
+            <div class="color-sample-text">
+              <strong>Dargestellte Farbe:</strong> <span class="code-hex-badge">a34bfd</span> = <span class="code-mono">(163, 75, 253)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -945,32 +962,13 @@
     </article>
 
     <!-- ======================================================================
-         ABSCHNITT 5: MERKHEFT-SICHERUNG (Roter Merke-Kasten gemäss GEMINI.md)
+         ABSCHNITT 5: TRAININGSAUFGABEN ZUR SELBSTKONTROLLE
          ====================================================================== -->
-    <article class="sheet-card" id="sec-merke">
+    <article class="sheet-card" id="sec-training">
       <h2 class="task-title">
         <span class="task-number">5</span>
-        Zusammenfassung &amp; Merkheft-Sicherung
-      </h2>
-
-      <div class="merke-box">
-        <span class="merke-tag">Merke: Das Hexadezimalsystem &amp; Farbcodes</span>
-        <div class="merke-content">
-          <div class="merke-title">Die wichtigsten Regeln für deinen Test auf einen Blick</div>
-          <ul class="rule-list">
-            <li><strong>Basis 16 &amp; Index:</strong> Das Hexadezimalsystem nutzt <strong>16 Ziffern</strong> (<span class="code-mono">0–9</span> sowie <span class="code-mono">a=10</span>, <span class="code-mono">b=11</span>, <span class="code-mono">c=12</span>, <span class="code-mono">d=13</span>, <span class="code-mono">e=14</span>, <span class="code-mono">f=15</span>). Um Verwechslungen auszuschließen, kennzeichnet man Dezimalzahlen mit Index $d$ (z. B. $64_d$) und Hex-Zahlen mit Index $\text{hex}$ bzw. $h$ (z. B. $64_{\text{hex}}$ oder $64_h$).</li>
-            <li><strong>Stellenwerte ($\cdot 16$):</strong> Von rechts nach links lauten die Stellenwerte $\mathbf{1}$, $\mathbf{16}$, $\mathbf{256}$, $\mathbf{4096}$.</li>
-            <li><strong>Hex $\rightarrow$ Dezimal:</strong> Jede Ziffer mit ihrem Stellenwert multiplizieren und alles addieren (z. B. $3\text{c}_{\text{hex}} = 3 \cdot 16 + 12 \cdot 1 = 60_d$).</li>
-            <li><strong>Dezimal $\rightarrow$ Hex (Abziehmethode):</strong> Prüfen, wie oft der größte passende Stellenwert ($256$ bzw. $16$) in die Zahl passt, das Vielfache abziehen und mit dem Rest weitermachen. Zahlen ab $10$ in Buchstaben (<span class="code-mono">a–f</span>) tauschen!</li>
-            <li><strong>RGB als Hex-Code (<span class="code-mono">RRGGBB</span>):</strong> Ein Hex-Farbcode besteht aus <strong>6 Ziffern</strong> (2 für Rot, 2 für Grün, 2 für Blau). Die höchste Intensität $255_d$ ist <span class="code-mono">ff</span> ($15 \cdot 16 + 15$).</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Selbst-Check mit weiteren Trainingsaufgaben -->
-      <h3 style="font-size: 1.12rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
         Trainingsaufgaben zur Selbstkontrolle (Aufdecken &amp; Prüfen)
-      </h3>
+      </h2>
 
       <div class="solution-toggle-box" onclick="toggleSolution(this)">
         <div class="solution-header">
@@ -987,7 +985,7 @@
 
       <div class="solution-toggle-box" onclick="toggleSolution(this)">
         <div class="solution-header">
-          <span><strong>Frage 2:</strong> Wandle die Dezimalzahl <span class="code-mono">175<sub>d</sub></span> mit der Abziehmethode in eine Hex-Zahl um.</span>
+          <span><strong>Frage 2:</strong> Wandle die Dezimalzahl <span class="code-mono">175<sub>d</sub></span> in eine Hex-Zahl um.</span>
           <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
         </div>
         <div class="solution-body">
@@ -1367,8 +1365,11 @@
             <div><strong style="color:#16a34a;">Grün:</strong> ${g} = ${g16}·16 + ${g1}·1 ⟷ <span class="code-hex-badge" style="color:#16a34a;">${hexG}</span></div>
             <div><strong style="color:#2563eb;">Blau:</strong> ${b} = ${b16}·16 + ${b1}·1 ⟷ <span class="code-hex-badge" style="color:#2563eb;">${hexB}</span></div>
           </div>
-          <div class="color-preview-swatch" style="background:#${hexR}${hexG}${hexB}; color:${textColor};">
-            RGB: (${r}, ${g}, ${b}) &nbsp;|&nbsp; Hex-Code: ${hexR}${hexG}${hexB}
+          <div class="color-sample-row" style="background:#f8fafc;">
+            <div class="color-sample-box" style="background:#${hexR}${hexG}${hexB};"></div>
+            <div class="color-sample-text">
+              <strong>Dargestellte Farbe:</strong> RGB <span class="code-mono">(${r}, ${g}, ${b})</span> &nbsp;|&nbsp; Hex-Code: <span class="code-hex-badge">${hexR}${hexG}${hexB}</span>
+            </div>
           </div>
         </div>
       `;
