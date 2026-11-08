@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Das Hexadezimalsystem &amp; RGB-Farbcodes | Informatik Klasse 6</title>
+
+  <!-- Zentrales Schulheft- & Tafelbild-Designsystem gemäss GEMINI.md -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematisch-technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Ergänzende Stile für das Hexadezimal-Lernatelier (100% GEMINI.md konform, ohne border-left) */
+    .code-mono {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: #111827;
+      font-size: 0.96em;
+    }
+
+    .code-hex-badge {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #1e3a8a;
+      letter-spacing: 0.5px;
+    }
+
+    /* Wort-Zerlegung Hexa + dezimal */
+    .etymology-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .etym-part {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.6rem 1.1rem;
+      min-width: 135px;
+    }
+    .etym-word {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .etym-num {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #dc2626;
+      margin-top: 2px;
+    }
+    .etym-sub {
+      font-size: 0.82rem;
+      color: #475569;
+    }
+
+    /* Grüne Kästchen wie im Tafelbild (Heftaufschrieb 05.11.26) */
+    .green-box-digit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 7px;
+      border: 2px solid #16a34a;
+      background: #f0fdf4;
+      color: #111827;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      margin: 0 3px;
+      vertical-align: middle;
+    }
+
+    .red-letter-note {
+      color: #dc2626;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    /* Schriftliche Abzieh-Rechnung (wie im Heft S. 7 oben) */
+    .subtraction-notebook {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.9rem 1.25rem;
+      display: inline-block;
+      line-height: 1.45;
+      font-size: 1.05rem;
+      color: #111827;
+    }
+    .sub-line {
+      border-bottom: 1.5px solid #1e3a8a;
+      margin-bottom: 2px;
+      padding-bottom: 2px;
+    }
+
+    /* Schritt-für-Schritt Rezept-Karten */
+    .recipe-step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.15rem 0;
+    }
+    @media (max-width: 780px) {
+      .recipe-step-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .recipe-card {
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1.1rem 1.2rem;
+    }
+    .recipe-badge {
+      display: inline-block;
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .recipe-card h4 {
+      color: #1e3a8a;
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+    }
+    .recipe-card p {
+      font-size: 0.94rem;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    /* Aufklappbare Übungs-Lösungen (Klapp-Karten) */
+    .solution-toggle-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      margin-bottom: 0.85rem;
+      overflow: hidden;
+    }
+    .solution-header {
+      padding: 0.85rem 1.15rem;
+      background: #f8fafc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #111827;
+      transition: background 0.15s;
+    }
+    .solution-header:hover {
+      background: #eff6ff;
+    }
+    .btn-reveal {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: inherit;
+    }
+    .solution-toggle-box.open .btn-reveal {
+      background: #475569;
+    }
+    .solution-body {
+      display: none;
+      padding: 1.1rem 1.25rem;
+      border-top: 1px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+    .solution-toggle-box.open .solution-body {
+      display: block;
+    }
+
+    /* Interaktive Eingabefelder & Trainer */
+    .trainer-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .trainer-input {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 6px;
+      color: #111827;
+      width: 140px;
+      text-transform: lowercase;
+    }
+    .trainer-input:focus {
+      outline: none;
+      border-color: #1e3a8a;
+      background: #f8fbff;
+    }
+    .btn-action {
+      background: #1e3a8a;
+      color: #ffffff;
+      border: 1px solid #1e3a8a;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-action:hover {
+      background: #1d4ed8;
+    }
+
+    /* Farb-Kreise wie auf Heft-Seite 7: (a3)(4b)(fd) */
+    .hex-pair-pill {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid #ea580c;
+      background: #fff7ed;
+      border-radius: 999px;
+      padding: 6px 16px;
+      margin: 0 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #111827;
+    }
+    .hex-pair-label {
+      font-family: var(--font-family-base);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #c2410c;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Interaktiver Kästchen-Übungs-Trainer */
+    .quiz-box-input {
+      width: 54px;
+      height: 38px;
+      text-align: center;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: 2px solid #16a34a;
+      border-radius: 5px;
+      background: #ffffff;
+      color: #111827;
+      margin: 0 4px;
+    }
+    .quiz-box-input:focus {
+      outline: none;
+      background: #f0fdf4;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+    }
+
+    .color-preview-swatch {
+      width: 100%;
+      height: 64px;
+      border-radius: 6px;
+      border: 1.5px solid #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation (Presenter-Bar im Tafel-Look gemäss GEMINI.md) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Klasse 6</a>
+      <div class="presenter-title">
+        <span>Informatik 6 • Farben &amp; Zahlensysteme</span>
+        <span class="presenter-tag">Modul 3</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="farben.html" class="presenter-tab-btn">1. Farbmodelle &amp; RGB</a>
+      <a href="binaerzahlen.html" class="presenter-tab-btn">2. Binärzahlen &amp; Farbtiefe</a>
+      <a href="hexadezimal.html" class="presenter-tab-btn active">3. Hexadezimalsystem &amp; Umrechnung</a>
+      <a href="handout.html" class="presenter-tab-btn btn-summary">Handout &amp; Kompetenzen</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- Deckblatt-Kopfzeile -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Klasse 6 (6a, 6b, 6c, 6d) · Informatik</span>
+        <span>Unterricht vom 08.10. &amp; 05.11.2026</span>
+        <span>Kapitel: Farbcodierung &amp; Zahlensysteme</span>
+      </div>
+      <h1>Farben im Binärsystem &amp; das Hexadezimalsystem</h1>
+      <p class="sheet-intro">
+        In diesem Modul schlagen wir die Brücke von den 24-stelligen Binärcodes der Maschine zum kompakten <strong>Hexadezimalsystem (Basis 16)</strong>. Besonderer Schwerpunkt: Schritt-für-Schritt-Anleitungen und interaktive Trainer zum sicheren <strong>Umrechnen in beide Richtungen</strong>.
+      </p>
+    </header>
+
+    <!-- ======================================================================
+         ABSCHNITT 1: FARBEN IM BINÄRSYSTEM (Brücke aus dem Heft S. 5)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-binaer-farben">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        Rückblick &amp; Problemstellung: Farben im Binärsystem
+      </h2>
+
+      <p>
+        Ein Farbcode wie <span class="code-mono">(190, 33, 107)</span> ist <strong>für Menschen sofort klar</strong> – für Maschinen (Computer) jedoch nicht, denn der Computer versteht nur <span class="code-mono">0</span> und <span class="code-mono">1</span>.
+      </p>
+
+      <div class="comment-notebook-banner" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <strong>Wichtige 8-Bit-Regel für jeden Farbkanal:</strong><br>
+        Jeder der drei Farbkanäle (Rot, Grün, Blau) belegt im Speicher fest <strong>8 Bits (1 Byte)</strong>. Ergibt die Umrechnung einer Zahl weniger als 8 Binärstellen, müssen wir <strong>vorne (links) mit Nullen auffüllen</strong>, bis genau 8 Stellen erreicht sind!
+      </div>
+
+      <div class="table-responsive">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th>Farbkanal</th>
+              <th>Dezimalwert</th>
+              <th>Binärzahl (ohne Vor-Nullen)</th>
+              <th>Aufgefüllt auf 8 Bits (1 Byte)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rot (R)</strong></td>
+              <td>$190$</td>
+              <td><span class="code-mono">10111110</span> (schon 8 Stellen)</td>
+              <td><span class="code-mono" style="color:#dc2626;">10111110</span></td>
+            </tr>
+            <tr>
+              <td><strong>Grün (G)</strong></td>
+              <td>$33$</td>
+              <td><span class="code-mono">100001</span> (nur 6 Stellen)</td>
+              <td><span class="code-mono"><strong style="color:#2563eb;">00</strong><span style="color:#16a34a;">100001</span></span> (2 Nullen ergänzt)</td>
+            </tr>
+            <tr>
+              <td><strong>Blau (B)</strong></td>
+              <td>$107$</td>
+              <td><span class="code-mono">1101011</span> (nur 7 Stellen)</td>
+              <td><span class="code-mono"><strong style="color:#2563eb;">0</strong><span style="color:#1e3a8a;">1101011</span></span> (1 Null ergänzt)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin-top: 0.75rem;">
+        Hintereinander geschrieben speichert der Computer für diesen einzigen Bildpunkt eine <strong>24-stellige Kolonne</strong>:
+      </p>
+      <div class="formula-notebook-box" style="font-family: 'Consolas', monospace; font-size: 1.15rem; letter-spacing: 1px;">
+        <span style="color:#dc2626; font-weight:700;">10111110</span><span style="color:#16a34a; font-weight:700;">00100001</span><span style="color:#1e3a8a; font-weight:700;">01101011</span>
+      </div>
+
+      <!-- Heft-Aufgaben 1 und 2 (Seite 5) -->
+      <h3 style="font-size: 1.12rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
+        Übungen aus dem Heft (mit Schritt-für-Schritt-Kontrolle)
+      </h3>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Aufgabe 1:</strong> Schreibe die Farbe <span class="code-mono">(200, 70, 11)</span> als 24-stelligen Binärcode.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <ul class="rule-list" style="margin-top:0;">
+            <li><strong>1. Kanal (Rot = 200):</strong> $200 = 128 + 64 + 8 \rightarrow$ <span class="code-mono" style="color:#dc2626;">11001000</span> (8 Stellen)</li>
+            <li><strong>2. Kanal (Grün = 70):</strong> $70 = 64 + 4 + 2 \rightarrow 1000110_2 \rightarrow$ mit einer führenden Null: <span class="code-mono" style="color:#16a34a;">01000110</span></li>
+            <li><strong>3. Kanal (Blau = 11):</strong> $11 = 8 + 2 + 1 \rightarrow 1011_2 \rightarrow$ mit vier führenden Nullen: <span class="code-mono" style="color:#1e3a8a;">00001011</span></li>
+          </ul>
+          <p style="margin-top: 0.65rem; font-weight: 700;">
+            Gesamter Binärcode: <span class="code-mono"><span style="color:#dc2626;">11001000</span> <span style="color:#16a34a;">01000110</span> <span style="color:#1e3a8a;">00001011</span></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Aufgabe 2a:</strong> Schreibe den Binärcode <span class="code-mono">100110001110010100</span> als RGB-Code.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>
+            <strong style="color:#dc2626;">Achtung Falle: Kein gültiger RGB-Code!</strong><br>
+            Zählt man die Ziffern nach, besteht dieser Code nur aus <strong>18 Bits</strong>. Da jeder der 3 Farbkanäle genau 8 Bits benötigt, muss ein gültiger RGB-Binärcode immer exakt $3 \cdot 8 = \mathbf{24\text{ Stellen}}$ haben!
+          </p>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Aufgabe 2b:</strong> Schreibe den Binärcode <span class="code-mono">010001110100110011000011</span> als RGB-Code.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>Der Code hat genau 24 Stellen. Wir trennen ihn in <strong>drei 8er-Blöcke</strong> auf:</p>
+          <ul class="rule-list">
+            <li><strong>1. Block (Rot):</strong> <span class="code-mono">01000111</span> $= 64 + 4 + 2 + 1 = \mathbf{71}$</li>
+            <li><strong>2. Block (Grün):</strong> <span class="code-mono">01001100</span> $= 64 + 8 + 4 = \mathbf{76}$</li>
+            <li><strong>3. Block (Blau):</strong> <span class="code-mono">11000011</span> $= 128 + 64 + 2 + 1 = \mathbf{195}$</li>
+          </ul>
+          <p style="margin-top: 0.65rem; font-weight: 700;">
+            Ergebnis im RGB-Modell: <span class="code-mono">(71, 76, 195)</span>
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 2: DAS HEXADEZIMALSYSTEM (Basis 16 & Ziffern 0-f)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-hex-grundlagen">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        Das Hexadezimalsystem: Basis 16 und die 16 Ziffern
+      </h2>
+
+      <p>
+        Weil 24-stellige Binärzahlen viel zu unübersichtlich sind, nutzen Informatiker das <strong>Hexadezimalsystem</strong>. Schon der Name verrät, wie viele Ziffern dieses System besitzt:
+      </p>
+
+      <!-- Etymologie-Box wie im Heft S. 6 -->
+      <div class="etymology-box">
+        <div class="etym-part">
+          <div class="etym-word">Hexa</div>
+          <div class="etym-num">6</div>
+          <div class="etym-sub">(griechisch)</div>
+        </div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #475569;">+</div>
+        <div class="etym-part">
+          <div class="etym-word">dezimal</div>
+          <div class="etym-num">10</div>
+          <div class="etym-sub">(lateinisch)</div>
+        </div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #475569;">$\longrightarrow$</div>
+        <div class="etym-part" style="border-color: #1e3a8a; background: #eff6ff;">
+          <div class="etym-word">Basis 16</div>
+          <div class="etym-num" style="color: #1e3a8a;">16 Ziffern</div>
+          <div class="etym-sub">(0 bis 9 und a bis f)</div>
+        </div>
+      </div>
+
+      <p style="margin-top: 1rem;">
+        <strong>Warum brauchen wir Buchstaben?</strong><br>
+        Im Zehnersystem enden unsere Ziffern bei der <span class="code-mono">9</span>. Im 16er-System brauchen wir aber auch für die Werte <strong>10, 11, 12, 13, 14 und 15</strong> jeweils ein <em>einziges</em> Zeichen (damit eine Stelle nicht aus zwei Zeichen besteht). Dafür nehmen wir einfach die ersten sechs Buchstaben des Alphabets: <strong>a, b, c, d, e, f</strong> (oft auch groß geschrieben: <strong>A, B, C, D, E, F</strong>).
+      </p>
+
+      <!-- Übersetzungstabelle Dez <-> Hex wie im Heft S. 6 -->
+      <h3 style="font-size: 1.08rem; color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0;">
+        Die Übersetzungstabelle (Spickzettel für jede Umrechnung):
+      </h3>
+      <div class="table-responsive" style="margin-top: 0.5rem;">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th style="background:#e2e8f0;">Dezimal</th>
+              <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">10</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">11</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">12</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">13</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">14</th>
+              <th style="background:#dbeafe; color:#1e3a8a;">15</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="background:#f1f5f9; font-weight:700;">Hex</td>
+              <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">a</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">b</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">c</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">d</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">e</td>
+              <td style="background:#eff6ff; font-weight:700; color:#dc2626; font-size:1.1rem;">f</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 3: UMRECHNUNG HEXADEZIMAL -> DEZIMAL (Mit Stellenwerttafel)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-hex-to-dec">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        Umrechnung Richtung 1: Hexadezimal $\rightarrow$ Dezimal
+      </h2>
+
+      <p>
+        Beim Umrechnen einer Hex-Zahl (z. B. <span class="code-hex-badge">1a</span>, <span class="code-hex-badge">3c</span> oder <span class="code-hex-badge">a0f</span>) in eine normale Dezimalzahl hilft uns die <strong>Stellenwerttafel</strong>. Da die Basis <strong>16</strong> ist, vergrößert sich der Wert jeder Stelle von rechts nach links immer um den Faktor <strong>$\cdot 16$</strong>:
+      </p>
+
+      <div class="formula-notebook-box">
+        <div class="formula-tag" style="color: var(--ink-blue);">Die Stellenwerte im Hexadezimalsystem (von rechts nach links mal 16)</div>
+        <div style="font-size: 1.25rem; font-weight: 700; margin-top: 6px; color: var(--ink-black);">
+          $$\mathbf{4096} \xleftarrow{\;\cdot 16\;} \mathbf{256} \xleftarrow{\;\cdot 16\;} \mathbf{16} \xleftarrow{\;\cdot 16\;} \mathbf{1}$$
+        </div>
+      </div>
+
+      <!-- Das 3-Schritte-Rezept -->
+      <div class="recipe-step-grid">
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 1</span>
+          <h4>Von rechts eintragen</h4>
+          <p>Schreibe die Hex-Ziffern von <strong>rechts nach links</strong> in die Spalten <span class="code-mono">1</span>, <span class="code-mono">16</span> und <span class="code-mono">256</span>. Die letzte Ziffer rechts steht immer bei der <strong>1</strong>!</p>
+        </div>
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 2</span>
+          <h4>Buchstaben übersetzen</h4>
+          <p>Kommt ein Buchstabe (<span class="code-mono">a</span> bis <span class="code-mono">f</span>) vor? Schaue in die Tabelle und ersetze ihn sofort durch seine Zahl (<span class="code-mono">a=10</span>, <span class="code-mono">b=11</span>, <span class="code-mono">c=12</span>, <span class="code-mono">d=13</span>, <span class="code-mono">e=14</span>, <span class="code-mono">f=15</span>).</p>
+        </div>
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 3</span>
+          <h4>Malnehmen &amp; Addieren</h4>
+          <p>Rechne für jede Spalte <strong>Ziffer $\cdot$ Stellenwert</strong> (z. B. $\text{Ziffer} \cdot 16$) und rechne die Ergebnisse am Ende plus.</p>
+        </div>
+      </div>
+
+      <!-- Stellenwerttafel aus dem Heft S. 6 -->
+      <h3 style="font-size: 1.08rem; color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0;">
+        Die Stellenwerttafel mit den 4 Beispielen aus dem Heft:
+      </h3>
+      <div class="table-responsive">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th style="width:90px;">Hex-Zahl</th>
+              <th style="width:85px;">4096</th>
+              <th style="width:85px; background:#dbeafe; color:#1e3a8a;">256</th>
+              <th style="width:85px; background:#dbeafe; color:#1e3a8a;">16</th>
+              <th style="width:85px; background:#dbeafe; color:#1e3a8a;">1</th>
+              <th style="text-align:left;">Schrittweise Rechnung $\rightarrow$ Dezimalzahl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="code-hex-badge">1a</span></td>
+              <td style="color:#94a3b8;">–</td>
+              <td style="color:#94a3b8;">–</td>
+              <td><strong>1</strong></td>
+              <td><strong>a</strong> <span class="red-letter-note">(=10)</span></td>
+              <td style="text-align:left;">$1 \cdot 16 + 10 \cdot 1 = 16 + 10 = \mathbf{26}$</td>
+            </tr>
+            <tr>
+              <td><span class="code-hex-badge">a0f</span></td>
+              <td style="color:#94a3b8;">–</td>
+              <td><strong>a</strong> <span class="red-letter-note">(=10)</span></td>
+              <td><strong>0</strong></td>
+              <td><strong>f</strong> <span class="red-letter-note">(=15)</span></td>
+              <td style="text-align:left;">$10 \cdot 256 + 0 \cdot 16 + 15 \cdot 1 = 2560 + 0 + 15 = \mathbf{2575}$</td>
+            </tr>
+            <tr>
+              <td><span class="code-hex-badge">12b</span></td>
+              <td style="color:#94a3b8;">–</td>
+              <td><strong>1</strong></td>
+              <td><strong>2</strong></td>
+              <td><strong>b</strong> <span class="red-letter-note">(=11)</span></td>
+              <td style="text-align:left;">$1 \cdot 256 + 2 \cdot 16 + 11 \cdot 1 = 256 + 32 + 11 = \mathbf{299}$</td>
+            </tr>
+            <tr>
+              <td><span class="code-hex-badge">64</span></td>
+              <td style="color:#94a3b8;">–</td>
+              <td style="color:#94a3b8;">–</td>
+              <td><strong>6</strong></td>
+              <td><strong>4</strong></td>
+              <td style="text-align:left;">$6 \cdot 16 + 4 \cdot 1 = 96 + 4 = \mathbf{100}$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- INTERAKTIVER TRAINER 1: HEX -> DEZIMAL -->
+      <div class="lab-box" style="margin-top: 1.5rem;">
+        <div class="slider-label" style="margin-bottom: 0.35rem;">
+          Interaktiver Umrechnungs-Trainer (Hexadezimal $\rightarrow$ Dezimal)
+        </div>
+        <p style="font-size: 0.94rem; color: var(--ink-muted); margin-bottom: 0.85rem;">
+          Gib eine beliebige Hex-Zahl (1 bis 3 Stellen, z. B. <span class="code-mono">3c</span>, <span class="code-mono">abd</span> oder <span class="code-mono">ff</span>) ein oder wähle ein Unterrichtsbeispiel:
+        </p>
+
+        <div class="trainer-controls">
+          <input type="text" id="hexToDecInput" class="trainer-input" maxlength="4" value="abd" placeholder="z.B. 3c">
+          <button type="button" class="btn-action" onclick="calcHexToDec()">Schritt-für-Schritt vorrechnen</button>
+        </div>
+
+        <div class="button-selector-row" style="margin-bottom: 1rem;">
+          <button type="button" class="btn-day" onclick="setHexExample('10')">Übung 1a: 10</button>
+          <button type="button" class="btn-day" onclick="setHexExample('3c')">Übung 1b: 3c</button>
+          <button type="button" class="btn-day active" onclick="setHexExample('abd')">Übung 1c: abd</button>
+          <button type="button" class="btn-day" onclick="setHexExample('1a')">Heft: 1a</button>
+          <button type="button" class="btn-day" onclick="setHexExample('a0f')">Heft: a0f</button>
+          <button type="button" class="btn-day" onclick="setHexExample('ff')">Maximum: ff</button>
+        </div>
+
+        <div id="hexToDecResult"></div>
+      </div>
+
+      <!-- Übung 1 aus dem Heft (05.11.2026) -->
+      <h3 style="font-size: 1.08rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
+        Übung 1 aus dem Unterricht (05.11.2026): Schreibe als Dezimalzahl
+      </h3>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 1a:</strong> Wandle <span class="code-hex-badge">10<sub>hex</sub></span> in eine Dezimalzahl um.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>
+            Die <span class="code-mono">1</span> steht an der 16er-Stelle, die <span class="code-mono">0</span> an der 1er-Stelle:<br>
+            $$10_{\text{hex}} = 1 \cdot 16 + 0 \cdot 1 = \mathbf{16_d}$$
+            <em>Merke: Eine <span class="code-mono">10</span> im Hex-System ist nicht zehn, sondern genau ein 16er-Paket, also <strong>16</strong>!</em>
+          </p>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 1b:</strong> Wandle <span class="code-hex-badge">3c</span> in eine Dezimalzahl um.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>
+            1. Buchstabe übersetzen: <span class="code-mono">c</span> steht für den Wert $\mathbf{12}$.<br>
+            2. Stellenwerte berechnen ($3$ an der 16er-Stelle, $12$ an der 1er-Stelle):<br>
+            $$3\text{c}_{\text{hex}} = 3 \cdot 16 + 12 \cdot 1 = 48 + 12 = \mathbf{60_d}$$
+          </p>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 1c:</strong> Wandle <span class="code-hex-badge">abd</span> in eine Dezimalzahl um.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>
+            1. Alle drei Buchstaben übersetzen: <span class="code-mono">a = 10</span>, <span class="code-mono">b = 11</span>, <span class="code-mono">d = 13</span>.<br>
+            2. Da die Zahl dreistellig ist, starten wir links bei der <strong>256er-Stelle</strong>:<br>
+            $$\text{abd}_{\text{hex}} = 10 \cdot 256 + 11 \cdot 16 + 13 \cdot 1 = 2560 + 176 + 13 = \mathbf{2749_d}$$
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 4: UMRECHNUNG DEZIMAL -> HEXADEZIMAL (Kästchen- & Abziehmethode)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-dec-to-hex">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        Umrechnung Richtung 2: Dezimal $\rightarrow$ Hexadezimal (Kästchen- &amp; Abziehmethode)
+      </h2>
+
+      <p>
+        Die Rückrichtung (z. B. <span class="code-mono">100</span>, <span class="code-mono">201</span> oder <span class="code-mono">567</span> in eine Hex-Zahl umwandeln) fällt vielen am Anfang schwerer. Mit der <strong>Kästchen- und Abziehmethode</strong> aus unserem Heft klappt es aber garantiert fehlerfrei!
+      </p>
+
+      <!-- Das 3-Schritte-Rezept für Dez -> Hex -->
+      <div class="recipe-step-grid">
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 1</span>
+          <h4>Wie oft passt der Stellenwert?</h4>
+          <p>Ist die Zahl <strong>unter 256</strong>, starte bei der <strong>16</strong>: <em>„Wie oft passt die 16 in meine Zahl?“</em> (Ist die Zahl <strong>ab 256</strong>, starte zuerst mit der <strong>256</strong>!)</p>
+        </div>
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 2</span>
+          <h4>Abziehen &amp; Rest bestimmen</h4>
+          <p>Schreibe die gefundene Anzahl in das erste <span class="green-box-digit" style="min-width:24px; height:24px; font-size:0.9rem;">?</span> Kästchen. Ziehe das Vielfache von deiner Zahl ab. Was übrig bleibt, ist der <strong>Rest</strong> für die nächste Stelle.</p>
+        </div>
+        <div class="recipe-card">
+          <span class="recipe-badge">Schritt 3</span>
+          <h4>Ab 10 in Buchstaben tauschen!</h4>
+          <p>Steht in einem Kästchen eine Zahl von <strong>10 bis 15</strong>? Dann musst du sie am Ende zwingend in den Buchstaben <strong>a bis f</strong> umwandeln!</p>
+        </div>
+      </div>
+
+      <!-- Hilfstabelle: Die 16er-Reihe auf einen Blick -->
+      <div class="comment-notebook-banner" style="background: #f8fbff; border-color: #bfdbfe; margin: 1.25rem 0;">
+        <div style="font-weight: 700; color: var(--ink-blue); margin-bottom: 6px;">
+          Rechenhilfe für die Abziehmethode: Die 16er-Reihe &amp; 256er-Reihe auf einen Blick
+        </div>
+        <p style="font-size: 0.92rem; margin-bottom: 8px;">
+          Du musst nicht lange raten, wie oft die 16 in deine Zahl passt – suche einfach das größte Vielfache, das gerade noch kleiner oder gleich deiner Zahl ist:
+        </p>
+        <div class="table-responsive" style="margin: 0.4rem 0;">
+          <table class="sheet-calc-table" style="font-size: 0.86rem;">
+            <thead>
+              <tr>
+                <th>Mal 16</th>
+                <th>$1\cdot 16$</th><th>$2\cdot 16$</th><th>$3\cdot 16$</th><th>$4\cdot 16$</th><th>$5\cdot 16$</th>
+                <th>$6\cdot 16$</th><th>$7\cdot 16$</th><th>$8\cdot 16$</th><th>$9\cdot 16$</th>
+                <th style="background:#dbeafe;">$10\cdot 16$ (a)</th>
+                <th style="background:#dbeafe;">$11\cdot 16$ (b)</th>
+                <th style="background:#dbeafe;">$12\cdot 16$ (c)</th>
+                <th style="background:#dbeafe;">$13\cdot 16$ (d)</th>
+                <th style="background:#dbeafe;">$14\cdot 16$ (e)</th>
+                <th style="background:#dbeafe;">$15\cdot 16$ (f)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; background:#f1f5f9;">Wert</td>
+                <td><strong>16</strong></td><td><strong>32</strong></td><td><strong>48</strong></td><td><strong>64</strong></td><td><strong>80</strong></td>
+                <td><strong>96</strong></td><td><strong>112</strong></td><td><strong>128</strong></td><td><strong>144</strong></td>
+                <td style="background:#eff6ff; font-weight:700;">160</td>
+                <td style="background:#eff6ff; font-weight:700;">176</td>
+                <td style="background:#eff6ff; font-weight:700;">192</td>
+                <td style="background:#eff6ff; font-weight:700;">208</td>
+                <td style="background:#eff6ff; font-weight:700;">224</td>
+                <td style="background:#eff6ff; font-weight:700;">240</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size: 0.88rem; color: var(--ink-muted); margin-top: 6px;">
+          <strong>Für Zahlen ab 256 (256er-Reihe):</strong> &nbsp;
+          $1 \cdot 256 = \mathbf{256}$ &nbsp;|&nbsp;
+          $2 \cdot 256 = \mathbf{512}$ &nbsp;|&nbsp;
+          $3 \cdot 256 = \mathbf{768}$ &nbsp;|&nbsp;
+          $4 \cdot 256 = \mathbf{1024}$
+        </div>
+      </div>
+
+      <!-- Die 3 Musterbeispiele aus dem Heft (Seite 6 unten & Seite 7 oben) -->
+      <h3 style="font-size: 1.12rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
+        Die 3 Musterbeispiele aus dem Heft – Schritt für Schritt erklärt:
+      </h3>
+
+      <div class="note-columns" style="grid-template-columns: 1fr 1fr;">
+        <!-- Musterbeispiel 1: 100 -->
+        <div class="notebook-column col-blue">
+          <div class="col-title">Beispiel 1: $100_d$ in Hex umwandeln</div>
+          <ul class="rule-list" style="margin-bottom: 0.85rem;">
+            <li><strong>16er-Stelle:</strong> Wie oft passt $16$ in $100$?<br>
+              Blick in die 16er-Reihe: <strong>6-mal</strong>, denn $6 \cdot 16 = 96$.</li>
+            <li><strong>Abziehen (Rest):</strong> $100 - 96 = \mathbf{4}$.</li>
+            <li><strong>1er-Stelle:</strong> Es bleiben $\mathbf{4}$ Einer übrig.</li>
+          </ul>
+          <div class="formula-notebook-box" style="padding: 0.75rem; font-size: 1.15rem; font-weight: 700;">
+            $100_d =$ <span class="green-box-digit">6</span> $\cdot\; 16 \;+$ <span class="green-box-digit">4</span> $\cdot\; 1 \;\longrightarrow\; \mathbf{64_{\text{hex}}}$
+          </div>
+        </div>
+
+        <!-- Musterbeispiel 2: 201 -->
+        <div class="notebook-column col-purple">
+          <div class="col-title">Beispiel 2: $201_d$ in Hex (mit Buchstabe!)</div>
+          <ul class="rule-list" style="margin-bottom: 0.85rem;">
+            <li><strong>16er-Stelle:</strong> Wie oft passt $16$ in $201$?<br>
+              Blick in die 16er-Reihe: <strong>12-mal</strong>, denn $12 \cdot 16 = 192$.</li>
+            <li><strong>Abziehen (Rest):</strong> $201 - 192 = \mathbf{9}$.</li>
+            <li><strong>Buchstaben-Tausch:</strong> Die <span style="color:#dc2626; font-weight:700;">12</span> im ersten Kästchen wird zum Buchstaben <strong style="color:#dc2626;">c</strong>!</li>
+          </ul>
+          <div class="formula-notebook-box" style="padding: 0.75rem; font-size: 1.15rem; font-weight: 700;">
+            $201_d =$
+            <span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px;">
+              <span class="green-box-digit">12</span>
+              <span style="color:#dc2626; font-size:0.88rem; line-height:1.1; margin-top:2px;">↓ c</span>
+            </span>
+            $\cdot\; 16 \;+$ <span class="green-box-digit">9</span> $\cdot\; 1 \;\longrightarrow\; \mathbf{c9_{\text{hex}}}$
+          </div>
+        </div>
+      </div>
+
+      <!-- Musterbeispiel 3: 567 (Dreistellig mit schriftlicher Nebenrechnung wie auf Heft S. 7) -->
+      <div class="notebook-column" style="border: 1.5px solid #cbd5e1; background: #f8fafc; margin-top: 1rem;">
+        <div class="col-title" style="color: var(--ink-blue);">
+          Beispiel 3 (Große Zahl ab 256): $567_d$ mit schriftlicher Abzieh-Rechnung
+        </div>
+        <p style="font-size: 0.96rem; margin-bottom: 1rem;">
+          Weil $567$ größer als $256$ ist, brauchen wir drei Kästchen: die <strong>256er-Stelle</strong>, die <strong>16er-Stelle</strong> und die <strong>1er-Stelle</strong>.
+        </p>
+
+        <div class="note-columns" style="align-items: center; margin: 0;">
+          <div>
+            <ol style="margin-left: 1.25rem; font-size: 0.95rem; line-height: 1.7;">
+              <li><strong>256er-Stelle:</strong> Wie oft passt $256$ in $567$? $\rightarrow$ <strong>2-mal</strong> ($2 \cdot 256 = 512$).<br>
+                Wir ziehen $512$ ab: $567 - 512 = \mathbf{55}$ (Rest $55$).</li>
+              <li><strong>16er-Stelle:</strong> Wie oft passt $16$ in den Rest $55$? $\rightarrow$ <strong>3-mal</strong> ($3 \cdot 16 = 48$).<br>
+                Wir ziehen $48$ ab: $55 - 48 = \mathbf{7}$ (Rest $7$).</li>
+              <li><strong>1er-Stelle:</strong> Es bleibt der Rest $\mathbf{7}$ ($7 \cdot 1$).</li>
+            </ol>
+            <div class="formula-notebook-box" style="margin-top: 0.85rem; font-size: 1.15rem; font-weight: 700;">
+              $567_d =$ <span class="green-box-digit">2</span> $\cdot\; 256 \;+$ <span class="green-box-digit">3</span> $\cdot\; 16 \;+$ <span class="green-box-digit">7</span> $\cdot\; 1 \;\longrightarrow\; \mathbf{237_{\text{hex}}}$
+            </div>
+          </div>
+
+          <div style="text-align: center;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--ink-muted); margin-bottom: 6px;">
+              Schriftliche Nebenrechnung (wie im Heft):
+            </div>
+            <div class="subtraction-notebook">
+              &nbsp;&nbsp;567 &nbsp;<span style="color:#64748b; font-size:0.85rem;">(Startzahl)</span><br>
+              <span class="sub-line">- 512</span> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">($\mathbf{2} \cdot 256$)</span><br>
+              &nbsp;&nbsp;&nbsp;55 &nbsp;<span style="color:#64748b; font-size:0.85rem;">(1. Rest)</span><br>
+              <span class="sub-line">- &nbsp;48</span> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">($\mathbf{3} \cdot 16$)</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<strong>7</strong> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">($\mathbf{7} \cdot 1$)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERAKTIVER TRAINER 2: DEZIMAL -> HEX (Kästchen- & Abzieh-Generator + Selbst-Test) -->
+      <div class="lab-box" style="margin-top: 1.5rem;">
+        <div class="slider-label" style="margin-bottom: 0.35rem;">
+          Interaktiver Kästchen- &amp; Abzieh-Rechner (Dezimal $\rightarrow$ Hexadezimal)
+        </div>
+        <p style="font-size: 0.94rem; color: var(--ink-muted); margin-bottom: 0.85rem;">
+          Gib eine beliebige Dezimalzahl (von $0$ bis $4095$) ein – der Rechner zeigt dir sofort die <strong>Kästchen-Zerlegung</strong> und die <strong>schriftliche Abzieh-Rechnung</strong> wie an der Tafel:
+        </p>
+
+        <div class="trainer-controls">
+          <input type="number" id="decToHexInput" class="trainer-input" min="0" max="4095" value="201">
+          <button type="button" class="btn-action" onclick="calcDecToHex()">Kästchen &amp; Nebenrechnung anzeigen</button>
+        </div>
+
+        <div class="button-selector-row" style="margin-bottom: 1rem;">
+          <button type="button" class="btn-day" onclick="setDecExample(100)">Heft: 100</button>
+          <button type="button" class="btn-day active" onclick="setDecExample(201)">Heft: 201</button>
+          <button type="button" class="btn-day" onclick="setDecExample(567)">Heft: 567</button>
+          <button type="button" class="btn-day" onclick="setDecExample(300)">Übung 2a: 300</button>
+          <button type="button" class="btn-day" onclick="setDecExample(91)">Übung 2b: 91</button>
+          <button type="button" class="btn-day" onclick="setDecExample(870)">Übung 2c: 870</button>
+        </div>
+
+        <div id="decToHexResult"></div>
+      </div>
+
+      <!-- INTERAKTIVES SELBST-TRAINING: Fülle die grünen Kästchen selbst aus! -->
+      <div class="lab-box" style="margin-top: 1.25rem; background: #f0fdf4; border-color: #bbf7d0;">
+        <div class="slider-label" style="color: #166534; margin-bottom: 0.35rem;">
+          Selbst-Trainer: Fülle die grünen Kästchen selbst aus!
+        </div>
+        <p style="font-size: 0.94rem; color: #111827; margin-bottom: 0.85rem;">
+          Hier kannst du das Umrechnen selbst trainieren. Berechne zuerst die Kästchen (Dezimalzahlen $0$ bis $15$) und schreibe dann die fertige Hex-Zahl auf:
+        </p>
+
+        <div class="button-selector-row" style="margin-bottom: 1rem;">
+          <button type="button" class="btn-day" onclick="loadPracticeTask(75)">Leicht: 75</button>
+          <button type="button" class="btn-day" onclick="loadPracticeTask(164)">Mittel: 164</button>
+          <button type="button" class="btn-day" onclick="loadPracticeTask(220)">Mit Buchstaben: 220</button>
+          <button type="button" class="btn-day" onclick="loadPracticeTask(191)">Mit Buchstaben: 191</button>
+          <button type="button" class="btn-day" onclick="loadPracticeTask(0)">Zufallszahl (16–255)</button>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #86efac; border-radius: 6px; padding: 1.15rem;">
+          <div style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.85rem; display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+            <span id="practiceTargetNum" style="color:#1e3a8a; font-size:1.3rem;">164<sub>d</sub></span>
+            <span>$=$</span>
+            <input type="number" id="quizBox16" class="quiz-box-input" min="0" max="15" placeholder="?">
+            <span>$\cdot\; 16 \;+$</span>
+            <input type="number" id="quizBox1" class="quiz-box-input" min="0" max="15" placeholder="?">
+            <span>$\cdot\; 1 \;\longrightarrow\;$ Hex-Zahl:</span>
+            <input type="text" id="quizHexFinal" class="trainer-input" style="width:90px; height:38px; text-align:center;" maxlength="2" placeholder="??">
+            <button type="button" class="btn-action" style="background:#16a34a; border-color:#16a34a;" onclick="checkPracticeTask()">Prüfen</button>
+          </div>
+          <div id="practiceFeedback" style="font-size: 0.95rem; font-weight: 600;"></div>
+        </div>
+      </div>
+
+      <!-- Übung 2 aus dem Heft (Seite 7 oben) -->
+      <h3 style="font-size: 1.08rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
+        Übung 2 aus dem Unterricht: Schreibe als Hex-Zahl
+      </h3>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 2a:</strong> Schreibe <span class="code-mono">300</span> als Hex-Zahl.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>Da $300 \ge 256$ ist, beginnen wir mit der <strong>256er-Stelle</strong>:</p>
+          <ul class="rule-list">
+            <li><strong>256er-Stelle:</strong> $256$ passt <strong>1-mal</strong> in $300$. Rest: $300 - 256 = \mathbf{44}$.</li>
+            <li><strong>16er-Stelle:</strong> $16$ passt <strong>2-mal</strong> in $44$ ($2 \cdot 16 = 32$). Rest: $44 - 32 = \mathbf{12}$.</li>
+            <li><strong>1er-Stelle:</strong> Rest $\mathbf{12} \rightarrow$ Buchstabe <strong style="color:#dc2626;">c</strong>!</li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top:0.5rem; font-weight:700; font-size:1.1rem;">
+            $300_d =$ <span class="green-box-digit">1</span> $\cdot\; 256 \;+$ <span class="green-box-digit">2</span> $\cdot\; 16 \;+$
+            <span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px;">
+              <span class="green-box-digit">12</span>
+              <span style="color:#dc2626; font-size:0.85rem; line-height:1.1; margin-top:2px;">↓ c</span>
+            </span>
+            $\cdot\; 1 \;\longrightarrow\; \mathbf{12\text{c}_{\text{hex}}}$
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 2b:</strong> Schreibe <span class="code-mono">91</span> als Hex-Zahl.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>Da $91 < 256$ ist, starten wir direkt bei der <strong>16er-Stelle</strong>:</p>
+          <ul class="rule-list">
+            <li><strong>16er-Stelle:</strong> $16$ passt <strong>5-mal</strong> in $91$ (denn $5 \cdot 16 = 80$).</li>
+            <li><strong>Abziehen (Rest):</strong> $91 - 80 = \mathbf{11}$.</li>
+            <li><strong>1er-Stelle:</strong> Rest $\mathbf{11} \rightarrow$ Buchstabe <strong style="color:#dc2626;">b</strong>!</li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top:0.5rem; font-weight:700; font-size:1.1rem;">
+            $91_d =$ <span class="green-box-digit">5</span> $\cdot\; 16 \;+$
+            <span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px;">
+              <span class="green-box-digit">11</span>
+              <span style="color:#dc2626; font-size:0.85rem; line-height:1.1; margin-top:2px;">↓ b</span>
+            </span>
+            $\cdot\; 1 \;\longrightarrow\; \mathbf{5\text{b}_{\text{hex}}}$
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Übung 2c:</strong> Schreibe <span class="code-mono">870<sub>d</sub></span> als Hex-Zahl.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>Da $870 \ge 256$ ist, starten wir bei der <strong>256er-Stelle</strong>:</p>
+          <ul class="rule-list">
+            <li><strong>256er-Stelle:</strong> $256$ passt <strong>3-mal</strong> in $870$ (denn $3 \cdot 256 = 768$). Rest: $870 - 768 = \mathbf{102}$.</li>
+            <li><strong>16er-Stelle:</strong> $16$ passt <strong>6-mal</strong> in $102$ (denn $6 \cdot 16 = 96$). Rest: $102 - 96 = \mathbf{6}$.</li>
+            <li><strong>1er-Stelle:</strong> Es bleibt der Rest $\mathbf{6}$.</li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top:0.5rem; font-weight:700; font-size:1.1rem;">
+            $870_d =$ <span class="green-box-digit">3</span> $\cdot\; 256 \;+$ <span class="green-box-digit">6</span> $\cdot\; 16 \;+$ <span class="green-box-digit">6</span> $\cdot\; 1 \;\longrightarrow\; \mathbf{366_h}$
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 5: RGB ALS HEX-CODE (Beide Richtungen aus Heft S. 7)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-rgb-hex">
+      <h2 class="task-title">
+        <span class="task-number">5</span>
+        RGB-Farben als Hex-Code (<span class="code-hex-badge">RRGGBB</span>) – Beide Richtungen
+      </h2>
+
+      <p>
+        Jetzt verbinden wir unser Wissen über das Hexadezimalsystem mit den <strong>RGB-Farben</strong>! Weil die höchste Farbintensität $255$ im Hex-System genau <span class="code-hex-badge">ff</span> ($15 \cdot 16 + 15 = 255$) ist, lässt sich jeder Farbkanal von $0$ bis $255$ mit <strong>genau 2 Hex-Ziffern</strong> darstellen.
+      </p>
+
+      <div class="note-columns" style="margin-top: 1.25rem;">
+        <!-- Richtung A: RGB -> Hex (Heft S. 7: (32, 100, 255) -> 2064ff) -->
+        <div class="notebook-column col-blue">
+          <div class="col-title">Richtung A: RGB-Modell $\rightarrow$ Hex-Code</div>
+          <p class="col-description">
+            <strong>Unterrichtsbeispiel:</strong> Schreibe die Farbe <span class="code-mono">(32, 100, 255)</span> als Hex-Code.
+          </p>
+          <p style="font-size: 0.94rem; margin-bottom: 0.65rem;">
+            <strong>Vorgehen:</strong> Wir rechnen alle 3 Farbwerte einzeln in je 2 Hex-Ziffern um und schreiben sie direkt hintereinander:
+          </p>
+          <ul class="rule-list">
+            <li><strong>Rot ($32$):</strong> $32 = 2 \cdot 16 + 0 \cdot 1 \;\rightarrow\;$ <span class="code-hex-badge" style="color:#dc2626;">20</span></li>
+            <li><strong>Grün ($100$):</strong> $100 = 6 \cdot 16 + 4 \cdot 1 \;\rightarrow\;$ <span class="code-hex-badge" style="color:#16a34a;">64</span></li>
+            <li><strong>Blau ($255$):</strong> $255 = 15 \cdot 16 + 15 \cdot 1 \;\rightarrow\;$ <span class="code-hex-badge" style="color:#2563eb;">ff</span></li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top: 0.85rem;">
+            <div class="formula-tag">Fertiger 6-stelliger Hex-Code</div>
+            <div class="formula-val" style="font-family: 'Consolas', monospace; letter-spacing: 2px;">
+              <span style="color:#dc2626;">20</span><span style="color:#16a34a;">64</span><span style="color:#2563eb;">ff</span>
+            </div>
+          </div>
+          <div class="color-preview-swatch" style="background: #2064ff; color: #ffffff;">
+            Vorschau: (32, 100, 255) = 2064ff
+          </div>
+        </div>
+
+        <!-- Richtung B: Hex -> RGB (Heft S. 7: a34bfd) -->
+        <div class="notebook-column col-purple">
+          <div class="col-title">Richtung B: Hex-Code $\rightarrow$ RGB-Modell</div>
+          <p class="col-description">
+            <strong>Unterrichtsaufgabe:</strong> Gib die Farbe <span class="code-hex-badge">a34bfd</span> im RGB-Modell an.
+          </p>
+          <p style="font-size: 0.94rem; margin-bottom: 0.65rem;">
+            <strong>Vorgehen (Dreier-Kreise wie im Heft):</strong> Wir kreisen immer <strong>je 2 Ziffern</strong> für Rot, Grün und Blau ein:
+          </p>
+          <div style="text-align: center; margin: 0.65rem 0;">
+            <span class="hex-pair-pill">a3<span class="hex-pair-label">1. Rot</span></span>
+            <span class="hex-pair-pill">4b<span class="hex-pair-label">2. Grün</span></span>
+            <span class="hex-pair-pill">fd<span class="hex-pair-label">3. Blau</span></span>
+          </div>
+          <ul class="rule-list">
+            <li><strong>Rot (<span class="code-mono">a3</span>):</strong> $10 \cdot 16 + 3 \cdot 1 = 160 + 3 = \mathbf{163}$</li>
+            <li><strong>Grün (<span class="code-mono">4b</span>):</strong> $4 \cdot 16 + 11 \cdot 1 = 64 + 11 = \mathbf{75}$</li>
+            <li><strong>Blau (<span class="code-mono">fd</span>):</strong> $15 \cdot 16 + 13 \cdot 1 = 240 + 13 = \mathbf{253}$</li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top: 0.85rem;">
+            <div class="formula-tag">Ergebnis im RGB-Modell</div>
+            <div class="formula-val" style="font-family: 'Consolas', monospace;">
+              (163, 75, 253)
+            </div>
+          </div>
+          <div class="color-preview-swatch" style="background: #a34bfd; color: #ffffff;">
+            Vorschau: a34bfd = (163, 75, 253)
+          </div>
+        </div>
+      </div>
+
+      <div class="comment-notebook-banner" style="margin-top: 1.25rem; margin-bottom: 0;">
+        <strong>Wichtiger Tipp bei kleinen Zahlen (unter 16):</strong><br>
+        Jede Farbe braucht im Hex-Code <strong>genau 2 Stellen</strong>! Wenn ein Farbwert kleiner als $16$ ist – zum Beispiel $0$ oder $11$ (<span class="code-mono">b</span>) –, schreiben wir eine <strong>führende Null</strong> davor: Aus $0$ wird <span class="code-hex-badge">00</span>, aus $11$ wird <span class="code-hex-badge">0b</span>. Beispiel: <span class="code-mono">(255, 0, 11)</span> $\rightarrow$ <span class="code-hex-badge">ff000b</span>.
+      </div>
+
+      <!-- INTERAKTIVER FARBCODE-LABOR-RECHNER -->
+      <div class="lab-box" style="margin-top: 1.5rem;">
+        <div class="slider-label" style="margin-bottom: 0.35rem;">
+          Interaktiver RGB $\leftrightarrow$ Hex-Farbcode-Übersetzer
+        </div>
+        <p style="font-size: 0.94rem; color: var(--ink-muted); margin-bottom: 1rem;">
+          Teste eigene RGB-Werte oder einen 6-stelligen Hex-Code und verfolge live die Umrechnung aller drei Kanäle:
+        </p>
+
+        <div class="note-columns" style="margin: 0;">
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 1rem;">
+            <div style="font-weight: 700; color: var(--ink-blue); margin-bottom: 0.6rem;">RGB-Werte (0 bis 255) eingeben:</div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <label style="font-weight:700; color:#dc2626;">R: <input type="number" id="labR" class="trainer-input" style="width:72px;" min="0" max="255" value="32" oninput="updateFromRGB()"></label>
+              <label style="font-weight:700; color:#16a34a;">G: <input type="number" id="labG" class="trainer-input" style="width:72px;" min="0" max="255" value="100" oninput="updateFromRGB()"></label>
+              <label style="font-weight:700; color:#2563eb;">B: <input type="number" id="labB" class="trainer-input" style="width:72px;" min="0" max="255" value="255" oninput="updateFromRGB()"></label>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 1rem;">
+            <div style="font-weight: 700; color: var(--ink-blue); margin-bottom: 0.6rem;">Oder 6-stelligen Hex-Code eingeben:</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="labHex" class="trainer-input" style="width:140px; letter-spacing:2px;" maxlength="6" value="2064ff" oninput="updateFromHex()">
+              <button type="button" class="btn-day" onclick="setLabHex('a34bfd')">Heft: a34bfd</button>
+              <button type="button" class="btn-day" onclick="setLabHex('2064ff')">Heft: 2064ff</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="labColorExplanation" style="margin-top: 1rem;"></div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 6: MERKHEFT-SICHERUNG (Roter Merke-Kasten gemäss GEMINI.md)
+         ====================================================================== -->
+    <article class="sheet-card" id="sec-merke">
+      <h2 class="task-title">
+        <span class="task-number">6</span>
+        Zusammenfassung &amp; Merkheft-Sicherung
+      </h2>
+
+      <div class="merke-box">
+        <span class="merke-tag">Merke: Das Hexadezimalsystem &amp; Farbcodes</span>
+        <div class="merke-content">
+          <div class="merke-title">Die wichtigsten Regeln für deinen Test auf einen Blick</div>
+          <ul class="rule-list">
+            <li><strong>Basis 16:</strong> Das Hexadezimalsystem nutzt <strong>16 Ziffern</strong>: die Zahlen <span class="code-mono">0</span> bis <span class="code-mono">9</span> sowie die Buchstaben <span class="code-mono">a=10</span>, <span class="code-mono">b=11</span>, <span class="code-mono">c=12</span>, <span class="code-mono">d=13</span>, <span class="code-mono">e=14</span> und <span class="code-mono">f=15</span>.</li>
+            <li><strong>Stellenwerte ($\cdot 16$):</strong> Von rechts nach links lauten die Stellenwerte $\mathbf{1}$, $\mathbf{16}$, $\mathbf{256}$, $\mathbf{4096}$.</li>
+            <li><strong>Hex $\rightarrow$ Dezimal:</strong> Jede Ziffer mit ihrem Stellenwert multiplizieren und alles addieren (z. B. $\text{3c} = 3 \cdot 16 + 12 \cdot 1 = 60$).</li>
+            <li><strong>Dezimal $\rightarrow$ Hex (Kästchen-/Abziehmethode):</strong> Prüfen, wie oft der größte passende Stellenwert ($256$ bzw. $16$) in die Zahl passt, das Vielfache abziehen und mit dem Rest weitermachen. Zahlen ab $10$ in Buchstaben (<span class="code-mono">a–f</span>) tauschen!</li>
+            <li><strong>RGB als Hex-Code (<span class="code-mono">RRGGBB</span>):</strong> Ein Hex-Farbcode besteht aus <strong>6 Ziffern</strong> (2 für Rot, 2 für Grün, 2 für Blau). Die höchste Intensität $255$ ist <span class="code-mono">ff</span> ($15 \cdot 16 + 15$).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Selbst-Check mit weiteren Trainingsaufgaben -->
+      <h3 style="font-size: 1.12rem; color: var(--ink-blue); margin: 1.5rem 0 0.75rem 0;">
+        Trainingsaufgaben zur Selbstkontrolle (Aufdecken &amp; Prüfen)
+      </h3>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Frage 1:</strong> Warum ist <span class="code-hex-badge">ff</span> im Hexadezimalsystem genau die Zahl $255$?</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>
+            Der Buchstabe <span class="code-mono">f</span> hat den Wert $15$. Bei <span class="code-hex-badge">ff</span> steht sowohl an der 16er-Stelle als auch an der 1er-Stelle eine $15$:<br>
+            $$\text{ff}_{\text{hex}} = 15 \cdot 16 + 15 \cdot 1 = 240 + 15 = \mathbf{255_d}$$
+          </p>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Frage 2:</strong> Wandle die Dezimalzahl <span class="code-mono">175</span> mit der Kästchenmethode in eine Hex-Zahl um.</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <ul class="rule-list">
+            <li><strong>1. Schritt (16er-Stelle):</strong> Wie oft passt $16$ in $175$? $\rightarrow$ <strong>10-mal</strong> (denn $10 \cdot 16 = 160$).</li>
+            <li><strong>2. Schritt (Abziehen):</strong> $175 - 160 = \mathbf{15}$ (Rest $15$ für die 1er-Stelle).</li>
+            <li><strong>3. Schritt (Buchstaben):</strong> $10 = \mathbf{a}$ und $15 = \mathbf{f}$.</li>
+          </ul>
+          <div class="formula-notebook-box" style="margin-top:0.5rem; font-weight:700; font-size:1.1rem;">
+            $175_d =$
+            <span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px;">
+              <span class="green-box-digit">10</span>
+              <span style="color:#dc2626; font-size:0.85rem; line-height:1.1; margin-top:2px;">↓ a</span>
+            </span>
+            $\cdot\; 16 \;+$
+            <span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px;">
+              <span class="green-box-digit">15</span>
+              <span style="color:#dc2626; font-size:0.85rem; line-height:1.1; margin-top:2px;">↓ f</span>
+            </span>
+            $\cdot\; 1 \;\longrightarrow\; \mathbf{af_{\text{hex}}}$
+          </div>
+        </div>
+      </div>
+
+      <div class="solution-toggle-box" onclick="toggleSolution(this)">
+        <div class="solution-header">
+          <span><strong>Frage 3:</strong> Welche Farbe im RGB-Modell verbirgt sich hinter dem Hex-Code <span class="code-hex-badge">00ff80</span>?</span>
+          <button class="btn-reveal" type="button">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="solution-body">
+          <p>Wir teilen den Code in drei 2er-Paare auf: <span class="code-mono">00</span> | <span class="code-mono">ff</span> | <span class="code-mono">80</span></p>
+          <ul class="rule-list">
+            <li><strong>Rot (<span class="code-mono">00</span>):</strong> $0 \cdot 16 + 0 \cdot 1 = \mathbf{0}$</li>
+            <li><strong>Grün (<span class="code-mono">ff</span>):</strong> $15 \cdot 16 + 15 \cdot 1 = \mathbf{255}$</li>
+            <li><strong>Blau (<span class="code-mono">80</span>):</strong> $8 \cdot 16 + 0 \cdot 1 = \mathbf{128}$</li>
+          </ul>
+          <p style="margin-top:0.5rem; font-weight:700;">
+            RGB-Code: <span class="code-mono">(0, 255, 128)</span> (ein leuchtendes Frühlingsgrün/Mintgrün).
+          </p>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <script>
+    // Klapp-Lösungen auf- und zuklappen
+    function toggleSolution(box) {
+      box.classList.toggle('open');
+      const btn = box.querySelector('.btn-reveal');
+      if (box.classList.contains('open')) {
+        btn.textContent = 'Antwort verbergen';
+      } else {
+        btn.textContent = 'Antwort & Erklärung aufdecken';
+      }
+    }
+
+    // =========================================================================
+    // TRAINER 1: HEXADEZIMAL -> DEZIMAL
+    // =========================================================================
+    const hexMap = {
+      '0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+      '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15
+    };
+
+    function setHexExample(val) {
+      document.getElementById('hexToDecInput').value = val;
+      calcHexToDec();
+    }
+
+    function calcHexToDec() {
+      const raw = document.getElementById('hexToDecInput').value.trim().toLowerCase();
+      const out = document.getElementById('hexToDecResult');
+
+      if (!raw || !/^[0-9a-f]{1,4}$/.test(raw)) {
+        out.innerHTML = `<div style="color:#dc2626; font-weight:700; padding:0.75rem; background:#fef2f2; border:1px solid #fecaca; border-radius:6px;">
+          Bitte gib 1 bis 4 gültige Hex-Ziffern ein (nur 0–9 und a–f)!
+        </div>`;
+        return;
+      }
+
+      const padded = raw.padStart(4, ' ');
+      const placeValues = [4096, 256, 16, 1];
+      let terms = [];
+      let subSums = [];
+      let total = 0;
+
+      let tableCells = '';
+      for (let i = 0; i < 4; i++) {
+        const ch = padded[i];
+        if (ch === ' ') {
+          tableCells += `<td style="color:#94a3b8;">–</td>`;
+        } else {
+          const val = hexMap[ch];
+          const isLetter = ch >= 'a' && ch <= 'f';
+          tableCells += `<td style="font-size:1.1rem;"><strong>${ch}</strong> ${isLetter ? `<span class="red-letter-note">(=${val})</span>` : ''}</td>`;
+          const prod = val * placeValues[i];
+          terms.push(`${val} · ${placeValues[i]}`);
+          subSums.push(prod);
+          total += prod;
+        }
+      }
+
+      out.innerHTML = `
+        <div class="table-responsive" style="margin: 0.5rem 0;">
+          <table class="sheet-calc-table">
+            <thead>
+              <tr>
+                <th>Stellenwert</th>
+                <th>4096</th>
+                <th style="background:#dbeafe; color:#1e3a8a;">256</th>
+                <th style="background:#dbeafe; color:#1e3a8a;">16</th>
+                <th style="background:#dbeafe; color:#1e3a8a;">1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700; background:#f8fafc;">Eingetragen</td>
+                ${tableCells}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="background:#ffffff; border:1.5px solid #bfdbfe; border-radius:6px; padding:0.9rem 1.15rem; margin-top:0.65rem;">
+          <div style="font-size:0.92rem; color:#475569; font-weight:600;">Schrittweise Rechnung:</div>
+          <div style="font-family:'Consolas', monospace; font-size:1.08rem; margin-top:4px; color:#111827;">
+            <strong>${raw}<sub>hex</sub></strong> = ${terms.join(' + ')} = ${subSums.join(' + ')} = <strong style="color:#1e3a8a; font-size:1.25rem;">${total}<sub>d</sub></strong>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // TRAINER 2: DEZIMAL -> HEXADEZIMAL (Kästchen- & Abziehmethode)
+    // =========================================================================
+    const decToHexChar = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
+
+    function setDecExample(num) {
+      document.getElementById('decToHexInput').value = num;
+      calcDecToHex();
+    }
+
+    function formatGreenBox(val) {
+      const hexCh = decToHexChar[val];
+      if (val >= 10) {
+        return `<span style="display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 4px;">
+          <span class="green-box-digit">${val}</span>
+          <span style="color:#dc2626; font-weight:700; font-size:0.88rem; line-height:1.1; margin-top:2px;">↓ ${hexCh}</span>
+        </span>`;
+      }
+      return `<span class="green-box-digit">${val}</span>`;
+    }
+
+    function calcDecToHex() {
+      const val = parseInt(document.getElementById('decToHexInput').value, 10);
+      const out = document.getElementById('decToHexResult');
+
+      if (isNaN(val) || val < 0 || val > 4095) {
+        out.innerHTML = `<div style="color:#dc2626; font-weight:700; padding:0.75rem; background:#fef2f2; border:1px solid #fecaca; border-radius:6px;">
+          Bitte gib eine Dezimalzahl zwischen 0 und 4095 ein!
+        </div>`;
+        return;
+      }
+
+      if (val < 256) {
+        const d16 = Math.floor(val / 16);
+        const prod16 = d16 * 16;
+        const d1 = val - prod16;
+        const hexStr = (d16 > 0 ? decToHexChar[d16] : '') + decToHexChar[d1];
+        const hexTwoDigit = decToHexChar[d16] + decToHexChar[d1];
+
+        out.innerHTML = `
+          <div class="note-columns" style="margin:0.5rem 0 0 0; align-items:center;">
+            <div style="background:#ffffff; border:1.5px solid #bfdbfe; border-radius:6px; padding:1rem;">
+              <div style="font-weight:700; color:#1e3a8a; margin-bottom:0.5rem;">1. Kästchen-Gleichung (unter 256):</div>
+              <ol style="margin-left:1.2rem; font-size:0.93rem; line-height:1.65; margin-bottom:0.85rem;">
+                <li><strong>16er-Stelle:</strong> Die 16 passt <strong>${d16}-mal</strong> in ${val} (denn $${d16} \\cdot 16 = ${prod16}$).</li>
+                <li><strong>Abziehen:</strong> $${val} - ${prod16} = \\mathbf{${d1}}$ (Rest ${d1} für die 1er-Stelle).</li>
+                ${(d16 >= 10 || d1 >= 10) ? `<li style="color:#dc2626; font-weight:700;">Zahlen ab 10 in Buchstaben tauschen!</li>` : ''}
+              </ol>
+              <div style="font-size:1.15rem; font-weight:700; text-align:center; padding:0.65rem; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:6px;">
+                ${val}<sub>d</sub> = ${formatGreenBox(d16)} · 16 + ${formatGreenBox(d1)} · 1 &nbsp;⟶&nbsp; <span class="code-hex-badge" style="font-size:1.2rem;">${hexStr}<sub>hex</sub></span>
+                ${d16 === 0 ? `<div style="font-size:0.82rem; color:#475569; margin-top:4px;">(Als 2-stelliger Farbkanal mit führender Null: <strong>${hexTwoDigit}</strong>)</div>` : ''}
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:0.85rem; font-weight:700; color:#475569; margin-bottom:6px;">Schriftliche Abzieh-Rechnung:</div>
+              <div class="subtraction-notebook">
+                &nbsp;&nbsp;${String(val).padStart(3, ' ')} &nbsp;<span style="color:#64748b; font-size:0.85rem;">(Startzahl)</span><br>
+                <span class="sub-line">- ${String(prod16).padStart(3, ' ')}</span> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">(<strong>${d16}</strong> · 16)</span><br>
+                &nbsp;&nbsp;<strong>${String(d1).padStart(3, ' ')}</strong> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">(<strong>${d1}</strong> · 1)</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        const d256 = Math.floor(val / 256);
+        const prod256 = d256 * 256;
+        const rem1 = val - prod256;
+        const d16 = Math.floor(rem1 / 16);
+        const prod16 = d16 * 16;
+        const d1 = rem1 - prod16;
+        const hexStr = decToHexChar[d256] + decToHexChar[d16] + decToHexChar[d1];
+
+        out.innerHTML = `
+          <div class="note-columns" style="margin:0.5rem 0 0 0; align-items:center;">
+            <div style="background:#ffffff; border:1.5px solid #bfdbfe; border-radius:6px; padding:1rem;">
+              <div style="font-weight:700; color:#1e3a8a; margin-bottom:0.5rem;">1. Kästchen-Gleichung (ab 256 mit 3 Stellen):</div>
+              <ol style="margin-left:1.2rem; font-size:0.93rem; line-height:1.65; margin-bottom:0.85rem;">
+                <li><strong>256er-Stelle:</strong> 256 passt <strong>${d256}-mal</strong> in ${val} ($${d256} \\cdot 256 = ${prod256}$). Rest: <strong>${rem1}</strong>.</li>
+                <li><strong>16er-Stelle:</strong> 16 passt <strong>${d16}-mal</strong> in ${rem1} ($${d16} \\cdot 16 = ${prod16}$). Rest: <strong>${d1}</strong>.</li>
+                <li><strong>1er-Stelle:</strong> Es bleibt der Rest <strong>${d1}</strong>.</li>
+              </ol>
+              <div style="font-size:1.1rem; font-weight:700; text-align:center; padding:0.65rem; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:6px;">
+                ${val}<sub>d</sub> = ${formatGreenBox(d256)} · 256 + ${formatGreenBox(d16)} · 16 + ${formatGreenBox(d1)} · 1 &nbsp;⟶&nbsp; <span class="code-hex-badge" style="font-size:1.2rem;">${hexStr}<sub>hex</sub></span>
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:0.85rem; font-weight:700; color:#475569; margin-bottom:6px;">Schriftliche Abzieh-Rechnung:</div>
+              <div class="subtraction-notebook">
+                &nbsp;&nbsp;${String(val).padStart(4, ' ')} &nbsp;<span style="color:#64748b; font-size:0.85rem;">(Startzahl)</span><br>
+                <span class="sub-line">- ${String(prod256).padStart(4, ' ')}</span> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">(<strong>${d256}</strong> · 256)</span><br>
+                &nbsp;&nbsp;${String(rem1).padStart(4, ' ')} &nbsp;<span style="color:#64748b; font-size:0.85rem;">(1. Rest)</span><br>
+                <span class="sub-line">- ${String(prod16).padStart(4, ' ')}</span> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">(<strong>${d16}</strong> · 16)</span><br>
+                &nbsp;&nbsp;<strong>${String(d1).padStart(4, ' ')}</strong> &nbsp;<span style="color:#16a34a; font-size:0.85rem;">(<strong>${d1}</strong> · 1)</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      triggerKaTeX();
+    }
+
+    // =========================================================================
+    // SELBST-TRAINER (Fülle die grünen Kästchen selbst aus)
+    // =========================================================================
+    let currentPracticeVal = 164;
+
+    function loadPracticeTask(val) {
+      if (val === 0) {
+        currentPracticeVal = Math.floor(Math.random() * 239) + 16;
+      } else {
+        currentPracticeVal = val;
+      }
+      document.getElementById('practiceTargetNum').innerHTML = `${currentPracticeVal}<sub>d</sub>`;
+      document.getElementById('quizBox16').value = '';
+      document.getElementById('quizBox1').value = '';
+      document.getElementById('quizHexFinal').value = '';
+      document.getElementById('practiceFeedback').innerHTML = '';
+    }
+
+    function checkPracticeTask() {
+      const b16 = parseInt(document.getElementById('quizBox16').value, 10);
+      const b1 = parseInt(document.getElementById('quizBox1').value, 10);
+      const hexIn = document.getElementById('quizHexFinal').value.trim().toLowerCase();
+      const fb = document.getElementById('practiceFeedback');
+
+      const corr16 = Math.floor(currentPracticeVal / 16);
+      const corr1 = currentPracticeVal % 16;
+      const corrHex = decToHexChar[corr16] + decToHexChar[corr1];
+
+      if (b16 === corr16 && b1 === corr1 && hexIn === corrHex) {
+        fb.innerHTML = `<span style="color:#15803d;">Richtig gelöst! ${currentPracticeVal} = ${corr16} · 16 + ${corr1} · 1 ⟶ Hex-Zahl: <strong>${corrHex}</strong>.</span>`;
+      } else {
+        let hints = [];
+        if (b16 !== corr16) {
+          hints.push(`In das erste Kästchen (16er-Stelle) gehört <strong>${corr16}</strong>, denn ${corr16} · 16 = ${corr16 * 16}.`);
+        }
+        if (b1 !== corr1) {
+          hints.push(`In das zweite Kästchen (1er-Stelle) gehört der Rest ${currentPracticeVal} - ${corr16 * 16} = <strong>${corr1}</strong>.`);
+        }
+        if (b16 === corr16 && b1 === corr1 && hexIn !== corrHex) {
+          hints.push(`Deine Kästchen (${corr16} und ${corr1}) stimmen schon! Denk jetzt noch an die Buchstaben-Umwandlung: ${corr16} ⟶ <strong>${decToHexChar[corr16]}</strong> und ${corr1} ⟶ <strong>${decToHexChar[corr1]}</strong>, zusammen also <strong>${corrHex}</strong>.`);
+        }
+        fb.innerHTML = `<div style="color:#b91c1c; margin-top:4px;">Noch nicht ganz: ${hints.join(' ')}</div>`;
+      }
+    }
+
+    // =========================================================================
+    // TRAINER 3: RGB <-> HEX FARBCODE ÜBERSETZER
+    // =========================================================================
+    function setLabHex(hex) {
+      document.getElementById('labHex').value = hex;
+      updateFromHex();
+    }
+
+    function updateFromRGB() {
+      const r = Math.min(255, Math.max(0, parseInt(document.getElementById('labR').value || 0, 10)));
+      const g = Math.min(255, Math.max(0, parseInt(document.getElementById('labG').value || 0, 10)));
+      const b = Math.min(255, Math.max(0, parseInt(document.getElementById('labB').value || 0, 10)));
+
+      const hexR = r.toString(16).padStart(2, '0');
+      const hexG = g.toString(16).padStart(2, '0');
+      const hexB = b.toString(16).padStart(2, '0');
+      const fullHex = hexR + hexG + hexB;
+
+      document.getElementById('labHex').value = fullHex;
+      renderLabExplanation(r, g, b, hexR, hexG, hexB);
+    }
+
+    function updateFromHex() {
+      const raw = document.getElementById('labHex').value.trim().toLowerCase().replace('#', '');
+      if (!/^[0-9a-f]{6}$/.test(raw)) {
+        return;
+      }
+      const hexR = raw.slice(0, 2);
+      const hexG = raw.slice(2, 4);
+      const hexB = raw.slice(4, 6);
+
+      const r = parseInt(hexR, 16);
+      const g = parseInt(hexG, 16);
+      const b = parseInt(hexB, 16);
+
+      document.getElementById('labR').value = r;
+      document.getElementById('labG').value = g;
+      document.getElementById('labB').value = b;
+      renderLabExplanation(r, g, b, hexR, hexG, hexB);
+    }
+
+    function renderLabExplanation(r, g, b, hexR, hexG, hexB) {
+      const r16 = Math.floor(r / 16), r1 = r % 16;
+      const g16 = Math.floor(g / 16), g1 = g % 16;
+      const b16 = Math.floor(b / 16), b1 = b % 16;
+
+      const textColor = (r * 0.299 + g * 0.587 + b * 0.114) > 145 ? '#111827' : '#ffffff';
+
+      document.getElementById('labColorExplanation').innerHTML = `
+        <div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:6px; padding:1rem;">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-around; gap:10px; font-family:'Consolas', monospace; font-size:0.98rem;">
+            <div><strong style="color:#dc2626;">Rot:</strong> ${r} = ${r16}·16 + ${r1}·1 ⟷ <span class="code-hex-badge" style="color:#dc2626;">${hexR}</span></div>
+            <div><strong style="color:#16a34a;">Grün:</strong> ${g} = ${g16}·16 + ${g1}·1 ⟷ <span class="code-hex-badge" style="color:#16a34a;">${hexG}</span></div>
+            <div><strong style="color:#2563eb;">Blau:</strong> ${b} = ${b16}·16 + ${b1}·1 ⟷ <span class="code-hex-badge" style="color:#2563eb;">${hexB}</span></div>
+          </div>
+          <div class="color-preview-swatch" style="background:#${hexR}${hexG}${hexB}; color:${textColor};">
+            RGB: (${r}, ${g}, ${b}) &nbsp;|&nbsp; Hex-Code: ${hexR}${hexG}${hexB}
+          </div>
+        </div>
+      `;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      calcHexToDec();
+      calcDecToHex();
+      updateFromRGB();
+    });
+  </script>
+
+</body>
+</html>
