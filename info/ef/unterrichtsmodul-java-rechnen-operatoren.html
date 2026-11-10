@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Rechnen mit Variablen &amp; Selbstzuweisung | Informatik EF</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Zentrales Web-Modul Stylesheet (Schulheft- & Tafel-Design) -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --border-soft: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --highlight-math: #0369a1;
+      --warning-calc: #9a3412;
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.2rem 1.4rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid #334155;
+    }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; font-weight: 700; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Auftrags- & Infoboxen (Allseitig geschlossen, kein border-left) */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+    }
+    .auftrag-badge {
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .auftrag-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+
+    /* Merke Box Standard gemäss GEMINI.md */
+    .merke-box {
+      background: #ffffff;
+      border: 2.5px solid #dc2626;
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.75rem 0;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827;
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    /* Ablaufschritte-Visualisierung (Schritt-Kette) */
+    .step-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1.25rem 0;
+    }
+    .step-node {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .step-num-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--ink-blue);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+    .step-text-main {
+      font-size: 0.96rem;
+      color: var(--ink-black);
+      line-height: 1.55;
+    }
+
+    /* Vergleichs- und Rechenraster */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .compare-table th {
+      background: var(--ink-blue);
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border: 1px solid var(--ink-blue);
+    }
+    .compare-table td {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+      background: #ffffff;
+    }
+    .compare-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* TÜV Quiz Karten */
+    .tuev-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .tuev-question {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+      margin-bottom: 0.85rem;
+    }
+    .tuev-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tuev-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 9px 14px;
+      border-radius: 6px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tuev-btn:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .tuev-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #059669 !important;
+      color: #065f46 !important;
+      font-weight: 700;
+    }
+    .tuev-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
+    }
+    .tuev-feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* Aufklapp-Antworten */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.35rem;
+      margin: 1rem 0;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .question-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink-black);
+    }
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .question-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 0.98rem;
+      color: var(--primary);
+      line-height: 1.6;
+    }
+    .question-answer.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER BAR (Kapitel-Navigationsleiste)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <span class="presenter-title">
+        Informatik EF • Thema 2: Java &amp; BlueJ
+      </span>
+      <span class="presenter-tag">Stunde 5 • Rechnen &amp; Operatoren</span>
+    </div>
+    <div class="presenter-actions">
+      <a href="bluej-figuren-einstieg.html" class="presenter-tab-btn">1. Figuren &amp; OOP</a>
+      <a href="quelltext-editor-compiler.html" class="presenter-tab-btn">2. Quellcode &amp; Compiler</a>
+      <a href="zusammenspiel-objekte-klasse-bild.html" class="presenter-tab-btn">3. Klasse Bild</a>
+      <a href="unterrichtsmodul-java-grundlagen-variablen.html" class="presenter-tab-btn">4. Grundlagen &amp; Variablen</a>
+      <a href="unterrichtsmodul-java-rechnen-operatoren.html" class="presenter-tab-btn active">5. Rechnen &amp; Selbstzuweisung</a>
+      <button class="presenter-tab-btn" onclick="toggleAllAnswers()">Alle Antworten aufdecken</button>
+      <button class="presenter-tab-btn" onclick="window.print()">Drucken</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ========================================================
+         DECKBLATT-HEADER
+         ======================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik • Einführungsphase (EF)</span>
+        <span>Thema 2: Java &amp; BlueJ</span>
+        <span>Unterrichtsbaustein: Arithmetik &amp; Selbstzuweisung</span>
+      </div>
+      <h1>Rechnen mit Variablen &amp; die Selbstzuweisung</h1>
+      <p class="sheet-intro">
+        Variablen heißen nicht ohne Grund <em>Variablen</em>: Ihr Inhalt ist veränderlich (variabel). 
+        Bisher haben wir Werte lediglich deklariert und starr auf der Konsole ausgegeben. 
+        In dieser Lerneinheit machen wir den Computer zur echten Rechenmaschine: Wir lernen die Grundoperatoren 
+        kennen, untersuchen die tückische Ganzzahldivision, berechnen Divisionsreste mit dem Modulo-Operator 
+        und lüften das Geheimnis der Selbstzuweisung <span class="code-pill">punkte = punkte + 5;</span>.
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.25rem;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Zentrales Lernziel</span>
+          <span class="auftrag-title">Vom Speicherfach zum Rechenprozess</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.55;">
+          Nach dieser Einheit kannst du:
+          (1) Die fünf Grundoperatoren in Java sicher anwenden, 
+          (2) den Unterschied zwischen <span class="code-pill">int</span>- und <span class="code-pill">double</span>-Division erklären, 
+          (3) mit dem Modulo-Operator <span class="code-pill">%</span> rechnen und 
+          (4) Schritt für Schritt nachvollziehen, was bei Selbstzuweisungen wie <span class="code-pill">x = x + 1;</span> 
+          im Arbeitsspeicher geschieht.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         PHASE 1: DIE ARITHMETISCHEN GRUNDOPERATOREN
+         ======================================================== -->
+    <section class="sheet-card" id="operatoren">
+      <div class="task-title">
+        <span class="task-number">1</span>
+        <span>Die vier Grundrechenarten in Java</span>
+      </div>
+
+      <p>
+        In Java können Zahlenwerte direkt oder über ihre Variablennamen miteinander verrechnet werden. 
+        Die Rechenregeln entsprechen denen der Schulmathematik: 
+        <strong>Punktrechnung (<span class="code-pill">*</span>, <span class="code-pill">/</span>) geht vor Strichrechnung (<span class="code-pill">+</span>, <span class="code-pill">-</span>)</strong>, 
+        und Klammern <span class="code-pill">( ... )</span> haben stets Vorrang.
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width: 20%;">Rechenart</th>
+            <th style="width: 15%;">Operator</th>
+            <th style="width: 35%;">Java-Codebeispiel</th>
+            <th style="width: 30%;">Ergebnis im RAM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Addition</strong></td>
+            <td><span class="code-pill">+</span></td>
+            <td><span class="code-pill">int summe = 15 + 4;</span></td>
+            <td>Wert <span class="code-num">19</span></td>
+          </tr>
+          <tr>
+            <td><strong>Subtraktion</strong></td>
+            <td><span class="code-pill">-</span></td>
+            <td><span class="code-pill">int rest = 20 - 7;</span></td>
+            <td>Wert <span class="code-num">13</span></td>
+          </tr>
+          <tr>
+            <td><strong>Multiplikation</strong></td>
+            <td><span class="code-pill">*</span></td>
+            <td><span class="code-pill">int flaeche = 6 * 8;</span></td>
+            <td>Wert <span class="code-num">48</span> (Sternchen statt $\cdot$)</td>
+          </tr>
+          <tr>
+            <td><strong>Division</strong></td>
+            <td><span class="code-pill">/</span></td>
+            <td><span class="code-pill">double halbe = 10.0 / 4.0;</span></td>
+            <td>Wert <span class="code-num">2.5</span> (Schrägstrich statt :)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Wichtiger Hinweis zu Variablen als Operanden -->
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Regel</span>
+          <span class="auftrag-title">Rechnen mit bestehenden Variablen</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.55;">
+          Man muss keine festen Zahlen hinschreiben. Es können beliebige Variablen eingesetzt werden:
+        </p>
+        <pre class="code-block"><span class="code-type">int</span> laenge = 10;
+<span class="code-type">int</span> breite = 4;
+<span class="code-type">int</span> umfang = 2 * (laenge + breite);  <span class="code-comment">// Ergibt 28</span>
+System.out.<span class="code-method">println</span>(<span class="code-string">"Umfang: "</span> + umfang);</pre>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 2: DIE GANZZAHLDIVISION (DIE INT-FALLE)
+         ======================================================== -->
+    <section class="sheet-card" id="division">
+      <div class="task-title">
+        <span class="task-number">2</span>
+        <span>Die Division: Der große Unterschied zwischen int und double</span>
+      </div>
+
+      <p>
+        Bei der Division lauert in Java der häufigste Rechenfehler von Programmieranfängern: 
+        <strong>Die sogenannte Ganzzahldivision</strong>.
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-purple">
+          <div class="col-title">• Fall A: Die int-Ganzzahldivision</div>
+          <div class="col-description">
+            Wenn <strong>zwei ganze Zahlen (<span class="code-pill">int</span>)</strong> geteilt werden, 
+            ist das Ergebnis für Java zwingend wieder ein <span class="code-pill">int</span>!<br><br>
+            <span class="highlighter">Alle Nachkommastellen werden einfach abgeschnitten</span> (nicht gerundet!).<br><br>
+            <span class="code-pill">int ergebnis = 7 / 2;</span> $\to$ Ergebnis: <strong>3</strong> (nicht 3.5!).<br>
+            <span class="code-pill">int test = 1 / 2;</span> $\to$ Ergebnis: <strong>0</strong> (nicht 0.5!).
+          </div>
+        </div>
+
+        <div class="notebook-column col-blue">
+          <div class="col-title">• Fall B: Die echte Fließkommadivision</div>
+          <div class="col-description">
+            Sobald <strong>mindestens ein Operand eine Dezimalzahl (<span class="code-pill">double</span>)</strong> ist, 
+            rechnet Java mit Nachkommastellen weiter:<br><br>
+            <span class="code-pill">double ergebnis = 7.0 / 2;</span> $\to$ Ergebnis: <strong>3.5</strong>.<br>
+            <span class="code-pill">double test = 1.0 / 2;</span> $\to$ Ergebnis: <strong>0.5</strong>.<br><br>
+            <em>Tipp:</em> Wenn man zwei <span class="code-pill">int</span>-Variablen teilt, kann man einen Operanden mit <span class="code-pill">1.0 * a / b</span> zu <span class="code-pill">double</span> befördern.
+          </div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('q-div-falle', this.querySelector('.btn-reveal'))">
+          <span class="question-title">• Warum ergibt double x = 7 / 2; in Java überraschend 3.0 und nicht 3.5?</span>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <div id="q-div-falle" class="question-answer">
+          Das ist die klassische Anfängerfalle! Java wertet zuerst die <strong>rechte Seite</strong> aus: 
+          Dort steht <span class="code-pill">7 / 2</span>. Weil beides <span class="code-pill">int</span>-Zahlen sind, führt Java eine Ganzzahldivision durch und erhält <span class="code-pill">3</span>. 
+          Erst <em>danach</em> wird die Zuweisung an die linke Seite (<span class="code-pill">double x</span>) ausgeführt. Die Zahl 3 wird zu <span class="code-pill">3.0</span> umgewandelt. 
+          Die Nachkommastelle <span class="code-pill">.5</span> war da bereits unwiderruflich verloren! 
+          <strong>Lösung:</strong> <span class="code-pill">double x = 7.0 / 2;</span> schreiben.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 3: DER MODULO-OPERATOR (%)
+         ======================================================== -->
+    <section class="sheet-card" id="modulo">
+      <div class="task-title">
+        <span class="task-number">3</span>
+        <span>Der Modulo-Operator (%): Rechnen mit dem Divisionsrest</span>
+      </div>
+
+      <p>
+        In der Grundschule hat man geteilt, bevor man Brüche kannte: 
+        <em>„14 geteilt durch 4 ist 3, Rest 2.“</em> Genau diesen <strong>Rest</strong> liefert in Java 
+        das Prozentzeichen <span class="code-pill">%</span>, genannt <strong>Modulo-Operator</strong>:
+      </p>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          Der <strong>Modulo-Operator (<span class="code-pill">%</span>)</strong> berechnet den ganzzahligen Rest einer Division:<br>
+          • <span class="code-pill">14 / 4</span> ergibt <span class="code-pill">3</span> <em>(Wie oft passt die 4 ganz hinein?)</em><br>
+          • <span class="code-pill">14 % 4</span> ergibt <span class="code-pill">2</span> <em>(Welcher Rest bleibt übrig?)</em>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.5rem 0 0.5rem 0;">
+        Warum ist Modulo in der Informatik so wichtig?
+      </h3>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">• 1. Gerade oder ungerade Zahl?</div>
+          <div class="col-description">
+            Jede gerade Zahl lässt sich ohne Rest durch 2 teilen. 
+            Teilt man eine Zahl durch 2 mit Modulo, bleibt entweder 0 oder 1 übrig:<br>
+            • <span class="code-pill">8 % 2</span> $\to$ <strong>0</strong> (gerade Zahl)<br>
+            • <span class="code-pill">9 % 2</span> $\to$ <strong>1</strong> (ungerade Zahl)
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">• 2. Zeit- &amp; Einheitenrechnung</div>
+          <div class="col-description">
+            Wie viele Minuten und Restsekunden sind 125 Sekunden?<br>
+            • Minuten: <span class="code-pill">125 / 60</span> $\to$ <strong>2 Minuten</strong><br>
+            • Restsekunden: <span class="code-pill">125 % 60</span> $\to$ <strong>5 Sekunden</strong><br>
+            Ergebnis: 2 Minuten und 5 Sekunden!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 4: DIE SELBSTZUWEISUNG (DAS HERZSTÜCK)
+         ======================================================== -->
+    <section class="sheet-card" id="selbstzuweisung">
+      <div class="task-title">
+        <span class="task-number">4</span>
+        <span>Die Selbstzuweisung: punkte = punkte + 5;</span>
+      </div>
+
+      <p>
+        Stell dir vor, du programmierst ein Spiel. Ein Spieler sammelt eine Münze ein und erhält 5 Punkte dazu. 
+        Im Quelltext steht:
+      </p>
+
+      <pre class="code-block"><span class="code-type">int</span> punkte = 10;
+punkte = punkte + 5;</pre>
+
+      <div class="note-columns">
+        <div class="notebook-column" style="border: 1.5px solid #cbd5e1; background: #f8fafc;">
+          <div class="col-title" style="color: #64748b;">Aus Sicht der Mathematik</div>
+          <div class="col-description">
+            Gleichung: $x = x + 5$<br>
+            Zieht man auf beiden Seiten $x$ ab, erhält man:<br>
+            $0 = 5 \implies$ <strong>Widerspruch / Unlösbar!</strong><br>
+            Keine Zahl der Welt kann gleich sich selbst plus 5 sein.
+          </div>
+        </div>
+
+        <div class="notebook-column col-blue">
+          <div class="col-title">• Aus Sicht von Java (Arbeitsspeicher)</div>
+          <div class="col-description">
+            Es ist <strong>keine Gleichung</strong>, sondern ein <strong>Zuweisungsbefehl</strong>!<br>
+            Java arbeitet strikt von <strong>rechts nach links</strong> ($\leftarrow$):<br>
+            1. Lies den alten Wert aus dem Fach <span class="code-pill">punkte</span> aus (10).<br>
+            2. Rechne 5 dazu: $10 + 5 = 15$.<br>
+            3. Schreibe das Ergebnis 15 in das Fach <span class="code-pill">punkte</span> zurück.
+          </div>
+        </div>
+      </div>
+
+      <!-- Ablaufkette -->
+      <h3 style="font-size: 1.05rem; color: var(--ink-blue); margin: 1.5rem 0 0.5rem 0;">
+        Schritt-für-Schritt im Arbeitsspeicher:
+      </h3>
+      <div class="step-flow">
+        <div class="step-node">
+          <span class="step-num-circle">1</span>
+          <div class="step-text-main">
+            <strong>Rechte Seite auswerten:</strong> Java schaut im Speicherfach <span class="code-pill">punkte</span> nach. Dort liegt aktuell der Wert <span class="code-num">10</span>.
+          </div>
+        </div>
+        <div class="step-node">
+          <span class="step-num-circle">2</span>
+          <div class="step-text-main">
+            <strong>Rechnung ausführen:</strong> Java berechnet den Gesamtwert der rechten Seite: <span class="code-pill">10 + 5 = 15</span>.
+          </div>
+        </div>
+        <div class="step-node">
+          <span class="step-num-circle">3</span>
+          <div class="step-text-main">
+            <strong>Zuweisung durchführen:</strong> Der alte Wert <span class="code-num">10</span> wird im Speicherfach <span class="code-pill">punkte</span> überschrieben. Das Fach enthält ab sofort den neuen Wert <span class="code-num">15</span>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 5: ABKÜRZUNGEN & INKREMENT (++, --)
+         ======================================================== -->
+    <section class="sheet-card" id="kurzschreibweisen">
+      <div class="task-title">
+        <span class="task-number">5</span>
+        <span>Kurzschreibweisen &amp; der Inkrement-Operator</span>
+      </div>
+
+      <p>
+        Weil Selbstzuweisungen wie das Erhöhen eines Punktestands ständig vorkommen, 
+        haben die Erfinder von Java praktische Kurzschreibweisen eingebaut:
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width: 28%;">Ausführliche Schreibweise</th>
+            <th style="width: 28%;">Verkürzte Schreibweise</th>
+            <th style="width: 44%;">Bedeutung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="code-pill">punkte = punkte + 5;</span></td>
+            <td><span class="code-pill">punkte += 5;</span></td>
+            <td>Erhöht <span class="code-pill">punkte</span> um 5.</td>
+          </tr>
+          <tr>
+            <td><span class="code-pill">leben = leben - 1;</span></td>
+            <td><span class="code-pill">leben -= 1;</span></td>
+            <td>Verringert <span class="code-pill">leben</span> um 1.</td>
+          </tr>
+          <tr>
+            <td><span class="code-pill">faktor = faktor * 2;</span></td>
+            <td><span class="code-pill">faktor *= 2;</span></td>
+            <td>Verdoppelt den Wert der Variable.</td>
+          </tr>
+          <tr>
+            <td><span class="code-pill">x = x + 1;</span></td>
+            <td><span class="code-pill">x++;</span></td>
+            <td><strong>Inkrement:</strong> Erhöht die Variable genau um 1.</td>
+          </tr>
+          <tr>
+            <td><span class="code-pill">x = x - 1;</span></td>
+            <td><span class="code-pill">x--;</span></td>
+            <td><strong>Dekrement:</strong> Verringert die Variable genau um 1.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Informatik-Wissen</span>
+          <span class="auftrag-title">Warum heißt die Programmiersprache C++ eigentlich C++?</span>
+        </div>
+        <p style="font-size: 0.94rem; line-height: 1.55;">
+          Die Programmiersprache <strong>C</strong> war der berühmte Vorgänger von C++ und Java. 
+          Der Erfinder Bjarne Stroustrup wollte ausdrücken, dass seine neue Sprache 
+          <em>„C um einen Schritt weiterentwickelt“</em> ist. Daher nannte er sie mit dem Inkrement-Operator <strong>C++</strong>!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 6: PRAXIS-CODE ZUM AUSPROBIEREN (RECHNER.JAVA)
+         ======================================================== -->
+    <section class="sheet-card" id="praxis">
+      <div class="task-title">
+        <span class="task-number">6</span>
+        <span>Praxis-Code: Die Klasse Rechner</span>
+      </div>
+
+      <p>
+        Hier ist eine vollständige Java-Klasse, die alle Rechenarten demonstriert. 
+        Du kannst sie in BlueJ ausprobieren:
+      </p>
+
+      <pre class="code-block"><span class="code-keyword">public class</span> Rechner 
+{
+    <span class="code-comment">// Demonstriert Grundrechenarten &amp; Ganzzahldivision</span>
+    <span class="code-keyword">void</span> <span class="code-method">grundrechenarten</span>()
+    {
+        <span class="code-type">int</span> a = 17;
+        <span class="code-type">int</span> b = 4;
+        
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Addition: "</span> + (a + b));        <span class="code-comment">// 21</span>
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Ganzzahldivision: "</span> + (a / b)); <span class="code-comment">// 4</span>
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Modulo (Rest): "</span> + (a % b));    <span class="code-comment">// 1 (denn 4*4 + 1 = 17)</span>
+    }
+    
+    <span class="code-comment">// Demonstriert die Selbstzuweisung bei einem Punktestand</span>
+    <span class="code-keyword">void</span> <span class="code-method">spielStand</span>()
+    {
+        <span class="code-type">int</span> punkte = 0;
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Start: "</span> + punkte);  <span class="code-comment">// 0</span>
+        
+        punkte = punkte + 10;                     <span class="code-comment">// Münze eingesammelt</span>
+        punkte += 50;                             <span class="code-comment">// Bonus geholt</span>
+        punkte++;                                 <span class="code-comment">// Einzelschritt</span>
+        
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Endstand: "</span> + punkte); <span class="code-comment">// 61</span>
+    }
+    
+    <span class="code-comment">// Rechnet Sekunden in Minuten und Rest-Sekunden um</span>
+    <span class="code-keyword">void</span> <span class="code-method">zeitUmrechnen</span>()
+    {
+        <span class="code-type">int</span> gesamtSekunden = 145;
+        <span class="code-type">int</span> minuten = gesamtSekunden / 60;
+        <span class="code-type">int</span> restSekunden = gesamtSekunden % 60;
+        
+        System.out.<span class="code-method">println</span>(gesamtSekunden + <span class="code-string">" s sind "</span> + minuten + <span class="code-string">" min und "</span> + restSekunden + <span class="code-string">" s."</span>);
+    }
+} <span class="code-comment">// Ende Klasse</span></pre>
+    </section>
+
+    <!-- ========================================================
+         PHASE 7: BEGRIFFS- & RECHEN-TÜV
+         ======================================================== -->
+    <section class="sheet-card" id="tuev">
+      <div class="task-title">
+        <span class="task-number">7</span>
+        <span>Begriffs- &amp; Rechen-TÜV: Teste dein Verständnis</span>
+      </div>
+
+      <!-- Frage 1 -->
+      <div class="tuev-card" id="card-r1">
+        <div class="tuev-question">
+          1. Welchen Wert speichert Java bei der Ausführung von: <span class="code-pill">int x = 11 / 4;</span>?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-r1', 1, false, 'Java rundet bei int-Zahlen niemals auf 3 auf, sondern schneidet Stellen rigoros ab.')">
+            A) 3
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r1', 2, true, 'Richtig! Weil 11 und 4 vom Typ int sind, wird eine Ganzzahldivision durchgeführt: 4 passt 2-mal ganz in die 11. Die Nachkommastellen werden abgeschnitten.')">
+            B) 2
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r1', 3, false, 'Ein int kann keine Kommazahl speichern! 2.75 würde nur entstehen, wenn double beteiligt wäre.')">
+            C) 2.75
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-r1-fb"></div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="tuev-card" id="card-r2">
+        <div class="tuev-question">
+          2. Was ergibt der Ausdruck: <span class="code-pill">23 % 5</span>?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 1, false, '4 ist das Ergebnis der normalen Ganzzahldivision (23 / 5), nicht der Rest!')">
+            A) 4
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 2, true, 'Richtig! 23 geteilt durch 5 ist 4, Rest 3 (denn 4 * 5 = 20, bis 23 fehlen 3). Modulo liefert genau diese 3.')">
+            B) 3
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 3, false, 'Modulo liefert keinen Prozentwert (nicht 0.23), sondern den Divisionsrest.')">
+            C) 0.23
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-r2-fb"></div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="tuev-card" id="card-r3">
+        <div class="tuev-question">
+          3. Welcher Wert liegt am Ende in der Variable <span class="code-pill">a</span>?
+          <pre class="code-block" style="margin: 0.5rem 0; font-size: 0.88rem;">int a = 4;
+a = a * 2;
+a++;</pre>
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 1, false, '4 * 2 ergibt 8. Danach kommt noch a++; dazu!')">
+            A) 8
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 2, true, 'Richtig! Zeile 1: a = 4. Zeile 2: 4 * 2 = 8, also a = 8. Zeile 3: a++ erhöht um 1 auf 9.')">
+            B) 9
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 3, false, 'Nach a = 4 * 2 ist a = 8, nicht 10.')">
+            C) 10
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-r3-fb"></div>
+      </div>
+
+      <!-- Frage 4 -->
+      <div class="tuev-card" id="card-r4">
+        <div class="tuev-question">
+          4. Warum ist die Zeile <span class="code-pill">punkte = punkte + 5;</span> in Java völlig legal, in Mathe aber ein Widerspruch?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-r4', 1, true, 'Richtig! In Java ist = der Zuweisungsoperator von rechts nach links. Der Wert rechts wird ausgerechnet und ins Fach links geschrieben.')">
+            A) Weil = in Java kein Gleichheitszeichen ist, sondern der Wert rechts ausgerechnet und ins linke Fach geschrieben wird.
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r4', 2, false, 'Mathematisch ist x = x + 5 unlösbar. In Java hat = aber eine ganz andere Bedeutung.')">
+            B) Weil in der Informatik andere mathematische Gesetze gelten.
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-r4', 3, false, 'punkte ist eine Variable, keine mathematische Konstante.')">
+            C) Weil punkte in Java immer den Wert 0 hat.
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-r4-fb"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 8: MERKHEFTSICHERUNG
+         ======================================================== -->
+    <section class="sheet-card" id="hefteintrag">
+      <div class="task-title">
+        <span class="task-number">8</span>
+        <span>Merkheftsicherung: Zusammenfassung für das Heft</span>
+      </div>
+
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Hefteintrag</span>
+          <span class="auftrag-title">Übertrag in das Informatik-Heft</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.6;">
+          Übertrage den folgenden Merkkasten sauber in dein Heft. 
+          Achte besonders auf den Modulo-Operator und das Prinzip der Selbstzuweisung.
+        </p>
+      </div>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin-bottom: 0.75rem;">1. Arithmetik &amp; Division in Java</h3>
+          <p>
+            • Operatoren: <span class="code-pill">+</span> (Addition), <span class="code-pill">-</span> (Subtraktion), 
+            <span class="code-pill">*</span> (Multiplikation), <span class="code-pill">/</span> (Division).<br>
+            • <strong>Ganzzahldivision:</strong> Teilen zweier <span class="code-pill">int</span>-Zahlen schneidet Nachkommastellen ab (<span class="code-pill">7 / 2</span> ergibt <span class="code-pill">3</span>). 
+            Für Dezimalergebnisse muss mindestens ein Operand <span class="code-pill">double</span> sein (<span class="code-pill">7.0 / 2</span> ergibt <span class="code-pill">3.5</span>).<br>
+            • <strong>Modulo (<span class="code-pill">%</span>):</strong> Berechnet den ganzzahligen Divisionsrest (<span class="code-pill">14 % 4</span> ergibt <span class="code-pill">2</span>).
+          </p>
+
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 1rem 0 0.75rem 0;">2. Die Selbstzuweisung &amp; Inkrement</h3>
+          <p>
+            • <span class="code-pill">x = x + 5;</span> liest den alten Wert von <span class="code-pill">x</span>, rechnet 5 dazu und speichert das Ergebnis zurück in <span class="code-pill">x</span>.<br>
+            • Kurzschreibweisen: <span class="code-pill">x += 5;</span>, <span class="code-pill">x -= 3;</span>, <span class="code-pill">x *= 2;</span>.<br>
+            • Inkrement (<span class="code-pill">x++;</span>) erhöht um 1, Dekrement (<span class="code-pill">x--;</span>) verringert um 1.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div> <!-- /container -->
+
+  <!-- ========================================================
+       SCRIPTE
+       ======================================================== -->
+  <script>
+    function checkTuev(cardId, optionNum, isCorrect, feedbackText) {
+      const card = document.getElementById(cardId);
+      const buttons = card.querySelectorAll('.tuev-btn');
+      const feedback = document.getElementById(cardId + '-fb');
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong');
+        if (index + 1 === optionNum) {
+          if (isCorrect) btn.classList.add('correct');
+          else btn.classList.add('wrong');
+        }
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#ecfdf5';
+        feedback.style.color = '#065f46';
+        feedback.style.border = '1.5px solid #a7f3d0';
+        feedback.innerHTML = '<strong>Richtig!</strong> ' + feedbackText;
+      } else {
+        feedback.style.background = '#fef2f2';
+        feedback.style.color = '#991b1b';
+        feedback.style.border = '1.5px solid #fecaca';
+        feedback.innerHTML = '<strong>Hinweis:</strong> ' + feedbackText;
+      }
+    }
+
+    function toggleReveal(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const isVisible = el.classList.toggle('show');
+      if (btn) {
+        btn.textContent = isVisible ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      }
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      const anyHidden = Array.from(answers).some(a => !a.classList.contains('show'));
+
+      answers.forEach(a => {
+        if (anyHidden) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+
+      buttons.forEach(b => {
+        b.textContent = anyHidden ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      });
+    }
+  </script>
+</body>
+</html>
