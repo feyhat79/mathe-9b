@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Java-Grundlagen &amp; Variablenkonzept | Informatik EF</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX fuer mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Zentrales Web-Modul Stylesheet (Schulheft- & Tafel-Design) -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --border-soft: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --ram-color: #0369a1;
+      --ram-bg: #f0f9ff;
+      --ram-border: #bae6fd;
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.2rem 1.4rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid #334155;
+    }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Auftragsboxen & Infoboxen (Allseitig geschlossen, kein border-left) */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+    }
+    .auftrag-badge {
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .auftrag-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+
+    /* Merke Box Standard */
+    .merke-box {
+      background: #ffffff;
+      border: 2.5px solid #dc2626;
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.75rem 0;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827;
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    /* Interaktiver Konsolen-Simulator */
+    .console-sim-container {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .console-screen {
+      background: #0f172a;
+      border: 1.5px solid #334155;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #38bdf8;
+      font-size: 0.95rem;
+      min-height: 120px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .console-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: #38bdf8;
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .console-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-sim {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sim:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .btn-sim.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Arbeitsspeicher-Regal Modell */
+    .ram-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      background: var(--ram-bg);
+      border: 1.5px solid var(--ram-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .ram-container { grid-template-columns: 1fr; }
+    }
+    .ram-ladder {
+      background: #ffffff;
+      border: 2px solid #0369a1;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ram-cell {
+      border-bottom: 1.5px solid #bae6fd;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86rem;
+      transition: background 0.3s;
+    }
+    .ram-cell:last-child { border-bottom: none; }
+    .ram-cell.highlight {
+      background: #fef08a !important;
+      font-weight: 700;
+    }
+    .ram-addr {
+      color: #64748b;
+      font-size: 0.76rem;
+    }
+    .ram-slot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ram-var-label {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .ram-val {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .ram-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-ram-step {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 9px 14px;
+      border-radius: 6px;
+      border: 1.5px solid #0369a1;
+      background: #ffffff;
+      color: #0369a1;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-ram-step:hover {
+      background: #e0f2fe;
+    }
+    .btn-ram-step.active {
+      background: #0369a1;
+      color: #ffffff;
+    }
+
+    /* Begriffs-TÜV Quiz-Karten */
+    .tuev-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .tuev-question {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+      margin-bottom: 0.85rem;
+    }
+    .tuev-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tuev-btn {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 9px 14px;
+      border-radius: 6px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tuev-btn:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+    }
+    .tuev-btn.correct {
+      background: #ecfdf5 !important;
+      border-color: #059669 !important;
+      color: #065f46 !important;
+      font-weight: 700;
+    }
+    .tuev-btn.wrong {
+      background: #fef2f2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
+    }
+    .tuev-feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* Aufklapp-Antworten */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.35rem;
+      margin: 1rem 0;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .question-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink-black);
+    }
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .question-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 0.98rem;
+      color: var(--primary);
+      line-height: 1.6;
+    }
+    .question-answer.show {
+      display: block;
+    }
+
+    /* Syntax Zerlegungs-Box */
+    .syntax-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .syn-pill {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .syn-sub {
+      font-size: 0.72rem;
+      font-family: var(--font-family-base);
+      font-weight: 600;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .syn-type  { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .syn-name  { background: #fef3c7; color: #92400e; border-color: #fde047; }
+    .syn-op    { background: #e2e8f0; color: #334155; border-color: #cbd5e1; }
+    .syn-val   { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .syn-semi  { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+
+    /* Vergleichstabelle */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .compare-table th {
+      background: var(--ink-blue);
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border: 1px solid var(--ink-blue);
+    }
+    .compare-table td {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+      background: #ffffff;
+    }
+    .compare-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER BAR (Kapitel-Navigationsleiste gemäss GEMINI.md)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <span class="presenter-title">
+        Informatik EF • Thema 2: Java &amp; BlueJ
+      </span>
+      <span class="presenter-tag">Stunde 4 • Grundlagen</span>
+    </div>
+    <div class="presenter-actions">
+      <a href="bluej-figuren-einstieg.html" class="presenter-tab-btn">1. Figuren &amp; OOP</a>
+      <a href="quelltext-editor-compiler.html" class="presenter-tab-btn">2. Quellcode &amp; Compiler</a>
+      <a href="zusammenspiel-objekte-klasse-bild.html" class="presenter-tab-btn">3. Klasse Bild</a>
+      <a href="unterrichtsmodul-java-grundlagen-variablen.html" class="presenter-tab-btn active">4. Grundlagen &amp; Variablen</a>
+      <a href="unterrichtsmodul-klasse-auto-komposition.html" class="presenter-tab-btn">5. Praxis: Klasse Auto</a>
+      <button class="presenter-tab-btn" onclick="toggleAllAnswers()">Alle Antworten aufdecken</button>
+      <button class="presenter-tab-btn" onclick="window.print()">Drucken</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ========================================================
+         DECKBLATT-HEADER
+         ======================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik • Einführungsphase (EF)</span>
+        <span>Thema 2: Java &amp; BlueJ</span>
+        <span>Unterrichtsbaustein: Variablenkonzept</span>
+      </div>
+      <h1>Grundlagen von Java &amp; das Variablenkonzept</h1>
+      <p class="sheet-intro">
+        Wie merkt sich ein Computer Zwischenergebnisse und Namen? Wie kommunizieren Programme über das Konsolen-Terminal mit uns Menschen? 
+        Und warum ist das Gleichheitszeichen in einer Programmiersprache fundamental etwas anderes als im Mathematikunterricht?
+        In diesem Modul untersuchen wir die Arbeitsweise des Arbeitsspeichers (RAM), die elementaren Datentypen in Java sowie die 
+        fünf goldenen Regeln für sauberen Quelltext.
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.25rem;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Begleitendes BlueJ-Projekt</span>
+          <span class="auftrag-title">Projekt „Grundlagen“ in BlueJ</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.55;">
+          Zu dieser Lerneinheit gehört die Klasse <span class="code-pill">Grundlagen</span>. 
+          Du kannst den Quelltext direkt in BlueJ öffnen und ausprobieren: 
+          Rechtsklick auf die Klasse $\to$ <span class="code-pill">new Grundlagen()</span> $\to$ Methoden 
+          <span class="code-pill">helloWorld()</span> und <span class="code-pill">unterhaltung()</span> ausführen.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         PHASE 1: CLEAN CODE & PROGRAMMIERSTIL
+         ======================================================== -->
+    <section class="sheet-card" id="stil">
+      <div class="task-title">
+        <span class="task-number">1</span>
+        <span>Programmierstil: Die 5 Clean-Code-Regeln für Java</span>
+      </div>
+
+      <p>
+        Ein Computer akzeptiert Quelltext, solange die Syntax stimmt – egal wie unordentlich er aussieht. 
+        In der professionellen Softwareentwicklung schreiben wir Programme jedoch für <strong>Menschen</strong>, 
+        die den Quelltext lesen, verstehen und weiterentwickeln müssen. 
+        Im Tafelanschrieb haben wir deshalb fünf verbindliche Grundregeln vereinbart:
+      </p>
+
+      <div class="note-columns" style="margin-top: 1.25rem;">
+        <div class="notebook-column col-blue">
+          <div class="col-title">• Namenskonventionen in Java</div>
+          <div class="col-description">
+            <ul style="margin-left: 1.2rem; line-height: 1.65;">
+              <li>
+                <strong>Methodennamen immer klein beginnen:</strong><br>
+                Aktionen/Verben im <em>lowerCamelCase</em> (z. B. <span class="code-pill">helloWorld()</span>, <span class="code-pill">unterhaltung()</span>, <span class="code-pill">nachRechtsBewegen()</span>).
+              </li>
+              <li>
+                <strong>Variablennamen immer klein beginnen:</strong><br>
+                Sprechende Nomen im <em>lowerCamelCase</em> (z. B. <span class="code-pill">n</span>, <span class="code-pill">schuelerName</span>, <span class="code-pill">alter</span>, <span class="code-pill">tagesTemperatur</span>).
+              </li>
+              <li>
+                <strong>CamelCase-Schreibweise:</strong><br>
+                Wortgrenzen werden durch einen Großbuchstaben markiert. 
+                <span class="highlighter">Keine Leerzeichen, keine Umlaute (ä, ö, ü) und keine Sonderzeichen!</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">• Struktur &amp; Lesbarkeit</div>
+          <div class="col-description">
+            <ul style="margin-left: 1.2rem; line-height: 1.65;">
+              <li>
+                <strong>Mit sauberen Einrückungen arbeiten:</strong><br>
+                Jeder Codeblock innerhalb geschweifter Klammern <span class="code-pill">{ ... }</span> 
+                wird um vier Leerzeichen nach rechts eingerückt. So erkennt das Auge sofort die Programmhierarchie.
+              </li>
+              <li>
+                <strong>Kommentare sinnvoll nutzen:</strong><br>
+                Einzeilige Hinweise mit <span class="code-pill">//</span> erklären schwierige Abschnitte. 
+                Schließende Klammern werden zur Orientierung beschriftet (z. B. <span class="code-pill">} // Ende helloWorld</span>).
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quelltext-Beispiel der Stunde -->
+      <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.5rem 0 0.5rem 0;">
+        Der Quelltext aus der Unterrichtsstunde (Grundlagen.java):
+      </h3>
+      <pre class="code-block"><span class="code-keyword">public class</span> Grundlagen 
+{
+    <span class="code-keyword">void</span> <span class="code-method">helloWorld</span>()
+    {
+        System.out.<span class="code-method">print</span>(<span class="code-string">"Hello World"</span>);
+    } <span class="code-comment">// Ende helloWorld</span>
+    
+    <span class="code-keyword">void</span> <span class="code-method">unterhaltung</span>()
+    {
+        <span class="code-type">String</span> n = <span class="code-string">"Alfred"</span>; 
+        <span class="code-comment">// String n;</span> 
+        <span class="code-comment">// n = "Alfred";</span> 
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Mein Name ist "</span> + n); 
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Günni: Hi"</span>); 
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Alfred: Hey"</span>);
+    }
+    
+} <span class="code-comment">// Ende Klasse</span></pre>
+    </section>
+
+    <!-- ========================================================
+         PHASE 2: KONSOLENAUSGABE (PRINT VS. PRINTLN)
+         ======================================================== -->
+    <section class="sheet-card" id="konsole">
+      <div class="task-title">
+        <span class="task-number">2</span>
+        <span>Ausgabe auf der Konsole: System.out.print vs. System.out.println</span>
+      </div>
+
+      <p>
+        Wenn wir in BlueJ keinen Zeichenrahmen (wie die Leinwand) verwenden, kommuniziert Java über das 
+        <strong>Terminal (die Konsole)</strong>. Es gibt zwei elementare Ausgabe-Befehle:
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title"><span class="code-pill">System.out.print(...)</span></div>
+          <div class="col-description">
+            Gibt den übergebenen Text oder Variablenwert auf der Konsole aus und 
+            <strong>bleibt in derselben Zeile stehen</strong>. 
+            Der nächste Ausgabebefehl schreibt direkt hinter dem letzten Zeichen weiter.
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title"><span class="code-pill">System.out.println(...)</span></div>
+          <div class="col-description">
+            <em>(ln = line / new line)</em> Gibt den Text oder Variablenwert aus und 
+            <strong>springt unmittelbar danach in die nächste Zeile</strong>. 
+            Der Cursor wartet am Anfang der nächsten Zeile auf neue Ausgaben.
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Terminal Simulator -->
+      <div class="console-sim-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <strong style="color: var(--ink-blue); font-size: 1rem;">Interaktives BlueJ-Terminalfenster:</strong>
+          <span style="font-size: 0.8rem; color: #64748b; font-family: 'JetBrains Mono', monospace;">BlueJ Terminal v5.2</span>
+        </div>
+
+        <div class="console-screen" id="simTerminal">> Bereit.<span class="console-cursor"></span></div>
+
+        <div class="console-controls">
+          <button class="btn-sim" onclick="runSim(1)">1. Test: Nur System.out.print</button>
+          <button class="btn-sim" onclick="runSim(2)">2. Test: Nur System.out.println</button>
+          <button class="btn-sim" onclick="runSim(3)">3. Test: Methode unterhaltung()</button>
+          <button class="btn-sim" onclick="clearSim()">Terminal leeren</button>
+        </div>
+        <div id="simExplanation" style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--ink-muted); font-style: italic;">
+          Klicke auf einen der Test-Buttons, um das Terminal-Verhalten Schritt für Schritt zu beobachten.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 3: DAS ARBEITSSPEICHER-MODELL (RAM)
+         ======================================================== -->
+    <section class="sheet-card" id="speicher">
+      <div class="task-title">
+        <span class="task-number">3</span>
+        <span>Das Variablenkonzept: Das Arbeitsspeicher-Regal</span>
+      </div>
+
+      <p>
+        Ein Computer besitzt keinen Notizblock aus Papier, sondern einen flüchtigen <strong>Arbeitsspeicher (RAM)</strong>. 
+        Im Tafelanschrieb haben wir den Arbeitsspeicher als <strong>Leiter bzw. Hochregal mit vielen nummerierten Fächern</strong> modelliert:
+      </p>
+
+      <ul style="margin: 0.75rem 0 1rem 1.4rem; line-height: 1.65;">
+        <li>Jedes Fach besitzt eine eindeutige <strong>Speicheradresse</strong> (eine Nummer im Speicher).</li>
+        <li>Eine <strong>Variable</strong> ist ein reserviertes und <strong>beschriftetes Fach</strong> in diesem Regal.</li>
+        <li>Das Fach hat einen festen <strong>Namen (Identifikator)</strong>, einen <strong>Typ</strong> (welche Sorte Inhalt hineinpasst) und einen aktuellen <strong>Wert</strong>.</li>
+      </ul>
+
+      <!-- Interaktives RAM Modell -->
+      <div class="ram-container">
+        <div>
+          <div style="font-weight: 700; color: #0369a1; margin-bottom: 0.5rem; font-size: 0.95rem;">
+            Hochregal: Arbeitsspeicher (RAM)
+          </div>
+          <div class="ram-ladder">
+            <div class="ram-cell">
+              <span class="ram-addr">0x1004</span>
+              <span class="ram-slot" style="color: #94a3b8;">(frei / Betriebssystem)</span>
+            </div>
+            <div class="ram-cell" id="ramCell-n">
+              <span class="ram-addr">0x1008</span>
+              <div class="ram-slot">
+                <span class="ram-var-label" id="ramLabel-n">frei</span>
+                <span class="ram-val" id="ramVal-n">-</span>
+              </div>
+            </div>
+            <div class="ram-cell" id="ramCell-alter">
+              <span class="ram-addr">0x100C</span>
+              <div class="ram-slot">
+                <span class="ram-var-label" id="ramLabel-alter">frei</span>
+                <span class="ram-val" id="ramVal-alter">-</span>
+              </div>
+            </div>
+            <div class="ram-cell">
+              <span class="ram-addr">0x1010</span>
+              <span class="ram-slot" style="color: #94a3b8;">(frei)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ram-controls">
+          <div style="font-weight: 700; color: var(--ink-blue); margin-bottom: 0.2rem; font-size: 0.95rem;">
+            Aktionen im Arbeitsspeicher simulieren:
+          </div>
+          <button class="btn-ram-step" onclick="ramStep(1)">
+            Schritt 1: Deklaration <span class="code-pill">String n;</span>
+          </button>
+          <button class="btn-ram-step" onclick="ramStep(2)">
+            Schritt 2: Zuweisung <span class="code-pill">n = "Alfred";</span>
+          </button>
+          <button class="btn-ram-step" onclick="ramStep(3)">
+            Schritt 3: Überschreiben <span class="code-pill">n = "Günni";</span>
+          </button>
+          <button class="btn-ram-step" onclick="ramStep(4)">
+            Schritt 4: Zweite Variable <span class="code-pill">int alter = 16;</span>
+          </button>
+          <button class="btn-ram-step" style="border-color: #cbd5e1; color: #475569;" onclick="ramReset()">
+            Speicher zurücksetzen
+          </button>
+
+          <div id="ramFeedback" style="background: #ffffff; border: 1px solid #bae6fd; border-radius: 6px; padding: 10px 12px; font-size: 0.88rem; color: #0369a1; line-height: 1.5; margin-top: 4px;">
+            Klicke auf Schritt 1, um zu sehen, wie der Speicher reserviert wird.
+          </div>
+        </div>
+      </div>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <strong>Um Werte dauerhaft im Arbeitsspeicher abzulegen, sind zwei Dinge zwingend notwendig:</strong><br>
+          1. Die <strong>Deklaration:</strong> Dem Computer mitteilen, welchen Typ die Daten haben und wie das Fach heißt.<br>
+          2. Die <strong>Zuweisung:</strong> Einen konkreten Wert in das reservierte Fach hineinschreiben.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 4: DIE 5 ELEMENTAREN DATENTYPEN
+         ======================================================== -->
+    <section class="sheet-card" id="datentypen">
+      <div class="task-title">
+        <span class="task-number">4</span>
+        <span>Die 5 elementaren Datentypen in der gymnasialen Einführung</span>
+      </div>
+
+      <p>
+        In Java ist jedes Speicherfach typisiert: Man kann in ein Fach für ganze Zahlen keinen Text ablegen. 
+        Der Compiler wacht streng darüber, dass Typ und Wert zusammenpassen. 
+        Hier sind die fünf Datentypen aus dem Unterricht im Überblick:
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">Datentyp</th>
+            <th style="width: 20%;">Java-Schlüsselwort</th>
+            <th style="width: 32%;">Bedeutung &amp; Inhalt</th>
+            <th style="width: 30%;">Typisches Beispiel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>String</strong></td>
+            <td><span class="code-pill">String</span> <em>(großgeschrieben!)</em></td>
+            <td>Zeichenkette (beliebig langer Text). Steht immer in <strong>doppelten Anführungszeichen</strong>.</td>
+            <td><span class="code-pill">String n = "Alfred";</span></td>
+          </tr>
+          <tr>
+            <td><strong>Character</strong></td>
+            <td><span class="code-pill">char</span></td>
+            <td>Genau ein einzelnes Schriftzeichen. Steht immer in <strong>einfachen Hochkommas</strong>.</td>
+            <td><span class="code-pill">char note = 'A';</span></td>
+          </tr>
+          <tr>
+            <td><strong>Integer</strong></td>
+            <td><span class="code-pill">int</span></td>
+            <td>Ganze Zahlen (positiv, negativ oder null). Keine Nachkommastellen.</td>
+            <td><span class="code-pill">int alter = 16;</span></td>
+          </tr>
+          <tr>
+            <td><strong>Double</strong></td>
+            <td><span class="code-pill">double</span></td>
+            <td>Dezimalzahlen (Kommazahlen). In Java zwingend mit <strong>Punkt statt Komma</strong>.</td>
+            <td><span class="code-pill">double preis = 3.99;</span></td>
+          </tr>
+          <tr>
+            <td><strong>Boolean</strong></td>
+            <td><span class="code-pill">boolean</span></td>
+            <td>Wahrheitswerte. Kennt ausschließlich zwei Zustände: <span class="code-pill">true</span> (wahr) oder <span class="code-pill">false</span> (falsch).</td>
+            <td><span class="code-pill">boolean bestanden = true;</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Verständnisfragen zu Datentypen -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('q-typen', this.querySelector('.btn-reveal'))">
+          <span class="question-title">• Warum schreibt man String mit großem „S“, int aber klein?</span>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <div id="q-typen" class="question-answer">
+          In Java sind <span class="code-pill">int</span>, <span class="code-pill">double</span>, <span class="code-pill">char</span> und <span class="code-pill">boolean</span> sogenannte <strong>primitive Datentypen</strong> (Grundbausteine der Sprache, daher kleingeschrieben). 
+          <span class="code-pill">String</span> hingegen ist eine vollwertige <strong>Klasse</strong> (ein komplexer Objekttyp mit eigenen Methoden wie <span class="code-pill">.length()</span>), weshalb er nach den Namenskonventionen großgeschrieben wird. In der EF nutzen wir ihn zunächst wie einen Grundtyp.
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 5: CODE-ANATOMIE (DEKLARATION VS. ZUWEISUNG)
+         ======================================================== -->
+    <section class="sheet-card" id="anatomie">
+      <div class="task-title">
+        <span class="task-number">5</span>
+        <span>Code-Anatomie: Deklaration, Zuweisung &amp; Initialisierung</span>
+      </div>
+
+      <p>
+        Betrachten wir die zentrale Codezeile aus dem Tafelanschrieb:
+      </p>
+
+      <div class="syntax-pills">
+        <div class="syn-pill syn-type">
+          <span>String</span>
+          <span class="syn-sub">Datentyp</span>
+        </div>
+        <div class="syn-pill syn-name">
+          <span>n</span>
+          <span class="syn-sub">Variablenname</span>
+        </div>
+        <div class="syn-pill syn-op">
+          <span>=</span>
+          <span class="syn-sub">Zuweisung</span>
+        </div>
+        <div class="syn-pill syn-val">
+          <span>"Alfred"</span>
+          <span class="syn-sub">Wert / Literal</span>
+        </div>
+        <div class="syn-pill syn-semi">
+          <span>;</span>
+          <span class="syn-sub">Semikolon</span>
+        </div>
+      </div>
+
+      <p>
+        In Java gibt es zwei Wege, eine Variable einsatzbereit zu machen:
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">Weg A: Zwei Schritte (Getrennt)</div>
+          <div class="col-description">
+            <pre class="code-block" style="margin: 0.5rem 0;"><span class="code-type">String</span> n;          <span class="code-comment">// 1. Deklaration</span>
+n = <span class="code-string">"Alfred"</span>;      <span class="code-comment">// 2. Zuweisung</span></pre>
+            <p style="margin-top: 0.5rem; font-size: 0.94rem;">
+              Zuerst wird das Fach im Speicher reserviert (es ist noch leer). 
+              Später wird der Wert hineingelegt.
+            </p>
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">Weg B: Ein Schritt (Initialisierung)</div>
+          <div class="col-description">
+            <pre class="code-block" style="margin: 0.5rem 0;"><span class="code-type">String</span> n = <span class="code-string">"Alfred"</span>;  <span class="code-comment">// Beides zusammen!</span></pre>
+            <p style="margin-top: 0.5rem; font-size: 0.94rem;">
+              Deklaration und <strong>erstmalige Zuweisung (Initialisierung)</strong> erfolgen direkt in einem Zug. 
+              Dies ist der kompaktere und häufigste Programmierstil.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- String Konkatenation -->
+      <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.5rem 0 0.5rem 0;">
+        String-Verknüpfung (Konkatenation mit dem Plus-Operator):
+      </h3>
+      <p>
+        In der Methode <span class="code-pill">unterhaltung()</span> steht folgende Zeile:
+      </p>
+      <pre class="code-block">System.out.<span class="code-method">println</span>(<span class="code-string">"Mein Name ist "</span> + n);</pre>
+      <p>
+        Das Pluszeichen <span class="code-pill">+</span> rechnet hier nicht wie in Mathe Zahlen zusammen, sondern 
+        <strong>klebt Texte aneinander</strong> (Konkatenation). Java schaut im Speicherfach <span class="code-pill">n</span> nach, 
+        findet dort den Text <span class="code-pill">"Alfred"</span> und fügt ihn nahtlos an den Satzanfang an. 
+        Auf der Konsole erscheint: <span class="code-pill">Mein Name ist Alfred</span>.
+      </p>
+    </section>
+
+    <!-- ========================================================
+         PHASE 6: DIE KARDINALREGEL (GLEICHHEITSZEICHEN)
+         ======================================================== -->
+    <section class="sheet-card" id="zuweisung">
+      <div class="task-title">
+        <span class="task-number">6</span>
+        <span>Die Kardinalregel: Bedeutung des Gleichheitszeichens</span>
+      </div>
+
+      <div class="note-columns">
+        <div class="notebook-column" style="border: 1.5px solid #cbd5e1; background: #f8fafc;">
+          <div class="col-title" style="color: #64748b;">In der Mathematik ($=$)</div>
+          <div class="col-description">
+            In der Mathematik ist $=$ ein <strong>Gleichheits- und Relationszeichen</strong> (eine Waage).<br><br>
+            Aussage: Die linke Seite ist wertgleich zur rechten Seite.<br>
+            Es gilt Symmetrie: $x = 5$ bedeutet exakt dasselbe wie $5 = x$.
+          </div>
+        </div>
+
+        <div class="notebook-column col-blue">
+          <div class="col-title">• In Java Informatik ($=$)</div>
+          <div class="col-description">
+            In Java ist $=$ <strong>kein Gleichheitszeichen</strong>, sondern der <strong>Zuweisungsoperator</strong>!<br><br>
+            Aussage: Führe einen aktiven Schreibbefehl von <strong>rechts nach links</strong> aus ($\leftarrow$).<br>
+            <strong>Der Wert auf der rechten Seite wird in die Variable auf der linken Seite geschrieben.</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <strong>Regeln für den Zuweisungsoperator in Java:</strong><br>
+          1. <strong>Links</strong> vom Gleichheitszeichen muss <em>immer</em> der Name eines beschreibbaren Speicherfachs (eine Variable) stehen.<br>
+          2. <strong>Rechts</strong> steht der Wert, eine Zahl, ein Text oder eine Berechnung.<br>
+          3. Der Ausdruck <span class="code-pill">"Alfred" = n;</span> oder <span class="code-pill">16 = alter;</span> führt zu einem sofortigen <strong>Compiler-Fehler</strong>, weil man einem festen Wert nichts zuweisen kann!
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 7: BEGRIFFS-TÜV (INTERAKTIVES QUIZ)
+         ======================================================== -->
+    <section class="sheet-card" id="tuev">
+      <div class="task-title">
+        <span class="task-number">7</span>
+        <span>Begriffs-TÜV: Teste dein Verständnis</span>
+      </div>
+
+      <p>
+        Wähle bei den folgenden Aufgaben jeweils die fachlich richtige Antwort aus. 
+        Du erhältst sofort eine Rückmeldung mit Begründung.
+      </p>
+
+      <!-- Frage 1 -->
+      <div class="tuev-card" id="card-q1">
+        <div class="tuev-question">
+          1. Welche Ausgabe erzeugt folgendes Programmstück auf der Konsole?
+          <pre class="code-block" style="margin: 0.5rem 0; font-size: 0.88rem;">System.out.print("Hallo ");
+System.out.println("Welt");
+System.out.print("EF");</pre>
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-q1', 1, true, 'Weil nach dem ersten print kein Zeilensprung stattfindet, steht Welt direkt hinter Hallo in Zeile 1. Nach println erfolgt der Zeilensprung, sodass EF in Zeile 2 beginnt.')">
+            A) Zeile 1: Hallo Welt<br>&nbsp;&nbsp;&nbsp;&nbsp;Zeile 2: EF
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q1', 2, false, 'Achtung: System.out.print springt nicht in die nächste Zeile! Daher stehen Hallo und Welt zusammen in der ersten Zeile.')">
+            B) Zeile 1: Hallo<br>&nbsp;&nbsp;&nbsp;&nbsp;Zeile 2: Welt<br>&nbsp;&nbsp;&nbsp;&nbsp;Zeile 3: EF
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q1', 3, false, 'Achtung: Nach Welt wird println aufgerufen – das erzeugt zwingend einen Zeilenumbruch vor EF!')">
+            C) Zeile 1: Hallo Welt EF
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-q1-fb"></div>
+      </div>
+
+      <!-- Frage 2 -->
+      <div class="tuev-card" id="card-q2">
+        <div class="tuev-question">
+          2. Welcher Datentyp eignet sich für die Speicherung einer Körpergröße in Metern (z. B. 1.78)?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-q2', 1, false, 'int speichert nur ganze Zahlen ohne Nachkommastellen (z. B. 1 oder 2, aber nicht 1.78).')">
+            A) int
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q2', 2, true, 'double ist der Standard-Datentyp für Fließkommazahlen (Dezimalzahlen mit Punkt) in Java.')">
+            B) double
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q2', 3, false, 'char kann genau ein einzelnes Schriftzeichen speichern, z. B. A oder 1, aber keine Dezimalzahl.')">
+            C) char
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q2', 4, false, 'boolean speichert nur die Wahrheitswerte true oder false.')">
+            D) boolean
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-q2-fb"></div>
+      </div>
+
+      <!-- Frage 3 -->
+      <div class="tuev-card" id="card-q3">
+        <div class="tuev-question">
+          3. Welcher Variablenname verstößt gegen die Clean-Code-Regeln für Java?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-q3', 1, false, 'schuelerAlter ist perfektes lowerCamelCase (kleiner Anfangsbuchstabe, Großbuchstabe als Wortgrenze).')">
+            A) schuelerAlter
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q3', 2, false, 'n ist zwar kurz, aber syntaktisch und stilistisch völlig legal (wie in unserem Unterrichtsbeispiel).')">
+            B) n
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q3', 3, true, 'Zwei Verstöße: 1. Beginnt mit Großbuchstaben (für Klassen reserviert), 2. Enthält den verbotenen Umlaut ü statt ue.')">
+            C) Schueler_Größe
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-q3-fb"></div>
+      </div>
+
+      <!-- Frage 4 -->
+      <div class="tuev-card" id="card-q4">
+        <div class="tuev-question">
+          4. Was passiert im Arbeitsspeicher bei der Ausführung der Zeile: <span class="code-pill">int punkte;</span>?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-q4', 1, true, 'Das ist eine reine Deklaration: Das Fach wird reserviert und benannt, erhält aber noch keinen konkreten Wert.')">
+            A) Ein Speicherfach vom Typ int mit dem Namen punkte wird reserviert (Deklaration).
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q4', 2, false, 'Es wurde kein Wert zugewiesen! Dazu müsste punkte = 0; im Code stehen.')">
+            B) Der Wert 0 wird auf der Konsole ausgegeben.
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q4', 3, false, 'Der Typ int ist eine Zahl. Ein Text kann darin prinzipiell nicht gespeichert werden.')">
+            C) Das Wort punkte wird als Text gespeichert.
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-q4-fb"></div>
+      </div>
+
+      <!-- Frage 5 -->
+      <div class="tuev-card" id="card-q5">
+        <div class="tuev-question">
+          5. Warum meldet der Compiler bei der Zeile <span class="code-pill">"Alfred" = n;</span> einen Fehler?
+        </div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('card-q5', 1, false, 'Anführungszeichen sind für Strings völlig korrekt.')">
+            A) Weil Alfred in einfachen Hochkommas stehen müsste.
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q5', 2, true, 'Der Zuweisungsoperator schreibt immer von rechts nach links. Links muss daher zwingend ein beschreibbares Speicherfach (eine Variable) stehen, kein fester Wert (Literal).')">
+            B) Weil links vom Zuweisungsoperator immer eine Variable stehen muss, kein fester Text.
+          </button>
+          <button class="tuev-btn" onclick="checkTuev('card-q5', 3, false, 'Das Gleichheitszeichen existiert in Java sehr wohl als Zuweisungsoperator.')">
+            C) Weil es in Java kein Gleichheitszeichen gibt.
+          </button>
+        </div>
+        <div class="tuev-feedback" id="card-q5-fb"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 8: MERKHEFTSICHERUNG (HEFTEINTRAG)
+         ======================================================== -->
+    <section class="sheet-card" id="hefteintrag">
+      <div class="task-title">
+        <span class="task-number">8</span>
+        <span>Merkheftsicherung: Zusammenfassung für das Heft</span>
+      </div>
+
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Hefteintrag</span>
+          <span class="auftrag-title">Übertrag in das Informatik-Heft</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.6;">
+          Übertrage den folgenden Merkkasten und die Übersicht der Datentypen sauber in dein Heft. 
+          Achte besonders auf die Kennzeichnung von Deklaration und Zuweisung.
+        </p>
+      </div>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin-bottom: 0.75rem;">1. Das Variablenkonzept</h3>
+          <p>
+            Eine <strong>Variable</strong> ist ein beschrifteter Platzhalter im Arbeitsspeicher (RAM).<br>
+            • <strong>Deklaration:</strong> Reserviert das Fach unter Angabe von Datentyp und Bezeichner (z. B. <span class="code-pill">String n;</span>).<br>
+            • <strong>Zuweisung:</strong> Speichert einen Wert im reservierten Fach (z. B. <span class="code-pill">n = "Alfred";</span>).<br>
+            • <strong>Initialisierung:</strong> Deklaration und erstmalige Zuweisung in einer einzigen Zeile (<span class="code-pill">String n = "Alfred";</span>).
+          </p>
+
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 1rem 0 0.75rem 0;">2. Der Zuweisungsoperator ($=$)</h3>
+          <p>
+            Das Zeichen <span class="code-pill">=</span> ist in Java <strong>keine Gleichheitswaage</strong> wie in der Mathematik, 
+            sondern ein <strong>Zuweisungsbefehl von rechts nach links</strong> ($\leftarrow$).<br>
+            Der Wert der rechten Seite wird in die Variable der linken Seite geschrieben.
+          </p>
+
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 1rem 0 0.75rem 0;">3. Konsole &amp; Datentypen</h3>
+          <p>
+            • <span class="code-pill">System.out.print(...)</span> bleibt in derselben Zeile.<br>
+            • <span class="code-pill">System.out.println(...)</span> setzt nach der Ausgabe einen Zeilenumbruch.<br>
+            • Die fünf Grundtypen: <span class="code-pill">String</span> (Text in <span class="code-pill">"..."</span>), 
+            <span class="code-pill">char</span> (Zeichen in <span class="code-pill">'...'</span>), 
+            <span class="code-pill">int</span> (Ganze Zahl), 
+            <span class="code-pill">double</span> (Dezimalzahl mit Punkt), 
+            <span class="code-pill">boolean</span> (<span class="code-pill">true</span> / <span class="code-pill">false</span>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div> <!-- /container -->
+
+  <!-- ========================================================
+       INTERAKTIVE SCRIPTE
+       ======================================================== -->
+  <script>
+    // --- Konsolen-Simulator ---
+    const simTerminal = document.getElementById('simTerminal');
+    const simExplanation = document.getElementById('simExplanation');
+
+    function runSim(testNum) {
+      if (testNum === 1) {
+        simTerminal.innerHTML = '> Ausführung von System.out.print:\n' +
+                                'Hallo Welt (Cursor bleibt hier stehen)<span class="console-cursor"></span>';
+        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Weil zweimal print() aufgerufen wurde, stehen beide Wörter nahtlos hintereinander in derselben Zeile. Der Cursor springt nicht um.';
+      } else if (testNum === 2) {
+        simTerminal.innerHTML = '> Ausführung von System.out.println:\n' +
+                                'Hallo\n' +
+                                'Welt\n' +
+                                '<span class="console-cursor"></span>';
+        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Jeder println()-Aufruf beendet die aktuelle Zeile und schickt den Cursor an den Anfang der nächsten Zeile.';
+      } else if (testNum === 3) {
+        simTerminal.innerHTML = '> Ausführung von Grundlagen.unterhaltung():\n' +
+                                'Mein Name ist Alfred\n' +
+                                'Günni: Hi\n' +
+                                'Alfred: Hey\n' +
+                                '<span class="console-cursor"></span>';
+        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Die Variable n wurde mit Alfred initialisiert. Über die Konkatenation ("Mein Name ist " + n) setzt Java den Namen dynamisch in die Ausgabe ein!';
+      }
+    }
+
+    function clearSim() {
+      simTerminal.innerHTML = '> Bereit.<span class="console-cursor"></span>';
+      simExplanation.innerHTML = 'Terminal geleert.';
+    }
+
+    // --- Arbeitsspeicher Simulator ---
+    function ramStep(step) {
+      const cellN = document.getElementById('ramCell-n');
+      const labelN = document.getElementById('ramLabel-n');
+      const valN = document.getElementById('ramVal-n');
+      const cellAlter = document.getElementById('ramCell-alter');
+      const labelAlter = document.getElementById('ramLabel-alter');
+      const valAlter = document.getElementById('ramVal-alter');
+      const fb = document.getElementById('ramFeedback');
+
+      if (step === 1) {
+        cellN.classList.add('highlight');
+        setTimeout(() => cellN.classList.remove('highlight'), 600);
+        labelN.textContent = 'String n';
+        valN.textContent = '<uninitialisiert>';
+        valN.style.color = '#94a3b8';
+        fb.innerHTML = '<strong>Schritt 1 ausgeführt:</strong> Das Fach an Adresse 0x1008 wurde für einen String mit dem Namen <code>n</code> reserviert. Es enthält noch keinen gültigen Wert.';
+      } else if (step === 2) {
+        cellN.classList.add('highlight');
+        setTimeout(() => cellN.classList.remove('highlight'), 600);
+        labelN.textContent = 'String n';
+        valN.textContent = '"Alfred"';
+        valN.style.color = '#166534';
+        fb.innerHTML = '<strong>Schritt 2 ausgeführt:</strong> Über die Zuweisung <code>n = "Alfred";</code> wurde der Text "Alfred" in das reservierte Fach geschrieben.';
+      } else if (step === 3) {
+        cellN.classList.add('highlight');
+        setTimeout(() => cellN.classList.remove('highlight'), 600);
+        valN.textContent = '"Günni"';
+        valN.style.color = '#166534';
+        fb.innerHTML = '<strong>Schritt 3 ausgeführt (Überschreiben):</strong> Die neue Zuweisung <code>n = "Günni";</code> löscht den alten Wert "Alfred" aus dem Fach und speichert "Günni". Eine Variable kann immer nur einen Wert gleichzeitig halten!';
+      } else if (step === 4) {
+        cellAlter.classList.add('highlight');
+        setTimeout(() => cellAlter.classList.remove('highlight'), 600);
+        labelAlter.textContent = 'int alter';
+        valAlter.textContent = '16';
+        valAlter.style.color = '#c2410c';
+        fb.innerHTML = '<strong>Schritt 4 ausgeführt:</strong> An Adresse 0x100C wurde ein neues Fach vom Typ <code>int</code> mit dem Namen <code>alter</code> deklariert und direkt mit der Zahl 16 initialisiert.';
+      }
+    }
+
+    function ramReset() {
+      document.getElementById('ramLabel-n').textContent = 'frei';
+      document.getElementById('ramVal-n').textContent = '-';
+      document.getElementById('ramVal-n').style.color = '#0f172a';
+      document.getElementById('ramLabel-alter').textContent = 'frei';
+      document.getElementById('ramVal-alter').textContent = '-';
+      document.getElementById('ramVal-alter').style.color = '#0f172a';
+      document.getElementById('ramFeedback').innerHTML = 'Arbeitsspeicher zurückgesetzt.';
+    }
+
+    // --- Begriffs-TÜV Quiz ---
+    function checkTuev(cardId, optionNum, isCorrect, feedbackText) {
+      const card = document.getElementById(cardId);
+      const buttons = card.querySelectorAll('.tuev-btn');
+      const feedback = document.getElementById(cardId + '-fb');
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong');
+        if (index + 1 === optionNum) {
+          if (isCorrect) btn.classList.add('correct');
+          else btn.classList.add('wrong');
+        }
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#ecfdf5';
+        feedback.style.color = '#065f46';
+        feedback.style.border = '1.5px solid #a7f3d0';
+        feedback.innerHTML = '<strong>Richtig!</strong> ' + feedbackText;
+      } else {
+        feedback.style.background = '#fef2f2';
+        feedback.style.color = '#991b1b';
+        feedback.style.border = '1.5px solid #fecaca';
+        feedback.innerHTML = '<strong>Hinweis:</strong> ' + feedbackText;
+      }
+    }
+
+    // --- Aufklapp-Antworten ---
+    function toggleReveal(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const isVisible = el.classList.toggle('show');
+      if (btn) {
+        btn.textContent = isVisible ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      }
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      const anyHidden = Array.from(answers).some(a => !a.classList.contains('show'));
+
+      answers.forEach(a => {
+        if (anyHidden) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+
+      buttons.forEach(b => {
+        b.textContent = anyHidden ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      });
+    }
+  </script>
+</body>
+</html>
