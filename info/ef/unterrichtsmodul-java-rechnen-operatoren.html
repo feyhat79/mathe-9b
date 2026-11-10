@@ -349,8 +349,8 @@
         Variablen heißen nicht ohne Grund <em>Variablen</em>: Ihr Inhalt ist veränderlich (variabel). 
         Bisher haben wir Werte lediglich deklariert und starr auf der Konsole ausgegeben. 
         In dieser Lerneinheit machen wir den Computer zur echten Rechenmaschine: Wir lernen die Grundoperatoren 
-        kennen, untersuchen die tückische Ganzzahldivision, berechnen Divisionsreste mit dem Modulo-Operator 
-        und lüften das Geheimnis der Selbstzuweisung <span class="code-pill">punkte = punkte + 5;</span>.
+        kennen, untersuchen die tückische Ganzzahldivision und lüften das Geheimnis 
+        der Selbstzuweisung <span class="code-pill">punkte = punkte + 5;</span>.
       </p>
 
       <div class="auftrag-box" style="margin-top: 1.25rem;">
@@ -360,10 +360,9 @@
         </div>
         <p style="font-size: 0.96rem; line-height: 1.55;">
           Nach dieser Einheit kannst du:
-          (1) Die fünf Grundoperatoren in Java sicher anwenden, 
-          (2) den Unterschied zwischen <span class="code-pill">int</span>- und <span class="code-pill">double</span>-Division erklären, 
-          (3) mit dem Modulo-Operator <span class="code-pill">%</span> rechnen und 
-          (4) Schritt für Schritt nachvollziehen, was bei Selbstzuweisungen wie <span class="code-pill">x = x + 1;</span> 
+          (1) Die Grundoperatoren in Java sicher anwenden, 
+          (2) den Unterschied zwischen <span class="code-pill">int</span>- und <span class="code-pill">double</span>-Division erklären und 
+          (3) Schritt für Schritt nachvollziehen, was bei Selbstzuweisungen wie <span class="code-pill">x = x + 1;</span> 
           im Arbeitsspeicher geschieht.
         </p>
       </div>
@@ -492,62 +491,11 @@ System.out.<span class="code-method">println</span>(<span class="code-string">"U
     </section>
 
     <!-- ========================================================
-         PHASE 3: DER MODULO-OPERATOR (%)
-         ======================================================== -->
-    <section class="sheet-card" id="modulo">
-      <div class="task-title">
-        <span class="task-number">3</span>
-        <span>Der Modulo-Operator (%): Rechnen mit dem Divisionsrest</span>
-      </div>
-
-      <p>
-        In der Grundschule hat man geteilt, bevor man Brüche kannte: 
-        <em>„14 geteilt durch 4 ist 3, Rest 2.“</em> Genau diesen <strong>Rest</strong> liefert in Java 
-        das Prozentzeichen <span class="code-pill">%</span>, genannt <strong>Modulo-Operator</strong>:
-      </p>
-
-      <div class="merke-box">
-        <span class="merke-tag">MERKE</span>
-        <div class="merke-content">
-          Der <strong>Modulo-Operator (<span class="code-pill">%</span>)</strong> berechnet den ganzzahligen Rest einer Division:<br>
-          • <span class="code-pill">14 / 4</span> ergibt <span class="code-pill">3</span> <em>(Wie oft passt die 4 ganz hinein?)</em><br>
-          • <span class="code-pill">14 % 4</span> ergibt <span class="code-pill">2</span> <em>(Welcher Rest bleibt übrig?)</em>
-        </div>
-      </div>
-
-      <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.5rem 0 0.5rem 0;">
-        Warum ist Modulo in der Informatik so wichtig?
-      </h3>
-
-      <div class="note-columns">
-        <div class="notebook-column col-blue">
-          <div class="col-title">• 1. Gerade oder ungerade Zahl?</div>
-          <div class="col-description">
-            Jede gerade Zahl lässt sich ohne Rest durch 2 teilen. 
-            Teilt man eine Zahl durch 2 mit Modulo, bleibt entweder 0 oder 1 übrig:<br>
-            • <span class="code-pill">8 % 2</span> $\to$ <strong>0</strong> (gerade Zahl)<br>
-            • <span class="code-pill">9 % 2</span> $\to$ <strong>1</strong> (ungerade Zahl)
-          </div>
-        </div>
-
-        <div class="notebook-column col-purple">
-          <div class="col-title">• 2. Zeit- &amp; Einheitenrechnung</div>
-          <div class="col-description">
-            Wie viele Minuten und Restsekunden sind 125 Sekunden?<br>
-            • Minuten: <span class="code-pill">125 / 60</span> $\to$ <strong>2 Minuten</strong><br>
-            • Restsekunden: <span class="code-pill">125 % 60</span> $\to$ <strong>5 Sekunden</strong><br>
-            Ergebnis: 2 Minuten und 5 Sekunden!
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================================
-         PHASE 4: DIE SELBSTZUWEISUNG (DAS HERZSTÜCK)
+         PHASE 3: DIE SELBSTZUWEISUNG (DAS HERZSTÜCK)
          ======================================================== -->
     <section class="sheet-card" id="selbstzuweisung">
       <div class="task-title">
-        <span class="task-number">4</span>
+        <span class="task-number">3</span>
         <span>Die Selbstzuweisung: punkte = punkte + 5;</span>
       </div>
 
@@ -609,11 +557,11 @@ punkte = punkte + 5;</pre>
     </section>
 
     <!-- ========================================================
-         PHASE 5: ABKÜRZUNGEN & INKREMENT (++, --)
+         PHASE 4: ABKÜRZUNGEN & INKREMENT (++, --)
          ======================================================== -->
     <section class="sheet-card" id="kurzschreibweisen">
       <div class="task-title">
-        <span class="task-number">5</span>
+        <span class="task-number">4</span>
         <span>Kurzschreibweisen &amp; der Inkrement-Operator</span>
       </div>
 
@@ -673,16 +621,16 @@ punkte = punkte + 5;</pre>
     </section>
 
     <!-- ========================================================
-         PHASE 6: PRAXIS-CODE ZUM AUSPROBIEREN (RECHNER.JAVA)
+         PHASE 5: PRAXIS-CODE ZUM AUSPROBIEREN (RECHNER.JAVA)
          ======================================================== -->
     <section class="sheet-card" id="praxis">
       <div class="task-title">
-        <span class="task-number">6</span>
+        <span class="task-number">5</span>
         <span>Praxis-Code: Die Klasse Rechner</span>
       </div>
 
       <p>
-        Hier ist eine vollständige Java-Klasse, die alle Rechenarten demonstriert. 
+        Hier ist eine vollständige Java-Klasse, die die Rechenarten und die Selbstzuweisung demonstriert. 
         Du kannst sie in BlueJ ausprobieren:
       </p>
 
@@ -696,7 +644,7 @@ punkte = punkte + 5;</pre>
         
         System.out.<span class="code-method">println</span>(<span class="code-string">"Addition: "</span> + (a + b));        <span class="code-comment">// 21</span>
         System.out.<span class="code-method">println</span>(<span class="code-string">"Ganzzahldivision: "</span> + (a / b)); <span class="code-comment">// 4</span>
-        System.out.<span class="code-method">println</span>(<span class="code-string">"Modulo (Rest): "</span> + (a % b));    <span class="code-comment">// 1 (denn 4*4 + 1 = 17)</span>
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Kommadivision: "</span> + (17.0 / 4)); <span class="code-comment">// 4.25</span>
     }
     
     <span class="code-comment">// Demonstriert die Selbstzuweisung bei einem Punktestand</span>
@@ -712,24 +660,26 @@ punkte = punkte + 5;</pre>
         System.out.<span class="code-method">println</span>(<span class="code-string">"Endstand: "</span> + punkte); <span class="code-comment">// 61</span>
     }
     
-    <span class="code-comment">// Rechnet Sekunden in Minuten und Rest-Sekunden um</span>
-    <span class="code-keyword">void</span> <span class="code-method">zeitUmrechnen</span>()
+    <span class="code-comment">// Berechnet Umfang und Fläche eines Rechtecks</span>
+    <span class="code-keyword">void</span> <span class="code-method">rechteckBerechnen</span>()
     {
-        <span class="code-type">int</span> gesamtSekunden = 145;
-        <span class="code-type">int</span> minuten = gesamtSekunden / 60;
-        <span class="code-type">int</span> restSekunden = gesamtSekunden % 60;
+        <span class="code-type">int</span> laenge = 8;
+        <span class="code-type">int</span> breite = 5;
+        <span class="code-type">int</span> flaeche = laenge * breite;
+        <span class="code-type">int</span> umfang = 2 * (laenge + breite);
         
-        System.out.<span class="code-method">println</span>(gesamtSekunden + <span class="code-string">" s sind "</span> + minuten + <span class="code-string">" min und "</span> + restSekunden + <span class="code-string">" s."</span>);
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Flaeche: "</span> + flaeche + <span class="code-string">" qm"</span>);
+        System.out.<span class="code-method">println</span>(<span class="code-string">"Umfang: "</span> + umfang + <span class="code-string">" m"</span>);
     }
 } <span class="code-comment">// Ende Klasse</span></pre>
     </section>
 
     <!-- ========================================================
-         PHASE 7: BEGRIFFS- & RECHEN-TÜV
+         PHASE 6: BEGRIFFS- & RECHEN-TÜV
          ======================================================== -->
     <section class="sheet-card" id="tuev">
       <div class="task-title">
-        <span class="task-number">7</span>
+        <span class="task-number">6</span>
         <span>Begriffs- &amp; Rechen-TÜV: Teste dein Verständnis</span>
       </div>
 
@@ -755,17 +705,20 @@ punkte = punkte + 5;</pre>
       <!-- Frage 2 -->
       <div class="tuev-card" id="card-r2">
         <div class="tuev-question">
-          2. Was ergibt der Ausdruck: <span class="code-pill">23 % 5</span>?
+          2. Welcher Wert liegt am Ende in der Variable <span class="code-pill">a</span>?
+          <pre class="code-block" style="margin: 0.5rem 0; font-size: 0.88rem;">int a = 4;
+a = a * 2;
+a++;</pre>
         </div>
         <div class="tuev-options">
-          <button class="tuev-btn" onclick="checkTuev('card-r2', 1, false, '4 ist das Ergebnis der normalen Ganzzahldivision (23 / 5), nicht der Rest!')">
-            A) 4
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 1, false, '4 * 2 ergibt 8. Danach kommt noch a++; dazu!')">
+            A) 8
           </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r2', 2, true, 'Richtig! 23 geteilt durch 5 ist 4, Rest 3 (denn 4 * 5 = 20, bis 23 fehlen 3). Modulo liefert genau diese 3.')">
-            B) 3
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 2, true, 'Richtig! Zeile 1: a = 4. Zeile 2: 4 * 2 = 8, also a = 8. Zeile 3: a++ erhöht um 1 auf 9.')">
+            B) 9
           </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r2', 3, false, 'Modulo liefert keinen Prozentwert (nicht 0.23), sondern den Divisionsrest.')">
-            C) 0.23
+          <button class="tuev-btn" onclick="checkTuev('card-r2', 3, false, 'Nach a = 4 * 2 ist a = 8, nicht 10.')">
+            C) 10
           </button>
         </div>
         <div class="tuev-feedback" id="card-r2-fb"></div>
@@ -774,51 +727,29 @@ punkte = punkte + 5;</pre>
       <!-- Frage 3 -->
       <div class="tuev-card" id="card-r3">
         <div class="tuev-question">
-          3. Welcher Wert liegt am Ende in der Variable <span class="code-pill">a</span>?
-          <pre class="code-block" style="margin: 0.5rem 0; font-size: 0.88rem;">int a = 4;
-a = a * 2;
-a++;</pre>
+          3. Warum ist die Zeile <span class="code-pill">punkte = punkte + 5;</span> in Java völlig legal, in Mathe aber ein Widerspruch?
         </div>
         <div class="tuev-options">
-          <button class="tuev-btn" onclick="checkTuev('card-r3', 1, false, '4 * 2 ergibt 8. Danach kommt noch a++; dazu!')">
-            A) 8
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 1, true, 'Richtig! In Java ist = der Zuweisungsoperator von rechts nach links. Der Wert rechts wird ausgerechnet und ins Fach links geschrieben.')">
+            A) Weil = in Java kein Gleichheitszeichen ist, sondern der Wert rechts ausgerechnet und ins linke Fach geschrieben wird.
           </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r3', 2, true, 'Richtig! Zeile 1: a = 4. Zeile 2: 4 * 2 = 8, also a = 8. Zeile 3: a++ erhöht um 1 auf 9.')">
-            B) 9
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 2, false, 'Mathematisch ist x = x + 5 unlösbar. In Java hat = aber eine ganz andere Bedeutung.')">
+            B) Weil in der Informatik andere mathematische Gesetze gelten.
           </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r3', 3, false, 'Nach a = 4 * 2 ist a = 8, nicht 10.')">
-            C) 10
+          <button class="tuev-btn" onclick="checkTuev('card-r3', 3, false, 'punkte ist eine Variable, keine mathematische Konstante.')">
+            C) Weil punkte in Java immer den Wert 0 hat.
           </button>
         </div>
         <div class="tuev-feedback" id="card-r3-fb"></div>
       </div>
-
-      <!-- Frage 4 -->
-      <div class="tuev-card" id="card-r4">
-        <div class="tuev-question">
-          4. Warum ist die Zeile <span class="code-pill">punkte = punkte + 5;</span> in Java völlig legal, in Mathe aber ein Widerspruch?
-        </div>
-        <div class="tuev-options">
-          <button class="tuev-btn" onclick="checkTuev('card-r4', 1, true, 'Richtig! In Java ist = der Zuweisungsoperator von rechts nach links. Der Wert rechts wird ausgerechnet und ins Fach links geschrieben.')">
-            A) Weil = in Java kein Gleichheitszeichen ist, sondern der Wert rechts ausgerechnet und ins linke Fach geschrieben wird.
-          </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r4', 2, false, 'Mathematisch ist x = x + 5 unlösbar. In Java hat = aber eine ganz andere Bedeutung.')">
-            B) Weil in der Informatik andere mathematische Gesetze gelten.
-          </button>
-          <button class="tuev-btn" onclick="checkTuev('card-r4', 3, false, 'punkte ist eine Variable, keine mathematische Konstante.')">
-            C) Weil punkte in Java immer den Wert 0 hat.
-          </button>
-        </div>
-        <div class="tuev-feedback" id="card-r4-fb"></div>
-      </div>
     </section>
 
     <!-- ========================================================
-         PHASE 8: MERKHEFTSICHERUNG
+         PHASE 7: MERKHEFTSICHERUNG
          ======================================================== -->
     <section class="sheet-card" id="hefteintrag">
       <div class="task-title">
-        <span class="task-number">8</span>
+        <span class="task-number">7</span>
         <span>Merkheftsicherung: Zusammenfassung für das Heft</span>
       </div>
 
@@ -829,7 +760,7 @@ a++;</pre>
         </div>
         <p style="font-size: 0.96rem; line-height: 1.6;">
           Übertrage den folgenden Merkkasten sauber in dein Heft. 
-          Achte besonders auf den Modulo-Operator und das Prinzip der Selbstzuweisung.
+          Achte besonders auf den Unterschied bei der Ganzzahldivision und das Prinzip der Selbstzuweisung.
         </p>
       </div>
 
@@ -840,9 +771,8 @@ a++;</pre>
           <p>
             • Operatoren: <span class="code-pill">+</span> (Addition), <span class="code-pill">-</span> (Subtraktion), 
             <span class="code-pill">*</span> (Multiplikation), <span class="code-pill">/</span> (Division).<br>
-            • <strong>Ganzzahldivision:</strong> Teilen zweier <span class="code-pill">int</span>-Zahlen schneidet Nachkommastellen ab (<span class="code-pill">7 / 2</span> ergibt <span class="code-pill">3</span>). 
-            Für Dezimalergebnisse muss mindestens ein Operand <span class="code-pill">double</span> sein (<span class="code-pill">7.0 / 2</span> ergibt <span class="code-pill">3.5</span>).<br>
-            • <strong>Modulo (<span class="code-pill">%</span>):</strong> Berechnet den ganzzahligen Divisionsrest (<span class="code-pill">14 % 4</span> ergibt <span class="code-pill">2</span>).
+            • <strong>Ganzzahldivision:</strong> Teilen zweier <span class="code-pill">int</span>-Zahlen schneidet Nachkommastellen rigoros ab (<span class="code-pill">7 / 2</span> ergibt <span class="code-pill">3</span>). 
+            Für Dezimalergebnisse muss mindestens ein Operand <span class="code-pill">double</span> sein (<span class="code-pill">7.0 / 2</span> ergibt <span class="code-pill">3.5</span>).
           </p>
 
           <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 1rem 0 0.75rem 0;">2. Die Selbstzuweisung &amp; Inkrement</h3>
