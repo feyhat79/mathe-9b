@@ -142,68 +142,6 @@
       line-height: 1.6;
     }
 
-    /* Interaktiver Konsolen-Simulator */
-    .console-sim-container {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin: 1.5rem 0;
-    }
-    .console-screen {
-      background: #0f172a;
-      border: 1.5px solid #334155;
-      border-radius: 6px;
-      padding: 1rem 1.25rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: #38bdf8;
-      font-size: 0.95rem;
-      min-height: 120px;
-      white-space: pre-wrap;
-      line-height: 1.5;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-    }
-    .console-cursor {
-      display: inline-block;
-      width: 8px;
-      height: 16px;
-      background: #38bdf8;
-      vertical-align: text-bottom;
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .console-controls {
-      display: flex;
-      gap: 10px;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-    .btn-sim {
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 7px 14px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      color: var(--primary);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-sim:hover {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-    .btn-sim.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-
     /* Arbeitsspeicher-Regal Modell */
     .ram-container {
       display: grid;
@@ -623,25 +561,6 @@
         </div>
       </div>
 
-      <!-- Live Terminal Simulator -->
-      <div class="console-sim-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-          <strong style="color: var(--ink-blue); font-size: 1rem;">Interaktives BlueJ-Terminalfenster:</strong>
-          <span style="font-size: 0.8rem; color: #64748b; font-family: 'JetBrains Mono', monospace;">BlueJ Terminal v5.2</span>
-        </div>
-
-        <div class="console-screen" id="simTerminal">> Bereit.<span class="console-cursor"></span></div>
-
-        <div class="console-controls">
-          <button class="btn-sim" onclick="runSim(1)">1. Test: Nur System.out.print</button>
-          <button class="btn-sim" onclick="runSim(2)">2. Test: Nur System.out.println</button>
-          <button class="btn-sim" onclick="runSim(3)">3. Test: Methode unterhaltung()</button>
-          <button class="btn-sim" onclick="clearSim()">Terminal leeren</button>
-        </div>
-        <div id="simExplanation" style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--ink-muted); font-style: italic;">
-          Klicke auf einen der Test-Buttons, um das Terminal-Verhalten Schritt für Schritt zu beobachten.
-        </div>
-      </div>
     </section>
 
     <!-- ========================================================
@@ -1098,36 +1017,6 @@ System.out.print("EF");</pre>
        INTERAKTIVE SCRIPTE
        ======================================================== -->
   <script>
-    // --- Konsolen-Simulator ---
-    const simTerminal = document.getElementById('simTerminal');
-    const simExplanation = document.getElementById('simExplanation');
-
-    function runSim(testNum) {
-      if (testNum === 1) {
-        simTerminal.innerHTML = '> Ausführung von System.out.print:\n' +
-                                'Hallo Welt (Cursor bleibt hier stehen)<span class="console-cursor"></span>';
-        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Weil zweimal print() aufgerufen wurde, stehen beide Wörter nahtlos hintereinander in derselben Zeile. Der Cursor springt nicht um.';
-      } else if (testNum === 2) {
-        simTerminal.innerHTML = '> Ausführung von System.out.println:\n' +
-                                'Hallo\n' +
-                                'Welt\n' +
-                                '<span class="console-cursor"></span>';
-        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Jeder println()-Aufruf beendet die aktuelle Zeile und schickt den Cursor an den Anfang der nächsten Zeile.';
-      } else if (testNum === 3) {
-        simTerminal.innerHTML = '> Ausführung von Grundlagen.unterhaltung():\n' +
-                                'Mein Name ist Alfred\n' +
-                                'Günni: Hi\n' +
-                                'Alfred: Hey\n' +
-                                '<span class="console-cursor"></span>';
-        simExplanation.innerHTML = '<strong>Beobachtung:</strong> Die Variable n wurde mit Alfred initialisiert. Über die Konkatenation ("Mein Name ist " + n) setzt Java den Namen dynamisch in die Ausgabe ein!';
-      }
-    }
-
-    function clearSim() {
-      simTerminal.innerHTML = '> Bereit.<span class="console-cursor"></span>';
-      simExplanation.innerHTML = 'Terminal geleert.';
-    }
-
     // --- Arbeitsspeicher Simulator ---
     function ramStep(step) {
       const cellN = document.getElementById('ramCell-n');
