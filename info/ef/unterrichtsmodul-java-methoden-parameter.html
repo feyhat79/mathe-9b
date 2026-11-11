@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Methodensignaturen &amp; Übergabeparameter | Informatik EF</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematisch-technische Ausdrücke -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Zentrales Web-Modul Stylesheet (Schulheft- & Tafel-Design) -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;          /* Füller-Königsblau */
+      --primary-light: #eff6ff;
+      --border-soft: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --highlight-param: #0284c7;
+      --ink-blue: #1e3a8a;
+      --ink-black: #111827;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      color: var(--ink-black);
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem 1.5rem;
+    }
+
+    /* Presenter Bar Fixierung */
+    nav.presenter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 1.5rem;
+      gap: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    .presenter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-nav-back {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #f8fafc;
+      transition: background 0.15s;
+    }
+    .btn-nav-back:hover {
+      background: #e2e8f0;
+    }
+    .presenter-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--ink-blue);
+    }
+    .presenter-tag {
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #bfdbfe;
+    }
+    .presenter-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .presenter-tab-btn {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .presenter-tab-btn:hover {
+      background: #f1f5f9;
+    }
+    .presenter-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Deckblatt-Header */
+    header.sheet-header {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .sheet-meta-row {
+      display: flex;
+      gap: 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    h1 {
+      font-size: 1.85rem;
+      color: var(--primary);
+      margin: 0 0 1rem 0;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+    .sheet-intro {
+      font-size: 1.05rem;
+      color: #334155;
+      margin: 0;
+    }
+
+    /* Modul-Karten (Lernabschnitte) */
+    .sheet-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .sheet-card h2 {
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.2rem 1.4rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border: 1px solid #334155;
+    }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; }
+    .code-param { color: #38bdf8; font-weight: 700; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Auftragsboxen & Infoboxen */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+    }
+    .auftrag-badge {
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .auftrag-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+
+    /* Lebensdauer-Timeline (Speichermodell) */
+    .ram-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1.5rem 0;
+    }
+    .ram-step {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .ram-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .ram-birth { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .ram-live  { background: #e0f2fe; color: #075985; border: 1px solid #7dd3fc; }
+    .ram-death { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+    .ram-content {
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+    .ram-title {
+      font-weight: 700;
+      color: var(--ink-black);
+      margin-bottom: 3px;
+    }
+
+    /* Gegenüberstellungs-Tabelle */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .compare-table th {
+      background: #f1f5f9;
+      color: var(--ink-blue);
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+    }
+    .compare-table td {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+    }
+
+    /* Merke-Box Standard gemäss GEMINI.md */
+    .merke-box {
+      background: #ffffff;
+      border: 2.5px solid #dc2626;
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.75rem 0;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827;
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    /* TÜV Multiple Choice Interaktiv */
+    .tuev-card {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .tuev-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--ink-black);
+      margin-bottom: 0.75rem;
+    }
+    .tuev-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tuev-btn {
+      font-family: inherit;
+      font-size: 0.92rem;
+      padding: 10px 14px;
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--ink-black);
+      transition: all 0.15s;
+    }
+    .tuev-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .tuev-btn.correct {
+      background: #dcfce7 !important;
+      border-color: #22c55e !important;
+      color: #166534 !important;
+      font-weight: 700;
+    }
+    .tuev-btn.wrong {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+    .tuev-feedback {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    /* Aufklappbare Verständnis- & Musterlösungs-Karten */
+    .question-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.35rem;
+      margin: 1.15rem 0;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .question-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--ink-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .question-num {
+      background: #e2e8f0;
+      color: #1e3a8a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .btn-reveal:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+    .question-answer {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+    .question-answer.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER BAR (Kapitel-Navigationsleiste)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <span class="presenter-title">Informatik EF • Thema 2: Java &amp; BlueJ</span>
+      <span class="presenter-tag">Stunde 6 • Übergabeparameter</span>
+    </div>
+    <div class="presenter-actions">
+      <a href="bluej-figuren-einstieg.html" class="presenter-tab-btn">1. Figuren &amp; OOP</a>
+      <a href="quelltext-editor-compiler.html" class="presenter-tab-btn">2. Quellcode &amp; Compiler</a>
+      <a href="zusammenspiel-objekte-klasse-bild.html" class="presenter-tab-btn">3. Klasse Bild</a>
+      <a href="unterrichtsmodul-java-grundlagen-variablen.html" class="presenter-tab-btn">4. Grundlagen &amp; Variablen</a>
+      <a href="unterrichtsmodul-java-rechnen-operatoren.html" class="presenter-tab-btn">5. Rechnen &amp; Selbstzuweisung</a>
+      <a href="unterrichtsmodul-java-methoden-parameter.html" class="presenter-tab-btn active">6. Methoden &amp; Parameter</a>
+      <button class="presenter-tab-btn" onclick="toggleAllAnswers()">Alle Antworten aufdecken</button>
+      <button class="presenter-tab-btn" onclick="window.print()">Drucken</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ========================================================
+         DECKBLATT-HEADER
+         ======================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik • Einführungsphase (EF)</span>
+        <span>Thema 2: Java &amp; BlueJ</span>
+        <span>Unterrichtsbaustein: Methodensignaturen (Teil 1)</span>
+      </div>
+      <h1>Methodensignaturen &amp; Übergabeparameter</h1>
+      <p class="sheet-intro">
+        Bisher waren unsere Java-Methoden starre Ausführer: Sie arbeiteten mit fest im Quellcode einprogrammierten Zahlen 
+        (z. B. starr 145 Sekunden in <span class="code-pill">zeitUmrechnen()</span>). Wollte man eine andere Zahl berechnen, 
+        musste man den Quelltext umschreiben und neu kompilieren.
+        In dieser Lerneinheit machen wir unsere Methoden flexibel und ansprechbar: Wir lernen das Konzept der 
+        <strong>Übergabeparameter</strong> kennen und untersuchen genau, wann diese Variablen im Arbeitsspeicher entstehen, 
+        wo sie leben und warum sie an der schließenden Klammer wieder spurlos verschwinden.
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.25rem;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Zentrales Lernziel</span>
+          <span class="auftrag-title">Vom starren Arbeiter zum flexiblen Assistenten</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; color: #334155;">
+          • Methoden deklarieren, die Eingabewerte über die runden Klammern <span class="code-pill">(int zahl)</span> entgegennehmen.<br>
+          • Den fundamentalen Unterschied zwischen <strong>Parameter</strong> (Schablone) und <strong>Argument</strong> (konkreter Wert) sicher anwenden.<br>
+          • Den Lebenszyklus (Geburt, Gültigkeitsbereich, Tod) lokaler Parameter im Arbeitsspeicher präzise erklären.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         PHASE 1: PROBLEM & LÖSUNG
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">1</span> Das Problem: Der starre Rechner</h2>
+      <p>
+        Betrachten wir die Methode <span class="code-pill">zeitUmrechnen()</span> aus unserer bisherigen Klasse 
+        <span class="code-pill">Rechner.java</span>:
+      </p>
+
+      <pre class="code-block"><span class="code-comment">// Bisheriger Zustand: Starr und unflexibel</span>
+<span class="code-keyword">void</span> <span class="code-method">zeitUmrechnen</span>()
+{
+    <span class="code-type">int</span> gesamtSekunden = <span class="code-num">145</span>; <span class="code-comment">// Fest verdrahteter Wert!</span>
+    <span class="code-type">int</span> minuten = gesamtSekunden / <span class="code-num">60</span>;
+    <span class="code-type">int</span> restSekunden = gesamtSekunden % <span class="code-num">60</span>;
+    <span class="code-type">System</span>.out.println(gesamtSekunden + <span class="code-string">" s sind "</span> + minuten + <span class="code-string">" min und "</span> + restSekunden + <span class="code-string">" s."</span>);
+}</pre>
+
+      <p>
+        <strong>Der Mangel:</strong> Diese Methode rechnet jedes Mal stur 145 Sekunden um. 
+        Ein echter Taschenrechner muss jedoch mit jeder beliebigen Zahl rechnen können, die ihm der Nutzer beim Start zur Verfügung stellt.
+      </p>
+
+      <p>
+        <strong>Die Lösung:</strong> Wir verlegen die Variablendeklaration direkt in die runden Klammern des Methodenkopfs:
+      </p>
+
+      <pre class="code-block"><span class="code-comment">// Neu: Flexibel durch Übergabeparameter</span>
+<span class="code-keyword">void</span> <span class="code-method">zeitUmrechnenFlexibel</span>(<span class="code-type">int</span> <span class="code-param">gesamtSekunden</span>)
+{
+    <span class="code-type">int</span> minuten = <span class="code-param">gesamtSekunden</span> / <span class="code-num">60</span>;
+    <span class="code-type">int</span> restSekunden = <span class="code-param">gesamtSekunden</span> % <span class="code-num">60</span>;
+    <span class="code-type">System</span>.out.println(<span class="code-param">gesamtSekunden</span> + <span class="code-string">" s sind "</span> + minuten + <span class="code-string">" min und "</span> + restSekunden + <span class="code-string">" s."</span>);
+}</pre>
+
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">BlueJ-Aha-Effekt</span>
+          <span class="auftrag-title">Was passiert beim Methodenaufruf?</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; color: #334155;">
+          Wenn du in BlueJ mit der rechten Maustaste auf ein erzeugtes Objekt klickst und 
+          <span class="code-pill">zeitUmrechnenFlexibel(gesamtSekunden)</span> auswählst, öffnet sich ein 
+          <strong>Eingabedialog</strong>. Hier tippst du z. B. <span class="code-pill">350</span> ein. 
+          Java weist diesen Wert automatisch dem Parameter <span class="code-pill">gesamtSekunden</span> zu und startet die Rechnung!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 2: FACHBEGRIFFE
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">2</span> Fachbegriffe: Parameter vs. Argument</h2>
+      <p>
+        In der Informatik wird streng zwischen der <em>Schablone</em> im Quelltext und dem <em>konkreten Wert</em> beim Ausführen unterschieden:
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width: 28%;">Fachbegriff</th>
+            <th style="width: 32%;">Wo steht er?</th>
+            <th>Bedeutung &amp; Beispiel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Parameter</strong><br><span style="font-size:0.85rem; color:#64748b;">(formaler Parameter)</span></td>
+            <td>Im <strong>Methodenkopf</strong><br><span class="code-pill">void quadriere(int zahl)</span></td>
+            <td>
+              Der <strong>Platzhalter / Trichter</strong>. Er legt fest, welcher Datentyp hineingeworfen werden muss und unter welchem Namen er im Methodenrumpf ansprechbar ist.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Argument</strong><br><span style="font-size:0.85rem; color:#64748b;">(aktueller Parameter)</span></td>
+            <td>Beim <strong>Methodenaufruf</strong><br><span class="code-pill">r.quadriere(7);</span></td>
+            <td>
+              Der <strong>konkrete Wert</strong>, der tatsächlich an die Methode übergeben wird. Hier ist die Zahl <span class="code-pill">7</span> das Argument.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ========================================================
+         PHASE 3: LEBENSDAUER & GÜLTIGKEITSBEREICH
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">3</span> Lebensdauer &amp; Gültigkeitsbereich (*Scope &amp; Lifetime*)</h2>
+      <p>
+        Ein Parameter ist eine <strong>lokale Variable</strong>. Seine Existenz im Arbeitsspeicher (RAM) 
+        ist streng an den Ablauf seiner eigenen Methode gekoppelt:
+      </p>
+
+      <div class="ram-timeline">
+        <div class="ram-step">
+          <span class="ram-badge ram-birth">1. Geburt</span>
+          <div class="ram-content">
+            <div class="ram-title">Aufruf der Methode (Öffnende geschweifte Klammer `{`)</div>
+            Java reserviert im Arbeitsspeicher (auf dem Stack) ein Speicherfach für den Parameter. 
+            Der übergebene Argument-Wert wird hineinkopiert.
+          </div>
+        </div>
+
+        <div class="ram-step">
+          <span class="ram-badge ram-live">2. Leben</span>
+          <div class="ram-content">
+            <div class="ram-title">Innerhalb des Methodenrumpfs</div>
+            Der Parameter kann gelesen, in Rechnungen genutzt und verändert werden. 
+            <strong>Wichtig:</strong> Nur diese eine Methode kann ihn sehen (Gültigkeitsbereich).
+          </div>
+        </div>
+
+        <div class="ram-step">
+          <span class="ram-badge ram-death">3. Tod</span>
+          <div class="ram-content">
+            <div class="ram-title">Ende der Methode (Schließende geschweifte Klammer `}`)</div>
+            Sobald die schließende Klammer <span class="code-pill">}</span> erreicht wird, 
+            wird das Speicherfach **spurlos aus dem RAM gelöscht**. Der Parameter existiert nicht mehr!
+          </div>
+        </div>
+      </div>
+
+      <div class="auftrag-box" style="background: #fef2f2; border-color: #fecaca;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge" style="background: #dc2626;">Zwei typische Fehlerquellen</span>
+          <span class="auftrag-title" style="color: #991b1b;">Was Schüler häufig falsch machen</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; color: #111827;">
+          <strong>Fehler 1: Doppel-Deklaration</strong><br>
+          Weil der Parameter bereits im Kopf deklariert ist (<span class="code-pill">void rechne(int x)</span>), 
+          darf im Rumpf <em>nicht</em> noch einmal <span class="code-pill">int x = 10;</span> stehen. 
+          Das führt zum Compiler-Fehler: <span class="code-pill">variable x is already defined</span>.<br><br>
+          <strong>Fehler 2: Fernzugriff über Methodengrenzen hinweg</strong><br>
+          Eine Methode B kann niemals auf den Parameter von Methode A zugreifen. 
+          Variablen „wandern“ nicht von selbst durch die Klasse!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 4: CODE-INSPEKTION RECHNER.JAVA
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">4</span> Die erweiterte Klasse `Rechner.java`</h2>
+      <p>
+        Hier ist die vollständige Version der Klasse mit Beispielen für <strong>einen Parameter</strong>, 
+        <strong>zwei Parameter</strong> und <strong>verschiedene Datentypen</strong>:
+      </p>
+
+      <pre class="code-block"><span class="code-keyword">public class</span> <span class="code-type">Rechner</span> 
+{
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-comment">// BEISPIEL 1: Ein Parameter (Ganzzahl)</span>
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-keyword">void</span> <span class="code-method">quadriere</span>(<span class="code-type">int</span> <span class="code-param">zahl</span>) 
+    {
+        <span class="code-type">int</span> ergebnis = <span class="code-param">zahl</span> * <span class="code-param">zahl</span>;
+        <span class="code-type">System</span>.out.println(<span class="code-string">"Das Quadrat von "</span> + <span class="code-param">zahl</span> + <span class="code-string">" ist: "</span> + ergebnis);
+    } <span class="code-comment">// <-- HIER sterben 'zahl' und 'ergebnis' im RAM!</span>
+
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-comment">// BEISPIEL 2: Zwei Parameter (durch Komma getrennt)</span>
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-keyword">void</span> <span class="code-method">rechteckFlaeche</span>(<span class="code-type">int</span> <span class="code-param">breite</span>, <span class="code-type">int</span> <span class="code-param">laenge</span>) 
+    {
+        <span class="code-type">int</span> flaeche = <span class="code-param">breite</span> * <span class="code-param">laenge</span>;
+        <span class="code-type">System</span>.out.println(<span class="code-string">"Rechteck ("</span> + <span class="code-param">breite</span> + <span class="code-string">" x "</span> + <span class="code-param">laenge</span> + <span class="code-string">") hat die Fläche: "</span> + flaeche);
+    }
+
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-comment">// BEISPIEL 3: Verschiedene Datentypen kombinieren (String & int)</span>
+    <span class="code-comment">// ==============================================================</span>
+    <span class="code-keyword">void</span> <span class="code-method">druckeKassenbon</span>(<span class="code-type">String</span> <span class="code-param">artikel</span>, <span class="code-type">int</span> <span class="code-param">anzahl</span>, <span class="code-type">int</span> <span class="code-param">preisCent</span>) 
+    {
+        <span class="code-type">int</span> gesamtCent = <span class="code-param">anzahl</span> * <span class="code-param">preisCent</span>;
+        <span class="code-type">System</span>.out.println(<span class="code-string">"Artikel: "</span> + <span class="code-param">artikel</span>);
+        <span class="code-type">System</span>.out.println(<span class="code-string">"Menge:   "</span> + <span class="code-param">anzahl</span> + <span class="code-string">" x "</span> + <span class="code-param">preisCent</span> + <span class="code-string">" Cent"</span>);
+        <span class="code-type">System</span>.out.println(<span class="code-string">"Gesamt:  "</span> + gesamtCent + <span class="code-string">" Cent"</span>);
+    }
+}</pre>
+    </section>
+
+    <!-- ========================================================
+         PHASE 5: TÜV VERSTÄNDNIS-CHECK
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">5</span> TÜV: Sofort-Verständnis-Check</h2>
+      <p>Teste dein Wissen direkt mit diesen drei typischen Fragestellungen:</p>
+
+      <!-- TÜV 1 -->
+      <div class="tuev-card" id="tuev-1">
+        <div class="tuev-title">1. Gegeben ist der Aufruf: <span class="code-pill">rechner.quadriere(12);</span>. Was ist die Zahl 12?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 1, false, 'Der Parameter steht in der Methodendefinition im Code (int zahl).')">A) Der formale Parameter</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 2, true, 'Exakt. Der beim Aufruf übergebene konkrete Wert heißt Argument.')">B) Das Argument (der konkrete Wert)</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 3, false, 'Eine globale Variable ist eine Objekt-Eigenschaft (Attribut). Das ist 12 hier nicht.')">C) Eine globale Variable</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-1-fb"></div>
+      </div>
+
+      <!-- TÜV 2 -->
+      <div class="tuev-card" id="tuev-2">
+        <div class="tuev-title">2. Wann wird ein Übergabeparameter aus dem Arbeitsspeicher (RAM) gelöscht?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 1, false, 'Nein, während die Methode rechnet, wird der Parameter ja noch gebraucht.')">A) Sobald die erste Rechenzeile vorbei ist.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 2, true, 'Richtig! An der schließenden geschweiften Klammer } der Methode endet seine Lebensdauer.')">B) Genau an der schließenden geschweiften Klammer `}` der Methode.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 3, false, 'Lokale Parameter überleben das Methodenende nicht. Nur Attribute eines Objekts bleiben bestehen.')">C) Erst wenn das gesamte BlueJ-Projekt geschlossen wird.</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-2-fb"></div>
+      </div>
+
+      <!-- TÜV 3 -->
+      <div class="tuev-card" id="tuev-3">
+        <div class="tuev-title">3. Warum meckert Java bei folgendem Code? <span class="code-pill">void test(int a) { int a = 5; }</span></div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 1, false, 'Die Syntax mit Semikolon ist hier formal in Ordnung.')">A) Weil hinter int a = 5 ein Komma stehen müsste.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 2, true, 'Genau. Der Name a ist im Methodenbereich durch den Parameter schon vergeben (variable already defined).')">B) Weil 'a' bereits als Parameter existiert und nicht doppelt deklariert werden darf.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 3, false, 'Ganzzahlen dürfen selbstverständlich mit int deklariert werden.')">C) Weil Methoden keine int-Werte verarbeiten können.</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-3-fb"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 6: PRAXIS-AUFGABEN MIT LÖSUNGEN
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">6</span> Übungsaufgaben für den Unterricht</h2>
+
+      <!-- Aufgabe 1 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('ans-1', this.querySelector('.btn-reveal'))">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 1</span>
+            Der Verdoppler (1 Parameter)
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
+          Schreibe in der Klasse <span class="code-pill">Rechner</span> eine Methode <span class="code-pill">verdopple(int zahl)</span>. 
+          Sie soll die übergebene Zahl verdoppeln und auf der Konsole ausgeben: 
+          <em>„Das Doppelte von 14 ist: 28“</em>.
+        </p>
+        <div class="question-answer" id="ans-1">
+          <strong>Musterlösung:</strong>
+          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">verdopple</span>(<span class="code-type">int</span> <span class="code-param">zahl</span>)
+{
+    <span class="code-type">int</span> ergebnis = <span class="code-param">zahl</span> * <span class="code-num">2</span>;
+    <span class="code-type">System</span>.out.println(<span class="code-string">"Das Doppelte von "</span> + <span class="code-param">zahl</span> + <span class="code-string">" ist: "</span> + ergebnis);
+}</pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('ans-2', this.querySelector('.btn-reveal'))">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 2</span>
+            Umfang eines Rechtecks (2 Parameter)
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
+          Schreibe eine Methode <span class="code-pill">rechteckUmfang(int laenge, int breite)</span>. 
+          Sie berechnet den Umfang nach der Formel $U = 2 \cdot (\text{laenge} + \text{breite})$ 
+          und gibt das Ergebnis formatiert auf der Konsole aus.
+        </p>
+        <div class="question-answer" id="ans-2">
+          <strong>Musterlösung:</strong>
+          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">rechteckUmfang</span>(<span class="code-type">int</span> <span class="code-param">laenge</span>, <span class="code-type">int</span> <span class="code-param">breite</span>)
+{
+    <span class="code-type">int</span> umfang = <span class="code-num">2</span> * (<span class="code-param">laenge</span> + <span class="code-param">breite</span>);
+    <span class="code-type">System</span>.out.println(<span class="code-string">"Ein Rechteck ("</span> + <span class="code-param">laenge</span> + <span class="code-string">" x "</span> + <span class="code-param">breite</span> + <span class="code-string">") hat den Umfang: "</span> + umfang);
+}</pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 3 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('ans-3', this.querySelector('.btn-reveal'))">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 3</span>
+            Zeitrechner Rückwärts: Minuten &amp; Sekunden in Gesamtsekunden
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
+          Schreibe eine Methode <span class="code-pill">inSekundenUmrechnen(int minuten, int sekunden)</span>. 
+          Beispiel: Werden <span class="code-pill">3</span> Minuten und <span class="code-pill">25</span> Sekunden übergeben, 
+          soll die Konsole ausgeben: <em>„3 min und 25 s sind insgesamt 205 Sekunden.“</em>
+        </p>
+        <div class="question-answer" id="ans-3">
+          <strong>Musterlösung:</strong>
+          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">inSekundenUmrechnen</span>(<span class="code-type">int</span> <span class="code-param">minuten</span>, <span class="code-type">int</span> <span class="code-param">sekunden</span>)
+{
+    <span class="code-type">int</span> gesamt = (<span class="code-param">minuten</span> * <span class="code-num">60</span>) + <span class="code-param">sekunden</span>;
+    <span class="code-type">System</span>.out.println(<span class="code-param">minuten</span> + <span class="code-string">" min und "</span> + <span class="code-param">sekunden</span> + <span class="code-string">" s sind insgesamt "</span> + gesamt + <span class="code-string">" Sekunden."</span>);
+}</pre>
+        </div>
+      </div>
+
+      <!-- Aufgabe 4 -->
+      <div class="question-card">
+        <div class="question-header" onclick="toggleReveal('ans-4', this.querySelector('.btn-reveal'))">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 4</span>
+            Fehlersuche &amp; Quelltext-Kritik (Gültigkeitsbereich &amp; Lebensdauer)
+          </div>
+          <button class="btn-reveal">Erklärung aufdecken</button>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
+          Betrachte den folgenden Quelltext. Der Compiler meldet drei Fehler. Finde und begründe sie:
+        </p>
+        <pre class="code-block"><span class="code-keyword">public class</span> <span class="code-type">Kollision</span> 
+{
+    <span class="code-keyword">void</span> <span class="code-method">schritt1</span>(<span class="code-type">int</span> <span class="code-param">a</span>) 
+    {
+        <span class="code-type">int</span> a = <span class="code-num">20</span>;            <span class="code-comment">// Zeile A</span>
+        <span class="code-type">int</span> ergebnis = a * <span class="code-num">2</span>;  <span class="code-comment">// Zeile B</span>
+    }
+
+    <span class="code-keyword">void</span> <span class="code-method">schritt2</span>() 
+    {
+        <span class="code-type">System</span>.out.println(a);        <span class="code-comment">// Zeile C</span>
+        <span class="code-type">System</span>.out.println(ergebnis); <span class="code-comment">// Zeile D</span>
+    }
+}</pre>
+        <div class="question-answer" id="ans-4">
+          <strong>Begründung der 3 Compiler-Fehler:</strong>
+          <ul>
+            <li><strong>Fehler in Zeile A:</strong> Die Variable <span class="code-pill">a</span> wurde bereits im Methodenkopf als Übergabeparameter deklariert. Ein zweites <span class="code-pill">int a</span> im Methodenrumpf ist eine unzulässige Doppel-Deklaration (*variable already defined*).</li>
+            <li><strong>Fehler in Zeile C:</strong> Der Parameter <span class="code-pill">a</span> lebt ausschließlich im Rumpf von <span class="code-pill">schritt1</span>. Die Methode <span class="code-pill">schritt2</span> hat keinen Zugriff darauf (*cannot find symbol*).</li>
+            <li><strong>Fehler in Zeile D:</strong> Die lokale Variable <span class="code-pill">ergebnis</span> wurde an der schließenden Klammer von <span class="code-pill">schritt1</span> gelöscht. Sie ist in <span class="code-pill">schritt2</span> unbekannt.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 7: MERKSATZ-BOX (GEMINI.md Standard)
+         ======================================================== -->
+    <section>
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin-top: 0; margin-bottom: 0.75rem;">1. Parameter &amp; Argument</h3>
+          <p style="margin-bottom: 1rem;">
+            • Der <strong>Parameter</strong> steht im Methodenkopf (z. B. <span class="code-pill">void methode(int zahl)</span>). Er fungiert als Trichter/Platzhalter.<br>
+            • Das <strong>Argument</strong> ist der tatsächliche Wert, der beim Aufruf übergeben wird (z. B. <span class="code-pill">r.methode(15);</span>).<br>
+            • Mehrere Parameter werden innerhalb der Klammern mit einem Komma getrennt (<span class="code-pill">int a, int b</span>).
+          </p>
+
+          <h3 style="font-size: 1.15rem; color: #1e3a8a; margin: 1rem 0 0.75rem 0;">2. Lebensdauer &amp; Gültigkeitsbereich</h3>
+          <p style="margin-bottom: 0;">
+            • Parameter sind <strong>lokale Variablen</strong>: Sie werden beim Methodenaufruf im Arbeitsspeicher (RAM) erzeugt und beim Erreichen der schließenden Klammer <span class="code-pill">}</span> unwiderruflich gelöscht.<br>
+            • Andere Methoden haben <strong>keinen Zugriff</strong> auf fremde Parameter.<br>
+            • Ein Parameter darf im Rumpf <strong>nicht noch einmal deklariert werden</strong> (kein doppeltes <span class="code-pill">int</span>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div> <!-- /container -->
+
+  <!-- ========================================================
+       SCRIPTE
+       ======================================================== -->
+  <script>
+    function checkTuev(cardId, optionNum, isCorrect, feedbackText) {
+      const card = document.getElementById(cardId);
+      const buttons = card.querySelectorAll('.tuev-btn');
+      const feedback = document.getElementById(cardId + '-fb');
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong');
+        if (index + 1 === optionNum) {
+          if (isCorrect) btn.classList.add('correct');
+          else btn.classList.add('wrong');
+        }
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#ecfdf5';
+        feedback.style.color = '#065f46';
+        feedback.style.border = '1.5px solid #a7f3d0';
+        feedback.innerHTML = '<strong>Richtig!</strong> ' + feedbackText;
+      } else {
+        feedback.style.background = '#fef2f2';
+        feedback.style.color = '#991b1b';
+        feedback.style.border = '1.5px solid #fecaca';
+        feedback.innerHTML = '<strong>Hinweis:</strong> ' + feedbackText;
+      }
+    }
+
+    function toggleReveal(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const isVisible = el.classList.toggle('show');
+      if (btn) {
+        btn.textContent = isVisible ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      }
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.question-answer');
+      const buttons = document.querySelectorAll('.btn-reveal');
+      const anyHidden = Array.from(answers).some(a => !a.classList.contains('show'));
+
+      answers.forEach(a => {
+        if (anyHidden) a.classList.add('show');
+        else a.classList.remove('show');
+      });
+
+      buttons.forEach(b => {
+        b.textContent = anyHidden ? 'Antwort verbergen' : 'Erklärung aufdecken';
+      });
+    }
+  </script>
+</body>
+</html>

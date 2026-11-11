@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handout &amp; Training: Wurzeln &amp; Parabeln (Scheitelpunktform) | Mathe 9b</title>
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827;
+      line-height: 1.35;
+      font-size: 10.5pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-teacher-active {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    body.teacher-mode .badge-teacher-active {
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       SEITENAUFBAU (EXAKT 6 DIN-A4-SEITEN)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 20px auto 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm 9mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    /* ========================================================
+       HEADER & METADATEN
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 4px;
+      margin-bottom: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-meta {
+      font-size: 8pt;
+      color: #1e3a8a;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.18;
+      margin-top: 1px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.2pt;
+      color: #334155;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .badge-doc {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ========================================================
+       ABSCHNITTS- & AUFGABENÜBERSCHRIFTEN (Königsblau)
+       ======================================================== */
+    .section-title {
+      font-size: 11.2pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 7px;
+      margin: 6px 0 4px 0;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 2px;
+    }
+
+    .section-title-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .section-num, .task-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* KOMPETENZ-BADGES FÜR ZUORDNUNG */
+    .k-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      border: 1px solid #93c5fd;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 0.5px 5px;
+      border-radius: 3px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .ref-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 0.5px 5px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    /* ========================================================
+       MERKE-KASTEN (Schulblatt-Standard: Roter Rahmen, Text Schwarz)
+       ======================================================== */
+    .merke-box {
+      border: 2.2px solid #dc2626;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 7px 10px 6px 10px;
+      margin: 6px 0 5px 0;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -9px;
+      left: 12px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 700;
+      padding: 1px 8px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .merke-content {
+      font-size: 9.8pt;
+      color: #111827;
+      line-height: 1.35;
+    }
+
+    .merke-formula-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 3px 10px;
+      margin: 3px 0;
+      text-align: center;
+      font-size: 10pt;
+      color: #111827;
+    }
+
+    /* ========================================================
+       KOMPETENZEN-LISTE (MIT ZUORDNUNG STATT SICHER/ÜBEN)
+       ======================================================== */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .comp-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .comp-header {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      font-size: 9.2pt;
+      padding: 3.5px 8px;
+      border-bottom: 1px solid #bfdbfe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.8pt;
+    }
+
+    .comp-table td {
+      padding: 3px 6px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+      line-height: 1.25;
+    }
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comp-refs {
+      width: 82px;
+      text-align: right;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    /* ========================================================
+       WISSENS-KARTEN & RASTER (Allseitig geschlossene Rahmen)
+       ======================================================== */
+    .rules-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .rule-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 5.5px 8.5px;
+      font-size: 9.3pt;
+      line-height: 1.33;
+    }
+
+    .rule-card-title {
+      font-weight: 700;
+      color: #1e3a8a;
+      font-size: 9.6pt;
+      margin-bottom: 2.5px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rule-example {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 3px 6.5px;
+      margin-top: 2.5px;
+      font-size: 9pt;
+    }
+
+    .warn-inline {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 4px;
+      padding: 2.5px 6.5px;
+      margin-top: 2.5px;
+      color: #991b1b;
+      font-size: 8.8pt;
+    }
+
+    .highlighter {
+      background: #fef08a;
+      padding: 0 4px;
+      border-radius: 2px;
+      font-weight: 700;
+    }
+
+    /* ========================================================
+       TABELLEN (PARAMETER & AUFGABEN)
+       ======================================================== */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.1pt;
+      margin: 3px 0;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      padding: 3.5px 6px;
+      text-align: left;
+    }
+
+    .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3.5px 6px;
+      vertical-align: middle;
+    }
+
+    .wt-table th, .wt-table td {
+      text-align: center;
+      padding: 2.5px 4px;
+      font-size: 8.8pt;
+    }
+
+    /* ========================================================
+       AUFGABENKARTEN & LÖSUNGSFELDER (SEITEN 3 BIS 6)
+       ======================================================== */
+    .task-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 6.5px 9.5px;
+      margin-bottom: 7px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 2.5px;
+      margin-bottom: 4.5px;
+    }
+
+    .task-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .task-points {
+      font-size: 7.8pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    .task-sub {
+      font-size: 9.5pt;
+      margin-bottom: 3.5px;
+    }
+
+    .sub-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px 8px;
+      font-size: 9.4pt;
+      margin: 2px 0 5px 0;
+    }
+
+    .sub-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px 10px;
+      font-size: 9.4pt;
+      margin: 2px 0 5px 0;
+    }
+
+    .sub-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 12px;
+      font-size: 9.4pt;
+      margin: 2px 0 5px 0;
+    }
+
+    .blank-line {
+      display: inline-block;
+      border-bottom: 1px dotted #64748b;
+      min-width: 48px;
+      height: 13px;
+      vertical-align: baseline;
+    }
+
+    .dotted-box {
+      background-image: radial-gradient(#94a3b8 0.85px, transparent 0.85px);
+      background-size: 4.5mm 4.5mm;
+      border: 1px dashed #cbd5e1;
+      border-radius: 4px;
+      padding: 4px 7px;
+      margin-top: 2px;
+    }
+
+    /* ========================================================
+       MUSTERLÖSUNG (LEHRER-MODUS IN KLASSISCHEM LEHRER-ROT)
+       ======================================================== */
+    .sol-text {
+      display: none;
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    body.teacher-mode .sol-text {
+      display: inline;
+    }
+
+    body.teacher-mode .blank-line {
+      display: none;
+    }
+
+    .sol-svg {
+      display: none;
+    }
+
+    body.teacher-mode .sol-svg {
+      display: inline;
+    }
+
+    /* ========================================================
+       PRINT MEDIA QUERY (EXAKT 6 DIN-A4-SEITEN OHNE FUSSZEILE)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .no-print, .screen-toolbar {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        height: 276mm !important;
+        min-height: 276mm !important;
+        max-height: 276mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP SCREEN TOOLBAR -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="parabeln-streckung-stauchung.html" class="toolbar-btn-nav">← Zum Parabel-Modul</a>
+      <a href="wurzeln.html" class="toolbar-btn-nav">← Zum Wurzel-Modul</a>
+      <a href="index.html" class="toolbar-btn-nav">Übersicht 9b</a>
+      <div class="toolbar-title">
+        <span>Handout &amp; Großes Training: Wurzeln &amp; Parabeln</span>
+        <span class="badge-teacher-active">MUSTERLÖSUNG AKTIV</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" onclick="toggleTeacherMode()">
+        <span id="teacherBtnLabel">Musterlösung einblenden</span>
+      </button>
+      <a href="handout-wurzeln-parabeln-musterloesung.html" class="btn-action btn-toggle-teacher" style="text-decoration: none;">
+        Separates Lösungsblatt öffnen
+      </a>
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / PDF (Strg+P)
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ========================================================
+         SEITE 1: KOMPETENZLISTE (MIT ZUORDNUNG) & HANDOUT TEIL I (WURZELN)
+         ======================================================== -->
+    <div class="page" id="page1">
+      <!-- HEADER -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Städtisches Gymnasium • Mathematik Klasse 9b • Schuljahr 2026/27</div>
+          <h1 class="doc-title">Kompetenzübersicht &amp; Handout: Wurzeln und Parabeln</h1>
+          <div class="doc-subtitle">Kapitel I (Reelle Zahlen &amp; Quadratwurzeln) • Kapitel II (Quadratische Funktionen bis Scheitelpunktform)</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Handout • Seite 1 / 6</strong><br>
+          Kompetenzen &amp; Wurzeln
+        </div>
+      </header>
+
+      <!-- 1. KOMPETENZENLISTE MIT ZUORDNUNG ZU HANDOUT & AUFGABEN -->
+      <div class="section-title">
+        <div class="section-title-left">
+          <span class="section-num">1</span>
+          <span>Kompetenzliste mit direkter Zuordnung zum Handout und zu den Übungsaufgaben</span>
+        </div>
+      </div>
+
+      <div class="comp-grid">
+        <!-- Spalte I: Wurzeln -->
+        <div class="comp-card">
+          <div class="comp-header">
+            <span>Kapitel I: Reelle Zahlen &amp; Quadratwurzeln</span>
+            <span style="font-size: 7.8pt; font-weight: 600;">Handout | Übung</span>
+          </div>
+          <table class="comp-table">
+            <tbody>
+              <tr>
+                <td><span class="k-badge">K1</span> <strong>Zahlenbereiche:</strong> Ich kann Zahlen den Bereichen $\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{I}$ und $\mathbb{R}$ zuordnen und irrationale Zahlen erklären.</td>
+                <td class="comp-refs"><span class="ref-badge">2.M</span> <span class="ref-badge">Aufg. 3</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K2</span> <strong>Wurzeln im Kopf:</strong> Ich beherrsche die Quadratzahlen $1^2$–$20^2$ und ziehe Wurzeln aus Kommazahlen, Zehnerpotenzen und Brüchen.</td>
+                <td class="comp-refs"><span class="ref-badge">2.A</span> <span class="ref-badge">Aufg. 1</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K3</span> <strong>Grundregeln:</strong> Ich kann begründen, warum $\sqrt{-a}$ in $\mathbb{R}$ nicht existiert und warum $\sqrt{a}$ niemals negativ ist.</td>
+                <td class="comp-refs"><span class="ref-badge">2.M</span> <span class="ref-badge">Aufg. 1</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K4</span> <strong>Wurzeln schätzen:</strong> Ich kann irrationale Wurzeln ohne Taschenrechner zwischen zwei ganzen Zahlen eingrenzen.</td>
+                <td class="comp-refs"><span class="ref-badge">2.D</span> <span class="ref-badge">Aufg. 3</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K5</span> <strong>Wurzelgesetze:</strong> Ich kann Produkte/Quotienten zusammenfassen, teilweise Wurzelziehen und Wurzelterme vereinfachen.</td>
+                <td class="comp-refs"><span class="ref-badge">2.B/C</span> <span class="ref-badge">Aufg. 2</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Spalte II: Parabeln -->
+        <div class="comp-card">
+          <div class="comp-header">
+            <span>Kapitel II: Parabeln &amp; Scheitelpunktform</span>
+            <span style="font-size: 7.8pt; font-weight: 600;">Handout | Übung</span>
+          </div>
+          <table class="comp-table">
+            <tbody>
+              <tr>
+                <td><span class="k-badge">K6</span> <strong>Wertetabelle &amp; Zeichnen:</strong> Ich kann jede quadratische Funktion mithilfe einer Wertetabelle zeichnen.</td>
+                <td class="comp-refs"><span class="ref-badge">3.A</span> <span class="ref-badge">Aufg. 4</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K7</span> <strong>Transformationen beschreiben:</strong> Ich kann anhand der Gleichung $f(x)=a(x-d)^2+e$ alle Veränderungen aus der Normalparabel benennen.</td>
+                <td class="comp-refs"><span class="ref-badge">3.B</span> <span class="ref-badge">Aufg. 5, 6</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K8</span> <strong>Scheitelpunkt &amp; Gleichung:</strong> Ich kann aus der Scheitelpunktform direkt den Scheitelpunkt $S(d\mid e)$ ablesen und umgekehrt.</td>
+                <td class="comp-refs"><span class="ref-badge">3.M/B</span> <span class="ref-badge">Aufg. 5, 6</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K9</span> <strong>Gleichung aus Graph ermitteln:</strong> Ich kann $S(d\mid e)$ sowie den Faktor $a$ aus dem Graphen ablesen und die Scheitelpunktform aufstellen.</td>
+                <td class="comp-refs"><span class="ref-badge">4.A</span> <span class="ref-badge">Aufg. 7</span></td>
+              </tr>
+              <tr>
+                <td><span class="k-badge">K10</span> <strong>Skizzieren &amp; Punktprobe:</strong> Ich kann Parabeln aus der Scheitelpunktform qualitativ skizzieren und eine Punktprobe durchführen.</td>
+                <td class="comp-refs"><span class="ref-badge">4.B/C</span> <span class="ref-badge">Aufg. 8, 9</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. KOMPAKTWISSEN KAPITEL I: WURZELN -->
+      <div class="section-title">
+        <div class="section-title-left">
+          <span class="section-num">2</span>
+          <span>Kompaktwissen Kapitel I: Reelle Zahlen ($\mathbb{R}$) &amp; Quadratwurzeln</span>
+        </div>
+        <div>
+          <span class="k-badge">K1</span> <span class="k-badge">K2</span> <span class="k-badge">K3</span> <span class="k-badge">K4</span> <span class="k-badge">K5</span>
+        </div>
+      </div>
+
+      <section class="merke-box">
+        <div class="merke-tag">Merke (2.M) • K1 &amp; K3</div>
+        <div class="merke-content">
+          Die <strong>Quadratwurzel $\sqrt{a}$</strong> einer nicht-negativen Zahl $a \ge 0$ ist diejenige <strong>nicht-negative Zahl $b \ge 0$</strong>, die quadriert wieder $a$ ergibt:
+          <div class="merke-formula-box">
+            $$\sqrt{a} = b \quad \Longleftrightarrow \quad b^2 = a \qquad (\text{wobei zwingend } a \ge 0 \text{ und } b \ge 0 \text{ gilt!})$$
+          </div>
+          • <strong>Grundregel 1 (<span class="k-badge">K3</span>):</strong> Aus negativen Zahlen kann man keine Wurzel ziehen ($\sqrt{-16}$ ist in $\mathbb{R}$ nicht definiert, da $4^2 = 16$ und $(-4)^2 = 16$).<br>
+          • <strong>Grundregel 2 (<span class="k-badge">K3</span>):</strong> Das Ergebnis einer Wurzel ist nie negativ: $\sqrt{25} = 5$ (und <em>nicht</em> $-5$ oder $\pm 5$). Aber: $-\sqrt{25} = -5$ (Minus steht <em>vor</em> der Wurzel!).<br>
+          • <strong>Zahlenbereiche (<span class="k-badge">K1</span>):</strong> $\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}$. Wurzeln aus Nicht-Quadratzahlen ($\sqrt{2}, \sqrt{3}, \sqrt{50}$) sowie $\pi$ sind <strong>irrational ($\mathbb{I}$)</strong>: unendliche, nicht-periodische Dezimalzahlen, die sich nicht als Bruch schreiben lassen. Zusammen mit $\mathbb{Q}$ bilden sie die <strong>reellen Zahlen $\mathbb{R}$</strong>.
+        </div>
+      </section>
+
+      <div class="rules-grid-2">
+        <!-- Karte 2.A -->
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>2.A Kopfrechnen: Nullen, Kommas &amp; Brüche</span>
+            <span class="k-badge">K2</span>
+          </div>
+          • <strong>Endnullen &amp; Nachkommastellen</strong> halbieren sich beim Wurzelziehen!<br>
+          • <strong>Gemischte Zahlen</strong> immer zuerst in einen unechten Bruch umwandeln!
+          <div class="rule-example">
+            • $\sqrt{1600} = 40$ &nbsp;(2 Nullen $\to$ 1 Null) &nbsp;|&nbsp; $\sqrt{90\,000} = 300$<br>
+            • $\sqrt{0{,}04} = 0{,}2$ &nbsp;(2 Nachkommastellen $\to$ 1 Stelle, nicht $0{,}02$!)<br>
+            • $\sqrt{0{,}0081} = 0{,}09$ &nbsp;(4 Stellen $\to$ 2 Stellen) &nbsp;|&nbsp; $\sqrt{1{,}44} = 1{,}2$<br>
+            • $\sqrt{\frac{9}{25}} = \frac{\sqrt{9}}{\sqrt{25}} = \frac{3}{5}$ &nbsp;|&nbsp; $\sqrt{1\frac{7}{9}} = \sqrt{\frac{16}{9}} = \frac{4}{3} = 1\frac{1}{3}$
+          </div>
+        </div>
+
+        <!-- Karte 2.B -->
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>2.B Wurzelgesetze für Produkte &amp; Quotienten</span>
+            <span class="k-badge">K5</span>
+          </div>
+          Multiplikation und Division dürfen unter <em>eine</em> Wurzel gezogen werden:
+          <div class="rule-example">
+            • <strong>Produktregel:</strong> $\sqrt{a} \cdot \sqrt{b} = \sqrt{a \cdot b} \implies \sqrt{2} \cdot \sqrt{8} = \sqrt{16} = 4$<br>
+            • <strong>Quotientenregel:</strong> $\dfrac{\sqrt{a}}{\sqrt{b}} = \sqrt{\dfrac{a}{b}} \implies \dfrac{\sqrt{18}}{\sqrt{2}} = \sqrt{\dfrac{18}{2}} = \sqrt{9} = 3$
+          </div>
+          <div class="warn-inline">
+            <strong>Falle bei $+$ und $-$:</strong> Über Summen/Differenzen darf man <strong>nie</strong> einzeln Wurzel ziehen! $\sqrt{16+9} = \sqrt{25} = 5 \ne \sqrt{16}+\sqrt{9} = 7$.
+          </div>
+        </div>
+
+        <!-- Karte 2.C -->
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>2.C Teilweises Wurzelziehen &amp; Zusammenfassen</span>
+            <span class="k-badge">K5</span>
+          </div>
+          Zerlege den Radikanden in die <strong>größte enthaltene Quadratzahl</strong> mal Rest:
+          $$\sqrt{a^2 \cdot r} = \sqrt{a^2} \cdot \sqrt{r} = a\sqrt{r}$$
+          <div class="rule-example">
+            • $\sqrt{72} = \sqrt{36 \cdot 2} = 6\sqrt{2}$ &nbsp;|&nbsp; $\sqrt{48} = \sqrt{16 \cdot 3} = 4\sqrt{3}$<br>
+            • <strong>Gleiche Wurzeln</strong> wie Variablen zusammenfassen / ausmultiplizieren:<br>
+            &nbsp;&nbsp;$5\sqrt{2} - 7\sqrt{2} = -2\sqrt{2}$ &nbsp;|&nbsp; $\sqrt{3}(\sqrt{12} - \sqrt{3}) = \sqrt{36} - \sqrt{9} = 6 - 3 = 3$
+          </div>
+        </div>
+
+        <!-- Karte 2.D -->
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>2.D Irrationale Wurzeln schätzen &amp; Quadratzahlen</span>
+            <span class="k-badge">K2, K4</span>
+          </div>
+          Suche die beiden <strong>Nachbar-Quadratzahlen</strong> links und rechts vom Radikanden:
+          <div class="rule-example">
+            • <strong>Beispiel $\sqrt{50}$:</strong> $49 < 50 < 64 \implies \sqrt{49} < \sqrt{50} < \sqrt{64} \implies \mathbf{7 < \sqrt{50} < 8}$<br>
+            • <strong>Wichtige Quadratzahlen ($11^2$ bis $20^2$):</strong><br>
+            &nbsp;&nbsp;$11^2=121 \mid 12^2=144 \mid 13^2=169 \mid 14^2=196 \mid 15^2=225$<br>
+            &nbsp;&nbsp;$16^2=256 \mid 17^2=289 \mid 18^2=324 \mid 19^2=361 \mid 20^2=400$
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 2: KOMPAKTWISSEN TEIL II (PARABELN & SCHEITELPUNKTFORM)
+         ======================================================== -->
+    <div class="page" id="page2">
+      <!-- HEADER SEITE 2 -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Mathematik Klasse 9b • Kapitel II: Quadratische Funktionen</div>
+          <h2 class="doc-title">Wertetabelle, Transformationen &amp; Scheitelpunktform</h2>
+          <div class="doc-subtitle">Parabeln zeichnen, Transformationen beschreiben, Scheitelpunkt ablesen &amp; Gleichung aus Graphen ermitteln</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Handout • Seite 2 / 6</strong><br>
+          Parabeln &amp; Scheitelpunktform
+        </div>
+      </header>
+
+      <!-- 3. WERTETABELLE, SCHEITELPUNKTFORM & TRANSFORMATIONEN -->
+      <div class="section-title">
+        <div class="section-title-left">
+          <span class="section-num">3</span>
+          <span>Wertetabelle, Scheitelpunktform und Transformationen der Normalparabel ($y = x^2$)</span>
+        </div>
+        <div>
+          <span class="k-badge">K6</span> <span class="k-badge">K7</span> <span class="k-badge">K8</span>
+        </div>
+      </div>
+
+      <!-- 3.A WERTETABELLE ERSTELLEN & ZEICHNEN (K6) -->
+      <div class="rule-card" style="margin-bottom: 5px;">
+        <div class="rule-card-title">
+          <span>3.A Jede quadratische Funktion mithilfe einer Wertetabelle zeichnen</span>
+          <span class="k-badge">K6</span>
+        </div>
+        Setze die $x$-Werte nacheinander in die Funktionsgleichung ein, um die $y$-Werte $f(x)$ zu berechnen. Trage die Punkte $(x \mid f(x))$ in das Koordinatensystem ein und verbinde sie schwungvoll (keine geraden Lineal-Striche!). <strong>Wichtig:</strong> Negative Zahlen beim Quadrieren in Klammern setzen, z.&nbsp;B. $(-2)^2 = +4$!<br>
+        <div style="display: flex; gap: 10px; align-items: center; margin-top: 3px;">
+          <div style="font-size: 8.8pt; white-space: nowrap;">
+            <strong>Beispiel:</strong> $g(x) = x^2 - 1$
+          </div>
+          <table class="calc-table wt-table" style="margin: 0;">
+            <thead>
+              <tr>
+                <th>$x$</th><th>$-3$</th><th>$-2$</th><th>$-1$</th><th>$0$</th><th>$1$</th><th>$2$</th><th>$3$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>$g(x) = x^2 - 1$</strong></td>
+                <td>$(-3)^2-1 = \mathbf{8}$</td><td>$\mathbf{3}$</td><td>$\mathbf{0}$</td><td>$\mathbf{-1}$</td><td>$\mathbf{0}$</td><td>$\mathbf{3}$</td><td>$\mathbf{8}$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <section class="merke-box">
+        <div class="merke-tag">Merke (3.M) • K7 &amp; K8</div>
+        <div class="merke-content">
+          Jede verschobene, gestreckte, gestauchte oder gespiegelte Parabel lässt sich in der <strong>Scheitelpunktform</strong> schreiben. Ihr höchster bzw. tiefster Punkt heißt <strong>Scheitelpunkt $S(d \mid e)$</strong> und kann direkt aus der Funktionsgleichung abgelesen werden:
+          <div class="merke-formula-box">
+            $$f(x) = a \cdot (x - d)^2 + e \qquad \longrightarrow \qquad \text{Scheitelpunkt } \mathbf{S(d \mid e)}$$
+          </div>
+          <strong>Vorzeichen-Regel bei $d$ (<span class="k-badge">K8</span>):</strong> In der Formel steht $(x - d)^2$. Beim Ablesen der $x$-Koordinate $d$ des Scheitelpunkts <strong>dreht sich das Vorzeichen in der Klammer um</strong>, während das Vorzeichen von $e$ hinten unverändert bleibt!
+        </div>
+      </section>
+
+      <!-- 3.B TABELLE DER 3 PARAMETER a, d, e -->
+      <table class="calc-table" style="font-size: 9pt;">
+        <thead>
+          <tr>
+            <th style="width: 19%;">Parameter (<span class="k-badge">K7</span>)</th>
+            <th style="width: 27%;">Bedeutung / Auswirkung</th>
+            <th style="width: 54%;">3.B Fallunterscheidung &amp; Fachbegriffe für die Beschreibung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Streckfaktor $a$</strong><br><span style="font-size: 8pt; color: #475569;">(Form &amp; Öffnung)</span></td>
+            <td>Steuert die <strong>Öffnungsrichtung</strong> und wie eng oder weit die Parabeläste verlaufen.</td>
+            <td>
+              • $\mathbf{a < 0}$: <strong>Spiegelung an der $x$-Achse</strong> (nach unten geöffnet; bei $a > 0$ nach oben).<br>
+              • $\mathbf{|a| > 1}$ ($a > 1$ oder $a < -1$): <strong>Streckung</strong> mit Faktor $|a|$ (Parabeläste laufen zusammen / enger).<br>
+              • $\mathbf{0 < |a| < 1}$ (z.&nbsp;B. $a = 0{,}5$): <strong>Stauchung</strong> mit Faktor $|a|$ (Parabeläste laufen auseinander / weiter).
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Verschiebung $d$</strong><br><span style="font-size: 8pt; color: #475569;">(entlang der $x$-Achse)</span></td>
+            <td>Verschiebt die Parabel <strong>horizontal</strong> nach rechts oder links.<br><span class="highlighter">Vorzeichen dreht um!</span></td>
+            <td>
+              • Klammer $\mathbf{(x - 3)^2} \implies d = +3$: Verschiebung um <strong>3 Einheiten nach rechts</strong>.<br>
+              • Klammer $\mathbf{(x + 2)^2} \implies d = -2$: Verschiebung um <strong>2 Einheiten nach links</strong>.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Verschiebung $e$</strong><br><span style="font-size: 8pt; color: #475569;">(entlang der $y$-Achse)</span></td>
+            <td>Verschiebt die Parabel <strong>vertikal</strong> nach oben oder unten.</td>
+            <td>
+              • $\mathbf{e > 0}$ (z.&nbsp;B. $+4$): Verschiebung um <strong>4 Einheiten nach oben</strong>.<br>
+              • $\mathbf{e < 0}$ (z.&nbsp;B. $-2$): Verschiebung um <strong>2 Einheiten nach unten</strong>.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- MUSTERBEISPIELE TRANSFORMATIONEN -->
+      <div class="rules-grid-2" style="margin-top: 4px;">
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>Musterbeispiel 1: Gleichung $\to$ Transformation &amp; $S$</span>
+            <span class="k-badge">K7, K8</span>
+          </div>
+          Gegeben: $\mathbf{f(x) = -2(x - 3)^2 + 4} \implies$ <strong>Scheitelpunkt:</strong> $\mathbf{S(3 \mid 4)}$<br>
+          • <strong>Transformationen aus der Normalparabel:</strong><br>
+          &nbsp;&nbsp;1. Spiegelung an der $x$-Achse, &nbsp;2. Streckung mit Faktor $2$,<br>
+          &nbsp;&nbsp;3. Verschiebung um $3$ nach rechts und um $4$ nach oben.
+        </div>
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>Musterbeispiel 2: Gleichung $\to$ Transformation &amp; $S$</span>
+            <span class="k-badge">K7, K8</span>
+          </div>
+          Gegeben: $\mathbf{g(x) = 0{,}5(x + 1)^2 - 2} \implies$ <strong>Scheitelpunkt:</strong> $\mathbf{S(-1 \mid -2)}$<br>
+          • <strong>Transformationen aus der Normalparabel:</strong><br>
+          &nbsp;&nbsp;1. Stauchung mit dem Faktor $0{,}5$ (nach oben geöffnet),<br>
+          &nbsp;&nbsp;2. Verschiebung um $1$ nach links und um $2$ nach unten.
+        </div>
+      </div>
+
+      <!-- 4. DIE 3 REZEPTE FÜR GRAPHEN & PUNKTPROBE -->
+      <div class="section-title" style="margin-top: 6px;">
+        <div class="section-title-left">
+          <span class="section-num">4</span>
+          <span>Methoden: Gleichung aus Graphen ermitteln, Qualitativ skizzieren &amp; Punktprobe</span>
+        </div>
+        <div>
+          <span class="k-badge">K9</span> <span class="k-badge">K10</span>
+        </div>
+      </div>
+
+      <!-- KASTEN 4.A: AUS DEM GRAPHEN ZUR SCHEITELPUNKTFORM (INKL. TAFELSKIZZE) -->
+      <div class="rule-card" style="display: flex; gap: 12px; align-items: center; padding: 6px 9px;">
+        <div style="flex: 1;">
+          <div class="rule-card-title">
+            <span>4.A Aus dem Graphen die Scheitelpunktform ermitteln</span>
+            <span class="k-badge">K9</span>
+          </div>
+          <strong>1. Scheitelpunkt ablesen:</strong> Lies den höchsten/tiefsten Punkt $S(d \mid e)$ ab.<br>
+          <strong>2. Faktor $a$ mit dem „1-Schritt-Trick“ bestimmen:</strong><br>
+          &nbsp;&nbsp;• Gehe vom Scheitelpunkt $S$ genau <span class="highlighter">1 Schritt nach rechts</span>.<br>
+          &nbsp;&nbsp;• Gehe so viele Schritte <strong>nach oben bzw. nach unten</strong>, bis du auf dem Graphen landest $\implies$ das ist der <strong>Faktor $a$</strong>! (Nach unten geöffnet: $a$ ist negativ).<br>
+          <strong>3. Einsetzen:</strong> Setze $a$, $d$ und $e$ in $f(x) = a(x - d)^2 + e$ ein.<br>
+          <div class="rule-example" style="margin-top: 3px;">
+            <strong>Beispiel rechts:</strong> $S(1 \mid 1) \implies d=1, e=1$. Von $S$ aus $1$ nach rechts und $2$ nach oben $\implies a = 2 \implies \mathbf{f(x) = 2(x - 1)^2 + 1}$.
+          </div>
+        </div>
+
+        <div style="width: 165px; flex-shrink: 0; text-align: center;">
+          <svg viewBox="0 0 180 145" width="160" height="130" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+            <g stroke="#e2e8f0" stroke-width="0.8">
+              <line x1="20" y1="10" x2="20" y2="135"/><line x1="45" y1="10" x2="45" y2="135"/>
+              <line x1="70" y1="10" x2="70" y2="135"/><line x1="95" y1="10" x2="95" y2="135"/>
+              <line x1="120" y1="10" x2="120" y2="135"/><line x1="145" y1="10" x2="145" y2="135"/>
+              <line x1="10" y1="15" x2="170" y2="15"/><line x1="10" y1="40" x2="170" y2="40"/>
+              <line x1="10" y1="65" x2="170" y2="65"/><line x1="10" y1="90" x2="170" y2="90"/>
+              <line x1="10" y1="115" x2="170" y2="115"/>
+            </g>
+            <line x1="10" y1="115" x2="168" y2="115" stroke="#334155" stroke-width="1.3"/>
+            <line x1="45" y1="138" x2="45" y2="8" stroke="#334155" stroke-width="1.3"/>
+            <polygon points="168,115 163,112 163,118" fill="#334155"/>
+            <polygon points="45,8 42,13 48,13" fill="#334155"/>
+            <text x="162" y="127" font-size="9" font-weight="bold" fill="#334155">x</text>
+            <text x="34" y="15" font-size="9" font-weight="bold" fill="#334155">y</text>
+            <text x="37" y="126" font-size="8" fill="#475569">0</text>
+            <text x="68" y="126" font-size="8" fill="#475569">1</text>
+            <text x="93" y="126" font-size="8" fill="#475569">2</text>
+            <text x="118" y="126" font-size="8" fill="#475569">3</text>
+            <text x="35" y="93" font-size="8" fill="#475569">1</text>
+            <text x="35" y="68" font-size="8" fill="#475569">2</text>
+            <text x="35" y="43" font-size="8" fill="#475569">3</text>
+            <text x="35" y="18" font-size="8" fill="#475569">4</text>
+            <path d="M 34 5 Q 70 175 106 5" fill="none" stroke="#16a34a" stroke-width="2.2"/>
+            <line x1="70" y1="90" x2="95" y2="90" stroke="#d97706" stroke-width="2"/>
+            <line x1="95" y1="90" x2="95" y2="40" stroke="#dc2626" stroke-width="2"/>
+            <circle cx="70" cy="90" r="3" fill="#1e3a8a"/>
+            <circle cx="95" cy="40" r="3" fill="#dc2626"/>
+            <text x="52" y="103" font-size="8.5" font-weight="bold" fill="#1e3a8a">S(1|1)</text>
+            <text x="79" y="101" font-size="8.5" font-weight="bold" fill="#b45309">+1</text>
+            <text x="100" y="69" font-size="8.5" font-weight="bold" fill="#dc2626">a = +2</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- KASTEN 4.B & 4.C: QUALITATIV SKIZZIEREN & PUNKTPROBE -->
+      <div class="rules-grid-2" style="margin-top: 5px;">
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>4.B Parabel aus Scheitelpunktform qualitativ skizzieren</span>
+            <span class="k-badge">K10</span>
+          </div>
+          So skizzierst du z.&nbsp;B. $\mathbf{f(x) = -0{,}5(x + 2)^2 + 3}$:<br>
+          <strong>1. Scheitelpunkt einzeichnen:</strong> Markiere $S(-2 \mid 3)$.<br>
+          <strong>2. Hilfspunkte über $a$:</strong> Gehe von $S$ aus je $1$ Schritt nach rechts/links und um $a = -0{,}5$ nach unten zu $(-1 \mid 2{,}5)$ und $(-3 \mid 2{,}5)$.<br>
+          <strong>3. Verbinden:</strong> Zeichne eine weite, nach unten geöffnete Parabel.
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-title">
+            <span>4.C Rechnerische Punktprobe durchführen</span>
+            <span class="k-badge">K10</span>
+          </div>
+          Ein Punkt $P(x_P \mid y_P)$ liegt genau dann auf der Parabel, wenn $\mathbf{f(x_P) = y_P}$ gilt.
+          <div class="rule-example">
+            Gegeben: $f(x) = 2(x - 1)^2 - 3$.<br>
+            • $P(3 \mid 5)$: $f(3) = 2(3-1)^2 - 3 = 2\cdot 4 - 3 = 5 \implies$ <strong>liegt darauf!</strong><br>
+            • $Q(-1 \mid 2)$: $f(-1) = 2(-2)^2 - 3 = 5 \ne 2 \implies$ <strong>liegt nicht darauf!</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 3: ÜBUNGSAUFGABEN TEIL 1 (KAPITEL I: WURZELN & ZAHLBEREICHE)
+         ======================================================== -->
+    <div class="page" id="page3">
+      <!-- HEADER SEITE 3 -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Mathematik Klasse 9b • Großes Trainingspaket (Kapitel I &amp; II)</div>
+          <h2 class="doc-title">Übungsaufgaben Teil 1: Quadratwurzeln, Wurzelgesetze &amp; Zahlbereiche</h2>
+          <div class="doc-subtitle">Alle Aufgaben sind mit den zugehörigen Kompetenzen (K1 bis K5) aus dem Handout verknüpft</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Training • Seite 3 / 6</strong><br>
+          Aufgaben 1 – 3 (Wurzeln)
+        </div>
+      </header>
+
+      <!-- AUFGABE 1: KOPFRECHNEN & GRUNDREGELN (K2, K3) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">1</span>
+            <span>Quadratwurzeln im Kopf berechnen &amp; Grundregeln anwenden</span>
+          </div>
+          <div>
+            <span class="k-badge">K2</span> <span class="k-badge">K3</span>
+            <span class="task-points">Handout: 2.M &amp; 2.A</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          <strong>a) Kopfrechnen (ohne Taschenrechner):</strong> Berechne die Wurzeln (achte auf Nullen, Kommastellen und gemischte Zahlen):
+        </div>
+        <div class="sub-grid-4">
+          <div>1) $\sqrt{169} =$ <span class="blank-line"></span><span class="sol-text">$13$</span></div>
+          <div>2) $\sqrt{289} =$ <span class="blank-line"></span><span class="sol-text">$17$</span></div>
+          <div>3) $\sqrt{361} =$ <span class="blank-line"></span><span class="sol-text">$19$</span></div>
+          <div>4) $\sqrt{2500} =$ <span class="blank-line"></span><span class="sol-text">$50$</span></div>
+          <div>5) $\sqrt{160\,000} =$ <span class="blank-line"></span><span class="sol-text">$400$</span></div>
+          <div>6) $\sqrt{0{,}09} =$ <span class="blank-line"></span><span class="sol-text">$0{,}3$</span></div>
+          <div>7) $\sqrt{1{,}96} =$ <span class="blank-line"></span><span class="sol-text">$1{,}4$</span></div>
+          <div>8) $\sqrt{0{,}0144} =$ <span class="blank-line"></span><span class="sol-text">$0{,}12$</span></div>
+          <div>9) $\sqrt{0{,}0004} =$ <span class="blank-line"></span><span class="sol-text">$0{,}02$</span></div>
+          <div>10) $\sqrt{\dfrac{64}{121}} =$ <span class="blank-line"></span><span class="sol-text">$\dfrac{8}{11}$</span></div>
+          <div>11) $\sqrt{1\dfrac{9}{16}} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{\dfrac{25}{16}} = \dfrac{5}{4}$</span></div>
+          <div>12) $\sqrt{2\dfrac{7}{9}} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{\dfrac{25}{9}} = \dfrac{5}{3}$</span></div>
+        </div>
+
+        <div class="task-sub" style="margin-top: 4px;">
+          <strong>b) Grundregeln &amp; Vorzeichen (<span class="k-badge">K3</span>):</strong> Entscheide, ob der Term definiert ist, berechne ihn falls möglich und begründe kurz:
+        </div>
+        <div class="sub-grid-2">
+          <div>1) $-\sqrt{81} =$ <span class="blank-line" style="min-width: 140px;"></span><span class="sol-text">$-9$ (Minus steht vor der Wurzel)</span></div>
+          <div>2) $\sqrt{-81} =$ <span class="blank-line" style="min-width: 140px;"></span><span class="sol-text">nicht definiert (Radikand negativ!)</span></div>
+          <div>3) $\sqrt{(-9)^2} =$ <span class="blank-line" style="min-width: 140px;"></span><span class="sol-text">$\sqrt{81} = 9$ (Ergebnis nie negativ!)</span></div>
+          <div>4) Warum gilt $\sqrt{36} \ne -6$? <span class="blank-line" style="min-width: 110px;"></span><span class="sol-text">Die Wurzel ist per Definition $\ge 0$.</span></div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 2: WURZELGESETZE & TEILWEISES WURZELZIEHEN (K5) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">2</span>
+            <span>Wurzelgesetze, Terme vereinfachen &amp; Teilweises Wurzelziehen</span>
+          </div>
+          <div>
+            <span class="k-badge">K5</span>
+            <span class="task-points">Handout: 2.B &amp; 2.C</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          <strong>a) Geschickt rechnen mit Wurzelgesetzen:</strong> Fasse zusammen bzw. multipliziere aus und berechne ohne Taschenrechner:
+        </div>
+        <div class="sub-grid-2">
+          <div>1) $\sqrt{3} \cdot \sqrt{27} =$ <span class="blank-line" style="min-width: 130px;"></span><span class="sol-text">$\sqrt{81} = 9$</span></div>
+          <div>2) $\sqrt{5} \cdot \sqrt{45} =$ <span class="blank-line" style="min-width: 130px;"></span><span class="sol-text">$\sqrt{225} = 15$</span></div>
+          <div>3) $\sqrt{2} \cdot \sqrt{32} =$ <span class="blank-line" style="min-width: 130px;"></span><span class="sol-text">$\sqrt{64} = 8$</span></div>
+          <div>4) $\dfrac{\sqrt{72}}{\sqrt{2}} =$ <span class="blank-line" style="min-width: 130px;"></span><span class="sol-text">$\sqrt{\dfrac{72}{2}} = \sqrt{36} = 6$</span></div>
+          <div>5) $\dfrac{\sqrt{125}}{\sqrt{5}} =$ <span class="blank-line" style="min-width: 130px;"></span><span class="sol-text">$\sqrt{\dfrac{125}{5}} = \sqrt{25} = 5$</span></div>
+          <div>6) $7\sqrt{5} - 11\sqrt{5} + 2\sqrt{5} =$ <span class="blank-line" style="min-width: 110px;"></span><span class="sol-text">$-2\sqrt{5}$</span></div>
+          <div>7) $\sqrt{5} \cdot (\sqrt{20} - \sqrt{5}) =$ <span class="blank-line" style="min-width: 120px;"></span><span class="sol-text">$\sqrt{100} - \sqrt{25} = 10 - 5 = 5$</span></div>
+          <div>8) $\sqrt{2} \cdot (\sqrt{18} + \sqrt{8}) =$ <span class="blank-line" style="min-width: 120px;"></span><span class="sol-text">$\sqrt{36} + \sqrt{16} = 6 + 4 = 10$</span></div>
+        </div>
+
+        <div class="task-sub" style="margin-top: 4px;">
+          <strong>b) Teilweises Wurzelziehen:</strong> Zerlege den Radikanden mit der <em>größtmöglichen Quadratzahl</em> und ziehe teilweise die Wurzel:
+        </div>
+        <div class="sub-grid-4">
+          <div>1) $\sqrt{50} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{25\cdot 2} = 5\sqrt{2}$</span></div>
+          <div>2) $\sqrt{48} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{16\cdot 3} = 4\sqrt{3}$</span></div>
+          <div>3) $\sqrt{75} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{25\cdot 3} = 5\sqrt{3}$</span></div>
+          <div>4) $\sqrt{108} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{36\cdot 3} = 6\sqrt{3}$</span></div>
+          <div>5) $\sqrt{72} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{36\cdot 2} = 6\sqrt{2}$</span></div>
+          <div>6) $\sqrt{98} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{49\cdot 2} = 7\sqrt{2}$</span></div>
+          <div>7) $\sqrt{125} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{25\cdot 5} = 5\sqrt{5}$</span></div>
+          <div>8) $\sqrt{200} =$ <span class="blank-line"></span><span class="sol-text">$\sqrt{100\cdot 2} = 10\sqrt{2}$</span></div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 3: EINGRENZEN & ZAHLENBEREICHE (K1, K4) -->
+      <div class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">3</span>
+            <span>Irrationale Wurzeln eingrenzen &amp; Zahlenbereiche zuordnen</span>
+          </div>
+          <div>
+            <span class="k-badge">K1</span> <span class="k-badge">K4</span>
+            <span class="task-points">Handout: 2.M &amp; 2.D</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          <strong>a) Eingrenzen ohne Taschenrechner (<span class="k-badge">K4</span>):</strong> Zwischen welchen zwei aufeinanderfolgenden ganzen Zahlen liegt die Wurzel?
+        </div>
+        <div class="sub-grid-3">
+          <div>1) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$4$</span> $&lt; \sqrt{20} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$5$</span></div>
+          <div>2) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$6$</span> $&lt; \sqrt{40} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$7$</span></div>
+          <div>3) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$8$</span> $&lt; \sqrt{70} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$9$</span></div>
+          <div>4) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$9$</span> $&lt; \sqrt{90} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$10$</span></div>
+          <div>5) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$11$</span> $&lt; \sqrt{130} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$12$</span></div>
+          <div>6) <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$14$</span> $&lt; \sqrt{210} &lt;$ <span class="blank-line" style="min-width: 22px;"></span><span class="sol-text">$15$</span></div>
+        </div>
+
+        <div class="task-sub" style="margin-top: 3px;">
+          <strong>b) Zahlenbereiche zuordnen (<span class="k-badge">K1</span>):</strong> Kreuze für jede Zahl <strong>alle</strong> Zahlenbereiche an, zu denen sie gehört:
+        </div>
+        <table class="calc-table wt-table" style="margin-top: 2px;">
+          <thead>
+            <tr>
+              <th style="width: 22%; text-align: left; padding-left: 8px;">Zahl</th>
+              <th>$-12$</th>
+              <th>$\sqrt{36} = 6$</th>
+              <th>$-\dfrac{3}{8}$</th>
+              <th>$\sqrt{11}$</th>
+              <th>$0{,}\overline{4}$</th>
+              <th>$\pi$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; padding-left: 8px;"><strong>Zahlenbereiche ($\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{I}, \mathbb{R}$)</strong></td>
+              <td><span class="sol-text">$\mathbb{Z}, \mathbb{Q}, \mathbb{R}$</span></td>
+              <td><span class="sol-text">$\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R}$</span></td>
+              <td><span class="sol-text">$\mathbb{Q}, \mathbb{R}$</span></td>
+              <td><span class="sol-text">$\mathbb{I}, \mathbb{R}$</span></td>
+              <td><span class="sol-text">$\mathbb{Q}, \mathbb{R}$</span></td>
+              <td><span class="sol-text">$\mathbb{I}, \mathbb{R}$</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="task-sub" style="margin-top: 4px; margin-bottom: 0;">
+          <strong>c) Fehlersuche (<span class="k-badge">K5</span>):</strong> Warum ist $\sqrt{36 + 64} = 6 + 8 = 14$ falsch? Wie lautet das richtige Ergebnis?
+          <span class="blank-line" style="min-width: 190px;"></span><span class="sol-text">Keine Summen-Trennung! $\sqrt{100} = 10$.</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 4: ÜBUNGSAUFGABEN TEIL 2 (WERTETABELLE, TRANSFORMATIONEN & SCHEITELPUNKT)
+         ======================================================== -->
+    <div class="page" id="page4">
+      <!-- HEADER SEITE 4 -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Mathematik Klasse 9b • Großes Trainingspaket (Kapitel II: Parabeln)</div>
+          <h2 class="doc-title">Übungsaufgaben Teil 2: Wertetabelle, Transformationen &amp; Scheitelpunkt</h2>
+          <div class="doc-subtitle">Parabeln mit Wertetabelle zeichnen (K6), Transformationen beschreiben (K7) und Scheitelpunkt ablesen (K8)</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Training • Seite 4 / 6</strong><br>
+          Aufgaben 4 &amp; 5
+        </div>
+      </header>
+
+      <!-- AUFGABE 4: QUADRATISCHE FUNKTIONEN MITHILFE EINER WERTETABELLE ZEICHNEN (K6) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">4</span>
+            <span>Quadratische Funktionen mithilfe einer Wertetabelle zeichnen</span>
+          </div>
+          <div>
+            <span class="k-badge">K6</span>
+            <span class="task-points">Handout: 3.A</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          Vervollständige die Wertetabelle von $x = -3$ bis $x = 3$ für alle vier quadratischen Funktionen und zeichne die vier zugehörigen Parabeln sauber in das Koordinatensystem rechts ein:
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <!-- Wertetabelle links -->
+          <div style="flex: 1;">
+            <table class="calc-table wt-table">
+              <thead>
+                <tr>
+                  <th style="width: 32%; text-align: left; padding-left: 6px;">Funktion</th>
+                  <th>$-3$</th><th>$-2$</th><th>$-1$</th><th>$0$</th><th>$1$</th><th>$2$</th><th>$3$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align: left; padding-left: 6px;"><strong>a)</strong> $f_1(x) = x^2 - 2$</td>
+                  <td><span class="sol-text">$7$</span></td>
+                  <td><span class="sol-text">$2$</span></td>
+                  <td><span class="sol-text">$-1$</span></td>
+                  <td><span class="sol-text">$-2$</span></td>
+                  <td><span class="sol-text">$-1$</span></td>
+                  <td><span class="sol-text">$2$</span></td>
+                  <td><span class="sol-text">$7$</span></td>
+                </tr>
+                <tr>
+                  <td style="text-align: left; padding-left: 6px;"><strong>b)</strong> $f_2(x) = 0{,}5x^2 - 1$</td>
+                  <td><span class="sol-text">$3{,}5$</span></td>
+                  <td><span class="sol-text">$1$</span></td>
+                  <td><span class="sol-text">$-0{,}5$</span></td>
+                  <td><span class="sol-text">$-1$</span></td>
+                  <td><span class="sol-text">$-0{,}5$</span></td>
+                  <td><span class="sol-text">$1$</span></td>
+                  <td><span class="sol-text">$3{,}5$</span></td>
+                </tr>
+                <tr>
+                  <td style="text-align: left; padding-left: 6px;"><strong>c)</strong> $f_3(x) = -x^2 + 4$</td>
+                  <td><span class="sol-text">$-5$</span></td>
+                  <td><span class="sol-text">$0$</span></td>
+                  <td><span class="sol-text">$3$</span></td>
+                  <td><span class="sol-text">$4$</span></td>
+                  <td><span class="sol-text">$3$</span></td>
+                  <td><span class="sol-text">$0$</span></td>
+                  <td><span class="sol-text">$-5$</span></td>
+                </tr>
+                <tr>
+                  <td style="text-align: left; padding-left: 6px;"><strong>d)</strong> $f_4(x) = (x - 1)^2 - 3$</td>
+                  <td><span class="sol-text">$13$</span></td>
+                  <td><span class="sol-text">$6$</span></td>
+                  <td><span class="sol-text">$1$</span></td>
+                  <td><span class="sol-text">$-2$</span></td>
+                  <td><span class="sol-text">$-3$</span></td>
+                  <td><span class="sol-text">$-2$</span></td>
+                  <td><span class="sol-text">$1$</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="rule-example" style="margin-top: 4px; font-size: 8.6pt;">
+              <strong>Rechenhinweis zu d):</strong> Setze $x$ zuerst in die Klammer ein, rechne die Klammer aus, quadriere das Ergebnis und ziehe am Ende $3$ ab (z.&nbsp;B. für $x = -1$: $f_4(-1) = (-1 - 1)^2 - 3 = (-2)^2 - 3 = 4 - 3 = 1$).
+            </div>
+          </div>
+
+          <!-- Koordinatensystem rechts: x in [-4, 4], y in [-4, 6], 1 Einheit = 17px, Ursprung (80, 110) -->
+          <div style="width: 170px; flex-shrink: 0;">
+            <svg viewBox="0 0 165 186" width="165" height="175" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+              <defs>
+                <clipPath id="clipWT">
+                  <rect x="12" y="8" width="136" height="170"/>
+                </clipPath>
+              </defs>
+              <!-- Gitter: x von 12 (-4) bis 148 (+4) in 17px Schritten; y von 8 (+6) bis 178 (-4) in 17px Schritten -->
+              <g stroke="#e2e8f0" stroke-width="0.7">
+                <line x1="12" y1="8" x2="12" y2="178"/><line x1="29" y1="8" x2="29" y2="178"/>
+                <line x1="46" y1="8" x2="46" y2="178"/><line x1="63" y1="8" x2="63" y2="178"/>
+                <line x1="80" y1="8" x2="80" y2="178"/><line x1="97" y1="8" x2="97" y2="178"/>
+                <line x1="114" y1="8" x2="114" y2="178"/><line x1="131" y1="8" x2="131" y2="178"/>
+                <line x1="148" y1="8" x2="148" y2="178"/>
+
+                <line x1="12" y1="8" x2="148" y2="8"/><line x1="12" y1="25" x2="148" y2="25"/>
+                <line x1="12" y1="42" x2="148" y2="42"/><line x1="12" y1="59" x2="148" y2="59"/>
+                <line x1="12" y1="76" x2="148" y2="76"/><line x1="12" y1="93" x2="148" y2="93"/>
+                <line x1="12" y1="110" x2="148" y2="110"/><line x1="12" y1="127" x2="148" y2="127"/>
+                <line x1="12" y1="144" x2="148" y2="144"/><line x1="12" y1="161" x2="148" y2="161"/>
+                <line x1="12" y1="178" x2="148" y2="178"/>
+              </g>
+              <line x1="10" y1="110" x2="154" y2="110" stroke="#334155" stroke-width="1.2"/>
+              <line x1="80" y1="180" x2="80" y2="4" stroke="#334155" stroke-width="1.2"/>
+              <text x="150" y="120" font-size="7.5" font-weight="bold" fill="#334155">x</text>
+              <text x="84" y="12" font-size="7.5" font-weight="bold" fill="#334155">y</text>
+              <g font-size="6.8" fill="#475569" text-anchor="middle">
+                <text x="29" y="119">-3</text><text x="46" y="119">-2</text><text x="63" y="119">-1</text>
+                <text x="97" y="119">1</text><text x="114" y="119">2</text><text x="131" y="119">3</text>
+              </g>
+              <g font-size="6.8" fill="#475569" text-anchor="end">
+                <text x="77" y="28">5</text><text x="77" y="45">4</text><text x="77" y="62">3</text>
+                <text x="77" y="79">2</text><text x="77" y="96">1</text><text x="77" y="130">-1</text>
+                <text x="77" y="147">-2</text><text x="77" y="164">-3</text>
+              </g>
+              <!-- Musterlösungs-Graphen -->
+              <g class="sol-svg" clip-path="url(#clipWT)">
+                <!-- f1(x) = x^2 - 2: S(0|-2)->(80,144), (-3|7)->(29,-9), (3|7)->(131,-9) -->
+                <path d="M 29 -9 Q 80 297 131 -9" fill="none" stroke="#dc2626" stroke-width="1.6"/>
+                <text x="122" y="20" font-size="7.5" font-weight="bold" fill="#dc2626">f₁</text>
+                <!-- f2(x) = 0.5x^2 - 1: S(0|-1)->(80,127), (-4|7)->(12,-9), (4|7)->(148,-9) -->
+                <path d="M 12 -9 Q 80 263 148 -9" fill="none" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="3,2"/>
+                <text x="132" y="55" font-size="7.5" font-weight="bold" fill="#b91c1c">f₂</text>
+                <!-- f3(x) = -x^2 + 4: S(0|4)->(80,42), (-3|-5)->(29,195), (3|-5)->(131,195) -->
+                <path d="M 29 195 Q 80 -111 131 195" fill="none" stroke="#ef4444" stroke-width="1.6"/>
+                <text x="52" y="38" font-size="7.5" font-weight="bold" fill="#ef4444">f₃</text>
+                <!-- f4(x) = (x-1)^2 - 3: S(1|-3)->(97,161), (-2|6)->(46,8), (4|6)->(148,8) -->
+                <path d="M 46 8 Q 97 314 148 8" fill="none" stroke="#991b1b" stroke-width="1.6"/>
+                <text x="103" y="168" font-size="7.5" font-weight="bold" fill="#991b1b">f₄</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 5: GROSSES TABELLEN-TRAINING TRANSFORMATIONEN & SCHEITELPUNKT (K7, K8) -->
+      <div class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">5</span>
+            <span>Großes Tabellen-Training: Transformationen, Scheitelpunkt &amp; Funktionsgleichung</span>
+          </div>
+          <div>
+            <span class="k-badge">K7</span> <span class="k-badge">K8</span>
+            <span class="task-points">Handout: 3.M &amp; 3.B</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          Ergänze in jeder Zeile die fehlenden Angaben: Bestimme die Funktionsgleichung in Scheitelpunktform, den Scheitelpunkt $S(d\mid e)$ sowie alle Transformationen aus der Normalparabel $y = x^2$:
+        </div>
+
+        <table class="calc-table" style="font-size: 8.9pt;">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Funktionsgleichung</th>
+              <th style="width: 16%;">Scheitelpunkt $S$</th>
+              <th style="width: 56%;">Transformationen aus der Normalparabel $y = x^2$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1)</strong> $f_1(x) = (x - 4)^2 + 2$</td>
+              <td><span class="sol-text">$S(4 \mid 2)$</span></td>
+              <td><span class="sol-text">Verschiebung um $4$ nach rechts und um $2$ nach oben.</span></td>
+            </tr>
+            <tr>
+              <td><strong>2)</strong> $f_2(x) = -0{,}5x^2 + 3$</td>
+              <td><span class="sol-text">$S(0 \mid 3)$</span></td>
+              <td><span class="sol-text">Spiegelung an der $x$-Achse, Stauchung mit Faktor $0{,}5$, um $3$ nach oben.</span></td>
+            </tr>
+            <tr>
+              <td><strong>3)</strong> $f_3(x) = 3(x + 2)^2 - 5$</td>
+              <td><span class="sol-text">$S(-2 \mid -5)$</span></td>
+              <td><span class="sol-text">Streckung mit Faktor $3$, Verschiebung um $2$ nach links und um $5$ nach unten.</span></td>
+            </tr>
+            <tr>
+              <td><strong>4)</strong> $f_4(x) = -(x - 1)^2$</td>
+              <td><span class="sol-text">$S(1 \mid 0)$</span></td>
+              <td><span class="sol-text">Spiegelung an der $x$-Achse, Verschiebung um $1$ nach rechts.</span></td>
+            </tr>
+            <tr>
+              <td><strong>5)</strong> $f_5(x) = 0{,}25(x + 6)^2$</td>
+              <td><span class="sol-text">$S(-6 \mid 0)$</span></td>
+              <td><span class="sol-text">Stauchung mit Faktor $0{,}25$, Verschiebung um $6$ nach links.</span></td>
+            </tr>
+            <tr>
+              <td><strong>6)</strong> $f_6(x) = -4(x + 1)^2 + 7$</td>
+              <td><span class="sol-text">$S(-1 \mid 7)$</span></td>
+              <td><span class="sol-text">Spiegelung an der $x$-Achse, Streckung mit Faktor $4$, um $1$ nach links, um $7$ nach oben.</span></td>
+            </tr>
+            <tr>
+              <td><strong>7)</strong> <span class="sol-text">$f_7(x) = 2(x + 3)^2 + 4$</span></td>
+              <td>$S(-3 \mid 4)$</td>
+              <td>Nach oben geöffnet, gestreckt mit dem Faktor $2$, verschoben nach links/oben.</td>
+            </tr>
+            <tr>
+              <td><strong>8)</strong> <span class="sol-text">$f_8(x) = -0{,}25(x - 5)^2 - 1$</span></td>
+              <td><span class="sol-text">$S(5 \mid -1)$</span></td>
+              <td>Spiegelung an der $x$-Achse, Stauchung mit Faktor $0{,}25$, um $5$ nach rechts, um $1$ nach unten.</td>
+            </tr>
+            <tr>
+              <td><strong>9)</strong> <span class="sol-text">$f_9(x) = (x + 4)^2 - 8$</span></td>
+              <td><span class="sol-text">$S(-4 \mid -8)$</span></td>
+              <td>Form der Normalparabel (nach oben geöffnet), um $4$ nach links und um $8$ nach unten verschoben.</td>
+            </tr>
+            <tr>
+              <td><strong>10)</strong> <span class="sol-text">$f_{10}(x) = -1{,}5x^2 - 2$</span></td>
+              <td>$S(0 \mid -2)$</td>
+              <td>An der $x$-Achse gespiegelt, gestreckt mit Faktor $1{,}5$, entlang der $y$-Achse verschoben.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 5: ÜBUNGSAUFGABEN TEIL 3 (TEXTAUFGABEN & GLEICHUNG AUS GRAPHEN)
+         ======================================================== -->
+    <div class="page" id="page5">
+      <!-- HEADER SEITE 5 -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Mathematik Klasse 9b • Großes Trainingspaket (Kapitel II: Parabeln)</div>
+          <h2 class="doc-title">Übungsaufgaben Teil 3: Gleichungen aufstellen &amp; aus Graphen ablesen</h2>
+          <div class="doc-subtitle">Textaufgaben zu Transformationen (K7, K8) und Scheitelpunktform aus Graphen ermitteln (K9)</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Training • Seite 5 / 6</strong><br>
+          Aufgaben 6 &amp; 7
+        </div>
+      </header>
+
+      <!-- AUFGABE 6: TEXTAUFGABEN & MEHRFACHE TRANSFORMATIONEN (K7, K8) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">6</span>
+            <span>Funktionsgleichungen aus Beschreibungen und schrittweisen Verschiebungen aufstellen</span>
+          </div>
+          <div>
+            <span class="k-badge">K7</span> <span class="k-badge">K8</span>
+            <span class="task-points">Handout: 3.M &amp; 3.B</span>
+          </div>
+        </div>
+
+        <div style="font-size: 9.2pt; line-height: 1.44;">
+          <strong>a)</strong> Die Normalparabel wird an der $x$-Achse gespiegelt, mit dem Faktor $4$ gestreckt und so verschoben, dass ihr Scheitelpunkt bei $S(2 \mid -6)$ liegt. $\implies g_1(x) =$ <span class="blank-line" style="min-width: 155px;"></span><span class="sol-text">$-4(x - 2)^2 - 6$</span><br>
+          <strong>b)</strong> Eine nach oben geöffnete, mit dem Faktor $0{,}5$ gestauchte Parabel besitzt ihren tiefsten Punkt auf der $x$-Achse bei $x = -3$. $\implies S($ <span class="blank-line" style="min-width: 45px;"></span><span class="sol-text">$-3 \mid 0$</span> $)$ und $g_2(x) =$ <span class="blank-line" style="min-width: 155px;"></span><span class="sol-text">$0{,}5(x + 3)^2$</span><br>
+          <strong>c)</strong> Eine nach unten geöffnete Normalparabel hat ihren höchsten Punkt auf der $y$-Achse bei $y = 5$. $\implies S($ <span class="blank-line" style="min-width: 45px;"></span><span class="sol-text">$0 \mid 5$</span> $)$ und $g_3(x) =$ <span class="blank-line" style="min-width: 155px;"></span><span class="sol-text">$-x^2 + 5$</span><br>
+          <strong>d)</strong> Die Parabel $h_1(x) = 0{,}5(x - 1)^2 + 3$ wird nachträglich um $4$ Einheiten nach links und um $5$ Einheiten nach unten verschoben. $\implies S_{\text{neu}}($ <span class="blank-line" style="min-width: 50px;"></span><span class="sol-text">$-3 \mid -2$</span> $)$ und $h_{1,\text{neu}}(x) =$ <span class="blank-line" style="min-width: 155px;"></span><span class="sol-text">$0{,}5(x + 3)^2 - 2$</span><br>
+          <strong>e)</strong> Die Parabel $h_2(x) = -2(x + 4)^2 - 1$ wird nachträglich um $6$ Einheiten nach rechts und um $3$ Einheiten nach oben verschoben. $\implies S_{\text{neu}}($ <span class="blank-line" style="min-width: 50px;"></span><span class="sol-text">$2 \mid 2$</span> $)$ und $h_{2,\text{neu}}(x) =$ <span class="blank-line" style="min-width: 155px;"></span><span class="sol-text">$-2(x - 2)^2 + 2$</span><br>
+          <strong>f)</strong> Welche Transformationen führen von der Parabel $p(x) = (x - 2)^2 + 1$ zurück zur Normalparabel $f(x) = x^2$?
+          <span class="blank-line" style="min-width: 240px;"></span><span class="sol-text">Verschiebung um $2$ nach links und um $1$ nach unten.</span>
+        </div>
+      </div>
+
+      <!-- AUFGABE 7: AUS DEM GRAPHEN ZUR SCHEITELPUNKTFORM (8 PARABELN p1 BIS p8, K9) -->
+      <div class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">7</span>
+            <span>Aus dem Graphen zur Scheitelpunktform (8 Parabeln $p_1$ bis $p_8$)</span>
+          </div>
+          <div>
+            <span class="k-badge">K8</span> <span class="k-badge">K9</span>
+            <span class="task-points">Handout: 4.A („1-Schritt-Trick“)</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          Bestimme für alle <strong>acht Parabeln $p_1$ bis $p_8$</strong> jeweils den Scheitelpunkt $S(d \mid e)$, den Faktor $a$ (indem du vom Scheitelpunkt $1$ Einheit nach rechts gehst) und stelle die Funktionsgleichung in Scheitelpunktform $f(x) = a(x-d)^2+e$ auf:
+        </div>
+
+        <!-- ZWEI KOORDINATENSYSTEME NEBENEINANDER (JE 4 PARABELN) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 6px;">
+          <!-- Koordinatensystem A: p1 bis p4 -->
+          <div style="text-align: center;">
+            <div style="font-size: 8.5pt; font-weight: 700; color: #1e3a8a; margin-bottom: 2px;">Koordinatensystem A: Parabeln $p_1$ bis $p_4$</div>
+            <svg viewBox="0 0 242 195" width="100%" height="172" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+              <defs>
+                <clipPath id="clip7A">
+                  <rect x="10" y="10" width="220" height="180"/>
+                </clipPath>
+              </defs>
+              <!-- Gitter: 1 Einheit = 20px, Ursprung (110, 110), x in [-5,6], y in [-4,5] -->
+              <g stroke="#e2e8f0" stroke-width="0.8">
+                <line x1="10" y1="10" x2="10" y2="190"/><line x1="30" y1="10" x2="30" y2="190"/>
+                <line x1="50" y1="10" x2="50" y2="190"/><line x1="70" y1="10" x2="70" y2="190"/>
+                <line x1="90" y1="10" x2="90" y2="190"/><line x1="110" y1="10" x2="110" y2="190"/>
+                <line x1="130" y1="10" x2="130" y2="190"/><line x1="150" y1="10" x2="150" y2="190"/>
+                <line x1="170" y1="10" x2="170" y2="190"/><line x1="190" y1="10" x2="190" y2="190"/>
+                <line x1="210" y1="10" x2="210" y2="190"/><line x1="230" y1="10" x2="230" y2="190"/>
+                <line x1="10" y1="10" x2="230" y2="10"/><line x1="10" y1="30" x2="230" y2="30"/>
+                <line x1="10" y1="50" x2="230" y2="50"/><line x1="10" y1="70" x2="230" y2="70"/>
+                <line x1="10" y1="90" x2="230" y2="90"/><line x1="10" y1="110" x2="230" y2="110"/>
+                <line x1="10" y1="130" x2="230" y2="130"/><line x1="10" y1="150" x2="230" y2="150"/>
+                <line x1="10" y1="170" x2="230" y2="170"/><line x1="10" y1="190" x2="230" y2="190"/>
+              </g>
+              <line x1="10" y1="110" x2="234" y2="110" stroke="#334155" stroke-width="1.3"/>
+              <line x1="110" y1="192" x2="110" y2="6" stroke="#334155" stroke-width="1.3"/>
+              <text x="230" y="121" font-size="8" font-weight="bold" fill="#334155">x</text>
+              <text x="115" y="14" font-size="8" font-weight="bold" fill="#334155">y</text>
+              <g font-size="7" fill="#475569" text-anchor="middle">
+                <text x="30" y="120">-4</text><text x="50" y="120">-3</text><text x="70" y="120">-2</text><text x="90" y="120">-1</text>
+                <text x="130" y="120">1</text><text x="150" y="120">2</text><text x="170" y="120">3</text><text x="190" y="120">4</text><text x="210" y="120">5</text>
+              </g>
+              <g font-size="7" fill="#475569" text-anchor="end">
+                <text x="106" y="14">5</text><text x="106" y="33">4</text><text x="106" y="53">3</text><text x="106" y="73">2</text><text x="106" y="93">1</text>
+                <text x="106" y="133">-1</text><text x="106" y="153">-2</text><text x="106" y="173">-3</text><text x="106" y="190">-4</text>
+              </g>
+              <g clip-path="url(#clip7A)">
+                <!-- p1(x) = (x+3)^2 - 2: S(-3|-2)->(50,150), (-6|7)->(-10,-30), (0|7)->(110,-30) -->
+                <path d="M -10 -30 Q 50 330 110 -30" fill="none" stroke="#1e3a8a" stroke-width="2"/>
+                <circle cx="50" cy="150" r="2.6" fill="#1e3a8a"/>
+                <!-- p2(x) = 2(x-1)^2 - 3: S(1|-3)->(130,170), (-1|5)->(90,10), (3|5)->(170,10) -->
+                <path d="M 90 10 Q 130 330 170 10" fill="none" stroke="#059669" stroke-width="2"/>
+                <circle cx="130" cy="170" r="2.6" fill="#059669"/>
+                <!-- p3(x) = -(x-3)^2 + 4: S(3|4)->(170,30), (0|-5)->(110,210), (6|-5)->(230,210) -->
+                <path d="M 110 210 Q 170 -150 230 210" fill="none" stroke="#d97706" stroke-width="2"/>
+                <circle cx="170" cy="30" r="2.6" fill="#d97706"/>
+                <!-- p4(x) = -0.5(x+1)^2 + 3: S(-1|3)->(90,50), (-5|-5)->(10,210), (3|-5)->(170,210) -->
+                <path d="M 10 210 Q 90 -110 170 210" fill="none" stroke="#7c3aed" stroke-width="2"/>
+                <circle cx="90" cy="50" r="2.6" fill="#7c3aed"/>
+              </g>
+              <text x="20" y="55" font-size="9" font-weight="bold" fill="#1e3a8a">p₁</text>
+              <text x="148" y="65" font-size="9" font-weight="bold" fill="#059669">p₂</text>
+              <text x="176" y="26" font-size="9" font-weight="bold" fill="#b45309">p₃</text>
+              <text x="64" y="45" font-size="9" font-weight="bold" fill="#7c3aed">p₄</text>
+            </svg>
+          </div>
+
+          <!-- Koordinatensystem B: p5 bis p8 -->
+          <div style="text-align: center;">
+            <div style="font-size: 8.5pt; font-weight: 700; color: #1e3a8a; margin-bottom: 2px;">Koordinatensystem B: Parabeln $p_5$ bis $p_8$</div>
+            <svg viewBox="0 0 242 195" width="100%" height="172" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+              <defs>
+                <clipPath id="clip7B">
+                  <rect x="10" y="10" width="220" height="180"/>
+                </clipPath>
+              </defs>
+              <g stroke="#e2e8f0" stroke-width="0.8">
+                <line x1="10" y1="10" x2="10" y2="190"/><line x1="30" y1="10" x2="30" y2="190"/>
+                <line x1="50" y1="10" x2="50" y2="190"/><line x1="70" y1="10" x2="70" y2="190"/>
+                <line x1="90" y1="10" x2="90" y2="190"/><line x1="110" y1="10" x2="110" y2="190"/>
+                <line x1="130" y1="10" x2="130" y2="190"/><line x1="150" y1="10" x2="150" y2="190"/>
+                <line x1="170" y1="10" x2="170" y2="190"/><line x1="190" y1="10" x2="190" y2="190"/>
+                <line x1="210" y1="10" x2="210" y2="190"/><line x1="230" y1="10" x2="230" y2="190"/>
+                <line x1="10" y1="10" x2="230" y2="10"/><line x1="10" y1="30" x2="230" y2="30"/>
+                <line x1="10" y1="50" x2="230" y2="50"/><line x1="10" y1="70" x2="230" y2="70"/>
+                <line x1="10" y1="90" x2="230" y2="90"/><line x1="10" y1="110" x2="230" y2="110"/>
+                <line x1="10" y1="130" x2="230" y2="130"/><line x1="10" y1="150" x2="230" y2="150"/>
+                <line x1="10" y1="170" x2="230" y2="170"/><line x1="10" y1="190" x2="230" y2="190"/>
+              </g>
+              <line x1="10" y1="110" x2="234" y2="110" stroke="#334155" stroke-width="1.3"/>
+              <line x1="110" y1="192" x2="110" y2="6" stroke="#334155" stroke-width="1.3"/>
+              <text x="230" y="121" font-size="8" font-weight="bold" fill="#334155">x</text>
+              <text x="115" y="14" font-size="8" font-weight="bold" fill="#334155">y</text>
+              <g font-size="7" fill="#475569" text-anchor="middle">
+                <text x="30" y="120">-4</text><text x="50" y="120">-3</text><text x="70" y="120">-2</text><text x="90" y="120">-1</text>
+                <text x="130" y="120">1</text><text x="150" y="120">2</text><text x="170" y="120">3</text><text x="190" y="120">4</text><text x="210" y="120">5</text>
+              </g>
+              <g font-size="7" fill="#475569" text-anchor="end">
+                <text x="106" y="14">5</text><text x="106" y="33">4</text><text x="106" y="53">3</text><text x="106" y="73">2</text><text x="106" y="93">1</text>
+                <text x="106" y="133">-1</text><text x="106" y="153">-2</text><text x="106" y="173">-3</text><text x="106" y="190">-4</text>
+              </g>
+              <g clip-path="url(#clip7B)">
+                <!-- p5(x) = 0.5(x-2)^2 - 1: S(2|-1)->(150,130), (-2|7)->(70,-30), (6|7)->(230,-30) -->
+                <path d="M 70 -30 Q 150 290 230 -30" fill="none" stroke="#1e3a8a" stroke-width="2"/>
+                <circle cx="150" cy="130" r="2.6" fill="#1e3a8a"/>
+                <!-- p6(x) = -2(x+2)^2 + 4: S(-2|4)->(70,30), (-4|-4)->(30,190), (0|-4)->(110,190) -->
+                <path d="M 30 190 Q 70 -130 110 190" fill="none" stroke="#059669" stroke-width="2"/>
+                <circle cx="70" cy="30" r="2.6" fill="#059669"/>
+                <!-- p7(x) = 3x^2 - 4: S(0|-4)->(110,190), (-2|8)->(70,-50), (2|8)->(150,-50) -->
+                <path d="M 70 -50 Q 110 430 150 -50" fill="none" stroke="#d97706" stroke-width="2"/>
+                <circle cx="110" cy="190" r="2.6" fill="#d97706"/>
+                <!-- p8(x) = -(x-4)^2: S(4|0)->(190,110), (1|-9)->(130,290), (7|-9)->(250,290) -->
+                <path d="M 130 290 Q 190 -70 250 290" fill="none" stroke="#7c3aed" stroke-width="2"/>
+                <circle cx="190" cy="110" r="2.6" fill="#7c3aed"/>
+              </g>
+              <text x="208" y="45" font-size="9" font-weight="bold" fill="#1e3a8a">p₅</text>
+              <text x="52" y="26" font-size="9" font-weight="bold" fill="#059669">p₆</text>
+              <text x="122" y="65" font-size="9" font-weight="bold" fill="#b45309">p₇</text>
+              <text x="195" y="104" font-size="9" font-weight="bold" fill="#7c3aed">p₈</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- AUSWERTUNGSTABELLE FÜR p1 BIS p8 (2 SPALTEN NEBENEINANDER) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <table class="calc-table" style="font-size: 8.8pt; margin: 0;">
+            <thead>
+              <tr>
+                <th style="width: 14%;">Graph</th>
+                <th style="width: 25%;">Scheitelpunkt</th>
+                <th style="width: 20%;">Faktor $a$</th>
+                <th style="width: 41%;">Scheitelpunktform</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: #1e3a8a;">$p_1$</strong></td>
+                <td><span class="sol-text">$S_1(-3 \mid -2)$</span></td>
+                <td><span class="sol-text">$a = 1$</span></td>
+                <td><span class="sol-text">$p_1(x) = (x + 3)^2 - 2$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #059669;">$p_2$</strong></td>
+                <td><span class="sol-text">$S_2(1 \mid -3)$</span></td>
+                <td><span class="sol-text">$a = 2$</span></td>
+                <td><span class="sol-text">$p_2(x) = 2(x - 1)^2 - 3$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #b45309;">$p_3$</strong></td>
+                <td><span class="sol-text">$S_3(3 \mid 4)$</span></td>
+                <td><span class="sol-text">$a = -1$</span></td>
+                <td><span class="sol-text">$p_3(x) = -(x - 3)^2 + 4$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #7c3aed;">$p_4$</strong></td>
+                <td><span class="sol-text">$S_4(-1 \mid 3)$</span></td>
+                <td><span class="sol-text">$a = -0{,}5$</span></td>
+                <td><span class="sol-text">$p_4(x) = -0{,}5(x + 1)^2 + 3$</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="calc-table" style="font-size: 8.8pt; margin: 0;">
+            <thead>
+              <tr>
+                <th style="width: 14%;">Graph</th>
+                <th style="width: 25%;">Scheitelpunkt</th>
+                <th style="width: 20%;">Faktor $a$</th>
+                <th style="width: 41%;">Scheitelpunktform</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: #1e3a8a;">$p_5$</strong></td>
+                <td><span class="sol-text">$S_5(2 \mid -1)$</span></td>
+                <td><span class="sol-text">$a = 0{,}5$</span></td>
+                <td><span class="sol-text">$p_5(x) = 0{,}5(x - 2)^2 - 1$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #059669;">$p_6$</strong></td>
+                <td><span class="sol-text">$S_6(-2 \mid 4)$</span></td>
+                <td><span class="sol-text">$a = -2$</span></td>
+                <td><span class="sol-text">$p_6(x) = -2(x + 2)^2 + 4$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #b45309;">$p_7$</strong></td>
+                <td><span class="sol-text">$S_7(0 \mid -4)$</span></td>
+                <td><span class="sol-text">$a = 3$</span></td>
+                <td><span class="sol-text">$p_7(x) = 3x^2 - 4$</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: #7c3aed;">$p_8$</strong></td>
+                <td><span class="sol-text">$S_8(4 \mid 0)$</span></td>
+                <td><span class="sol-text">$a = -1$</span></td>
+                <td><span class="sol-text">$p_8(x) = -(x - 4)^2$</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================================
+         SEITE 6: ÜBUNGSAUFGABEN TEIL 4 (QUALITATIV SKIZZIEREN & PUNKTPROBE)
+         ======================================================== -->
+    <div class="page" id="page6">
+      <!-- HEADER SEITE 6 -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Mathematik Klasse 9b • Großes Trainingspaket (Kapitel II: Parabeln)</div>
+          <h2 class="doc-title">Übungsaufgaben Teil 4: Parabeln qualitativ skizzieren &amp; Punktprobe</h2>
+          <div class="doc-subtitle">Graphen aus der Scheitelpunktform skizzieren und rechnerische Punktproben durchführen (K10)</div>
+        </div>
+        <div class="badge-doc">
+          <strong>Training • Seite 6 / 6</strong><br>
+          Aufgaben 8 &amp; 9
+        </div>
+      </header>
+
+      <!-- AUFGABE 8: 6 PARABELN QUALITATIV SKIZZIEREN (K8, K10) -->
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">8</span>
+            <span>Parabeln aus der Scheitelpunktform qualitativ skizzieren (6 Parabeln $g_1$ bis $g_6$)</span>
+          </div>
+          <div>
+            <span class="k-badge">K8</span> <span class="k-badge">K10</span>
+            <span class="task-points">Handout: 4.B</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          Notiere für die sechs Parabeln $g_1$ bis $g_6$ jeweils zuerst den Scheitelpunkt $S(d\mid e)$ sowie den Faktor $a$ und skizziere die Graphen anschließend qualitativ (über den Scheitelpunkt und die $\pm 1$-Hilfspunkte) in das jeweilige Koordinatensystem:
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <!-- Gruppe A: g1 bis g3 -->
+          <div>
+            <div style="font-size: 9pt; line-height: 1.48; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 7px; margin-bottom: 5px;">
+              <strong>1)</strong> $g_1(x) = (x - 2)^2 - 3 \implies S_1($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$2 \mid -3$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$1$</span><br>
+              <strong>2)</strong> $g_2(x) = -2(x + 2)^2 + 5 \implies S_2($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$-2 \mid 5$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$-2$</span><br>
+              <strong>3)</strong> $g_3(x) = 0{,}5(x - 1)^2 + 1 \implies S_3($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$1 \mid 1$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$0{,}5$</span>
+            </div>
+
+            <svg viewBox="0 0 242 195" width="100%" height="168" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+              <defs>
+                <clipPath id="clip8A">
+                  <rect x="10" y="10" width="220" height="180"/>
+                </clipPath>
+              </defs>
+              <g stroke="#e2e8f0" stroke-width="0.8">
+                <line x1="10" y1="10" x2="10" y2="190"/><line x1="30" y1="10" x2="30" y2="190"/>
+                <line x1="50" y1="10" x2="50" y2="190"/><line x1="70" y1="10" x2="70" y2="190"/>
+                <line x1="90" y1="10" x2="90" y2="190"/><line x1="110" y1="10" x2="110" y2="190"/>
+                <line x1="130" y1="10" x2="130" y2="190"/><line x1="150" y1="10" x2="150" y2="190"/>
+                <line x1="170" y1="10" x2="170" y2="190"/><line x1="190" y1="10" x2="190" y2="190"/>
+                <line x1="210" y1="10" x2="210" y2="190"/><line x1="230" y1="10" x2="230" y2="190"/>
+                <line x1="10" y1="10" x2="230" y2="10"/><line x1="10" y1="30" x2="230" y2="30"/>
+                <line x1="10" y1="50" x2="230" y2="50"/><line x1="10" y1="70" x2="230" y2="70"/>
+                <line x1="10" y1="90" x2="230" y2="90"/><line x1="10" y1="110" x2="230" y2="110"/>
+                <line x1="10" y1="130" x2="230" y2="130"/><line x1="10" y1="150" x2="230" y2="150"/>
+                <line x1="10" y1="170" x2="230" y2="170"/><line x1="10" y1="190" x2="230" y2="190"/>
+              </g>
+              <line x1="10" y1="110" x2="234" y2="110" stroke="#334155" stroke-width="1.3"/>
+              <line x1="110" y1="192" x2="110" y2="6" stroke="#334155" stroke-width="1.3"/>
+              <text x="230" y="121" font-size="8" font-weight="bold" fill="#334155">x</text>
+              <text x="115" y="14" font-size="8" font-weight="bold" fill="#334155">y</text>
+              <g font-size="7" fill="#475569" text-anchor="middle">
+                <text x="30" y="120">-4</text><text x="50" y="120">-3</text><text x="70" y="120">-2</text><text x="90" y="120">-1</text>
+                <text x="130" y="120">1</text><text x="150" y="120">2</text><text x="170" y="120">3</text><text x="190" y="120">4</text><text x="210" y="120">5</text>
+              </g>
+              <g font-size="7" fill="#475569" text-anchor="end">
+                <text x="106" y="14">5</text><text x="106" y="33">4</text><text x="106" y="53">3</text><text x="106" y="73">2</text><text x="106" y="93">1</text>
+                <text x="106" y="133">-1</text><text x="106" y="153">-2</text><text x="106" y="173">-3</text><text x="106" y="190">-4</text>
+              </g>
+              <g class="sol-svg" clip-path="url(#clip8A)">
+                <!-- g1: S(2|-3)->(150,170), (-1|6)->(90,-10), (5|6)->(210,-10) -->
+                <path d="M 90 -10 Q 150 350 210 -10" fill="none" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="150" cy="170" r="2.8" fill="#dc2626"/>
+                <text x="155" y="175" font-size="8" font-weight="bold" fill="#dc2626">S₁(2|-3)</text>
+                <text x="195" y="35" font-size="8.5" font-weight="bold" fill="#dc2626">g₁</text>
+                <!-- g2: S(-2|5)->(70,10), (-4|-3)->(30,170), (0|-3)->(110,170) -->
+                <path d="M 30 170 Q 70 -150 110 170" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="4,2"/>
+                <circle cx="70" cy="10" r="2.8" fill="#b91c1c"/>
+                <text x="30" y="22" font-size="8" font-weight="bold" fill="#b91c1c">S₂(-2|5)</text>
+                <text x="35" y="150" font-size="8.5" font-weight="bold" fill="#b91c1c">g₂</text>
+                <!-- g3: S(1|1)->(130,90), (-3|9)->(50,-70), (5|9)->(210,-70) -->
+                <path d="M 50 -70 Q 130 250 210 -70" fill="none" stroke="#ef4444" stroke-width="2"/>
+                <circle cx="130" cy="90" r="2.8" fill="#ef4444"/>
+                <text x="135" y="98" font-size="8" font-weight="bold" fill="#ef4444">S₃(1|1)</text>
+                <text x="72" y="32" font-size="8.5" font-weight="bold" fill="#ef4444">g₃</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Gruppe B: g4 bis g6 -->
+          <div>
+            <div style="font-size: 9pt; line-height: 1.48; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 7px; margin-bottom: 5px;">
+              <strong>4)</strong> $g_4(x) = -(x - 3)^2 + 4 \implies S_4($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$3 \mid 4$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$-1$</span><br>
+              <strong>5)</strong> $g_5(x) = 2(x + 3)^2 - 4 \implies S_5($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$-3 \mid -4$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$2$</span><br>
+              <strong>6)</strong> $g_6(x) = -0{,}5x^2 + 2 \implies S_6($ <span class="blank-line" style="min-width: 38px;"></span><span class="sol-text">$0 \mid 2$</span> $), \; a =$ <span class="blank-line" style="min-width: 24px;"></span><span class="sol-text">$-0{,}5$</span>
+            </div>
+
+            <svg viewBox="0 0 242 195" width="100%" height="168" style="border: 1px solid #cbd5e1; border-radius: 4px; background: #ffffff;">
+              <defs>
+                <clipPath id="clip8B">
+                  <rect x="10" y="10" width="220" height="180"/>
+                </clipPath>
+              </defs>
+              <g stroke="#e2e8f0" stroke-width="0.8">
+                <line x1="10" y1="10" x2="10" y2="190"/><line x1="30" y1="10" x2="30" y2="190"/>
+                <line x1="50" y1="10" x2="50" y2="190"/><line x1="70" y1="10" x2="70" y2="190"/>
+                <line x1="90" y1="10" x2="90" y2="190"/><line x1="110" y1="10" x2="110" y2="190"/>
+                <line x1="130" y1="10" x2="130" y2="190"/><line x1="150" y1="10" x2="150" y2="190"/>
+                <line x1="170" y1="10" x2="170" y2="190"/><line x1="190" y1="10" x2="190" y2="190"/>
+                <line x1="210" y1="10" x2="210" y2="190"/><line x1="230" y1="10" x2="230" y2="190"/>
+                <line x1="10" y1="10" x2="230" y2="10"/><line x1="10" y1="30" x2="230" y2="30"/>
+                <line x1="10" y1="50" x2="230" y2="50"/><line x1="10" y1="70" x2="230" y2="70"/>
+                <line x1="10" y1="90" x2="230" y2="90"/><line x1="10" y1="110" x2="230" y2="110"/>
+                <line x1="10" y1="130" x2="230" y2="130"/><line x1="10" y1="150" x2="230" y2="150"/>
+                <line x1="10" y1="170" x2="230" y2="170"/><line x1="10" y1="190" x2="230" y2="190"/>
+              </g>
+              <line x1="10" y1="110" x2="234" y2="110" stroke="#334155" stroke-width="1.3"/>
+              <line x1="110" y1="192" x2="110" y2="6" stroke="#334155" stroke-width="1.3"/>
+              <text x="230" y="121" font-size="8" font-weight="bold" fill="#334155">x</text>
+              <text x="115" y="14" font-size="8" font-weight="bold" fill="#334155">y</text>
+              <g font-size="7" fill="#475569" text-anchor="middle">
+                <text x="30" y="120">-4</text><text x="50" y="120">-3</text><text x="70" y="120">-2</text><text x="90" y="120">-1</text>
+                <text x="130" y="120">1</text><text x="150" y="120">2</text><text x="170" y="120">3</text><text x="190" y="120">4</text><text x="210" y="120">5</text>
+              </g>
+              <g font-size="7" fill="#475569" text-anchor="end">
+                <text x="106" y="14">5</text><text x="106" y="33">4</text><text x="106" y="53">3</text><text x="106" y="73">2</text><text x="106" y="93">1</text>
+                <text x="106" y="133">-1</text><text x="106" y="153">-2</text><text x="106" y="173">-3</text><text x="106" y="190">-4</text>
+              </g>
+              <g class="sol-svg" clip-path="url(#clip8B)">
+                <!-- g4: S(3|4)->(170,30), (0|-5)->(110,210), (6|-5)->(230,210) -->
+                <path d="M 110 210 Q 170 -150 230 210" fill="none" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="170" cy="30" r="2.8" fill="#dc2626"/>
+                <text x="174" y="25" font-size="8" font-weight="bold" fill="#dc2626">S₄(3|4)</text>
+                <text x="206" y="150" font-size="8.5" font-weight="bold" fill="#dc2626">g₄</text>
+                <!-- g5: S(-3|-4)->(50,190), (-5|4)->(10,30), (-1|4)->(90,30) -->
+                <path d="M 10 30 Q 50 350 90 30" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="4,2"/>
+                <circle cx="50" cy="190" r="2.8" fill="#b91c1c"/>
+                <text x="14" y="185" font-size="8" font-weight="bold" fill="#b91c1c">S₅(-3|-4)</text>
+                <text x="18" y="55" font-size="8.5" font-weight="bold" fill="#b91c1c">g₅</text>
+                <!-- g6: S(0|2)->(110,70), (-4|-6)->(30,230), (4|-6)->(190,230) -->
+                <path d="M 30 230 Q 110 -90 190 230" fill="none" stroke="#ef4444" stroke-width="2"/>
+                <circle cx="110" cy="70" r="2.8" fill="#ef4444"/>
+                <text x="115" y="66" font-size="8" font-weight="bold" fill="#ef4444">S₆(0|2)</text>
+                <text x="60" y="155" font-size="8.5" font-weight="bold" fill="#ef4444">g₆</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 9: RECHNERISCHE PUNKTPROBEN & FEHLENDE KOORDINATEN (K10) -->
+      <div class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <div class="task-title">
+            <span class="task-num">9</span>
+            <span>Rechnerische Punktproben &amp; Fehlende Punktkoordinaten bestimmen</span>
+          </div>
+          <div>
+            <span class="k-badge">K10</span>
+            <span class="task-points">Handout: 4.C</span>
+          </div>
+        </div>
+
+        <div class="task-sub">
+          <strong>a) Punktproben durchführen:</strong> Prüfe rechnerisch durch Einsetzen, ob die angegebenen Punkte auf der jeweiligen Parabel liegen:
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 9pt;">
+          <div class="dotted-box" style="min-height: 76px;">
+            <strong>Parabel 1:</strong> $f(x) = 2(x - 3)^2 - 1$<br>
+            • Punkt $A(5 \mid 7)$:<br>
+            <span class="sol-text">$f(5) = 2(2)^2 - 1 = 7 \implies$ <strong>Ja!</strong><br></span>
+            • Punkt $B(1 \mid -9)$:<br>
+            <span class="sol-text">$f(1) = 2(-2)^2 - 1 = 7 \ne -9 \implies$ <strong>Nein!</strong></span>
+          </div>
+
+          <div class="dotted-box" style="min-height: 76px;">
+            <strong>Parabel 2:</strong> $g(x) = -0{,}5(x + 2)^2 + 6$<br>
+            • Punkt $C(2 \mid -2)$:<br>
+            <span class="sol-text">$g(2) = -0{,}5(4)^2 + 6 = -2 \implies$ <strong>Ja!</strong><br></span>
+            • Punkt $D(-4 \mid 8)$:<br>
+            <span class="sol-text">$g(-4) = -0{,}5(-2)^2 + 6 = 4 \ne 8 \implies$ <strong>Nein!</strong></span>
+          </div>
+
+          <div class="dotted-box" style="min-height: 76px;">
+            <strong>Parabel 3:</strong> $h(x) = -(x - 1)^2 + 4$<br>
+            • Punkt $E(-2 \mid -5)$:<br>
+            <span class="sol-text">$h(-2) = -(-3)^2 + 4 = -5 \implies$ <strong>Ja!</strong><br></span>
+            • Punkt $F(4 \mid 13)$:<br>
+            <span class="sol-text">$h(4) = -(3)^2 + 4 = -5 \ne 13 \implies$ <strong>Nein!</strong></span>
+          </div>
+        </div>
+
+        <div class="task-sub" style="margin-top: 5px; margin-bottom: 0;">
+          <strong>b) Fehlende $y$-Koordinate berechnen:</strong> Die Punkte liegen auf der Parabel $p(x) = 3(x + 1)^2 - 5$. Berechne die fehlende Koordinate:<br>
+          1) $P(2 \mid y_P) \implies y_P =$ <span class="blank-line" style="min-width: 150px;"></span><span class="sol-text">$p(2) = 3(2+1)^2 - 5 = 3\cdot 9 - 5 = \mathbf{22}$</span> &emsp;&emsp;
+          2) $Q(-3 \mid y_Q) \implies y_Q =$ <span class="blank-line" style="min-width: 150px;"></span><span class="sol-text">$p(-3) = 3(-3+1)^2 - 5 = 3\cdot 4 - 5 = \mathbf{7}$</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      document.body.classList.toggle('teacher-mode');
+      const isTeacher = document.body.classList.contains('teacher-mode');
+      const label = document.getElementById('teacherBtnLabel');
+      if (label) {
+        label.innerText = isTeacher ? "Musterlösung ausblenden" : "Musterlösung einblenden";
+      }
+    }
+  </script>
+
+</body>
+</html>
