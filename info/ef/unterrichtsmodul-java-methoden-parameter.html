@@ -496,7 +496,6 @@
       <a href="unterrichtsmodul-java-grundlagen-variablen.html" class="presenter-tab-btn">4. Grundlagen &amp; Variablen</a>
       <a href="unterrichtsmodul-java-rechnen-operatoren.html" class="presenter-tab-btn">5. Rechnen &amp; Selbstzuweisung</a>
       <a href="unterrichtsmodul-java-methoden-parameter.html" class="presenter-tab-btn active">6. Methoden &amp; Parameter</a>
-      <button class="presenter-tab-btn" onclick="toggleAllAnswers()">Alle Antworten aufdecken</button>
       <button class="presenter-tab-btn" onclick="window.print()">Drucken</button>
     </div>
   </nav>
@@ -762,94 +761,74 @@
     </section>
 
     <!-- ========================================================
-         PHASE 6: PRAXIS-AUFGABEN MIT LÖSUNGEN
+         PHASE 6: PRAXIS-AUFGABEN (EIGENSTÄNDIGE BEARBEITUNG)
          ======================================================== -->
     <section class="sheet-card">
       <h2><span class="section-num">6</span> Übungsaufgaben für den Unterricht</h2>
+      <p style="color: #64748b; font-size: 0.92rem; margin-top: -0.25rem; margin-bottom: 1.25rem;">
+        Bearbeite die folgenden Aufgaben eigenständig in deiner Klasse <span class="code-pill">Rechner.java</span>. 
+        Die gemeinsame Besprechung und Auswertung erfolgt anschließend im Kurs.
+      </p>
 
       <!-- Aufgabe 1 -->
       <div class="question-card">
-        <div class="question-header" onclick="toggleReveal('ans-1', this.querySelector('.btn-reveal'))">
+        <div class="question-header">
           <div class="question-title">
             <span class="question-num">Aufgabe 1</span>
             Der Verdoppler (1 Parameter)
           </div>
-          <button class="btn-reveal">Erklärung aufdecken</button>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e1;">Eigenständige Übung</span>
         </div>
         <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
           Schreibe in der Klasse <span class="code-pill">Rechner</span> eine Methode <span class="code-pill">verdopple(int zahl)</span>. 
           Sie soll die übergebene Zahl verdoppeln und auf der Konsole ausgeben: 
           <em>„Das Doppelte von 14 ist: 28“</em>.
         </p>
-        <div class="question-answer" id="ans-1">
-          <strong>Musterlösung:</strong>
-          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">verdopple</span>(<span class="code-type">int</span> <span class="code-param">zahl</span>)
-{
-    <span class="code-type">int</span> ergebnis = <span class="code-param">zahl</span> * <span class="code-num">2</span>;
-    <span class="code-type">System</span>.out.println(<span class="code-string">"Das Doppelte von "</span> + <span class="code-param">zahl</span> + <span class="code-string">" ist: "</span> + ergebnis);
-}</pre>
-        </div>
       </div>
 
       <!-- Aufgabe 2 -->
       <div class="question-card">
-        <div class="question-header" onclick="toggleReveal('ans-2', this.querySelector('.btn-reveal'))">
+        <div class="question-header">
           <div class="question-title">
             <span class="question-num">Aufgabe 2</span>
             Umfang eines Rechtecks (2 Parameter)
           </div>
-          <button class="btn-reveal">Erklärung aufdecken</button>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e1;">Eigenständige Übung</span>
         </div>
         <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
           Schreibe eine Methode <span class="code-pill">rechteckUmfang(int laenge, int breite)</span>. 
           Sie berechnet den Umfang nach der Formel $U = 2 \cdot (\text{laenge} + \text{breite})$ 
           und gibt das Ergebnis formatiert auf der Konsole aus.
         </p>
-        <div class="question-answer" id="ans-2">
-          <strong>Musterlösung:</strong>
-          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">rechteckUmfang</span>(<span class="code-type">int</span> <span class="code-param">laenge</span>, <span class="code-type">int</span> <span class="code-param">breite</span>)
-{
-    <span class="code-type">int</span> umfang = <span class="code-num">2</span> * (<span class="code-param">laenge</span> + <span class="code-param">breite</span>);
-    <span class="code-type">System</span>.out.println(<span class="code-string">"Ein Rechteck ("</span> + <span class="code-param">laenge</span> + <span class="code-string">" x "</span> + <span class="code-param">breite</span> + <span class="code-string">") hat den Umfang: "</span> + umfang);
-}</pre>
-        </div>
       </div>
 
       <!-- Aufgabe 3 -->
       <div class="question-card">
-        <div class="question-header" onclick="toggleReveal('ans-3', this.querySelector('.btn-reveal'))">
+        <div class="question-header">
           <div class="question-title">
             <span class="question-num">Aufgabe 3</span>
             Zeitrechner Rückwärts: Minuten &amp; Sekunden in Gesamtsekunden
           </div>
-          <button class="btn-reveal">Erklärung aufdecken</button>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e1;">Eigenständige Übung</span>
         </div>
         <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
           Schreibe eine Methode <span class="code-pill">inSekundenUmrechnen(int minuten, int sekunden)</span>. 
           Beispiel: Werden <span class="code-pill">3</span> Minuten und <span class="code-pill">25</span> Sekunden übergeben, 
           soll die Konsole ausgeben: <em>„3 min und 25 s sind insgesamt 205 Sekunden.“</em>
         </p>
-        <div class="question-answer" id="ans-3">
-          <strong>Musterlösung:</strong>
-          <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">inSekundenUmrechnen</span>(<span class="code-type">int</span> <span class="code-param">minuten</span>, <span class="code-type">int</span> <span class="code-param">sekunden</span>)
-{
-    <span class="code-type">int</span> gesamt = (<span class="code-param">minuten</span> * <span class="code-num">60</span>) + <span class="code-param">sekunden</span>;
-    <span class="code-type">System</span>.out.println(<span class="code-param">minuten</span> + <span class="code-string">" min und "</span> + <span class="code-param">sekunden</span> + <span class="code-string">" s sind insgesamt "</span> + gesamt + <span class="code-string">" Sekunden."</span>);
-}</pre>
-        </div>
       </div>
 
       <!-- Aufgabe 4 -->
       <div class="question-card">
-        <div class="question-header" onclick="toggleReveal('ans-4', this.querySelector('.btn-reveal'))">
+        <div class="question-header">
           <div class="question-title">
             <span class="question-num">Aufgabe 4</span>
             Fehlersuche &amp; Quelltext-Kritik (Gültigkeitsbereich &amp; Lebensdauer)
           </div>
-          <button class="btn-reveal">Erklärung aufdecken</button>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e1;">Eigenständige Übung</span>
         </div>
         <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; color: #334155;">
-          Betrachte den folgenden Quelltext. Der Compiler meldet drei Fehler. Finde und begründe sie:
+          Betrachte den folgenden Quelltext. Der Compiler meldet drei Fehler. Finde und begründe sie in deinem Heft:
         </p>
         <pre class="code-block"><span class="code-keyword">public class</span> <span class="code-type">Kollision</span> 
 {
@@ -865,14 +844,6 @@
         <span class="code-type">System</span>.out.println(ergebnis); <span class="code-comment">// Zeile D</span>
     }
 }</pre>
-        <div class="question-answer" id="ans-4">
-          <strong>Begründung der 3 Compiler-Fehler:</strong>
-          <ul>
-            <li><strong>Fehler in Zeile A:</strong> Die Variable <span class="code-pill">a</span> wurde bereits im Methodenkopf als Übergabeparameter deklariert. Ein zweites <span class="code-pill">int a</span> im Methodenrumpf ist eine unzulässige Doppel-Deklaration (*variable already defined*).</li>
-            <li><strong>Fehler in Zeile C:</strong> Der Parameter <span class="code-pill">a</span> lebt ausschließlich im Rumpf von <span class="code-pill">schritt1</span>. Die Methode <span class="code-pill">schritt2</span> hat keinen Zugriff darauf (*cannot find symbol*).</li>
-            <li><strong>Fehler in Zeile D:</strong> Die lokale Variable <span class="code-pill">ergebnis</span> wurde an der schließenden Klammer von <span class="code-pill">schritt1</span> gelöscht. Sie ist in <span class="code-pill">schritt2</span> unbekannt.</li>
-          </ul>
-        </div>
       </div>
     </section>
 
