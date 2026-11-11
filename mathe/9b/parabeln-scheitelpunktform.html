@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Horizontale Verschiebung &amp; Scheitelpunktform: f(x) = a(x - d)² + e | Mathe 9b</title>
+
+  <!-- Zentrales Schulheft- & Tafelbild-Designsystem gemäss GEMINI.md -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Modulspezifische Erweiterungen im Rahmen des Designstandards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 860px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Kacheln mit allseitig geschlossenen zarten Rahmen */
+    .case-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .case-card.case-pos {
+      border-color: #bfdbfe;
+      background: #f8fbff;
+    }
+    .case-card.case-zero {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+    .case-card.case-neg {
+      border-color: #fed7aa;
+      background: #fffbf5;
+    }
+
+    .case-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.65rem;
+      width: fit-content;
+    }
+    .case-pos .case-badge { background: #dbeafe; color: #1e40af; }
+    .case-zero .case-badge { background: #e2e8f0; color: #334155; }
+    .case-neg .case-badge { background: #ffedd5; color: #c2410c; }
+
+    .case-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .case-list {
+      list-style-type: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .case-list li {
+      margin-bottom: 0.4rem;
+      padding-left: 18px;
+      position: relative;
+    }
+    .case-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--ink-blue);
+      font-weight: bold;
+    }
+
+    /* Interaktive Klapp-Boxen für Aufgaben (Aufdecken / Verbergen) */
+    .task-interactive-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.35rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .task-interactive-card:hover {
+      border-color: #94a3b8;
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .task-card-pill {
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .task-question {
+      font-size: 0.96rem;
+      color: var(--ink-black);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .reveal-box {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--paper-border);
+    }
+
+    .btn-reveal {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      color: var(--ink-blue);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+    .btn-reveal:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+    }
+    .btn-reveal.active {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #1e3a8a;
+    }
+
+    .revealed-content {
+      display: none;
+      margin-top: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-size: 0.93rem;
+      line-height: 1.55;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Live-Labor Layout & Koordinatenfeld */
+    .lab-coordinate-box {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .highlight-delta {
+      font-weight: 700;
+      color: #b45309;
+      background: #fef3c7;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .slider-shelf-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.85rem;
+    }
+    @media (max-width: 900px) {
+      .slider-shelf-3 { grid-template-columns: 1fr; }
+    }
+
+    .slider-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-header-inline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slider-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+
+    .slider-badge {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .slider-badge.badge-d { background: #fef3c7; color: #92400e; }
+    .slider-badge.badge-e { background: #fee2e2; color: #991b1b; }
+    .slider-badge.badge-a { background: #dbeafe; color: #1e40af; }
+
+    /* Kompetenz-Badge */
+    .k-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #1e3a8a;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+
+    /* Handout Callout Banner */
+    .handout-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 14px rgba(30, 58, 138, 0.2);
+    }
+    @media (max-width: 768px) {
+      .handout-banner { flex-direction: column; align-items: flex-start; }
+    }
+
+    .btn-handout-white {
+      background: #ffffff;
+      color: #1e3a8a;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 9px 18px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .btn-handout-white:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAVIGATION (PRESENTER-BAR IM SCHULTAFEL-LOOK)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht 9b</a>
+      <div class="presenter-title">
+        <span>Mathe 9b • Kapitel II: Quadratische Funktionen</span>
+        <span class="presenter-tag">Letzte Doppelstunde vor der Arbeit</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="parabeln.html" class="presenter-tab-btn">1. Einstieg ($x^2$)</a>
+      <a href="parabeln-verschiebung-y.html" class="presenter-tab-btn">2. Verschiebung y-Achse ($x^2+e$)</a>
+      <a href="parabeln-streckung-stauchung.html" class="presenter-tab-btn">3. Streckung ($ax^2$)</a>
+      <a href="parabeln-scheitelpunktform.html" class="presenter-tab-btn active">4. Scheitelpunktform ($a(x-d)^2+e$)</a>
+      <a href="handout-wurzeln-parabeln.html" class="presenter-tab-btn" style="background: rgba(254, 243, 199, 0.15); border-color: #f59e0b; color: #fef08a;">Handout &amp; Training</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ======================================================
+         DECKBLATT-KOPFZEILE
+         ====================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Klasse 9b · Mathematik</span>
+        <span>Kapitel II: Quadratische Funktionen</span>
+        <span>Vorbereitung auf die Klassenarbeit</span>
+      </div>
+      <h1>Horizontale Verschiebung &amp; Die allgemeine Scheitelpunktform</h1>
+      <p class="sheet-intro">
+        Wie verschiebt man eine Parabel waagerecht nach links oder rechts? Warum dreht sich in der Klammer $(x - d)^2$ das Vorzeichen überraschend um? 
+        Und wie fügen sich Streckfaktor $a$, waagerechte Verschiebung $d$ und senkrechte Verschiebung $e$ zum großen Finale zusammen: der universellen <strong>Scheitelpunktform</strong> $f(x) = a \cdot (x - d)^2 + e$? 
+        In dieser letzten Doppelstunde vor der Klassenarbeit führen wir alle Bausteine zusammen – einfach, anschaulich und exakt abgestimmt auf dein Handout!
+      </p>
+    </header>
+
+    <!-- ======================================================
+         1. DAS GROSSE VORZEICHEN-RÄTSEL
+         ====================================================== -->
+    <article class="sheet-card" id="sec-vorzeichen-raetsel">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        Das Vorzeichen-Rätsel: Verschiebung entlang der $x$-Achse ($f(x) = (x - d)^2$)
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Bisher haben wir die feste Zahl immer <em>außerhalb</em> des Quadrats addiert ($x^2 + e$). Nun wandert die Verschiebung <strong>direkt in die Klammer hinein vor das Quadrieren</strong>: Wir betrachten $f_1(x) = (x - 3)^2$ und $f_2(x) = (x + 2)^2$.
+      </p>
+
+      <!-- Die typische Denkfalle & didaktische Auflösung -->
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">Die häufigste Denkfalle bei Schülern</div>
+          <div class="col-description">
+            Viele Schüler vermuten spontan: <em>„In der Klammer steht $-3$, also muss die Parabel doch nach links ins Negative wandern!“</em><br>
+            <strong>Das ist falsch!</strong> Die Parabel wandert bei $(x - 3)^2$ um <strong>$+3$ nach rechts</strong>!
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">Die anschauliche Auflösung: Das Nullstellen-Prinzip</div>
+          <div class="col-description">
+            Wo liegt der tiefste Punkt (Scheitelpunkt) der Normalparabel? Bei $y = 0$.<br>
+            Wann wird der Term $(x - 3)^2$ gleich null? Genau dann, wenn das Innere der Klammer null wird:<br>
+            $$x - 3 = 0 \iff \mathbf{x = +3}$$
+            Der Tiefpunkt tritt also erst bei <strong>$x = +3$</strong> auf – um genau $3$ Schritte <strong>nach rechts verzögert</strong>!
+          </div>
+        </div>
+      </div>
+
+      <!-- Vergleichende Wertetabelle -->
+      <div class="table-responsive" style="margin-top: 1.25rem;">
+        <table class="sheet-calc-table">
+          <thead>
+            <tr>
+              <th style="width: 25%; text-align: left;">Stelle $x$</th>
+              <th style="width: 8%;">$-2$</th>
+              <th style="width: 8%;">$-1$</th>
+              <th style="width: 8%;">0</th>
+              <th style="width: 8%;">1</th>
+              <th style="width: 8%;">2</th>
+              <th style="width: 9%; background: #e0e7ff; color: #1e3a8a;">3 (Scheitel)</th>
+              <th style="width: 8%;">4</th>
+              <th style="width: 8%;">5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: left; font-weight: 700;">Normalparabel: $g(x) = x^2$</td>
+              <td>$4$</td>
+              <td>$1$</td>
+              <td style="font-weight: 800; background: #f8fafc;">$0$</td>
+              <td>$1$</td>
+              <td>$4$</td>
+              <td>$9$</td>
+              <td>$16$</td>
+              <td>$25$</td>
+            </tr>
+            <tr style="background: #fefce8;">
+              <td style="text-align: left; font-weight: 700; color: #92400e;">
+                $f_1(x) = (x - 3)^2$
+              </td>
+              <td>$25$</td>
+              <td>$16$</td>
+              <td>$9$</td>
+              <td>$4$</td>
+              <td>$1$</td>
+              <td style="font-weight: 800; background: #fef08a; color: #78350f;">$0$</td>
+              <td>$1$</td>
+              <td>$4$</td>
+            </tr>
+            <tr style="background: #fdf2f8;">
+              <td style="text-align: left; font-weight: 700; color: #9d174d;">
+                $f_2(x) = (x + 2)^2$
+              </td>
+              <td style="font-weight: 800; background: #fbcfe8; color: #831843;">$0$</td>
+              <td>$1$</td>
+              <td>$4$</td>
+              <td>$9$</td>
+              <td>$16$</td>
+              <td>$25$</td>
+              <td>$36$</td>
+              <td>$49$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Didaktische Kacheln -->
+      <div class="insight-columns" style="margin-top: 1.25rem;">
+        <div class="insight-card card-blue">
+          <strong>1. Rechnerische Beobachtung (<span class="k-badge">K8</span>):</strong><br>
+          Vergleiche die Zeile von $g(x) = x^2$ mit $f_1(x) = (x - 3)^2$: Die typischen Werte $(4, 1, \mathbf{0}, 1, 4)$ sind exakt dieselben – sie treten bei $f_1$ lediglich genau <strong>3 Spalten weiter rechts</strong> auf! Bei $f_2(x) = (x + 2)^2$ treten sie <strong>2 Spalten weiter links</strong> auf (Scheitelpunkt bei $x = -2$).
+        </div>
+
+        <div class="insight-card card-purple">
+          <strong>2. Die goldene Vorzeichen-Regel für die Klassenarbeit:</strong><br>
+          Steht die Zahl in der Klammer mit einem <strong>Minus</strong>: $\mathbf{(x - d)^2} \implies$ Verschiebung nach <strong>rechts ($+d$)</strong>.<br>
+          Steht die Zahl in der Klammer mit einem <strong>Plus</strong>: $\mathbf{(x + d)^2} \implies$ Verschiebung nach <strong>links ($-d$)</strong>.<br>
+          <em>Beim Ablesen des Scheitelpunkts dreht sich das Vorzeichen aus der Klammer immer um!</em>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================
+         2. DAS GROSSE 3-PARAMETER-LABOR
+         ====================================================== -->
+    <article class="sheet-card" id="sec-labor">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        Interaktives 3-Parameter-Labor: $f(x) = a \cdot (x - d)^2 + e$ in Echtzeit
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Bewege die drei Schieberegler oder klicke auf die Schnellwahltasten aus dem Handout. Beobachte live, wie $a$ die Form steuert, $d$ die Parabel waagerecht verschiebt und $e$ sie senkrecht positioniert:
+      </p>
+
+      <div class="lab-box">
+
+        <!-- 3 Schieberegler nebeneinander -->
+        <div class="slider-shelf-3">
+          <!-- Regler d -->
+          <div class="slider-col">
+            <div class="slider-header-inline">
+              <span class="slider-title">1. Verschiebung x-Achse ($d$):</span>
+              <span class="slider-badge badge-d" id="lblCurrentD">d = +2.0</span>
+            </div>
+            <input type="range" class="range-input" id="sliderD" min="-4" max="4" step="0.5" value="2" oninput="updateLab()">
+            <div style="font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+              <span>← links (-4)</span>
+              <span>Ursprung (0)</span>
+              <span>rechts (+4) →</span>
+            </div>
+          </div>
+
+          <!-- Regler e -->
+          <div class="slider-col">
+            <div class="slider-header-inline">
+              <span class="slider-title">2. Verschiebung y-Achse ($e$):</span>
+              <span class="slider-badge badge-e" id="lblCurrentE">e = +1.0</span>
+            </div>
+            <input type="range" class="range-input" id="sliderE" min="-4" max="4" step="0.5" value="1" oninput="updateLab()">
+            <div style="font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+              <span>↓ unten (-4)</span>
+              <span>Ursprung (0)</span>
+              <span>oben (+4) ↑</span>
+            </div>
+          </div>
+
+          <!-- Regler a -->
+          <div class="slider-col">
+            <div class="slider-header-inline">
+              <span class="slider-title">3. Streckfaktor ($a$):</span>
+              <span class="slider-badge badge-a" id="lblCurrentA">a = +1.0</span>
+            </div>
+            <input type="range" class="range-input" id="sliderA" min="-3" max="3" step="0.5" value="1" oninput="updateLab()">
+            <div style="font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+              <span>↓ gespiegelt (-3)</span>
+              <span>flach (±0.5)</span>
+              <span>steil (+3) ↑</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schnellwahl-Klassiker aus dem Handout -->
+        <div class="button-selector-row" style="margin-bottom: 0.85rem;">
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--ink-muted); align-self: center; margin-right: 4px;">Schnellwahl (Handout):</span>
+          <button class="btn-day" onclick="setPreset(0, 0, 1)">Normalparabel $y=x^2$</button>
+          <button class="btn-day" onclick="setPreset(3, 0, 1)">$(x - 3)^2$ (nur rechts)</button>
+          <button class="btn-day" onclick="setPreset(-2, 0, 1)">$(x + 2)^2$ (nur links)</button>
+          <button class="btn-day" onclick="setPreset(3, 4, -2)">Muster 1: $-2(x - 3)^2 + 4$</button>
+          <button class="btn-day" onclick="setPreset(-1, -2, 0.5)">Muster 2: $0{,}5(x + 1)^2 - 2$</button>
+          <button class="btn-day" onclick="setPreset(1, 1, 2)">Handout 4.A: $2(x - 1)^2 + 1$</button>
+        </div>
+
+        <!-- Interaktives SVG-Koordinatensystem -->
+        <div class="lab-coordinate-box" style="margin-bottom: 1.25rem;">
+          <div class="svg-legend" style="flex-wrap: wrap; gap: 14px;">
+            <div class="svg-legend-item">
+              <span class="legend-bar" style="background: #94a3b8; border: 1px dashed #64748b;"></span>
+              <span>Ausgangs-Normalparabel $y = x^2$ (Referenz)</span>
+            </div>
+            <div class="svg-legend-item">
+              <span class="legend-bar" id="legendDynBar" style="background: #1e3a8a; height: 4px;"></span>
+              <span id="legendDynLabel">Transformierte Parabel $f(x) = a(x - d)^2 + e$</span>
+            </div>
+            <div class="svg-legend-item">
+              <span style="width: 11px; height: 11px; border-radius: 50%; background: #dc2626; display: inline-block;"></span>
+              <span id="legendVertexText">Scheitelpunkt $S(d \mid e)$</span>
+            </div>
+            <div class="svg-legend-item">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
+              <span>1-Schritt-Trick: $P(d+1 \mid e+a)$</span>
+            </div>
+          </div>
+
+          <div class="svg-wrapper" style="padding: 4px; overflow: hidden;">
+            <svg id="parabelSvg" viewBox="0 0 620 440" width="100%" height="auto" style="display: block; background: #ffffff;">
+              <defs>
+                <marker id="axisArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+                </marker>
+                <marker id="shiftArrowX" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
+                </marker>
+                <marker id="shiftArrowY" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+                </marker>
+                <marker id="stepArrowA" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+                </marker>
+              </defs>
+
+              <!-- Gitterlinien (Ursprung X=310, Y=230, ScaleX=38, ScaleY=30) -->
+              <g stroke="#f1f5f9" stroke-width="1.2">
+                <!-- Vertikale Ticks -->
+                <line x1="82" y1="20" x2="82" y2="420" /><line x1="120" y1="20" x2="120" y2="420" />
+                <line x1="158" y1="20" x2="158" y2="420" /><line x1="196" y1="20" x2="196" y2="420" />
+                <line x1="234" y1="20" x2="234" y2="420" /><line x1="272" y1="20" x2="272" y2="420" />
+                <line x1="348" y1="20" x2="348" y2="420" /><line x1="386" y1="20" x2="386" y2="420" />
+                <line x1="424" y1="20" x2="424" y2="420" /><line x1="462" y1="20" x2="462" y2="420" />
+                <line x1="500" y1="20" x2="500" y2="420" /><line x1="538" y1="20" x2="538" y2="420" />
+
+                <!-- Horizontale Ticks -->
+                <line x1="50" y1="50" x2="570" y2="50" /><line x1="50" y1="80" x2="570" y2="80" />
+                <line x1="50" y1="110" x2="570" y2="110" /><line x1="50" y1="140" x2="570" y2="140" />
+                <line x1="50" y1="170" x2="570" y2="170" /><line x1="50" y1="200" x2="570" y2="200" />
+                <line x1="50" y1="260" x2="570" y2="260" /><line x1="50" y1="290" x2="570" y2="290" />
+                <line x1="50" y1="320" x2="570" y2="320" /><line x1="50" y1="350" x2="570" y2="350" />
+                <line x1="50" y1="380" x2="570" y2="380" /><line x1="50" y1="410" x2="570" y2="410" />
+              </g>
+
+              <!-- Hauptachsen mit Pfeilen -->
+              <line x1="40" y1="230" x2="580" y2="230" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="586" y="234" font-size="13" font-weight="700" fill="#334155">x</text>
+
+              <line x1="310" y1="420" x2="310" y2="25" stroke="#334155" stroke-width="2" marker-end="url(#axisArrow)" />
+              <text x="316" y="20" font-size="13" font-weight="700" fill="#334155">y</text>
+
+              <!-- Achsenbeschriftungen -->
+              <g font-size="10.5" fill="#64748b" text-anchor="middle">
+                <text x="120" y="246">-5</text><text x="158" y="246">-4</text><text x="196" y="246">-3</text>
+                <text x="234" y="246">-2</text><text x="272" y="246">-1</text>
+                <text x="348" y="246">1</text><text x="386" y="246">2</text><text x="424" y="246">3</text>
+                <text x="462" y="246">4</text><text x="500" y="246">5</text><text x="538" y="246">6</text>
+              </g>
+              <g font-size="10.5" fill="#64748b" text-anchor="end">
+                <text x="304" y="54">6</text><text x="304" y="84">5</text><text x="304" y="114">4</text>
+                <text x="304" y="144">3</text><text x="304" y="174">2</text><text x="304" y="204">1</text>
+                <text x="304" y="264">-1</text><text x="304" y="294">-2</text><text x="304" y="324">-3</text>
+                <text x="304" y="354">-4</text><text x="304" y="384">-5</text><text x="304" y="414">-6</text>
+              </g>
+
+              <!-- 1. Feste Referenz-Normalparabel y = x² -->
+              <path id="refParabolaPath" d="" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4" />
+              <circle cx="310" cy="230" r="4" fill="#94a3b8" />
+              <text x="318" y="222" font-size="10.5" font-weight="600" fill="#64748b">O(0|0)</text>
+
+              <!-- 2. Dynamische Parabel f(x) = a(x - d)² + e -->
+              <path id="dynParabolaPath" d="" fill="none" stroke="#1e3a8a" stroke-width="3.2" stroke-linecap="round" />
+
+              <!-- 3. Verschiebungspfeile vom Ursprung zum Scheitelpunkt -->
+              <!-- Horizontaler Pfeil (Orange): entlang x-Achse zu d -->
+              <line id="arrowShiftX" x1="310" y1="230" x2="386" y2="230" stroke="#d97706" stroke-width="2.5" marker-end="url(#shiftArrowX)" />
+              <!-- Vertikaler Pfeil (Rot): von (d,0) zu (d,e) -->
+              <line id="arrowShiftY" x1="386" y1="230" x2="386" y2="200" stroke="#dc2626" stroke-width="2.5" marker-end="url(#shiftArrowY)" />
+
+              <!-- 4. Scheitelpunkt S(d | e) -->
+              <g id="dynVertexGroup">
+                <circle id="dynVertexDot" cx="386" cy="200" r="6.5" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
+                <rect id="dynVertexBg" x="396" y="188" width="90" height="24" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2" />
+                <text id="dynVertexTxt" x="441" y="204" font-size="11" font-weight="800" fill="#b91c1c" text-anchor="middle">S(2 | 1)</text>
+              </g>
+
+              <!-- 5. Der 1-Schritt-Trick (Ablesen von a) -->
+              <g id="dynStepTrickGroup">
+                <!-- 1 Schritt nach rechts -->
+                <line id="stepLineH" x1="386" y1="200" x2="424" y2="200" stroke="#d97706" stroke-width="2" stroke-dasharray="3,2" />
+                <!-- a Schritte nach oben / unten -->
+                <line id="stepLineV" x1="424" y1="200" x2="424" y2="170" stroke="#2563eb" stroke-width="2.5" marker-end="url(#stepArrowA)" />
+                <circle id="stepPoint" cx="424" cy="170" r="5" fill="#d97706" stroke="#ffffff" stroke-width="1.5" />
+                <!-- Label für den Schritt -->
+                <rect id="stepLabelBg" x="432" y="160" width="85" height="20" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="1" />
+                <text id="stepLabelTxt" x="474.5" y="174" font-size="10" font-weight="800" fill="#1e40af" text-anchor="middle">1 →, a = +1</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 4 Live-KPI Kacheln -->
+        <div class="kpi-grid" style="margin-bottom: 1.25rem;">
+          <div class="kpi-tile">
+            <div class="kpi-caption">Funktionsgleichung</div>
+            <div class="kpi-number blue-text" id="kpiEquation" style="font-size: 1.3rem;">$f(x) = (x - 2)^2 + 1$</div>
+            <div class="kpi-subtext" id="kpiEqSub">Scheitelpunktform</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Scheitelpunkt $S(d \mid e)$</div>
+            <div class="kpi-number purple-text" id="kpiVertex" style="font-size: 1.3rem;">$S(2 \mid 1)$</div>
+            <div class="kpi-subtext" id="kpiVertexSub">Vorzeichen bei $d$ gedreht!</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Verschiebung im Raum</div>
+            <div class="kpi-number" id="kpiShift" style="font-size: 1.1rem; color: #1e3a8a;">2 rechts, 1 oben</div>
+            <div class="kpi-subtext" id="kpiShiftSub">ausgehend von $S(0\mid 0)$</div>
+          </div>
+
+          <div class="kpi-tile">
+            <div class="kpi-caption">Form &amp; Öffnung</div>
+            <div class="kpi-number" id="kpiForm" style="font-size: 1.1rem; color: #047857;">Normalform (oben)</div>
+            <div class="kpi-subtext" id="kpiFormSub">Streckfaktor $a = +1$</div>
+          </div>
+        </div>
+
+        <!-- Live-Kommentar Banner -->
+        <div class="comment-notebook-banner" id="paramCommentBox" style="margin-bottom: 0;">
+          <strong>Beobachtung:</strong> Die Parabel besitzt den Scheitelpunkt $S(2 \mid 1)$. In der Funktionsgleichung steht deshalb $(x - 2)^2 + 1$ (Minus in der Klammer für Verschiebung nach rechts!). Da $a = 1$ ist, behält sie die originale Form der Normalparabel und ist nach oben geöffnet.
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         3. DIE 3 METHODEN-WERKZEUGE FÜR DIE KLASSENARBEIT
+         ====================================================== -->
+    <article class="sheet-card" id="sec-methoden">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        Die 3 Kern-Methoden für die Klassenarbeit (Synthese aus dem Handout)
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        In der Klassenarbeit werden drei typische Aufgabentypen zur Scheitelpunktform geprüft. Präge dir diese einfachen Rezepte ein:
+      </p>
+
+      <div class="grid-3">
+
+        <!-- Methode 1: S ablesen / aufstellen -->
+        <div class="case-card case-pos">
+          <div>
+            <span class="case-badge">Werkzeug 1 (<span class="k-badge">K8</span>)</span>
+            <div class="case-title">Scheitelpunkt direkt ablesen &amp; aufstellen</div>
+            <p style="font-size: 0.93rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Aus der Scheitelpunktform $f(x) = a(x - d)^2 + e$ liest du den Scheitelpunkt sofort ab:
+            </p>
+            <ul class="case-list">
+              <li><strong>Die $x$-Koordinate $d$:</strong> Steht mit <em>umgekehrtem Vorzeichen</em> in der Klammer!<br>
+                $(x - 4)^2 \implies d = \mathbf{+4}$<br>
+                $(x + 5)^2 \implies d = \mathbf{-5}$
+              </li>
+              <li><strong>Die $y$-Koordinate $e$:</strong> Steht <em>unverändert</em> hinten!<br>
+                $+3 \implies e = \mathbf{+3}$, &nbsp; $-7 \implies e = \mathbf{-7}$
+              </li>
+              <li><strong>Beispiel:</strong> $f(x) = -2(x - 3)^2 + 4 \implies \mathbf{S(3 \mid 4)}$</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(37,99,235,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #1e40af; text-align: center;">
+            Klammer umdrehen, Zahl hinten übernehmen
+          </div>
+        </div>
+
+        <!-- Methode 2: 1-Schritt-Trick -->
+        <div class="case-card case-zero">
+          <div>
+            <span class="case-badge" style="background: #fef3c7; color: #92400e;">Werkzeug 2 (<span class="k-badge">K9</span>)</span>
+            <div class="case-title">Der 1-Schritt-Trick (Gleichung aus Graph)</div>
+            <p style="font-size: 0.93rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              So ermittelst du die Gleichung direkt aus einer gezeichneten Kurve:
+            </p>
+            <ul class="case-list">
+              <li><strong>1. Scheitelpunkt ablesen:</strong> Höchster oder tiefster Punkt ergibt $S(d \mid e)$.</li>
+              <li><strong>2. Einen Schritt nach rechts:</strong> Gehe von $S$ aus genau <span class="highlighter">1 Einheit waagerecht nach rechts</span>.</li>
+              <li><strong>3. Senkrecht zur Kurve:</strong> Gehe so viele Schritte nach oben bzw. unten, bis du auf dem Graphen landest $\implies$ <strong>das ist dein Streckfaktor $a$</strong>!</li>
+              <li><strong>4. Einsetzen:</strong> Setze $a$, $d$, $e$ in $f(x) = a(x - d)^2 + e$ ein.</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(217,119,6,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #b45309; text-align: center;">
+            Vom Scheitel 1 nach rechts $\implies$ $\Delta y$ ist $a$!
+          </div>
+        </div>
+
+        <!-- Methode 3: Punktprobe & Skizzieren -->
+        <div class="case-card case-neg">
+          <div>
+            <span class="case-badge">Werkzeug 3 (<span class="k-badge">K10</span>)</span>
+            <div class="case-title">Punktprobe rechnerisch durchführen</div>
+            <p style="font-size: 0.93rem; color: var(--ink-black); margin-bottom: 0.75rem;">
+              Liegt der Punkt $P(x_P \mid y_P)$ auf dem Graphen von $f(x)$?
+            </p>
+            <ul class="case-list">
+              <li><strong>Rezept:</strong> Setze die $x$-Koordinate $x_P$ in die Funktionsgleichung ein und rechne den Wert aus.</li>
+              <li><strong>Prüfung:</strong> Ist das Ergebnis gleich der $y$-Koordinate $y_P$?
+                <br>• Ja $\implies$ $P$ <strong>liegt auf</strong> der Parabel.
+                <br>• Nein $\implies$ $P$ <strong>liegt nicht</strong> darauf.
+              </li>
+              <li><strong>Klammer-Regel:</strong> Zuerst Klammer ausrechnen, dann quadrieren, dann mit $a$ multiplizieren, dann $e$ verrechnen!</li>
+            </ul>
+          </div>
+          <div style="margin-top: 1rem; padding: 6px 10px; background: rgba(220,38,38,0.08); border-radius: 4px; font-size: 0.85rem; font-weight: 700; color: #b91c1c; text-align: center;">
+            Punkt einsetzen: $f(x_P) \stackrel{?}{=} y_P$
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         4. INTENSIV-TRAINING FÜR DIE KLASSENARBEIT
+         ====================================================== -->
+    <article class="sheet-card" id="sec-training">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        Intensiv-Training: Die 6 typischen Klassenarbeits-Aufgaben
+      </h2>
+
+      <p style="margin-bottom: 1.25rem;">
+        Diese Aufgaben entsprechen exakt den Anforderungen aus deinem Handout (Aufgaben 5, 6 und 7). Löse sie zuerst im Kopf oder auf einem Blatt und decke dann die Musterlösung auf:
+      </p>
+
+      <div class="grid-2">
+
+        <!-- Aufgabe 1: Scheitelpunkt ablesen -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 1</span>
+              <span>Scheitelpunkt &amp; Transformationen ablesen (<span class="k-badge">K8</span>)</span>
+            </div>
+            <p class="task-question">
+              Gegeben sind zwei Funktionen:
+              <br>a) $f_1(x) = (x - 4)^2 + 2$
+              <br>b) $f_2(x) = -3(x + 2)^2 - 5$
+              <br>Gib für beide Parabeln den Scheitelpunkt $S$ an und beschreibe alle Transformationen aus der Normalparabel.
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Zu a) $f_1(x) = (x - 4)^2 + 2$:</strong><br>
+              • <strong>Scheitelpunkt:</strong> $\mathbf{S(4 \mid 2)}$ (Vorzeichen in der Klammer dreht von $-4$ zu $+4$).<br>
+              • <strong>Transformationen:</strong> Verschiebung um $4$ Einheiten nach rechts und um $2$ Einheiten nach oben. Form und Öffnung bleiben die der Normalparabel.<br><br>
+              <strong>Zu b) $f_2(x) = -3(x + 2)^2 - 5$:</strong><br>
+              • <strong>Scheitelpunkt:</strong> $\mathbf{S(-2 \mid -5)}$ (Vorzeichen dreht von $+2$ zu $-2$).<br>
+              • <strong>Transformationen:</strong> 1. Spiegelung an der $x$-Achse (nach unten geöffnet), 2. Streckung mit Faktor $3$ (schmaler), 3. Verschiebung um $2$ nach links und um $5$ nach unten.
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 2: Die typische Prüfungsfalle -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill" style="background: #fee2e2; color: #b91c1c;">Stolperfalle</span>
+              <span>Die Vorzeichen-Falle im Test entlarven (<span class="k-badge">K8</span>)</span>
+            </div>
+            <p class="task-question">
+              Ein Mitschüler soll für den Scheitelpunkt $S(-5 \mid 3)$ die Funktionsgleichung einer Normalparabel aufstellen und schreibt: 
+              $$f(x) = (x - 5)^2 + 3$$
+              Erkläre präzise den Fehler und stelle die korrekte Gleichung auf.
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Der Fehler:</strong><br>
+              Der Schüler hat das Vorzeichen der $x$-Koordinate unreflektiert übernommen. In der Scheitelpunktform lautet die Grundstruktur jedoch $f(x) = a(x - d)^2 + e$. 
+              Setzt man für $d = -5$ ein, entsteht:
+              $$(x - (-5))^2 = (x + 5)^2$$
+              <strong>Korrekte Gleichung:</strong> $\mathbf{f(x) = (x + 5)^2 + 3}$<br>
+              <em>Merke: Bei einem negativen Scheitel-x ($d = -5$) steht in der Klammer immer ein Plus!</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 3: Textaufgabe in Gleichung -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 3</span>
+              <span>Gleichung aus Text aufstellen (<span class="k-badge">K7</span>, <span class="k-badge">K8</span>)</span>
+            </div>
+            <p class="task-question">
+              Die Normalparabel wird an der $x$-Achse gespiegelt, mit dem Faktor $4$ gestreckt und so verschoben, dass ihr Scheitelpunkt bei <strong>$S(2 \mid -6)$</strong> liegt.<br>
+              Wie lautet die Funktionsgleichung in Scheitelpunktform?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Schrittweise Übersetzung:</strong><br>
+              1. An $x$-Achse gespiegelt $\implies a < 0$<br>
+              2. Mit Faktor $4$ gestreckt $\implies |a| = 4 \implies \mathbf{a = -4}$<br>
+              3. Scheitelpunkt $S(2 \mid -6) \implies d = 2$ und $e = -6$<br>
+              4. Einsetzen in $f(x) = a(x - d)^2 + e$:<br>
+              $$\mathbf{f(x) = -4(x - 2)^2 - 6}$$
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 4: 1-Schritt-Trick am Graph -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 4</span>
+              <span>Gleichung mit dem 1-Schritt-Trick (<span class="k-badge">K9</span>)</span>
+            </div>
+            <p class="task-question">
+              Ein Parabelgraph hat seinen Scheitelpunkt bei <strong>$S(1 \mid 1)$</strong>. Geht man vom Scheitelpunkt genau $1$ Einheit nach rechts ($x = 2$), muss man um $2$ Einheiten nach oben gehen ($y = 3$), um den Graphen zu treffen.<br>
+              Wie lautet die Funktionsgleichung?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Anwendung des 1-Schritt-Tricks:</strong><br>
+              1. Scheitelpunkt abgelesen: $S(1 \mid 1) \implies d = 1, e = 1$.<br>
+              2. Vom Scheitel $1$ nach rechts und $2$ nach oben $\implies \mathbf{a = +2}$.<br>
+              3. Einsetzen in die Scheitelpunktform:<br>
+              $$\mathbf{f(x) = 2(x - 1)^2 + 1}$$
+              <em>(Genau das Musterbeispiel aus Kasten 4.A deines Handouts!)</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 5: Rechnerische Punktprobe -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 5</span>
+              <span>Rechnerische Punktprobe durchführen (<span class="k-badge">K10</span>)</span>
+            </div>
+            <p class="task-question">
+              Gegeben ist die Parabel <strong>$f(x) = 2(x - 1)^2 - 3$</strong>.<br>
+              Prüfe rechnerisch, ob die Punkte <strong>$P(3 \mid 5)$</strong> und <strong>$Q(-1 \mid 2)$</strong> auf dem Graphen liegen.
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Punktprobe für $P(3 \mid 5)$:</strong><br>
+              Setze $x = 3$ ein:<br>
+              $$f(3) = 2(3 - 1)^2 - 3 = 2 \cdot (2)^2 - 3 = 2 \cdot 4 - 3 = 8 - 3 = 5$$
+              Ergebnis ist gleich der $y$-Koordinate ($5 = 5$) $\implies$ <strong>$P(3 \mid 5)$ liegt auf dem Graphen!</strong><br><br>
+              <strong>Punktprobe für $Q(-1 \mid 2)$:</strong><br>
+              Setze $x = -1$ ein:<br>
+              $$f(-1) = 2(-1 - 1)^2 - 3 = 2 \cdot (-2)^2 - 3 = 2 \cdot 4 - 3 = 5 \neq 2$$
+              Ergebnis weicht ab ($5 \neq 2$) $\implies$ <strong>$Q(-1 \mid 2)$ liegt NICHT auf dem Graphen!</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aufgabe 6: Kombinierte Verschiebung -->
+        <div class="task-interactive-card">
+          <div>
+            <div class="task-card-header">
+              <span class="task-card-pill">Aufgabe 6</span>
+              <span>Nachträgliche Verschiebung einer Parabel (<span class="k-badge">K7</span>)</span>
+            </div>
+            <p class="task-question">
+              Die Parabel <strong>$h_1(x) = 0{,}5(x - 1)^2 + 3$</strong> wird nachträglich um <strong>$4$ Einheiten nach links</strong> und um <strong>$5$ Einheiten nach unten</strong> verschoben.<br>
+              Wie lauten der neue Scheitelpunkt $S_{\text{neu}}$ und die neue Funktionsgleichung $h_{1,\text{neu}}(x)$?
+            </p>
+          </div>
+          <div class="reveal-box">
+            <button class="btn-reveal" onclick="toggleSection(this)">Antwort &amp; Erklärung aufdecken</button>
+            <div class="revealed-content">
+              <strong>Lösungsweg über den Scheitelpunkt:</strong><br>
+              1. Alter Scheitelpunkt: $S_{\text{alt}}(1 \mid 3)$.<br>
+              2. Verschiebung anwenden:<br>
+              • $x$-Koordinate: $1 - 4 = \mathbf{-3}$ (nach links)<br>
+              • $y$-Koordinate: $3 - 5 = \mathbf{-2}$ (nach unten)<br>
+              $\implies \mathbf{S_{\text{neu}}(-3 \mid -2)}$<br>
+              3. Der Streckfaktor $a = 0{,}5$ bleibt bei reiner Verschiebung unverändert!<br>
+              4. Neue Funktionsgleichung aufstellen:<br>
+              $$\mathbf{h_{1,\text{neu}}(x) = 0{,}5(x + 3)^2 - 2}$$
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </article>
+
+    <!-- ======================================================
+         5. ZUSAMMENFASSUNG FÜRS MERKHEFT & CHECKLISTE
+         ====================================================== -->
+    <article class="sheet-card" id="sec-merksatz">
+      <h2 class="task-title">
+        <span class="task-number">5</span>
+        Zusammenfassung fürs Merkheft &amp; Klassenarbeits-Checkliste
+      </h2>
+
+      <!-- DER ROTE MERKSATZ-KASTEN (GEMÄSS GEMINI.MD) -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke • Kapitel II (K7, K8, K9)</div>
+        <div class="merke-title">Die allgemeine Scheitelpunktform der quadratischen Funktion</div>
+        <div class="merke-content">
+          <p style="margin-bottom: 0.75rem;">
+            Jede quadratische Funktion lässt sich in der <strong>Scheitelpunktform</strong> angeben. Ihr Scheitelpunkt ist der höchste bzw. tiefste Punkt der Kurve und kann unmittelbar abgelesen werden:
+          </p>
+
+          <div class="merke-formula-box">
+            $$f(x) = a \cdot (x - d)^2 + e \qquad \longleftrightarrow \qquad \mathbf{S(d \mid e)}$$
+          </div>
+
+          <table class="summary-grid-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Parameter</th>
+                <th style="width: 35%;">Geometrische Bedeutung</th>
+                <th style="width: 40%;">Wichtige Regeln für die Arbeit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Streckfaktor $a$</strong><br>(Form &amp; Öffnung)</td>
+                <td>
+                  • $a > 0$: nach <strong>oben</strong> geöffnet<br>
+                  • $a < 0$: nach <strong>unten</strong> geöffnet (gespiegelt)<br>
+                  • $|a| > 1$: <strong>gestreckt</strong> (schmaler)<br>
+                  • $0 < |a| < 1$: <strong>gestaucht</strong> (breiter)
+                </td>
+                <td>
+                  <strong>1-Schritt-Trick:</strong> Gehe vom Scheitelpunkt $1$ Schritt nach rechts. Die senkrechte Schrittzahl zur Parabel ist genau der Wert von $a$!
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Parameter $d$</strong><br>(waagerechte Verschiebung)</td>
+                <td>
+                  • $(x - d)^2$: Verschiebung nach <strong>rechts</strong><br>
+                  • $(x + d)^2$: Verschiebung nach <strong>links</strong>
+                </td>
+                <td>
+                  <strong>Vorzeichen-Umkehr:</strong> Beim Ablesen der $x$-Koordinate dreht sich das Vorzeichen aus der Klammer immer um!
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Parameter $e$</strong><br>(senkrechte Verschiebung)</td>
+                <td>
+                  • $+e$: Verschiebung nach <strong>oben</strong><br>
+                  • $-e$: Verschiebung nach <strong>unten</strong>
+                </td>
+                <td>
+                  <strong>Vorzeichen bleibt:</strong> Die $y$-Koordinate des Scheitelpunkts entspricht exakt dem Vorzeichen der Zahl hinten.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 1rem; line-height: 1.6;">
+            <strong>Die 4-Punkte-Prüfung vor Abgabe deiner Klassenarbeit:</strong><br>
+            1. <strong>Vorzeichen bei $d$ kontrolliert?</strong> Bei $S(3 \mid \dots)$ muss in der Klammer $(x - 3)$ stehen!<br>
+            2. <strong>Öffnung beachtet?</strong> Ist die Parabel nach unten geöffnet, darf das Minus vor dem $a$ niemals fehlen!<br>
+            3. <strong>Klammer gesetzt?</strong> Bei $a \neq 1$ muss die Klammer $(x - d)^2$ quadriert werden, bevor mit $a$ multipliziert wird!<br>
+            4. <strong>Punktprobe zur Sicherheit:</strong> Setze einen markanten Punkt vom Graphen in deine aufgestellte Formel ein – wenn das Ergebnis stimmt, ist deine Formel zu 100 % richtig!
+          </div>
+        </div>
+      </div>
+
+      <!-- HANDOUT CALLOUT BANNER -->
+      <div class="handout-banner">
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">Perfekte Prüfungsvorbereitung</div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin: 4px 0 6px 0;">Das große Handout &amp; Trainingspaket (6 Seiten)</h3>
+          <p style="font-size: 0.95rem; opacity: 0.92; line-height: 1.45; max-width: 650px;">
+            Enthält das komplette Kompaktwissen zu Kapitel I (Wurzeln) und Kapitel II (Parabeln), alle Kompetenzen von K1 bis K10 sowie über 20 originale Trainingsaufgaben mit Musterlösungen.
+          </p>
+        </div>
+        <a href="handout-wurzeln-parabeln.html" class="btn-handout-white">Zum Handout &amp; Training →</a>
+      </div>
+
+    </article>
+
+  </main>
+
+  <!-- ========================================================
+       JAVASCRIPT: LIVE-LABOR, SVG-UPDATE & AUFDECK-FUNKTION
+       ======================================================== -->
+  <script>
+    // Aktueller Zustand (Default: Handout-Muster 1 oder neutrale Normalstellung)
+    let currentD = 2.0;
+    let currentE = 1.0;
+    let currentA = 1.0;
+
+    // SVG-Koordinaten-Konstanten
+    // viewBox: 0 0 620 440
+    // Ursprung O(0|0) bei pxX = 310, pxY = 230
+    // 1 Einheit in x = 38 Pixel
+    // 1 Einheit in y = 30 Pixel
+    const ORIGIN_X = 310;
+    const ORIGIN_Y = 230;
+    const SCALE_X = 38;
+    const SCALE_Y = 30;
+
+    // Erzeugt einen SVG-Pfadstring für f(x) = a * (x - d)² + e
+    function calcParabolaPath(a, d, e) {
+      if (a === 0) {
+        // Sonderfall Gerade y = e
+        const yPx = ORIGIN_Y - e * SCALE_Y;
+        return `M 40 ${yPx} L 580 ${yPx}`;
+      }
+
+      const points = [];
+      // Bereich x: vom Scheitel d aus ca. ±5 Einheiten
+      for (let x = d - 5.5; x <= d + 5.501; x += 0.05) {
+        const y = a * Math.pow(x - d, 2) + e;
+        const pxX = ORIGIN_X + x * SCALE_X;
+        const pxY = ORIGIN_Y - y * SCALE_Y;
+
+        // Begrenzung auf sichtbaren SVG-Ausschnitt
+        if (pxY >= -20 && pxY <= 460 && pxX >= 20 && pxX <= 600) {
+          points.push({ x: pxX, y: pxY });
+        }
+      }
+
+      if (points.length === 0) return "";
+      let pathStr = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+      for (let i = 1; i < points.length; i++) {
+        pathStr += ` L ${points[i].x.toFixed(1)} ${points[i].y.toFixed(1)}`;
+      }
+      return pathStr;
+    }
+
+    // Setzt ein Preset (Schnellwahltasten)
+    function setPreset(dVal, eVal, aVal) {
+      document.getElementById('sliderD').value = dVal;
+      document.getElementById('sliderE').value = eVal;
+      document.getElementById('sliderA').value = aVal;
+      updateLab();
+    }
+
+    // Liest Reglerwerte und aktualisiert SVG und KPIs
+    function updateLab() {
+      currentD = parseFloat(document.getElementById('sliderD').value);
+      currentE = parseFloat(document.getElementById('sliderE').value);
+      currentA = parseFloat(document.getElementById('sliderA').value);
+
+      // 1. Slider-Labels aktualisieren
+      document.getElementById('lblCurrentD').textContent = `d = ${currentD > 0 ? '+' : ''}${currentD.toFixed(1)}`;
+      document.getElementById('lblCurrentE').textContent = `e = ${currentE > 0 ? '+' : ''}${currentE.toFixed(1)}`;
+      document.getElementById('lblCurrentA').textContent = `a = ${currentA > 0 ? '+' : ''}${currentA.toFixed(1)}`;
+
+      // 2. Gleichung als mathematischer String für KaTeX aufbauen
+      let eqStr = "f(x) = ";
+      if (currentA === 0) {
+        eqStr += `${currentE.toFixed(1).replace('.', ',')}`;
+      } else {
+        // Streckfaktor a
+        if (currentA === -1) eqStr += "-";
+        else if (currentA !== 1) eqStr += `${currentA.toFixed(1).replace('.', ',')}`;
+
+        // Klammer mit d
+        if (currentD === 0) {
+          eqStr += "x^2";
+        } else if (currentD > 0) {
+          eqStr += `(x - ${currentD.toFixed(1).replace('.0', '').replace('.', ',')})^2`;
+        } else {
+          eqStr += `(x + ${Math.abs(currentD).toFixed(1).replace('.0', '').replace('.', ',')})^2`;
+        }
+
+        // Verschiebung e
+        if (currentE > 0) {
+          eqStr += ` + ${currentE.toFixed(1).replace('.0', '').replace('.', ',')}`;
+        } else if (currentE < 0) {
+          eqStr += ` - ${Math.abs(currentE).toFixed(1).replace('.0', '').replace('.', ',')}`;
+        }
+      }
+      document.getElementById('kpiEquation').innerHTML = `$${eqStr}$`;
+
+      // Scheitelpunkt KPI
+      const dStr = currentD.toFixed(1).replace('.0', '').replace('.', ',');
+      const eStr = currentE.toFixed(1).replace('.0', '').replace('.', ',');
+      document.getElementById('kpiVertex').innerHTML = `$S(${dStr} \\mid ${eStr})$`;
+
+      // Verschiebung KPI
+      let shiftXText = "keine x-Verschiebung";
+      if (currentD > 0) shiftXText = `${currentD.toFixed(1).replace('.0', '').replace('.', ',')} nach rechts`;
+      else if (currentD < 0) shiftXText = `${Math.abs(currentD).toFixed(1).replace('.0', '').replace('.', ',')} nach links`;
+
+      let shiftYText = "keine y-Verschiebung";
+      if (currentE > 0) shiftYText = `${currentE.toFixed(1).replace('.0', '').replace('.', ',')} nach oben`;
+      else if (currentE < 0) shiftYText = `${Math.abs(currentE).toFixed(1).replace('.0', '').replace('.', ',')} nach unten`;
+
+      document.getElementById('kpiShift').textContent = `${shiftXText}, ${shiftYText}`;
+
+      // Form & Öffnung KPI
+      const absA = Math.abs(currentA);
+      let formText = "Normalparabel";
+      if (currentA === 0) formText = "Gerade (Steigung 0)";
+      else if (absA > 1) formText = `Gestreckt (schmaler, |a|=${absA.toFixed(1).replace('.', ',')})`;
+      else if (absA < 1) formText = `Gestaucht (breiter, |a|=${absA.toFixed(1).replace('.', ',')})`;
+
+      const dirText = currentA > 0 ? "nach oben geöffnet ↑" : (currentA < 0 ? "nach unten geöffnet ↓" : "");
+      document.getElementById('kpiForm').textContent = `${formText}`;
+      document.getElementById('kpiFormSub').textContent = `${dirText}`;
+
+      // 3. Kommentar-Banner
+      let comment = "";
+      if (currentA === 0) {
+        comment = `<strong>Sonderfall:</strong> Für $a = 0$ verschwindet der quadratische Teil. Es entsteht eine waagerechte Gerade auf der Höhe $y = ${eStr}$.`;
+      } else {
+        const signNote = currentD > 0 ? `Da die Parabel nach rechts verschoben ist, steht in der Klammer ein <strong>Minus</strong>: $(x - ${dStr})^2$.` : (currentD < 0 ? `Da die Parabel nach links verschoben ist, steht in der Klammer ein <strong>Plus</strong>: $(x + ${Math.abs(currentD).toFixed(1).replace('.0', '').replace('.', ',')})^2$.` : "Die Parabel ist nicht waagerecht verschoben ($d = 0$).";
+        comment = `<strong>Beobachtung:</strong> Scheitelpunkt liegt bei <strong>$S(${dStr} \\mid ${eStr})$</strong>. ${signNote} Der Streckfaktor $a = ${currentA > 0 ? '+' : ''}${currentA.toFixed(1).replace('.', ',')}$ bewirkt, dass die Parabel ${currentA > 0 ? 'nach oben' : 'nach unten (gespiegelt)'} geöffnet ist und ${absA > 1 ? 'gestreckt' : (absA < 1 ? 'gestaucht' : 'normal')} verläuft.`;
+      }
+      document.getElementById('paramCommentBox').innerHTML = comment;
+
+      // 4. SVG Dynamische Parabel aktualisieren
+      const dynPath = document.getElementById('dynParabolaPath');
+      if (dynPath) {
+        dynPath.setAttribute('d', calcParabolaPath(currentA, currentD, currentE));
+        dynPath.setAttribute('stroke', currentA < 0 ? '#b91c1c' : '#1e3a8a');
+      }
+
+      // Legend Bar & Label aktualisieren
+      const legBar = document.getElementById('legendDynBar');
+      if (legBar) legBar.style.background = currentA < 0 ? '#b91c1c' : '#1e3a8a';
+      const legTxt = document.getElementById('legendVertexText');
+      if (legTxt) legTxt.innerHTML = `Scheitelpunkt $S(${dStr} \\mid ${eStr})$`;
+
+      // 5. Scheitelpunkt S(d | e) Position im SVG
+      const vertexPxX = ORIGIN_X + currentD * SCALE_X;
+      const vertexPxY = ORIGIN_Y - currentE * SCALE_Y;
+
+      const vDot = document.getElementById('dynVertexDot');
+      if (vDot) {
+        vDot.setAttribute('cx', vertexPxX);
+        vDot.setAttribute('cy', vertexPxY);
+      }
+
+      const vBg = document.getElementById('dynVertexBg');
+      const vTxt = document.getElementById('dynVertexTxt');
+      if (vBg && vTxt) {
+        // Badge leicht nach rechts versetzen
+        vBg.setAttribute('x', vertexPxX + 10);
+        vBg.setAttribute('y', vertexPxY - 12);
+        vTxt.setAttribute('x', vertexPxX + 55);
+        vTxt.setAttribute('y', vertexPxY + 4);
+        vTxt.textContent = `S(${dStr} | ${eStr})`;
+      }
+
+      // 6. Verschiebungspfeile aktualisieren
+      const arrowX = document.getElementById('arrowShiftX');
+      if (arrowX) {
+        arrowX.setAttribute('x1', ORIGIN_X);
+        arrowX.setAttribute('y1', ORIGIN_Y);
+        arrowX.setAttribute('x2', vertexPxX);
+        arrowX.setAttribute('y2', ORIGIN_Y);
+        arrowX.style.display = currentD === 0 ? 'none' : 'block';
+      }
+
+      const arrowY = document.getElementById('arrowShiftY');
+      if (arrowY) {
+        arrowY.setAttribute('x1', vertexPxX);
+        arrowY.setAttribute('y1', ORIGIN_Y);
+        arrowY.setAttribute('x2', vertexPxX);
+        arrowY.setAttribute('y2', vertexPxY);
+        arrowY.style.display = currentE === 0 ? 'none' : 'block';
+      }
+
+      // 7. Der 1-Schritt-Trick (Ablesen von a)
+      const stepTrickGroup = document.getElementById('dynStepTrickGroup');
+      if (currentA === 0) {
+        if (stepTrickGroup) stepTrickGroup.style.display = 'none';
+      } else {
+        if (stepTrickGroup) stepTrickGroup.style.display = 'block';
+
+        const stepX = vertexPxX + 1 * SCALE_X; // 1 Schritt nach rechts
+        const stepY = vertexPxY - currentA * SCALE_Y; // a Einheiten in y
+
+        const lineH = document.getElementById('stepLineH');
+        if (lineH) {
+          lineH.setAttribute('x1', vertexPxX);
+          lineH.setAttribute('y1', vertexPxY);
+          lineH.setAttribute('x2', stepX);
+          lineH.setAttribute('y2', vertexPxY);
+        }
+
+        const lineV = document.getElementById('stepLineV');
+        if (lineV) {
+          lineV.setAttribute('x1', stepX);
+          lineV.setAttribute('y1', vertexPxY);
+          lineV.setAttribute('x2', stepX);
+          lineV.setAttribute('y2', stepY);
+          lineV.setAttribute('stroke', currentA < 0 ? '#b91c1c' : '#2563eb');
+        }
+
+        const pt = document.getElementById('stepPoint');
+        if (pt) {
+          pt.setAttribute('cx', stepX);
+          pt.setAttribute('cy', stepY);
+        }
+
+        const sBg = document.getElementById('stepLabelBg');
+        const sTxt = document.getElementById('stepLabelTxt');
+        if (sBg && sTxt) {
+          sBg.setAttribute('x', stepX + 8);
+          sBg.setAttribute('y', stepY - 10);
+          sTxt.setAttribute('x', stepX + 50.5);
+          sTxt.setAttribute('y', stepY + 4);
+          sTxt.textContent = `1 →, a = ${currentA > 0 ? '+' : ''}${currentA.toFixed(1).replace('.', ',')}`;
+        }
+      }
+
+      // KaTeX anstoßen
+      triggerKaTeX();
+    }
+
+    // Interaktive Klapp-Boxen für Aufgaben
+    function toggleSection(btn) {
+      const content = btn.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        btn.textContent = "Antwort & Erklärung aufdecken";
+        btn.classList.remove("active");
+      } else {
+        content.style.display = "block";
+        btn.textContent = "Antwort verbergen";
+        btn.classList.add("active");
+        triggerKaTeX();
+      }
+    }
+
+    // Initiale Ausführung beim Laden
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Feste Referenz-Parabel y = x² zeichnen
+      const refPath = document.getElementById('refParabolaPath');
+      if (refPath) {
+        refPath.setAttribute('d', calcParabolaPath(1.0, 0, 0));
+      }
+
+      // 2. Initial mit d = 2.0, e = 1.0, a = 1.0 starten
+      updateLab();
+    });
+  </script>
+
+</body>
+</html>
