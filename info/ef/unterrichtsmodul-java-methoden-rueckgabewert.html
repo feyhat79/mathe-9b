@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Methoden mit Rückgabewert (return) | Informatik EF</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <!-- Zentrales Web-Modul Stylesheet (Schulheft- & Tafel-Design) -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --border-soft: #cbd5e1;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --highlight-param: #0284c7;
+      --highlight-return: #059669;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 2rem auto 0 auto;
+      padding: 0 1.25rem 5rem 1.25rem;
+    }
+
+    .sheet-card h2 {
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 1rem;
+      padding-bottom: 0.55rem;
+      border-bottom: 2px solid #dbeafe;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.2rem 1.4rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin: 1.15rem 0;
+      border: 1px solid #334155;
+    }
+    .code-comment { color: #94a3b8; font-style: italic; }
+    .code-keyword { color: #f472b6; font-weight: 700; }
+    .code-type { color: #60a5fa; font-weight: 700; }
+    .code-method { color: #34d399; }
+    .code-string { color: #fde047; }
+    .code-num { color: #fb923c; font-weight: 700; }
+    .code-param { color: #38bdf8; font-weight: 700; }
+    .code-return { color: #4ade80; font-weight: 700; }
+    .code-error { color: #fca5a5; text-decoration: underline wavy #ef4444; }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', monospace;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.87em;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
+      white-space: nowrap;
+    }
+
+    /* Auftrags- & Diagnoseboxen (Allseitig geschlossen, kein border-left) */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .auftrag-box.error-box {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+    }
+    .auftrag-box.success-box {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+    }
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .auftrag-badge {
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+    .error-box .auftrag-badge {
+      background: #dc2626;
+    }
+    .success-box .auftrag-badge {
+      background: #059669;
+    }
+    .auftrag-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+    .error-box .auftrag-title {
+      color: #991b1b;
+    }
+    .success-box .auftrag-title {
+      color: #065f46;
+    }
+
+    /* Timeline / Regel-Schritte */
+    .ram-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 1.25rem 0;
+    }
+    .ram-step {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .ram-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .ram-type  { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .ram-stop  { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .ram-catch { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .ram-split { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+
+    .ram-content {
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+    .ram-title {
+      font-weight: 700;
+      color: var(--ink-black);
+      margin-bottom: 3px;
+    }
+
+    /* Vergleichstabelle */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .compare-table th {
+      background: var(--ink-blue);
+      color: #ffffff;
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid var(--ink-blue);
+      font-weight: 700;
+    }
+    .compare-table td {
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+      background: #ffffff;
+    }
+    .compare-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Live-Labor: Binomischer Datenfluss */
+    .lab-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 1rem 0 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .lab-flow-grid { grid-template-columns: 1fr; }
+    }
+    .lab-tile {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .lab-tile.tile-active {
+      border-color: #93c5fd;
+      background: #f8fbff;
+    }
+    .lab-tile.tile-muted {
+      opacity: 0.52;
+      background: #f1f5f9;
+      border-style: dashed;
+    }
+    .lab-tile-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .lab-tile-call {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 4px 8px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .lab-tile-return {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #047857;
+    }
+    .lab-eq-banner {
+      background: #ffffff;
+      border: 1.5px solid #93c5fd;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.96rem;
+      color: var(--ink-black);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .lab-result-pill {
+      background: #059669;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    .lab-check-banner {
+      background: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 0.95rem 1.25rem;
+      font-size: 0.95rem;
+      color: #065f46;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* TÜV Multiple Choice Interaktiv */
+    .tuev-card {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.15rem 0;
+    }
+    .tuev-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--ink-black);
+      margin-bottom: 0.85rem;
+    }
+    .tuev-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .tuev-btn {
+      font-family: inherit;
+      font-size: 0.93rem;
+      padding: 10px 14px;
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--ink-black);
+      transition: all 0.15s;
+    }
+    .tuev-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .tuev-btn.correct {
+      background: #dcfce7 !important;
+      border-color: #22c55e !important;
+      color: #166534 !important;
+      font-weight: 700;
+    }
+    .tuev-btn.wrong {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+      color: #991b1b !important;
+    }
+    .tuev-feedback {
+      margin-top: 10px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    /* Aufgaben-Karten */
+    .question-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      margin: 1.15rem 0;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .question-title {
+      font-weight: 700;
+      font-size: 1.03rem;
+      color: var(--ink-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .question-num {
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+    .exercise-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      white-space: nowrap;
+    }
+
+    @media print {
+      .presenter-bar { display: none !important; }
+      body { background: #ffffff; padding: 0; }
+      .container { margin: 0; max-width: 100%; padding: 0; }
+      .sheet-card, .sheet-header { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP PRESENTER BAR (Kapitel-Navigationsleiste)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht EF</a>
+      <span class="presenter-title">Informatik EF • Thema 2: Java &amp; BlueJ</span>
+      <span class="presenter-tag">Stunde 7 • Rückgabewerte (return)</span>
+    </div>
+    <div class="presenter-actions">
+      <a href="bluej-figuren-einstieg.html" class="presenter-tab-btn">1. Figuren &amp; OOP</a>
+      <a href="quelltext-editor-compiler.html" class="presenter-tab-btn">2. Quellcode &amp; Compiler</a>
+      <a href="zusammenspiel-objekte-klasse-bild.html" class="presenter-tab-btn">3. Klasse Bild</a>
+      <a href="unterrichtsmodul-java-grundlagen-variablen.html" class="presenter-tab-btn">4. Grundlagen &amp; Variablen</a>
+      <a href="unterrichtsmodul-java-rechnen-operatoren.html" class="presenter-tab-btn">5. Rechnen &amp; Selbstzuweisung</a>
+      <a href="unterrichtsmodul-java-methoden-parameter.html" class="presenter-tab-btn">6. Methoden &amp; Parameter</a>
+      <a href="unterrichtsmodul-java-methoden-rueckgabewert.html" class="presenter-tab-btn active">7. Rückgabewerte (return)</a>
+      <button class="presenter-tab-btn" onclick="window.print()">Drucken</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ========================================================
+         DECKBLATT-HEADER
+         ======================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik • Einführungsphase (EF)</span>
+        <span>Thema 2: Java &amp; BlueJ</span>
+        <span>Unterrichtsbaustein: Methodensignaturen (Teil 2)</span>
+      </div>
+      <h1>Methoden mit Rückgabewert (return)</h1>
+      <p class="sheet-intro">
+        In der letzten Stunde haben wir unsere Klasse <span class="code-pill">Rechner</span> mit Übergabeparametern flexibel gemacht und 
+        Methoden wie <span class="code-pill">quadrat(a)</span>, <span class="code-pill">doppelteEinerZahl(z)</span> oder 
+        <span class="code-pill">berechneBrutto(netto)</span> innerhalb von <span class="code-pill">verschiedenes(n)</span> und 
+        <span class="code-pill">kbDrucken(netto)</span> aufgerufen. Dabei sind wir auf eine entscheidende Grenze gestoßen: 
+        Eine <span class="code-pill">void</span>-Methode druckt ihr Ergebnis lediglich auf die Konsole, liefert aber keinen Wert zurück, mit dem wir weiterrechnen können.
+        Am Beispiel der <span class="highlighter">binomischen Formeln</span> lösen wir genau dieses Problem mit dem Schlüsselwort <span class="code-pill">return</span>.
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.25rem; margin-bottom: 0;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Zentrales Lernziel</span>
+          <span class="auftrag-title">Vom reinen Drucker zur echten Rechenfunktion</span>
+        </div>
+        <p style="margin: 0; font-size: 0.96rem; color: #1e293b;">
+          • Den Unterschied zwischen <strong>Ausgeben</strong> (<span class="code-pill">System.out.println</span>) und <strong>Zurückgeben</strong> (<span class="code-pill">return</span>) sicher erklären.<br>
+          • Methoden mit einem konkreten <strong>Rückgabetyp</strong> (<span class="code-pill">int</span>, <span class="code-pill">double</span>) statt <span class="code-pill">void</span> deklarieren.<br>
+          • Rückgabewerte als Bausteine in anderen Methoden auffangen, verrechnen und verschachteln (z. B. binomische Formeln und Kassenbon mit Rabatt).<br>
+          • Typische Compiler-Fehler rund um Rückgabetyp und <span class="code-pill">return</span> erkennen und beheben.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         PHASE 1: ANKNÜPFUNG & SACKGASSE VON VOID
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">1</span> Anknüpfung &amp; die Sackgasse von void (1. Binomische Formel)</h2>
+      <p>
+        Schauen wir zunächst auf das Ende unserer letzten Stunde zurück. In <span class="code-pill">verschiedenes(int n)</span> sollten wir 
+        das Quadrat und das Doppelte einer Zahl ausgeben und dafür die vorhandenen Methoden nutzen:
+      </p>
+
+      <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">doppelteEinerZahl</span>(<span class="code-type">int</span> <span class="code-param">z</span>)
+{
+    <span class="code-type">System</span>.out.println(<span class="code-num">2</span> * <span class="code-param">z</span>);
+}
+
+<span class="code-keyword">void</span> <span class="code-method">quadrat</span>(<span class="code-type">int</span> <span class="code-param">a</span>)
+{
+    <span class="code-type">System</span>.out.println(<span class="code-param">a</span> * <span class="code-param">a</span>);
+}
+
+<span class="code-keyword">void</span> <span class="code-method">verschiedenes</span>(<span class="code-type">int</span> <span class="code-param">n</span>)
+{
+    quadrat(<span class="code-param">n</span>);           <span class="code-comment">// Klappt: druckt n*n direkt auf die Konsole</span>
+    doppelteEinerZahl(<span class="code-param">n</span>); <span class="code-comment">// Klappt: druckt 2*n direkt darunter</span>
+}</pre>
+
+      <p>
+        Solange wir Zahlen nur <em>untereinander ausgeben</em> möchten, funktioniert dieser Baustein-Aufruf problemlos.
+        Jetzt gehen wir einen Schritt weiter und wollen aus genau diesen beiden Bausteinen die <strong>1. binomische Formel</strong> zusammensetzen:
+      </p>
+
+      <div class="formula-notebook-box">
+        <div class="formula-tag">1. Binomische Formel als Methoden-Baukasten</div>
+        <div class="formula-val">$$(a + b)^2 = a^2 + 2 \cdot a \cdot b + b^2$$</div>
+        <p style="margin: 0.4rem 0 0 0; font-size: 0.94rem; color: #475569;">
+          $a^2 \rightarrow$ <span class="code-pill">quadrat(a)</span> &nbsp;&bull;&nbsp;
+          $2 \cdot a \cdot b \rightarrow$ <span class="code-pill">doppelteEinerZahl(a * b)</span> &nbsp;&bull;&nbsp;
+          $b^2 \rightarrow$ <span class="code-pill">quadrat(b)</span>
+        </p>
+      </div>
+
+      <p>
+        Versuchen wir nun, diese drei Aufrufe in einer neuen Methode <span class="code-pill">ersteBinomische(int a, int b)</span> zu addieren:
+      </p>
+
+      <pre class="code-block"><span class="code-keyword">void</span> <span class="code-method">ersteBinomische</span>(<span class="code-type">int</span> <span class="code-param">a</span>, <span class="code-type">int</span> <span class="code-param">b</span>)
+{
+    <span class="code-type">int</span> ergebnis = <span class="code-error">quadrat(a) + doppelteEinerZahl(a * b) + quadrat(b)</span>; <span class="code-comment">// COMPILER-FEHLER!</span>
+    <span class="code-type">System</span>.out.println(<span class="code-string">"(a + b)^2 = "</span> + ergebnis);
+}</pre>
+
+      <div class="auftrag-box error-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Compiler-Stopp</span>
+          <span class="auftrag-title">Warum lehnt Java diesen Code sofort ab?</span>
+        </div>
+        <p style="margin: 0; font-size: 0.96rem; color: #111827;">
+          Der Java-Compiler meldet: <span class="code-pill">bad operand types for binary operator '+'</span> bzw. 
+          <span class="code-pill">'void' type not allowed here</span>.<br><br>
+          <strong>Der Grund:</strong> Das Schlüsselwort <span class="code-pill">void</span> bedeutet wörtlich <em>„Leere / Nichts“</em>. 
+          Die Methode <span class="code-pill">quadrat(a)</span> ist eine <strong>Einbahnstraße</strong>: Sie empfängt zwar die Zahl <span class="code-pill">a</span>, 
+          schreibt das Quadrat aber nur als Text auf das Konsolenfenster und endet an der schließenden Klammer <span class="code-pill">}</span> mit leeren Händen. 
+          Genau das Gleiche passiert bei <span class="code-pill">kbDrucken</span> mit <span class="code-pill">berechneBrutto(netto)</span>: 
+          <span class="code-pill">kbDrucken</span> kann mit dem Bruttopreis nicht weiterrechnen (z. B. Rabatt abziehen), weil <span class="code-pill">berechneBrutto</span> ihn nur druckt statt zurückzuliefern.
+          Und „Nichts + Nichts + Nichts“ lässt sich nicht addieren!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 2: DIE LÖSUNG – RÜCKGABETYP & RETURN
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">2</span> Die Lösung: Rückgabetyp statt void &amp; das Schlüsselwort return</h2>
+      <p>
+        Damit eine Methode wie eine mathematische Funktion arbeitet und ein Ergebnis an ihren Aufrufer zurückliefert, 
+        verwandeln wir die Einbahnstraße in einen <strong>Kreislauf mit Ausgang</strong>:
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">Bisher: void (Nur Konsolen-Befehl)</div>
+          <p class="col-description">
+            <span class="code-pill">void quadrat(int a)</span><br>
+            Nimmt den Parameter <span class="code-pill">a</span> durch den Eingangstrichter auf, druckt den Text ins Terminal und liefert <strong>nichts</strong> zurück.
+          </p>
+          <ul class="rule-list">
+            <li>Kopf beginnt mit <span class="code-pill">void</span>.</li>
+            <li>Ergebnis landet als Text in der Konsole.</li>
+            <li>Kann <strong>nicht</strong> in Rechnungen (<span class="code-pill">+</span>, <span class="code-pill">*</span>) genutzt werden.</li>
+          </ul>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">Neu: Rückgabetyp + return (Rechenfunktion)</div>
+          <p class="col-description">
+            <span class="code-pill">int quadrat(int a)</span><br>
+            Ersetzt <span class="code-pill">void</span> durch den Ergebnistyp (<span class="code-pill">int</span>) und sendet das Resultat per <span class="code-pill">return</span> an exakt die Aufrufstelle zurück.
+          </p>
+          <ul class="rule-list">
+            <li>Kopf nennt den Typ des Ergebnisses (<span class="code-pill">int</span>, <span class="code-pill">double</span>, ...).</li>
+            <li><span class="code-pill">return</span> gibt den Wert an den Aufrufer zurück.</li>
+            <li>Kann direkt gespeichert, addiert oder verschachtelt werden.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Bauen wir nun unsere drei Methoden sauber um. Die Rechenmethoden verzichten bewusst auf <span class="code-pill">System.out.println</span> 
+        und liefern nur noch ihren Zahlenwert per <span class="code-pill">return</span> zurück:
+      </p>
+
+      <pre class="code-block"><span class="code-comment">// Baustein 1: Liefert das Quadrat als int zurück</span>
+<span class="code-type">int</span> <span class="code-method">quadrat</span>(<span class="code-type">int</span> <span class="code-param">a</span>)
+{
+    <span class="code-keyword">return</span> <span class="code-param">a</span> * <span class="code-param">a</span>;
+}
+
+<span class="code-comment">// Baustein 2: Liefert das Doppelte als int zurück</span>
+<span class="code-type">int</span> <span class="code-method">doppelteEinerZahl</span>(<span class="code-type">int</span> <span class="code-param">z</span>)
+{
+    <span class="code-keyword">return</span> <span class="code-num">2</span> * <span class="code-param">z</span>;
+}
+
+<span class="code-comment">// Zusammensetzen (Ausführliche Variante mit Zwischenvariablen)</span>
+<span class="code-type">int</span> <span class="code-method">ersteBinomische</span>(<span class="code-type">int</span> <span class="code-param">a</span>, <span class="code-type">int</span> <span class="code-param">b</span>)
+{
+    <span class="code-type">int</span> teil1 = quadrat(<span class="code-param">a</span>);                   <span class="code-comment">// fängt a^2 auf</span>
+    <span class="code-type">int</span> teil2 = doppelteEinerZahl(<span class="code-param">a</span> * <span class="code-param">b</span>);     <span class="code-comment">// fängt 2*a*b auf</span>
+    <span class="code-type">int</span> teil3 = quadrat(<span class="code-param">b</span>);                   <span class="code-comment">// fängt b^2 auf</span>
+    <span class="code-keyword">return</span> teil1 + teil2 + teil3;
+}</pre>
+
+      <p>
+        Sobald die Zwischenschritte klar sind, lässt sich <span class="code-pill">ersteBinomische</span> sogar als eleganter Einzeiler schreiben, 
+        weil jeder Methodenaufruf direkt an seiner Stelle durch seinen Rückgabewert ersetzt wird:
+      </p>
+
+      <pre class="code-block"><span class="code-type">int</span> <span class="code-method">ersteBinomische</span>(<span class="code-type">int</span> <span class="code-param">a</span>, <span class="code-type">int</span> <span class="code-param">b</span>)
+{
+    <span class="code-keyword">return</span> quadrat(<span class="code-param">a</span>) + doppelteEinerZahl(<span class="code-param">a</span> * <span class="code-param">b</span>) + quadrat(<span class="code-param">b</span>);
+}</pre>
+
+      <div class="auftrag-box success-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">BlueJ-Aha-Effekt</span>
+          <span class="auftrag-title">Das Methodenergebnis-Fenster in BlueJ</span>
+        </div>
+        <p style="margin: 0; font-size: 0.96rem; color: #111827;">
+          Rufst du auf einem <span class="code-pill">Rechner</span>-Objekt nun per Rechtsklick <span class="code-pill">ersteBinomische(3, 4)</span> auf, 
+          öffnet sich <strong>nicht mehr das Konsolenfenster</strong>, sondern ein kleines Dialogfeld mit der Anzeige 
+          <span class="code-pill">int: 49</span> (<em>Methodenergebnis</em>).<br>
+          Und die Gegenprobe stimmt auf Anhieb: <span class="code-pill">quadrat(3 + 4)</span> wertet erst <span class="code-pill">3 + 4 = 7</span> aus, 
+          übergibt <span class="code-pill">7</span> an <span class="code-pill">quadrat</span> und liefert ebenfalls <span class="code-pill">49</span> zurück!
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 3: INTERAKTIVES LIVE-LABOR
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">3</span> Interaktives Labor: Datenfluss der binomischen Formeln</h2>
+      <p>
+        Wähle eine der drei binomischen Formeln und verändere die Argumente <span class="code-pill">a</span> und <span class="code-pill">b</span>. 
+        Beobachte genau, welche Teilwerte die Hilfsmethoden per <span class="code-pill">return</span> zurückliefern und wie die Hauptmethode sie zusammensetzt.
+      </p>
+
+      <div class="lab-box">
+        <div style="margin-bottom: 1rem;">
+          <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px;">
+            1. Binomische Formel wählen
+          </div>
+          <div class="button-selector-row" style="margin-top: 0;">
+            <button class="btn-day active" id="mode-btn-1" onclick="setBinomMode(1)">1. Binomische: (a + b)<sup>2</sup></button>
+            <button class="btn-day" id="mode-btn-2" onclick="setBinomMode(2)">2. Binomische: (a - b)<sup>2</sup></button>
+            <button class="btn-day" id="mode-btn-3" onclick="setBinomMode(3)">3. Binomische: (a + b)(a - b)</button>
+          </div>
+        </div>
+
+        <div class="note-columns" style="margin: 1rem 0;">
+          <div class="slider-shelf" style="margin-bottom: 0;">
+            <div class="slider-row">
+              <span class="slider-label">Argument a</span>
+              <span class="day-badge" id="badge-a">a = 3</span>
+            </div>
+            <input type="range" min="1" max="10" value="3" class="range-input" id="slider-a" oninput="updateBinomLab()">
+          </div>
+
+          <div class="slider-shelf" style="margin-bottom: 0;">
+            <div class="slider-row">
+              <span class="slider-label">Argument b</span>
+              <span class="day-badge" id="badge-b">b = 4</span>
+            </div>
+            <input type="range" min="1" max="10" value="4" class="range-input" id="slider-b" oninput="updateBinomLab()">
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; font-size: 0.92rem; font-weight: 700; color: var(--ink-blue);">
+          Aktiver Aufruf: <span class="code-pill" id="lab-active-call">ersteBinomische(3, 4)</span>
+        </div>
+
+        <!-- Die drei Methoden-Bausteine -->
+        <div class="lab-flow-grid">
+          <div class="lab-tile tile-active" id="tile-1">
+            <div class="lab-tile-label">Baustein 1 (a<sup>2</sup>)</div>
+            <div class="lab-tile-call" id="call-t1">quadrat(3)</div>
+            <div class="lab-tile-return" id="ret-t1">return 9</div>
+          </div>
+
+          <div class="lab-tile tile-active" id="tile-2">
+            <div class="lab-tile-label" id="label-t2">Baustein 2 (2 &middot; a &middot; b)</div>
+            <div class="lab-tile-call" id="call-t2">doppelteEinerZahl(12)</div>
+            <div class="lab-tile-return" id="ret-t2">return 24</div>
+          </div>
+
+          <div class="lab-tile tile-active" id="tile-3">
+            <div class="lab-tile-label">Baustein 3 (b<sup>2</sup>)</div>
+            <div class="lab-tile-call" id="call-t3">quadrat(4)</div>
+            <div class="lab-tile-return" id="ret-t3">return 16</div>
+          </div>
+        </div>
+
+        <!-- Zusammensetzung -->
+        <div class="lab-eq-banner">
+          <div id="lab-compose-text">return 9 + 24 + 16</div>
+          <div class="lab-result-pill" id="lab-final-result">Rückgabewert: 49</div>
+        </div>
+
+        <!-- Gegenprobe -->
+        <div class="lab-check-banner">
+          <div>
+            <strong>Mathematische Gegenprobe:</strong>
+            <span id="lab-counter-expr">(3 + 4)<sup>2</sup> = 7<sup>2</sup> = 49</span>
+          </div>
+          <span style="font-weight: 700;" id="lab-counter-status">Exakte Übereinstimmung</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 4: METHODENTYPEN & GOLDENE REGELN
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">4</span> Die 4 Methodentypen &amp; goldene Regeln für return</h2>
+      <p>
+        Mit dem Rückgabewert vervollständigen wir das Gesamtbild aller vier Grundtypen von Methoden in Java:
+      </p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width: 14%;">Typ</th>
+            <th style="width: 24%;">Eigenschaften</th>
+            <th style="width: 34%;">Beispiel-Signatur</th>
+            <th>Verwendungszweck</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Typ 1</strong></td>
+            <td>ohne Parameter,<br>ohne Rückgabe (<span class="code-pill">void</span>)</td>
+            <td><span class="code-pill">void begruessung()</span></td>
+            <td>Fester Ablauf / starre Ausgabe ohne Eingabedaten.</td>
+          </tr>
+          <tr>
+            <td><strong>Typ 2</strong></td>
+            <td>mit Parameter(n),<br>ohne Rückgabe (<span class="code-pill">void</span>)</td>
+            <td><span class="code-pill">void kbDrucken(int netto)</span></td>
+            <td>Führt eine Aktion mit Eingaben aus (z. B. Beleg drucken, Figur bewegen).</td>
+          </tr>
+          <tr>
+            <td><strong>Typ 3</strong></td>
+            <td>ohne Parameter,<br>mit Rückgabe</td>
+            <td><span class="code-pill">double gibMwStSatz()</span></td>
+            <td>Liefert einen festen Wert oder später gespeicherte Objekteigenschaften (<em>Getter</em>).</td>
+          </tr>
+          <tr>
+            <td><strong>Typ 4</strong></td>
+            <td>mit Parameter(n),<br>mit Rückgabe</td>
+            <td><span class="code-pill">int ersteBinomische(int a, int b)</span></td>
+            <td>Klassische Rechenfunktion: verarbeitet Eingaben und liefert ein Ergebnis weiter.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="ram-timeline">
+        <div class="ram-step">
+          <span class="ram-badge ram-type">Regel 1</span>
+          <div class="ram-content">
+            <div class="ram-title">Typ-Versprechen im Methodenkopf einhalten</div>
+            Steht im Methodenkopf <span class="code-pill">int</span>, muss hinter <span class="code-pill">return</span> ein ganzzahliger Wert stehen. 
+            Steht dort <span class="code-pill">double</span>, wird eine Kommazahl erwartet (ein <span class="code-pill">int</span> wird automatisch zu <span class="code-pill">double</span> erweitert, 
+            umgekehrt verbietet Java den Datenverlust von <span class="code-pill">double</span> nach <span class="code-pill">int</span>).
+          </div>
+        </div>
+
+        <div class="ram-step">
+          <span class="ram-badge ram-stop">Regel 2</span>
+          <div class="ram-content">
+            <div class="ram-title">return beendet die Methode sofort</div>
+            Sobald Java eine <span class="code-pill">return</span>-Anweisung ausführt, wird der Wert nach draußen gereicht und die Methode 
+            augenblicklich verlassen. Alle lokalen Variablen sterben dabei im Arbeitsspeicher – nur der Rückgabewert bleibt erhalten.
+          </div>
+        </div>
+
+        <div class="ram-step">
+          <span class="ram-badge ram-catch">Regel 3</span>
+          <div class="ram-content">
+            <div class="ram-title">Rückgabewert auffangen, sonst verpufft er</div>
+            Ein nackter Aufruf wie <span class="code-pill">quadrat(5);</span> berechnet zwar <span class="code-pill">25</span>, wirft das Ergebnis aber ungenutzt weg. 
+            Sinnvoll sind drei Wege: in einer Variable speichern (<span class="code-pill">int q = quadrat(5);</span>), 
+            direkt weiterrechnen (<span class="code-pill">quadrat(5) + 10</span>) oder direkt übergeben (<span class="code-pill">System.out.println(quadrat(5));</span>).
+          </div>
+        </div>
+
+        <div class="ram-step">
+          <span class="ram-badge ram-split">Regel 4</span>
+          <div class="ram-content">
+            <div class="ram-title">Rechnen und Ausgeben sauber trennen</div>
+            Gute Software trennt Berechnung (<span class="code-pill">return</span>) und Darstellung (<span class="code-pill">System.out.println</span>). 
+            So kann <span class="code-pill">berechneBrutto(netto)</span> sowohl von <span class="code-pill">kbDrucken</span> als auch von einer späteren Rabatt-Methode wiederverwendet werden.
+          </div>
+        </div>
+      </div>
+
+      <div class="auftrag-box error-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Typische Fehlerquellen</span>
+          <span class="auftrag-title">Drei klassische Compiler-Fehler beim Einstieg in return</span>
+        </div>
+        <p style="margin: 0; font-size: 0.95rem; color: #111827;">
+          <strong>1. Rückgabe in einer void-Methode:</strong> Wer <span class="code-pill">void</span> schreibt, hat „keine Rückgabe“ versprochen. 
+          Ein <span class="code-pill">return a * a;</span> erzeugt den Fehler <span class="code-pill">incompatible types: unexpected return value</span>.<br><br>
+          <strong>2. Unerreichbarer Code nach return:</strong> Schreibt man unter <span class="code-pill">return ergebnis;</span> noch ein <span class="code-pill">System.out.println(...);</span>, 
+          bricht der Compiler mit <span class="code-pill">unreachable statement</span> ab – diese Zeile wird niemals erreicht.<br><br>
+          <strong>3. Rückgabe vergessen:</strong> Hat die Methode einen Rückgabetyp wie <span class="code-pill">int</span>, aber es fehlt das <span class="code-pill">return</span>, 
+          meldet Java <span class="code-pill">missing return statement</span>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 5: TÜV VERSTÄNDNIS-CHECK
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">5</span> TÜV: Sofort-Verständnis-Check</h2>
+      <p>Prüfe dein Verständnis an vier typischen Fragestellungen aus dem Unterricht:</p>
+
+      <!-- TÜV 1 -->
+      <div class="tuev-card" id="tuev-1">
+        <div class="tuev-title">1. Warum funktioniert <span class="code-pill">int x = quadrat(4);</span> nicht, wenn <span class="code-pill">quadrat</span> als <span class="code-pill">void</span> mit <span class="code-pill">System.out.println</span> programmiert ist?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 1, false, 'Variablennamen wie x dürfen selbstverständlich mit dem Ergebnis einer int-Methode belegt werden.')">A) Weil eine int-Variable niemals mit einer Methode belegt werden darf.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 2, true, 'Genau! void liefert keinen Wert zurück, sondern druckt nur Text auf die Konsole. Man kann x kein Nichts zuweisen.')">B) Weil eine void-Methode nichts zurückgibt, was man in x speichern könnte.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-1', 3, false, '4 ist ein gültiges int-Argument. Das Problem liegt auf der linken/Ausgangsseite der Methode.')">C) Weil die Zahl 4 in Anführungszeichen stehen müsste.</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-1-fb"></div>
+      </div>
+
+      <!-- TÜV 2 -->
+      <div class="tuev-card" id="tuev-2">
+        <div class="tuev-title">2. Beide Methoden nutzen nun <span class="code-pill">int</span> und <span class="code-pill">return</span>. Welchen Wert liefert <span class="code-pill">doppelteEinerZahl(quadrat(3))</span> zurück?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 1, false, 'Achtung auf die Reihenfolge: Innen steht quadrat(3), erst danach wird verdoppelt.')">A) 36 (erst verdoppeln, dann quadrieren)</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 2, true, 'Richtig! Java arbeitet von innen nach außen: quadrat(3) liefert 9, und doppelteEinerZahl(9) liefert 18.')">B) 18 (erst quadrat(3) = 9, dann doppelteEinerZahl(9) = 18)</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-2', 3, false, 'Eine Methode lässt sich problemlos als Argument einer anderen aufrufen, wenn der Rückgabetyp passt.')">C) Compiler-Fehler, weil man Methoden nicht ineinander schreiben darf.</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-2-fb"></div>
+      </div>
+
+      <!-- TÜV 3 -->
+      <div class="tuev-card" id="tuev-3">
+        <div class="tuev-title">3. Du möchtest <span class="code-pill">berechneBrutto</span> umbauen, damit der Bruttopreis (<span class="code-pill">netto * 1.19</span>) zurückgegeben wird. Wie muss der Methodenkopf lauten?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 1, false, 'Mit void kann die Methode keinen Bruttopreis per return zurückgeben.')">A) void berechneBrutto(double netto)</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 2, false, 'netto * 1.19 ergibt eine Kommazahl (double). Ein int-Rückgabetyp lehnt double-Werte ab.')">B) int berechneBrutto(double netto)</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-3', 3, true, 'Exakt! Der Eingabeparameter und das Multiplikationsergebnis mit 1.19 sind vom Typ double.')">C) double berechneBrutto(double netto)</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-3-fb"></div>
+      </div>
+
+      <!-- TÜV 4 -->
+      <div class="tuev-card" id="tuev-4">
+        <div class="tuev-title">4. Was passiert, wenn in einer Methode nach der Zeile <span class="code-pill">return a * a;</span> noch eine weitere Zeile <span class="code-pill">System.out.println(a);</span> steht?</div>
+        <div class="tuev-options">
+          <button class="tuev-btn" onclick="checkTuev('tuev-4', 1, true, 'Richtig! return beendet die Methode sofort. Alles danach ist für Java unerreichbar (unreachable statement).')">A) Compiler-Fehler: Die Zeile nach return ist unerreichbar.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-4', 2, false, 'Java kompiliert Methoden nicht mit totem Code nach einem unbedingten return.')">B) Die Methode gibt zuerst a*a zurück und druckt danach trotzdem noch a aus.</button>
+          <button class="tuev-btn" onclick="checkTuev('tuev-4', 3, false, 'Die Zahl a wird durch return nicht verändert, aber die Zeile ist dennoch unerreichbar.')">C) Es wird 0 auf der Konsole ausgegeben.</button>
+        </div>
+        <div class="tuev-feedback" id="tuev-4-fb"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 6: ÜBUNGSAUFGABEN (SCHÜLERVERSION OHNE LÖSUNGEN)
+         ======================================================== -->
+    <section class="sheet-card">
+      <h2><span class="section-num">6</span> Übungsaufgaben für den Unterricht</h2>
+      <p style="color: #475569; font-size: 0.95rem; margin-top: -0.25rem; margin-bottom: 1.25rem;">
+        Bearbeite die folgenden Aufgaben eigenständig in deiner Klasse <span class="code-pill">Rechner.java</span> in BlueJ. 
+        Die gemeinsame Besprechung und Auswertung erfolgt anschließend im Kurs.
+      </p>
+
+      <!-- Aufgabe 1 -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 1</span>
+            Bausteine umbauen &amp; 1. binomische Formel testen
+          </div>
+          <span class="exercise-badge">Eigenständige Übung</span>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.96rem; color: #1e293b;">
+          a) Ändere die bestehenden Methoden <span class="code-pill">quadrat(int a)</span> und <span class="code-pill">doppelteEinerZahl(int z)</span> 
+          in deiner Klasse <span class="code-pill">Rechner</span> so um, dass sie den Rückgabetyp <span class="code-pill">int</span> besitzen und das Ergebnis 
+          mit <span class="code-pill">return</span> zurückgeben (ohne <span class="code-pill">System.out.println</span>).<br>
+          b) Implementiere <span class="code-pill">int ersteBinomische(int a, int b)</span> für $(a + b)^2 = a^2 + 2ab + b^2$ mithilfe der umgebauten Bausteine.<br>
+          c) Passe auch <span class="code-pill">verschiedenes(int n)</span> so an, dass Quadrat, Doppeltes und deren Summe $n^2 + 2n$ sauber auf der Konsole ausgegeben werden. 
+          Teste in BlueJ mit <span class="code-pill">ersteBinomische(3, 4)</span> und mache die Gegenprobe mit <span class="code-pill">quadrat(3 + 4)</span>.
+        </p>
+      </div>
+
+      <!-- Aufgabe 2 -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 2</span>
+            2. und 3. binomische Formel als Baukasten
+          </div>
+          <span class="exercise-badge">Eigenständige Übung</span>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.96rem; color: #1e293b;">
+          Erweitere die Klasse <span class="code-pill">Rechner</span> um zwei weitere Methoden mit Rückgabewert, die <strong>ausschließlich</strong> über deine Bausteine 
+          <span class="code-pill">quadrat(...)</span> und <span class="code-pill">doppelteEinerZahl(...)</span> rechnen:<br>
+          • <span class="code-pill">int zweiteBinomische(int a, int b)</span> für $(a - b)^2 = a^2 - 2ab + b^2$<br>
+          • <span class="code-pill">int dritteBinomische(int a, int b)</span> für $(a + b)(a - b) = a^2 - b^2$<br>
+          Überprüfe beide Methoden in BlueJ mit <span class="code-pill">a = 5</span> und <span class="code-pill">b = 2</span> 
+          (Erwartete Rückgaben: <span class="code-pill">9</span> und <span class="code-pill">21</span>).
+        </p>
+      </div>
+
+      <!-- Aufgabe 3 -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 3</span>
+            Transfer zum Kassenbon: Brutto &amp; Rabatt kombinieren
+          </div>
+          <span class="exercise-badge">Eigenständige Übung</span>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.96rem; color: #1e293b;">
+          a) Baue deine Methode <span class="code-pill">berechneBrutto(double netto)</span> so um, dass sie den Bruttopreis (<span class="code-pill">netto * 1.19</span>) 
+          als <span class="code-pill">double</span> per <span class="code-pill">return</span> zurückgibt (und korrigiere bei Bedarf die Schreibweise mit doppeltem <em>t</em>).<br>
+          b) Schreibe eine neue Methode <span class="code-pill">double berechneRabattPreis(double preis, double rabattProzent)</span>, die den reduzierten Preis zurückgibt 
+          (Formel: $\text{preis} \cdot \left(1 - \frac{\text{rabattProzent}}{100.0}\right)$).<br>
+          c) Schreibe eine reine Ausgabemethode <span class="code-pill">void kbDruckenMitRabatt(double netto, double rabattProzent)</span>, 
+          die beide Rechenmethoden aufruft, zuerst Brutto ohne Rabatt berechnet und anschließend den Endpreis nach Rabattabzug ordentlich auf der Konsole ausgibt.
+        </p>
+      </div>
+
+      <!-- Aufgabe 4 -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 4</span>
+            Verschachtelung im Kopf &amp; Fehlersuche im Quelltext
+          </div>
+          <span class="exercise-badge">Eigenständige Übung</span>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.96rem; color: #1e293b;">
+          <strong>Teil a)</strong> Bestimme zunächst ohne BlueJ die Rückgabewerte dieser verschachtelten Aufrufe (von innen nach außen):<br>
+          1. <span class="code-pill">doppelteEinerZahl(quadrat(4))</span><br>
+          2. <span class="code-pill">quadrat(doppelteEinerZahl(4))</span><br>
+          3. <span class="code-pill">dritteBinomische(quadrat(2), 3)</span><br><br>
+          <strong>Teil b)</strong> Im folgenden Quelltext stecken genau <strong>drei Compiler-Fehler</strong>. Finde sie und begründe jeden Fehler im Heft:
+        </p>
+        <pre class="code-block"><span class="code-keyword">public class</span> <span class="code-type">FehlerSuche</span>
+{
+    <span class="code-keyword">void</span> <span class="code-method">rechne</span>(<span class="code-type">int</span> <span class="code-param">x</span>)
+    {
+        <span class="code-keyword">return</span> <span class="code-param">x</span> + <span class="code-num">5</span>;              <span class="code-comment">// Zeile A</span>
+    }
+
+    <span class="code-type">int</span> <span class="code-method">halbiere</span>(<span class="code-type">int</span> <span class="code-param">x</span>)
+    {
+        <span class="code-keyword">return</span> <span class="code-param">x</span> / <span class="code-num">2.0</span>;            <span class="code-comment">// Zeile B</span>
+    }
+
+    <span class="code-type">int</span> <span class="code-method">verdopple</span>(<span class="code-type">int</span> <span class="code-param">x</span>)
+    {
+        <span class="code-keyword">return</span> <span class="code-num">2</span> * <span class="code-param">x</span>;
+        <span class="code-type">System</span>.out.println(<span class="code-param">x</span>);     <span class="code-comment">// Zeile C</span>
+    }
+}</pre>
+      </div>
+
+      <!-- Aufgabe 5 -->
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title">
+            <span class="question-num">Aufgabe 5 (Bonus)</span>
+            Der Mathe-Fehler-Detektor: Warum gilt $(a+b)^2 \neq a^2 + b^2$?
+          </div>
+          <span class="exercise-badge">Bonusaufgabe</span>
+        </div>
+        <p style="margin: 0.75rem 0 0 0; font-size: 0.96rem; color: #1e293b;">
+          Einer der häufigsten Rechenfehler lautet: „$(a + b)^2$ ist doch einfach $a^2 + b^2$!“<br>
+          Schreibe eine Methode <span class="code-pill">int summeQuadrate(int a, int b)</span>, die mithilfe von <span class="code-pill">quadrat(...)</span> die falsche Vereinfachung $a^2 + b^2$ zurückgibt. 
+          Schreibe anschließend <span class="code-pill">void vergleicheBinom(int a, int b)</span>, die die Rückgabewerte von <span class="code-pill">ersteBinomische(a, b)</span> 
+          und <span class="code-pill">summeQuadrate(a, b)</span> auffängt, die Differenz (den fehlenden Mischterm $2ab$) berechnet und alles übersichtlich auf der Konsole gegenüberstellt.
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 7: MERKSATZ-BOX (GEMINI.md Standard)
+         ======================================================== -->
+    <section>
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <h3 class="merke-title" style="margin-top: 0;">1. Methoden mit Rückgabewert (return)</h3>
+          <p style="margin-bottom: 1rem;">
+            • Soll eine Methode ein Ergebnis an den Aufrufer zurückliefern, ersetzt man <span class="code-pill">void</span> im Methodenkopf durch den passenden <strong>Rückgabetyp</strong> (z. B. <span class="code-pill">int</span> oder <span class="code-pill">double</span>).<br>
+            • Mit <span class="code-pill">return wert;</span> wird das Ergebnis an die exakte Aufrufstelle zurückgegeben. Gleichzeitig wird die Methode sofort beendet.<br>
+            • Der Datentyp des zurückgegebenen Werts muss zum Rückgabetyp im Methodenkopf passen.
+          </p>
+
+          <h3 class="merke-title">2. Ausgeben vs. Zurückgeben</h3>
+          <p style="margin-bottom: 0;">
+            • <span class="code-pill">System.out.println(...)</span> schreibt nur Text für den Menschen auf die Konsole – das Programm kann damit nicht weiterrechnen.<br>
+            • <span class="code-pill">return ...</span> liefert einen echten Datenwert an das Programm zurück. Diesen kann man in einer Variable speichern (<span class="code-pill">int erg = quadrat(3);</span>), direkt in Termen addieren oder als Argument an die nächste Methode weiterreichen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========================================================
+       SCRIPTE
+       ======================================================== -->
+  <script>
+    let currentMode = 1;
+
+    function setBinomMode(mode) {
+      currentMode = mode;
+      [1, 2, 3].forEach(m => {
+        const btn = document.getElementById('mode-btn-' + m);
+        if (btn) btn.classList.toggle('active', m === mode);
+      });
+      updateBinomLab();
+    }
+
+    function updateBinomLab() {
+      const a = parseInt(document.getElementById('slider-a').value, 10);
+      const b = parseInt(document.getElementById('slider-b').value, 10);
+
+      document.getElementById('badge-a').textContent = 'a = ' + a;
+      document.getElementById('badge-b').textContent = 'b = ' + b;
+
+      const qa = a * a;
+      const ab = a * b;
+      const twoAb = 2 * ab;
+      const qb = b * b;
+
+      const tile2 = document.getElementById('tile-2');
+      const labelT2 = document.getElementById('label-t2');
+      const callT2 = document.getElementById('call-t2');
+      const retT2 = document.getElementById('ret-t2');
+
+      document.getElementById('call-t1').textContent = 'quadrat(' + a + ')';
+      document.getElementById('ret-t1').textContent = 'return ' + qa;
+      document.getElementById('call-t3').textContent = 'quadrat(' + b + ')';
+      document.getElementById('ret-t3').textContent = 'return ' + qb;
+
+      let activeCall = '';
+      let composeText = '';
+      let finalVal = 0;
+      let counterHtml = '';
+
+      if (currentMode === 1) {
+        activeCall = 'ersteBinomische(' + a + ', ' + b + ')';
+        tile2.classList.remove('tile-muted');
+        tile2.classList.add('tile-active');
+        labelT2.innerHTML = 'Baustein 2 (2 &middot; a &middot; b)';
+        callT2.textContent = 'doppelteEinerZahl(' + ab + ')';
+        retT2.textContent = 'return ' + twoAb;
+
+        finalVal = qa + twoAb + qb;
+        composeText = 'return ' + qa + ' + ' + twoAb + ' + ' + qb;
+        const sum = a + b;
+        counterHtml = '(' + a + ' + ' + b + ')<sup>2</sup> = ' + sum + '<sup>2</sup> = ' + (sum * sum);
+      } else if (currentMode === 2) {
+        activeCall = 'zweiteBinomische(' + a + ', ' + b + ')';
+        tile2.classList.remove('tile-muted');
+        tile2.classList.add('tile-active');
+        labelT2.innerHTML = 'Baustein 2 (2 &middot; a &middot; b)';
+        callT2.textContent = 'doppelteEinerZahl(' + ab + ')';
+        retT2.textContent = 'return ' + twoAb;
+
+        finalVal = qa - twoAb + qb;
+        composeText = 'return ' + qa + ' - ' + twoAb + ' + ' + qb;
+        const diff = a - b;
+        const diffDisplay = diff < 0 ? '(' + diff + ')' : String(diff);
+        counterHtml = '(' + a + ' - ' + b + ')<sup>2</sup> = ' + diffDisplay + '<sup>2</sup> = ' + (diff * diff);
+      } else {
+        activeCall = 'dritteBinomische(' + a + ', ' + b + ')';
+        tile2.classList.remove('tile-active');
+        tile2.classList.add('tile-muted');
+        labelT2.textContent = 'Baustein 2 (entfällt)';
+        callT2.textContent = 'nicht benötigt';
+        retT2.textContent = '—';
+
+        finalVal = qa - qb;
+        composeText = 'return ' + qa + ' - ' + qb;
+        const sum = a + b;
+        const diff = a - b;
+        const diffDisplay = diff < 0 ? '(' + diff + ')' : String(diff);
+        counterHtml = '(' + a + ' + ' + b + ') &middot; (' + a + ' - ' + b + ') = ' + sum + ' &middot; ' + diffDisplay + ' = ' + (sum * diff);
+      }
+
+      document.getElementById('lab-active-call').textContent = activeCall;
+      document.getElementById('lab-compose-text').textContent = composeText;
+      document.getElementById('lab-final-result').textContent = 'Rückgabewert: ' + finalVal;
+      document.getElementById('lab-counter-expr').innerHTML = counterHtml;
+    }
+
+    function checkTuev(cardId, optionNum, isCorrect, feedbackText) {
+      const card = document.getElementById(cardId);
+      const buttons = card.querySelectorAll('.tuev-btn');
+      const feedback = document.getElementById(cardId + '-fb');
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('correct', 'wrong');
+        if (index + 1 === optionNum) {
+          if (isCorrect) btn.classList.add('correct');
+          else btn.classList.add('wrong');
+        }
+      });
+
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = '#ecfdf5';
+        feedback.style.color = '#065f46';
+        feedback.style.border = '1.5px solid #a7f3d0';
+        feedback.innerHTML = '<strong>Richtig!</strong> ' + feedbackText;
+      } else {
+        feedback.style.background = '#fef2f2';
+        feedback.style.color = '#991b1b';
+        feedback.style.border = '1.5px solid #fecaca';
+        feedback.innerHTML = '<strong>Hinweis:</strong> ' + feedbackText;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateBinomLab);
+  </script>
+</body>
+</html>
