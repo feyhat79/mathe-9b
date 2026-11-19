@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AB 2 – Konstruktion von DEA &amp; Binärsystem | Informatik Q2</title>
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827;
+      line-height: 1.38;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       BILDSCHIRM-STEUERLEISTE (NICHT IM DRUCK)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.86rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-teacher-active {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    body.teacher-mode .badge-teacher-active {
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    /* ========================================================
+       EXAKTE DIN-A4-SEITEN (OHNE FUSSZEILEN)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 18px auto 36px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm 10mm 13mm;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    /* ========================================================
+       KOPFBEREICH & METADATEN
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .doc-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .doc-course {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .badge-sheet {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+    }
+
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #334155;
+      margin-top: 2px;
+    }
+
+    .meta-bar {
+      display: flex;
+      gap: 18px;
+      font-size: 8.5pt;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 4px 10px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-label {
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .meta-line {
+      display: inline-block;
+      border-bottom: 1px dotted #64748b;
+      min-width: 110px;
+      height: 12px;
+    }
+
+    /* ========================================================
+       AUFGABEN-KÄSTEN & TYPOGRAFIE
+       ======================================================== */
+    .task-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+    }
+
+    .task-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .task-points {
+      font-size: 8pt;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .task-desc {
+      font-size: 11pt;
+      color: #111827;
+      margin-bottom: 6px;
+      line-height: 1.38;
+    }
+
+    .subtask-list {
+      list-style: none;
+      margin-bottom: 6px;
+    }
+
+    .subtask-list li {
+      font-size: 10.5pt;
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    .subtask-label {
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-right: 4px;
+    }
+
+    .code-inline {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 0 4px;
+      border-radius: 3px;
+      font-size: 9.8pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* ========================================================
+       TIPP- & MERKE-BOX
+       ======================================================== */
+    .tip-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 5px 9px;
+      margin: 5px 0 7px 0;
+      font-size: 9.5pt;
+      color: #111827;
+    }
+
+    .tip-label {
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    /* ========================================================
+       ARBEITSBEREICHE FÜR SCHÜLER (ZEICHENFELD & LINIEN)
+       ======================================================== */
+    .draw-box {
+      border: 1px dashed #94a3b8;
+      border-radius: 5px;
+      background: #fcfdff;
+      background-image:
+        linear-gradient(to right, #eef2f7 1px, transparent 1px),
+        linear-gradient(to bottom, #eef2f7 1px, transparent 1px);
+      background-size: 5mm 5mm;
+      position: relative;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .draw-box-label {
+      position: absolute;
+      top: 3px;
+      left: 7px;
+      font-size: 8pt;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 0 4px;
+      border-radius: 2px;
+    }
+
+    .dotted-lines {
+      background-image: linear-gradient(to bottom, transparent 19px, #cbd5e1 20px);
+      background-size: 100% 20px;
+      line-height: 20px;
+      min-height: 40px;
+      margin-top: 2px;
+      margin-bottom: 4px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .grid-2-wide {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    /* ========================================================
+       TABELLEN (10pt)
+       ======================================================== */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin-top: 4px;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      font-size: 9.5pt;
+      border: 1px solid #cbd5e1;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 4px 6px;
+      vertical-align: middle;
+      font-size: 10pt;
+      text-align: center;
+      height: 22px;
+    }
+
+    .calc-table td.left {
+      text-align: left;
+    }
+
+    /* ========================================================
+       LEHRER-MUSTERLÖSUNG (LEHRER-ROT #dc2626)
+       ======================================================== */
+    .sol-block {
+      display: none;
+      color: #dc2626;
+      font-size: 10pt;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    .sol-inline {
+      display: none;
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .sol-diagram-wrap {
+      display: none;
+      border: 1.5px solid #fca5a5;
+      background: #fffafa;
+      border-radius: 5px;
+      padding: 4px 6px;
+      margin: 4px 0 6px 0;
+      text-align: center;
+    }
+
+    .sol-diagram-caption {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #b91c1c;
+      text-align: left;
+      margin-bottom: 2px;
+    }
+
+    body.teacher-mode .sol-block {
+      display: block;
+    }
+    body.teacher-mode .sol-inline {
+      display: inline;
+    }
+    body.teacher-mode .sol-diagram-wrap {
+      display: block;
+    }
+    body.teacher-mode .student-only {
+      display: none !important;
+    }
+
+    /* ========================================================
+       DRUCK-OPTIMIERUNG (EXAKT 2 SEITEN DIN A4)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: 274mm !important;
+        max-height: 277mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+
+      .page:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BILDSCHIRM-STEUERUNG -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="automaten.html" class="toolbar-btn-nav">← Zurück zu Automaten (DEA)</a>
+      <div class="toolbar-title">
+        <span>AB 2: Konstruktion Deterministischer Endlicher Automaten (DEA)</span>
+        <span class="badge-teacher-active">Musterlösung aktiv</span>
+      </div>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" onclick="toggleTeacherMode()">
+        <span id="btnTeacherText">Musterlösung einblenden</span>
+      </button>
+      <a href="AB02_DEA_Konstruktion_Binaersystem.pdf" target="_blank" class="btn-action btn-download-pdf">
+        <span>PDF öffnen</span>
+      </a>
+      <button class="btn-action btn-print" onclick="window.print()">
+        <span>Drucken</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ================================================================
+         SEITE 1: KOPF + AUFGABE 1 + AUFGABE 2
+         ================================================================ -->
+    <section class="page">
+
+      <header class="doc-header">
+        <div class="doc-header-top">
+          <span class="doc-course">Informatik Q2 • Theoretische Informatik (Automaten)</span>
+          <span class="badge-sheet">Arbeitsblatt 2 • Gestaffelte Übung</span>
+        </div>
+        <h1 class="doc-title">Konstruktion Deterministischer Endlicher Automaten (DEA)</h1>
+        <p class="doc-subtitle">Mustererkennung, Fehlerzustände und Arithmetik im Binärsystem — von der Basisaufgabe bis zum Abitur-Transfer.</p>
+        <div class="meta-bar">
+          <div class="meta-item"><span class="meta-label">Name:</span><span class="meta-line" style="min-width: 150px;"></span></div>
+          <div class="meta-item"><span class="meta-label">Kurs:</span><span class="meta-line" style="min-width: 65px;"></span></div>
+          <div class="meta-item"><span class="meta-label">Datum:</span><span class="meta-line" style="min-width: 85px;"></span></div>
+        </div>
+      </header>
+
+      <!-- AUFGABE 1 -->
+      <article class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">1</span>
+            <span>Wortende erkennen: Endet auf <span class="code-inline">ab</span></span>
+          </h2>
+          <span class="task-points">Niveau 1: Basis (3 Zustände)</span>
+        </div>
+
+        <p class="task-desc">
+          Entwickle einen DEA über dem Alphabet $\Sigma = \{a, b\}$, der genau alle Wörter akzeptiert, die auf die Zeichenfolge <span class="code-inline">ab</span> <strong>enden</strong> (z. B. <span class="code-inline">ab</span>, <span class="code-inline">aab</span>, <span class="code-inline">bbab</span>; <strong>nicht</strong> akzeptiert werden z. B. <span class="code-inline">aba</span>, <span class="code-inline">ba</span>, <span class="code-inline">a</span> oder das leere Wort $\varepsilon$).
+        </p>
+
+        <ul class="subtask-list">
+          <li><span class="subtask-label">a)</span> Zeichne das vollständige Zustandsdiagramm. Prüfe bei jedem Zustand, ob sowohl für $a$ als auch für $b$ ein Übergang existiert.</li>
+        </ul>
+
+        <!-- Schüler-Zeichenfeld 1 -->
+        <div class="draw-box student-only" style="height: 49mm;">
+          <span class="draw-box-label">Zustandsdiagramm zu Aufgabe 1</span>
+        </div>
+
+        <!-- Lehrer-Diagramm 1 -->
+        <div class="sol-diagram-wrap">
+          <div class="sol-diagram-caption">Musterlösung 1a) Zustandsdiagramm ($Q = \{q_0, q_1, q_2\}$, $F = \{q_2\}$):</div>
+          <svg viewBox="0 0 460 144" width="430" height="132" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+              </marker>
+            </defs>
+            <!-- Start -->
+            <line x1="10" y1="76" x2="47" y2="76" stroke="#dc2626" stroke-width="2" marker-end="url(#arr1)"/>
+            <text x="12" y="68" font-family="Calibri, sans-serif" font-size="10" font-weight="700" fill="#dc2626">Start</text>
+
+            <!-- q0 -->
+            <circle cx="74" cy="76" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+            <text x="74" y="80" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">0</tspan></text>
+
+            <!-- q1 -->
+            <circle cx="220" cy="76" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+            <text x="220" y="80" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">1</tspan></text>
+
+            <!-- q2 (Endzustand) -->
+            <circle cx="366" cy="76" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+            <circle cx="366" cy="76" r="16" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="366" y="80" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">2</tspan></text>
+
+            <!-- q0 Schleife b -->
+            <path d="M 64 56 C 54 20, 94 20, 84 56" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="74" y="21" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">b</text>
+
+            <!-- q0 -> q1 (a) -->
+            <path d="M 95 70 Q 147 52 199 70" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="147" y="54" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">a</text>
+
+            <!-- q1 Schleife a -->
+            <path d="M 210 56 C 200 20, 240 20, 230 56" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="220" y="21" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">a</text>
+
+            <!-- q1 -> q2 (b) -->
+            <path d="M 241 70 Q 293 52 345 70" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="293" y="54" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">b</text>
+
+            <!-- q2 -> q1 (a) -->
+            <path d="M 345 84 Q 293 106 241 84" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="293" y="107" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">a</text>
+
+            <!-- q2 -> q0 (b) -->
+            <path d="M 353 94 Q 220 152 87 94" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr1)"/>
+            <text x="220" y="137" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">b</text>
+          </svg>
+        </div>
+
+        <ul class="subtask-list" style="margin-top: 4px;">
+          <li><span class="subtask-label">b)</span> Begründe kurz, warum hier — anders als bei der Aufgabe <em>„beginnt mit ab“</em> — <strong>kein Fangzustand</strong> benötigt wird.</li>
+        </ul>
+        <div class="dotted-lines student-only" style="min-height: 40px;"></div>
+        <div class="sol-block">
+          <strong>Lösung 1b):</strong> Ein falsches Zeichen zu Beginn oder in der Mitte schließt nicht aus, dass das Wort später doch noch auf <span class="code-inline">ab</span> endet. Es muss lediglich zum passenden Vorzustand zurückgesprungen werden (z. B. von $q_2$ bei $a$ nach $q_1$, da dieses $a$ schon der Beginn des nächsten <span class="code-inline">ab</span> sein kann).
+        </div>
+      </article>
+
+      <!-- AUFGABE 2 -->
+      <article class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">2</span>
+            <span>Binärsystem I: Gültige Binärzahlen ohne führende Nullen</span>
+          </h2>
+          <span class="task-points">Niveau 2: Mittel (4 Zustände)</span>
+        </div>
+
+        <p class="task-desc">
+          Ein Compiler-Prüfmodul über $\Sigma = \{0, 1\}$ soll nur <strong>sauber formatierte Binärzahlen ohne unnötige führende Nullen</strong> akzeptieren: gültig sind also die einzelne <span class="code-inline">0</span> sowie jede Binärzahl, die mit <span class="code-inline">1</span> beginnt (z. B. <span class="code-inline">0</span>, <span class="code-inline">1</span>, <span class="code-inline">10</span>, <span class="code-inline">1011</span>; <strong>abgelehnt</strong> werden <span class="code-inline">00</span>, <span class="code-inline">01</span>, <span class="code-inline">0101</span> und $\varepsilon$).
+        </p>
+
+        <ul class="subtask-list">
+          <li><span class="subtask-label">a)</span> Zeichne das vollständige Zustandsdiagramm inklusive Fangzustand $q_{\text{fehler}}$.</li>
+          <li><span class="subtask-label">b)</span> Vervollständige rechts die Überführungstabelle und gib das 5-Tupel an.</li>
+        </ul>
+
+        <div class="grid-2-wide">
+          <!-- Links: Diagramm -->
+          <div>
+            <div class="draw-box student-only" style="height: 53mm; margin-bottom: 0;">
+              <span class="draw-box-label">Zustandsdiagramm zu Aufgabe 2</span>
+            </div>
+            <div class="sol-diagram-wrap" style="margin: 0;">
+              <div class="sol-diagram-caption">Musterlösung 2a) Zustandsdiagramm:</div>
+              <svg viewBox="0 0 430 156" width="350" height="127" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+                  </marker>
+                </defs>
+                <!-- Start -->
+                <line x1="8" y1="78" x2="40" y2="78" stroke="#dc2626" stroke-width="2" marker-end="url(#arr2)"/>
+                <text x="10" y="70" font-family="Calibri, sans-serif" font-size="10" font-weight="700" fill="#dc2626">Start</text>
+
+                <!-- q0 -->
+                <circle cx="64" cy="78" r="20" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="64" y="82" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">0</tspan></text>
+
+                <!-- q_null (Endzustand) -->
+                <circle cx="195" cy="36" r="20" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="195" cy="36" r="15" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="195" y="40" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">null</tspan></text>
+
+                <!-- q_ok (Endzustand) -->
+                <circle cx="195" cy="120" r="20" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="195" cy="120" r="15" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="195" y="124" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">ok</tspan></text>
+
+                <!-- q_fehler (Fangzustand) -->
+                <circle cx="348" cy="36" r="22" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="348" y="40" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8">fehler</tspan></text>
+
+                <!-- q0 -> q_null (0) -->
+                <line x1="83" y1="71" x2="174" y2="41" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr2)"/>
+                <text x="125" y="49" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- q0 -> q_ok (1) -->
+                <line x1="83" y1="85" x2="174" y2="115" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr2)"/>
+                <text x="125" y="114" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+
+                <!-- q_null -> q_fehler (0,1) -->
+                <line x1="216" y1="36" x2="323" y2="36" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr2)"/>
+                <text x="270" y="29" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0, 1</text>
+
+                <!-- q_ok Schleife (0,1) -->
+                <path d="M 213 111 C 254 96, 254 144, 213 129" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr2)"/>
+                <text x="258" y="124" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="start">0, 1</text>
+
+                <!-- q_fehler Schleife (0,1) -->
+                <path d="M 338 56 C 325 96, 371 96, 358 56" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr2)"/>
+                <text x="348" y="99" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0, 1</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Rechts: Tabelle & 5-Tupel -->
+          <div>
+            <table class="calc-table">
+              <thead>
+                <tr>
+                  <th>$\delta$</th>
+                  <th>Eingabe $0$</th>
+                  <th>Eingabe $1$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$q_0$ (Start)</td>
+                  <td><span class="sol-inline">$q_{\text{null}}$</span></td>
+                  <td><span class="sol-inline">$q_{\text{ok}}$</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{\text{null}}$ (Ende)</td>
+                  <td><span class="sol-inline">$q_{\text{fehler}}$</span></td>
+                  <td><span class="sol-inline">$q_{\text{fehler}}$</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{\text{ok}}$ (Ende)</td>
+                  <td><span class="sol-inline">$q_{\text{ok}}$</span></td>
+                  <td><span class="sol-inline">$q_{\text{ok}}$</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{\text{fehler}}$</td>
+                  <td><span class="sol-inline">$q_{\text{fehler}}$</span></td>
+                  <td><span class="sol-inline">$q_{\text{fehler}}$</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: 7px; font-size: 9.8pt; line-height: 1.5;">
+              <div><strong>Endzustände:</strong> $F = \{$<span class="student-only"> $\dots\dots\dots\dots$ </span><span class="sol-inline">$q_{\text{null}}, q_{\text{ok}}$</span>$\}$</div>
+              <div><strong>Zustände:</strong> $Q = \{q_0, q_{\text{null}}, q_{\text{ok}}, q_{\text{fehler}}\}$</div>
+              <div><strong>Start:</strong> $q_0$, &nbsp; <strong>Alphabet:</strong> $\Sigma = \{0, 1\}$</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ================================================================
+         SEITE 2: AUFGABE 3 + AUFGABE 4 (TEILBARKEIT DURCH 3)
+         ================================================================ -->
+    <section class="page">
+
+      <!-- AUFGABE 3 -->
+      <article class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">3</span>
+            <span>Binärsystem II: Paritäten kombinieren (<span class="code-inline">0</span> gerade UND <span class="code-inline">1</span> ungerade)</span>
+          </h2>
+          <span class="task-points">Niveau 3: Anspruchsvoll (4 Zustände)</span>
+        </div>
+
+        <p class="task-desc">
+          Ein Prüfmodul über $\Sigma = \{0, 1\}$ akzeptiert genau jene Binärwörter, die <strong>gleichzeitig</strong> eine <strong>gerade Anzahl von Nullen</strong> und eine <strong>ungerade Anzahl von Einsen</strong> enthalten (z. B. <span class="code-inline">1</span>, <span class="code-inline">001</span>, <span class="code-inline">10101</span>; <strong>nicht</strong> akzeptiert werden <span class="code-inline">00</span>, <span class="code-inline">11</span>, <span class="code-inline">01</span> oder $\varepsilon$).
+        </p>
+
+        <ul class="subtask-list">
+          <li><span class="subtask-label">a)</span> Benenne die vier benötigten Zustände sinnvoll (Tipp: Jeder Zustand speichert zwei Paritäten gleichzeitig).</li>
+          <li><span class="subtask-label">b)</span> Zeichne das vollständige Zustandsdiagramm und markiere Start- sowie Endzustand.</li>
+        </ul>
+
+        <div class="grid-2-wide">
+          <!-- Links: Diagramm -->
+          <div>
+            <div class="draw-box student-only" style="height: 55mm; margin-bottom: 0;">
+              <span class="draw-box-label">Zustandsdiagramm zu Aufgabe 3 (Tipp: 2×2-Raster)</span>
+            </div>
+            <div class="sol-diagram-wrap" style="margin: 0;">
+              <div class="sol-diagram-caption">Musterlösung 3b) Zustandsdiagramm ($F = \{q_{g,u}\}$):</div>
+              <svg viewBox="0 0 385 182" width="335" height="158" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+                  </marker>
+                </defs>
+                <!-- Start -->
+                <line x1="12" y1="42" x2="54" y2="42" stroke="#dc2626" stroke-width="2" marker-end="url(#arr3)"/>
+                <text x="14" y="34" font-family="Calibri, sans-serif" font-size="10" font-weight="700" fill="#dc2626">Start</text>
+
+                <!-- q_gg -->
+                <circle cx="82" cy="42" r="22" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="82" y="46" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">g,g</tspan></text>
+
+                <!-- q_ug -->
+                <circle cx="282" cy="42" r="22" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="282" y="46" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">u,g</tspan></text>
+
+                <!-- q_gu (Endzustand) -->
+                <circle cx="82" cy="136" r="22" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="82" cy="136" r="17" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="82" y="140" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">g,u</tspan></text>
+
+                <!-- q_uu -->
+                <circle cx="282" cy="136" r="22" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="282" y="140" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="8.5">u,u</tspan></text>
+
+                <!-- Horizontal oben: 0 -->
+                <path d="M 104 35 Q 182 14 260 35" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="182" y="18" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+                <path d="M 260 49 Q 182 70 104 49" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="182" y="69" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- Horizontal unten: 0 -->
+                <path d="M 104 129 Q 182 108 260 129" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="182" y="112" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+                <path d="M 260 143 Q 182 164 104 143" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="182" y="169" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- Vertikal links: 1 -->
+                <path d="M 74 64 Q 53 89 74 114" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="53" y="93" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+                <path d="M 90 114 Q 111 89 90 64" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="110" y="93" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+
+                <!-- Vertikal rechts: 1 -->
+                <path d="M 274 64 Q 253 89 274 114" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="253" y="93" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+                <path d="M 290 114 Q 311 89 290 64" fill="none" stroke="#dc2626" stroke-width="1.7" marker-end="url(#arr3)"/>
+                <text x="310" y="93" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Rechts: Zustandsbedeutung -->
+          <div>
+            <div style="font-size: 9.5pt; font-weight: 700; color: #1e3a8a; margin-bottom: 3px;">Zustandsbedeutung (a):</div>
+            <table class="calc-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Zustand</th>
+                  <th>Bedeutung (0-Anz. / 1-Anz.)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$q_{g,g}$</td>
+                  <td class="left"><span class="sol-inline">0 gerade, 1 gerade (Start)</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{u,g}$</td>
+                  <td class="left"><span class="sol-inline">0 ungerade, 1 gerade</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{g,u}$</td>
+                  <td class="left"><span class="sol-inline">0 gerade, 1 ungerade (Ende)</span></td>
+                </tr>
+                <tr>
+                  <td>$q_{u,u}$</td>
+                  <td class="left"><span class="sol-inline">0 ungerade, 1 ungerade</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="sol-block" style="margin-top: 6px; font-size: 9.2pt;">
+              <strong>Merke:</strong> Jede <span class="code-inline">0</span> wechselt waagerecht, jede <span class="code-inline">1</span> wechselt senkrecht.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- AUFGABE 4: TEILBARKEIT DURCH 3 -->
+      <article class="task-card" style="margin-bottom: 0;">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">4</span>
+            <span>Binärsystem III (Abitur-Transfer): Teilbarkeit durch 3</span>
+          </h2>
+          <span class="task-points">Niveau 4: Experte (3 Zustände)</span>
+        </div>
+
+        <p class="task-desc">
+          Ein DEA liest über $\Sigma = \{0, 1\}$ eine Binärzahl <strong>von links nach rechts</strong> (höchstwertiges Bit zuerst) und akzeptiert sie genau dann, wenn ihr Zahlenwert <strong>durch 3 teilbar</strong> ist (z. B. <span class="code-inline">0</span>, <span class="code-inline">11</span> $= 3$, <span class="code-inline">110</span> $= 6$, <span class="code-inline">1001</span> $= 9$, <span class="code-inline">1111</span> $= 15$; <strong>nicht</strong> akzeptiert werden <span class="code-inline">1</span>, <span class="code-inline">10</span> $= 2$, <span class="code-inline">100</span> $= 4$, <span class="code-inline">101</span> $= 5$). <em>Hinweis: Das leere Wort $\varepsilon$ darf wie der Wert $0$ akzeptiert werden.</em>
+        </p>
+
+        <div class="tip-box">
+          <span class="tip-label">Impuls für die Modellierung:</span> Wird an eine bestehende Binärzahl mit dem Wert $z$ rechts das nächste Bit $b \in \{0, 1\}$ angehängt, verdoppelt sich der bisherige Wert und $b$ kommt hinzu: $z_{\text{neu}} = 2 \cdot z + b$. Welchen Rest bei Division durch $3$ muss sich der Automat jeweils merken?
+        </div>
+
+        <ul class="subtask-list">
+          <li><span class="subtask-label">a)</span> Erkläre die Bedeutung der drei Zustände $q_0, q_1, q_2$ und gib Start- sowie Endzustand an.</li>
+          <li><span class="subtask-label">b)</span> Erstelle die Überführungstabelle und zeichne das Zustandsdiagramm.</li>
+          <li><span class="subtask-label">c)</span> Prüfe mit einer Trace-Tabelle Schritt für Schritt das Wort $w = 1001$ (Dezimalwert $9$).</li>
+        </ul>
+
+        <!-- Schüler-Lösungsbereich zu 4a -->
+        <div class="dotted-lines student-only" style="min-height: 42px; margin-bottom: 6px;"></div>
+        <div class="sol-block" style="margin-bottom: 6px;">
+          <strong>Lösung 4a):</strong> Die Zustände speichern den aktuellen <strong>Divisionsrest modulo 3</strong>: $q_0$: Rest $0$ (Start- und Endzustand, da durch $3$ teilbar), $q_1$: Rest $1$, $q_2$: Rest $2$. Mit $r_{\text{neu}} = (2 \cdot r + b) \bmod 3$ folgen alle Übergänge eindeutig.
+        </div>
+
+        <div class="grid-2-wide">
+          <!-- Links: Diagramm 4b -->
+          <div>
+            <div class="draw-box student-only" style="height: 49mm; margin-bottom: 0;">
+              <span class="draw-box-label">Zustandsdiagramm zu Aufgabe 4</span>
+            </div>
+            <div class="sol-diagram-wrap" style="margin: 0;">
+              <div class="sol-diagram-caption">Musterlösung 4b) Zustandsdiagramm ($F = \{q_0\}$):</div>
+              <svg viewBox="0 0 435 144" width="350" height="116" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+                  </marker>
+                </defs>
+                <!-- Start -->
+                <line x1="10" y1="80" x2="46" y2="80" stroke="#dc2626" stroke-width="2" marker-end="url(#arr4)"/>
+                <text x="12" y="72" font-family="Calibri, sans-serif" font-size="10" font-weight="700" fill="#dc2626">Start</text>
+
+                <!-- q0 (Start & Endzustand) -->
+                <circle cx="74" cy="80" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <circle cx="74" cy="80" r="16" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="74" y="84" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">0</tspan></text>
+
+                <!-- q1 -->
+                <circle cx="218" cy="80" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="218" y="84" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">1</tspan></text>
+
+                <!-- q2 -->
+                <circle cx="362" cy="80" r="21" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+                <text x="362" y="84" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">q<tspan dy="3" font-size="9">2</tspan></text>
+
+                <!-- q0 Schleife 0 -->
+                <path d="M 64 60 C 54 22, 94 22, 84 60" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="74" y="22" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- q0 -> q1 (1) -->
+                <path d="M 94 72 Q 146 47 198 72" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="146" y="51" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+
+                <!-- q1 -> q0 (1) -->
+                <path d="M 198 88 Q 146 113 94 88" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="146" y="114" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+
+                <!-- q1 -> q2 (0) -->
+                <path d="M 238 72 Q 290 47 342 72" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="290" y="51" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- q2 -> q1 (0) -->
+                <path d="M 342 88 Q 290 113 238 88" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="290" y="114" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">0</text>
+
+                <!-- q2 Schleife 1 -->
+                <path d="M 352 60 C 342 22, 382 22, 372 60" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr4)"/>
+                <text x="362" y="22" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626" text-anchor="middle">1</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Rechts: Überführungstabelle 4b + Trace 4c -->
+          <div>
+            <table class="calc-table">
+              <thead>
+                <tr>
+                  <th>$\delta$</th>
+                  <th>Bit $0$ ($2r$)</th>
+                  <th>Bit $1$ ($2r+1$)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$q_0$ (Rest 0)</td>
+                  <td><span class="sol-inline">$q_0$</span></td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                </tr>
+                <tr>
+                  <td>$q_1$ (Rest 1)</td>
+                  <td><span class="sol-inline">$q_2$</span></td>
+                  <td><span class="sol-inline">$q_0$</span></td>
+                </tr>
+                <tr>
+                  <td>$q_2$ (Rest 2)</td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                  <td><span class="sol-inline">$q_2$</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="font-size: 9pt; font-weight: 700; color: #1e3a8a; margin-top: 6px; margin-bottom: 2px;">Trace-Tabelle für $w = 1001$ (Teil c):</div>
+            <table class="calc-table" style="font-size: 9pt;">
+              <thead>
+                <tr>
+                  <th>Schritt</th>
+                  <th>Zustand</th>
+                  <th>Bit</th>
+                  <th>Folgezust.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><span class="sol-inline">$q_0$</span></td>
+                  <td><span class="sol-inline">1</span></td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                  <td><span class="sol-inline">0</span></td>
+                  <td><span class="sol-inline">$q_2$</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><span class="sol-inline">$q_2$</span></td>
+                  <td><span class="sol-inline">0</span></td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><span class="sol-inline">$q_1$</span></td>
+                  <td><span class="sol-inline">1</span></td>
+                  <td><span class="sol-inline">$q_0 \in F$</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      const body = document.body;
+      const btnText = document.getElementById('btnTeacherText');
+      body.classList.toggle('teacher-mode');
+      const isTeacher = body.classList.contains('teacher-mode');
+      btnText.textContent = isTeacher ? 'Musterlösung verbergen' : 'Musterlösung einblenden';
+    }
+  </script>
+</body>
+</html>
