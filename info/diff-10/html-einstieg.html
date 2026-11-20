@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>HTML-Einstieg: Grundgerüst &amp; erste Tags | Informatik Diff-10</title>
+
+  <!-- Google Fonts: JetBrains Mono für saubere Quelltext-Darstellung -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Zentrales Web-Modul Stylesheet (Schulheft-, Tafelbild- & Lernatelier-Stil) -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <style>
+    :root {
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --code-border: #334155;
+      --tag-blue: #93c5fd;
+      --tag-bracket: #94a3b8;
+      --tag-attr: #fde047;
+      --tag-val: #86efac;
+      --tag-comment: #64748b;
+    }
+
+    /* Inline-Code-Pill */
+    .code-pill {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1px solid #bfdbfe;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Quelltext-Blöcke */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.1rem 1.3rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 0.9rem 0;
+      border: 1px solid var(--code-border);
+    }
+
+    .tok-b { color: var(--tag-bracket); }
+    .tok-t { color: var(--tag-blue); font-weight: 700; }
+    .tok-a { color: var(--tag-attr); }
+    .tok-v { color: var(--tag-val); }
+    .tok-c { color: var(--tag-comment); font-style: italic; }
+
+    /* Auftrags- und Hinweisboxen (allseitig geschlossen, kein border-left) */
+    .auftrag-box {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.4rem;
+      margin: 1.1rem 0;
+    }
+
+    .auftrag-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .auftrag-badge {
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .auftrag-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+
+    /* Phase 1: Röntgenblick-Demo */
+    .xray-demo-box {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.35rem;
+      margin-top: 0.75rem;
+    }
+
+    .xray-tag {
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #dbeafe;
+      color: #1e3a8a;
+      border: 1px solid #93c5fd;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin: 0 3px;
+      vertical-align: middle;
+    }
+
+    .xray-active .xray-tag {
+      display: inline-block;
+    }
+
+    /* Phase 2: Anatomie-Schaubild */
+    .anatomy-stage {
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1.35rem;
+      margin: 1rem 0 1.4rem 0;
+      text-align: center;
+    }
+
+    .anatomy-parts {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 0.5rem;
+    }
+
+    .anatomy-chip {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+      min-width: 145px;
+    }
+
+    .anatomy-chip.chip-open {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .anatomy-chip.chip-content {
+      border-color: #059669;
+      background: #ecfdf5;
+    }
+
+    .anatomy-chip.chip-close {
+      border-color: #7c3aed;
+      background: #fdfaff;
+    }
+
+    .anatomy-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .anatomy-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Phase 2: Interaktiver Grundgerüst-Inspektor */
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1rem;
+      align-items: start;
+    }
+
+    @media (max-width: 780px) {
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-lines-box {
+      background: var(--code-bg);
+      border: 1.5px solid var(--code-border);
+      border-radius: 8px;
+      padding: 0.75rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86rem;
+      overflow-x: auto;
+    }
+
+    .code-line-btn {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      font-family: inherit;
+      font-size: inherit;
+      text-align: left;
+      padding: 5px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    .code-line-btn:hover {
+      background: rgba(59, 130, 246, 0.22);
+    }
+
+    .code-line-btn.active {
+      background: #1e3a8a;
+      color: #ffffff;
+    }
+
+    .line-no {
+      color: #64748b;
+      min-width: 22px;
+      text-align: right;
+      user-select: none;
+      font-size: 0.78rem;
+    }
+
+    .code-line-btn.active .line-no {
+      color: #bfdbfe;
+    }
+
+    .inspector-detail {
+      background: #ffffff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 1.25rem;
+      min-height: 245px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .inspector-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 4px;
+      background: #dbeafe;
+      color: #1e3a8a;
+      margin-bottom: 0.65rem;
+      text-transform: uppercase;
+    }
+
+    .inspector-detail h3 {
+      font-size: 1.15rem;
+      color: var(--ink-blue);
+      margin-bottom: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .inspector-pitfall {
+      margin-top: 1rem;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.92rem;
+      color: #111827;
+    }
+
+    /* Phase 4: Live-HTML-Labor */
+    .lab-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .lab-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .btn-lab {
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-lab:hover {
+      background: #eff6ff;
+      border-color: #2563eb;
+      color: #1e3a8a;
+    }
+
+    .btn-lab.active {
+      background: var(--ink-blue);
+      border-color: var(--ink-blue);
+      color: #ffffff;
+    }
+
+    .btn-lab-primary {
+      background: #047857;
+      border-color: #047857;
+      color: #ffffff;
+    }
+
+    .btn-lab-primary:hover {
+      background: #065f46;
+      border-color: #065f46;
+      color: #ffffff;
+    }
+
+    .lab-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 820px) {
+      .lab-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lab-pane {
+      display: flex;
+      flex-direction: column;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .lab-pane-head {
+      background: #f1f5f9;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .lab-tab-title {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      color: #1e3a8a;
+      max-width: 210px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #htmlEditor {
+      width: 100%;
+      min-height: 360px;
+      border: none;
+      padding: 1rem;
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      resize: vertical;
+      outline: none;
+      tab-size: 2;
+    }
+
+    #htmlPreview {
+      width: 100%;
+      min-height: 360px;
+      border: none;
+      background: #ffffff;
+      flex-grow: 1;
+    }
+
+    .check-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+
+    .check-pill {
+      font-size: 0.83rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #64748b;
+    }
+
+    .check-pill.ok {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+      color: #065f46;
+    }
+
+    /* Phase 5: Verständnis-Aufgaben mit Klapp-Lösung */
+    .question-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.15rem 1.35rem;
+      margin: 1rem 0;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .question-title {
+      font-weight: 700;
+      font-size: 1.03rem;
+      color: var(--ink-blue);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .q-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .btn-reveal {
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1.5px solid #1e3a8a;
+      background: #ffffff;
+      color: #1e3a8a;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reveal:hover {
+      background: #eff6ff;
+    }
+
+    .answer-panel {
+      display: none;
+      margin-top: 0.9rem;
+      padding: 0.95rem 1.1rem;
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 6px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    .answer-panel.open {
+      display: block;
+    }
+
+    .step-list {
+      margin: 0.6rem 0 0 1.25rem;
+      line-height: 1.65;
+    }
+    .step-list li {
+      margin-bottom: 0.45rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       PRESENTER-BAR (KAPITEL-NAVIGATION)
+       ======================================================== -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Diff-10</a>
+      <span class="presenter-title">Informatik Diff-10 • Webentwicklung (HTML &amp; Websites)</span>
+      <span class="presenter-tag">Modul 1 • Einstieg</span>
+    </div>
+    <div class="presenter-actions">
+      <a href="html-einstieg.html" class="presenter-tab-btn active">1. Einstieg &amp; Grundgerüst</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ========================================================
+         DECKBLATT-HEADER
+         ======================================================== -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik Differenzierung • Klasse 10</span>
+        <span>Reihe: Webentwicklung &amp; Websites</span>
+        <span>Modul 1: Grundlagen ohne Vorkenntnisse</span>
+      </div>
+      <h1>Einstieg in HTML: Wie aus Text eine Website wird</h1>
+      <p class="sheet-intro">
+        Jede Website im Internet – vom Schulportal bis zum Online-Shop – basiert auf derselben Grundsprache: <strong>HTML</strong>.
+        In dieser Lerneinheit erarbeiten wir das Fundament von Grund auf: Warum reicht normaler Text für den Browser nicht aus?
+        Wie ist ein HTML-Dokument aufgebaut? Und wie erstellst du im Browser sofort deine erste eigene Webseite?
+      </p>
+
+      <div class="auftrag-box" style="margin-top: 1.15rem; margin-bottom: 0;">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Fahrplan der Reihe</span>
+          <span class="auftrag-title">Erst selbst verstehen, dann im 2er-Team entwickeln</span>
+        </div>
+        <p style="font-size: 0.96rem; line-height: 1.55;">
+          In den ersten Stunden lernst du HTML (und später CSS) Schritt für Schritt <strong>ohne KI-Hilfe</strong>,
+          damit du Quellcode sicher lesen, schreiben und Fehler selbst erkennen kannst.
+          Am Ende der Reihe ersetzt ein <strong>eigenes Website-Projekt im 2er-Team</strong> die Klassenarbeit – dort darfst du auch gezielt die Schul-KI (AIS) als Werkzeug einsetzen.
+        </p>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         PHASE 1: ALLTAGSAKTIVIERUNG – WAS SIEHT DER BROWSER?
+         ======================================================== -->
+    <section class="sheet-card" id="ausgangslage">
+      <div class="task-title">
+        <span class="task-number">1</span>
+        <span>Ausgangslage: Warum braucht der Browser überhaupt HTML?</span>
+      </div>
+
+      <p>
+        Stell dir vor, du schreibst einen kurzen Steckbrief in einer einfachen Textdatei: Eine große Überschrift, darunter zwei Absätze und ein wichtiges Wort fett gedruckt.
+        Für uns Menschen ist sofort klar, was eine Überschrift und was ein Absatz ist. Für den Webbrowser (z. B. Safari, Chrome oder Edge) ist reiner Text jedoch völlig unstrukturiert.
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">• So soll es auf der Website aussehen</div>
+          <div class="xray-demo-box" id="xrayBox">
+            <div style="font-size: 1.3rem; font-weight: 700; color: #1e3a8a; margin-bottom: 0.4rem;">
+              <span class="xray-tag">&lt;h1&gt;</span>Willkommen in Diff-10<span class="xray-tag">&lt;/h1&gt;</span>
+            </div>
+            <p style="margin-bottom: 0.5rem;">
+              <span class="xray-tag">&lt;p&gt;</span>In diesem Kurs entwickeln wir eigene Websites.<span class="xray-tag">&lt;/p&gt;</span>
+            </p>
+            <p>
+              <span class="xray-tag">&lt;p&gt;</span>Wichtig: <span class="xray-tag">&lt;strong&gt;</span>Sorgfalt<span class="xray-tag">&lt;/strong&gt;</span> schlägt Tempo.<span class="xray-tag">&lt;/p&gt;</span>
+            </p>
+          </div>
+          <div style="margin-top: 0.85rem;">
+            <button type="button" class="btn-lab" id="xrayBtn" onclick="toggleXray()">HTML-Markierungen einblenden</button>
+          </div>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">• Was der Browser ohne HTML macht</div>
+          <div class="xray-demo-box" style="font-family: Georgia, serif; font-size: 0.96rem; color: #111827;">
+            Willkommen in Diff-10 In diesem Kurs entwickeln wir eigene Websites. Wichtig: Sorgfalt schlägt Tempo.
+          </div>
+          <ul class="rule-list" style="margin-top: 0.9rem;">
+            <li>Alle <strong>Zeilenumbrüche (Enter)</strong> im Quelltext werden zu einem einzigen Leerzeichen zusammengefasst.</li>
+            <li>Mehrfache Leerzeichen werden einfach verschluckt.</li>
+            <li>Der Browser weiß nicht, was eine Überschrift, ein Absatz oder ein Link sein soll.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="margin-top: 0.5rem;">
+        Die Lösung heißt <span class="highlighter">HTML (Hypertext Markup Language)</span>.
+        HTML ist keine Programmiersprache wie Python oder Java (es gibt keine Schleifen oder Berechnungen), sondern eine
+        <strong>Auszeichnungssprache (Markup Language)</strong>: Sie markiert Textteile mit sogenannten <strong>Tags</strong> in spitzen Klammern
+        (<span class="code-pill">&lt;...&gt;</span>), damit der Browser ihre Bedeutung und Struktur erkennt.
+      </p>
+    </section>
+
+    <!-- ========================================================
+         PHASE 2: ANATOMIE EINES TAGS & DAS HTML5-GRUNDGERÜST
+         ======================================================== -->
+    <section class="sheet-card" id="grundgeruest">
+      <div class="task-title">
+        <span class="task-number">2</span>
+        <span>Bauplan: Anatomie eines Elements &amp; das HTML-Grundgerüst</span>
+      </div>
+
+      <p>
+        Fast jedes HTML-Element funktioniert wie eine Klammer um den Inhalt: Es sagt dem Browser genau, <em>wo eine Rolle beginnt</em> und <em>wo sie wieder endet</em>.
+      </p>
+
+      <div class="anatomy-stage">
+        <div style="font-weight: 700; color: #1e3a8a; font-size: 0.95rem;">Aufbau eines HTML-Elements (Beispiel: Hauptüberschrift)</div>
+        <div class="anatomy-parts">
+          <div class="anatomy-chip chip-open">
+            <div class="anatomy-code">&lt;h1&gt;</div>
+            <div class="anatomy-label">Öffnendes Tag (Start)</div>
+          </div>
+          <div class="anatomy-chip chip-content">
+            <div class="anatomy-code" style="font-family: inherit;">Meine Website</div>
+            <div class="anatomy-label">Inhalt (Content)</div>
+          </div>
+          <div class="anatomy-chip chip-close">
+            <div class="anatomy-code">&lt;/h1&gt;</div>
+            <div class="anatomy-label">Schließendes Tag (mit /)</div>
+          </div>
+        </div>
+        <p style="font-size: 0.92rem; color: #475569; margin-top: 0.9rem;">
+          <strong>Ausnahme (Leere Tags):</strong> Elemente ohne eigenen Textinhalt – wie ein Zeilenumbruch <span class="code-pill">&lt;br&gt;</span> oder eine Trennlinie <span class="code-pill">&lt;hr&gt;</span> – brauchen kein schließendes Tag.
+        </p>
+      </div>
+
+      <h3 style="font-size: 1.12rem; color: var(--ink-blue); margin: 1.25rem 0 0.4rem 0;">
+        Das verbindliche HTML5-Grundgerüst (Klicke auf eine Zeile)
+      </h3>
+      <p style="font-size: 0.96rem; color: var(--ink-muted);">
+        Jede professionelle HTML-Datei beginnt mit demselben Rahmen. Wähle links eine Zeile aus, um ihre Aufgabe im Browser zu untersuchen:
+      </p>
+
+      <div class="inspector-grid">
+        <div class="code-lines-box" id="skeletonLines">
+          <button type="button" class="code-line-btn active" onclick="selectLine(0)">
+            <span class="line-no">1</span>
+            <span>&lt;!DOCTYPE html&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(1)">
+            <span class="line-no">2</span>
+            <span>&lt;html lang="de"&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(2)">
+            <span class="line-no">3</span>
+            <span>&nbsp;&nbsp;&lt;head&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(3)">
+            <span class="line-no">4</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(4)">
+            <span class="line-no">5</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Meine erste Seite&lt;/title&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(5)">
+            <span class="line-no">6</span>
+            <span>&nbsp;&nbsp;&lt;/head&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(6)">
+            <span class="line-no">7</span>
+            <span>&nbsp;&nbsp;&lt;body&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(7)">
+            <span class="line-no">8</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Hallo Welt!&lt;/h1&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(8)">
+            <span class="line-no">9</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Das ist mein erster Absatz.&lt;/p&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(9)">
+            <span class="line-no">10</span>
+            <span>&nbsp;&nbsp;&lt;/body&gt;</span>
+          </button>
+          <button type="button" class="code-line-btn" onclick="selectLine(10)">
+            <span class="line-no">11</span>
+            <span>&lt;/html&gt;</span>
+          </button>
+        </div>
+
+        <div class="inspector-detail" id="inspectorDetail">
+          <div>
+            <span class="inspector-badge" id="inspBadge">Zeile 1 • Dokumenttyp</span>
+            <h3 id="inspTitle">&lt;!DOCTYPE html&gt;</h3>
+            <p id="inspText">
+              Erste Pflichtzeile jeder Datei. Sie teilt dem Browser mit: „Achtung, hier folgt modernes HTML5!“ Ohne sie schaltet der Browser eventuell in einen veralteten Kompatibilitätsmodus.
+            </p>
+          </div>
+          <div class="inspector-pitfall" id="inspPitfall">
+            <strong>Wichtig:</strong> Es ist eine reine Deklaration – es gibt kein schließendes <code>&lt;/!DOCTYPE&gt;</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 3: STARTER-TAGS & DAS ZWIEBELPRINZIP
+         ======================================================== -->
+    <section class="sheet-card" id="starter-tags">
+      <div class="task-title">
+        <span class="task-number">3</span>
+        <span>Die wichtigsten Starter-Tags &amp; das Zwiebelprinzip</span>
+      </div>
+
+      <p>
+        Für die ersten eigenen Webseiten brauchst du keine 100 Befehle – diese sieben Bausteine reichen für klar strukturierte Texte vollkommen aus:
+      </p>
+
+      <div class="table-responsive">
+        <table class="sheet-calc-table" style="text-align: left;">
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Englische Herkunft</th>
+              <th>Bedeutung &amp; Einsatz</th>
+              <th>Wichtiger Hinweis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="code-pill">&lt;h1&gt; ... &lt;/h1&gt;</span> bis <span class="code-pill">&lt;h6&gt;</span></td>
+              <td>Heading 1–6</td>
+              <td>Überschriften in 6 Ebenen (<span class="code-pill">&lt;h1&gt;</span> = Haupttitel, <span class="code-pill">&lt;h2&gt;</span> = Unterkapitel).</td>
+              <td>Nur <strong>eine</strong> <span class="code-pill">&lt;h1&gt;</span> pro Seite; nicht für „großen Text“ missbrauchen!</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;p&gt; ... &lt;/p&gt;</span></td>
+              <td>Paragraph</td>
+              <td>Textabsatz mit automatischem Abstand nach oben und unten.</td>
+              <td>Fließtext immer in <span class="code-pill">&lt;p&gt;</span>-Tags verpacken.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;br&gt;</span></td>
+              <td>Line Break</td>
+              <td>Erzwingt einen einfachen Zeilenumbruch (ohne neuen Absatz).</td>
+              <td>Leeres Tag (kein End-Tag). Sinnvoll z. B. bei Adressen oder Gedichten.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;hr&gt;</span></td>
+              <td>Horizontal Rule</td>
+              <td>Zeichnet eine waagerechte Trennlinie zwischen Themenblöcken.</td>
+              <td>Leeres Tag (kein End-Tag).</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;strong&gt; ... &lt;/strong&gt;</span></td>
+              <td>Strong Importance</td>
+              <td>Hebt besonders wichtigen Text inhaltlich hervor (meist fett dargestellt).</td>
+              <td>Bedeutet „inhaltlich wichtig“, nicht nur „dicke Schrift“.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;em&gt; ... &lt;/em&gt;</span></td>
+              <td>Emphasis</td>
+              <td>Betont ein Wort oder einen Satzteil (meist kursiv dargestellt).</td>
+              <td>Schachtelung innerhalb von <span class="code-pill">&lt;p&gt;</span> beachten.</td>
+            </tr>
+            <tr>
+              <td><span class="code-pill">&lt;!-- Text --&gt;</span></td>
+              <td>Comment</td>
+              <td>Notiz im Quelltext für Menschen (z. B. Aufgabenverteilung im Team).</td>
+              <td>Wird vom Browser komplett ignoriert und erscheint nicht auf der Seite.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size: 1.1rem; color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0;">
+        Typischer Anfängerfehler: Richtig vs. Falsch verschachteln (Zwiebelprinzip)
+      </h3>
+      <p>
+        Tags werden oft ineinander gelegt (z. B. ein <span class="code-pill">&lt;strong&gt;</span> innerhalb eines <span class="code-pill">&lt;p&gt;</span>).
+        Dabei gilt streng das <strong>Zwiebelprinzip</strong>: <em>Das Tag, das zuletzt geöffnet wurde, muss zuerst wieder geschlossen werden.</em>
+      </p>
+
+      <div class="insight-columns">
+        <div class="insight-card card-blue">
+          <div style="font-weight: 700; color: #1e40af; margin-bottom: 6px;">Richtig: Saubere Schachtelung (innen vor außen)</div>
+          <pre class="code-block" style="margin: 0.4rem 0;"><span class="tok-b">&lt;</span><span class="tok-t">p</span><span class="tok-b">&gt;</span>Morgen schreiben wir <span class="tok-b">&lt;</span><span class="tok-t">strong</span><span class="tok-b">&gt;</span>keinen<span class="tok-b">&lt;/</span><span class="tok-t">strong</span><span class="tok-b">&gt;</span> Test.<span class="tok-b">&lt;/</span><span class="tok-t">p</span><span class="tok-b">&gt;</span></pre>
+          <p style="font-size: 0.9rem; color: #334155;">
+            <span class="code-pill">&lt;strong&gt;</span> liegt vollständig innerhalb von <span class="code-pill">&lt;p&gt; ... &lt;/p&gt;</span>.
+          </p>
+        </div>
+
+        <div class="insight-card" style="border: 1.5px solid #fca5a5; background: #fef2f2;">
+          <div style="font-weight: 700; color: #991b1b; margin-bottom: 6px;">Falsch: Überkreuzte Tags</div>
+          <pre class="code-block" style="margin: 0.4rem 0;"><span class="tok-b">&lt;</span><span class="tok-t">p</span><span class="tok-b">&gt;</span>Morgen schreiben wir <span class="tok-b">&lt;</span><span class="tok-t">strong</span><span class="tok-b">&gt;</span>keinen<span class="tok-b">&lt;/</span><span class="tok-t">p</span><span class="tok-b">&gt;&lt;/</span><span class="tok-t">strong</span><span class="tok-b">&gt;</span></pre>
+          <p style="font-size: 0.9rem; color: #7f1d1d;">
+            Hier wurde <span class="code-pill">&lt;/p&gt;</span> vor <span class="code-pill">&lt;/strong&gt;</span> geschlossen – der Baum bricht auseinander!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 4: INTERAKTIVES LIVE-HTML-LABOR (IPAD-READY)
+         ======================================================== -->
+    <section class="sheet-card" id="labor">
+      <div class="task-title">
+        <span class="task-number">4</span>
+        <span>Live-HTML-Labor: Schreiben, testen &amp; Fehler finden</span>
+      </div>
+
+      <p style="margin-bottom: 0.85rem;">
+        Links schreibst du deinen HTML-Code, rechts siehst du sofort, was ein Browser daraus macht.
+        Du kannst das Labor direkt auf dem iPad oder PC nutzen und dein fertiges Ergebnis als echte <span class="code-pill">.html</span>-Datei herunterladen.
+      </p>
+
+      <div class="auftrag-box">
+        <div class="auftrag-header">
+          <span class="auftrag-badge">Praxisauftrag</span>
+          <span class="auftrag-title">Bearbeite die zwei Aufgaben im Live-Labor</span>
+        </div>
+        <ol class="step-list">
+          <li><strong>Aufgabe A (Fehler-Detektiv):</strong> Lade <em>„Vorlage 2: Fehler-Code reparieren“</em>. Finde und korrigiere die <strong>4 eingebauten Fehler</strong> (Umlaute, falscher Bereich, fehlendes End-Tag, falsche Schachtelung).</li>
+          <li><strong>Aufgabe B (Eigene Infoseite):</strong> Lade <em>„Vorlage 3: Steckbrief-Start“</em> und erstelle eine kurze Seite über dich, dein Lieblingshobby oder deinen Lieblingsfilm mit passendem Seitentitel (<span class="code-pill">&lt;title&gt;</span>), einer <span class="code-pill">&lt;h1&gt;</span>, mindestens zwei <span class="code-pill">&lt;h2&gt;</span>-Abschnitten, Absätzen (<span class="code-pill">&lt;p&gt;</span>), einer Trennlinie (<span class="code-pill">&lt;hr&gt;</span>) und <span class="code-pill">&lt;strong&gt;</span>/<span class="code-pill">&lt;em&gt;</span>.</li>
+        </ol>
+      </div>
+
+      <div class="lab-box">
+        <div class="lab-toolbar">
+          <div class="lab-presets">
+            <button type="button" class="btn-lab active" data-preset="0" onclick="loadPreset(0)">1. Leeres Grundgerüst</button>
+            <button type="button" class="btn-lab" data-preset="1" onclick="loadPreset(1)">2. Fehler-Code reparieren</button>
+            <button type="button" class="btn-lab" data-preset="2" onclick="loadPreset(2)">3. Steckbrief-Start</button>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-lab" onclick="resetCurrentPreset()">Zurücksetzen</button>
+            <button type="button" class="btn-lab btn-lab-primary" onclick="downloadHtmlFile()">Als .html speichern</button>
+          </div>
+        </div>
+
+        <div class="lab-split">
+          <div class="lab-pane">
+            <div class="lab-pane-head">
+              <span>Quelltext: index.html</span>
+              <span style="font-weight: 500; color: #64748b;">Echtzeit-Editor</span>
+            </div>
+            <textarea id="htmlEditor" spellcheck="false" aria-label="HTML Quelltext Editor"></textarea>
+          </div>
+
+          <div class="lab-pane">
+            <div class="lab-pane-head">
+              <span>Browser-Vorschau</span>
+              <span class="lab-tab-title" id="previewTabTitle">Tab: Meine erste Seite</span>
+            </div>
+            <iframe id="htmlPreview" sandbox="" title="Live Browser Vorschau"></iframe>
+          </div>
+        </div>
+
+        <div class="check-strip" id="structureChecks">
+          <span class="check-pill" id="chk-doctype">Doctype vorhanden</span>
+          <span class="check-pill" id="chk-headbody">Head &amp; Body vollständig</span>
+          <span class="check-pill" id="chk-charset">UTF-8 gesetzt</span>
+          <span class="check-pill" id="chk-h1">Genau eine Hauptüberschrift (h1)</span>
+          <span class="check-pill" id="chk-p">Mindestens 2 Absätze (p)</span>
+          <span class="check-pill" id="chk-emph">Hervorhebung (strong/em)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         PHASE 5: VERSTÄNDNIS-AUFGABEN & MERKHEFT-SICHERUNG
+         ======================================================== -->
+    <section class="sheet-card" id="sicherung">
+      <div class="task-title">
+        <span class="task-number">5</span>
+        <span>Verständnis-Check &amp; Merkheft-Sicherung</span>
+      </div>
+
+      <p>
+        Überprüfe dein Wissen mit diesen vier typischen Klausur- und Fachgesprächsfragen, bevor du den Merksatz ins Heft oder nach OneNote überträgst.
+      </p>
+
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title"><span class="q-badge">1</span> Warum ist HTML keine Programmiersprache wie Python oder Java?</div>
+          <button type="button" class="btn-reveal" onclick="toggleAnswer(this)">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="answer-panel">
+          <strong>Antwort:</strong> HTML ist eine <strong>Auszeichnungssprache (Markup Language)</strong>. Mit HTML formuliert man keine Algorithmen, Bedingungen (<code>if/else</code>), Schleifen oder Berechnungen, sondern beschreibt ausschließlich die <strong>Struktur und Bedeutung</strong> von Inhalten (Überschrift, Absatz, Trennlinie usw.).
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title"><span class="q-badge">2</span> Ein Schüler schreibt Text in den <code>&lt;head&gt;</code>. Was passiert im Browser?</div>
+          <button type="button" class="btn-reveal" onclick="toggleAnswer(this)">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="answer-panel">
+          <strong>Antwort:</strong> Der <span class="code-pill">&lt;head&gt;</span> ist für Metadaten gedacht (Zeichensatz, Tab-Titel via <span class="code-pill">&lt;title&gt;</span>, spätere CSS-Verknüpfung). Sichtbarer Inhalt gehört zwingend in den <span class="code-pill">&lt;body&gt;</span>. Steht normaler Text im <span class="code-pill">&lt;head&gt;</span>, gehört er strukturell nicht in die Seite (Browser schieben ihn aus Not manchmal in den Body oder verwerfen das Layout).
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title"><span class="q-badge">3</span> Warum darf man <code>&lt;h1&gt;</code> nicht einfach nutzen, nur weil ein Satz „schön groß“ aussehen soll?</div>
+          <button type="button" class="btn-reveal" onclick="toggleAnswer(this)">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="answer-panel">
+          <strong>Antwort:</strong> HTML beschreibt die <strong>inhaltliche Hierarchie</strong>, nicht das Design (dafür ist später CSS zuständig). Suchmaschinen (z. B. Google) und Vorleseprogramme für sehbehinderte Menschen (Screenreader) nutzen <span class="code-pill">&lt;h1&gt;</span> bis <span class="code-pill">&lt;h6&gt;</span> als Inhaltsverzeichnis. Pro Seite gibt es genau <strong>eine</strong> Hauptüberschrift <span class="code-pill">&lt;h1&gt;</span>.
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-header">
+          <div class="question-title"><span class="q-badge">4</span> Finde die zwei Fehler in: <code>&lt;p&gt;Heute ist &lt;em&gt;ein guter&lt;/p&gt; Tag.&lt;/em&gt;</code></div>
+          <button type="button" class="btn-reveal" onclick="toggleAnswer(this)">Antwort &amp; Erklärung aufdecken</button>
+        </div>
+        <div class="answer-panel">
+          <strong>Antwort:</strong> Verstoß gegen das <strong>Zwiebelprinzip</strong>! <span class="code-pill">&lt;em&gt;</span> wurde innerhalb von <span class="code-pill">&lt;p&gt;</span> geöffnet, aber erst <em>nach</em> <span class="code-pill">&lt;/p&gt;</span> geschlossen. Korrekt ist:<br>
+          <span class="code-pill">&lt;p&gt;Heute ist &lt;em&gt;ein guter&lt;/em&gt; Tag.&lt;/p&gt;</span>
+        </div>
+      </div>
+
+      <!-- VERBINDLICHE MERKBOX IM SCHULSTANDARD -->
+      <div class="merke-box">
+        <div class="merke-tag">MERKE</div>
+        <div class="merke-title">HTML-Grundgerüst &amp; erste Struktur-Tags</div>
+        <div class="merke-content">
+          <p style="margin-bottom: 0.6rem;">
+            <strong>1. Auszeichnungssprache:</strong> <strong>HTML</strong> (Hypertext Markup Language) beschreibt die logische Struktur einer Webseite mithilfe von <strong>Tags</strong> (<span class="code-pill">&lt;tag&gt;Inhalt&lt;/tag&gt;</span>). Zeilenumbrüche und Mehrfach-Leerzeichen im Quelltext ignoriert der Browser.
+          </p>
+          <p style="margin-bottom: 0.6rem;">
+            <strong>2. Das Grundgerüst:</strong> Jede HTML-Datei startet mit <span class="code-pill">&lt;!DOCTYPE html&gt;</span> und dem Wurzelelement <span class="code-pill">&lt;html lang="de"&gt;</span>. Darin liegen genau zwei Bereiche:
+          </p>
+          <ul style="margin: 0 0 0.7rem 1.35rem; line-height: 1.6;">
+            <li><span class="code-pill">&lt;head&gt;</span> (Kopfbereich): Unsichtbare Steuerdaten wie <span class="code-pill">&lt;meta charset="UTF-8"&gt;</span> (für ä, ö, ü, ß) und <span class="code-pill">&lt;title&gt;</span> (Name im Browser-Tab).</li>
+            <li><span class="code-pill">&lt;body&gt;</span> (Körperbereich): Alles, was im Browserfenster sichtbar angezeigt wird.</li>
+          </ul>
+          <p style="margin-bottom: 0;">
+            <strong>3. Zwiebelprinzip &amp; Semantik:</strong> Verschachtelte Tags werden von innen nach außen geschlossen. Wähle Tags immer nach ihrer <em>Bedeutung</em> (<span class="code-pill">&lt;h1&gt;</span> einmalig für den Haupttitel, <span class="code-pill">&lt;p&gt;</span> für Absätze, <span class="code-pill">&lt;strong&gt;</span>/<span class="code-pill">&lt;em&gt;</span> für Hervorhebungen) – das optische Design folgt später mit CSS.
+          </p>
+        </div>
+      </div>
+
+      <div class="future-note">
+        <strong>Ausblick auf Modul 2:</strong> Im nächsten Schritt erweitern wir unsere einzelnen HTML-Seiten zu einer echten verlinkten Website – mit <strong>Listen</strong> (<span class="code-pill">&lt;ul&gt;</span>, <span class="code-pill">&lt;ol&gt;</span>), <strong>Hyperlinks</strong> (<span class="code-pill">&lt;a&gt;</span>) zwischen mehreren Seiten und <strong>Bildern</strong> (<span class="code-pill">&lt;img&gt;</span>).
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    /* ========================================================================
+       PHASE 1: RÖNTGENBLICK-UMSCHALTER
+       ======================================================================== */
+    function toggleXray() {
+      const box = document.getElementById('xrayBox');
+      const btn = document.getElementById('xrayBtn');
+      const active = box.classList.toggle('xray-active');
+      btn.textContent = active ? 'HTML-Markierungen ausblenden' : 'HTML-Markierungen einblenden';
+    }
+
+    /* ========================================================================
+       PHASE 2: GRUNDGERÜST-INSPEKTOR
+       ======================================================================== */
+    const lineDetails = [
+      {
+        badge: 'Zeile 1 • Dokumenttyp',
+        title: '<!DOCTYPE html>',
+        text: 'Erste Pflichtzeile jeder Datei. Sie teilt dem Browser mit: „Hier folgt modernes HTML5!“ Ohne sie schaltet der Browser eventuell in einen veralteten Kompatibilitätsmodus.',
+        pitfall: '<strong>Wichtig:</strong> Es ist eine reine Deklaration – es gibt kein schließendes <code>&lt;/!DOCTYPE&gt;</code>.'
+      },
+      {
+        badge: 'Zeile 2 • Wurzel-Element',
+        title: '<html lang="de">',
+        text: 'Die äußerste Klammer um das gesamte Dokument. Das Attribut <code>lang="de"</code> verrät Suchmaschinen und Vorleseprogrammen (Screenreadern), dass der Text auf Deutsch geschrieben ist.',
+        pitfall: '<strong>Zwiebelprinzip:</strong> Dieses Tag wird erst ganz am Ende der Datei in Zeile 11 mit <code>&lt;/html&gt;</code> geschlossen.'
+      },
+      {
+        badge: 'Zeile 3 • Kopfbereich (Start)',
+        title: '<head>',
+        text: 'Der unsichtbare „Kopf“ der Webseite. Hier stehen technische Informationen, der Tab-Titel und später die Verknüpfung zur CSS-Design-Datei.',
+        pitfall: '<strong>Merke:</strong> Sichtbare Überschriften oder Bilder gehören <em>nicht</em> in den Head!'
+      },
+      {
+        badge: 'Zeile 4 • Zeichencodierung',
+        title: '<meta charset="UTF-8">',
+        text: 'Legt die Zeichencodierung fest. UTF-8 sorgt dafür, dass deutsche Umlaute (ä, ö, ü, ß) und Sonderzeichen auf jedem Gerät weltweit korrekt dargestellt werden.',
+        pitfall: '<strong>Fehler-Klassiker:</strong> Fehlt diese Zeile, erscheinen auf manchen Systemen statt „Übung“ kryptische Zeichen wie „Ãœbung“.'
+      },
+      {
+        badge: 'Zeile 5 • Browser-Tab-Titel',
+        title: '<title>Meine erste Seite</title>',
+        text: 'Legt den Namen fest, der oben im Browser-Tab, in Lesezeichen und als Überschrift in Suchmaschinen-Treffern angezeigt wird.',
+        pitfall: '<strong>Verwechslungsgefahr:</strong> <code>&lt;title&gt;</code> steht im Tab – für die große Überschrift <em>auf</em> der Seite brauchst du <code>&lt;h1&gt;</code> im Body!'
+      },
+      {
+        badge: 'Zeile 6 • Kopfbereich (Ende)',
+        title: '</head>',
+        text: 'Schließt den Kopfbereich sauber ab, bevor der sichtbare Seitenkörper beginnt.',
+        pitfall: '<strong>Tipp:</strong> Kopf und Körper stehen immer <em>nacheinander</em> im <code>&lt;html&gt;</code>-Tag, niemals ineinander!'
+      },
+      {
+        badge: 'Zeile 7 • Körperbereich (Start)',
+        title: '<body>',
+        text: 'Ab hier beginnt alles, was der Nutzer im eigentlichen Browserfenster sieht: Überschriften, Texte, Listen, Bilder, Links und Tabellen.',
+        pitfall: '<strong>Regel:</strong> Pro HTML-Datei gibt es genau einen <code>&lt;body&gt;</code>.'
+      },
+      {
+        badge: 'Zeile 8 • Hauptüberschrift',
+        title: '<h1>Hallo Welt!</h1>',
+        text: 'Die wichtigste Überschrift der gesamten Seite (Heading 1). Sie fasst das Hauptthema dieser HTML-Seite zusammen.',
+        pitfall: '<strong>Regel:</strong> Verwende <code>&lt;h1&gt;</code> genau einmal pro Seite und nutze für Unterabschnitte <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code> usw.'
+      },
+      {
+        badge: 'Zeile 9 • Textabsatz',
+        title: '<p>Das ist mein erster Absatz.</p>',
+        text: 'Verpackt zusammengehörigen Fließtext in einen Absatz (Paragraph) und fügt automatisch einen sauberen Abstand zum nächsten Element ein.',
+        pitfall: '<strong>Praxis:</strong> Schreibe im Body keinen Text „nackt“ ohne umgebendes Tag – gib jedem Textblock seine Rolle.'
+      },
+      {
+        badge: 'Zeile 10 • Körperbereich (Ende)',
+        title: '</body>',
+        text: 'Beendet den sichtbaren Bereich der Webseite.',
+        pitfall: '<strong>Fehler-Klassiker:</strong> Text, der versehentlich hinter <code>&lt;/body&gt;</code> steht, ist ungültiges HTML.'
+      },
+      {
+        badge: 'Zeile 11 • Wurzel-Element (Ende)',
+        title: '</html>',
+        text: 'Schließt das gesamte HTML-Dokument ab. Danach sollte nichts mehr folgen.',
+        pitfall: '<strong>Ordnung:</strong> Durch Einrücken (2 Leerzeichen pro Ebene) erkennst du sofort, ob jedes geöffnete Tag auch wieder geschlossen wurde.'
+      }
+    ];
+
+    function selectLine(idx) {
+      const btns = document.querySelectorAll('#skeletonLines .code-line-btn');
+      btns.forEach((b, i) => b.classList.toggle('active', i === idx));
+
+      const data = lineDetails[idx];
+      document.getElementById('inspBadge').textContent = data.badge;
+      document.getElementById('inspTitle').textContent = data.title;
+      document.getElementById('inspText').innerHTML = data.text;
+      document.getElementById('inspPitfall').innerHTML = data.pitfall;
+    }
+
+    /* ========================================================================
+       PHASE 4: LIVE-HTML-LABOR
+       ======================================================================== */
+    const presets = [
+`<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <title>Meine erste Seite</title>
+  </head>
+  <body>
+    <h1>Hallo Informatik Diff-10!</h1>
+    <p>Das ist meine <strong>allererste</strong> selbst geschriebene HTML-Seite.</p>
+    <hr>
+    <h2>Was ich heute gelernt habe</h2>
+    <p>Der Browser braucht <em>Tags</em>, um Überschriften und Absätze zu erkennen.</p>
+  </body>
+</html>`,
+
+`<!-- Aufgabe A: Finde und repariere alle 4 Fehler in diesem Dokument! -->
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <title>Fehlerhafte Seite</title>
+    <p>Dieser Text steht versehentlich im falschen Bereich!</p>
+  </head>
+  <body>
+    <h1>Mein Lieblingsfach: Informatik
+    <p>Hier lerne ich <strong>sauberes HTML</p></strong> und später CSS.
+    <p>Umlaute wie ä, ö, ü und ß müssen immer sauber lesbar sein.</p>
+  </body>
+</html>`,
+
+`<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <!-- Ändere den Tab-Titel passend zu deinem Thema -->
+    <title>Steckbrief-Vorlage</title>
+  </head>
+  <body>
+    <!-- 1. Eine eindeutige Hauptüberschrift -->
+    <h1>Mein Thema: ...</h1>
+    <p>Kurze Einleitung zu deinem Hobby, Lieblingsfilm oder Verein.</p>
+
+    <hr>
+
+    <!-- 2. Zwei Unterabschnitte mit h2, Absätzen und Hervorhebungen -->
+    <h2>Warum mich das begeistert</h2>
+    <p>Schreibe hier deinen ersten Absatz mit <strong>wichtigen</strong> Begriffen.</p>
+
+    <h2>Fakten im Überblick</h2>
+    <p>Nutze <em>Betonungen</em> und bei Bedarf einen Zeilenumbruch.<br>Das ist die zweite Zeile im selben Absatz.</p>
+  </body>
+</html>`
+    ];
+
+    let currentPresetIdx = 0;
+    const editor = document.getElementById('htmlEditor');
+    const preview = document.getElementById('htmlPreview');
+    const tabTitleEl = document.getElementById('previewTabTitle');
+
+    function updatePreview() {
+      const code = editor.value;
+      preview.srcdoc = code;
+
+      const titleMatch = code.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      const tabText = titleMatch && titleMatch[1].trim() ? titleMatch[1].trim() : 'Unbenannt';
+      tabTitleEl.textContent = 'Tab: ' + tabText;
+
+      runStructureChecks(code);
+    }
+
+    function runStructureChecks(code) {
+      const hasDoctype = /<!DOCTYPE\s+html>/i.test(code);
+      const hasHeadBody = /<head>[\s\S]*<\/head>/i.test(code) && /<body>[\s\S]*<\/body>/i.test(code);
+      const hasCharset = /<meta[^>]+charset\s*=\s*["']?utf-8["']?/i.test(code);
+      const h1Matches = code.match(/<h1[^>]*>[\s\S]*?<\/h1>/gi) || [];
+      const pMatches = code.match(/<p[^>]*>[\s\S]*?<\/p>/gi) || [];
+      const hasEmph = /<(strong|em)[^>]*>[\s\S]*?<\/\1>/i.test(code);
+
+      setCheck('chk-doctype', hasDoctype);
+      setCheck('chk-headbody', hasHeadBody);
+      setCheck('chk-charset', hasCharset);
+      setCheck('chk-h1', h1Matches.length === 1);
+      setCheck('chk-p', pMatches.length >= 2);
+      setCheck('chk-emph', hasEmph);
+    }
+
+    function setCheck(id, ok) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.toggle('ok', ok);
+      }
+    }
+
+    function loadPreset(idx) {
+      currentPresetIdx = idx;
+      editor.value = presets[idx];
+      document.querySelectorAll('.lab-presets .btn-lab').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      updatePreview();
+    }
+
+    function resetCurrentPreset() {
+      editor.value = presets[currentPresetIdx];
+      updatePreview();
+    }
+
+    function downloadHtmlFile() {
+      const blob = new Blob([editor.value], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'meine-erste-seite.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    /* Tab-Unterstützung (2 Leerzeichen) im Editor für sauberes Einrücken */
+    editor.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 2;
+        updatePreview();
+      }
+    });
+
+    editor.addEventListener('input', updatePreview);
+
+    /* ========================================================================
+       PHASE 5: KLAPP-ANTWORTEN
+       ======================================================================== */
+    function toggleAnswer(btn) {
+      const panel = btn.closest('.question-card').querySelector('.answer-panel');
+      const isOpen = panel.classList.toggle('open');
+      btn.textContent = isOpen ? 'Antwort verbergen' : 'Antwort & Erklärung aufdecken';
+    }
+
+    /* Initialisierung beim Laden */
+    loadPreset(0);
+  </script>
+</body>
+</html>
