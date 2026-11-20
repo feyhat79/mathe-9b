@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merkblatt: Volladdierer &amp; Bauteile auf dem Steckbrett | Informatik Diff-9</title>
+
+  <!-- KaTeX für mathematische und logische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 13mm 10mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827; /* Füllertiefes Schwarz */
+      line-height: 1.38;
+      font-size: 10.5pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Bildschirm-Toolbar (wird nicht gedruckt) */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .toolbar-btn-nav {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+    .toolbar-btn-nav:hover {
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+    }
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-print { background: #2563eb; color: #ffffff; }
+    .btn-print:hover { background: #1d4ed8; }
+    .btn-pdf { background: #047857; color: #ffffff; }
+    .btn-pdf:hover { background: #065f46; }
+
+    /* DIN-A4 Seiten */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 18px auto 36px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .sheet-wrapper {
+        margin: 0;
+        gap: 0;
+        max-width: none;
+      }
+      .page {
+        width: auto;
+        min-height: 0;
+        padding: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+    }
+
+    /* Dokument-Header (Füller-Königsblau) */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 4px;
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-meta {
+      font-size: 8pt;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.18;
+      margin-top: 1px;
+    }
+    .badge-sheet {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 8pt;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Abschnittsüberschriften (12pt, Königsblau mit nummeriertem Kreis) */
+    .section-title {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 7px 0 5px 0;
+      border-bottom: 1.5px solid #dbeafe;
+      padding-bottom: 2px;
+    }
+    .section-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Karten & Raster */
+    .box-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 9px;
+      background: #ffffff;
+      margin-bottom: 7px;
+    }
+    .box-title {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 2px;
+    }
+    .box-tag {
+      font-size: 7.5pt;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 4px 0 6px 0;
+    }
+
+    .svg-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 3px 0;
+    }
+    .svg-wrap svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    ul.compact-list {
+      list-style: none;
+      font-size: 9.5pt;
+      line-height: 1.35;
+    }
+    ul.compact-list li {
+      padding-left: 12px;
+      position: relative;
+      margin-bottom: 2px;
+    }
+    ul.compact-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+
+    .chip-badge-box {
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 4px 6px;
+      text-align: center;
+      background: #f8fafc;
+      font-size: 9pt;
+    }
+    .chip-badge-box strong {
+      font-family: 'Consolas', monospace;
+      color: #1e3a8a;
+      font-size: 10pt;
+    }
+
+    /* Wahrheitstabelle & Formeln */
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      text-align: center;
+    }
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 3px 5px;
+      border: 1px solid #94a3b8;
+    }
+    .calc-table td {
+      padding: 2.5px 5px;
+      border: 1px solid #cbd5e1;
+      font-family: 'Consolas', monospace;
+    }
+
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 10pt;
+      margin: 6px 0;
+    }
+
+    /* Roter Merksatz-Kasten (GEMINI.md Standard: Text zwingend schwarz #111827) */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 8px 12px;
+      margin-top: 9px;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827;
+      font-size: 9.8pt;
+      line-height: 1.38;
+    }
+
+    code {
+      font-family: 'Consolas', monospace;
+      font-size: 9pt;
+      background: #f1f5f9;
+      padding: 0 3px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BILDSCHIRM-TOOLBAR -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="volladdierer-bauteile.html" class="toolbar-btn-nav">← Zurück zum Praxis-Modul</a>
+      <span class="toolbar-title">DIN-A4-Merkblatt: Bauteile &amp; Volladdierer</span>
+    </div>
+    <div class="toolbar-actions">
+      <button type="button" class="btn-action btn-print" onclick="window.print()">Seite drucken</button>
+      <a href="Merkblatt_Volladdierer_Bauteile.pdf" download class="btn-action btn-pdf">PDF herunterladen</a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+
+    <!-- ==================== SEITE 1: BAUTEILE-LEXIKON ==================== -->
+    <section class="page">
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Informatik Differenzierung 9 • Hardware-Praxis</div>
+          <h1 class="doc-title">Bauteile-Nachschlageblatt für das Steckbrett</h1>
+        </div>
+        <span class="badge-sheet">Seite 1 / 2 • Bauteile</span>
+      </header>
+
+      <!-- 1. STECKBRETT -->
+      <div class="section-title">
+        <span class="section-num">1</span>
+        <span>Das Steckbrett (Wo fließt der Strom unter dem Brett?)</span>
+      </div>
+
+      <div class="box-card">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 740 165" width="700" height="156" aria-label="Steckbrett Leiterbahnen">
+            <rect x="6" y="4" width="728" height="157" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+            <!-- Obere Stromschiene -->
+            <line x1="30" y1="15" x2="710" y2="15" stroke="#2563eb" stroke-width="1.8"/>
+            <line x1="30" y1="35" x2="710" y2="35" stroke="#dc2626" stroke-width="1.8"/>
+            <rect x="40" y="18" width="655" height="7" rx="3" fill="#dbeafe"/>
+            <rect x="40" y="27" width="655" height="7" rx="3" fill="#fee2e2"/>
+            <text x="18" y="24" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#2563eb">−</text>
+            <text x="18" y="33" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626">+</text>
+            <text x="370" y="24" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" font-weight="700" fill="#1e3a8a">Stromschienen (+ / −): waagerecht verbunden</text>
+
+            <!-- Untere Stromschiene -->
+            <rect x="40" y="131" width="655" height="7" rx="3" fill="#dbeafe"/>
+            <rect x="40" y="140" width="655" height="7" rx="3" fill="#fee2e2"/>
+            <line x1="30" y1="130" x2="710" y2="130" stroke="#2563eb" stroke-width="1.8"/>
+            <line x1="30" y1="150" x2="710" y2="150" stroke="#dc2626" stroke-width="1.8"/>
+            <text x="18" y="138" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#2563eb">−</text>
+            <text x="18" y="147" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626">+</text>
+
+            <!-- Mittelgraben -->
+            <rect x="26" y="75" width="688" height="15" rx="2" fill="#fef08a" stroke="#eab308" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="178" y="86" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9" font-weight="700" fill="#854d0e">MITTELGRABEN: Keine Verbindung oben ↔ unten</text>
+            <text x="582" y="86" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9" font-weight="700" fill="#854d0e">ICs genau über den Graben stecken!</text>
+
+            <!-- 5er Spalten als Beispiel -->
+            <g fill="#bbf7d0" stroke="#22c55e" stroke-width="1">
+              <rect x="45" y="40" width="12" height="32" rx="3"/><rect x="45" y="93" width="12" height="32" rx="3"/>
+              <rect x="75" y="40" width="12" height="32" rx="3"/><rect x="75" y="93" width="12" height="32" rx="3"/>
+              <rect x="105" y="40" width="12" height="32" rx="3"/><rect x="105" y="93" width="12" height="32" rx="3"/>
+              <rect x="135" y="40" width="12" height="32" rx="3"/><rect x="135" y="93" width="12" height="32" rx="3"/>
+              <rect x="165" y="40" width="12" height="32" rx="3"/><rect x="165" y="93" width="12" height="32" rx="3"/>
+              <rect x="195" y="40" width="12" height="32" rx="3"/><rect x="195" y="93" width="12" height="32" rx="3"/>
+              <rect x="225" y="40" width="12" height="32" rx="3"/><rect x="225" y="93" width="12" height="32" rx="3"/>
+              <rect x="255" y="40" width="12" height="32" rx="3"/><rect x="255" y="93" width="12" height="32" rx="3"/>
+            </g>
+            <!-- IC auf Graben -->
+            <rect x="330" y="68" width="120" height="29" rx="3" fill="#1e293b"/>
+            <path d="M 330 77 A 5.5 5.5 0 0 1 330 88" fill="#cbd5e1"/>
+            <text x="392" y="86" text-anchor="middle" font-family="Consolas, monospace" font-size="10" font-weight="700" fill="#ffffff">IC über Graben</text>
+            <!-- Weitere Spalten rechts -->
+            <g fill="#bbf7d0" stroke="#22c55e" stroke-width="1">
+              <rect x="525" y="40" width="12" height="32" rx="3"/><rect x="525" y="93" width="12" height="32" rx="3"/>
+              <rect x="555" y="40" width="12" height="32" rx="3"/><rect x="555" y="93" width="12" height="32" rx="3"/>
+              <rect x="585" y="40" width="12" height="32" rx="3"/><rect x="585" y="93" width="12" height="32" rx="3"/>
+              <rect x="615" y="40" width="12" height="32" rx="3"/><rect x="615" y="93" width="12" height="32" rx="3"/>
+              <rect x="645" y="40" width="12" height="32" rx="3"/><rect x="645" y="93" width="12" height="32" rx="3"/>
+              <rect x="675" y="40" width="12" height="32" rx="3"/><rect x="675" y="93" width="12" height="32" rx="3"/>
+            </g>
+            <text x="395" y="59" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" font-weight="700" fill="#15803d">Jeweils 5 Löcher senkrecht verbunden (oben f–j, unten a–e)</text>
+          </svg>
+        </div>
+        <ul class="compact-list">
+          <li><strong>Stromschienen (+ und −):</strong> Alle Löcher einer langen Randreihe sind <strong>waagerecht</strong> miteinander verbunden.</li>
+          <li><strong>Hauptfeld (f–j und a–e):</strong> Immer <strong>5 Löcher senkrecht</strong> untereinander sind verbunden. Der <strong>Mittelgraben</strong> isoliert oben und unten.</li>
+        </ul>
+      </div>
+
+      <!-- 2. LED, WIDERSTAND, TASTER -->
+      <div class="section-title">
+        <span class="section-num">2</span>
+        <span>LED, Vorwiderstand &amp; Taster</span>
+      </div>
+
+      <div class="grid-2">
+        <!-- LED -->
+        <div class="box-card">
+          <div class="box-title">
+            <span>LED (Leuchtdiode)</span>
+            <span class="box-tag">Polung beachten</span>
+          </div>
+          <div class="svg-wrap">
+            <svg viewBox="0 0 320 115" width="300" height="108">
+              <line x1="130" y1="36" x2="55" y2="36" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="130" y1="68" x2="86" y2="68" stroke="#475569" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M 130 22 L 180 22 A 30 30 0 0 1 180 82 L 130 82 Z" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+              <rect x="124" y="18" width="8" height="68" rx="1" fill="#ef4444"/>
+              <circle cx="38" cy="36" r="11" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+              <text x="38" y="40" text-anchor="middle" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#dc2626">+</text>
+              <text x="90" y="13" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#dc2626">Langes Bein (+)</text>
+
+              <circle cx="69" cy="68" r="11" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+              <text x="69" y="72" text-anchor="middle" font-family="Calibri, sans-serif" font-size="15" font-weight="700" fill="#2563eb">−</text>
+              <text x="98" y="99" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#2563eb">Kurzes Bein (−)</text>
+
+              <!-- Schaltsymbol -->
+              <g transform="translate(230, 32)">
+                <line x1="0" y1="20" x2="18" y2="20" stroke="#111827" stroke-width="2"/>
+                <polygon points="18,9 18,31 40,20" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+                <line x1="40" y1="9" x2="40" y2="31" stroke="#111827" stroke-width="2.2"/>
+                <line x1="40" y1="20" x2="58" y2="20" stroke="#111827" stroke-width="2"/>
+                <text x="6" y="38" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626">+</text>
+                <text x="48" y="38" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#2563eb">−</text>
+              </g>
+            </svg>
+          </div>
+          <ul class="compact-list">
+            <li><strong>Langes Bein (+):</strong> führt zum Pluspol / Ausgang.</li>
+            <li><strong>Kurzes Bein (−):</strong> mit Minus (GND) verbinden.</li>
+            <li>Eselsbrücke: <strong>K</strong>urz = <strong>K</strong>athode = Minus.</li>
+          </ul>
+        </div>
+
+        <!-- Widerstand -->
+        <div class="box-card">
+          <div class="box-title">
+            <span>Widerstand (Vorwiderstand)</span>
+            <span class="box-tag">Richtung egal</span>
+          </div>
+          <div class="svg-wrap">
+            <svg viewBox="0 0 320 115" width="300" height="108">
+              <line x1="50" y1="28" x2="115" y2="28" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+              <line x1="195" y1="28" x2="260" y2="28" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+              <rect x="115" y="16" width="80" height="24" rx="8" fill="#fde68a" stroke="#b45309" stroke-width="1.8"/>
+              <rect x="128" y="16" width="7" height="24" fill="#dc2626"/>
+              <rect x="142" y="16" width="7" height="24" fill="#dc2626"/>
+              <rect x="156" y="16" width="7" height="24" fill="#78350f"/>
+              <rect x="176" y="16" width="6" height="24" fill="#d97706"/>
+
+              <!-- Reihenschaltung -->
+              <text x="160" y="60" text-anchor="middle" font-family="Calibri, sans-serif" font-size="10.5" font-weight="700" fill="#1e3a8a">In Reihe zur LED schalten:</text>
+              <text x="32" y="88" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626">+</text>
+              <line x1="45" y1="84" x2="85" y2="84" stroke="#111827" stroke-width="2"/>
+              <rect x="85" y="74" width="52" height="20" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="111" y="88" text-anchor="middle" font-family="Calibri, sans-serif" font-size="10.5" font-weight="700">R</text>
+              <line x1="137" y1="84" x2="188" y2="84" stroke="#111827" stroke-width="2"/>
+              <polygon points="188,73 188,95 210,84" fill="#fecaca" stroke="#111827" stroke-width="2"/>
+              <line x1="210" y1="73" x2="210" y2="95" stroke="#111827" stroke-width="2.2"/>
+              <line x1="210" y1="84" x2="265" y2="84" stroke="#111827" stroke-width="2"/>
+              <text x="273" y="88" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#2563eb">−</text>
+            </svg>
+          </div>
+          <ul class="compact-list">
+            <li>Schützt die LED vor zu hohem Strom (Durchbrennen).</li>
+            <li>Kann an <strong>beliebiger Stelle</strong> in Reihe und <strong>beliebig herum</strong> eingebaut werden.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Taster kompakt -->
+      <div class="box-card">
+        <div class="box-title">
+          <span>Taster (Eingänge A, B, C)</span>
+          <span class="box-tag">Signal nur beim Drücken</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <svg viewBox="0 0 180 54" width="165" height="50" style="flex-shrink:0;">
+            <line x1="10" y1="34" x2="55" y2="34" stroke="#111827" stroke-width="2.2"/>
+            <circle cx="55" cy="34" r="3" fill="#111827"/>
+            <line x1="55" y1="34" x2="105" y2="16" stroke="#dc2626" stroke-width="2.2"/>
+            <line x1="82" y1="6" x2="82" y2="24" stroke="#64748b" stroke-width="1.4" stroke-dasharray="3,2"/>
+            <line x1="70" y1="6" x2="94" y2="6" stroke="#111827" stroke-width="2.2"/>
+            <circle cx="107" cy="34" r="3" fill="#111827"/>
+            <line x1="107" y1="34" x2="165" y2="34" stroke="#111827" stroke-width="2.2"/>
+          </svg>
+          <ul class="compact-list" style="margin:0;">
+            <li><strong>Schließer-Funktion:</strong> Das Signal wird <em>nur weitergeleitet, solange der Taster gedrückt ist</em> (gedrückt = 1, losgelassen = 0).</li>
+            <li>4-Bein-Taster am besten <strong>über den Mittelgraben</strong> stecken (je 2 Beinchen auf einer Seite sind intern fest verbunden).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3. LOGIKGATTER-ICs -->
+      <div class="section-title">
+        <span class="section-num">3</span>
+        <span>Logikgatter-ICs: 4fach-Gatter &amp; Pin-Belegung</span>
+      </div>
+
+      <div class="box-card" style="margin-bottom:0;">
+        <div class="grid-3">
+          <div class="chip-badge-box"><strong>74LS08</strong> → AND-Gatter (2× benötigt)</div>
+          <div class="chip-badge-box"><strong>74LS32</strong> → OR-Gatter (1× benötigt)</div>
+          <div class="chip-badge-box"><strong>74LS86</strong> → XOR-Gatter (2× benötigt)</div>
+        </div>
+
+        <div class="svg-wrap">
+          <svg viewBox="0 0 720 220" width="660" height="202" aria-label="14-Pin Logik-IC Pinout">
+            <!-- Stromversorgung -->
+            <text x="148" y="15" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#dc2626">Pin 14 → PLUS (+)</text>
+            <line x1="148" y1="19" x2="148" y2="38" stroke="#dc2626" stroke-width="2"/>
+
+            <text x="572" y="213" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#2563eb">Pin 7 → MINUS (−)</text>
+            <line x1="572" y1="182" x2="572" y2="200" stroke="#2563eb" stroke-width="2"/>
+
+            <!-- Kerbe Hinweis -->
+            <text x="55" y="106" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#1e3a8a">Einkerbung</text>
+            <text x="55" y="121" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#1e3a8a">LINKS!</text>
+            <line x1="90" y1="110" x2="110" y2="110" stroke="#1e3a8a" stroke-width="2"/>
+
+            <!-- Gehäuse -->
+            <rect x="115" y="54" width="490" height="112" rx="6" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+            <path d="M 115 95 A 15 15 0 0 1 115 125" fill="#e2e8f0"/>
+
+            <!-- Pins oben (14..8) -->
+            <g font-family="Consolas, monospace" font-size="10.5" font-weight="700">
+              <rect x="138" y="38" width="20" height="16" fill="#fecaca" stroke="#dc2626"/><text x="148" y="50" text-anchor="middle" fill="#7f1d1d">14</text>
+              <rect x="208" y="38" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="218" y="50" text-anchor="middle">13</text>
+              <rect x="279" y="38" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="289" y="50" text-anchor="middle">12</text>
+              <rect x="350" y="38" width="20" height="16" fill="#bbf7d0" stroke="#16a34a"/><text x="360" y="50" text-anchor="middle" fill="#14532d">11</text>
+              <rect x="421" y="38" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="431" y="50" text-anchor="middle">10</text>
+              <rect x="492" y="38" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="502" y="50" text-anchor="middle">9</text>
+              <rect x="562" y="38" width="20" height="16" fill="#bbf7d0" stroke="#16a34a"/><text x="572" y="50" text-anchor="middle" fill="#14532d">8</text>
+
+              <!-- Pins unten (1..7) -->
+              <rect x="138" y="166" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="148" y="178" text-anchor="middle">1</text>
+              <rect x="208" y="166" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="218" y="178" text-anchor="middle">2</text>
+              <rect x="279" y="166" width="20" height="16" fill="#bbf7d0" stroke="#16a34a"/><text x="289" y="178" text-anchor="middle" fill="#14532d">3</text>
+              <rect x="350" y="166" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="360" y="178" text-anchor="middle">4</text>
+              <rect x="421" y="166" width="20" height="16" fill="#e2e8f0" stroke="#64748b"/><text x="431" y="178" text-anchor="middle">5</text>
+              <rect x="492" y="166" width="20" height="16" fill="#bbf7d0" stroke="#16a34a"/><text x="502" y="178" text-anchor="middle" fill="#14532d">6</text>
+              <rect x="562" y="166" width="20" height="16" fill="#bfdbfe" stroke="#2563eb"/><text x="572" y="178" text-anchor="middle" fill="#1e3a8a">7</text>
+            </g>
+
+            <!-- Ein/Aus Labels -->
+            <g font-family="Calibri, sans-serif" font-size="10" font-weight="700">
+              <text x="218" y="32" text-anchor="middle" fill="#475569">Ein</text><text x="289" y="32" text-anchor="middle" fill="#475569">Ein</text><text x="360" y="32" text-anchor="middle" fill="#15803d">Aus</text>
+              <text x="431" y="32" text-anchor="middle" fill="#475569">Ein</text><text x="502" y="32" text-anchor="middle" fill="#475569">Ein</text><text x="572" y="32" text-anchor="middle" fill="#15803d">Aus</text>
+              <text x="148" y="195" text-anchor="middle" fill="#475569">Ein</text><text x="218" y="195" text-anchor="middle" fill="#475569">Ein</text><text x="289" y="195" text-anchor="middle" fill="#15803d">Aus</text>
+              <text x="360" y="195" text-anchor="middle" fill="#475569">Ein</text><text x="431" y="195" text-anchor="middle" fill="#475569">Ein</text><text x="502" y="195" text-anchor="middle" fill="#15803d">Aus</text>
+            </g>
+
+            <!-- Interne Gatter -->
+            <polyline points="148,166 148,136 185,136" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="218,166 218,150 185,150" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="233,143 289,143 289,166" fill="none" stroke="#4ade80" stroke-width="2"/>
+            <rect x="185" y="130" width="48" height="26" rx="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+            <text x="209" y="147" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#ffffff">Gatter 1</text>
+
+            <polyline points="360,166 360,136 398,136" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="431,166 431,150 398,150" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="446,143 502,143 502,166" fill="none" stroke="#4ade80" stroke-width="2"/>
+            <rect x="398" y="130" width="48" height="26" rx="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+            <text x="422" y="147" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#ffffff">Gatter 2</text>
+
+            <polyline points="218,54 218,70 270,70" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="289,54 289,84 270,84" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="318,77 360,77 360,54" fill="none" stroke="#4ade80" stroke-width="2"/>
+            <rect x="270" y="64" width="48" height="26" rx="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+            <text x="294" y="81" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#ffffff">Gatter 4</text>
+
+            <polyline points="431,54 431,70 482,70" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="502,54 502,84 482,84" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+            <polyline points="530,77 572,77 572,54" fill="none" stroke="#4ade80" stroke-width="2"/>
+            <rect x="482" y="64" width="48" height="26" rx="3" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.5"/>
+            <text x="506" y="81" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#ffffff">Gatter 3</text>
+          </svg>
+        </div>
+        <p style="font-size:9.3pt; text-align:center; color:#334155;">
+          <strong>Stromversorgung niemals vergessen:</strong> Kerbe nach <strong>links</strong> → <strong>Oben links (Pin 14) an Plus (+)</strong>, <strong>Unten rechts (Pin 7) an Minus (−)</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== SEITE 2: DER VOLLADDIERER ==================== -->
+    <section class="page">
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Informatik Differenzierung 9 • Hardware-Praxis</div>
+          <h1 class="doc-title">Der Volladdierer: Schaltung, Wahrheitstabelle &amp; Formeln</h1>
+        </div>
+        <span class="badge-sheet">Seite 2 / 2 • Volladdierer</span>
+      </header>
+
+      <!-- 4. BLACKBOX & WAHRHEITSTABELLE -->
+      <div class="section-title">
+        <span class="section-num">4</span>
+        <span>Blackbox &amp; Wahrheitstabelle</span>
+      </div>
+
+      <div class="grid-2" style="grid-template-columns: 0.78fr 1.22fr; align-items: stretch;">
+        <!-- Blackbox -->
+        <div class="box-card" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:center;">
+          <div class="box-title"><span>Blackbox-Modell</span><span class="box-tag">3 Ein / 2 Aus</span></div>
+          <div class="svg-wrap">
+            <svg viewBox="0 0 230 190" width="210" height="174">
+              <!-- Ausgänge -->
+              <circle cx="72" cy="24" r="13" fill="#eff6ff" stroke="#1e3a8a" stroke-width="2"/>
+              <line x1="63" y1="15" x2="81" y2="33" stroke="#1e3a8a" stroke-width="1.5"/>
+              <line x1="81" y1="15" x2="63" y2="33" stroke="#1e3a8a" stroke-width="1.5"/>
+              <text x="45" y="28" text-anchor="end" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">C</text>
+              <line x1="72" y1="37" x2="72" y2="62" stroke="#111827" stroke-width="2"/>
+
+              <circle cx="158" cy="24" r="13" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+              <line x1="149" y1="15" x2="167" y2="33" stroke="#15803d" stroke-width="1.5"/>
+              <line x1="167" y1="15" x2="149" y2="33" stroke="#15803d" stroke-width="1.5"/>
+              <text x="184" y="28" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#15803d">S</text>
+              <line x1="158" y1="37" x2="158" y2="62" stroke="#111827" stroke-width="2"/>
+
+              <!-- Kasten -->
+              <rect x="42" y="62" width="146" height="66" rx="5" fill="#f8fafc" stroke="#1e3a8a" stroke-width="2"/>
+              <text x="115" y="83" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#111827">2 × XOR (74LS86)</text>
+              <text x="115" y="100" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#111827">2 × AND (74LS08)</text>
+              <text x="115" y="117" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#111827">1 × OR (74LS32)</text>
+
+              <!-- Eingänge -->
+              <line x1="65" y1="128" x2="65" y2="152" stroke="#111827" stroke-width="2"/>
+              <rect x="53" y="152" width="24" height="20" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.6"/>
+              <text x="65" y="166" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700">A</text>
+
+              <line x1="115" y1="128" x2="115" y2="152" stroke="#111827" stroke-width="2"/>
+              <rect x="103" y="152" width="24" height="20" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.6"/>
+              <text x="115" y="166" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700">B</text>
+
+              <line x1="165" y1="128" x2="165" y2="152" stroke="#111827" stroke-width="2"/>
+              <rect x="153" y="152" width="24" height="20" rx="3" fill="#f1f5f9" stroke="#334155" stroke-width="1.6"/>
+              <text x="165" y="166" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700">C</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Wahrheitstabelle -->
+        <div class="box-card" style="margin-bottom:0;">
+          <div class="box-title"><span>Wahrheitstabelle (alle 8 Schaltzustände)</span><span class="box-tag">A + B + C</span></div>
+          <table class="calc-table">
+            <thead>
+              <tr>
+                <th>A</th><th>B</th><th>C</th><th>Wert</th><th style="color:#1e3a8a;">C (Übertrag)</th><th style="color:#15803d;">S (Summe)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td><td>= 0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>0</td><td>1</td><td>= 1</td><td>0</td><td>1</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td><td>= 1</td><td>0</td><td>1</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td><td>= 2</td><td><strong>1</strong></td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td><td>= 1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td><td>= 2</td><td><strong>1</strong></td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td><td>= 2</td><td><strong>1</strong></td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td><td>= 3</td><td><strong>1</strong></td><td><strong>1</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. SCHALTGLEICHUNGEN -->
+      <div class="section-title">
+        <span class="section-num">5</span>
+        <span>Logische Gleichungen</span>
+      </div>
+
+      <div class="formula-box">
+        <div style="margin-bottom: 3px;">
+          <strong>Summe $S$:</strong>
+          $S = (\overline{A} \land \overline{B} \land C) \lor (\overline{A} \land B \land \overline{C}) \lor (A \land \overline{B} \land \overline{C}) \lor (A \land B \land C) = (A \oplus B) \oplus C$
+        </div>
+        <div>
+          <strong>Übertrag $C$:</strong>
+          $C = (A \land B) \lor (A \land C) \lor (B \land C) = (B \land C) \lor \bigl(A \land (B \oplus C)\bigr)$
+        </div>
+      </div>
+
+      <!-- 6. SCHALTPLAN -->
+      <div class="section-title">
+        <span class="section-num">6</span>
+        <span>Schaltplan zum Nachstecken (Taster unten → LEDs oben)</span>
+      </div>
+
+      <div class="box-card" style="margin-bottom:4px;">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 460 330" width="430" height="308" aria-label="Schaltplan Volladdierer zum Drucken">
+            <!-- LEDs oben -->
+            <g transform="translate(135, 22)">
+              <circle cx="0" cy="14" r="13" fill="#eff6ff" stroke="#1e3a8a" stroke-width="2"/>
+              <line x1="-8" y1="6" x2="8" y2="22" stroke="#1e3a8a" stroke-width="1.5"/>
+              <line x1="8" y1="6" x2="-8" y2="22" stroke="#1e3a8a" stroke-width="1.5"/>
+              <text x="20" y="18" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#1e3a8a">LED C (Übertrag)</text>
+            </g>
+            <g transform="translate(345, 22)">
+              <circle cx="0" cy="14" r="13" fill="#f0fdf4" stroke="#15803d" stroke-width="2"/>
+              <line x1="-8" y1="6" x2="8" y2="22" stroke="#15803d" stroke-width="1.5"/>
+              <line x1="8" y1="6" x2="-8" y2="22" stroke="#15803d" stroke-width="1.5"/>
+              <text x="20" y="18" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#15803d">LED S (Summe)</text>
+            </g>
+
+            <!-- Leitungen -->
+            <!-- A -->
+            <polyline points="40,286 40,188 158,188 158,174" fill="none" stroke="#111827" stroke-width="2"/>
+            <polyline points="158,188 328,188 328,132" fill="none" stroke="#111827" stroke-width="2"/>
+            <!-- B -->
+            <polyline points="220,286 220,258 93,258 93,230" fill="none" stroke="#2563eb" stroke-width="2"/>
+            <polyline points="220,258 333,258 333,230" fill="none" stroke="#2563eb" stroke-width="2"/>
+            <!-- C -->
+            <polyline points="370,286 370,244 367,244 367,230" fill="none" stroke="#047857" stroke-width="2"/>
+            <polyline points="370,244 123,244 123,230" fill="none" stroke="#047857" stroke-width="2"/>
+
+            <!-- S1 -->
+            <polyline points="350,194 350,178 365,178 365,132" fill="none" stroke="#0f766e" stroke-width="2"/>
+            <polyline points="350,178 188,178 188,174" fill="none" stroke="#0f766e" stroke-width="2"/>
+
+            <!-- C1, C2 -> OR -->
+            <polyline points="108,194 108,122 120,122 120,104" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+            <polyline points="173,138 173,122 150,122 150,104" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+
+            <!-- Ausgänge -->
+            <line x1="135" y1="68" x2="135" y2="49" stroke="#1e3a8a" stroke-width="2.2"/>
+            <line x1="345" y1="96" x2="345" y2="49" stroke="#15803d" stroke-width="2.2"/>
+
+            <!-- Gatter -->
+            <g transform="translate(78, 194)">
+              <rect x="0" y="0" width="60" height="36" rx="3" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="30" y="17" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700">&amp;</text>
+              <text x="30" y="30" text-anchor="middle" font-family="Consolas, monospace" font-size="8.5" fill="#475569">74LS08</text>
+            </g>
+            <g transform="translate(318, 194)">
+              <rect x="0" y="0" width="64" height="36" rx="3" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="32" y="17" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700">=1</text>
+              <text x="32" y="30" text-anchor="middle" font-family="Consolas, monospace" font-size="8.5" fill="#475569">74LS86</text>
+            </g>
+            <g transform="translate(143, 138)">
+              <rect x="0" y="0" width="60" height="36" rx="3" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="30" y="17" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700">&amp;</text>
+              <text x="30" y="30" text-anchor="middle" font-family="Consolas, monospace" font-size="8.5" fill="#475569">74LS08</text>
+            </g>
+            <g transform="translate(313, 96)">
+              <rect x="0" y="0" width="64" height="36" rx="3" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="32" y="17" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700">=1</text>
+              <text x="32" y="30" text-anchor="middle" font-family="Consolas, monospace" font-size="8.5" fill="#475569">74LS86</text>
+            </g>
+            <g transform="translate(103, 68)">
+              <rect x="0" y="0" width="64" height="36" rx="3" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+              <text x="32" y="17" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700">&ge;1</text>
+              <text x="32" y="30" text-anchor="middle" font-family="Consolas, monospace" font-size="8.5" fill="#475569">74LS32</text>
+            </g>
+
+            <!-- Knotenpunkte -->
+            <circle cx="158" cy="188" r="3" fill="#111827"/>
+            <circle cx="220" cy="258" r="3" fill="#2563eb"/>
+            <circle cx="370" cy="244" r="3" fill="#047857"/>
+            <circle cx="350" cy="178" r="3" fill="#0f766e"/>
+
+            <!-- Taster A, B, C -->
+            <rect x="20" y="286" width="40" height="24" rx="4" fill="#f1f5f9" stroke="#334155" stroke-width="1.8"/>
+            <text x="40" y="302" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700">A</text>
+            <rect x="200" y="286" width="40" height="24" rx="4" fill="#f1f5f9" stroke="#334155" stroke-width="1.8"/>
+            <text x="220" y="302" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700">B</text>
+            <rect x="350" y="286" width="40" height="24" rx="4" fill="#f1f5f9" stroke="#334155" stroke-width="1.8"/>
+            <text x="370" y="302" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700">C</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- MERKE KASTEN (Checkliste) -->
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-content">
+          <strong>Aufbau-Check vor dem Einschalten:</strong>
+          (1) Zeigt die <strong>Einkerbung</strong> aller 3 ICs nach <strong>links</strong>?
+          (2) Liegen alle 3 ICs mit <strong>Pin 14 an Plus (+)</strong> und <strong>Pin 7 an Minus (−)</strong>?
+          (3) Hat jede LED einen <strong>Vorwiderstand</strong> und zeigt ihr <strong>kurzes Bein</strong> Richtung Minus (−)?
+          (4) Stecken alle ICs sauber über dem <strong>Mittelgraben</strong>?
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

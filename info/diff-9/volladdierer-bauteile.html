@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Praxis: Volladdierer &amp; Bauteile-Lexikon | Informatik Diff-9</title>
+
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische und logische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    /* Ergänzende Komponenten-Styles passend zu web-module.css */
+    .parts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 780px) {
+      .parts-grid { grid-template-columns: 1fr; }
+    }
+
+    .part-card {
+      background: var(--paper-white);
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .part-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+
+    .part-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+
+    .part-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .svg-box {
+      background: #f8fafc;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.85rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: auto;
+    }
+
+    .svg-box svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .info-pill-box {
+      background: #f8fbff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.96rem;
+      line-height: 1.55;
+      margin-top: 0.5rem;
+    }
+
+    .warn-pill-box {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-radius: 6px;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin-top: 0.5rem;
+    }
+
+    /* IC- & Steckbrett-Steuerung */
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0.85rem 0 1rem 0;
+    }
+
+    .ctrl-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      color: var(--ink-black);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ctrl-btn:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+      color: var(--model-blue);
+    }
+    .ctrl-btn.active {
+      background: var(--ink-blue);
+      border-color: var(--ink-blue);
+      color: #ffffff;
+    }
+
+    /* Chip-Typen Tabelle */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.1rem;
+    }
+    @media (max-width: 720px) {
+      .chip-grid { grid-template-columns: 1fr; }
+    }
+
+    .chip-mini-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip-mini-card:hover {
+      border-color: var(--model-blue);
+      background: #f8fbff;
+    }
+    .chip-mini-card.active {
+      border: 2px solid var(--ink-blue);
+      background: #eff6ff;
+    }
+    .chip-code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+    .chip-gate-name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 2px 0;
+    }
+    .chip-count {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+
+    /* Volladdierer Layout */
+    .va-layout {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 1.5rem;
+      align-items: start;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 820px) {
+      .va-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Interaktive Schaltungs-Leitungen */
+    .va-wire {
+      stroke: #cbd5e1;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.18s ease, stroke-width 0.18s ease;
+    }
+    .va-wire.on-s {
+      stroke: #16a34a;
+      stroke-width: 4;
+    }
+    .va-wire.on-c {
+      stroke: #2563eb;
+      stroke-width: 4;
+    }
+    .va-wire.on-in {
+      stroke: #0f766e;
+      stroke-width: 3.8;
+    }
+
+    .va-taster-btn {
+      cursor: pointer;
+    }
+    .va-taster-btn rect {
+      transition: all 0.15s ease;
+    }
+    .va-taster-btn:hover rect.taster-body {
+      stroke: var(--ink-blue);
+    }
+
+    .truth-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 0.96rem;
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+    }
+    .truth-table th, .truth-table td {
+      padding: 6px 8px;
+      border: 1px solid var(--paper-border);
+    }
+    .truth-table th {
+      background: #f1f5f9;
+      color: var(--ink-blue);
+      font-weight: 700;
+    }
+    .truth-table tr.active-row {
+      background: #fef08a;
+      font-weight: 700;
+    }
+    .truth-table td.mono {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .formula-block {
+      background: #f8fafc;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.9rem 1.15rem;
+      margin: 0.75rem 0;
+      overflow-x: auto;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 720px) {
+      .checklist-grid { grid-template-columns: 1fr; }
+    }
+
+    .step-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+    }
+    .step-badge-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .bb-rail, .bb-col {
+      transition: opacity 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRESENTER-BAR -->
+  <nav class="presenter-bar" aria-label="Kapitel-Navigation">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Diff-9</a>
+      <div class="presenter-title">
+        <span>Volladdierer &amp; Bauteile</span>
+        <span class="presenter-tag">Thema 4 • Praxis</span>
+      </div>
+    </div>
+
+    <div class="presenter-actions">
+      <a href="#bauteile" class="presenter-tab-btn">1. Bauteile</a>
+      <a href="#logik-ics" class="presenter-tab-btn">2. Logik-ICs</a>
+      <a href="#volladdierer" class="presenter-tab-btn">3. Volladdierer</a>
+      <a href="#aufbau-check" class="presenter-tab-btn">4. Checkliste</a>
+      <a href="addierer.html" class="presenter-tab-btn">Theorie-Modul</a>
+      <a href="Merkblatt_Volladdierer_Bauteile.html" class="presenter-tab-btn btn-summary">Merkblatt (Druck / PDF)</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- DECKBLATT-HEADER -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik Differenzierung 9 (Diff-9)</span>
+        <span>Nachschlagewerk für das Hardware-Labor</span>
+      </div>
+      <h1>Der Volladdierer auf dem Steckbrett: Bauteile &amp; Schaltung</h1>
+      <p class="sheet-intro">
+        In diesem Praxis-Leitfaden kannst du jederzeit nachschlagen, wie <span class="highlighter">Steckbrett, LEDs, Widerstände, Taster und Logikgatter-ICs</span> funktionieren und wie du daraus Schritt für Schritt einen funktionierenden Volladdierer für 3 Eingangsbits ($A, B, C$) aufbaust.
+      </p>
+    </header>
+
+    <!-- ABSCHNITT 1: BAUTEILE-LEXIKON -->
+    <section id="bauteile" class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        <span>Die Bauteile im Überblick</span>
+      </h2>
+
+      <!-- 1A: STECKBRETT (Volle Breite wegen guter Erkennbarkeit) -->
+      <div class="part-card" style="margin-bottom: 1.5rem;">
+        <div class="part-header">
+          <span class="part-title">1.1 Das Steckbrett (Breadboard)</span>
+          <span class="part-tag">Verbindung ohne Löten</span>
+        </div>
+
+        <p>
+          Unter den kleinen Stecklöchern sitzen Metallklammern. Damit du beim Stecken keinen Kurzschluss baust, musst du genau wissen, welche Löcher unter dem Kunststoff <strong>miteinander verbunden</strong> sind. Klicke auf die Buttons, um die versteckten Leiterbahnen sichtbar zu machen:
+        </p>
+
+        <div class="control-bar" role="group" aria-label="Steckbrett-Verbindungen anzeigen">
+          <button type="button" class="ctrl-btn active" onclick="setBreadboardMode('all', this)">Alle Verbindungen</button>
+          <button type="button" class="ctrl-btn" onclick="setBreadboardMode('rails', this)">Nur Stromschienen (+ / -)</button>
+          <button type="button" class="ctrl-btn" onclick="setBreadboardMode('cols', this)">Nur 5er-Spalten (a–e / f–j)</button>
+          <button type="button" class="ctrl-btn" onclick="setBreadboardMode('gap', this)">Mittelgraben (für ICs)</button>
+        </div>
+
+        <div class="svg-box">
+          <svg id="svg-breadboard" viewBox="0 0 760 270" width="760" height="270" aria-label="Schematischer Aufbau eines Steckbretts">
+            <!-- Äußerer Rahmen -->
+            <rect x="10" y="10" width="740" height="250" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+
+            <!-- Obere Stromschienen (+ und -) -->
+            <line x1="35" y1="26" x2="725" y2="26" stroke="#2563eb" stroke-width="2"/>
+            <line x1="35" y1="54" x2="725" y2="54" stroke="#dc2626" stroke-width="2"/>
+            <text x="20" y="34" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#2563eb">-</text>
+            <text x="20" y="50" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#dc2626">+</text>
+            <text x="733" y="34" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#2563eb">-</text>
+            <text x="733" y="50" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#dc2626">+</text>
+
+            <!-- Highlight-Bahnen Stromschienen -->
+            <g class="bb-rail">
+              <rect x="44" y="28" width="672" height="9" rx="4" fill="#bfdbfe" opacity="0.9"/>
+              <rect x="44" y="42" width="672" height="9" rx="4" fill="#fecaca" opacity="0.9"/>
+              <rect x="44" y="218" width="672" height="9" rx="4" fill="#bfdbfe" opacity="0.9"/>
+              <rect x="44" y="232" width="672" height="9" rx="4" fill="#fecaca" opacity="0.9"/>
+            </g>
+
+            <!-- Untere Stromschienen (+ und -) -->
+            <line x1="35" y1="215" x2="725" y2="215" stroke="#2563eb" stroke-width="2"/>
+            <line x1="35" y1="244" x2="725" y2="244" stroke="#dc2626" stroke-width="2"/>
+            <text x="20" y="226" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#2563eb">-</text>
+            <text x="20" y="241" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#dc2626">+</text>
+            <text x="733" y="226" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#2563eb">-</text>
+            <text x="733" y="241" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#dc2626">+</text>
+
+            <!-- Mittelgraben -->
+            <rect id="bb-gap-highlight" x="28" y="126" width="704" height="18" rx="3" fill="#e2e8f0" stroke="#94a3b8" stroke-dasharray="5,4" stroke-width="1"/>
+            <text x="380" y="139" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#475569">MITTELGRABEN — Keine Verbindung zwischen Reihe e und Reihe f (ICs hierüber stecken!)</text>
+
+            <!-- Reihenbeschriftung -->
+            <g font-family="Consolas, monospace" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">
+              <text x="24" y="75">j</text><text x="24" y="86">i</text><text x="24" y="97">h</text><text x="24" y="108">g</text><text x="24" y="119">f</text>
+              <text x="24" y="156">e</text><text x="24" y="167">d</text><text x="24" y="178">c</text><text x="24" y="189">b</text><text x="24" y="200">a</text>
+            </g>
+
+            <!-- Dynamisch generierte Spalten & Löcher durch JS -->
+            <g id="bb-cols-group" class="bb-col"></g>
+            <g id="bb-holes-group"></g>
+
+            <!-- Beispiel-IC über Mittelgraben (nur bei gap-Modus oder dezent sichtbar) -->
+            <g id="bb-ic-demo" opacity="0.95">
+              <rect x="278" y="116" width="128" height="38" rx="3" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+              <path d="M 278 128 A 7 7 0 0 1 278 142" fill="#94a3b8"/>
+              <text x="342" y="139" text-anchor="middle" font-family="Consolas, monospace" font-size="11" font-weight="700" fill="#f8fafc">74LS86 (über Graben)</text>
+            </g>
+          </svg>
+        </div>
+
+        <div id="bb-explain" class="info-pill-box">
+          <strong>Auf einen Blick:</strong> Die äußeren <strong>Stromschienen (+ und -)</strong> laufen <em>waagerecht</em> durch. Im inneren Hauptfeld sind immer <strong>5 Löcher senkrecht</strong> miteinander verbunden (oben <code>f–j</code>, unten <code>a–e</code>). Der <strong>Mittelgraben</strong> trennt oben und unten vollständig – genau dort werden die Logik-ICs aufgesteckt.
+        </div>
+      </div>
+
+      <!-- 1B: LED, WIDERSTAND, TASTER -->
+      <div class="parts-grid">
+        <!-- LED -->
+        <div class="part-card">
+          <div class="part-header">
+            <span class="part-title">1.2 LED (Leuchtdiode)</span>
+            <span class="part-tag">Polung beachten</span>
+          </div>
+          <div class="svg-box">
+            <svg viewBox="0 0 360 190" width="360" height="190" aria-label="Aufbau und Polung einer LED">
+              <!-- LED Körper (liegend/leicht geneigt für Klarheit) -->
+              <line x1="160" y1="62" x2="70" y2="62" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+              <line x1="160" y1="98" x2="105" y2="98" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+              <!-- Kuppel -->
+              <path d="M 160 44 L 222 44 A 36 36 0 0 1 222 116 L 160 116 Z" fill="#fecaca" stroke="#dc2626" stroke-width="2.5"/>
+              <!-- Sockelring (rechts flach angedeutet) -->
+              <rect x="152" y="38" width="10" height="84" rx="2" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
+              <!-- Inneres -->
+              <polygon points="175,58 205,58 212,68 175,68" fill="#94a3b8" opacity="0.6"/>
+              <polygon points="175,92 215,92 215,103 175,103" fill="#94a3b8" opacity="0.6"/>
+
+              <!-- Beschriftung langes Bein (+) -->
+              <circle cx="48" cy="62" r="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+              <text x="48" y="67" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#dc2626">+</text>
+              <text x="115" y="30" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#111827">Langes Bein (Anode)</text>
+              <text x="115" y="45" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" fill="#dc2626">→ zum Pluspol / Signal</text>
+
+              <!-- Beschriftung kurzes Bein (-) -->
+              <circle cx="83" cy="98" r="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+              <text x="83" y="103" text-anchor="middle" font-family="Calibri, sans-serif" font-size="18" font-weight="700" fill="#2563eb">−</text>
+              <text x="118" y="142" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#111827">Kurzes Bein (Kathode)</text>
+              <text x="118" y="158" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" fill="#2563eb">→ mit Minus (−) verbinden</text>
+
+              <!-- Schaltsymbol rechts -->
+              <g transform="translate(275, 55)">
+                <text x="35" y="-12" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#475569">Schaltsymbol</text>
+                <line x1="0" y1="25" x2="20" y2="25" stroke="#111827" stroke-width="2"/>
+                <polygon points="20,12 20,38 45,25" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+                <line x1="45" y1="12" x2="45" y2="38" stroke="#111827" stroke-width="2.5"/>
+                <line x1="45" y1="25" x2="65" y2="25" stroke="#111827" stroke-width="2"/>
+                <!-- Lichtpfeile -->
+                <line x1="30" y1="5" x2="42" y2="-4" stroke="#dc2626" stroke-width="1.8"/>
+                <polygon points="42,-4 35,-3 39,2" fill="#dc2626"/>
+                <line x1="40" y1="8" x2="52" y2="-1" stroke="#dc2626" stroke-width="1.8"/>
+                <polygon points="52,-1 45,0 49,5" fill="#dc2626"/>
+                <text x="8" y="45" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#dc2626">+</text>
+                <text x="54" y="45" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#2563eb">−</text>
+              </g>
+            </svg>
+          </div>
+          <ul class="rule-list">
+            <li><strong>Eine Diode leitet Strom nur in eine Richtung!</strong></li>
+            <li><strong>Langes Bein (+):</strong> Kommt an das Plus-Signal (z. B. den Gatter-Ausgang).</li>
+            <li><strong>Kurzes Bein (−):</strong> Kommt an den Minuspol (GND). Eselsbrücke: <strong>K</strong>urz = <strong>K</strong>athode = Minus.</li>
+            <li>Leuchtet die LED nicht, hast du sie oft nur falsch herum eingesteckt.</li>
+          </ul>
+        </div>
+
+        <!-- WIDERSTAND -->
+        <div class="part-card">
+          <div class="part-header">
+            <span class="part-title">1.3 Vorwiderstand</span>
+            <span class="part-tag">Richtung egal (ungepolt)</span>
+          </div>
+          <div class="svg-box">
+            <svg viewBox="0 0 360 190" width="360" height="190" aria-label="Vorwiderstand und LED-Schutzschaltung">
+              <!-- Bauteil-Zeichnung oben -->
+              <line x1="45" y1="45" x2="120" y2="45" stroke="#64748b" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="210" y1="45" x2="285" y2="45" stroke="#64748b" stroke-width="3.5" stroke-linecap="round"/>
+              <!-- Widerstandskörper -->
+              <rect x="120" y="30" width="90" height="30" rx="10" fill="#fde68a" stroke="#b45309" stroke-width="2"/>
+              <rect x="135" y="30" width="8" height="30" fill="#dc2626"/>
+              <rect x="151" y="30" width="8" height="30" fill="#dc2626"/>
+              <rect x="167" y="30" width="8" height="30" fill="#78350f"/>
+              <rect x="190" y="30" width="7" height="30" fill="#d97706"/>
+              <text x="165" y="18" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#111827">Widerstand (z. B. 220 Ω oder 330 Ω)</text>
+
+              <!-- Schaltsymbol + Reihenschaltung mit LED unten -->
+              <text x="180" y="92" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12.5" font-weight="700" fill="#1e3a8a">So schützt er deine LED (Reihenschaltung):</text>
+              <line x1="45" y1="130" x2="95" y2="130" stroke="#111827" stroke-width="2.2"/>
+              <circle cx="40" cy="130" r="9" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+              <text x="40" y="134" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#dc2626">+</text>
+
+              <!-- Schaltsymbol Widerstand -->
+              <rect x="95" y="118" width="60" height="24" fill="#ffffff" stroke="#111827" stroke-width="2.2"/>
+              <text x="125" y="134" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#111827">R</text>
+              <line x1="155" y1="130" x2="215" y2="130" stroke="#111827" stroke-width="2.2"/>
+
+              <!-- Schaltsymbol LED -->
+              <polygon points="215,117 215,143 242,130" fill="#fecaca" stroke="#111827" stroke-width="2.2"/>
+              <line x1="242" y1="117" x2="242" y2="143" stroke="#111827" stroke-width="2.5"/>
+              <line x1="242" y1="130" x2="310" y2="130" stroke="#111827" stroke-width="2.2"/>
+              <circle cx="318" cy="130" r="9" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+              <text x="318" y="134" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#2563eb">−</text>
+
+              <text x="125" y="160" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" fill="#475569">bremst den Strom</text>
+              <text x="229" y="160" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" fill="#475569">LED leuchtet sicher</text>
+            </svg>
+          </div>
+          <ul class="rule-list">
+            <li><strong>Schutzfunktion:</strong> Begrenzt den Strom (und senkt die Spannung an der LED), damit sie nicht durchbrennt.</li>
+            <li><strong>Beliebige Einbaustelle:</strong> Im LED-Stromkreis ist es egal, ob der Widerstand vor dem langen Bein oder nach dem kurzen Bein sitzt.</li>
+            <li><strong>Keine Polung:</strong> Ein Widerstand hat kein Plus oder Minus – man kann ihn beliebig herum einstecken.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1C: TASTER -->
+      <div class="part-card">
+        <div class="part-header">
+          <span class="part-title">1.4 Taster (Eingänge A, B, C)</span>
+          <span class="part-tag">Schließer-Prinzip</span>
+        </div>
+
+        <div class="note-columns" style="margin: 0.25rem 0; align-items: center;">
+          <div class="svg-box">
+            <svg viewBox="0 0 380 165" width="380" height="165" aria-label="Aufbau eines 4-Bein-Tasters und Schaltsymbol">
+              <!-- Links: Taster mit internen Verbindungen -->
+              <text x="105" y="18" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12.5" font-weight="700" fill="#1e3a8a">Steckbrett-Taster (Draufsicht)</text>
+              <!-- Beinchen -->
+              <line x1="55" y1="45" x2="72" y2="45" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+              <line x1="55" y1="115" x2="72" y2="115" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+              <line x1="138" y1="45" x2="155" y2="45" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+              <line x1="138" y1="115" x2="155" y2="115" stroke="#64748b" stroke-width="5" stroke-linecap="round"/>
+              <!-- Gehäuse -->
+              <rect x="70" y="32" width="70" height="96" rx="6" fill="#334155" stroke="#0f172a" stroke-width="2"/>
+              <!-- Interne feste Brücken -->
+              <line x1="82" y1="45" x2="82" y2="115" stroke="#38bdf8" stroke-width="3"/>
+              <line x1="128" y1="45" x2="128" y2="115" stroke="#38bdf8" stroke-width="3"/>
+              <!-- Schließerkontakt in der Mitte -->
+              <line x1="82" y1="80" x2="96" y2="80" stroke="#f8fafc" stroke-width="2.5"/>
+              <line x1="114" y1="80" x2="128" y2="80" stroke="#f8fafc" stroke-width="2.5"/>
+              <line x1="96" y1="80" x2="112" y2="68" stroke="#facc15" stroke-width="2.5"/>
+              <!-- Knopf -->
+              <circle cx="105" cy="80" r="14" fill="none" stroke="#94a3b8" stroke-dasharray="3,2" stroke-width="1.5"/>
+
+              <text x="105" y="148" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" fill="#475569">Blau = dauerhaft verbunden • Gelb = schließt beim Drücken</text>
+
+              <!-- Rechts: Schaltsymbol -->
+              <g transform="translate(220, 32)">
+                <text x="70" y="-14" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12.5" font-weight="700" fill="#1e3a8a">Schaltsymbol</text>
+                <line x1="10" y1="50" x2="45" y2="50" stroke="#111827" stroke-width="2.5"/>
+                <circle cx="45" cy="50" r="3.5" fill="#111827"/>
+                <line x1="45" y1="50" x2="88" y2="30" stroke="#dc2626" stroke-width="2.5"/>
+                <line x1="68" y1="16" x2="68" y2="39" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <line x1="56" y1="16" x2="80" y2="16" stroke="#111827" stroke-width="2.5"/>
+                <circle cx="90" cy="50" r="3.5" fill="#111827"/>
+                <line x1="90" y1="50" x2="125" y2="50" stroke="#111827" stroke-width="2.5"/>
+                <text x="70" y="80" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" font-weight="700" fill="#111827">Nur gedrückt = 1 (EIN)</text>
+                <text x="70" y="96" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11.5" fill="#475569">Losgelassen = 0 (AUS)</text>
+              </g>
+            </svg>
+          </div>
+
+          <div>
+            <ul class="rule-list" style="margin-top: 0;">
+              <li><strong>Funktion:</strong> Das Signal wird <em>nur weitergeleitet, solange der Taster gedrückt bleibt</em>.</li>
+              <li><strong>Stecktipp:</strong> Stecke den 4-Bein-Taster am besten <strong>über den Mittelgraben</strong>, dann liegen die zwei verbundenen Beinchen auf derselben Seite, und der Schaltkontakt überbrückt den Graben.</li>
+              <li><strong>Wichtig bei Logik-ICs:</strong> Ein freier Gatter-Eingang darf nicht „in der Luft hängen“. Wenn der Taster an <code>+</code> hängt, verbindet ein <strong>Pull-Down-Widerstand (z. B. 10 kΩ)</strong> den Eingang zusätzlich mit <code>−</code>, damit im ungedrückten Zustand sicher <code>0</code> anliegt.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 2: LOGIKGATTER-ICs -->
+    <section id="logik-ics" class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        <span>Die Logikgatter-ICs (74LS08, 74LS32, 74LS86)</span>
+      </h2>
+
+      <p>
+        In deinen schwarzen Chips (ICs mit 14 Beinchen) stecken jeweils <strong>4 identische Logikgatter</strong> auf einmal (<em>4fach-Gatter</em>). Alle drei Typen haben <strong>genau dieselbe Pin-Belegung</strong>! Wähle einen Chip aus, um seine Bezeichnung und die inneren Gatter anzuzeigen:
+      </p>
+
+      <div class="chip-grid" role="group" aria-label="IC-Typ auswählen">
+        <div class="chip-mini-card active" onclick="selectChip('86', this)">
+          <div class="chip-code">74LS86</div>
+          <div class="chip-gate-name">XOR-Gatter (4fach)</div>
+          <div class="chip-count">Für den Volladdierer: <strong>2 Gatter</strong> (1 Chip)</div>
+        </div>
+        <div class="chip-mini-card" onclick="selectChip('08', this)">
+          <div class="chip-code">74LS08</div>
+          <div class="chip-gate-name">AND-Gatter (4fach)</div>
+          <div class="chip-count">Für den Volladdierer: <strong>2 Gatter</strong> (1 Chip)</div>
+        </div>
+        <div class="chip-mini-card" onclick="selectChip('32', this)">
+          <div class="chip-code">74LS32</div>
+          <div class="chip-gate-name">OR-Gatter (4fach)</div>
+          <div class="chip-count">Für den Volladdierer: <strong>1 Gatter</strong> (1 Chip)</div>
+        </div>
+      </div>
+
+      <div class="svg-box" style="margin-top: 1.25rem; background: #ffffff;">
+        <svg id="svg-ic-pinout" viewBox="0 0 760 320" width="760" height="320" aria-label="Pin-Belegung der 14-Pin Logikgatter-ICs">
+          <!-- Stromversorgungs-Hinweise oben links und unten rechts -->
+          <rect x="64" y="10" width="128" height="34" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+          <text x="128" y="31" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13.5" font-weight="700" fill="#b91c1c">Pin 14 → PLUS (+5 V)</text>
+          <line x1="156" y1="44" x2="156" y2="66" stroke="#dc2626" stroke-width="2.5"/>
+
+          <rect x="568" y="276" width="132" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+          <text x="634" y="297" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13.5" font-weight="700" fill="#1e40af">Pin 7 → MINUS (− / GND)</text>
+          <line x1="604" y1="254" x2="604" y2="276" stroke="#2563eb" stroke-width="2.5"/>
+
+          <!-- Einkerbung Hinweis links -->
+          <text x="58" y="155" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">Einkerbung</text>
+          <text x="58" y="172" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">immer LINKS!</text>
+          <line x1="98" y1="160" x2="116" y2="160" stroke="#1e3a8a" stroke-width="2"/>
+          <polygon points="118,160 110,155 110,165" fill="#1e3a8a"/>
+
+          <!-- Chip-Gehäuse -->
+          <rect x="120" y="84" width="520" height="152" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="2.5"/>
+          <!-- Kerbe links -->
+          <path d="M 120 140 A 20 20 0 0 1 120 180" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+
+          <!-- Obere Pins (14 bis 8 von links nach rechts) -->
+          <!-- x-Positionen: 156, 230, 305, 380, 455, 530, 604 -->
+          <g font-family="Consolas, monospace" font-size="12" font-weight="700">
+            <!-- Pin 14 -->
+            <rect x="145" y="66" width="22" height="18" fill="#fca5a5" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="156" y="79" text-anchor="middle" fill="#7f1d1d">14</text>
+            <!-- Pin 13..8 -->
+            <rect x="219" y="66" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="230" y="79" text-anchor="middle" fill="#0f172a">13</text>
+            <rect x="294" y="66" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="305" y="79" text-anchor="middle" fill="#0f172a">12</text>
+            <rect x="369" y="66" width="22" height="18" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="380" y="79" text-anchor="middle" fill="#14532d">11</text>
+            <rect x="444" y="66" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="455" y="79" text-anchor="middle" fill="#0f172a">10</text>
+            <rect x="519" y="66" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="530" y="79" text-anchor="middle" fill="#0f172a">9</text>
+            <rect x="593" y="66" width="22" height="18" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="604" y="79" text-anchor="middle" fill="#14532d">8</text>
+
+            <!-- Untere Pins (1 bis 7 von links nach rechts) -->
+            <rect x="145" y="236" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="156" y="249" text-anchor="middle" fill="#0f172a">1</text>
+            <rect x="219" y="236" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="230" y="249" text-anchor="middle" fill="#0f172a">2</text>
+            <rect x="294" y="236" width="22" height="18" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="305" y="249" text-anchor="middle" fill="#14532d">3</text>
+            <rect x="369" y="236" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="380" y="249" text-anchor="middle" fill="#0f172a">4</text>
+            <rect x="444" y="236" width="22" height="18" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5"/>
+            <text x="455" y="249" text-anchor="middle" fill="#0f172a">5</text>
+            <rect x="519" y="236" width="22" height="18" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="530" y="249" text-anchor="middle" fill="#14532d">6</text>
+            <rect x="593" y="236" width="22" height="18" fill="#93c5fd" stroke="#2563eb" stroke-width="1.5"/>
+            <text x="604" y="249" text-anchor="middle" fill="#1e3a8a">7</text>
+          </g>
+
+          <!-- Labels Eingänge/Ausgänge außen -->
+          <g font-family="Calibri, sans-serif" font-size="11" font-weight="700">
+            <text x="230" y="59" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="305" y="59" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="380" y="59" text-anchor="middle" fill="#15803d">Aus</text>
+            <text x="455" y="59" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="530" y="59" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="604" y="59" text-anchor="middle" fill="#15803d">Aus</text>
+
+            <text x="156" y="270" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="230" y="270" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="305" y="270" text-anchor="middle" fill="#15803d">Aus</text>
+            <text x="380" y="270" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="455" y="270" text-anchor="middle" fill="#475569">Ein</text>
+            <text x="530" y="270" text-anchor="middle" fill="#15803d">Aus</text>
+          </g>
+
+          <!-- Chip-Aufdruck in der Mitte -->
+          <text id="ic-label-text" x="380" y="166" text-anchor="middle" font-family="Consolas, monospace" font-size="19" font-weight="700" fill="#f8fafc" opacity="0.22">SN74LS86N</text>
+
+          <!-- Interne Verdrahtung der 4 Gatter (Pins -> Box -> Ausgang) -->
+          <!-- Gatter 1 (unten links: 1,2 -> 3) -->
+          <polyline points="156,236 156,195 200,195" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="230,236 230,213 200,213" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="254,204 305,204 305,236" fill="none" stroke="#4ade80" stroke-width="2.2"/>
+          <g transform="translate(200, 186)">
+            <rect x="0" y="0" width="54" height="36" rx="4" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.8"/>
+            <text class="ic-gate-symbol" x="27" y="24" text-anchor="middle" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#ffffff">=1</text>
+          </g>
+
+          <!-- Gatter 2 (unten rechts: 4,5 -> 6) -->
+          <polyline points="380,236 380,195 425,195" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="455,236 455,213 425,213" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="479,204 530,204 530,236" fill="none" stroke="#4ade80" stroke-width="2.2"/>
+          <g transform="translate(425, 186)">
+            <rect x="0" y="0" width="54" height="36" rx="4" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.8"/>
+            <text class="ic-gate-symbol" x="27" y="24" text-anchor="middle" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#ffffff">=1</text>
+          </g>
+
+          <!-- Gatter 4 (oben links: 13,12 -> 11) -->
+          <polyline points="230,84 230,107 285,107" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="305,84 305,125 285,125" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="339,116 380,116 380,84" fill="none" stroke="#4ade80" stroke-width="2.2"/>
+          <g transform="translate(285, 98)">
+            <rect x="0" y="0" width="54" height="36" rx="4" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.8"/>
+            <text class="ic-gate-symbol" x="27" y="24" text-anchor="middle" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#ffffff">=1</text>
+          </g>
+
+          <!-- Gatter 3 (oben rechts: 10,9 -> 8) -->
+          <polyline points="455,84 455,107 510,107" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="530,84 530,125 510,125" fill="none" stroke="#94a3b8" stroke-width="2"/>
+          <polyline points="564,116 604,116 604,84" fill="none" stroke="#4ade80" stroke-width="2.2"/>
+          <g transform="translate(510, 98)">
+            <rect x="0" y="0" width="54" height="36" rx="4" fill="#0f172a" stroke="#e2e8f0" stroke-width="1.8"/>
+            <text class="ic-gate-symbol" x="27" y="24" text-anchor="middle" font-family="Calibri, sans-serif" font-size="14" font-weight="700" fill="#ffffff">=1</text>
+          </g>
+        </svg>
+      </div>
+
+      <div id="ic-desc-box" class="info-pill-box">
+        <strong>SN74LS86N (XOR-Gatter, Symbol <code>=1</code>):</strong> Ausgang ist nur <code>1</code>, wenn die beiden Eingänge <em>unterschiedlich</em> sind (genau einer ist <code>1</code>). Merke für den Chip-Aufdruck: <strong>86 = XOR</strong>, <strong>08 = AND</strong>, <strong>32 = OR</strong>.
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 3: DER VOLLADDIERER -->
+    <section id="volladdierer" class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        <span>Der Volladdierer: Schaltung, Wahrheitstabelle &amp; Formeln</span>
+      </h2>
+
+      <p>
+        Der Volladdierer addiert drei einzelne Bits ($A + B + C$) und gibt das Ergebnis zweistellig im Binärsystem aus: die rechte LED zeigt die <strong>Summe ($S$, Einerstelle)</strong> und die linke LED zeigt den <strong>Übertrag ($C_{\text{out}}$, Zweierstelle)</strong>.
+      </p>
+
+      <div class="va-layout">
+        <!-- Links: Interaktiver Schaltplan (Taster unten -> Gatter -> LEDs oben) -->
+        <div>
+          <div class="svg-box" style="background: #ffffff; flex-direction: column; gap: 10px;">
+            <div style="font-size: 0.92rem; font-weight: 700; color: var(--ink-blue);">
+              Interaktiver Schaltplan (klicke unten auf die Taster A, B, C)
+            </div>
+            <svg id="svg-va-circuit" viewBox="0 0 460 440" width="460" height="440" aria-label="Interaktiver Schaltplan des Volladdierers">
+              <!-- LEDs oben -->
+              <!-- Links: Übertrag C -->
+              <g transform="translate(135, 22)">
+                <circle id="va-led-c" cx="0" cy="18" r="16" fill="#f1f5f9" stroke="#1e293b" stroke-width="2.2"/>
+                <line x1="-10" y1="8" x2="10" y2="28" stroke="#1e293b" stroke-width="1.5"/>
+                <line x1="10" y1="8" x2="-10" y2="28" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="0" y="-4" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">LED C (Übertrag)</text>
+                <text id="va-txt-c" x="28" y="23" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#475569">0</text>
+              </g>
+
+              <!-- Rechts: Summe S -->
+              <g transform="translate(345, 22)">
+                <circle id="va-led-s" cx="0" cy="18" r="16" fill="#f1f5f9" stroke="#1e293b" stroke-width="2.2"/>
+                <line x1="-10" y1="8" x2="10" y2="28" stroke="#1e293b" stroke-width="1.5"/>
+                <line x1="10" y1="8" x2="-10" y2="28" stroke="#1e293b" stroke-width="1.5"/>
+                <text x="0" y="-4" text-anchor="middle" font-family="Calibri, sans-serif" font-size="13" font-weight="700" fill="#15803d">LED S (Summe)</text>
+                <text id="va-txt-s" x="28" y="23" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#475569">0</text>
+              </g>
+
+              <!-- Leitungen von Eingängen zu Gattern -->
+              <!-- Eingang A (x=40, y=382) -->
+              <polyline id="wire-a-main" class="va-wire" points="40,382 40,248"/>
+              <polyline id="wire-a-and2" class="va-wire" points="40,248 158,248 158,230"/>
+              <polyline id="wire-a-xor2" class="va-wire" points="158,248 328,248 328,170"/>
+
+              <!-- Eingang B (x=220, y=382) -->
+              <polyline id="wire-b-main" class="va-wire" points="220,382 220,344"/>
+              <polyline id="wire-b-and1" class="va-wire" points="220,344 93,344 93,305"/>
+              <polyline id="wire-b-xor1" class="va-wire" points="220,344 333,344 333,305"/>
+
+              <!-- Eingang C (x=370, y=382) -->
+              <polyline id="wire-c-main" class="va-wire" points="370,382 370,326"/>
+              <polyline id="wire-c-xor1" class="va-wire" points="370,326 367,326 367,305"/>
+              <polyline id="wire-c-and1" class="va-wire" points="370,326 123,326 123,305"/>
+
+              <!-- Zwischenleitung S1 = B XOR C (Ausgang XOR1: x=350, y=260) -->
+              <polyline id="wire-s1-xor2" class="va-wire" points="350,260 350,236 365,236 365,170"/>
+              <polyline id="wire-s1-and2" class="va-wire" points="350,236 188,236 188,230"/>
+
+              <!-- Ausgang AND1 (x=108, y=260) -> OR (x=120, y=140) -->
+              <polyline id="wire-c1-or" class="va-wire" points="108,260 108,165 120,165 120,140"/>
+              <!-- Ausgang AND2 (x=173, y=185) -> OR (x=150, y=140) -->
+              <polyline id="wire-c2-or" class="va-wire" points="173,185 173,165 150,165 150,140"/>
+
+              <!-- Ausgänge nach oben zu den LEDs -->
+              <line id="wire-out-c" class="va-wire" x1="135" y1="95" x2="135" y2="56"/>
+              <line id="wire-out-s" class="va-wire" x1="345" y1="125" x2="345" y2="56"/>
+
+              <!-- GATTER-SYMBOLE (DIN-Rechtecke mit klarer Chip-Nummer) -->
+              <!-- AND 1 (unten links: B & C) -->
+              <g transform="translate(78, 260)">
+                <rect x="0" y="0" width="60" height="45" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+                <text x="30" y="21" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#111827">&amp;</text>
+                <text x="30" y="37" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" fill="#475569">74LS08</text>
+              </g>
+
+              <!-- XOR 1 (unten rechts: B XOR C) -->
+              <g transform="translate(318, 260)">
+                <rect x="0" y="0" width="64" height="45" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+                <text x="32" y="21" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#111827">=1</text>
+                <text x="32" y="37" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" fill="#475569">74LS86</text>
+              </g>
+
+              <!-- AND 2 (mitte links: A & (B XOR C)) -->
+              <g transform="translate(143, 185)">
+                <rect x="0" y="0" width="60" height="45" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+                <text x="30" y="21" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#111827">&amp;</text>
+                <text x="30" y="37" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" fill="#475569">74LS08</text>
+              </g>
+
+              <!-- XOR 2 (oben rechts: A XOR (B XOR C) -> S) -->
+              <g transform="translate(313, 125)">
+                <rect x="0" y="0" width="64" height="45" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+                <text x="32" y="21" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#111827">=1</text>
+                <text x="32" y="37" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" fill="#475569">74LS86</text>
+              </g>
+
+              <!-- OR 1 (oben links -> C) -->
+              <g transform="translate(103, 95)">
+                <rect x="0" y="0" width="64" height="45" rx="4" fill="#ffffff" stroke="#0f172a" stroke-width="2.2"/>
+                <text x="32" y="21" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#111827">&ge;1</text>
+                <text x="32" y="37" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" fill="#475569">74LS32</text>
+              </g>
+
+              <!-- Knotenpunkte (Lötpunkte) -->
+              <circle cx="158" cy="248" r="3.5" fill="#0f172a"/>
+              <circle cx="220" cy="344" r="3.5" fill="#0f172a"/>
+              <circle cx="370" cy="326" r="3.5" fill="#0f172a"/>
+              <circle cx="350" cy="236" r="3.5" fill="#0f172a"/>
+
+              <!-- Klickbare Taster A, B, C unten -->
+              <g class="va-taster-btn" onclick="toggleVA('a')" transform="translate(15, 382)">
+                <rect class="taster-body" id="va-btn-a" x="0" y="0" width="50" height="36" rx="6" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+                <text id="va-btn-a-txt" x="25" y="23" text-anchor="middle" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#0f172a">A = 0</text>
+              </g>
+              <g class="va-taster-btn" onclick="toggleVA('b')" transform="translate(195, 382)">
+                <rect class="taster-body" id="va-btn-b" x="0" y="0" width="50" height="36" rx="6" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+                <text id="va-btn-b-txt" x="25" y="23" text-anchor="middle" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#0f172a">B = 0</text>
+              </g>
+              <g class="va-taster-btn" onclick="toggleVA('c')" transform="translate(345, 382)">
+                <rect class="taster-body" id="va-btn-c" x="0" y="0" width="50" height="36" rx="6" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
+                <text id="va-btn-c-txt" x="25" y="23" text-anchor="middle" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#0f172a">C = 0</text>
+              </g>
+            </svg>
+            <div id="va-live-calc" style="font-weight: 700; color: var(--ink-blue); font-size: 1rem;">
+              0 + 0 + 0 = 0 (Übertrag C = 0, Summe S = 0)
+            </div>
+          </div>
+        </div>
+
+        <!-- Rechts: Blackbox & Wahrheitstabelle -->
+        <div>
+          <div class="part-card" style="margin-bottom: 1rem;">
+            <div class="part-header">
+              <span class="part-title">Blackbox &amp; Materialbedarf</span>
+              <span class="part-tag">3 Chips</span>
+            </div>
+            <p style="font-size: 0.94rem;">
+              Für diesen Volladdierer brauchst du:
+            </p>
+            <ul class="rule-list" style="margin-top: 0;">
+              <li><strong>2 × XOR</strong> (auf einem <code>74LS86</code>)</li>
+              <li><strong>2 × AND</strong> (auf einem <code>74LS08</code>)</li>
+              <li><strong>1 × OR</strong> (auf einem <code>74LS32</code>)</li>
+              <li><strong>3 Taster</strong> ($A, B, C$), <strong>2 LEDs</strong> ($C, S$) und Vorwiderstände</li>
+            </ul>
+          </div>
+
+          <table class="truth-table" aria-label="Wahrheitstabelle des Volladdierers">
+            <thead>
+              <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>Dezimal</th>
+                <th style="color:#1e40af;">C (Übertrag)</th>
+                <th style="color:#15803d;">S (Summe)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="row-000"><td class="mono">0</td><td class="mono">0</td><td class="mono">0</td><td>0</td><td class="mono">0</td><td class="mono">0</td></tr>
+              <tr id="row-001"><td class="mono">0</td><td class="mono">0</td><td class="mono">1</td><td>1</td><td class="mono">0</td><td class="mono">1</td></tr>
+              <tr id="row-010"><td class="mono">0</td><td class="mono">1</td><td class="mono">0</td><td>1</td><td class="mono">0</td><td class="mono">1</td></tr>
+              <tr id="row-011"><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td>2</td><td class="mono">1</td><td class="mono">0</td></tr>
+              <tr id="row-100"><td class="mono">1</td><td class="mono">0</td><td class="mono">0</td><td>1</td><td class="mono">0</td><td class="mono">1</td></tr>
+              <tr id="row-101"><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td>2</td><td class="mono">1</td><td class="mono">0</td></tr>
+              <tr id="row-110"><td class="mono">1</td><td class="mono">1</td><td class="mono">0</td><td>2</td><td class="mono">1</td><td class="mono">0</td></tr>
+              <tr id="row-111"><td class="mono">1</td><td class="mono">1</td><td class="mono">1</td><td>3</td><td class="mono">1</td><td class="mono">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Logische Gleichungen -->
+      <div class="formula-block">
+        <div style="font-weight: 700; color: var(--ink-blue); margin-bottom: 0.4rem;">Schaltgleichungen (aus der Wahrheitstabelle und als Gatter-Schaltung):</div>
+        <p style="margin-bottom: 0.45rem;">
+          <strong>Summe $S$:</strong>
+          $$S = (\overline{A} \land \overline{B} \land C) \lor (\overline{A} \land B \land \overline{C}) \lor (A \land \overline{B} \land \overline{C}) \lor (A \land B \land C) = (A \oplus B) \oplus C$$
+        </p>
+        <p>
+          <strong>Übertrag $C_{\text{out}}$:</strong>
+          $$C_{\text{out}} = (A \land B) \lor (A \land C) \lor (B \land C) = (B \land C) \lor \bigl(A \land (B \oplus C)\bigr)$$
+        </p>
+      </div>
+    </section>
+
+    <!-- ABSCHNITT 4: AUFBAU-CHECKLISTE & MERKE -->
+    <section id="aufbau-check" class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        <span>Aufbau-Reihenfolge &amp; Fehler-Checkliste</span>
+      </h2>
+
+      <div class="checklist-grid">
+        <div class="step-row">
+          <span class="step-badge-sm">1</span>
+          <div>
+            <strong>Stromschienen versorgen:</strong> Batterie/Netzteil anschließen (Rot an <code>+</code>, Schwarz/Blau an <code>−</code>). Bei Bedarf obere und untere Schiene mit Brückenkabeln verbinden.
+          </div>
+        </div>
+        <div class="step-row">
+          <span class="step-badge-sm">2</span>
+          <div>
+            <strong>ICs richtig aufstecken:</strong> Alle drei ICs (<code>74LS86</code>, <code>74LS08</code>, <code>74LS32</code>) mit der <strong>Einkerbung nach LINKS</strong> über den Mittelgraben stecken.
+          </div>
+        </div>
+        <div class="step-row">
+          <span class="step-badge-sm">3</span>
+          <div>
+            <strong>IC-Stromversorgung legen:</strong> Bei <em>jedem</em> Chip <strong>Pin 14 (oben links) an <code>+</code></strong> und <strong>Pin 7 (unten rechts) an <code>−</code></strong> anschließen!
+          </div>
+        </div>
+        <div class="step-row">
+          <span class="step-badge-sm">4</span>
+          <div>
+            <strong>Taster, Gatter &amp; LEDs verdrahten:</strong> Verbindungen nach dem Schaltplan stecken. Bei den beiden LEDs <strong>Vorwiderstände</strong> nicht vergessen und langes/kurzes Bein prüfen.
+          </div>
+        </div>
+      </div>
+
+      <div class="merke-box">
+        <span class="merke-tag">MERKE</span>
+        <div class="merke-title">Wenn die Schaltung noch nicht wie erwartet leuchtet – 4 häufige Fehler:</div>
+        <div class="merke-content">
+          <ul class="rule-list" style="margin-top: 0;">
+            <li><strong>IC ohne Strom:</strong> Fehlt das Kabel an Pin 14 (<code>+</code>) oder Pin 7 (<code>−</code>)?</li>
+            <li><strong>IC falsch herum:</strong> Zeigt die Einkerbung wirklich nach <strong>links</strong>?</li>
+            <li><strong>LED verpolt:</strong> Steckt das <strong>kurze Bein</strong> Richtung Minus (<code>−</code>) und das <strong>lange Bein</strong> Richtung Ausgang?</li>
+            <li><strong>Reihe verrutscht:</strong> Steckt das Kabel wirklich in derselben 5er-Spalte wie das Chip-Beinchen?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* =====================================================================
+       1. STECKBRETT-SVG GENERIERUNG & INTERAKTION
+       ===================================================================== */
+    function initBreadboard() {
+      const colsGroup = document.getElementById('bb-cols-group');
+      const holesGroup = document.getElementById('bb-holes-group');
+      const startX = 48;
+      const stepX = 27.5;
+      const numCols = 25;
+
+      // Stromschienen-Löcher (2 Reihen oben, 2 Reihen unten, in 5er-Gruppen)
+      for (let c = 0; c < numCols; c++) {
+        const x = startX + c * stepX;
+        // Oben - und +
+        [32.5, 46.5, 222.5, 236.5].forEach(y => {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', x - 3);
+          rect.setAttribute('y', y - 3);
+          rect.setAttribute('width', '6');
+          rect.setAttribute('height', '6');
+          rect.setAttribute('rx', '1');
+          rect.setAttribute('fill', '#1e293b');
+          holesGroup.appendChild(rect);
+        });
+
+        // Senkrechte Verbindungsbalken (f-j oben, a-e unten)
+        const colRectTop = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        colRectTop.setAttribute('x', x - 5.5);
+        colRectTop.setAttribute('y', 65);
+        colRectTop.setAttribute('width', '11');
+        colRectTop.setAttribute('height', '57');
+        colRectTop.setAttribute('rx', '4');
+        colRectTop.setAttribute('fill', '#bbf7d0');
+        colRectTop.setAttribute('stroke', '#86efac');
+        colRectTop.setAttribute('stroke-width', '1');
+        colsGroup.appendChild(colRectTop);
+
+        const colRectBot = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        colRectBot.setAttribute('x', x - 5.5);
+        colRectBot.setAttribute('y', 147);
+        colRectBot.setAttribute('width', '11');
+        colRectBot.setAttribute('height', '57');
+        colRectBot.setAttribute('rx', '4');
+        colRectBot.setAttribute('fill', '#bbf7d0');
+        colRectBot.setAttribute('stroke', '#86efac');
+        colRectBot.setAttribute('stroke-width', '1');
+        colsGroup.appendChild(colRectBot);
+
+        // Löcher f-j (y: 71, 82, 93, 104, 115) & a-e (y: 153, 164, 175, 186, 197)
+        [71, 82, 93, 104, 115, 153, 164, 175, 186, 197].forEach(y => {
+          const hole = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          hole.setAttribute('x', x - 3);
+          hole.setAttribute('y', y - 3);
+          hole.setAttribute('width', '6');
+          hole.setAttribute('height', '6');
+          hole.setAttribute('rx', '1');
+          hole.setAttribute('fill', '#1e293b');
+          holesGroup.appendChild(hole);
+        });
+
+        // Spaltennummern alle 5 Spalten
+        if ((c + 1) % 5 === 0 || c === 0) {
+          const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          txt.setAttribute('x', x);
+          txt.setAttribute('y', 211);
+          txt.setAttribute('text-anchor', 'middle');
+          txt.setAttribute('font-family', 'Consolas, monospace');
+          txt.setAttribute('font-size', '9');
+          txt.setAttribute('fill', '#64748b');
+          txt.textContent = c + 1;
+          holesGroup.appendChild(txt);
+        }
+      }
+    }
+
+    function setBreadboardMode(mode, btn) {
+      document.querySelectorAll('.control-bar .ctrl-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const rails = document.querySelector('.bb-rail');
+      const cols = document.getElementById('bb-cols-group');
+      const gap = document.getElementById('bb-gap-highlight');
+      const icDemo = document.getElementById('bb-ic-demo');
+      const explain = document.getElementById('bb-explain');
+
+      if (mode === 'all') {
+        rails.style.opacity = '1';
+        cols.style.opacity = '1';
+        gap.setAttribute('fill', '#e2e8f0');
+        icDemo.style.opacity = '0.95';
+        explain.innerHTML = '<strong>Auf einen Blick:</strong> Die äußeren <strong>Stromschienen (+ und -)</strong> laufen <em>waagerecht</em> durch. Im inneren Hauptfeld sind immer <strong>5 Löcher senkrecht</strong> miteinander verbunden (oben <code>f–j</code>, unten <code>a–e</code>). Der <strong>Mittelgraben</strong> trennt oben und unten vollständig – genau dort werden die Logik-ICs aufgesteckt.';
+      } else if (mode === 'rails') {
+        rails.style.opacity = '1';
+        cols.style.opacity = '0.12';
+        gap.setAttribute('fill', '#f8fafc');
+        icDemo.style.opacity = '0.25';
+        explain.innerHTML = '<strong>Stromschienen (+ / -):</strong> Alle Löcher einer langen Reihe am oberen bzw. unteren Rand sind <strong>waagerecht</strong> verbunden. Rot führt Plus (+5 V), Blau führt Minus (− / GND).';
+      } else if (mode === 'cols') {
+        rails.style.opacity = '0.12';
+        cols.style.opacity = '1';
+        gap.setAttribute('fill', '#f8fafc');
+        icDemo.style.opacity = '0.25';
+        explain.innerHTML = '<strong>5er-Spalten (a–e und f–j):</strong> Jede grüne 5er-Spalte ist ein gemeinsamer Kontaktpunkt. Steckst du zwei Kabel in dieselbe 5er-Spalte, sind sie verbunden!';
+      } else if (mode === 'gap') {
+        rails.style.opacity = '0.18';
+        cols.style.opacity = '0.5';
+        gap.setAttribute('fill', '#fef08a');
+        icDemo.style.opacity = '1';
+        explain.innerHTML = '<strong>Mittelgraben (IC-Kanal):</strong> Zwischen Reihe <code>e</code> und Reihe <code>f</code> gibt es <strong>keine Verbindung</strong>. Deshalb steckt jedes IC genau über diesem Graben – so haben obere und untere Chip-Beinchen keinen Kurzschluss.';
+      }
+    }
+
+    /* =====================================================================
+       2. IC-PINOUT UMSCHALTER
+       ===================================================================== */
+    const chipData = {
+      '86': {
+        label: 'SN74LS86N',
+        symbol: '=1',
+        desc: '<strong>SN74LS86N (XOR-Gatter, Symbol <code>=1</code>):</strong> Ausgang ist nur <code>1</code>, wenn die beiden Eingänge <em>unterschiedlich</em> sind (genau einer ist <code>1</code>). Merke für den Chip-Aufdruck: <strong>86 = XOR</strong>, <strong>08 = AND</strong>, <strong>32 = OR</strong>.'
+      },
+      '08': {
+        label: 'SN74LS08N',
+        symbol: '&',
+        desc: '<strong>SN74LS08N (AND-Gatter, Symbol <code>&amp;</code>):</strong> Ausgang ist nur <code>1</code>, wenn <em>beide</em> Eingänge gleichzeitig <code>1</code> sind. Merke für den Chip-Aufdruck: <strong>08 = AND</strong>, <strong>32 = OR</strong>, <strong>86 = XOR</strong>.'
+      },
+      '32': {
+        label: 'SN74LS32N',
+        symbol: '≥1',
+        desc: '<strong>SN74LS32N (OR-Gatter, Symbol <code>≥1</code>):</strong> Ausgang ist <code>1</code>, sobald <em>mindestens ein</em> Eingang <code>1</code> ist. Merke für den Chip-Aufdruck: <strong>32 = OR</strong>, <strong>08 = AND</strong>, <strong>86 = XOR</strong>.'
+      }
+    };
+
+    function selectChip(code, cardEl) {
+      document.querySelectorAll('.chip-mini-card').forEach(c => c.classList.remove('active'));
+      if (cardEl) cardEl.classList.add('active');
+
+      const data = chipData[code];
+      document.getElementById('ic-label-text').textContent = data.label;
+      document.querySelectorAll('.ic-gate-symbol').forEach(el => {
+        el.textContent = data.symbol;
+      });
+      document.getElementById('ic-desc-box').innerHTML = data.desc;
+    }
+
+    /* =====================================================================
+       3. VOLLADDIERER INTERAKTIVER SCHALTPLAN
+       ===================================================================== */
+    const vaInputs = { a: 0, b: 0, c: 0 };
+
+    function toggleVA(key) {
+      vaInputs[key] = vaInputs[key] === 0 ? 1 : 0;
+      renderVA();
+    }
+
+    function renderVA() {
+      const a = vaInputs.a;
+      const b = vaInputs.b;
+      const c = vaInputs.c;
+
+      const s1 = b ^ c;
+      const c1 = b & c;
+      const c2 = a & s1;
+      const sum = a ^ s1;
+      const cout = c1 | c2;
+
+      // Taster-Optik
+      ['a', 'b', 'c'].forEach(k => {
+        const val = vaInputs[k];
+        const rect = document.getElementById('va-btn-' + k);
+        const txt = document.getElementById('va-btn-' + k + '-txt');
+        txt.textContent = k.toUpperCase() + ' = ' + val;
+        if (val === 1) {
+          rect.setAttribute('fill', '#0f766e');
+          rect.setAttribute('stroke', '#0f766e');
+          txt.setAttribute('fill', '#ffffff');
+        } else {
+          rect.setAttribute('fill', '#f1f5f9');
+          rect.setAttribute('stroke', '#334155');
+          txt.setAttribute('fill', '#0f172a');
+        }
+      });
+
+      // Leitungen A, B, C
+      const clsA = a ? 'va-wire on-in' : 'va-wire';
+      ['wire-a-main', 'wire-a-and2', 'wire-a-xor2'].forEach(id => document.getElementById(id).setAttribute('class', clsA));
+
+      const clsB = b ? 'va-wire on-in' : 'va-wire';
+      ['wire-b-main', 'wire-b-and1', 'wire-b-xor1'].forEach(id => document.getElementById(id).setAttribute('class', clsB));
+
+      const clsC = c ? 'va-wire on-in' : 'va-wire';
+      ['wire-c-main', 'wire-c-xor1', 'wire-c-and1'].forEach(id => document.getElementById(id).setAttribute('class', clsC));
+
+      // Zwischenleitungen
+      const clsS1 = s1 ? 'va-wire on-s' : 'va-wire';
+      document.getElementById('wire-s1-xor2').setAttribute('class', clsS1);
+      document.getElementById('wire-s1-and2').setAttribute('class', clsS1);
+
+      document.getElementById('wire-c1-or').setAttribute('class', c1 ? 'va-wire on-c' : 'va-wire');
+      document.getElementById('wire-c2-or').setAttribute('class', c2 ? 'va-wire on-c' : 'va-wire');
+
+      // Ausgänge + LEDs
+      document.getElementById('wire-out-s').setAttribute('class', sum ? 'va-wire on-s' : 'va-wire');
+      document.getElementById('wire-out-c').setAttribute('class', cout ? 'va-wire on-c' : 'va-wire');
+
+      const ledS = document.getElementById('va-led-s');
+      const txtS = document.getElementById('va-txt-s');
+      ledS.setAttribute('fill', sum ? '#22c55e' : '#f1f5f9');
+      ledS.setAttribute('stroke', sum ? '#15803d' : '#1e293b');
+      txtS.textContent = sum;
+      txtS.setAttribute('fill', sum ? '#15803d' : '#475569');
+
+      const ledC = document.getElementById('va-led-c');
+      const txtC = document.getElementById('va-txt-c');
+      ledC.setAttribute('fill', cout ? '#3b82f6' : '#f1f5f9');
+      ledC.setAttribute('stroke', cout ? '#1d4ed8' : '#1e293b');
+      txtC.textContent = cout;
+      txtC.setAttribute('fill', cout ? '#1d4ed8' : '#475569');
+
+      // Wahrheitstabelle Zeile hervorheben
+      document.querySelectorAll('.truth-table tbody tr').forEach(tr => tr.classList.remove('active-row'));
+      const activeRow = document.getElementById(`row-${a}${b}${c}`);
+      if (activeRow) activeRow.classList.add('active-row');
+
+      // Rechen-Text
+      const total = a + b + c;
+      document.getElementById('va-live-calc').textContent =
+        `${a} + ${b} + ${c} = ${total}  (Binär: ${cout}${sum}₂ → Übertrag C = ${cout}, Summe S = ${sum})`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initBreadboard();
+      renderVA();
+    });
+  </script>
+</body>
+</html>
