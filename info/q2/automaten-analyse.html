@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEA-Analyse: Sprachen klassifizieren | Informatik Q2</title>
+
+  <!-- Zentrales Schulheft- & Lernatelier-Stylesheet -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    .level-badge {
+      margin-left: auto;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: #eff6ff;
+      color: var(--ink-blue);
+      border: 1px solid #bfdbfe;
+      white-space: nowrap;
+    }
+
+    .dea-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      background: var(--paper-subtle);
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      margin: 0.9rem 0 1.15rem 0;
+      font-size: 0.96rem;
+    }
+
+    .dea-lab-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.25rem;
+      align-items: start;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 860px) {
+      .dea-lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .svg-stage {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .svg-stage svg {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .dea-node-circle {
+      fill: #ffffff;
+      stroke: #1e3a8a;
+      stroke-width: 2.2;
+      transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+    .dea-node-inner {
+      fill: none;
+      stroke: #1e3a8a;
+      stroke-width: 1.6;
+      transition: stroke 0.2s ease;
+    }
+    .dea-node-label {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      fill: #1e3a8a;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .dea-edge-path {
+      fill: none;
+      stroke: #475569;
+      stroke-width: 2;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+    .dea-edge-label {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      fill: #111827;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .dea-start-arrow {
+      stroke: #1e3a8a;
+      stroke-width: 2.2;
+    }
+    .dea-start-text {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      fill: #1e3a8a;
+    }
+
+    /* Aktive Zustands- & Kanten-Markierung */
+    .dea-node.is-active .dea-node-circle {
+      fill: #dbeafe;
+      stroke: #2563eb;
+      stroke-width: 3.2;
+    }
+    .dea-node.is-active.is-accepting .dea-node-circle {
+      fill: #dcfce7;
+      stroke: #059669;
+      stroke-width: 3.2;
+    }
+    .dea-node.is-active.is-accepting .dea-node-inner {
+      stroke: #059669;
+    }
+    .dea-node.is-active.is-rejected .dea-node-circle {
+      fill: #fee2e2;
+      stroke: #dc2626;
+      stroke-width: 3.2;
+    }
+    .dea-edge-path.is-active {
+      stroke: #2563eb;
+      stroke-width: 3.2;
+    }
+    .dea-edge-label.is-active {
+      fill: #1d4ed8;
+    }
+
+    .sim-panel {
+      background: var(--paper-subtle);
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1rem 1.1rem;
+    }
+
+    .sim-panel-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .word-input-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 0.65rem;
+    }
+
+    .word-input {
+      flex: 1;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.98rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      color: var(--ink-black);
+      background: #ffffff;
+      min-width: 0;
+    }
+    .word-input:focus {
+      outline: none;
+      border-color: var(--model-blue);
+    }
+
+    .btn-sim {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 11px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-sim:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+      color: var(--model-blue);
+    }
+    .btn-sim.btn-primary {
+      background: var(--ink-blue);
+      color: #ffffff;
+      border-color: var(--ink-blue);
+    }
+    .btn-sim.btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .btn-sim:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+    }
+
+    .preset-chip {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+    }
+    .preset-chip:hover {
+      border-color: var(--ink-blue);
+      background: #eff6ff;
+      color: var(--ink-blue);
+    }
+
+    .live-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .word-tape {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      min-height: 34px;
+      padding: 5px 8px;
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.92rem;
+    }
+
+    .tape-char {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 6px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-weight: 700;
+    }
+    .tape-char.done {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1e40af;
+    }
+    .tape-char.current {
+      background: #fef08a;
+      border-color: #eab308;
+      color: #111827;
+    }
+
+    .verdict-banner {
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      border-radius: 4px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .verdict-banner.is-accept {
+      background: #ecfdf5;
+      border-color: #86efac;
+      color: #065f46;
+    }
+    .verdict-banner.is-reject {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    .sim-error {
+      color: #b91c1c;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: none;
+    }
+
+    .trace-scroll {
+      max-height: 185px;
+      overflow-y: auto;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    .trace-scroll .calc-grid-table {
+      margin: 0;
+      border: none;
+      font-size: 0.86rem;
+    }
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 680px) {
+      .history-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .history-box {
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.7rem 0.9rem;
+      background: #ffffff;
+      min-height: 62px;
+    }
+    .history-box.accept-box {
+      border-color: #a7f3d0;
+      background: #f0fdf4;
+    }
+    .history-box.reject-box {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+    .history-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .accept-box .history-title { color: #065f46; }
+    .reject-box .history-title { color: #991b1b; }
+
+    .history-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .history-pill {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      color: var(--ink-black);
+    }
+
+    .assignment-box {
+      margin-top: 1.25rem;
+      background: var(--paper-subtle);
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+    }
+    .assignment-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.5rem;
+    }
+    .assignment-list {
+      margin-left: 1.25rem;
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+    .assignment-list li {
+      margin-bottom: 0.35rem;
+    }
+
+    .note-area {
+      width: 100%;
+      min-height: 68px;
+      margin-top: 0.65rem;
+      padding: 0.6rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--ink-black);
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      resize: vertical;
+    }
+    .note-area:focus {
+      outline: none;
+      border-color: var(--model-blue);
+    }
+
+    .code-inline {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- KOPFZEILE (KAPITEL-NAVIGATION) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Q2</a>
+      <div class="presenter-title">
+        <span>Theoretische Informatik: DEA</span>
+        <span class="presenter-tag">Reverse Engineering</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="automaten.html" class="presenter-tab-btn">1. Grundlagen (DEA)</a>
+      <a href="automaten-analyse.html" class="presenter-tab-btn active">2. Sprache klassifizieren</a>
+      <a href="AB02_DEA_Konstruktion_Binaersystem.html" class="presenter-tab-btn">3. Konstruktion (AB 2)</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- DECKBLATT-HEADER -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik Q2 • Theoretische Informatik</span>
+        <span>Analyse &amp; Sprachklassifikation</span>
+      </div>
+      <h1>Automaten lesen &amp; Sprachen klassifizieren</h1>
+      <p class="sheet-intro">
+        In diesem Modul drehen wir die Perspektive um: Statt einen DEA neu zu konstruieren, sind drei fertige Automaten $M_1$, $M_2$ und $M_3$ gegeben. Deine Aufgabe ist es, ihre Zustände zu deuten, gezielt Testwörter (inklusive $\varepsilon$) durch den Automaten zu schicken und die akzeptierte formale Sprache $L(M)$ präzise zu beschreiben.
+      </p>
+    </header>
+
+    <!-- STRATEGIE-MERKE -->
+    <section class="merke-box">
+      <span class="merke-tag">MERKE</span>
+      <h2 class="merke-title">Strategie: So knackst du einen unbekannten DEA</h2>
+      <div class="merke-content">
+        <ol style="margin-left: 1.25rem; line-height: 1.65;">
+          <li><strong>Start- und Endzustände prüfen:</strong> Ist der Startzustand $q_0$ selbst ein Endzustand ($q_0 \in F$), wird bereits das leere Wort $\varepsilon$ akzeptiert.</li>
+          <li><strong>Kurze Wörter systematisch testen:</strong> Prüfe Wörter der Länge $0$, $1$ und $2$ (z. B. $\varepsilon$, ein einzelnes Zeichen, zwei gleiche oder zwei verschiedene Zeichen) und beobachte die Übergänge.</li>
+          <li><strong>Zustandsbedeutung benennen:</strong> Jeder Zustand speichert eine Eigenschaft des bisher gelesenen Wortanfangs (z. B. <em>„zuletzt $a$ gesehen“</em>, <em>„Fehler eingetreten“</em> oder <em>„Rest bei Division“</em>).</li>
+          <li><strong>Fangzustände und Schleifen deuten:</strong> Ein Zustand ohne Ausgang zu anderen Zuständen ($q \notin F$) bedeutet meist einen Regelverstoß; ein Endzustand, aus dem man nicht mehr herausfällt, steht oft für <em>„Bedingung bereits erfüllt“</em>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         AUFGABE 1
+         ====================================================================== -->
+    <article class="sheet-card" id="aufgabe-1">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        <span>Automat $M_1$ analysieren</span>
+        <span class="level-badge">Niveau 1: Basis (3 Zustände)</span>
+      </h2>
+
+      <div class="dea-meta-strip">
+        <span><strong>Alphabet:</strong> $\Sigma = \{a, b\}$</span>
+        <span><strong>Zustände:</strong> $Q = \{q_0, q_1, q_2\}$</span>
+        <span><strong>Startzustand:</strong> $q_0$</span>
+        <span><strong>Endzustände:</strong> $F = \{q_2\}$</span>
+      </div>
+
+      <div class="dea-lab-grid">
+        <!-- Zustandsdiagramm M1 -->
+        <div class="svg-stage">
+          <svg id="svg-m1" viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" aria-label="Zustandsdiagramm Automat M1">
+            <defs>
+              <marker id="arr-m1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+              </marker>
+              <marker id="arr-m1-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+              </marker>
+              <marker id="arr-m1-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+
+            <!-- Startpfeil -->
+            <line x1="20" y1="115" x2="67" y2="115" class="dea-start-arrow" marker-end="url(#arr-m1-start)"/>
+            <text x="22" y="105" class="dea-start-text">Start</text>
+
+            <!-- Übergänge -->
+            <path id="m1-edge-q0-b" d="M 82 94 C 66 44, 124 44, 108 94" class="dea-edge-path" marker-end="url(#arr-m1)"/>
+            <text id="m1-lbl-q0-b" x="95" y="42" class="dea-edge-label">b</text>
+
+            <path id="m1-edge-q0-a" d="M 120 115 L 252 115" class="dea-edge-path" marker-end="url(#arr-m1)"/>
+            <text id="m1-lbl-q0-a" x="187" y="104" class="dea-edge-label">a</text>
+
+            <path id="m1-edge-q1-a" d="M 267 94 C 251 44, 309 44, 293 94" class="dea-edge-path" marker-end="url(#arr-m1)"/>
+            <text id="m1-lbl-q1-a" x="280" y="42" class="dea-edge-label">a</text>
+
+            <path id="m1-edge-q1-b" d="M 305 115 L 437 115" class="dea-edge-path" marker-end="url(#arr-m1)"/>
+            <text id="m1-lbl-q1-b" x="372" y="104" class="dea-edge-label">b</text>
+
+            <path id="m1-edge-q2-ab" d="M 452 94 C 436 44, 494 44, 478 94" class="dea-edge-path" marker-end="url(#arr-m1)"/>
+            <text id="m1-lbl-q2-ab" x="465" y="42" class="dea-edge-label">a, b</text>
+
+            <!-- Zustände -->
+            <g id="m1-node-q0" class="dea-node is-active">
+              <circle cx="95" cy="115" r="24" class="dea-node-circle"/>
+              <text x="95" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">0</tspan></text>
+            </g>
+
+            <g id="m1-node-q1" class="dea-node">
+              <circle cx="280" cy="115" r="24" class="dea-node-circle"/>
+              <text x="280" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">1</tspan></text>
+            </g>
+
+            <g id="m1-node-q2" class="dea-node">
+              <circle cx="465" cy="115" r="24" class="dea-node-circle"/>
+              <circle cx="465" cy="115" r="19" class="dea-node-inner"/>
+              <text x="465" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">2</tspan></text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Interaktiver Wort-Tester M1 -->
+        <div class="sim-panel">
+          <div class="sim-panel-title">Wort-Labor für $M_1$</div>
+          <div class="word-input-row">
+            <input type="text" id="m1-input" class="word-input" placeholder="Wort über {a, b}, z. B. aab" value="aba" aria-label="Testwort für M1">
+            <button type="button" class="btn-sim btn-primary" onclick="loadWord('m1')">Laden</button>
+          </div>
+          <div id="m1-error" class="sim-error"></div>
+
+          <div class="preset-row">
+            <span>Testbeispiele:</span>
+            <button type="button" class="preset-chip" onclick="quickRun('m1', '')">&epsilon;</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m1', 'ab')">ab</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m1', 'ba')">ba</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m1', 'baaa')">baaa</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m1', 'aabba')">aabba</button>
+          </div>
+
+          <div class="live-controls">
+            <button type="button" id="m1-step-btn" class="btn-sim btn-primary" onclick="stepSim('m1')">Nächstes Zeichen</button>
+            <button type="button" id="m1-run-btn" class="btn-sim" onclick="runAllSim('m1')">Ganz prüfen</button>
+            <button type="button" class="btn-sim" onclick="resetSim('m1')">Zurücksetzen</button>
+          </div>
+
+          <div id="m1-tape" class="word-tape"></div>
+          <div id="m1-verdict" class="verdict-banner">Aktueller Zustand: q<sub>0</sub></div>
+
+          <div class="trace-scroll">
+            <table class="calc-grid-table">
+              <thead>
+                <tr>
+                  <th>Schritt</th>
+                  <th>Zustand</th>
+                  <th>Zeichen</th>
+                  <th>Folgezustand</th>
+                </tr>
+              </thead>
+              <tbody id="m1-trace"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-grid">
+        <div class="history-box accept-box">
+          <div class="history-title">Getestet &amp; akzeptiert</div>
+          <div id="m1-hist-accept" class="history-pills"></div>
+        </div>
+        <div class="history-box reject-box">
+          <div class="history-title">Getestet &amp; abgelehnt</div>
+          <div id="m1-hist-reject" class="history-pills"></div>
+        </div>
+      </div>
+
+      <div class="assignment-box">
+        <div class="assignment-title">Arbeitsauftrag zu $M_1$</div>
+        <ol class="assignment-list">
+          <li>Teste die vorgegebenen Wörter sowie eigene kurze Wörter im Wort-Labor und achte besonders darauf, was in $q_2$ passiert.</li>
+          <li>Bestimme für jeden Zustand ($q_0, q_1, q_2$), welche Information sich der Automat dort merkt.</li>
+          <li>Formuliere die akzeptierte Sprache $L(M_1)$ in einem präzisen Satz und vergleiche sie mit der Aufgabe <em>„endet auf <span class="code-inline">ab</span>“</em>.</li>
+        </ol>
+        <textarea id="m1-notes" class="note-area" placeholder="Eigene Notizen zu Zustandsbedeutung und Sprache L(M₁) (werden lokal im Browser gespeichert)..."></textarea>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         AUFGABE 2
+         ====================================================================== -->
+    <article class="sheet-card" id="aufgabe-2">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        <span>Automat $M_2$ analysieren</span>
+        <span class="level-badge">Niveau 2: Mittel (4 Zustände)</span>
+      </h2>
+
+      <div class="dea-meta-strip">
+        <span><strong>Alphabet:</strong> $\Sigma = \{0, 1\}$</span>
+        <span><strong>Zustände:</strong> $Q = \{q_0, q_1, q_2, q_3\}$</span>
+        <span><strong>Startzustand:</strong> $q_0$</span>
+        <span><strong>Endzustände:</strong> $F = \{q_1, q_2\}$</span>
+      </div>
+
+      <div class="dea-lab-grid">
+        <!-- Zustandsdiagramm M2 -->
+        <div class="svg-stage">
+          <svg id="svg-m2" viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" aria-label="Zustandsdiagramm Automat M2">
+            <defs>
+              <marker id="arr-m2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+              </marker>
+              <marker id="arr-m2-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+              </marker>
+              <marker id="arr-m2-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+
+            <!-- Startpfeil -->
+            <line x1="20" y1="130" x2="67" y2="130" class="dea-start-arrow" marker-end="url(#arr-m2-start)"/>
+            <text x="22" y="120" class="dea-start-text">Start</text>
+
+            <!-- Übergänge -->
+            <path id="m2-edge-q0-0" d="M 118 121 L 244 72" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q0-0" x="174" y="86" class="dea-edge-label">0</text>
+
+            <path id="m2-edge-q0-1" d="M 118 139 L 244 188" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q0-1" x="174" y="180" class="dea-edge-label">1</text>
+
+            <path id="m2-edge-q1-1" d="M 258 84 Q 222 130 256 174" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q1-1" x="226" y="134" class="dea-edge-label">1</text>
+
+            <path id="m2-edge-q2-0" d="M 282 176 Q 318 130 284 86" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q2-0" x="314" y="134" class="dea-edge-label">0</text>
+
+            <path id="m2-edge-q1-0" d="M 293 71 L 429 120" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q1-0" x="368" y="86" class="dea-edge-label">0</text>
+
+            <path id="m2-edge-q2-1" d="M 293 189 L 429 140" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q2-1" x="368" y="180" class="dea-edge-label">1</text>
+
+            <path id="m2-edge-q3-01" d="M 476 117 C 526 101, 526 159, 476 143" class="dea-edge-path" marker-end="url(#arr-m2)"/>
+            <text id="m2-lbl-q3-01" x="530" y="134" class="dea-edge-label">0, 1</text>
+
+            <!-- Zustände -->
+            <g id="m2-node-q0" class="dea-node is-active">
+              <circle cx="95" cy="130" r="24" class="dea-node-circle"/>
+              <text x="95" y="135" class="dea-node-label">q<tspan dy="3" font-size="10">0</tspan></text>
+            </g>
+
+            <g id="m2-node-q1" class="dea-node">
+              <circle cx="270" cy="62" r="24" class="dea-node-circle"/>
+              <circle cx="270" cy="62" r="19" class="dea-node-inner"/>
+              <text x="270" y="67" class="dea-node-label">q<tspan dy="3" font-size="10">1</tspan></text>
+            </g>
+
+            <g id="m2-node-q2" class="dea-node">
+              <circle cx="270" cy="198" r="24" class="dea-node-circle"/>
+              <circle cx="270" cy="198" r="19" class="dea-node-inner"/>
+              <text x="270" y="203" class="dea-node-label">q<tspan dy="3" font-size="10">2</tspan></text>
+            </g>
+
+            <g id="m2-node-q3" class="dea-node">
+              <circle cx="455" cy="130" r="24" class="dea-node-circle"/>
+              <text x="455" y="135" class="dea-node-label">q<tspan dy="3" font-size="10">3</tspan></text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Interaktiver Wort-Tester M2 -->
+        <div class="sim-panel">
+          <div class="sim-panel-title">Wort-Labor für $M_2$</div>
+          <div class="word-input-row">
+            <input type="text" id="m2-input" class="word-input" placeholder="Wort über {0, 1}, z. B. 0101" value="0101" aria-label="Testwort für M2">
+            <button type="button" class="btn-sim btn-primary" onclick="loadWord('m2')">Laden</button>
+          </div>
+          <div id="m2-error" class="sim-error"></div>
+
+          <div class="preset-row">
+            <span>Testbeispiele:</span>
+            <button type="button" class="preset-chip" onclick="quickRun('m2', '')">&epsilon;</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m2', '0')">0</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m2', '0101')">0101</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m2', '1001')">1001</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m2', '10110')">10110</button>
+          </div>
+
+          <div class="live-controls">
+            <button type="button" id="m2-step-btn" class="btn-sim btn-primary" onclick="stepSim('m2')">Nächstes Zeichen</button>
+            <button type="button" id="m2-run-btn" class="btn-sim" onclick="runAllSim('m2')">Ganz prüfen</button>
+            <button type="button" class="btn-sim" onclick="resetSim('m2')">Zurücksetzen</button>
+          </div>
+
+          <div id="m2-tape" class="word-tape"></div>
+          <div id="m2-verdict" class="verdict-banner">Aktueller Zustand: q<sub>0</sub></div>
+
+          <div class="trace-scroll">
+            <table class="calc-grid-table">
+              <thead>
+                <tr>
+                  <th>Schritt</th>
+                  <th>Zustand</th>
+                  <th>Zeichen</th>
+                  <th>Folgezustand</th>
+                </tr>
+              </thead>
+              <tbody id="m2-trace"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-grid">
+        <div class="history-box accept-box">
+          <div class="history-title">Getestet &amp; akzeptiert</div>
+          <div id="m2-hist-accept" class="history-pills"></div>
+        </div>
+        <div class="history-box reject-box">
+          <div class="history-title">Getestet &amp; abgelehnt</div>
+          <div id="m2-hist-reject" class="history-pills"></div>
+        </div>
+      </div>
+
+      <div class="assignment-box">
+        <div class="assignment-title">Arbeitsauftrag zu $M_2$</div>
+        <ol class="assignment-list">
+          <li>Untersuche, warum das leere Wort $\varepsilon$ abgelehnt wird, einzelne Bits wie <span class="code-inline">0</span> und <span class="code-inline">1</span> aber akzeptiert werden.</li>
+          <li>Erkläre die Rolle von Zustand $q_3$ und welche Eingabefolgen dorthin führen.</li>
+          <li>Formuliere die akzeptierte Sprache $L(M_2)$ möglichst genau in Worten.</li>
+        </ol>
+        <textarea id="m2-notes" class="note-area" placeholder="Eigene Notizen zu Zustandsbedeutung und Sprache L(M₂)..."></textarea>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         AUFGABE 3
+         ====================================================================== -->
+    <article class="sheet-card" id="aufgabe-3">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        <span>Automat $M_3$ analysieren</span>
+        <span class="level-badge">Niveau 3: Anspruchsvoll (3 Zustände)</span>
+      </h2>
+
+      <div class="dea-meta-strip">
+        <span><strong>Alphabet:</strong> $\Sigma = \{0, 1\}$</span>
+        <span><strong>Zustände:</strong> $Q = \{q_0, q_1, q_2\}$</span>
+        <span><strong>Startzustand:</strong> $q_0$</span>
+        <span><strong>Endzustände:</strong> $F = \{q_0\}$</span>
+      </div>
+
+      <div class="dea-lab-grid">
+        <!-- Zustandsdiagramm M3 -->
+        <div class="svg-stage">
+          <svg id="svg-m3" viewBox="0 0 560 245" xmlns="http://www.w3.org/2000/svg" aria-label="Zustandsdiagramm Automat M3">
+            <defs>
+              <marker id="arr-m3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+              </marker>
+              <marker id="arr-m3-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+              </marker>
+              <marker id="arr-m3-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+
+            <!-- Startpfeil -->
+            <line x1="20" y1="135" x2="67" y2="135" class="dea-start-arrow" marker-end="url(#arr-m3-start)"/>
+            <text x="22" y="125" class="dea-start-text">Start</text>
+
+            <!-- Übergänge -->
+            <path id="m3-edge-q0-0" d="M 82 156 C 66 206, 124 206, 108 156" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q0-0" x="95" y="216" class="dea-edge-label">0</text>
+
+            <path id="m3-edge-q0-1" d="M 120 135 L 252 135" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q0-1" x="187" y="124" class="dea-edge-label">1</text>
+
+            <path id="m3-edge-q1-0" d="M 267 156 C 251 206, 309 206, 293 156" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q1-0" x="280" y="216" class="dea-edge-label">0</text>
+
+            <path id="m3-edge-q1-1" d="M 305 135 L 437 135" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q1-1" x="372" y="124" class="dea-edge-label">1</text>
+
+            <path id="m3-edge-q2-0" d="M 452 156 C 436 206, 494 206, 478 156" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q2-0" x="465" y="216" class="dea-edge-label">0</text>
+
+            <path id="m3-edge-q2-1" d="M 452 114 Q 280 18 109 112" class="dea-edge-path" marker-end="url(#arr-m3)"/>
+            <text id="m3-lbl-q2-1" x="280" y="48" class="dea-edge-label">1</text>
+
+            <!-- Zustände -->
+            <g id="m3-node-q0" class="dea-node is-active">
+              <circle cx="95" cy="135" r="24" class="dea-node-circle"/>
+              <circle cx="95" cy="135" r="19" class="dea-node-inner"/>
+              <text x="95" y="140" class="dea-node-label">q<tspan dy="3" font-size="10">0</tspan></text>
+            </g>
+
+            <g id="m3-node-q1" class="dea-node">
+              <circle cx="280" cy="135" r="24" class="dea-node-circle"/>
+              <text x="280" y="140" class="dea-node-label">q<tspan dy="3" font-size="10">1</tspan></text>
+            </g>
+
+            <g id="m3-node-q2" class="dea-node">
+              <circle cx="465" cy="135" r="24" class="dea-node-circle"/>
+              <text x="465" y="140" class="dea-node-label">q<tspan dy="3" font-size="10">2</tspan></text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Interaktiver Wort-Tester M3 -->
+        <div class="sim-panel">
+          <div class="sim-panel-title">Wort-Labor für $M_3$</div>
+          <div class="word-input-row">
+            <input type="text" id="m3-input" class="word-input" placeholder="Wort über {0, 1}, z. B. 1011" value="1011" aria-label="Testwort für M3">
+            <button type="button" class="btn-sim btn-primary" onclick="loadWord('m3')">Laden</button>
+          </div>
+          <div id="m3-error" class="sim-error"></div>
+
+          <div class="preset-row">
+            <span>Testbeispiele:</span>
+            <button type="button" class="preset-chip" onclick="quickRun('m3', '')">&epsilon;</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m3', '000')">000</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m3', '11')">11</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m3', '1011')">1011</button>
+            <button type="button" class="preset-chip" onclick="quickRun('m3', '1110111')">1110111</button>
+          </div>
+
+          <div class="live-controls">
+            <button type="button" id="m3-step-btn" class="btn-sim btn-primary" onclick="stepSim('m3')">Nächstes Zeichen</button>
+            <button type="button" id="m3-run-btn" class="btn-sim" onclick="runAllSim('m3')">Ganz prüfen</button>
+            <button type="button" class="btn-sim" onclick="resetSim('m3')">Zurücksetzen</button>
+          </div>
+
+          <div id="m3-tape" class="word-tape"></div>
+          <div id="m3-verdict" class="verdict-banner">Aktueller Zustand: q<sub>0</sub></div>
+
+          <div class="trace-scroll">
+            <table class="calc-grid-table">
+              <thead>
+                <tr>
+                  <th>Schritt</th>
+                  <th>Zustand</th>
+                  <th>Zeichen</th>
+                  <th>Folgezustand</th>
+                </tr>
+              </thead>
+              <tbody id="m3-trace"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-grid">
+        <div class="history-box accept-box">
+          <div class="history-title">Getestet &amp; akzeptiert</div>
+          <div id="m3-hist-accept" class="history-pills"></div>
+        </div>
+        <div class="history-box reject-box">
+          <div class="history-title">Getestet &amp; abgelehnt</div>
+          <div id="m3-hist-reject" class="history-pills"></div>
+        </div>
+      </div>
+
+      <div class="assignment-box">
+        <div class="assignment-title">Arbeitsauftrag zu $M_3$</div>
+        <ol class="assignment-list">
+          <li>Beobachte getrennt, welchen Effekt das Zeichen <span class="code-inline">0</span> und welchen Effekt das Zeichen <span class="code-inline">1</span> auf die Zustände hat.</li>
+          <li>Erkläre, welche mathematische Größe die Zustände $q_0, q_1, q_2$ zählen bzw. speichern.</li>
+          <li>Formuliere die akzeptierte Sprache $L(M_3)$ präzise (beachte auch den Fall $\varepsilon$ und reine Null-Folgen).</li>
+        </ol>
+        <textarea id="m3-notes" class="note-area" placeholder="Eigene Notizen zu Zustandsbedeutung und Sprache L(M₃)..."></textarea>
+      </div>
+    </article>
+
+  </main>
+
+  <script>
+    const MACHINES = {
+      m1: {
+        alphabet: ['a', 'b'],
+        start: 'q0',
+        accepting: ['q2'],
+        transitions: {
+          q0: { a: 'q1', b: 'q0' },
+          q1: { a: 'q1', b: 'q2' },
+          q2: { a: 'q2', b: 'q2' }
+        },
+        edgeIds: {
+          'q0-b': 'm1-edge-q0-b',
+          'q0-a': 'm1-edge-q0-a',
+          'q1-a': 'm1-edge-q1-a',
+          'q1-b': 'm1-edge-q1-b',
+          'q2-a': 'm1-edge-q2-ab',
+          'q2-b': 'm1-edge-q2-ab'
+        },
+        labelIds: {
+          'q0-b': 'm1-lbl-q0-b',
+          'q0-a': 'm1-lbl-q0-a',
+          'q1-a': 'm1-lbl-q1-a',
+          'q1-b': 'm1-lbl-q1-b',
+          'q2-a': 'm1-lbl-q2-ab',
+          'q2-b': 'm1-lbl-q2-ab'
+        }
+      },
+      m2: {
+        alphabet: ['0', '1'],
+        start: 'q0',
+        accepting: ['q1', 'q2'],
+        transitions: {
+          q0: { '0': 'q1', '1': 'q2' },
+          q1: { '0': 'q3', '1': 'q2' },
+          q2: { '0': 'q1', '1': 'q3' },
+          q3: { '0': 'q3', '1': 'q3' }
+        },
+        edgeIds: {
+          'q0-0': 'm2-edge-q0-0',
+          'q0-1': 'm2-edge-q0-1',
+          'q1-1': 'm2-edge-q1-1',
+          'q2-0': 'm2-edge-q2-0',
+          'q1-0': 'm2-edge-q1-0',
+          'q2-1': 'm2-edge-q2-1',
+          'q3-0': 'm2-edge-q3-01',
+          'q3-1': 'm2-edge-q3-01'
+        },
+        labelIds: {
+          'q0-0': 'm2-lbl-q0-0',
+          'q0-1': 'm2-lbl-q0-1',
+          'q1-1': 'm2-lbl-q1-1',
+          'q2-0': 'm2-lbl-q2-0',
+          'q1-0': 'm2-lbl-q1-0',
+          'q2-1': 'm2-lbl-q2-1',
+          'q3-0': 'm2-lbl-q3-01',
+          'q3-1': 'm2-lbl-q3-01'
+        }
+      },
+      m3: {
+        alphabet: ['0', '1'],
+        start: 'q0',
+        accepting: ['q0'],
+        transitions: {
+          q0: { '0': 'q0', '1': 'q1' },
+          q1: { '0': 'q1', '1': 'q2' },
+          q2: { '0': 'q2', '1': 'q0' }
+        },
+        edgeIds: {
+          'q0-0': 'm3-edge-q0-0',
+          'q0-1': 'm3-edge-q0-1',
+          'q1-0': 'm3-edge-q1-0',
+          'q1-1': 'm3-edge-q1-1',
+          'q2-0': 'm3-edge-q2-0',
+          'q2-1': 'm3-edge-q2-1'
+        },
+        labelIds: {
+          'q0-0': 'm3-lbl-q0-0',
+          'q0-1': 'm3-lbl-q0-1',
+          'q1-0': 'm3-lbl-q1-0',
+          'q1-1': 'm3-lbl-q1-1',
+          'q2-0': 'm3-lbl-q2-0',
+          'q2-1': 'm3-lbl-q2-1'
+        }
+      }
+    };
+
+    const simState = {};
+
+    function formatStateHtml(q) {
+      return q.replace(/^q(\d+)$/, 'q<sub>$1</sub>');
+    }
+
+    function formatWordLabel(word) {
+      return word === '' ? 'ε' : word;
+    }
+
+    function initMachine(id) {
+      const m = MACHINES[id];
+      const inputEl = document.getElementById(id + '-input');
+      simState[id] = {
+        word: inputEl ? inputEl.value.trim() : '',
+        index: 0,
+        current: m.start,
+        lastEdgeKey: null,
+        trace: [],
+        acceptedWords: [],
+        rejectedWords: []
+      };
+      renderMachine(id);
+    }
+
+    function validateWord(id, raw) {
+      const m = MACHINES[id];
+      const word = raw.trim();
+      for (const ch of word) {
+        if (!m.alphabet.includes(ch)) {
+          return {
+            ok: false,
+            error: 'Ungültiges Zeichen "' + ch + '". Erlaubtes Alphabet: {' + m.alphabet.join(', ') + '}.'
+          };
+        }
+      }
+      return { ok: true, word };
+    }
+
+    function loadWord(id) {
+      const inputEl = document.getElementById(id + '-input');
+      const errEl = document.getElementById(id + '-error');
+      const check = validateWord(id, inputEl.value);
+      if (!check.ok) {
+        errEl.textContent = check.error;
+        errEl.style.display = 'block';
+        return false;
+      }
+      errEl.style.display = 'none';
+      const st = simState[id];
+      st.word = check.word;
+      st.index = 0;
+      st.current = MACHINES[id].start;
+      st.lastEdgeKey = null;
+      st.trace = [];
+      renderMachine(id);
+      if (st.word.length === 0) {
+        recordHistory(id);
+      }
+      return true;
+    }
+
+    function resetSim(id) {
+      const st = simState[id];
+      st.index = 0;
+      st.current = MACHINES[id].start;
+      st.lastEdgeKey = null;
+      st.trace = [];
+      document.getElementById(id + '-error').style.display = 'none';
+      renderMachine(id);
+    }
+
+    function stepSim(id) {
+      const st = simState[id];
+      const m = MACHINES[id];
+      if (st.index >= st.word.length) {
+        renderMachine(id);
+        return;
+      }
+      const ch = st.word[st.index];
+      const prev = st.current;
+      const next = m.transitions[prev][ch];
+      st.index += 1;
+      st.current = next;
+      st.lastEdgeKey = prev + '-' + ch;
+      st.trace.push({
+        step: st.index,
+        from: prev,
+        symbol: ch,
+        to: next
+      });
+      if (st.index === st.word.length) {
+        recordHistory(id);
+      }
+      renderMachine(id);
+    }
+
+    function runAllSim(id) {
+      if (!loadWord(id)) return;
+      const st = simState[id];
+      while (st.index < st.word.length) {
+        stepSim(id);
+      }
+    }
+
+    function quickRun(id, word) {
+      document.getElementById(id + '-input').value = word;
+      runAllSim(id);
+    }
+
+    function recordHistory(id) {
+      const st = simState[id];
+      const m = MACHINES[id];
+      const isAcc = m.accepting.includes(st.current);
+      const list = isAcc ? st.acceptedWords : st.rejectedWords;
+      if (!list.includes(st.word)) {
+        list.push(st.word);
+      }
+    }
+
+    function renderMachine(id) {
+      const m = MACHINES[id];
+      const st = simState[id];
+      const finished = st.index >= st.word.length;
+      const isAcc = m.accepting.includes(st.current);
+
+      // SVG-Knoten zurücksetzen & aktiven Zustand markieren
+      const svg = document.getElementById('svg-' + id);
+      svg.querySelectorAll('.dea-node').forEach(node => {
+        node.classList.remove('is-active', 'is-accepting', 'is-rejected');
+      });
+      const activeNode = document.getElementById(id + '-node-' + st.current);
+      if (activeNode) {
+        activeNode.classList.add('is-active');
+        if (finished) {
+          activeNode.classList.add(isAcc ? 'is-accepting' : 'is-rejected');
+        }
+      }
+
+      // SVG-Kanten zurücksetzen & letzten Übergang markieren
+      svg.querySelectorAll('.dea-edge-path').forEach(edge => {
+        edge.classList.remove('is-active');
+        edge.setAttribute('marker-end', 'url(#arr-' + id + ')');
+      });
+      svg.querySelectorAll('.dea-edge-label').forEach(lbl => {
+        lbl.classList.remove('is-active');
+      });
+      if (st.lastEdgeKey && m.edgeIds[st.lastEdgeKey]) {
+        const activeEdge = document.getElementById(m.edgeIds[st.lastEdgeKey]);
+        const activeLbl = document.getElementById(m.labelIds[st.lastEdgeKey]);
+        if (activeEdge) {
+          activeEdge.classList.add('is-active');
+          activeEdge.setAttribute('marker-end', 'url(#arr-' + id + '-active)');
+        }
+        if (activeLbl) {
+          activeLbl.classList.add('is-active');
+        }
+      }
+
+      // Eingabeband rendern
+      const tapeEl = document.getElementById(id + '-tape');
+      tapeEl.innerHTML = '';
+      if (st.word.length === 0) {
+        const span = document.createElement('span');
+        span.className = 'tape-char done';
+        span.textContent = 'ε (leeres Wort)';
+        tapeEl.appendChild(span);
+      } else {
+        for (let i = 0; i < st.word.length; i++) {
+          const span = document.createElement('span');
+          span.className = 'tape-char';
+          if (i < st.index) span.classList.add('done');
+          else if (i === st.index) span.classList.add('current');
+          span.textContent = st.word[i];
+          tapeEl.appendChild(span);
+        }
+      }
+
+      // Ergebnis-Banner
+      const verdictEl = document.getElementById(id + '-verdict');
+      verdictEl.classList.remove('is-accept', 'is-reject');
+      if (finished) {
+        if (isAcc) {
+          verdictEl.classList.add('is-accept');
+          verdictEl.innerHTML = 'Wort "' + formatWordLabel(st.word) + '" akzeptiert (Endzustand ' + formatStateHtml(st.current) + ' &isin; F).';
+        } else {
+          verdictEl.classList.add('is-reject');
+          verdictEl.innerHTML = 'Wort "' + formatWordLabel(st.word) + '" abgelehnt (' + formatStateHtml(st.current) + ' &notin; F).';
+        }
+      } else {
+        verdictEl.innerHTML = 'Aktueller Zustand: ' + formatStateHtml(st.current) + ' &nbsp;|&nbsp; Nächstes Zeichen: "' + st.word[st.index] + '"';
+      }
+
+      // Step-Button Status
+      document.getElementById(id + '-step-btn').disabled = finished;
+
+      // Trace-Tabelle
+      const tbody = document.getElementById(id + '-trace');
+      tbody.innerHTML = '';
+      if (st.trace.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="4" style="color: var(--ink-muted); text-align: center;">Startzustand: ' + formatStateHtml(m.start) + ' (noch kein Zeichen gelesen)</td>';
+        tbody.appendChild(tr);
+      } else {
+        st.trace.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + row.step + '</td>' +
+            '<td>' + formatStateHtml(row.from) + '</td>' +
+            '<td><span class="code-inline">' + row.symbol + '</span></td>' +
+            '<td><strong>' + formatStateHtml(row.to) + '</strong></td>';
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Test-Chronik
+      renderHistoryList(id + '-hist-accept', st.acceptedWords);
+      renderHistoryList(id + '-hist-reject', st.rejectedWords);
+    }
+
+    function renderHistoryList(containerId, words) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      if (words.length === 0) {
+        const empty = document.createElement('span');
+        empty.style.fontSize = '0.84rem';
+        empty.style.color = 'var(--ink-muted)';
+        empty.textContent = 'Noch keine Wörter getestet';
+        container.appendChild(empty);
+        return;
+      }
+      words.forEach(w => {
+        const pill = document.createElement('span');
+        pill.className = 'history-pill';
+        pill.textContent = formatWordLabel(w);
+        container.appendChild(pill);
+      });
+    }
+
+    // Lokale Notizen im Browser speichern (ohne Musterlösungen)
+    function initNotes(id) {
+      const key = 'q2_dea_analyse_notes_' + id;
+      const el = document.getElementById(id + '-notes');
+      if (!el) return;
+      try {
+        const saved = localStorage.getItem(key);
+        if (saved !== null) el.value = saved;
+        el.addEventListener('input', () => {
+          localStorage.setItem(key, el.value);
+        });
+      } catch (e) {
+        // Ignorieren, falls localStorage deaktiviert ist
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      ['m1', 'm2', 'm3'].forEach(id => {
+        initMachine(id);
+        initNotes(id);
+        const inp = document.getElementById(id + '-input');
+        inp.addEventListener('keydown', evt => {
+          if (evt.key === 'Enter') {
+            evt.preventDefault();
+            runAllSim(id);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
