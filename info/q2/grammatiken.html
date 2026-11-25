@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formale Sprachen &amp; Reguläre Grammatiken (Typ 3) | Informatik Q2</title>
+
+  <!-- Zentrales Schulheft- & Lernatelier-Stylesheet -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    .level-badge {
+      margin-left: auto;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: #eff6ff;
+      color: var(--ink-blue);
+      border: 1px solid #bfdbfe;
+      white-space: nowrap;
+    }
+
+    .code-inline {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+      font-weight: 700;
+    }
+
+    .grammar-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .grammar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      align-items: baseline;
+    }
+
+    .grammar-label {
+      font-weight: 700;
+      color: var(--ink-blue);
+      min-width: 145px;
+    }
+
+    .contrast-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1rem 0;
+    }
+    @media (max-width: 768px) {
+      .contrast-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contrast-card {
+      border-radius: 6px;
+      padding: 1rem 1.15rem;
+      border: 1.5px solid var(--paper-border);
+      background: #ffffff;
+    }
+    .contrast-card.card-ok {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+    .contrast-card.card-warn {
+      border-color: #fca5a5;
+      background: #fef2f2;
+    }
+    .contrast-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+    .card-ok .contrast-title { color: #065f46; }
+    .card-warn .contrast-title { color: #991b1b; }
+
+    .recipe-steps {
+      list-style: none;
+      margin: 1rem 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .recipe-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.65rem 0.9rem;
+    }
+    .step-marker {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--ink-blue);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Synchron-Labor M1 (DEA <-> Grammatik) */
+    .sync-lab-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.25rem;
+      margin-top: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .sync-lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .svg-stage {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .svg-stage svg {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .dea-node-circle {
+      fill: #ffffff;
+      stroke: #1e3a8a;
+      stroke-width: 2.2;
+      transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+    .dea-node-inner {
+      fill: none;
+      stroke: #1e3a8a;
+      stroke-width: 1.6;
+      transition: stroke 0.2s ease;
+    }
+    .dea-node-label {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      fill: #1e3a8a;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .dea-edge-path {
+      fill: none;
+      stroke: #475569;
+      stroke-width: 2;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease;
+    }
+    .dea-edge-label {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      fill: #111827;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .dea-node.is-active .dea-node-circle {
+      fill: #dbeafe;
+      stroke: #2563eb;
+      stroke-width: 3.2;
+    }
+    .dea-node.is-done .dea-node-circle {
+      fill: #dcfce7;
+      stroke: #059669;
+      stroke-width: 3.2;
+    }
+    .dea-node.is-done .dea-node-inner {
+      stroke: #059669;
+    }
+    .dea-edge-path.is-active {
+      stroke: #2563eb;
+      stroke-width: 3.2;
+    }
+    .dea-edge-label.is-active {
+      fill: #1d4ed8;
+    }
+
+    .builder-panel {
+      background: var(--paper-subtle);
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1rem 1.1rem;
+    }
+
+    .sentential-display {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .nt-highlight {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      border: 1px solid #93c5fd;
+      border-radius: 4px;
+      padding: 0 6px;
+    }
+    .term-part {
+      color: #111827;
+    }
+    .finished-badge {
+      display: inline-block;
+      margin-left: auto;
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 0.84rem;
+      background: #dcfce7;
+      color: #065f46;
+      border: 1px solid #86efac;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .rule-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-rule {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #93c5fd;
+      background: #ffffff;
+      color: var(--ink-blue);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-rule:hover:not(:disabled) {
+      background: var(--ink-blue);
+      color: #ffffff;
+      border-color: var(--ink-blue);
+    }
+    .btn-rule:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-sim {
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+    }
+    .btn-sim:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+      color: var(--model-blue);
+    }
+    .btn-sim.btn-primary {
+      background: var(--ink-blue);
+      color: #ffffff;
+      border-color: var(--ink-blue);
+    }
+    .btn-sim.btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .derivation-chain {
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      padding: 0.65rem 0.85rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      max-height: 130px;
+      overflow-y: auto;
+    }
+
+    /* Übungsaufgaben & Eigene-Grammatik-Prüfer */
+    .exercise-block {
+      background: var(--paper-subtle);
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1.15rem 1.25rem;
+      margin-top: 1.1rem;
+    }
+    .exercise-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0.55rem;
+    }
+    .exercise-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+    .exercise-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      color: var(--ink-muted);
+    }
+
+    .checker-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 780px) {
+      .checker-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rule-textarea {
+      width: 100%;
+      min-height: 112px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      background: #ffffff;
+      color: var(--ink-black);
+      resize: vertical;
+    }
+    .rule-textarea:focus {
+      outline: none;
+      border-color: var(--model-blue);
+    }
+
+    .checker-feedback {
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      min-height: 112px;
+    }
+    .checker-feedback.is-ok {
+      border-color: #86efac;
+      background: #f0fdf4;
+      color: #065f46;
+    }
+    .checker-feedback.is-err {
+      border-color: #fca5a5;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .test-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 0.5rem;
+    }
+    .test-pill {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+    }
+    .test-pill.pass {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #065f46;
+    }
+    .test-pill.fail {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    .word-test-inline {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.55rem;
+    }
+    .word-test-inline input {
+      flex: 1;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      padding: 4px 8px;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+    }
+
+    .diagram-inline-wrap {
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.65rem;
+      margin: 0.75rem 0;
+      text-align: center;
+    }
+    .diagram-inline-wrap svg {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- KOPFZEILE (KAPITEL-NAVIGATION) -->
+  <nav class="presenter-bar">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Q2</a>
+      <div class="presenter-title">
+        <span>Theoretische Informatik: Formale Sprachen</span>
+        <span class="presenter-tag">Typ-3-Grammatiken</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="automaten.html" class="presenter-tab-btn">1. Grundlagen (DEA)</a>
+      <a href="AB02_DEA_Konstruktion_Binaersystem.html" class="presenter-tab-btn">2. Konstruktion (AB 2)</a>
+      <a href="automaten-analyse.html" class="presenter-tab-btn">3. Sprache klassifizieren</a>
+      <a href="grammatiken.html" class="presenter-tab-btn active">4. Grammatiken (Typ 3)</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- DECKBLATT-HEADER -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik Q2 • Theoretische Informatik</span>
+        <span>Vom DEA zur Regulären Grammatik</span>
+      </div>
+      <h1>Formale Sprachen &amp; Reguläre Grammatiken (Typ 3)</h1>
+      <p class="sheet-intro">
+        Bisher haben wir mit Deterministischen Endlichen Automaten (DEA) überprüft, ob ein gegebenes Wort zu einer Sprache gehört. Nun wechseln wir die Perspektive vom <strong>Prüfen</strong> zum <strong>Erzeugen</strong>, formalisieren die Grammatik für $M_1$ und leiten ein systematisches Verfahren für beliebige DEAs und neue Sprachen her.
+      </p>
+    </header>
+
+    <!-- ======================================================================
+         ABSCHNITT 1: MOTIVATION (WARUM GRAMMATIKEN?)
+         ====================================================================== -->
+    <article class="sheet-card" id="motivation">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        <span>Motivation: Warum brauchen wir Grammatiken?</span>
+        <span class="level-badge">Prüfen vs. Erzeugen</span>
+      </h2>
+
+      <p>
+        Ein endlicher Automat arbeitet wie ein strenger Kontrollposten: Man gibt ihm ein fertiges Wort Zeichen für Zeichen ein, und am Ende entscheidet er mit <span class="highlighter">akzeptiert</span> oder <span class="highlighter">abgelehnt</span>. Man kann Wörter damit also <strong>verifizieren</strong> (überprüfen) – aber nicht direkt sehen, wie neue gültige Wörter entstehen.
+      </p>
+
+      <div class="note-columns">
+        <div class="notebook-column col-blue">
+          <div class="col-title">Bisher: Automat $M$ (Verifizieren)</div>
+          <p class="col-description">
+            <strong>Blickrichtung:</strong> Ein fertiges Wort liegt vor und wird Schritt für Schritt getestet.
+          </p>
+          <ul class="rule-list">
+            <li>Eingabe: fertiges Wort $w$ (z. B. <span class="code-inline">bab</span>)</li>
+            <li>Frage: <em>„Landet $w$ in einem Endzustand?“</em></li>
+            <li>Typische Anwendung: Eingabefilter, Protokollprüfung, Lexer im Compiler</li>
+          </ul>
+        </div>
+
+        <div class="notebook-column col-purple">
+          <div class="col-title">Neu: Grammatik $G$ (Erzeugen)</div>
+          <p class="col-description">
+            <strong>Blickrichtung:</strong> Ein Regelwerk (Baukasten) erzeugt Schritt für Schritt alle gültigen Wörter.
+          </p>
+          <ul class="rule-list">
+            <li>Eingabe: Startsymbol $S$ + Produktionsregeln</li>
+            <li>Frage: <em>„Wie baue ich ein gültiges Wort zusammen?“</em></li>
+            <li>Typische Anwendung: Syntax-Definition von Programmiersprachen (Java, HTML), Code-Generatoren, Datenformate</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        Eine <strong>Grammatik</strong> liefert damit die präzise <em>Bauanleitung</em> einer formalen Sprache: Jedes Wort, das sich regelkonform aus dem Startsymbol ableiten lässt, gehört zur Sprache – und kein anderes.
+      </p>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 2: FORMALISIERUNG AN M1 + TYPISCHE FEHLER + NICHT ABLEITBAR
+         ====================================================================== -->
+    <article class="sheet-card" id="m1-formalisierung">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        <span>Formalisierung anhand von $M_1$ (Teilwort <span class="code-inline">ab</span>)</span>
+        <span class="level-badge">4-Tupel &amp; Ableitungsregeln</span>
+      </h2>
+
+      <p>
+        Für den Automaten $M_1$ (alle Wörter über $\{a, b\}$, die das Teilwort <span class="code-inline">ab</span> enthalten) haben wir die Zustände $q_0, q_1, q_2$ in Platzhalter (Nichtterminale) $Q_0, Q_1, Q_2$ übersetzt:
+      </p>
+
+      <div class="grammar-box">
+        <div class="grammar-row"><span class="grammar-label">Nichtterminale $N$:</span><span>$\{Q_0, Q_1, Q_2\}$ &nbsp; (Großbuchstaben als Platzhalter für den aktuellen Zustand)</span></div>
+        <div class="grammar-row"><span class="grammar-label">Terminale $T$:</span><span>$\{a, b\}$ &nbsp; (feste Zeichen des fertigen Wortes; $N \cap T = \emptyset$)</span></div>
+        <div class="grammar-row"><span class="grammar-label">Startsymbol $S$:</span><span>$Q_0$ &nbsp; (entspricht dem Startzustand $q_0$)</span></div>
+        <div class="grammar-row">
+          <span class="grammar-label">Produktionen $P$:</span>
+          <span>
+            $Q_0 \to bQ_0 \mid aQ_1$, &nbsp;&nbsp;
+            $Q_1 \to aQ_1 \mid bQ_2$, &nbsp;&nbsp;
+            $Q_2 \to aQ_2 \mid bQ_2 \mid \varepsilon$
+          </span>
+        </div>
+      </div>
+
+      <h3 style="color: var(--ink-blue); margin: 1.2rem 0 0.5rem 0; font-size: 1.12rem;">Warum brauchen wir die Regel $Q_2 \to \varepsilon$?</h3>
+      <p>
+        Die Regeln $Q_0 \to aQ_1$ und $Q_1 \to bQ_2$ hängen immer ein festes Zeichen an und setzen dahinter wieder einen neuen Platzhalter. Ohne eine Abbruchregel würde die Erzeugung niemals enden und immer ein Großbuchstabe stehen bleiben.
+        Die Regel <strong>$Q_2 \to \varepsilon$</strong> bedeutet: <em>„Da $q_2$ ein Endzustand ist, darf das Wort hier enden – wir ersetzen den Platzhalter $Q_2$ durch das leere Wort $\varepsilon$ (nichts) und sind fertig.“</em>
+      </p>
+
+      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0; font-size: 1.12rem;">Wichtige Grundregel beim Ableiten</h3>
+      <div class="contrast-grid">
+        <div class="contrast-card card-ok">
+          <div class="contrast-title">Richtig: Nur ein einzelnes Nichtterminal ersetzen</div>
+          <p style="font-size: 0.94rem; margin-bottom: 0.5rem;">
+            Auf der linken Seite jeder Regel steht <strong>genau ein Nichtterminal</strong>. Alles, was davor bereits an Terminalzeichen entstanden ist, bleibt stehen.
+          </p>
+          <p style="font-family: Consolas, monospace; font-size: 0.9rem; font-weight: 700;">
+            Q<sub>0</sub> &rArr; bQ<sub>0</sub> &rArr; baQ<sub>1</sub> &rArr; babQ<sub>2</sub> &rArr; bab
+          </p>
+          <p style="font-size: 0.86rem; color: #065f46; margin-top: 0.35rem;">
+            Im Schritt <span class="code-inline">baQ₁ ⇒ babQ₂</span> wird ausschließlich <span class="code-inline">Q₁</span> durch <span class="code-inline">bQ₂</span> ersetzt; <span class="code-inline">ba</span> bleibt unverändert.
+          </p>
+        </div>
+
+        <div class="contrast-card card-warn">
+          <div class="contrast-title">Häufiger Fehler: Kombinationen oder Terminale ableiten</div>
+          <p style="font-size: 0.94rem; margin-bottom: 0.5rem;">
+            Es gibt <strong>keine</strong> Regeln, bei denen links Terminale und Nichtterminale gemischt stehen (etwa <span class="code-inline">aQ₁ → ...</span>), und Terminalzeichen selbst werden niemals weiter abgeleitet.
+          </p>
+          <p style="font-family: Consolas, monospace; font-size: 0.9rem; font-weight: 700;">
+            Falsch: aQ<sub>1</sub> &rarr; abQ<sub>2</sub> &nbsp;oder&nbsp; a &rarr; ab
+          </p>
+          <p style="font-size: 0.86rem; color: #991b1b; margin-top: 0.35rem;">
+            Merksatz: Links vom Pfeil steht bei unseren regulären Grammatiken <strong>immer nur ein einziger Platzhalter</strong> (z. B. $Q_1$).
+          </p>
+        </div>
+      </div>
+
+      <!-- Interaktives Synchron-Labor für M1 -->
+      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.4rem 0; font-size: 1.12rem;">Interaktiver Vergleich: Ableitung und Automat $M_1$ laufen synchron</h3>
+      <p style="font-size: 0.95rem; color: var(--ink-muted);">
+        Klicke rechts eine erlaubte Regel für den markierten Platzhalter an und beobachte links, wie der Automat $M_1$ exakt denselben Übergang durchführt.
+      </p>
+
+      <div class="sync-lab-grid">
+        <div class="svg-stage">
+          <svg id="svg-sync-m1" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg" aria-label="Synchrones Diagramm M1">
+            <defs>
+              <marker id="arr-s1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+              </marker>
+              <marker id="arr-s1-act" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+              </marker>
+              <marker id="arr-s1-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+            <line x1="16" y1="112" x2="60" y2="112" stroke="#1e3a8a" stroke-width="2.2" marker-end="url(#arr-s1-start)"/>
+            <text x="18" y="102" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">Start</text>
+
+            <path id="s1-edge-Q0-b" d="M 76 90 C 60 42, 114 42, 98 90" class="dea-edge-path" marker-end="url(#arr-s1)"/>
+            <text id="s1-lbl-Q0-b" x="87" y="40" class="dea-edge-label">b</text>
+
+            <path id="s1-edge-Q0-a" d="M 111 112 L 233 112" class="dea-edge-path" marker-end="url(#arr-s1)"/>
+            <text id="s1-lbl-Q0-a" x="172" y="101" class="dea-edge-label">a</text>
+
+            <path id="s1-edge-Q1-a" d="M 248 90 C 232 42, 286 42, 270 90" class="dea-edge-path" marker-end="url(#arr-s1)"/>
+            <text id="s1-lbl-Q1-a" x="259" y="40" class="dea-edge-label">a</text>
+
+            <path id="s1-edge-Q1-b" d="M 283 112 L 405 112" class="dea-edge-path" marker-end="url(#arr-s1)"/>
+            <text id="s1-lbl-Q1-b" x="344" y="101" class="dea-edge-label">b</text>
+
+            <path id="s1-edge-Q2-ab" d="M 419 90 C 403 42, 457 42, 441 90" class="dea-edge-path" marker-end="url(#arr-s1)"/>
+            <text id="s1-lbl-Q2-ab" x="430" y="40" class="dea-edge-label">a, b</text>
+
+            <g id="s1-node-Q0" class="dea-node is-active">
+              <circle cx="87" cy="112" r="23" class="dea-node-circle"/>
+              <text x="87" y="117" class="dea-node-label">q<tspan dy="3" font-size="10">0</tspan></text>
+            </g>
+            <g id="s1-node-Q1" class="dea-node">
+              <circle cx="259" cy="112" r="23" class="dea-node-circle"/>
+              <text x="259" y="117" class="dea-node-label">q<tspan dy="3" font-size="10">1</tspan></text>
+            </g>
+            <g id="s1-node-Q2" class="dea-node">
+              <circle cx="430" cy="112" r="23" class="dea-node-circle"/>
+              <circle cx="430" cy="112" r="18" class="dea-node-inner"/>
+              <text x="430" y="117" class="dea-node-label">q<tspan dy="3" font-size="10">2</tspan></text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="builder-panel">
+          <div style="font-size: 0.92rem; font-weight: 700; color: var(--ink-blue); margin-bottom: 0.45rem;">Aktuelle Satzform (Platzhalter wird ersetzt):</div>
+          <div id="sync-sentential" class="sentential-display"></div>
+
+          <div style="font-size: 0.86rem; font-weight: 700; color: var(--ink-muted); margin-bottom: 0.35rem;">Erlaubte Regeln für das aktuelle Nichtterminal:</div>
+          <div id="sync-buttons" class="rule-btn-group"></div>
+
+          <div style="display: flex; gap: 6px; margin-bottom: 0.65rem;">
+            <button type="button" class="btn-sim" onclick="undoSync()">Schritt zurück</button>
+            <button type="button" class="btn-sim" onclick="resetSync()">Neu starten ($Q_0$)</button>
+          </div>
+
+          <div id="sync-chain" class="derivation-chain"></div>
+        </div>
+      </div>
+
+      <h3 style="color: var(--ink-blue); margin: 1.4rem 0 0.5rem 0; font-size: 1.12rem;">Wie erkennt man, dass ein Wort <em>nicht</em> ableitbar ist?</h3>
+      <p style="margin-bottom: 0.65rem;">
+        Bei einer Grammatik, die aus einem DEA stammt, gibt es für das aktuelle Nichtterminal und das nächste Zeichen des Zielwortes <strong>höchstens eine passende Regel</strong>. Deshalb kannst du ein Zielwort eindeutig von links nach rechts prüfen und zwei klare Abbruchgründe feststellen:
+      </p>
+
+      <div class="contrast-grid">
+        <div class="contrast-card">
+          <div class="contrast-title">Fall A: Wort zu Ende, aber keine $\varepsilon$-Regel</div>
+          <p style="font-size: 0.93rem;">
+            Prüfe für $G_1$ das Wort $w = \text{baaa}$:
+          </p>
+          <p style="font-family: Consolas, monospace; font-size: 0.88rem; margin: 0.4rem 0; font-weight: 700;">
+            Q<sub>0</sub> &rArr; bQ<sub>0</sub> &rArr; baQ<sub>1</sub> &rArr; baaQ<sub>1</sub> &rArr; baaaQ<sub>1</sub>
+          </p>
+          <p style="font-size: 0.9rem; color: var(--ink-muted);">
+            Alle vier Zeichen sind erzeugt, aber hinten steht noch das Nichtterminal $Q_1$. Da es <strong>keine Regel $Q_1 \to \varepsilon$</strong> gibt, lässt sich $Q_1$ nicht mehr auflösen (jeder weitere Schritt würde das Wort länger machen). Also ist <span class="code-inline">baaa</span> <strong>nicht ableitbar</strong>.
+          </p>
+        </div>
+
+        <div class="contrast-card">
+          <div class="contrast-title">Fall B: Keine Regel mit dem nächsten Terminal</div>
+          <p style="font-size: 0.93rem;">
+            Bei unvollständigen Grammatiken (oder wenn wir später Grammatiken ohne Fangzustand direkt entwerfen) fehlt manchmal der Übergang für ein Zeichen. Beispiel für <em>„beginnt mit a“</em>: $S \to aA$, $A \to aA \mid bA \mid \varepsilon$.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--ink-muted); margin-top: 0.4rem;">
+            Für $w = \text{ba}$ beginnt keine Regel von $S$ mit dem Terminal <span class="code-inline">b</span>. Die Ableitung scheitert bereits am ersten Zeichen: <span class="code-inline">ba</span> ist <strong>nicht ableitbar</strong>.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 3: SYSTEMATISCHES REZEPT DEA -> GRAMMATIK + FORMALES
+         ====================================================================== -->
+    <article class="sheet-card" id="rezept">
+      <h2 class="task-title">
+        <span class="task-number">3</span>
+        <span>Systematisches Verfahren: Vom DEA zur Typ-3-Grammatik</span>
+        <span class="level-badge">Algorithmus</span>
+      </h2>
+
+      <p>
+        Jeder Deterministische Endliche Automat $M = (Q, \Sigma, \delta, q_0, F)$ lässt sich mechanisch in fünf Schritten in eine rechtslineare (reguläre) Grammatik $G = (N, T, P, S)$ mit $L(G) = L(M)$ umwandeln:
+      </p>
+
+      <ol class="recipe-steps">
+        <li><span class="step-marker">1</span><div><strong>Nichtterminale $N$ festlegen:</strong> Übernimm alle Zustände aus $Q$ als Großbuchstaben (z. B. $q_0, q_1, q_2 \mapsto Q_0, Q_1, Q_2$).</div></li>
+        <li><span class="step-marker">2</span><div><strong>Terminale $T$ festlegen:</strong> Das Eingabealphabet $\Sigma$ bildet direkt die Menge der Terminalzeichen ($T = \Sigma$).</div></li>
+        <li><span class="step-marker">3</span><div><strong>Startsymbol $S$ bestimmen:</strong> Das Startsymbol entspricht genau dem Startzustand des Automaten ($S = Q_0$).</div></li>
+        <li><span class="step-marker">4</span><div><strong>Zustandsübergänge übersetzen:</strong> Für jeden Pfeil $\delta(q_i, x) = q_j$ entsteht in $P$ die Produktionsregel <strong>$Q_i \to xQ_j$</strong>.</div></li>
+        <li><span class="step-marker">5</span><div><strong>Endzustände abschließen ($\varepsilon$-Regel):</strong> Für jeden Endzustand $q_f \in F$ fügst du die Abbruchregel <strong>$Q_f \to \varepsilon$</strong> hinzu.</div></li>
+      </ol>
+
+      <div class="merke-box" style="margin-bottom: 0;">
+        <span class="merke-tag">MERKE</span>
+        <h3 class="merke-title">Formale Definition: Reguläre Grammatik (Chomsky Typ 3)</h3>
+        <div class="merke-content">
+          <p style="margin-bottom: 0.5rem;">
+            Eine Grammatik ist ein 4-Tupel $G = (N, T, P, S)$ aus Nichtterminalen $N$, Terminalen $T$ ($N \cap T = \emptyset$), Produktionsregeln $P$ und Startsymbol $S \in N$.
+          </p>
+          <p style="margin-bottom: 0.5rem;">
+            Eine Grammatik heißt <strong>rechtsregulär (Typ 3)</strong>, wenn jede Regel in $P$ eine der folgenden Formen hat (mit $A, B \in N$ und $a \in T$):
+            $$A \to aB, \qquad A \to a \qquad \text{oder} \qquad A \to \varepsilon$$
+          </p>
+          <p>
+            <strong>Erzeugte Sprache $L(G)$:</strong> Die Menge aller reinen Terminalwörter $w \in T^*$, die sich in endlich vielen Schritten vom Startsymbol $S$ ableiten lassen ($S \Rightarrow^* w$). Dabei wird in jedem Ableitungsschritt <strong>genau ein</strong> Nichtterminal ersetzt.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ======================================================================
+         ABSCHNITT 4: ÜBUNGSAUFGABEN FÜR DIE DOPPELSTUNDE
+         ====================================================================== -->
+    <article class="sheet-card" id="uebungen">
+      <h2 class="task-title">
+        <span class="task-number">4</span>
+        <span>Übungsaufgaben: Grammatiken erstellen &amp; DEAs übersetzen</span>
+        <span class="level-badge">Praxis-Training</span>
+      </h2>
+
+      <p style="margin-bottom: 0.75rem;">
+        In den folgenden Aufgaben kannst du deine selbst entworfenen Grammatiken direkt im <strong>Live-Grammatik-Prüfer</strong> testen. Schreibe Regeln im Format <span class="code-inline">S -&gt; aA | bS</span> (nutze <span class="code-inline">eps</span> für $\varepsilon$; das erste Nichtterminal oder <span class="code-inline">S</span> bzw. <span class="code-inline">Q0</span> gilt als Startsymbol).
+      </p>
+
+      <!-- AUFGABE 4.1 -->
+      <div class="exercise-block">
+        <div class="exercise-head">
+          <div class="exercise-title">Aufgabe 1: Neue Sprache I – Beginnt mit <span class="code-inline">ab</span></div>
+          <span class="exercise-tag">Basis • Ohne DEA-Umweg</span>
+        </div>
+        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+          Entwirf über $T = \{a, b\}$ eine reguläre Grammatik $G_2$, die genau alle Wörter erzeugt, die mit <span class="code-inline">ab</span> <strong>beginnen</strong> (z. B. <span class="code-inline">ab</span>, <span class="code-inline">aba</span>, <span class="code-inline">abbb</span>; <strong>nicht</strong> <span class="code-inline">ε</span>, <span class="code-inline">a</span>, <span class="code-inline">ba</span>, <span class="code-inline">aab</span>).
+        </p>
+        <p style="font-size: 0.9rem; color: var(--ink-muted);">
+          Tipp: Brauchst du hier einen Fangzustand wie im DEA, oder kannst du für fehlerhafte Zeichen einfach <em>gar keine Regel</em> angeben? Notiere zusätzlich auf Papier die Schrittfolge für <span class="code-inline">abba</span> und begründe, warum <span class="code-inline">aab</span> nicht ableitbar ist.
+        </p>
+
+        <div class="checker-grid">
+          <div>
+            <textarea id="rules-ex1" class="rule-textarea" placeholder="Beispiel-Format:&#10;S -> ...&#10;A -> ..."></textarea>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex1')">Grammatik prüfen</button>
+              <button type="button" class="btn-sim" onclick="insertEps('rules-ex1')">+ eps einfügen</button>
+            </div>
+            <div class="word-test-inline">
+              <input type="text" id="testword-ex1" placeholder="Eigenes Testwort prüfen, z. B. abba">
+              <button type="button" class="btn-sim" onclick="testSingleWord('ex1')">Wort testen</button>
+            </div>
+          </div>
+          <div id="fb-ex1" class="checker-feedback">
+            Gib links deine Produktionsregeln ein und klicke auf <strong>„Grammatik prüfen“</strong>. Der Prüfer kontrolliert auch, ob links immer genau ein einzelnes Nichtterminal steht.
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4.2 -->
+      <div class="exercise-block">
+        <div class="exercise-head">
+          <div class="exercise-title">Aufgabe 2: Neue Sprache II – Gerade Anzahl von Nullen</div>
+          <span class="exercise-tag">Mittel • Sonderfall $\varepsilon$</span>
+        </div>
+        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+          Erstelle über $T = \{0, 1\}$ eine reguläre Grammatik $G_3$ für alle Binärwörter mit einer <strong>geraden Anzahl von Nullen</strong> (beliebig viele Einsen). Beachte, dass $0$ Nullen ebenfalls gerade ist ($\varepsilon \in L(G_3)$, z. B. auch <span class="code-inline">11</span>, <span class="code-inline">00</span>, <span class="code-inline">1010</span>).
+        </p>
+
+        <div class="checker-grid">
+          <div>
+            <textarea id="rules-ex2" class="rule-textarea" placeholder="S -> ..."></textarea>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex2')">Grammatik prüfen</button>
+              <button type="button" class="btn-sim" onclick="insertEps('rules-ex2')">+ eps einfügen</button>
+            </div>
+            <div class="word-test-inline">
+              <input type="text" id="testword-ex2" placeholder="Eigenes Testwort prüfen, z. B. 1010">
+              <button type="button" class="btn-sim" onclick="testSingleWord('ex2')">Wort testen</button>
+            </div>
+          </div>
+          <div id="fb-ex2" class="checker-feedback">
+            Hinweis: Überlege, welche zwei Zustände (Nichtterminale) du brauchst und bei welchem die $\varepsilon$-Regel stehen darf.
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4.3 -->
+      <div class="exercise-block">
+        <div class="exercise-head">
+          <div class="exercise-title">Aufgabe 3: Neue Sprache III – Gültige Binärzahlen ohne führende Nullen</div>
+          <span class="exercise-tag">Mittel • Mehrere Fälle</span>
+        </div>
+        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+          Erstelle über $T = \{0, 1\}$ eine Grammatik $G_4$ für sauber formatierte Binärzahlen: gültig sind die einzelne <span class="code-inline">0</span> sowie jede Zahl, die mit <span class="code-inline">1</span> beginnt (z. B. <span class="code-inline">0</span>, <span class="code-inline">1</span>, <span class="code-inline">1011</span>; <strong>abgelehnt</strong> werden <span class="code-inline">ε</span>, <span class="code-inline">00</span>, <span class="code-inline">010</span>).
+        </p>
+
+        <div class="checker-grid">
+          <div>
+            <textarea id="rules-ex3" class="rule-textarea" placeholder="S -> ..."></textarea>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex3')">Grammatik prüfen</button>
+              <button type="button" class="btn-sim" onclick="insertEps('rules-ex3')">+ eps einfügen</button>
+            </div>
+            <div class="word-test-inline">
+              <input type="text" id="testword-ex3" placeholder="Eigenes Testwort prüfen, z. B. 01">
+              <button type="button" class="btn-sim" onclick="testSingleWord('ex3')">Wort testen</button>
+            </div>
+          </div>
+          <div id="fb-ex3" class="checker-feedback">
+            Tipp: Wenn die Zahl mit <span class="code-inline">0</span> startet, darf danach nichts mehr kommen. Wenn sie mit <span class="code-inline">1</span> startet, darf beliebig viel folgen.
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4.4: SYSTEMATISCH DEA -> GRAMMATIK (M3 AUS WORT-LABOR) -->
+      <div class="exercise-block">
+        <div class="exercise-head">
+          <div class="exercise-title">Aufgabe 4: Systematisch DEA $\to$ Grammatik übersetzen ($M_3$)</div>
+          <span class="exercise-tag">Anspruchsvoll • Rezept anwenden</span>
+        </div>
+        <p style="font-size: 0.95rem;">
+          Wende das 5-Schritte-Rezept aus Abschnitt 3 auf den bekannten Automaten $M_3$ (<em>„Anzahl der Einsen ist durch 3 teilbar“</em>, $F = \{q_0\}$) an. Notiere danach schriftlich die Ableitung für <span class="code-inline">1011</span> und begründe anhand der Regeln, warum <span class="code-inline">101</span> nicht ableitbar ist.
+        </p>
+
+        <div class="diagram-inline-wrap">
+          <svg viewBox="0 0 560 215" xmlns="http://www.w3.org/2000/svg" aria-label="Automat M3 für Aufgabe 4">
+            <defs>
+              <marker id="arr-ex4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+              </marker>
+              <marker id="arr-ex4-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a8a"/>
+              </marker>
+            </defs>
+            <line x1="20" y1="115" x2="67" y2="115" stroke="#1e3a8a" stroke-width="2.2" marker-end="url(#arr-ex4-start)"/>
+            <text x="22" y="105" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">Start</text>
+
+            <path d="M 82 136 C 66 186, 124 186, 108 136" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="95" y="196" class="dea-edge-label">0</text>
+            <path d="M 120 115 L 252 115" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="187" y="104" class="dea-edge-label">1</text>
+
+            <path d="M 267 136 C 251 186, 309 186, 293 136" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="280" y="196" class="dea-edge-label">0</text>
+            <path d="M 305 115 L 437 115" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="372" y="104" class="dea-edge-label">1</text>
+
+            <path d="M 452 136 C 436 186, 494 186, 478 136" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="465" y="196" class="dea-edge-label">0</text>
+            <path d="M 452 94 Q 280 8 109 92" class="dea-edge-path" marker-end="url(#arr-ex4)"/>
+            <text x="280" y="36" class="dea-edge-label">1</text>
+
+            <circle cx="95" cy="115" r="24" class="dea-node-circle"/>
+            <circle cx="95" cy="115" r="19" class="dea-node-inner"/>
+            <text x="95" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">0</tspan></text>
+
+            <circle cx="280" cy="115" r="24" class="dea-node-circle"/>
+            <text x="280" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">1</tspan></text>
+
+            <circle cx="465" cy="115" r="24" class="dea-node-circle"/>
+            <text x="465" y="120" class="dea-node-label">q<tspan dy="3" font-size="10">2</tspan></text>
+          </svg>
+        </div>
+
+        <div class="checker-grid">
+          <div>
+            <textarea id="rules-ex4" class="rule-textarea" placeholder="Q0 -> ...&#10;Q1 -> ...&#10;Q2 -> ..."></textarea>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex4')">Grammatik prüfen</button>
+              <button type="button" class="btn-sim" onclick="insertEps('rules-ex4')">+ eps einfügen</button>
+            </div>
+            <div class="word-test-inline">
+              <input type="text" id="testword-ex4" placeholder="Eigenes Testwort prüfen, z. B. 1011">
+              <button type="button" class="btn-sim" onclick="testSingleWord('ex4')">Wort testen</button>
+            </div>
+          </div>
+          <div id="fb-ex4" class="checker-feedback">
+            Verwende die Nichtterminale <span class="code-inline">Q0</span>, <span class="code-inline">Q1</span>, <span class="code-inline">Q2</span> (Startsymbol <span class="code-inline">Q0</span>) und übersetze jeden Übergang aus dem Diagramm.
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 4.5: SYSTEMATISCH DEA -> GRAMMATIK (M2 MIT FANGZUSTAND) -->
+      <div class="exercise-block">
+        <div class="exercise-head">
+          <div class="exercise-title">Aufgabe 5 (Transfer): DEA mit Fangzustand übersetzen ($M_2$)</div>
+          <span class="exercise-tag">Vertiefung • Rolle des Fangzustands</span>
+        </div>
+        <p style="font-size: 0.95rem;">
+          Übersetze den Automaten $M_2$ (<em>„nicht-leere alternierende Bitfolgen“</em>, $F = \{q_1, q_2\}$) mit dem 5-Schritte-Rezept in eine Grammatik. Überlege anschließend: Welche Auswirkung hat der Fangzustand $q_3$ auf das Nichtterminal $Q_3$ – und lässt sich $Q_3$ in einer Grammatik eigentlich einfach weglassen?
+        </p>
+
+        <div class="checker-grid">
+          <div>
+            <textarea id="rules-ex5" class="rule-textarea" placeholder="Q0 -> ...&#10;Q1 -> ...&#10;Q2 -> ..."></textarea>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex5')">Grammatik prüfen</button>
+              <button type="button" class="btn-sim" onclick="insertEps('rules-ex5')">+ eps einfügen</button>
+            </div>
+            <div class="word-test-inline">
+              <input type="text" id="testword-ex5" placeholder="Eigenes Testwort prüfen, z. B. 0101">
+              <button type="button" class="btn-sim" onclick="testSingleWord('ex5')">Wort testen</button>
+            </div>
+          </div>
+          <div id="fb-ex5" class="checker-feedback">
+            Schau dir bei Bedarf das Diagramm von $M_2$ noch einmal im Tab <strong>„3. Sprache klassifizieren“</strong> an. Prüfe hier, ob deine Grammatik genau alternierende Wörter ab Länge 1 erzeugt!
+          </div>
+        </div>
+      </div>
+
+    </article>
+
+  </main>
+
+  <script>
+    /* ========================================================================
+       1. SYNCHRON-LABOR FÜR M1
+       ======================================================================== */
+    const SYNC_RULES = {
+      Q0: [
+        { label: 'Q0 → bQ0', term: 'b', next: 'Q0', edgeId: 's1-edge-Q0-b', lblId: 's1-lbl-Q0-b' },
+        { label: 'Q0 → aQ1', term: 'a', next: 'Q1', edgeId: 's1-edge-Q0-a', lblId: 's1-lbl-Q0-a' }
+      ],
+      Q1: [
+        { label: 'Q1 → aQ1', term: 'a', next: 'Q1', edgeId: 's1-edge-Q1-a', lblId: 's1-lbl-Q1-a' },
+        { label: 'Q1 → bQ2', term: 'b', next: 'Q2', edgeId: 's1-edge-Q1-b', lblId: 's1-lbl-Q1-b' }
+      ],
+      Q2: [
+        { label: 'Q2 → aQ2', term: 'a', next: 'Q2', edgeId: 's1-edge-Q2-ab', lblId: 's1-lbl-Q2-ab' },
+        { label: 'Q2 → bQ2', term: 'b', next: 'Q2', edgeId: 's1-edge-Q2-ab', lblId: 's1-lbl-Q2-ab' },
+        { label: 'Q2 → ε', term: '', next: null, edgeId: null, lblId: null }
+      ]
+    };
+
+    const syncState = {
+      history: [{ prefix: '', nt: 'Q0', edgeId: null, lblId: null }]
+    };
+
+    function formatNtHtml(nt) {
+      return nt.replace(/^Q(\d+)$/, 'Q<sub>$1</sub>');
+    }
+
+    function applySyncRule(ruleIndex) {
+      const cur = syncState.history[syncState.history.length - 1];
+      if (!cur.nt) return;
+      const rule = SYNC_RULES[cur.nt][ruleIndex];
+      syncState.history.push({
+        prefix: cur.prefix + rule.term,
+        nt: rule.next,
+        edgeId: rule.edgeId,
+        lblId: rule.lblId,
+        ruleLabel: rule.label
+      });
+      renderSyncLab();
+    }
+
+    function undoSync() {
+      if (syncState.history.length > 1) {
+        syncState.history.pop();
+        renderSyncLab();
+      }
+    }
+
+    function resetSync() {
+      syncState.history = [{ prefix: '', nt: 'Q0', edgeId: null, lblId: null }];
+      renderSyncLab();
+    }
+
+    function renderSyncLab() {
+      const cur = syncState.history[syncState.history.length - 1];
+      const sentEl = document.getElementById('sync-sentential');
+      const btnsEl = document.getElementById('sync-buttons');
+      const chainEl = document.getElementById('sync-chain');
+      const svg = document.getElementById('svg-sync-m1');
+
+      // Satzform darstellen
+      sentEl.innerHTML = '';
+      if (cur.prefix) {
+        const tSpan = document.createElement('span');
+        tSpan.className = 'term-part';
+        tSpan.textContent = cur.prefix;
+        sentEl.appendChild(tSpan);
+      }
+      if (cur.nt) {
+        const ntSpan = document.createElement('span');
+        ntSpan.className = 'nt-highlight';
+        ntSpan.innerHTML = formatNtHtml(cur.nt);
+        sentEl.appendChild(ntSpan);
+      } else {
+        if (!cur.prefix) {
+          const epsSpan = document.createElement('span');
+          epsSpan.textContent = 'ε';
+          sentEl.appendChild(epsSpan);
+        }
+        const badge = document.createElement('span');
+        badge.className = 'finished-badge';
+        badge.textContent = 'Fertiges Terminalwort!';
+        sentEl.appendChild(badge);
+      }
+
+      // Regel-Buttons aktualisieren
+      btnsEl.innerHTML = '';
+      if (cur.nt) {
+        SYNC_RULES[cur.nt].forEach((r, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn-rule';
+          btn.textContent = r.label;
+          btn.onclick = () => applySyncRule(idx);
+          btnsEl.appendChild(btn);
+        });
+      } else {
+        const doneInfo = document.createElement('span');
+        doneInfo.style.fontSize = '0.88rem';
+        doneInfo.style.color = '#065f46';
+        doneInfo.style.fontWeight = '700';
+        doneInfo.textContent = 'Kein Nichtterminal mehr übrig – Ableitung abgeschlossen.';
+        btnsEl.appendChild(doneInfo);
+      }
+
+      // Ableitungskette rendern
+      const parts = syncState.history.map(item => {
+        const ntPart = item.nt ? formatNtHtml(item.nt) : '';
+        const text = (item.prefix + ntPart) || 'ε';
+        return text;
+      });
+      chainEl.innerHTML = parts.join(' &rArr; ');
+
+      // SVG synchronisieren
+      svg.querySelectorAll('.dea-node').forEach(n => n.classList.remove('is-active', 'is-done'));
+      svg.querySelectorAll('.dea-edge-path').forEach(e => {
+        e.classList.remove('is-active');
+        e.setAttribute('marker-end', 'url(#arr-s1)');
+      });
+      svg.querySelectorAll('.dea-edge-label').forEach(l => l.classList.remove('is-active'));
+
+      if (cur.nt) {
+        const node = document.getElementById('s1-node-' + cur.nt);
+        if (node) node.classList.add('is-active');
+      } else {
+        const node = document.getElementById('s1-node-Q2');
+        if (node) node.classList.add('is-done');
+      }
+      if (cur.edgeId) {
+        const edge = document.getElementById(cur.edgeId);
+        const lbl = document.getElementById(cur.lblId);
+        if (edge) {
+          edge.classList.add('is-active');
+          edge.setAttribute('marker-end', 'url(#arr-s1-act)');
+        }
+        if (lbl) lbl.classList.add('is-active');
+      }
+    }
+
+    /* ========================================================================
+       2. LIVE-GRAMMATIK-PRÜFER (OHNE MUSTERLÖSUNGS-SPOILER)
+       ======================================================================== */
+    const EXERCISES = {
+      ex1: {
+        alphabet: ['a', 'b'],
+        testWords: ['', 'a', 'b', 'ab', 'ba', 'aab', 'aba', 'abbb'],
+        oracle: w => w.startsWith('ab')
+      },
+      ex2: {
+        alphabet: ['0', '1'],
+        testWords: ['', '0', '1', '00', '11', '01', '1010', '000'],
+        oracle: w => (w.split('0').length - 1) % 2 === 0
+      },
+      ex3: {
+        alphabet: ['0', '1'],
+        testWords: ['', '0', '1', '00', '01', '10', '1011', '0101'],
+        oracle: w => w === '0' || (w.length >= 1 && w.startsWith('1'))
+      },
+      ex4: {
+        alphabet: ['0', '1'],
+        testWords: ['', '0', '1', '11', '101', '111', '1011', '011011'],
+        oracle: w => (w.split('1').length - 1) % 3 === 0
+      },
+      ex5: {
+        alphabet: ['0', '1'],
+        testWords: ['', '0', '1', '01', '10', '00', '0101', '10110'],
+        oracle: w => w.length >= 1 && !w.includes('00') && !w.includes('11')
+      }
+    };
+
+    function insertEps(textareaId) {
+      const el = document.getElementById(textareaId);
+      const start = el.selectionStart || el.value.length;
+      const end = el.selectionEnd || el.value.length;
+      el.value = el.value.slice(0, start) + 'eps' + el.value.slice(end);
+      el.focus();
+      el.selectionStart = el.selectionEnd = start + 3;
+    }
+
+    function parseGrammar(rawText, alphabet) {
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length === 0) {
+        return { ok: false, error: 'Bitte gib mindestens eine Produktionsregel ein (z. B. S -> aA | bS).' };
+      }
+
+      const productions = {};
+      const declaredNTs = [];
+      const warnings = [];
+
+      for (let idx = 0; idx < lines.length; idx++) {
+        const line = lines[idx];
+        const arrowMatch = line.split(/->|→/);
+        if (arrowMatch.length !== 2) {
+          return {
+            ok: false,
+            error: 'Zeile ' + (idx + 1) + ' ("' + line + '"): Jede Zeile muss genau einen Pfeil "->" enthalten.'
+          };
+        }
+
+        const lhs = arrowMatch[0].trim();
+        const rhsRaw = arrowMatch[1].trim();
+
+        // Kern-Didaktik-Check: Links darf NUR ein einzelnes Nichtterminal stehen!
+        if (!/^[A-Z][0-9]*$/.test(lhs)) {
+          return {
+            ok: false,
+            error: 'Fehler in Regel ' + (idx + 1) + ' (links steht "' + lhs + '"): Es darf immer nur ein einzelnes Nichtterminal (Großbuchstabe wie S, A, Q0) abgeleitet werden — keine Kombinationen mit Terminalzeichen!'
+          };
+        }
+
+        if (!rhsRaw) {
+          return {
+            ok: false,
+            error: 'Zeile ' + (idx + 1) + ': Die rechte Seite nach "->" darf nicht leer sein (nutze "eps" für ε).'
+          };
+        }
+
+        if (!productions[lhs]) {
+          productions[lhs] = [];
+          declaredNTs.push(lhs);
+        }
+
+        const alts = rhsRaw.split('|').map(a => a.trim()).filter(a => a.length > 0);
+        if (alts.length === 0) {
+          return { ok: false, error: 'Zeile ' + (idx + 1) + ': Leere Alternative nach "|".' };
+        }
+
+        for (const alt of alts) {
+          if (alt === 'eps' || alt === 'ε' || alt === 'EPS') {
+            productions[lhs].push({ type: 'eps', term: '', next: null });
+            continue;
+          }
+
+          // Rechtsreguläre Formen prüfen: t (einzelnes Terminal) oder tN (Terminal + Nichtterminal) oder N (Kettenregel)
+          const singleTerm = alt.length === 1 && alphabet.includes(alt);
+          if (singleTerm) {
+            productions[lhs].push({ type: 'term', term: alt, next: null });
+            continue;
+          }
+
+          const rightLinearMatch = alt.match(/^([a-z0-9])([A-Z][0-9]*)$/);
+          if (rightLinearMatch && alphabet.includes(rightLinearMatch[1])) {
+            productions[lhs].push({ type: 'step', term: rightLinearMatch[1], next: rightLinearMatch[2] });
+            continue;
+          }
+
+          const chainMatch = alt.match(/^([A-Z][0-9]*)$/);
+          if (chainMatch) {
+            productions[lhs].push({ type: 'chain', term: '', next: chainMatch[1] });
+            continue;
+          }
+
+          // Hilfreiche Diagnose bei nicht-rechtslinearen Alternativen
+          if (/^[A-Z][0-9]*[a-z0-9]/.test(alt)) {
+            return {
+              ok: false,
+              error: 'Zeile ' + (idx + 1) + ' ("' + alt + '"): Das Nichtterminal muss bei rechtsregulären Typ-3-Grammatiken rechts vom Terminal stehen (z. B. aB statt Ba).'
+            };
+          }
+
+          return {
+            ok: false,
+            error: 'Zeile ' + (idx + 1) + ' ("' + alt + '"): Erlaubt sind für T = {' + alphabet.join(', ') + '} Regeln der Form tN (z. B. ' + alphabet[0] + 'Q1), t oder eps.'
+          };
+        }
+      }
+
+      // Startsymbol ermitteln
+      let start = declaredNTs[0];
+      if (productions['S']) start = 'S';
+      else if (productions['Q0']) start = 'Q0';
+
+      // Prüfen auf undefinierte Nichtterminale auf der rechten Seite
+      for (const lhs of Object.keys(productions)) {
+        for (const p of productions[lhs]) {
+          if (p.next && !productions[p.next]) {
+            warnings.push('Hinweis: Das Nichtterminal "' + p.next + '" taucht rechts auf, hat aber noch keine eigene Regel.');
+          }
+        }
+      }
+
+      return { ok: true, start, productions, warnings };
+    }
+
+    function acceptsWord(grammar, word) {
+      const queue = [{ nt: grammar.start, pos: 0 }];
+      const visited = new Set([grammar.start + ':0']);
+
+      while (queue.length > 0) {
+        const { nt, pos } = queue.shift();
+        const rules = grammar.productions[nt] || [];
+
+        for (const r of rules) {
+          if (r.type === 'eps') {
+            if (pos === word.length) return true;
+          } else if (r.type === 'term') {
+            if (pos + 1 === word.length && word[pos] === r.term) return true;
+          } else if (r.type === 'step') {
+            if (pos < word.length && word[pos] === r.term) {
+              const nextKey = r.next + ':' + (pos + 1);
+              if (!visited.has(nextKey)) {
+                visited.add(nextKey);
+                queue.push({ nt: r.next, pos: pos + 1 });
+              }
+            }
+          } else if (r.type === 'chain') {
+            const nextKey = r.next + ':' + pos;
+            if (!visited.has(nextKey)) {
+              visited.add(nextKey);
+              queue.push({ nt: r.next, pos });
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function checkGrammar(exId) {
+      const ex = EXERCISES[exId];
+      const text = document.getElementById('rules-' + exId).value;
+      const fb = document.getElementById('fb-' + exId);
+      const parsed = parseGrammar(text, ex.alphabet);
+
+      fb.classList.remove('is-ok', 'is-err');
+      if (!parsed.ok) {
+        fb.classList.add('is-err');
+        fb.textContent = parsed.error;
+        return;
+      }
+
+      let passedCount = 0;
+      const pillsHtml = [];
+      let firstMismatch = null;
+
+      for (const w of ex.testWords) {
+        const expected = ex.oracle(w);
+        const actual = acceptsWord(parsed, w);
+        const ok = expected === actual;
+        if (ok) passedCount++;
+        else if (!firstMismatch) {
+          firstMismatch = { word: w, expected, actual };
+        }
+        const label = w === '' ? 'ε' : w;
+        pillsHtml.push('<span class="test-pill ' + (ok ? 'pass' : 'fail') + '">' + label + ': ' + (ok ? 'OK' : 'Falsch') + '</span>');
+      }
+
+      if (passedCount === ex.testWords.length) {
+        fb.classList.add('is-ok');
+        fb.innerHTML =
+          '<strong>Sehr gut! Alle ' + passedCount + ' Testwörter verhalten sich genau wie gefordert</strong> (Startsymbol: <span class="code-inline">' + parsed.start + '</span>).' +
+          (parsed.warnings.length ? '<div style="margin-top:4px; color:#92400e;">' + parsed.warnings.join('<br>') + '</div>' : '') +
+          '<div class="test-pill-list">' + pillsHtml.join('') + '</div>';
+      } else {
+        fb.classList.add('is-err');
+        const wShow = firstMismatch.word === '' ? 'ε (leeres Wort)' : '"' + firstMismatch.word + '"';
+        const reason = firstMismatch.expected
+          ? 'Das Wort ' + wShow + ' gehört zur Sprache, konnte mit deinen Regeln aber nicht abgeleitet werden.'
+          : 'Das Wort ' + wShow + ' gehört nicht zur Sprache, ließ sich mit deinen Regeln aber ableiten.';
+        fb.innerHTML =
+          '<strong>' + passedCount + ' von ' + ex.testWords.length + ' Testwörtern passen</strong> (Startsymbol: <span class="code-inline">' + parsed.start + '</span>).<br>' +
+          reason +
+          (parsed.warnings.length ? '<div style="margin-top:4px;">' + parsed.warnings.join('<br>') + '</div>' : '') +
+          '<div class="test-pill-list">' + pillsHtml.join('') + '</div>';
+      }
+    }
+
+    function testSingleWord(exId) {
+      const ex = EXERCISES[exId];
+      const text = document.getElementById('rules-' + exId).value;
+      const fb = document.getElementById('fb-' + exId);
+      const wordRaw = document.getElementById('testword-' + exId).value.trim();
+
+      const parsed = parseGrammar(text, ex.alphabet);
+      fb.classList.remove('is-ok', 'is-err');
+      if (!parsed.ok) {
+        fb.classList.add('is-err');
+        fb.textContent = parsed.error;
+        return;
+      }
+
+      for (const ch of wordRaw) {
+        if (!ex.alphabet.includes(ch)) {
+          fb.classList.add('is-err');
+          fb.textContent = 'Ungültiges Zeichen "' + ch + '" im Testwort. Erlaubt: {' + ex.alphabet.join(', ') + '}.';
+          return;
+        }
+      }
+
+      const actual = acceptsWord(parsed, wordRaw);
+      const expected = ex.oracle(wordRaw);
+      const wLabel = wordRaw === '' ? 'ε' : wordRaw;
+
+      if (actual === expected) {
+        fb.classList.add('is-ok');
+        fb.innerHTML = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ' — das stimmt mit der Zielsprache überein.';
+      } else {
+        fb.classList.add('is-err');
+        fb.innerHTML = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ', erwartet wird jedoch das Gegenteil.';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSyncLab();
+    });
+  </script>
+</body>
+</html>
