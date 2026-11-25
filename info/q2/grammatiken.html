@@ -373,6 +373,160 @@
       color: var(--ink-muted);
     }
 
+    .studio-step {
+      background: #ffffff;
+      border: 1px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.8rem 0.95rem;
+      margin-top: 0.75rem;
+    }
+
+    .studio-step-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .nt-chip-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 0.6rem;
+    }
+
+    .nt-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #f8fafc;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .nt-chip.is-start {
+      background: #dbeafe;
+      border-color: #60a5fa;
+      color: #1e3a8a;
+    }
+
+    .nt-chip-action {
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--ink-muted);
+      cursor: pointer;
+    }
+    .nt-chip-action:hover {
+      border-color: var(--ink-blue);
+      color: var(--ink-blue);
+    }
+
+    .nt-chip-del {
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 3px;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+    .nt-chip-del:hover {
+      color: #dc2626;
+    }
+
+    .nt-add-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nt-input {
+      width: 170px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+    }
+
+    .nt-error {
+      color: #b91c1c;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-top: 0.4rem;
+      display: none;
+    }
+
+    .rule-builder-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 0.65rem;
+    }
+
+    .rule-select {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      border: 1px solid var(--paper-border);
+      border-radius: 4px;
+      background: #ffffff;
+      color: var(--ink-black);
+    }
+    .rule-select:disabled {
+      background: #f1f5f9;
+      color: #94a3b8;
+    }
+
+    .rule-arrow-sym {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+    }
+
+    .rule-list-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0.5rem;
+      background: #f8fafc;
+      border: 1px dashed var(--paper-border);
+      border-radius: 4px;
+    }
+
+    .prod-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 1px solid #bfdbfe;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-black);
+    }
+
     .checker-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -385,32 +539,14 @@
       }
     }
 
-    .rule-textarea {
-      width: 100%;
-      min-height: 112px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      padding: 0.65rem 0.8rem;
-      border: 1px solid var(--paper-border);
-      border-radius: 4px;
-      background: #ffffff;
-      color: var(--ink-black);
-      resize: vertical;
-    }
-    .rule-textarea:focus {
-      outline: none;
-      border-color: var(--model-blue);
-    }
-
     .checker-feedback {
-      background: #ffffff;
+      background: #f8fafc;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
       padding: 0.7rem 0.9rem;
       font-size: 0.9rem;
       line-height: 1.55;
-      min-height: 112px;
+      margin-top: 0.55rem;
     }
     .checker-feedback.is-ok {
       border-color: #86efac;
@@ -771,7 +907,7 @@
       </h2>
 
       <p style="margin-bottom: 0.75rem;">
-        In den folgenden Aufgaben kannst du deine selbst entworfenen Grammatiken direkt im <strong>Live-Grammatik-Prüfer</strong> testen. Schreibe Regeln im Format <span class="code-inline">S -&gt; aA | bS</span> (nutze <span class="code-inline">eps</span> für $\varepsilon$; das erste Nichtterminal oder <span class="code-inline">S</span> bzw. <span class="code-inline">Q0</span> gilt als Startsymbol).
+        In den folgenden Aufgaben baust du jede Grammatik sauber in drei Schritten auf: Zuerst legst du die <strong>Nichtterminale $N$</strong> und das <strong>Startsymbol</strong> fest, danach stellst du mit diesen Nichtterminalen die <strong>Produktionsregeln $P$</strong> zusammen und leitest anschließend selbst Wörter ab oder überprüfst deine Grammatik gegen die Zielsprache.
       </p>
 
       <!-- AUFGABE 4.1 -->
@@ -780,29 +916,13 @@
           <div class="exercise-title">Aufgabe 1: Neue Sprache I – Beginnt mit <span class="code-inline">ab</span></div>
           <span class="exercise-tag">Basis • Ohne DEA-Umweg</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
           Entwirf über $T = \{a, b\}$ eine reguläre Grammatik $G_2$, die genau alle Wörter erzeugt, die mit <span class="code-inline">ab</span> <strong>beginnen</strong> (z. B. <span class="code-inline">ab</span>, <span class="code-inline">aba</span>, <span class="code-inline">abbb</span>; <strong>nicht</strong> <span class="code-inline">ε</span>, <span class="code-inline">a</span>, <span class="code-inline">ba</span>, <span class="code-inline">aab</span>).
         </p>
         <p style="font-size: 0.9rem; color: var(--ink-muted);">
           Tipp: Brauchst du hier einen Fangzustand wie im DEA, oder kannst du für fehlerhafte Zeichen einfach <em>gar keine Regel</em> angeben? Notiere zusätzlich auf Papier die Schrittfolge für <span class="code-inline">abba</span> und begründe, warum <span class="code-inline">aab</span> nicht ableitbar ist.
         </p>
-
-        <div class="checker-grid">
-          <div>
-            <textarea id="rules-ex1" class="rule-textarea" placeholder="Beispiel-Format:&#10;S -> ...&#10;A -> ..."></textarea>
-            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex1')">Grammatik prüfen</button>
-              <button type="button" class="btn-sim" onclick="insertEps('rules-ex1')">+ eps einfügen</button>
-            </div>
-            <div class="word-test-inline">
-              <input type="text" id="testword-ex1" placeholder="Eigenes Testwort prüfen, z. B. abba">
-              <button type="button" class="btn-sim" onclick="testSingleWord('ex1')">Wort testen</button>
-            </div>
-          </div>
-          <div id="fb-ex1" class="checker-feedback">
-            Gib links deine Produktionsregeln ein und klicke auf <strong>„Grammatik prüfen“</strong>. Der Prüfer kontrolliert auch, ob links immer genau ein einzelnes Nichtterminal steht.
-          </div>
-        </div>
+        <div id="studio-ex1"></div>
       </div>
 
       <!-- AUFGABE 4.2 -->
@@ -811,26 +931,10 @@
           <div class="exercise-title">Aufgabe 2: Neue Sprache II – Gerade Anzahl von Nullen</div>
           <span class="exercise-tag">Mittel • Sonderfall $\varepsilon$</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
           Erstelle über $T = \{0, 1\}$ eine reguläre Grammatik $G_3$ für alle Binärwörter mit einer <strong>geraden Anzahl von Nullen</strong> (beliebig viele Einsen). Beachte, dass $0$ Nullen ebenfalls gerade ist ($\varepsilon \in L(G_3)$, z. B. auch <span class="code-inline">11</span>, <span class="code-inline">00</span>, <span class="code-inline">1010</span>).
         </p>
-
-        <div class="checker-grid">
-          <div>
-            <textarea id="rules-ex2" class="rule-textarea" placeholder="S -> ..."></textarea>
-            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex2')">Grammatik prüfen</button>
-              <button type="button" class="btn-sim" onclick="insertEps('rules-ex2')">+ eps einfügen</button>
-            </div>
-            <div class="word-test-inline">
-              <input type="text" id="testword-ex2" placeholder="Eigenes Testwort prüfen, z. B. 1010">
-              <button type="button" class="btn-sim" onclick="testSingleWord('ex2')">Wort testen</button>
-            </div>
-          </div>
-          <div id="fb-ex2" class="checker-feedback">
-            Hinweis: Überlege, welche zwei Zustände (Nichtterminale) du brauchst und bei welchem die $\varepsilon$-Regel stehen darf.
-          </div>
-        </div>
+        <div id="studio-ex2"></div>
       </div>
 
       <!-- AUFGABE 4.3 -->
@@ -839,26 +943,10 @@
           <div class="exercise-title">Aufgabe 3: Neue Sprache III – Gültige Binärzahlen ohne führende Nullen</div>
           <span class="exercise-tag">Mittel • Mehrere Fälle</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.5rem;">
+        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
           Erstelle über $T = \{0, 1\}$ eine Grammatik $G_4$ für sauber formatierte Binärzahlen: gültig sind die einzelne <span class="code-inline">0</span> sowie jede Zahl, die mit <span class="code-inline">1</span> beginnt (z. B. <span class="code-inline">0</span>, <span class="code-inline">1</span>, <span class="code-inline">1011</span>; <strong>abgelehnt</strong> werden <span class="code-inline">ε</span>, <span class="code-inline">00</span>, <span class="code-inline">010</span>).
         </p>
-
-        <div class="checker-grid">
-          <div>
-            <textarea id="rules-ex3" class="rule-textarea" placeholder="S -> ..."></textarea>
-            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex3')">Grammatik prüfen</button>
-              <button type="button" class="btn-sim" onclick="insertEps('rules-ex3')">+ eps einfügen</button>
-            </div>
-            <div class="word-test-inline">
-              <input type="text" id="testword-ex3" placeholder="Eigenes Testwort prüfen, z. B. 01">
-              <button type="button" class="btn-sim" onclick="testSingleWord('ex3')">Wort testen</button>
-            </div>
-          </div>
-          <div id="fb-ex3" class="checker-feedback">
-            Tipp: Wenn die Zahl mit <span class="code-inline">0</span> startet, darf danach nichts mehr kommen. Wenn sie mit <span class="code-inline">1</span> startet, darf beliebig viel folgen.
-          </div>
-        </div>
+        <div id="studio-ex3"></div>
       </div>
 
       <!-- AUFGABE 4.4: SYSTEMATISCH DEA -> GRAMMATIK (M3 AUS WORT-LABOR) -->
@@ -868,7 +956,7 @@
           <span class="exercise-tag">Anspruchsvoll • Rezept anwenden</span>
         </div>
         <p style="font-size: 0.95rem;">
-          Wende das 5-Schritte-Rezept aus Abschnitt 3 auf den bekannten Automaten $M_3$ (<em>„Anzahl der Einsen ist durch 3 teilbar“</em>, $F = \{q_0\}$) an. Notiere danach schriftlich die Ableitung für <span class="code-inline">1011</span> und begründe anhand der Regeln, warum <span class="code-inline">101</span> nicht ableitbar ist.
+          Wende das 5-Schritte-Rezept aus Abschnitt 3 auf den bekannten Automaten $M_3$ (<em>„Anzahl der Einsen ist durch 3 teilbar“</em>, $F = \{q_0\}$) an. Lege zuerst die Nichtterminale <span class="code-inline">Q0</span>, <span class="code-inline">Q1</span>, <span class="code-inline">Q2</span> an und erstelle die Regeln. Notiere danach schriftlich die Ableitung für <span class="code-inline">1011</span> und begründe, warum <span class="code-inline">101</span> nicht ableitbar ist.
         </p>
 
         <div class="diagram-inline-wrap">
@@ -911,22 +999,7 @@
           </svg>
         </div>
 
-        <div class="checker-grid">
-          <div>
-            <textarea id="rules-ex4" class="rule-textarea" placeholder="Q0 -> ...&#10;Q1 -> ...&#10;Q2 -> ..."></textarea>
-            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex4')">Grammatik prüfen</button>
-              <button type="button" class="btn-sim" onclick="insertEps('rules-ex4')">+ eps einfügen</button>
-            </div>
-            <div class="word-test-inline">
-              <input type="text" id="testword-ex4" placeholder="Eigenes Testwort prüfen, z. B. 1011">
-              <button type="button" class="btn-sim" onclick="testSingleWord('ex4')">Wort testen</button>
-            </div>
-          </div>
-          <div id="fb-ex4" class="checker-feedback">
-            Verwende die Nichtterminale <span class="code-inline">Q0</span>, <span class="code-inline">Q1</span>, <span class="code-inline">Q2</span> (Startsymbol <span class="code-inline">Q0</span>) und übersetze jeden Übergang aus dem Diagramm.
-          </div>
-        </div>
+        <div id="studio-ex4"></div>
       </div>
 
       <!-- AUFGABE 4.5: SYSTEMATISCH DEA -> GRAMMATIK (M2 MIT FANGZUSTAND) -->
@@ -938,23 +1011,7 @@
         <p style="font-size: 0.95rem;">
           Übersetze den Automaten $M_2$ (<em>„nicht-leere alternierende Bitfolgen“</em>, $F = \{q_1, q_2\}$) mit dem 5-Schritte-Rezept in eine Grammatik. Überlege anschließend: Welche Auswirkung hat der Fangzustand $q_3$ auf das Nichtterminal $Q_3$ – und lässt sich $Q_3$ in einer Grammatik eigentlich einfach weglassen?
         </p>
-
-        <div class="checker-grid">
-          <div>
-            <textarea id="rules-ex5" class="rule-textarea" placeholder="Q0 -> ...&#10;Q1 -> ...&#10;Q2 -> ..."></textarea>
-            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <button type="button" class="btn-sim btn-primary" onclick="checkGrammar('ex5')">Grammatik prüfen</button>
-              <button type="button" class="btn-sim" onclick="insertEps('rules-ex5')">+ eps einfügen</button>
-            </div>
-            <div class="word-test-inline">
-              <input type="text" id="testword-ex5" placeholder="Eigenes Testwort prüfen, z. B. 0101">
-              <button type="button" class="btn-sim" onclick="testSingleWord('ex5')">Wort testen</button>
-            </div>
-          </div>
-          <div id="fb-ex5" class="checker-feedback">
-            Schau dir bei Bedarf das Diagramm von $M_2$ noch einmal im Tab <strong>„3. Sprache klassifizieren“</strong> an. Prüfe hier, ob deine Grammatik genau alternierende Wörter ab Länge 1 erzeugt!
-          </div>
-        </div>
+        <div id="studio-ex5"></div>
       </div>
 
     </article>
@@ -1102,148 +1159,199 @@
     }
 
     /* ========================================================================
-       2. LIVE-GRAMMATIK-PRÜFER (OHNE MUSTERLÖSUNGS-SPOILER)
+       2. INTUITIVES GRAMMATIK-STUDIO (NICHTTERMINALE -> REGELN -> ABLEITEN/PRÜFEN)
        ======================================================================== */
     const EXERCISES = {
       ex1: {
         alphabet: ['a', 'b'],
+        defaultNTs: ['S'],
+        quickNTs: ['A', 'B', 'C'],
         testWords: ['', 'a', 'b', 'ab', 'ba', 'aab', 'aba', 'abbb'],
         oracle: w => w.startsWith('ab')
       },
       ex2: {
         alphabet: ['0', '1'],
+        defaultNTs: ['S'],
+        quickNTs: ['A', 'B', 'U'],
         testWords: ['', '0', '1', '00', '11', '01', '1010', '000'],
         oracle: w => (w.split('0').length - 1) % 2 === 0
       },
       ex3: {
         alphabet: ['0', '1'],
+        defaultNTs: ['S'],
+        quickNTs: ['A', 'B', 'Z'],
         testWords: ['', '0', '1', '00', '01', '10', '1011', '0101'],
         oracle: w => w === '0' || (w.length >= 1 && w.startsWith('1'))
       },
       ex4: {
         alphabet: ['0', '1'],
+        defaultNTs: ['Q0'],
+        quickNTs: ['Q1', 'Q2'],
         testWords: ['', '0', '1', '11', '101', '111', '1011', '011011'],
         oracle: w => (w.split('1').length - 1) % 3 === 0
       },
       ex5: {
         alphabet: ['0', '1'],
+        defaultNTs: ['Q0'],
+        quickNTs: ['Q1', 'Q2', 'Q3'],
         testWords: ['', '0', '1', '01', '10', '00', '0101', '10110'],
         oracle: w => w.length >= 1 && !w.includes('00') && !w.includes('11')
       }
     };
 
-    function insertEps(textareaId) {
-      const el = document.getElementById(textareaId);
-      const start = el.selectionStart || el.value.length;
-      const end = el.selectionEnd || el.value.length;
-      el.value = el.value.slice(0, start) + 'eps' + el.value.slice(end);
-      el.focus();
-      el.selectionStart = el.selectionEnd = start + 3;
+    const studioState = {};
+
+    function initStudio(exId) {
+      const ex = EXERCISES[exId];
+      studioState[exId] = {
+        nts: [...ex.defaultNTs],
+        start: ex.defaultNTs[0],
+        rules: [], // { lhs, term, next } -> term='' bedeutet eps
+        derivation: [{ prefix: '', nt: ex.defaultNTs[0] }],
+        ntError: '',
+        feedbackHtml: 'Definiere oben deine Nichtterminale N, klicke Regeln zusammen und prüfe deine Grammatik.',
+        feedbackType: ''
+      };
+      renderStudio(exId);
     }
 
-    function parseGrammar(rawText, alphabet) {
-      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-      if (lines.length === 0) {
-        return { ok: false, error: 'Bitte gib mindestens eine Produktionsregel ein (z. B. S -> aA | bS).' };
-      }
+    function addNT(exId, rawName) {
+      const st = studioState[exId];
+      const name = (rawName !== undefined ? rawName : document.getElementById(exId + '-nt-in').value).trim();
+      st.ntError = '';
 
+      if (!/^[A-Z][0-9]*$/.test(name)) {
+        st.ntError = 'Ungültig ("' + (name || 'leer') + '"): Ein Nichtterminal muss mit einem Großbuchstaben beginnen (z. B. A, U, Q1) — keine Kleinbuchstaben oder Mischformen wie aS!';
+        renderStudio(exId);
+        return;
+      }
+      if (st.nts.includes(name)) {
+        st.ntError = 'Das Nichtterminal "' + name + '" existiert bereits.';
+        renderStudio(exId);
+        return;
+      }
+      st.nts.push(name);
+      if (!st.start) {
+        st.start = name;
+        st.derivation = [{ prefix: '', nt: name }];
+      }
+      const inp = document.getElementById(exId + '-nt-in');
+      if (inp) inp.value = '';
+      renderStudio(exId);
+    }
+
+    function setStartNT(exId, nt) {
+      const st = studioState[exId];
+      st.start = nt;
+      st.derivation = [{ prefix: '', nt }];
+      st.ntError = '';
+      renderStudio(exId);
+    }
+
+    function removeNT(exId, nt) {
+      const st = studioState[exId];
+      if (st.nts.length <= 1) {
+        st.ntError = 'Mindestens ein Start-Nichtterminal muss vorhanden bleiben.';
+        renderStudio(exId);
+        return;
+      }
+      st.nts = st.nts.filter(item => item !== nt);
+      st.rules = st.rules.filter(r => r.lhs !== nt && r.next !== nt);
+      if (st.start === nt) {
+        st.start = st.nts[0];
+      }
+      st.derivation = [{ prefix: '', nt: st.start }];
+      st.ntError = '';
+      renderStudio(exId);
+    }
+
+    function handleTermSelectChange(exId) {
+      const termSel = document.getElementById(exId + '-sel-term');
+      const nextSel = document.getElementById(exId + '-sel-next');
+      if (!termSel || !nextSel) return;
+      if (termSel.value === '__EPS__') {
+        nextSel.value = '';
+        nextSel.disabled = true;
+      } else {
+        nextSel.disabled = false;
+      }
+    }
+
+    function addRuleFromUI(exId) {
+      const st = studioState[exId];
+      const lhs = document.getElementById(exId + '-sel-lhs').value;
+      const termVal = document.getElementById(exId + '-sel-term').value;
+      const nextVal = document.getElementById(exId + '-sel-next').value;
+
+      const term = termVal === '__EPS__' ? '' : termVal;
+      const next = term === '' ? null : (nextVal === '' ? null : nextVal);
+
+      const exists = st.rules.some(r => r.lhs === lhs && r.term === term && r.next === next);
+      if (!exists) {
+        st.rules.push({ lhs, term, next });
+      }
+      renderStudio(exId);
+    }
+
+    function removeRule(exId, index) {
+      const st = studioState[exId];
+      st.rules.splice(index, 1);
+      st.derivation = [{ prefix: '', nt: st.start }];
+      renderStudio(exId);
+    }
+
+    function clearRules(exId) {
+      const st = studioState[exId];
+      st.rules = [];
+      st.derivation = [{ prefix: '', nt: st.start }];
+      renderStudio(exId);
+    }
+
+    function formatRuleText(r) {
+      if (r.term === '') return r.lhs + ' → ε';
+      return r.lhs + ' → ' + r.term + (r.next ? r.next : '');
+    }
+
+    function applyUserRule(exId, ruleObj) {
+      const st = studioState[exId];
+      const cur = st.derivation[st.derivation.length - 1];
+      if (!cur.nt) return;
+      st.derivation.push({
+        prefix: cur.prefix + ruleObj.term,
+        nt: ruleObj.next
+      });
+      renderStudio(exId);
+    }
+
+    function undoUserDerivation(exId) {
+      const st = studioState[exId];
+      if (st.derivation.length > 1) {
+        st.derivation.pop();
+        renderStudio(exId);
+      }
+    }
+
+    function resetUserDerivation(exId) {
+      const st = studioState[exId];
+      st.derivation = [{ prefix: '', nt: st.start }];
+      renderStudio(exId);
+    }
+
+    function buildGrammarObject(exId) {
+      const st = studioState[exId];
       const productions = {};
-      const declaredNTs = [];
-      const warnings = [];
-
-      for (let idx = 0; idx < lines.length; idx++) {
-        const line = lines[idx];
-        const arrowMatch = line.split(/->|→/);
-        if (arrowMatch.length !== 2) {
-          return {
-            ok: false,
-            error: 'Zeile ' + (idx + 1) + ' ("' + line + '"): Jede Zeile muss genau einen Pfeil "->" enthalten.'
-          };
+      st.nts.forEach(nt => { productions[nt] = []; });
+      st.rules.forEach(r => {
+        if (!productions[r.lhs]) productions[r.lhs] = [];
+        if (r.term === '') {
+          productions[r.lhs].push({ type: 'eps', term: '', next: null });
+        } else if (r.next === null) {
+          productions[r.lhs].push({ type: 'term', term: r.term, next: null });
+        } else {
+          productions[r.lhs].push({ type: 'step', term: r.term, next: r.next });
         }
-
-        const lhs = arrowMatch[0].trim();
-        const rhsRaw = arrowMatch[1].trim();
-
-        // Kern-Didaktik-Check: Links darf NUR ein einzelnes Nichtterminal stehen!
-        if (!/^[A-Z][0-9]*$/.test(lhs)) {
-          return {
-            ok: false,
-            error: 'Fehler in Regel ' + (idx + 1) + ' (links steht "' + lhs + '"): Es darf immer nur ein einzelnes Nichtterminal (Großbuchstabe wie S, A, Q0) abgeleitet werden — keine Kombinationen mit Terminalzeichen!'
-          };
-        }
-
-        if (!rhsRaw) {
-          return {
-            ok: false,
-            error: 'Zeile ' + (idx + 1) + ': Die rechte Seite nach "->" darf nicht leer sein (nutze "eps" für ε).'
-          };
-        }
-
-        if (!productions[lhs]) {
-          productions[lhs] = [];
-          declaredNTs.push(lhs);
-        }
-
-        const alts = rhsRaw.split('|').map(a => a.trim()).filter(a => a.length > 0);
-        if (alts.length === 0) {
-          return { ok: false, error: 'Zeile ' + (idx + 1) + ': Leere Alternative nach "|".' };
-        }
-
-        for (const alt of alts) {
-          if (alt === 'eps' || alt === 'ε' || alt === 'EPS') {
-            productions[lhs].push({ type: 'eps', term: '', next: null });
-            continue;
-          }
-
-          // Rechtsreguläre Formen prüfen: t (einzelnes Terminal) oder tN (Terminal + Nichtterminal) oder N (Kettenregel)
-          const singleTerm = alt.length === 1 && alphabet.includes(alt);
-          if (singleTerm) {
-            productions[lhs].push({ type: 'term', term: alt, next: null });
-            continue;
-          }
-
-          const rightLinearMatch = alt.match(/^([a-z0-9])([A-Z][0-9]*)$/);
-          if (rightLinearMatch && alphabet.includes(rightLinearMatch[1])) {
-            productions[lhs].push({ type: 'step', term: rightLinearMatch[1], next: rightLinearMatch[2] });
-            continue;
-          }
-
-          const chainMatch = alt.match(/^([A-Z][0-9]*)$/);
-          if (chainMatch) {
-            productions[lhs].push({ type: 'chain', term: '', next: chainMatch[1] });
-            continue;
-          }
-
-          // Hilfreiche Diagnose bei nicht-rechtslinearen Alternativen
-          if (/^[A-Z][0-9]*[a-z0-9]/.test(alt)) {
-            return {
-              ok: false,
-              error: 'Zeile ' + (idx + 1) + ' ("' + alt + '"): Das Nichtterminal muss bei rechtsregulären Typ-3-Grammatiken rechts vom Terminal stehen (z. B. aB statt Ba).'
-            };
-          }
-
-          return {
-            ok: false,
-            error: 'Zeile ' + (idx + 1) + ' ("' + alt + '"): Erlaubt sind für T = {' + alphabet.join(', ') + '} Regeln der Form tN (z. B. ' + alphabet[0] + 'Q1), t oder eps.'
-          };
-        }
-      }
-
-      // Startsymbol ermitteln
-      let start = declaredNTs[0];
-      if (productions['S']) start = 'S';
-      else if (productions['Q0']) start = 'Q0';
-
-      // Prüfen auf undefinierte Nichtterminale auf der rechten Seite
-      for (const lhs of Object.keys(productions)) {
-        for (const p of productions[lhs]) {
-          if (p.next && !productions[p.next]) {
-            warnings.push('Hinweis: Das Nichtterminal "' + p.next + '" taucht rechts auf, hat aber noch keine eigene Regel.');
-          }
-        }
-      }
-
-      return { ok: true, start, productions, warnings };
+      });
+      return { start: st.start, productions };
     }
 
     function acceptsWord(grammar, word) {
@@ -1267,12 +1375,6 @@
                 queue.push({ nt: r.next, pos: pos + 1 });
               }
             }
-          } else if (r.type === 'chain') {
-            const nextKey = r.next + ':' + pos;
-            if (!visited.has(nextKey)) {
-              visited.add(nextKey);
-              queue.push({ nt: r.next, pos });
-            }
           }
         }
       }
@@ -1281,24 +1383,22 @@
 
     function checkGrammar(exId) {
       const ex = EXERCISES[exId];
-      const text = document.getElementById('rules-' + exId).value;
-      const fb = document.getElementById('fb-' + exId);
-      const parsed = parseGrammar(text, ex.alphabet);
-
-      fb.classList.remove('is-ok', 'is-err');
-      if (!parsed.ok) {
-        fb.classList.add('is-err');
-        fb.textContent = parsed.error;
+      const st = studioState[exId];
+      if (st.rules.length === 0) {
+        st.feedbackType = 'is-err';
+        st.feedbackHtml = 'Bitte füge zuerst mindestens eine Produktionsregel in Schritt 2 hinzu.';
+        renderStudio(exId);
         return;
       }
 
+      const grammar = buildGrammarObject(exId);
       let passedCount = 0;
       const pillsHtml = [];
       let firstMismatch = null;
 
       for (const w of ex.testWords) {
         const expected = ex.oracle(w);
-        const actual = acceptsWord(parsed, w);
+        const actual = acceptsWord(grammar, w);
         const ok = expected === actual;
         if (ok) passedCount++;
         else if (!firstMismatch) {
@@ -1309,62 +1409,211 @@
       }
 
       if (passedCount === ex.testWords.length) {
-        fb.classList.add('is-ok');
-        fb.innerHTML =
-          '<strong>Sehr gut! Alle ' + passedCount + ' Testwörter verhalten sich genau wie gefordert</strong> (Startsymbol: <span class="code-inline">' + parsed.start + '</span>).' +
-          (parsed.warnings.length ? '<div style="margin-top:4px; color:#92400e;">' + parsed.warnings.join('<br>') + '</div>' : '') +
+        st.feedbackType = 'is-ok';
+        st.feedbackHtml =
+          '<strong>Sehr gut! Alle ' + passedCount + ' Testwörter verhalten sich genau wie gefordert</strong> (Startsymbol: <span class="code-inline">' + grammar.start + '</span>).' +
           '<div class="test-pill-list">' + pillsHtml.join('') + '</div>';
       } else {
-        fb.classList.add('is-err');
+        st.feedbackType = 'is-err';
         const wShow = firstMismatch.word === '' ? 'ε (leeres Wort)' : '"' + firstMismatch.word + '"';
         const reason = firstMismatch.expected
           ? 'Das Wort ' + wShow + ' gehört zur Sprache, konnte mit deinen Regeln aber nicht abgeleitet werden.'
           : 'Das Wort ' + wShow + ' gehört nicht zur Sprache, ließ sich mit deinen Regeln aber ableiten.';
-        fb.innerHTML =
-          '<strong>' + passedCount + ' von ' + ex.testWords.length + ' Testwörtern passen</strong> (Startsymbol: <span class="code-inline">' + parsed.start + '</span>).<br>' +
+        st.feedbackHtml =
+          '<strong>' + passedCount + ' von ' + ex.testWords.length + ' Testwörtern passen</strong> (Startsymbol: <span class="code-inline">' + grammar.start + '</span>).<br>' +
           reason +
-          (parsed.warnings.length ? '<div style="margin-top:4px;">' + parsed.warnings.join('<br>') + '</div>' : '') +
           '<div class="test-pill-list">' + pillsHtml.join('') + '</div>';
       }
+      renderStudio(exId);
     }
 
     function testSingleWord(exId) {
       const ex = EXERCISES[exId];
-      const text = document.getElementById('rules-' + exId).value;
-      const fb = document.getElementById('fb-' + exId);
-      const wordRaw = document.getElementById('testword-' + exId).value.trim();
+      const st = studioState[exId];
+      const inp = document.getElementById(exId + '-word-in');
+      const wordRaw = inp ? inp.value.trim() : '';
 
-      const parsed = parseGrammar(text, ex.alphabet);
-      fb.classList.remove('is-ok', 'is-err');
-      if (!parsed.ok) {
-        fb.classList.add('is-err');
-        fb.textContent = parsed.error;
+      if (st.rules.length === 0) {
+        st.feedbackType = 'is-err';
+        st.feedbackHtml = 'Bitte füge zuerst Produktionsregeln hinzu.';
+        renderStudio(exId);
         return;
       }
 
       for (const ch of wordRaw) {
         if (!ex.alphabet.includes(ch)) {
-          fb.classList.add('is-err');
-          fb.textContent = 'Ungültiges Zeichen "' + ch + '" im Testwort. Erlaubt: {' + ex.alphabet.join(', ') + '}.';
+          st.feedbackType = 'is-err';
+          st.feedbackHtml = 'Ungültiges Zeichen "' + ch + '" im Testwort. Erlaubt: {' + ex.alphabet.join(', ') + '}.';
+          renderStudio(exId);
           return;
         }
       }
 
-      const actual = acceptsWord(parsed, wordRaw);
+      const grammar = buildGrammarObject(exId);
+      const actual = acceptsWord(grammar, wordRaw);
       const expected = ex.oracle(wordRaw);
       const wLabel = wordRaw === '' ? 'ε' : wordRaw;
 
       if (actual === expected) {
-        fb.classList.add('is-ok');
-        fb.innerHTML = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ' — das stimmt mit der Zielsprache überein.';
+        st.feedbackType = 'is-ok';
+        st.feedbackHtml = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ' — das stimmt mit der Zielsprache überein.';
       } else {
-        fb.classList.add('is-err');
-        fb.innerHTML = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ', erwartet wird jedoch das Gegenteil.';
+        st.feedbackType = 'is-err';
+        st.feedbackHtml = 'Testwort <span class="code-inline">' + wLabel + '</span>: Deine Grammatik ' + (actual ? '<strong>leitet das Wort ab</strong>' : '<strong>leitet das Wort nicht ab</strong>') + ', erwartet wird jedoch das Gegenteil.';
+      }
+      renderStudio(exId, wordRaw);
+    }
+
+    function renderStudio(exId, preservedWord) {
+      const ex = EXERCISES[exId];
+      const st = studioState[exId];
+      const root = document.getElementById('studio-' + exId);
+      if (!root) return;
+
+      const prevLhs = document.getElementById(exId + '-sel-lhs')?.value;
+      const prevTerm = document.getElementById(exId + '-sel-term')?.value;
+      const prevNext = document.getElementById(exId + '-sel-next')?.value;
+      const prevWord = preservedWord !== undefined ? preservedWord : (document.getElementById(exId + '-word-in')?.value || '');
+
+      const ntChipsHtml = st.nts.map(nt => {
+        const isStart = nt === st.start;
+        return '<span class="nt-chip ' + (isStart ? 'is-start' : '') + '">' +
+          '<span>' + nt + (isStart ? ' (Start)' : '') + '</span>' +
+          (!isStart ? '<button type="button" class="nt-chip-action" onclick="setStartNT(\'' + exId + '\', \'' + nt + '\')">als Start</button>' : '') +
+          '<button type="button" class="nt-chip-del" title="Entfernen" onclick="removeNT(\'' + exId + '\', \'' + nt + '\')">&times;</button>' +
+        '</span>';
+      }).join('');
+
+      const quickBtnsHtml = ex.quickNTs
+        .filter(q => !st.nts.includes(q))
+        .map(q => '<button type="button" class="btn-sim" onclick="addNT(\'' + exId + '\', \'' + q + '\')">+ ' + q + '</button>')
+        .join('');
+
+      const lhsOpts = st.nts.map(nt => '<option value="' + nt + '"' + (prevLhs === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
+      const termOpts = ex.alphabet.map(t => '<option value="' + t + '"' + (prevTerm === t ? ' selected' : '') + '>' + t + '</option>').join('') +
+        '<option value="__EPS__"' + (prevTerm === '__EPS__' ? ' selected' : '') + '>ε (Wort beenden)</option>';
+      const nextOpts = '<option value=""' + (prevNext === '' ? ' selected' : '') + '>– (direkt enden)</option>' +
+        st.nts.map(nt => '<option value="' + nt + '"' + (prevNext === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
+
+      const rulesHtml = st.rules.length === 0
+        ? '<span style="font-size:0.86rem; color:var(--ink-muted);">Noch keine Regeln erstellt — wähle oben Links → Rechts aus.</span>'
+        : st.rules.map((r, idx) =>
+            '<span class="prod-chip">' +
+              '<span>' + formatRuleText(r) + '</span>' +
+              '<button type="button" class="nt-chip-del" title="Regel löschen" onclick="removeRule(\'' + exId + '\', ' + idx + ')">&times;</button>' +
+            '</span>'
+          ).join('');
+
+      // Eigene Live-Ableitung vorbereiten
+      const cur = st.derivation[st.derivation.length - 1];
+      const sentHtml =
+        (cur.prefix ? '<span class="term-part">' + cur.prefix + '</span>' : '') +
+        (cur.nt ? '<span class="nt-highlight">' + cur.nt + '</span>' : (!cur.prefix ? '<span>ε</span>' : '') + '<span class="finished-badge">Fertiges Wort!</span>');
+
+      const matchingRules = cur.nt ? st.rules.filter(r => r.lhs === cur.nt) : [];
+      const deriveBtnsHtml = !cur.nt
+        ? '<span style="font-size:0.86rem; color:#065f46; font-weight:700;">Kein Nichtterminal mehr übrig.</span>'
+        : (matchingRules.length === 0
+            ? '<span style="font-size:0.86rem; color:#991b1b; font-weight:700;">Für ' + cur.nt + ' gibt es noch keine Regel — ergänze sie in Schritt 2.</span>'
+            : matchingRules.map((r, idx) =>
+                '<button type="button" class="btn-rule" data-ridx="' + idx + '">' + formatRuleText(r) + '</button>'
+              ).join(''));
+
+      const chainText = st.derivation.map(d => (d.prefix + (d.nt || '')) || 'ε').join(' ⇒ ');
+
+      root.innerHTML =
+        '<div class="studio-step">' +
+          '<div class="studio-step-title">' +
+            '<span>Schritt 1: Nichtterminale $N$ &amp; Startsymbol definieren</span>' +
+            '<span style="font-family:Consolas, monospace; font-size:0.84rem; color:var(--ink-muted);">N = {' + st.nts.join(', ') + '} &nbsp;|&nbsp; T = {' + ex.alphabet.join(', ') + '}</span>' +
+          '</div>' +
+          '<div class="nt-chip-bar">' + ntChipsHtml + '</div>' +
+          '<div class="nt-add-row">' +
+            '<input type="text" id="' + exId + '-nt-in" class="nt-input" placeholder="Neues Nichtterminal (z. B. A)">' +
+            '<button type="button" class="btn-sim btn-primary" onclick="addNT(\'' + exId + '\')">+ Hinzufügen</button>' +
+            quickBtnsHtml +
+          '</div>' +
+          (st.ntError ? '<div class="nt-error" style="display:block;">' + st.ntError + '</div>' : '') +
+        '</div>' +
+
+        '<div class="studio-step">' +
+          '<div class="studio-step-title">' +
+            '<span>Schritt 2: Produktionsregeln $P$ mit deinen Nichtterminalen bauen</span>' +
+            (st.rules.length > 0 ? '<button type="button" class="btn-sim" onclick="clearRules(\'' + exId + '\')">Alle Regeln löschen</button>' : '') +
+          '</div>' +
+          '<div class="rule-builder-row">' +
+            '<select id="' + exId + '-sel-lhs" class="rule-select" aria-label="Linkes Nichtterminal">' + lhsOpts + '</select>' +
+            '<span class="rule-arrow-sym">&rarr;</span>' +
+            '<select id="' + exId + '-sel-term" class="rule-select" onchange="handleTermSelectChange(\'' + exId + '\')" aria-label="Terminal oder Epsilon">' + termOpts + '</select>' +
+            '<select id="' + exId + '-sel-next" class="rule-select" aria-label="Folge-Nichtterminal">' + nextOpts + '</select>' +
+            '<button type="button" class="btn-sim btn-primary" onclick="addRuleFromUI(\'' + exId + '\')">+ Regel hinzufügen</button>' +
+          '</div>' +
+          '<div class="rule-list-box">' + rulesHtml + '</div>' +
+        '</div>' +
+
+        '<div class="checker-grid">' +
+          '<div class="studio-step" style="margin-top:0;">' +
+            '<div class="studio-step-title"><span>Schritt 3a: Selbst ableiten (nur mit deinen Regeln)</span></div>' +
+            '<div class="sentential-display" style="min-height:42px; font-size:1.05rem;">' + sentHtml + '</div>' +
+            '<div id="' + exId + '-derive-btns" class="rule-btn-group">' + deriveBtnsHtml + '</div>' +
+            '<div style="display:flex; gap:6px; margin-bottom:0.5rem;">' +
+              '<button type="button" class="btn-sim" onclick="undoUserDerivation(\'' + exId + '\')">Schritt zurück</button>' +
+              '<button type="button" class="btn-sim" onclick="resetUserDerivation(\'' + exId + '\')">Neu starten (' + st.start + ')</button>' +
+            '</div>' +
+            '<div class="derivation-chain">' + chainText + '</div>' +
+          '</div>' +
+
+          '<div class="studio-step" style="margin-top:0;">' +
+            '<div class="studio-step-title"><span>Schritt 3b: Gegen Zielsprache prüfen</span></div>' +
+            '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
+              '<button type="button" class="btn-sim btn-primary" onclick="checkGrammar(\'' + exId + '\')">Grammatik prüfen</button>' +
+            '</div>' +
+            '<div class="word-test-inline">' +
+              '<input type="text" id="' + exId + '-word-in" value="' + prevWord.replace(/"/g, '&quot;') + '" placeholder="Testwort eingeben (leer = ε)">' +
+              '<button type="button" class="btn-sim" onclick="testSingleWord(\'' + exId + '\')">Wort testen</button>' +
+            '</div>' +
+            '<div class="checker-feedback ' + st.feedbackType + '">' + st.feedbackHtml + '</div>' +
+          '</div>' +
+        '</div>';
+
+      handleTermSelectChange(exId);
+
+      // Event-Listener für die dynamischen Ableitungs-Buttons
+      const btnWrap = document.getElementById(exId + '-derive-btns');
+      if (btnWrap) {
+        btnWrap.querySelectorAll('.btn-rule').forEach((btn, idx) => {
+          btn.onclick = () => applyUserRule(exId, matchingRules[idx]);
+        });
+      }
+
+      // Enter im Nichtterminal-Feld & Testwort-Feld
+      const ntIn = document.getElementById(exId + '-nt-in');
+      if (ntIn) {
+        ntIn.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); addNT(exId); }
+        });
+      }
+      const wIn = document.getElementById(exId + '-word-in');
+      if (wIn) {
+        wIn.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); testSingleWord(exId); }
+        });
+      }
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(root, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
       }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       renderSyncLab();
+      Object.keys(EXERCISES).forEach(initStudio);
     });
   </script>
 </body>
