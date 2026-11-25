@@ -37,11 +37,36 @@
   </script>
 
   <style>
+    body {
+      font-size: 1.18rem;
+      line-height: 1.68;
+    }
+
+    .container {
+      max-width: 1120px;
+    }
+
+    .sheet-header h1 {
+      font-size: 2.25rem;
+    }
+
+    .sheet-intro {
+      font-size: 1.16rem;
+    }
+
+    .task-title {
+      font-size: 1.5rem;
+    }
+
+    .merke-content {
+      font-size: 1.12rem;
+    }
+
     .level-badge {
       margin-left: auto;
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 4px;
       background: #eff6ff;
       color: var(--ink-blue);
@@ -53,9 +78,9 @@
       font-family: 'Consolas', 'Courier New', monospace;
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
-      padding: 1px 5px;
+      padding: 1px 6px;
       border-radius: 4px;
-      font-size: 0.92em;
+      font-size: 0.94em;
       font-weight: 700;
     }
 
@@ -63,10 +88,10 @@
       background: #f8fafc;
       border: 1.5px solid var(--paper-border);
       border-radius: 6px;
-      padding: 1rem 1.25rem;
-      margin: 1rem 0;
-      font-size: 1rem;
-      line-height: 1.7;
+      padding: 1.1rem 1.35rem;
+      margin: 1.1rem 0;
+      font-size: 1.12rem;
+      line-height: 1.75;
     }
 
     .grammar-row {
@@ -109,9 +134,9 @@
       background: #fef2f2;
     }
     .contrast-title {
-      font-size: 0.96rem;
+      font-size: 1.08rem;
       font-weight: 700;
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.5rem;
     }
     .card-ok .contrast-title { color: #065f46; }
     .card-warn .contrast-title { color: #991b1b; }
@@ -240,17 +265,17 @@
       background: #ffffff;
       border: 1.5px solid var(--paper-border);
       border-radius: 6px;
-      padding: 0.75rem 1rem;
+      padding: 0.85rem 1.1rem;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 1.15rem;
+      font-size: 1.32rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      margin-bottom: 0.75rem;
-      min-height: 48px;
+      margin-bottom: 0.8rem;
+      min-height: 52px;
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 5px;
     }
 
     .nt-highlight {
@@ -259,7 +284,7 @@
       color: #1e3a8a;
       border: 1px solid #93c5fd;
       border-radius: 4px;
-      padding: 0 6px;
+      padding: 0 7px;
     }
     .term-part {
       color: #111827;
@@ -268,26 +293,26 @@
       display: inline-block;
       margin-left: auto;
       font-family: Calibri, 'Segoe UI', Arial, sans-serif;
-      font-size: 0.84rem;
+      font-size: 0.95rem;
       background: #dcfce7;
       color: #065f46;
       border: 1px solid #86efac;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 4px;
     }
 
     .rule-btn-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 0.75rem;
+      gap: 7px;
+      margin-bottom: 0.8rem;
     }
 
     .btn-rule {
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
+      font-size: 1.02rem;
       font-weight: 700;
-      padding: 6px 10px;
+      padding: 7px 12px;
       border-radius: 4px;
       border: 1px solid #93c5fd;
       background: #ffffff;
@@ -307,9 +332,9 @@
 
     .btn-sim {
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.98rem;
       font-weight: 700;
-      padding: 5px 11px;
+      padding: 7px 13px;
       border-radius: 4px;
       border: 1px solid var(--paper-border);
       background: #ffffff;
@@ -334,11 +359,11 @@
       background: #ffffff;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
-      padding: 0.65rem 0.85rem;
+      padding: 0.75rem 0.95rem;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      max-height: 130px;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      max-height: 170px;
       overflow-y: auto;
     }
 
@@ -347,8 +372,8 @@
       background: var(--paper-subtle);
       border: 1px solid var(--paper-border);
       border-radius: 6px;
-      padding: 1.15rem 1.25rem;
-      margin-top: 1.1rem;
+      padding: 1.35rem 1.45rem;
+      margin-top: 1.35rem;
     }
     .exercise-head {
       display: flex;
@@ -356,17 +381,17 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.65rem;
     }
     .exercise-title {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--ink-blue);
     }
     .exercise-tag {
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 4px;
       background: #ffffff;
       border: 1px solid var(--paper-border);
@@ -377,39 +402,39 @@
       background: #ffffff;
       border: 1px solid var(--paper-border);
       border-radius: 6px;
-      padding: 0.8rem 0.95rem;
-      margin-top: 0.75rem;
+      padding: 0.95rem 1.15rem;
+      margin-top: 0.9rem;
     }
 
     .studio-step-title {
-      font-size: 0.9rem;
+      font-size: 1.04rem;
       font-weight: 700;
       color: var(--ink-blue);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.65rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
 
     .nt-chip-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 0.6rem;
+      gap: 7px;
+      margin-bottom: 0.7rem;
     }
 
     .nt-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
+      gap: 7px;
+      padding: 5px 10px;
       border-radius: 4px;
       border: 1px solid var(--paper-border);
       background: #f8fafc;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
+      font-size: 1.02rem;
       font-weight: 700;
     }
     .nt-chip.is-start {
@@ -420,9 +445,9 @@
 
     .nt-chip-action {
       font-family: Calibri, 'Segoe UI', Arial, sans-serif;
-      font-size: 0.74rem;
+      font-size: 0.86rem;
       font-weight: 700;
-      padding: 1px 5px;
+      padding: 2px 7px;
       border-radius: 3px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
@@ -440,8 +465,8 @@
       color: #64748b;
       font-weight: 700;
       cursor: pointer;
-      padding: 0 3px;
-      font-size: 0.95rem;
+      padding: 0 4px;
+      font-size: 1.1rem;
       line-height: 1;
     }
     .nt-chip-del:hover {
@@ -452,24 +477,24 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
 
     .nt-input {
-      width: 170px;
+      width: 210px;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
+      font-size: 1rem;
       font-weight: 700;
-      padding: 5px 8px;
+      padding: 7px 10px;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
     }
 
     .nt-error {
       color: #b91c1c;
-      font-size: 0.84rem;
+      font-size: 0.96rem;
       font-weight: 700;
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
       display: none;
     }
 
@@ -477,15 +502,15 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 7px;
-      margin-bottom: 0.55rem;
+      gap: 8px;
+      margin-bottom: 0.65rem;
     }
 
     .rule-select {
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.92rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      padding: 6px 9px;
+      padding: 7px 11px;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
       background: #ffffff;
@@ -494,28 +519,28 @@
 
     .rule-arrow-sym {
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       color: var(--ink-blue);
     }
 
     .rhs-preview {
-      min-width: 150px;
-      min-height: 34px;
-      padding: 4px 9px;
+      min-width: 175px;
+      min-height: 40px;
+      padding: 5px 11px;
       border: 1.5px solid var(--paper-border);
       border-radius: 4px;
       background: #ffffff;
       display: inline-flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 5px;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.92rem;
+      font-size: 1.05rem;
       font-weight: 700;
     }
 
     .rhs-tok {
-      padding: 1px 6px;
+      padding: 2px 8px;
       border-radius: 3px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
@@ -536,33 +561,33 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 6px 12px;
-      margin-bottom: 0.65rem;
-      padding: 0.45rem 0.65rem;
+      gap: 8px 16px;
+      margin-bottom: 0.75rem;
+      padding: 0.6rem 0.8rem;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 4px;
-      font-size: 0.84rem;
+      font-size: 0.98rem;
     }
 
     .picker-group {
       display: inline-flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     .picker-label {
       font-weight: 700;
       color: var(--ink-muted);
-      margin-right: 2px;
+      margin-right: 3px;
     }
 
     .btn-tok {
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.84rem;
+      font-size: 0.98rem;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 5px 11px;
       border-radius: 4px;
       border: 1px solid var(--paper-border);
       background: #ffffff;
@@ -595,9 +620,9 @@
     .rule-list-box {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      min-height: 34px;
-      padding: 0.5rem;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0.6rem;
       background: #f8fafc;
       border: 1px dashed var(--paper-border);
       border-radius: 4px;
@@ -606,13 +631,13 @@
     .prod-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 8px;
+      gap: 7px;
+      padding: 4px 10px;
       border-radius: 4px;
       background: #ffffff;
       border: 1px solid #bfdbfe;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
+      font-size: 1.02rem;
       font-weight: 700;
       color: var(--ink-black);
     }
@@ -620,8 +645,8 @@
     .checker-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 0.75rem;
+      gap: 1.15rem;
+      margin-top: 0.9rem;
     }
     @media (max-width: 780px) {
       .checker-grid {
@@ -633,10 +658,10 @@
       background: #f8fafc;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
-      padding: 0.7rem 0.9rem;
-      font-size: 0.9rem;
-      line-height: 1.55;
-      margin-top: 0.55rem;
+      padding: 0.85rem 1rem;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      margin-top: 0.65rem;
     }
     .checker-feedback.is-ok {
       border-color: #86efac;
@@ -652,14 +677,14 @@
     .test-pill-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 0.5rem;
+      gap: 6px;
+      margin-top: 0.6rem;
     }
     .test-pill {
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.8rem;
+      font-size: 0.92rem;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 3px 9px;
       border-radius: 4px;
       border: 1px solid var(--paper-border);
       background: #ffffff;
@@ -677,14 +702,14 @@
 
     .word-test-inline {
       display: flex;
-      gap: 6px;
-      margin-top: 0.55rem;
+      gap: 7px;
+      margin-top: 0.65rem;
     }
     .word-test-inline input {
       flex: 1;
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.88rem;
-      padding: 4px 8px;
+      font-size: 1rem;
+      padding: 6px 10px;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
     }
@@ -810,44 +835,44 @@
         </div>
       </div>
 
-      <h3 style="color: var(--ink-blue); margin: 1.2rem 0 0.5rem 0; font-size: 1.12rem;">Warum brauchen wir die Regel $Q_2 \to \varepsilon$?</h3>
+      <h3 style="color: var(--ink-blue); margin: 1.2rem 0 0.5rem 0; font-size: 1.26rem;">Warum brauchen wir die Regel $Q_2 \to \varepsilon$?</h3>
       <p>
         Die Regeln $Q_0 \to aQ_1$ und $Q_1 \to bQ_2$ hängen immer ein festes Zeichen an und setzen dahinter wieder einen neuen Platzhalter. Ohne eine Abbruchregel würde die Erzeugung niemals enden und immer ein Großbuchstabe stehen bleiben.
         Die Regel <strong>$Q_2 \to \varepsilon$</strong> bedeutet: <em>„Da $q_2$ ein Endzustand ist, darf das Wort hier enden – wir ersetzen den Platzhalter $Q_2$ durch das leere Wort $\varepsilon$ (nichts) und sind fertig.“</em>
       </p>
 
-      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0; font-size: 1.12rem;">Wichtige Grundregel beim Ableiten</h3>
+      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.5rem 0; font-size: 1.26rem;">Wichtige Grundregel beim Ableiten</h3>
       <div class="contrast-grid">
         <div class="contrast-card card-ok">
           <div class="contrast-title">Richtig: Nur ein einzelnes Nichtterminal ersetzen</div>
-          <p style="font-size: 0.94rem; margin-bottom: 0.5rem;">
+          <p style="font-size: 1.08rem; margin-bottom: 0.5rem;">
             Auf der linken Seite jeder Regel steht <strong>genau ein Nichtterminal</strong>. Alles, was davor bereits an Terminalzeichen entstanden ist, bleibt stehen.
           </p>
-          <p style="font-family: Consolas, monospace; font-size: 0.9rem; font-weight: 700;">
+          <p style="font-family: Consolas, monospace; font-size: 1.02rem; font-weight: 700;">
             Q<sub>0</sub> &rArr; bQ<sub>0</sub> &rArr; baQ<sub>1</sub> &rArr; babQ<sub>2</sub> &rArr; bab
           </p>
-          <p style="font-size: 0.86rem; color: #065f46; margin-top: 0.35rem;">
+          <p style="font-size: 0.98rem; color: #065f46; margin-top: 0.35rem;">
             Im Schritt <span class="code-inline">baQ₁ ⇒ babQ₂</span> wird ausschließlich <span class="code-inline">Q₁</span> durch <span class="code-inline">bQ₂</span> ersetzt; <span class="code-inline">ba</span> bleibt unverändert.
           </p>
         </div>
 
         <div class="contrast-card card-warn">
           <div class="contrast-title">Häufiger Fehler: Kombinationen oder Terminale ableiten</div>
-          <p style="font-size: 0.94rem; margin-bottom: 0.5rem;">
+          <p style="font-size: 1.08rem; margin-bottom: 0.5rem;">
             Es gibt <strong>keine</strong> Regeln, bei denen links Terminale und Nichtterminale gemischt stehen (etwa <span class="code-inline">aQ₁ → ...</span>), und Terminalzeichen selbst werden niemals weiter abgeleitet.
           </p>
-          <p style="font-family: Consolas, monospace; font-size: 0.9rem; font-weight: 700;">
+          <p style="font-family: Consolas, monospace; font-size: 1.02rem; font-weight: 700;">
             Falsch: aQ<sub>1</sub> &rarr; abQ<sub>2</sub> &nbsp;oder&nbsp; a &rarr; ab
           </p>
-          <p style="font-size: 0.86rem; color: #991b1b; margin-top: 0.35rem;">
+          <p style="font-size: 0.98rem; color: #991b1b; margin-top: 0.35rem;">
             Merksatz: Links vom Pfeil steht bei unseren regulären Grammatiken <strong>immer nur ein einziger Platzhalter</strong> (z. B. $Q_1$).
           </p>
         </div>
       </div>
 
       <!-- Interaktives Synchron-Labor für M1 -->
-      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.4rem 0; font-size: 1.12rem;">Interaktiver Vergleich: Ableitung und Automat $M_1$ laufen synchron</h3>
-      <p style="font-size: 0.95rem; color: var(--ink-muted);">
+      <h3 style="color: var(--ink-blue); margin: 1.25rem 0 0.4rem 0; font-size: 1.26rem;">Interaktiver Vergleich: Ableitung und Automat $M_1$ laufen synchron</h3>
+      <p style="font-size: 1.08rem; color: var(--ink-muted);">
         Klicke rechts eine erlaubte Regel für den markierten Platzhalter an und beobachte links, wie der Automat $M_1$ exakt denselben Übergang durchführt.
       </p>
 
@@ -900,10 +925,10 @@
         </div>
 
         <div class="builder-panel">
-          <div style="font-size: 0.92rem; font-weight: 700; color: var(--ink-blue); margin-bottom: 0.45rem;">Aktuelle Satzform (Platzhalter wird ersetzt):</div>
+          <div style="font-size: 1.04rem; font-weight: 700; color: var(--ink-blue); margin-bottom: 0.45rem;">Aktuelle Satzform (Platzhalter wird ersetzt):</div>
           <div id="sync-sentential" class="sentential-display"></div>
 
-          <div style="font-size: 0.86rem; font-weight: 700; color: var(--ink-muted); margin-bottom: 0.35rem;">Erlaubte Regeln für das aktuelle Nichtterminal:</div>
+          <div style="font-size: 0.98rem; font-weight: 700; color: var(--ink-muted); margin-bottom: 0.35rem;">Erlaubte Regeln für das aktuelle Nichtterminal:</div>
           <div id="sync-buttons" class="rule-btn-group"></div>
 
           <div style="display: flex; gap: 6px; margin-bottom: 0.65rem;">
@@ -915,7 +940,7 @@
         </div>
       </div>
 
-      <h3 style="color: var(--ink-blue); margin: 1.4rem 0 0.5rem 0; font-size: 1.12rem;">Wie erkennt man, dass ein Wort <em>nicht</em> ableitbar ist?</h3>
+      <h3 style="color: var(--ink-blue); margin: 1.4rem 0 0.5rem 0; font-size: 1.26rem;">Wie erkennt man, dass ein Wort <em>nicht</em> ableitbar ist?</h3>
       <p style="margin-bottom: 0.65rem;">
         Bei einer Grammatik, die aus einem DEA stammt, gibt es für das aktuelle Nichtterminal und das nächste Zeichen des Zielwortes <strong>höchstens eine passende Regel</strong>. Deshalb kannst du ein Zielwort eindeutig von links nach rechts prüfen und zwei klare Abbruchgründe feststellen:
       </p>
@@ -923,23 +948,23 @@
       <div class="contrast-grid">
         <div class="contrast-card">
           <div class="contrast-title">Fall A: Wort zu Ende, aber keine $\varepsilon$-Regel</div>
-          <p style="font-size: 0.93rem;">
+          <p style="font-size: 1.06rem;">
             Prüfe für $G_1$ das Wort $w = \text{baaa}$:
           </p>
-          <p style="font-family: Consolas, monospace; font-size: 0.88rem; margin: 0.4rem 0; font-weight: 700;">
+          <p style="font-family: Consolas, monospace; font-size: 1.02rem; margin: 0.4rem 0; font-weight: 700;">
             Q<sub>0</sub> &rArr; bQ<sub>0</sub> &rArr; baQ<sub>1</sub> &rArr; baaQ<sub>1</sub> &rArr; baaaQ<sub>1</sub>
           </p>
-          <p style="font-size: 0.9rem; color: var(--ink-muted);">
+          <p style="font-size: 1.02rem; color: var(--ink-muted);">
             Alle vier Zeichen sind erzeugt, aber hinten steht noch das Nichtterminal $Q_1$. Da es <strong>keine Regel $Q_1 \to \varepsilon$</strong> gibt, lässt sich $Q_1$ nicht mehr auflösen (jeder weitere Schritt würde das Wort länger machen). Also ist <span class="code-inline">baaa</span> <strong>nicht ableitbar</strong>.
           </p>
         </div>
 
         <div class="contrast-card">
           <div class="contrast-title">Fall B: Keine Regel mit dem nächsten Terminal</div>
-          <p style="font-size: 0.93rem;">
+          <p style="font-size: 1.06rem;">
             Bei unvollständigen Grammatiken (oder wenn wir später Grammatiken ohne Fangzustand direkt entwerfen) fehlt manchmal der Übergang für ein Zeichen. Beispiel für <em>„beginnt mit a“</em>: $S \to aA$, $A \to aA \mid bA \mid \varepsilon$.
           </p>
-          <p style="font-size: 0.9rem; color: var(--ink-muted); margin-top: 0.4rem;">
+          <p style="font-size: 1.02rem; color: var(--ink-muted); margin-top: 0.4rem;">
             Für $w = \text{ba}$ beginnt keine Regel von $S$ mit dem Terminal <span class="code-inline">b</span>. Die Ableitung scheitert bereits am ersten Zeichen: <span class="code-inline">ba</span> ist <strong>nicht ableitbar</strong>.
           </p>
         </div>
@@ -1006,10 +1031,10 @@
           <div class="exercise-title">Aufgabe 1: Neue Sprache I – Beginnt mit <span class="code-inline">ab</span></div>
           <span class="exercise-tag">Basis • Ohne DEA-Umweg</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
+        <p style="font-size: 1.08rem; margin-bottom: 0.45rem;">
           Entwirf über $T = \{a, b\}$ eine reguläre Grammatik $G_2$, die genau alle Wörter erzeugt, die mit <span class="code-inline">ab</span> <strong>beginnen</strong> (z. B. <span class="code-inline">ab</span>, <span class="code-inline">aba</span>, <span class="code-inline">abbb</span>; <strong>nicht</strong> <span class="code-inline">ε</span>, <span class="code-inline">a</span>, <span class="code-inline">ba</span>, <span class="code-inline">aab</span>).
         </p>
-        <p style="font-size: 0.9rem; color: var(--ink-muted);">
+        <p style="font-size: 1.02rem; color: var(--ink-muted);">
           Tipp: Brauchst du hier einen Fangzustand wie im DEA, oder kannst du für fehlerhafte Zeichen einfach <em>gar keine Regel</em> angeben? Notiere zusätzlich auf Papier die Schrittfolge für <span class="code-inline">abba</span> und begründe, warum <span class="code-inline">aab</span> nicht ableitbar ist.
         </p>
         <div id="studio-ex1"></div>
@@ -1021,7 +1046,7 @@
           <div class="exercise-title">Aufgabe 2: Neue Sprache II – Gerade Anzahl von Nullen</div>
           <span class="exercise-tag">Mittel • Sonderfall $\varepsilon$</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
+        <p style="font-size: 1.08rem; margin-bottom: 0.45rem;">
           Erstelle über $T = \{0, 1\}$ eine reguläre Grammatik $G_3$ für alle Binärwörter mit einer <strong>geraden Anzahl von Nullen</strong> (beliebig viele Einsen). Beachte, dass $0$ Nullen ebenfalls gerade ist ($\varepsilon \in L(G_3)$, z. B. auch <span class="code-inline">11</span>, <span class="code-inline">00</span>, <span class="code-inline">1010</span>).
         </p>
         <div id="studio-ex2"></div>
@@ -1033,7 +1058,7 @@
           <div class="exercise-title">Aufgabe 3: Neue Sprache III – Gültige Binärzahlen ohne führende Nullen</div>
           <span class="exercise-tag">Mittel • Mehrere Fälle</span>
         </div>
-        <p style="font-size: 0.95rem; margin-bottom: 0.45rem;">
+        <p style="font-size: 1.08rem; margin-bottom: 0.45rem;">
           Erstelle über $T = \{0, 1\}$ eine Grammatik $G_4$ für sauber formatierte Binärzahlen: gültig sind die einzelne <span class="code-inline">0</span> sowie jede Zahl, die mit <span class="code-inline">1</span> beginnt (z. B. <span class="code-inline">0</span>, <span class="code-inline">1</span>, <span class="code-inline">1011</span>; <strong>abgelehnt</strong> werden <span class="code-inline">ε</span>, <span class="code-inline">00</span>, <span class="code-inline">010</span>).
         </p>
         <div id="studio-ex3"></div>
@@ -1045,7 +1070,7 @@
           <div class="exercise-title">Aufgabe 4: Systematisch DEA $\to$ Grammatik übersetzen ($M_3$)</div>
           <span class="exercise-tag">Anspruchsvoll • Rezept anwenden</span>
         </div>
-        <p style="font-size: 0.95rem;">
+        <p style="font-size: 1.08rem;">
           Wende das 5-Schritte-Rezept aus Abschnitt 3 auf den bekannten Automaten $M_3$ (<em>„Anzahl der Einsen ist durch 3 teilbar“</em>, $F = \{q_0\}$) an. Lege zuerst die Nichtterminale <span class="code-inline">Q0</span>, <span class="code-inline">Q1</span>, <span class="code-inline">Q2</span> an und erstelle die Regeln. Notiere danach schriftlich die Ableitung für <span class="code-inline">1011</span> und begründe, warum <span class="code-inline">101</span> nicht ableitbar ist.
         </p>
 
@@ -1098,7 +1123,7 @@
           <div class="exercise-title">Aufgabe 5 (Transfer): DEA mit Fangzustand übersetzen ($M_2$)</div>
           <span class="exercise-tag">Vertiefung • Rolle des Fangzustands</span>
         </div>
-        <p style="font-size: 0.95rem;">
+        <p style="font-size: 1.08rem;">
           Übersetze den Automaten $M_2$ (<em>„nicht-leere alternierende Bitfolgen“</em>, $F = \{q_1, q_2\}$) mit dem 5-Schritte-Rezept in eine Grammatik. Überlege anschließend: Welche Auswirkung hat der Fangzustand $q_3$ auf das Nichtterminal $Q_3$ – und lässt sich $Q_3$ in einer Grammatik eigentlich einfach weglassen?
         </p>
         <div id="studio-ex5"></div>
@@ -1623,7 +1648,7 @@
       const lhsOpts = st.nts.map(nt => '<option value="' + nt + '"' + (st.builderLhs === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
 
       const rhsPreviewHtml = st.builderTokens.length === 0
-        ? '<span style="color:var(--ink-muted); font-family:Calibri, sans-serif; font-size:0.86rem; font-weight:400;">Rechte Seite unten anklicken ...</span>'
+        ? '<span style="color:var(--ink-muted); font-family:Calibri, sans-serif; font-size:0.98rem; font-weight:400;">Rechte Seite unten anklicken ...</span>'
         : st.builderTokens.map(tok => {
             const cls = tok.kind === 'nt' ? 'is-nt' : (tok.kind === 'eps' ? 'is-eps' : '');
             return '<span class="rhs-tok ' + cls + '">' + tok.val + '</span>';
@@ -1638,7 +1663,7 @@
       ).join('');
 
       const rulesHtml = st.rules.length === 0
-        ? '<span style="font-size:0.86rem; color:var(--ink-muted);">Noch keine Regeln erstellt — baue oben eine rechte Seite aus Terminalen und deinen Nichtterminalen.</span>'
+        ? '<span style="font-size:0.98rem; color:var(--ink-muted);">Noch keine Regeln erstellt — baue oben eine rechte Seite aus Terminalen und deinen Nichtterminalen.</span>'
         : st.rules.map((r, idx) =>
             '<span class="prod-chip">' +
               '<span>' + formatRuleText(r) + '</span>' +
@@ -1654,9 +1679,9 @@
 
       const matchingRules = cur.nt ? st.rules.filter(r => r.lhs === cur.nt) : [];
       const deriveBtnsHtml = !cur.nt
-        ? '<span style="font-size:0.86rem; color:#065f46; font-weight:700;">Kein Nichtterminal mehr übrig.</span>'
+        ? '<span style="font-size:0.98rem; color:#065f46; font-weight:700;">Kein Nichtterminal mehr übrig.</span>'
         : (matchingRules.length === 0
-            ? '<span style="font-size:0.86rem; color:#991b1b; font-weight:700;">Für ' + cur.nt + ' gibt es noch keine Regel — ergänze sie in Schritt 2.</span>'
+            ? '<span style="font-size:0.98rem; color:#991b1b; font-weight:700;">Für ' + cur.nt + ' gibt es noch keine Regel — ergänze sie in Schritt 2.</span>'
             : matchingRules.map((r, idx) =>
                 '<button type="button" class="btn-rule" data-ridx="' + idx + '">' + formatRuleText(r) + '</button>'
               ).join(''));
@@ -1667,7 +1692,7 @@
         '<div class="studio-step">' +
           '<div class="studio-step-title">' +
             '<span>Schritt 1: Nichtterminale $N$ &amp; Startsymbol definieren</span>' +
-            '<span style="font-family:Consolas, monospace; font-size:0.84rem; color:var(--ink-muted);">N = {' + st.nts.join(', ') + '} &nbsp;|&nbsp; T = {' + ex.alphabet.join(', ') + '}</span>' +
+            '<span style="font-family:Consolas, monospace; font-size:0.96rem; color:var(--ink-muted);">N = {' + st.nts.join(', ') + '} &nbsp;|&nbsp; T = {' + ex.alphabet.join(', ') + '}</span>' +
           '</div>' +
           '<div class="nt-chip-bar">' + ntChipsHtml + '</div>' +
           '<div class="nt-add-row">' +
@@ -1703,7 +1728,7 @@
         '<div class="checker-grid">' +
           '<div class="studio-step" style="margin-top:0;">' +
             '<div class="studio-step-title"><span>Schritt 3a: Selbst ableiten (nur mit deinen Regeln)</span></div>' +
-            '<div class="sentential-display" style="min-height:42px; font-size:1.05rem;">' + sentHtml + '</div>' +
+            '<div class="sentential-display" style="min-height:42px; font-size:1.22rem;">' + sentHtml + '</div>' +
             '<div id="' + exId + '-derive-btns" class="rule-btn-group">' + deriveBtnsHtml + '</div>' +
             '<div style="display:flex; gap:6px; margin-bottom:0.5rem;">' +
               '<button type="button" class="btn-sim" onclick="undoUserDerivation(\'' + exId + '\')">Schritt zurück</button>' +
