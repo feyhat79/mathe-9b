@@ -478,28 +478,118 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 7px;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.55rem;
     }
 
     .rule-select {
       font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
-      padding: 5px 8px;
+      padding: 6px 9px;
       border: 1px solid var(--paper-border);
       border-radius: 4px;
       background: #ffffff;
       color: var(--ink-black);
     }
-    .rule-select:disabled {
-      background: #f1f5f9;
-      color: #94a3b8;
-    }
 
     .rule-arrow-sym {
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--ink-blue);
+    }
+
+    .rhs-preview {
+      min-width: 150px;
+      min-height: 34px;
+      padding: 4px 9px;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 4px;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .rhs-tok {
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #111827;
+    }
+    .rhs-tok.is-nt {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1e3a8a;
+    }
+    .rhs-tok.is-eps {
+      background: #ecfdf5;
+      border-color: #86efac;
+      color: #065f46;
+    }
+
+    .token-picker-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+      margin-bottom: 0.65rem;
+      padding: 0.45rem 0.65rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 0.84rem;
+    }
+
+    .picker-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .picker-label {
+      font-weight: 700;
+      color: var(--ink-muted);
+      margin-right: 2px;
+    }
+
+    .btn-tok {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+    }
+    .btn-tok:hover {
+      border-color: var(--ink-blue);
+      background: #eff6ff;
+    }
+    .btn-tok.tok-nt {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: var(--ink-blue);
+    }
+    .btn-tok.tok-nt:hover {
+      background: var(--ink-blue);
+      color: #ffffff;
+    }
+    .btn-tok.tok-eps {
+      background: #ecfdf5;
+      border-color: #86efac;
+      color: #065f46;
+    }
+    .btn-tok.tok-eps:hover {
+      background: #059669;
+      color: #ffffff;
     }
 
     .rule-list-box {
@@ -1206,10 +1296,13 @@
       studioState[exId] = {
         nts: [...ex.defaultNTs],
         start: ex.defaultNTs[0],
-        rules: [], // { lhs, term, next } -> term='' bedeutet eps
+        rules: [], // { lhs, terms, next } -> terms='', next=null bedeutet eps
+        builderLhs: ex.defaultNTs[0],
+        builderTokens: [], // { kind: 'term'|'nt'|'eps', val: string }
+        ruleError: '',
         derivation: [{ prefix: '', nt: ex.defaultNTs[0] }],
         ntError: '',
-        feedbackHtml: 'Definiere oben deine Nichtterminale N, klicke Regeln zusammen und prüfe deine Grammatik.',
+        feedbackHtml: 'Definiere oben deine Nichtterminale N, baue deine Regeln aus Terminalen und Nichtterminalen und prüfe deine Grammatik.',
         feedbackType: ''
       };
       renderStudio(exId);
@@ -1257,39 +1350,88 @@
       }
       st.nts = st.nts.filter(item => item !== nt);
       st.rules = st.rules.filter(r => r.lhs !== nt && r.next !== nt);
-      if (st.start === nt) {
-        st.start = st.nts[0];
-      }
+      st.builderTokens = st.builderTokens.filter(tok => !(tok.kind === 'nt' && tok.val === nt));
+      if (st.builderLhs === nt) st.builderLhs = st.nts[0];
+      if (st.start === nt) st.start = st.nts[0];
       st.derivation = [{ prefix: '', nt: st.start }];
       st.ntError = '';
       renderStudio(exId);
     }
 
-    function handleTermSelectChange(exId) {
-      const termSel = document.getElementById(exId + '-sel-term');
-      const nextSel = document.getElementById(exId + '-sel-next');
-      if (!termSel || !nextSel) return;
-      if (termSel.value === '__EPS__') {
-        nextSel.value = '';
-        nextSel.disabled = true;
+    function setBuilderLhs(exId, val) {
+      studioState[exId].builderLhs = val;
+    }
+
+    function pushRhsToken(exId, kind, val) {
+      const st = studioState[exId];
+      st.ruleError = '';
+      if (kind === 'eps') {
+        st.builderTokens = [{ kind: 'eps', val: 'ε' }];
       } else {
-        nextSel.disabled = false;
+        if (st.builderTokens.length === 1 && st.builderTokens[0].kind === 'eps') {
+          st.builderTokens = [];
+        }
+        st.builderTokens.push({ kind, val });
       }
+      renderStudio(exId);
+    }
+
+    function popRhsToken(exId) {
+      const st = studioState[exId];
+      st.ruleError = '';
+      st.builderTokens.pop();
+      renderStudio(exId);
+    }
+
+    function clearRhsTokens(exId) {
+      const st = studioState[exId];
+      st.ruleError = '';
+      st.builderTokens = [];
+      renderStudio(exId);
     }
 
     function addRuleFromUI(exId) {
       const st = studioState[exId];
+      st.ruleError = '';
       const lhs = document.getElementById(exId + '-sel-lhs').value;
-      const termVal = document.getElementById(exId + '-sel-term').value;
-      const nextVal = document.getElementById(exId + '-sel-next').value;
+      st.builderLhs = lhs;
 
-      const term = termVal === '__EPS__' ? '' : termVal;
-      const next = term === '' ? null : (nextVal === '' ? null : nextVal);
-
-      const exists = st.rules.some(r => r.lhs === lhs && r.term === term && r.next === next);
-      if (!exists) {
-        st.rules.push({ lhs, term, next });
+      if (st.builderTokens.length === 0) {
+        st.ruleError = 'Bitte wähle unten mindestens ein Terminal, ein Nichtterminal oder ε für die rechte Seite aus.';
+        renderStudio(exId);
+        return;
       }
+
+      if (st.builderTokens.length === 1 && st.builderTokens[0].kind === 'eps') {
+        const exists = st.rules.some(r => r.lhs === lhs && r.terms === '' && r.next === null);
+        if (!exists) st.rules.push({ lhs, terms: '', next: null });
+        st.builderTokens = [];
+        renderStudio(exId);
+        return;
+      }
+
+      // Prüfen: Höchstens ein Nichtterminal und zwar ganz rechts (Typ 3)
+      const ntCount = st.builderTokens.filter(t => t.kind === 'nt').length;
+      if (ntCount > 1) {
+        st.ruleError = 'Bei einer regulären Grammatik (Typ 3) darf auf der rechten Seite höchstens ein Nichtterminal stehen.';
+        renderStudio(exId);
+        return;
+      }
+      if (ntCount === 1 && st.builderTokens[st.builderTokens.length - 1].kind !== 'nt') {
+        st.ruleError = 'Bei einer rechtsregulären Grammatik (Typ 3) muss das Nichtterminal ganz rechts stehen (z. B. aA statt Aa oder aAb).';
+        renderStudio(exId);
+        return;
+      }
+
+      const terms = st.builderTokens.filter(t => t.kind === 'term').map(t => t.val).join('');
+      const last = st.builderTokens[st.builderTokens.length - 1];
+      const next = last.kind === 'nt' ? last.val : null;
+
+      const exists = st.rules.some(r => r.lhs === lhs && r.terms === terms && r.next === next);
+      if (!exists) {
+        st.rules.push({ lhs, terms, next });
+      }
+      st.builderTokens = [];
       renderStudio(exId);
     }
 
@@ -1308,8 +1450,8 @@
     }
 
     function formatRuleText(r) {
-      if (r.term === '') return r.lhs + ' → ε';
-      return r.lhs + ' → ' + r.term + (r.next ? r.next : '');
+      if (r.terms === '' && r.next === null) return r.lhs + ' → ε';
+      return r.lhs + ' → ' + r.terms + (r.next ? r.next : '');
     }
 
     function applyUserRule(exId, ruleObj) {
@@ -1317,7 +1459,7 @@
       const cur = st.derivation[st.derivation.length - 1];
       if (!cur.nt) return;
       st.derivation.push({
-        prefix: cur.prefix + ruleObj.term,
+        prefix: cur.prefix + ruleObj.terms,
         nt: ruleObj.next
       });
       renderStudio(exId);
@@ -1343,13 +1485,7 @@
       st.nts.forEach(nt => { productions[nt] = []; });
       st.rules.forEach(r => {
         if (!productions[r.lhs]) productions[r.lhs] = [];
-        if (r.term === '') {
-          productions[r.lhs].push({ type: 'eps', term: '', next: null });
-        } else if (r.next === null) {
-          productions[r.lhs].push({ type: 'term', term: r.term, next: null });
-        } else {
-          productions[r.lhs].push({ type: 'step', term: r.term, next: r.next });
-        }
+        productions[r.lhs].push({ terms: r.terms, next: r.next });
       });
       return { start: st.start, productions };
     }
@@ -1363,17 +1499,15 @@
         const rules = grammar.productions[nt] || [];
 
         for (const r of rules) {
-          if (r.type === 'eps') {
-            if (pos === word.length) return true;
-          } else if (r.type === 'term') {
-            if (pos + 1 === word.length && word[pos] === r.term) return true;
-          } else if (r.type === 'step') {
-            if (pos < word.length && word[pos] === r.term) {
-              const nextKey = r.next + ':' + (pos + 1);
-              if (!visited.has(nextKey)) {
-                visited.add(nextKey);
-                queue.push({ nt: r.next, pos: pos + 1 });
-              }
+          if (!word.startsWith(r.terms, pos)) continue;
+          const nextPos = pos + r.terms.length;
+          if (r.next === null) {
+            if (nextPos === word.length) return true;
+          } else {
+            const nextKey = r.next + ':' + nextPos;
+            if (!visited.has(nextKey)) {
+              visited.add(nextKey);
+              queue.push({ nt: r.next, pos: nextPos });
             }
           }
         }
@@ -1470,9 +1604,6 @@
       const root = document.getElementById('studio-' + exId);
       if (!root) return;
 
-      const prevLhs = document.getElementById(exId + '-sel-lhs')?.value;
-      const prevTerm = document.getElementById(exId + '-sel-term')?.value;
-      const prevNext = document.getElementById(exId + '-sel-next')?.value;
       const prevWord = preservedWord !== undefined ? preservedWord : (document.getElementById(exId + '-word-in')?.value || '');
 
       const ntChipsHtml = st.nts.map(nt => {
@@ -1489,14 +1620,25 @@
         .map(q => '<button type="button" class="btn-sim" onclick="addNT(\'' + exId + '\', \'' + q + '\')">+ ' + q + '</button>')
         .join('');
 
-      const lhsOpts = st.nts.map(nt => '<option value="' + nt + '"' + (prevLhs === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
-      const termOpts = ex.alphabet.map(t => '<option value="' + t + '"' + (prevTerm === t ? ' selected' : '') + '>' + t + '</option>').join('') +
-        '<option value="__EPS__"' + (prevTerm === '__EPS__' ? ' selected' : '') + '>ε (Wort beenden)</option>';
-      const nextOpts = '<option value=""' + (prevNext === '' ? ' selected' : '') + '>– (direkt enden)</option>' +
-        st.nts.map(nt => '<option value="' + nt + '"' + (prevNext === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
+      const lhsOpts = st.nts.map(nt => '<option value="' + nt + '"' + (st.builderLhs === nt ? ' selected' : '') + '>' + nt + '</option>').join('');
+
+      const rhsPreviewHtml = st.builderTokens.length === 0
+        ? '<span style="color:var(--ink-muted); font-family:Calibri, sans-serif; font-size:0.86rem; font-weight:400;">Rechte Seite unten anklicken ...</span>'
+        : st.builderTokens.map(tok => {
+            const cls = tok.kind === 'nt' ? 'is-nt' : (tok.kind === 'eps' ? 'is-eps' : '');
+            return '<span class="rhs-tok ' + cls + '">' + tok.val + '</span>';
+          }).join('');
+
+      const termPickerHtml = ex.alphabet.map(t =>
+        '<button type="button" class="btn-tok" onclick="pushRhsToken(\'' + exId + '\', \'term\', \'' + t + '\')">+ ' + t + '</button>'
+      ).join('');
+
+      const ntPickerHtml = st.nts.map(nt =>
+        '<button type="button" class="btn-tok tok-nt" onclick="pushRhsToken(\'' + exId + '\', \'nt\', \'' + nt + '\')">+ ' + nt + '</button>'
+      ).join('');
 
       const rulesHtml = st.rules.length === 0
-        ? '<span style="font-size:0.86rem; color:var(--ink-muted);">Noch keine Regeln erstellt — wähle oben Links → Rechts aus.</span>'
+        ? '<span style="font-size:0.86rem; color:var(--ink-muted);">Noch keine Regeln erstellt — baue oben eine rechte Seite aus Terminalen und deinen Nichtterminalen.</span>'
         : st.rules.map((r, idx) =>
             '<span class="prod-chip">' +
               '<span>' + formatRuleText(r) + '</span>' +
@@ -1538,16 +1680,23 @@
 
         '<div class="studio-step">' +
           '<div class="studio-step-title">' +
-            '<span>Schritt 2: Produktionsregeln $P$ mit deinen Nichtterminalen bauen</span>' +
+            '<span>Schritt 2: Produktionsregeln $P$ aus Terminalen &amp; deinen Nichtterminalen bauen</span>' +
             (st.rules.length > 0 ? '<button type="button" class="btn-sim" onclick="clearRules(\'' + exId + '\')">Alle Regeln löschen</button>' : '') +
           '</div>' +
           '<div class="rule-builder-row">' +
-            '<select id="' + exId + '-sel-lhs" class="rule-select" aria-label="Linkes Nichtterminal">' + lhsOpts + '</select>' +
+            '<select id="' + exId + '-sel-lhs" class="rule-select" onchange="setBuilderLhs(\'' + exId + '\', this.value)" aria-label="Linkes Nichtterminal">' + lhsOpts + '</select>' +
             '<span class="rule-arrow-sym">&rarr;</span>' +
-            '<select id="' + exId + '-sel-term" class="rule-select" onchange="handleTermSelectChange(\'' + exId + '\')" aria-label="Terminal oder Epsilon">' + termOpts + '</select>' +
-            '<select id="' + exId + '-sel-next" class="rule-select" aria-label="Folge-Nichtterminal">' + nextOpts + '</select>' +
+            '<div class="rhs-preview">' + rhsPreviewHtml + '</div>' +
+            '<button type="button" class="btn-sim" title="Letztes Zeichen entfernen" onclick="popRhsToken(\'' + exId + '\')">&larr;</button>' +
+            '<button type="button" class="btn-sim" onclick="clearRhsTokens(\'' + exId + '\')">Leeren</button>' +
             '<button type="button" class="btn-sim btn-primary" onclick="addRuleFromUI(\'' + exId + '\')">+ Regel hinzufügen</button>' +
           '</div>' +
+          '<div class="token-picker-bar">' +
+            '<div class="picker-group"><span class="picker-label">Terminale (T):</span>' + termPickerHtml + '</div>' +
+            '<div class="picker-group"><span class="picker-label">Deine Nichtterminale (N):</span>' + ntPickerHtml + '</div>' +
+            '<div class="picker-group"><button type="button" class="btn-tok tok-eps" onclick="pushRhsToken(\'' + exId + '\', \'eps\', \'ε\')">ε (Wort beenden)</button></div>' +
+          '</div>' +
+          (st.ruleError ? '<div class="nt-error" style="display:block; margin-bottom:0.5rem;">' + st.ruleError + '</div>' : '') +
           '<div class="rule-list-box">' + rulesHtml + '</div>' +
         '</div>' +
 
@@ -1575,8 +1724,6 @@
             '<div class="checker-feedback ' + st.feedbackType + '">' + st.feedbackHtml + '</div>' +
           '</div>' +
         '</div>';
-
-      handleTermSelectChange(exId);
 
       // Event-Listener für die dynamischen Ableitungs-Buttons
       const btnWrap = document.getElementById(exId + '-derive-btns');
