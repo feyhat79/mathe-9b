@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gruppenarbeit: Praxis-Validatoren (DEA &amp; Grammatik) | Informatik Q2</title>
+
+  <!-- Zentrales Schulheft- & Lernatelier-Stylesheet -->
+  <link rel="stylesheet" href="../../assets/css/web-module.css">
+
+  <!-- KaTeX für mathematische & technische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    body {
+      font-size: 1.14rem;
+      line-height: 1.65;
+    }
+
+    .container {
+      max-width: 1120px;
+    }
+
+    .code-inline {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.94em;
+      font-weight: 700;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    @media (max-width: 820px) {
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .phase-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 0.95rem 1.1rem;
+    }
+    .phase-badge {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 4px;
+      background: #dbeafe;
+      color: var(--ink-blue);
+      margin-bottom: 0.4rem;
+    }
+    .phase-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--ink-black);
+      margin-bottom: 0.35rem;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 0.9rem;
+    }
+    @media (max-width: 820px) {
+      .role-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .role-card {
+      background: #ffffff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 0.9rem 1.05rem;
+    }
+    .role-name {
+      font-size: 1.04rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+      margin-bottom: 0.3rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 1rem 0 1.25rem 0;
+    }
+    .filter-btn {
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 700;
+      padding: 6px 13px;
+      border-radius: 5px;
+      border: 1px solid var(--paper-border);
+      background: #ffffff;
+      color: var(--ink-black);
+      cursor: pointer;
+    }
+    .filter-btn:hover {
+      background: #eff6ff;
+      border-color: var(--model-blue);
+      color: var(--ink-blue);
+    }
+    .filter-btn.active {
+      background: var(--ink-blue);
+      color: #ffffff;
+      border-color: var(--ink-blue);
+    }
+
+    .group-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .group-grid.single-focus {
+      grid-template-columns: 1fr;
+    }
+    @media (max-width: 860px) {
+      .group-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .group-card {
+      background: #ffffff;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 8px;
+      padding: 1.25rem 1.35rem;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .group-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 0.55rem;
+      border-bottom: 2px solid #dbeafe;
+    }
+
+    .group-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+
+    .group-pill {
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: #eff6ff;
+      color: var(--ink-blue);
+      border: 1px solid #bfdbfe;
+      white-space: nowrap;
+    }
+
+    .spec-strip {
+      background: #f8fafc;
+      border: 1px solid var(--paper-border);
+      border-radius: 5px;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .example-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 520px) {
+      .example-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ex-box {
+      border-radius: 5px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.98rem;
+      border: 1px solid var(--paper-border);
+    }
+    .ex-box.ex-ok {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #065f46;
+    }
+    .ex-box.ex-no {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    .bounty-note {
+      margin-top: auto;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 5px;
+      padding: 0.55rem 0.8rem;
+      font-size: 0.96rem;
+    }
+
+    .checklist-box {
+      margin-top: 1.25rem;
+      background: #f8fafc;
+      border: 1.5px solid var(--paper-border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+    }
+
+    @media print {
+      .presenter-bar, .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff;
+        font-size: 10.5pt;
+      }
+      .sheet-card, .sheet-header {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin-bottom: 1rem;
+      }
+      .group-card {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- KOPFZEILE -->
+  <nav class="presenter-bar no-print">
+    <div class="presenter-left">
+      <a href="index.html" class="btn-nav-back">← Übersicht Q2</a>
+      <div class="presenter-title">
+        <span>Gruppen-Challenge: Praxis-Validatoren</span>
+        <span class="presenter-tag">6 Gruppen • 18 Personen</span>
+      </div>
+    </div>
+    <div class="presenter-actions">
+      <a href="automaten.html" class="presenter-tab-btn">1. Grundlagen (DEA)</a>
+      <a href="AB02_DEA_Konstruktion_Binaersystem.html" class="presenter-tab-btn">2. Konstruktion (AB 2)</a>
+      <a href="automaten-analyse.html" class="presenter-tab-btn">3. Sprache klassifizieren</a>
+      <a href="grammatiken.html" class="presenter-tab-btn">4. Grammatiken (Typ 3)</a>
+      <a href="gruppenarbeit-validatoren.html" class="presenter-tab-btn active">5. Gruppenarbeit</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- DECKBLATT -->
+    <header class="sheet-header">
+      <div class="sheet-meta-row">
+        <span>Informatik Q2 • Theoretische Informatik (Team-Challenge)</span>
+        <span>6 Gruppen à 3 Personen</span>
+      </div>
+      <h1>Software-Auftrag + Bug-Bounty: Eingabe-Validatoren</h1>
+      <p class="sheet-intro">
+        Jede 3er-Gruppe übernimmt einen echten Software-Auftrag aus der Praxis, entwirft dafür einen vollständigen <strong>Deterministischen Endlichen Automaten (DEA)</strong> und übersetzt ihn in eine <strong>reguläre Grammatik (Typ 3)</strong>. Anschließend versuchen die anderen Gruppen, eure Lösung mit gezielten Testwörtern zu „hacken“.
+      </p>
+    </header>
+
+    <!-- ABLAUF & ROLLEN -->
+    <article class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">1</span>
+        <span>Ablauf &amp; Rollenverteilung im 3er-Team</span>
+      </h2>
+
+      <div class="phase-grid">
+        <div class="phase-box">
+          <span class="phase-badge">Phase 1 • 25 Min.</span>
+          <div class="phase-title">Entwurf (Plakat / Whiteboard)</div>
+          <p>Entwickelt Zustände, vollständigen DEA, Typ-3-Grammatik und eine Beispiel-Ableitung gemeinsam auf eurem Plakat oder geteilten Whiteboard.</p>
+        </div>
+        <div class="phase-box">
+          <span class="phase-badge">Phase 2 • 8 Min.</span>
+          <div class="phase-title">Gegen-Test (Qualitätsprüfung)</div>
+          <p>Ihr prüft den Entwurf eurer Partnergruppe (1&harr;2, 3&harr;4, 5&harr;6) mit 3 kniffligen Testwörtern: Findet ihr eine Lücke, oder hält die Lösung allen Grenzfällen fehlerfrei stand?</p>
+        </div>
+        <div class="phase-box">
+          <span class="phase-badge">Phase 3 • 15 Min.</span>
+          <div class="phase-title">Kurzpräsentation (je 2–3 Min.)</div>
+          <p>Stellt euren Auftrag, die Bedeutung der Zustände, ein abgeleitetes Beispielwort und das Ergebnis des Gegen-Tests kurz vor dem Kurs vor.</p>
+        </div>
+      </div>
+
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-name">1. Zustands-Architekt/in</div>
+          <p>Achtet darauf, dass jeder Zustand eine klare Bedeutung hat, Start- und Endkriterium ($\varepsilon$!) stimmen, kein Übergang fehlt – und erläutert bei der Vorstellung kurz den DEA.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-name">2. Grammatik-Profi</div>
+          <p>Übersetzt den DEA sauber in Typ-3-Regeln ($Q_i \to xQ_j$ und $Q_f \to \varepsilon$), prüft die Regel-Syntax und zeigt bei der Vorstellung eine Schritt-für-Schritt-Ableitung.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-name">3. Test-Profi &amp; Sprecher/in</div>
+          <p>Denkt sich 3 knifflige Grenzfälle für das eigene Team aus, prüft in Phase 2 den Entwurf der Partnergruppe und stellt als Sprecher/in Aufgabe sowie Testergebnisse kurz vor.</p>
+        </div>
+      </div>
+
+      <div class="checklist-box">
+        <strong>Das muss auf eurem Plakat / eurer Folie sichtbar sein:</strong>
+        <ol style="margin-left: 1.3rem; margin-top: 0.4rem;">
+          <li>Kurze Liste: <strong>Bedeutung jedes Zustands</strong> (z. B. $q_0$: Start, ...).</li>
+          <li><strong>Vollständiges DEA-Diagramm</strong> (alle Zeichen aus $T$ an jedem Zustand abgedeckt, inkl. Fangzustand).</li>
+          <li><strong>Reguläre Grammatik $G = (N, T, P, S)$</strong> mit einer vollständigen Wort-Ableitung ($S \Rightarrow^* w$).</li>
+          <li><strong>Zwei fiese Grenzfälle</strong> (ein knapp akzeptiertes und ein knapp abgelehntes Wort).</li>
+        </ol>
+      </div>
+    </article>
+
+    <!-- GRUPPEN-AUFTRÄGE -->
+    <article class="sheet-card">
+      <h2 class="task-title">
+        <span class="task-number">2</span>
+        <span>Die 6 Gruppen-Aufträge</span>
+      </h2>
+
+      <div class="filter-bar no-print">
+        <button type="button" class="filter-btn active" onclick="filterGroup('all', this)">Alle 6 Gruppen</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g1', this)">Gruppe 1</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g2', this)">Gruppe 2</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g3', this)">Gruppe 3</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g4', this)">Gruppe 4</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g5', this)">Gruppe 5</button>
+        <button type="button" class="filter-btn" onclick="filterGroup('g6', this)">Gruppe 6</button>
+      </div>
+
+      <div id="group-grid" class="group-grid">
+
+        <!-- GRUPPE 1 -->
+        <section class="group-card" data-group="g1">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 1: 24h-Stundenformat (<span class="code-inline">HH</span>)</h3>
+            <span class="group-pill">~5 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{0, 1, 2, 3, 9\}$</div>
+          <p>
+            Ein Formularfeld soll nur gültige <strong>zweistellige Stundenangaben von <span class="code-inline">00</span> bis <span class="code-inline">23</span></strong> akzeptieren (die Ziffer <span class="code-inline">9</span> steht stellvertretend für alle Ziffern größer als $3$). Einstellige oder zu lange Eingaben sind ungültig.
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">00</span>, <span class="code-inline">09</span>, <span class="code-inline">13</span>, <span class="code-inline">20</span>, <span class="code-inline">23</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">ε</span>, <span class="code-inline">2</span>, <span class="code-inline">29</span>, <span class="code-inline">30</span>, <span class="code-inline">023</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 2</strong>.</div>
+        </section>
+
+        <!-- GRUPPE 2 -->
+        <section class="group-card" data-group="g2">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 2: Java-Variablennamen</h3>
+            <span class="group-pill">~4 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{a, b, 0, 1, \_ \}$</div>
+          <p>
+            Ein Compiler-Prüfmodul akzeptiert Bezeichner, die mit einem Buchstaben (<span class="code-inline">a</span>, <span class="code-inline">b</span>) oder Unterstrich (<span class="code-inline">_</span>) beginnen und danach beliebig viele Zeichen aus $T$ enthalten. <strong>Sonderregel (seit Java 9):</strong> Der einzelne Unterstrich <span class="code-inline">_</span> allein (und $\varepsilon$) ist verboten!
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">a</span>, <span class="code-inline">_0</span>, <span class="code-inline">__</span>, <span class="code-inline">a1_b</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">ε</span>, <span class="code-inline">_</span>, <span class="code-inline">0a</span>, <span class="code-inline">1_b</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 1</strong>.</div>
+        </section>
+
+        <!-- GRUPPE 3 -->
+        <section class="group-card" data-group="g3">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 3: Kommazahlen / Geldbeträge</h3>
+            <span class="group-pill">~6 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{0, 1, \text{,}\}$ &nbsp;(Komma als Trennzeichen)</div>
+          <p>
+            Akzeptiere gültige Dezimal-/Binär-Kommazahlen mit <strong>genau einem Komma</strong>, <strong>ohne unnötige führende Null</strong> vor dem Komma (vor dem Komma nur <span class="code-inline">0</span> allein oder mit <span class="code-inline">1</span> beginnend) und <strong>mindestens einer Ziffer nach dem Komma</strong>.
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">0,0</span>, <span class="code-inline">0,10</span>, <span class="code-inline">1,1</span>, <span class="code-inline">101,0</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">10</span>, <span class="code-inline">01,0</span>, <span class="code-inline">,1</span>, <span class="code-inline">1,</span>, <span class="code-inline">1,0,1</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 4</strong>.</div>
+        </section>
+
+        <!-- GRUPPE 4 -->
+        <section class="group-card" data-group="g4">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 4: Netzwerk-Datenpaket</h3>
+            <span class="group-pill">~6 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{0, 1\}$</div>
+          <p>
+            Ein Datenrahmen ist gültig, wenn er mit der Startmarkierung <span class="code-inline">01</span> <strong>beginnt</strong> und mit der Endmarkierung <span class="code-inline">10</span> <strong>endet</strong>. Wichtig: Start- und Endmarkierung dürfen sich <strong>nicht überlappen</strong> (Mindestlänge also 4 Bits).
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">0110</span>, <span class="code-inline">01010</span>, <span class="code-inline">011110</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">010</span>, <span class="code-inline">01</span>, <span class="code-inline">10</span>, <span class="code-inline">01100</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 3</strong>.</div>
+        </section>
+
+        <!-- GRUPPE 5 -->
+        <section class="group-card" data-group="g5">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 5: Passwort-Policy</h3>
+            <span class="group-pill">~7 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{a, 1\}$ &nbsp;(<span class="code-inline">a</span> = Buchstabe, <span class="code-inline">1</span> = Ziffer)</div>
+          <p>
+            Ein Passwort wird nur akzeptiert, wenn es <strong>alle drei Regeln gleichzeitig</strong> erfüllt: (1) Länge <strong>mindestens 3 Zeichen</strong>, (2) mindestens ein Buchstabe <span class="code-inline">a</span> und (3) mindestens eine Ziffer <span class="code-inline">1</span>.
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">a1a</span>, <span class="code-inline">11a</span>, <span class="code-inline">aa1</span>, <span class="code-inline">1a11</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">ε</span>, <span class="code-inline">a1</span>, <span class="code-inline">1a</span>, <span class="code-inline">aaa</span>, <span class="code-inline">111</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 6</strong>.</div>
+        </section>
+
+        <!-- GRUPPE 6 -->
+        <section class="group-card" data-group="g6">
+          <div class="group-card-head">
+            <h3 class="group-title">Gruppe 6: E-Mail-Syntax (vereinfacht)</h3>
+            <span class="group-pill">~7 Zustände</span>
+          </div>
+          <div class="spec-strip">Alphabet: $T = \{a, @, .\}$ &nbsp;(<span class="code-inline">a</span> = Buchstabe)</div>
+          <p>
+            Prüfe vereinfachte E-Mail-Adressen: Vor dem <span class="code-inline">@</span> steht mindestens ein <span class="code-inline">a</span> (ohne Punkt), danach folgt genau ein <span class="code-inline">@</span>, dann mindestens ein <span class="code-inline">a</span> (Domain), genau ein Punkt <span class="code-inline">.</span> und wieder mindestens ein <span class="code-inline">a</span> (Endung).
+          </p>
+          <div class="example-row">
+            <div class="ex-box ex-ok"><strong>Akzeptiert:</strong> <span class="code-inline">a@a.a</span>, <span class="code-inline">aa@aaa.aa</span></div>
+            <div class="ex-box ex-no"><strong>Abgelehnt:</strong> <span class="code-inline">@a.a</span>, <span class="code-inline">a@.a</span>, <span class="code-inline">a@a.</span>, <span class="code-inline">a.a@a.a</span></div>
+          </div>
+          <div class="bounty-note"><strong>Bug-Bounty-Partner:</strong> Ihr testet anschließend den Entwurf von <strong>Gruppe 5</strong>.</div>
+        </section>
+
+      </div>
+    </article>
+
+  </main>
+
+  <script>
+    function filterGroup(target, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const grid = document.getElementById('group-grid');
+      const cards = grid.querySelectorAll('.group-card');
+      if (target === 'all') {
+        grid.classList.remove('single-focus');
+        cards.forEach(c => { c.style.display = 'flex'; });
+      } else {
+        grid.classList.add('single-focus');
+        cards.forEach(c => {
+          c.style.display = c.getAttribute('data-group') === target ? 'flex' : 'none';
+        });
+      }
+    }
+  </script>
+</body>
+</html>
