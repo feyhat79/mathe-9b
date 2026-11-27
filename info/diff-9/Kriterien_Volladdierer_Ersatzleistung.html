@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ersatzleistung: Volladdierer – Ablauf &amp; Bewertungskriterien | Informatik Diff-9</title>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8.5mm 12mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827;
+      line-height: 1.28;
+      font-size: 9.5pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Bildschirm-Toolbar (wird nicht gedruckt) */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toolbar-btn-nav {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+    .toolbar-btn-nav:hover { background: rgba(255,255,255,0.2); color: #ffffff; }
+    .toolbar-title { font-size: 0.95rem; font-weight: 700; }
+    .toolbar-actions { display: flex; align-items: center; gap: 8px; }
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-print { background: #2563eb; color: #ffffff; }
+    .btn-print:hover { background: #1d4ed8; }
+    .btn-pdf { background: #047857; color: #ffffff; }
+    .btn-pdf:hover { background: #065f46; }
+
+    /* DIN-A4 Blatt */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 18px auto 32px auto;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 8.5mm 12mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .no-print { display: none !important; }
+      .sheet-wrapper { margin: 0; max-width: none; }
+      .page {
+        width: auto;
+        min-height: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* Dokument-Header (Füller-Königsblau) */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 5px;
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-meta {
+      font-size: 8pt;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.18;
+      margin-top: 2px;
+    }
+    .badge-sheet {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1.5px solid #bfdbfe;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Abschnittsüberschriften */
+    .section-title {
+      font-size: 11.2pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 5px 0 4px 0;
+      border-bottom: 1.5px solid #dbeafe;
+      padding-bottom: 2px;
+    }
+    .section-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .intro-box {
+      border: 1px solid #bfdbfe;
+      background: #f8fbff;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 10pt;
+      margin-bottom: 6px;
+    }
+
+    /* 4-Schritte-Ablauf */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 7px;
+    }
+    .step-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 8px;
+      background: #ffffff;
+    }
+    .step-head {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .step-num {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border: 1px solid #bfdbfe;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-text {
+      font-size: 8.8pt;
+      color: #111827;
+      line-height: 1.3;
+    }
+
+    /* Kriterien-Tabelle */
+    .rubric-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin-bottom: 5px;
+    }
+    .rubric-table th {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 4px 7px;
+      border: 1px solid #1e3a8a;
+      text-align: left;
+      font-size: 9.2pt;
+    }
+    .rubric-table th.col-pts,
+    .rubric-table td.col-pts {
+      text-align: center;
+      width: 68px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .rubric-table tr.part-row td {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 3.5px 7px;
+      border: 1px solid #94a3b8;
+      font-size: 9.3pt;
+    }
+    .rubric-table td {
+      padding: 2.8px 7px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+      line-height: 1.24;
+    }
+    .crit-name {
+      font-weight: 700;
+      color: #111827;
+      width: 165px;
+    }
+    .rubric-table tr.total-row td {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: #1e3a8a;
+      border: 1.5px solid #1e3a8a;
+      padding: 5px 8px;
+    }
+
+    /* Günstig vs. Ungünstig Box */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .compare-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 9px;
+      background: #f8fafc;
+      font-size: 9.2pt;
+    }
+    .compare-card.good {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+    .compare-card.bad {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+    .compare-title {
+      font-weight: 700;
+      margin-bottom: 3px;
+      font-size: 9.5pt;
+    }
+    .compare-card.good .compare-title { color: #15803d; }
+    .compare-card.bad .compare-title { color: #b91c1c; }
+
+    ul.compact-list {
+      list-style: none;
+      line-height: 1.32;
+    }
+    ul.compact-list li {
+      padding-left: 11px;
+      position: relative;
+      margin-bottom: 2px;
+    }
+    ul.compact-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    /* Roter Merksatz-Kasten (GEMINI.md Standard: Text zwingend schwarz) */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 5px;
+      background: #ffffff;
+      padding: 7px 10px;
+      margin-top: 8px;
+      position: relative;
+    }
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+    .merke-content {
+      color: #111827;
+      font-size: 9.4pt;
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BILDSCHIRM-TOOLBAR -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-btn-nav">← Übersicht Diff-9</a>
+      <a href="Vorlage_Steckbrett_Bauplan.html" class="toolbar-btn-nav">Bauplan-Vorlage</a>
+      <a href="Infoblatt_Taster_und_LEDs.html" class="toolbar-btn-nav">Aufbauhilfe: Taster &amp; LEDs</a>
+      <span class="toolbar-title">Ersatzleistung: Bewertungskriterien</span>
+    </div>
+    <div class="toolbar-actions">
+      <button type="button" class="btn-action btn-print" onclick="window.print()">Seite drucken</button>
+      <a href="Kriterien_Volladdierer_Ersatzleistung.pdf" download class="btn-action btn-pdf">PDF herunterladen</a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+    <section class="page">
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Informatik Differenzierung 9 • Ersatzleistung Hardware-Praxis</div>
+          <h1 class="doc-title">Projekt „Volladdierer“: Ablauf &amp; Bewertungskriterien</h1>
+        </div>
+        <span class="badge-sheet">2er-Teams • 100 Punkte</span>
+      </header>
+
+      <div class="intro-box">
+        <strong>Aufgabe:</strong> Plant in <strong>2er-Teams</strong> einen vollständigen 1-Bit-Volladdierer für drei Eingänge (<em>A, B, C</em>) und zwei Ausgänge (Summe <em>S</em> und Übertrag <em>C</em><sub>out</sub>) auf dem Steckbrett und baut diesen anschließend funktionsfähig auf. Diese Projektarbeit ersetzt eine schriftliche Kursarbeit.
+      </div>
+
+      <!-- 1. ABLAUF -->
+      <div class="section-title">
+        <span class="section-num">1</span>
+        <span>Projektablauf in 4 Schritten</span>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-head"><span class="step-num">1</span><span>Bauplan entwerfen</span></div>
+          <div class="step-text">Bauteile sinnvoll anordnen und alle Kabel sowie Widerstände sauber in die Steckbrett-Vorlage einzeichnen.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-head"><span class="step-num">2</span><span>Plan verifizieren</span></div>
+          <div class="step-text">Fertigen Bauplan der Lehrkraft vorlegen. <strong>Erst nach schriftlicher Freigabe</strong> werden die Bauteile ausgegeben.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-head"><span class="step-num">3</span><span>Schaltung bauen</span></div>
+          <div class="step-text">Volladdierer nach eigenem Plan auf dem Steckbrett aufbauen. Sinnvolle Planänderungen im Plan nachführen.</div>
+        </div>
+        <div class="step-card">
+          <div class="step-head"><span class="step-num">4</span><span>Inspektion &amp; Abgabe</span></div>
+          <div class="step-text">Abgabe von <strong>Bauplan</strong> und <strong>fertigem Steckbrett</strong>. Gemeinsame Funktionsprüfung aller 8 Schaltzustände.</div>
+        </div>
+      </div>
+
+      <!-- 2. BEWERTUNGSKRITERIEN -->
+      <div class="section-title">
+        <span class="section-num">2</span>
+        <span>Bewertungsraster (Gesamt: 100 Punkte)</span>
+      </div>
+
+      <table class="rubric-table">
+        <thead>
+          <tr>
+            <th>Kriterium</th>
+            <th>Worauf genau geachtet wird</th>
+            <th class="col-pts">Punkte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="part-row">
+            <td colspan="2">Teil 1: Entwurf &amp; Bauplan auf der Steckbrett-Vorlage (Abgabe 1)</td>
+            <td class="col-pts">30 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Günstige Anordnung &amp; Platzplanung</td>
+            <td>Übersichtliche Gliederung (Eingänge, ICs, Ausgänge getrennt), logische Chip-Reihenfolge (z. B. <code>74LS86</code> → <code>74LS08</code> → <code>74LS32</code>), kurze Wege, genügend Platz für Kabel und Widerstände.</td>
+            <td class="col-pts">8 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Vollständigkeit, Ausrichtung &amp; Polung</td>
+            <td>Alle 3 ICs über dem Mittelgraben (Kerbe links), 3 Taster (<em>A, B, C</em>) am Minuspol (<code>−</code>) &amp; 3 Kontroll-LEDs, 2 Ergebnis-LEDs (<em>C</em><sub>out</sub>, <em>S</em>) gegen Plus (<code>+</code>) sowie Vorwiderstände an allen 5 LEDs eingezeichnet.</td>
+            <td class="col-pts">8 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Stromversorgung &amp; Verdrahtung</td>
+            <td>Batterie-Anschluss (<code>+</code>/<code>−</code>) an Schienen, Pin 14 (<code>+</code>) und Pin 7 (<code>−</code>) an jedem IC, notwendige Schienenbrücken sowie fehlerfreie Pin-Verbindungen zwischen den Gattern.</td>
+            <td class="col-pts">10 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Übersichtlichkeit &amp; Revision</td>
+            <td>Saubere Zeichnung, klare Farbwahl (<code>+</code>, <code>−</code>, Signale); eventuelle Änderungen während des Bauens sauber im Plan nachgetragen.</td>
+            <td class="col-pts">4 P.</td>
+          </tr>
+
+          <tr class="part-row">
+            <td colspan="2">Teil 2: Gebauter Volladdierer auf dem Steckbrett (Abgabe 2 – Inspektion)</td>
+            <td class="col-pts">70 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Funktionalität (Alle 8 Zustände)</td>
+            <td>
+              <strong>20 P.:</strong> Summe (<em>S</em>) schaltet in allen 8 Zeilen der Wahrheitstabelle (000 bis 111) korrekt.<br>
+              <strong>20 P.:</strong> Übertrag (<em>C</em><sub>out</sub>) schaltet in allen 8 Zeilen korrekt.<br>
+              <strong>5 P.:</strong> Eindeutiges, flackerfreies Leuchten (inkl. Kontroll-LEDs <em>A, B, C</em>) &amp; klare Zuordnung.
+            </td>
+            <td class="col-pts">45 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Stabilität &amp; Betriebssicherheit</td>
+            <td>
+              <strong>5 P.:</strong> Fester mechanischer Sitz aller ICs, Taster, LEDs, Widerstände und Kabel.<br>
+              <strong>5 P.:</strong> Elektrische Sicherheit (Vorwiderstände an allen 5 LEDs, keine Kurzschlussgefahr durch blanke Beinchen).<br>
+              <strong>5 P.:</strong> Zuverlässiger Kontakt beim Tasten und Bewegen (keine Wackelkontakte).
+            </td>
+            <td class="col-pts">15 P.</td>
+          </tr>
+          <tr>
+            <td class="crit-name">Ästhetik &amp; praktische Anordnung</td>
+            <td>
+              <strong>5 P.:</strong> Günstige Bauteil-Anordnung in der Umsetzung (kurze Leitungswege, Chip-Aufdrucke lesbar, LEDs sinnvoll als Dualzahl <em>C</em><sub>out</sub> | <em>S</em> nebeneinander).<br>
+              <strong>5 P.:</strong> Saubere Kabelführung ohne „Kabelsalat“ und mit konsequentem Farbkonzept.
+            </td>
+            <td class="col-pts">10 P.</td>
+          </tr>
+
+          <tr class="total-row">
+            <td colspan="2">Gesamtpunktzahl (Teil 1 + Teil 2)</td>
+            <td class="col-pts">100 P.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 3. GÜNSTIGE VS. UNGÜNSTIGE ANORDNUNG -->
+      <div class="section-title">
+        <span class="section-num">3</span>
+        <span>Was bedeutet „günstige“ vs. „ungünstige“ Bauteil-Anordnung?</span>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-card good">
+          <div class="compare-title">Günstige Anordnung (hohe Punktzahl)</div>
+          <ul class="compact-list">
+            <li>Eingänge (Taster <em>A, B, C</em>), ICs und Ausgänge (LEDs) liegen geordnet nach dem Signalfluss (EVA-Prinzip).</li>
+            <li>Zwischen den ICs bleiben 1–2 Spalten frei – Brücken und Pins bleiben gut erreichbar.</li>
+            <li>Ausgangs-LEDs stehen übersichtlich nebeneinander (links <em>C</em><sub>out</sub> = Zweierstelle, rechts <em>S</em> = Einerstelle).</li>
+          </ul>
+        </div>
+        <div class="compare-card bad">
+          <div class="compare-title">Ungünstige Anordnung (Punktabzug)</div>
+          <ul class="compact-list">
+            <li>ICs werden ohne Zwischenraum aneinandergedrängt oder in unlogischer Reihenfolge gesteckt.</li>
+            <li>Taster sitzen mitten zwischen den Chips; Kabel kreuzen sich unnötig quer über die ICs.</li>
+            <li>LEDs sind verdeckt oder weit voneinander getrennt, sodass das Ergebnis schwer ablesbar ist.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MERKE -->
+      <div class="merke-box">
+        <span class="merke-tag">WICHTIG</span>
+        <div class="merke-content">
+          <strong>Team-Regel &amp; Verifizierung:</strong> Ohne von der Lehrkraft verifizierten Bauplan darf keine Batterie angeschlossen werden. Beide Teammitglieder tragen gemeinsam Verantwortung für Bauplan und Schaltung und müssen bei der Inspektion erklären können, wo Eingänge, Gatter und Ausgänge liegen.
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>

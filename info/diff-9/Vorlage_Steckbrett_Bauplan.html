@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bauplan-Vorlage: Steckbrett mit Stromquelle | Informatik Diff-9</title>
+
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 8mm 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #e2e8f0;
+      color: #111827;
+      line-height: 1.3;
+      font-size: 10pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Bildschirm-Toolbar (wird nicht gedruckt) */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 9px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toolbar-btn-nav {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+    .toolbar-btn-nav:hover { background: rgba(255,255,255,0.2); color: #ffffff; }
+    .toolbar-title { font-size: 0.95rem; font-weight: 700; }
+    .toolbar-actions { display: flex; align-items: center; gap: 8px; }
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-print { background: #2563eb; color: #ffffff; }
+    .btn-print:hover { background: #1d4ed8; }
+    .btn-pdf { background: #047857; color: #ffffff; }
+    .btn-pdf:hover { background: #065f46; }
+
+    /* DIN-A4 Querformat Blatt */
+    .sheet-wrapper {
+      max-width: 297mm;
+      margin: 16px auto 30px auto;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 297mm;
+      min-height: 210mm;
+      padding: 8mm 10mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .no-print { display: none !important; }
+      .sheet-wrapper { margin: 0; max-width: none; }
+      .page {
+        width: auto;
+        min-height: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* Kopfzeile */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 5px;
+      margin-bottom: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+    }
+    .doc-meta {
+      font-size: 8pt;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.15;
+    }
+    .team-fields {
+      display: flex;
+      gap: 14px;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #111827;
+      align-items: flex-end;
+    }
+    .fill-line {
+      display: inline-block;
+      border-bottom: 1.5px solid #475569;
+      min-width: 120px;
+      height: 15px;
+    }
+    .fill-line.short { min-width: 65px; }
+
+    /* Zeichenbereich (Batterie links + Steckbrett rechts) */
+    .workspace-wrap {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 8px;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .workspace-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Untere Info- & Freigabe-Boxen (keine Fußzeile!) */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1.15fr 0.9fr;
+      gap: 8px;
+    }
+    .info-card {
+      border: 1.2px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 6px 9px;
+      background: #f8fafc;
+      font-size: 8.8pt;
+    }
+    .info-card.verify {
+      border: 1.8px solid #1e3a8a;
+      background: #f8fbff;
+    }
+    .card-head {
+      font-size: 9.2pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+    }
+    .check-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 8px;
+      line-height: 1.35;
+    }
+    .chk-box {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: 1.3px solid #1e3a8a;
+      border-radius: 2px;
+      background: #ffffff;
+      vertical-align: -1px;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BILDSCHIRM-TOOLBAR -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-btn-nav">← Übersicht Diff-9</a>
+      <a href="Kriterien_Volladdierer_Ersatzleistung.html" class="toolbar-btn-nav">Bewertungskriterien</a>
+      <a href="Infoblatt_Taster_und_LEDs.html" class="toolbar-btn-nav">Aufbauhilfe: Taster &amp; LEDs</a>
+      <span class="toolbar-title">Bauplan-Vorlage (DIN A4 Querformat)</span>
+    </div>
+    <div class="toolbar-actions">
+      <button type="button" class="btn-action btn-print" onclick="window.print()">Seite drucken</button>
+      <a href="Vorlage_Steckbrett_Bauplan.pdf" download class="btn-action btn-pdf">PDF herunterladen</a>
+    </div>
+  </div>
+
+  <div class="sheet-wrapper">
+    <section class="page">
+      <!-- KOPFZEILE -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-meta">Informatik Differenzierung 9 • Ersatzleistung Volladdierer (Teil 1: Planung)</div>
+          <h1 class="doc-title">Steckbrett-Bauplan (Eigener Entwurf)</h1>
+        </div>
+        <div class="team-fields">
+          <div>Team: <span class="fill-line" style="min-width:170px;"></span></div>
+          <div>Kurs: <span class="fill-line short"></span></div>
+          <div>Datum: <span class="fill-line short" style="min-width:85px;"></span></div>
+        </div>
+      </header>
+
+      <!-- HAUPTZEICHNUNG: BATTERIE (DRAUFSICHT) LINKS + SAUBERES 63-SPALTEN-STECKBRETT -->
+      <div class="workspace-wrap">
+        <svg id="svg-plan-template" viewBox="0 0 1200 490" xmlns="http://www.w3.org/2000/svg" aria-label="Leere 63-Spalten-Steckbrett-Vorlage mit Batterie links">
+          <!-- ===== LINKE SEITE: ZEICHEN-TIPP OBEN + KOMPAKTE BATTERIE AM LINKEN UNTEREN RAND ===== -->
+          <g id="battery-top-view">
+            <!-- Kompakter Zeichen-Tipp oben links -->
+            <rect x="24" y="22" width="118" height="106" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+            <text x="83" y="42" text-anchor="middle" font-family="Calibri, sans-serif" font-size="10.5" font-weight="700" fill="#1e3a8a">Zeichen-Tipp:</text>
+            <text x="83" y="60" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" fill="#334155">1. Batterie an</text>
+            <text x="83" y="73" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" fill="#334155">+ / − Schienen</text>
+            <text x="83" y="91" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" fill="#334155">2. Bauteile zuerst</text>
+            <text x="83" y="104" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" fill="#334155">mit Bleistift</text>
+            <text x="83" y="120" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" fill="#334155">3. Kabel farbig</text>
+
+            <!-- Beschriftung direkt über der Batterie -->
+            <text x="83" y="246" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12" font-weight="700" fill="#1e3a8a">STROMQUELLE</text>
+            <text x="83" y="261" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.8" fill="#475569">(Batterie-Draufsicht)</text>
+
+            <!-- Batterie-Körper am linken unteren Rand (bündig zur Steckbrett-Unterkante y=470) -->
+            <rect x="28" y="272" width="110" height="198" rx="9" fill="#f8fafc" stroke="#1e293b" stroke-width="2"/>
+            <rect x="35" y="279" width="96" height="184" rx="5" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1"/>
+
+            <!-- PLUS-POL oben (rot, Kontaktfahne rechts) -->
+            <rect x="52" y="290" width="62" height="36" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+            <circle cx="83" cy="308" r="11.5" fill="#ffffff" stroke="#dc2626" stroke-width="2"/>
+            <text x="83" y="313.5" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#dc2626">+</text>
+            <rect x="114" y="302" width="40" height="12" rx="2" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+            <circle cx="148" cy="308" r="3" fill="#dc2626"/>
+            <text x="83" y="340" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" font-weight="700" fill="#dc2626">Pluspol (+)</text>
+
+            <!-- Beschriftung mittig -->
+            <text x="83" y="367" text-anchor="middle" font-family="Calibri, sans-serif" font-size="12.5" font-weight="700" fill="#1e293b">BATTERIE</text>
+            <text x="83" y="381" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9" fill="#475569">Zuleitungen selbst</text>
+            <text x="83" y="392" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9" fill="#475569">einzeichnen</text>
+
+            <!-- MINUS-POL unten (blau, Kontaktfahne rechts) -->
+            <text x="83" y="410" text-anchor="middle" font-family="Calibri, sans-serif" font-size="9.5" font-weight="700" fill="#2563eb">Minuspol (−)</text>
+            <rect x="52" y="416" width="62" height="36" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+            <circle cx="83" cy="434" r="11.5" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+            <text x="83" y="439.5" text-anchor="middle" font-family="Calibri, sans-serif" font-size="19" font-weight="700" fill="#2563eb">−</text>
+            <rect x="114" y="428" width="40" height="12" rx="2" fill="#dbeafe" stroke="#2563eb" stroke-width="1.4"/>
+            <circle cx="148" cy="434" r="3" fill="#2563eb"/>
+          </g>
+
+          <!-- ===== RECHTE SEITE: SAUBERES 63-SPALTEN-STECKBRETT ===== -->
+          <g id="breadboard-group"></g>
+        </svg>
+      </div>
+
+      <!-- UNTERE CHECKLISTEN & FREIGABE-FELD -->
+      <div class="bottom-grid">
+        <div class="info-card">
+          <div class="card-head">Pflicht-Check vor der Verifizierung (Selbstkontrolle)</div>
+          <div class="check-row">
+            <div><span class="chk-box"></span>3 ICs (<code>74LS86</code>, <code>08</code>, <code>32</code>) über Graben</div>
+            <div><span class="chk-box"></span>Einkerbung aller ICs nach <strong>LINKS</strong></div>
+            <div><span class="chk-box"></span>Pin 14 (<code>+</code>) &amp; Pin 7 (<code>−</code>) an jedem IC</div>
+            <div><span class="chk-box"></span>3 Taster (<em>A, B, C</em>) an (<code>−</code>) + 3 Kontroll-LEDs</div>
+            <div><span class="chk-box"></span>2 Ergebnis-LEDs (<em>C</em><sub>out</sub>, <em>S</em>) gegen (<code>+</code>)</div>
+            <div><span class="chk-box"></span>Vorwiderstände an <strong>allen 5 LEDs</strong></div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="card-head">Legende &amp; eigene Notizen (z. B. Kabelfarben)</div>
+          <div style="line-height:1.45; color:#334155;">
+            <div><strong>Farb-Tipp:</strong> Rot = <code>+</code> (Plus) &nbsp;|&nbsp; Blau/Schwarz = <code>−</code> (Minus) &nbsp;|&nbsp; Bunt = Signale</div>
+            <div style="margin-top:5px; border-bottom:1px dotted #94a3b8; height:15px;"></div>
+            <div style="margin-top:4px; border-bottom:1px dotted #94a3b8; height:15px;"></div>
+          </div>
+        </div>
+
+        <div class="info-card verify">
+          <div class="card-head">Plan-Verifizierung (Lehrkraft)</div>
+          <div style="line-height:1.5;">
+            <div><span class="chk-box"></span><strong>Verifiziert – Freigabe zum Bauen</strong></div>
+            <div><span class="chk-box"></span>Überarbeiten (Hinweis beachten)</div>
+            <div style="margin-top:6px;">Datum / Kürzel: ______________________</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Generiert das leere 63-Spalten-Steckbrett (830er-Standardbrett) sauber und druckoptimiert
+    (function renderCleanBreadboard() {
+      const g = document.getElementById('breadboard-group');
+      const cols = 63;
+      const startX = 212;
+      const stepX = 15.1;
+      const endX = startX + (cols - 1) * stepX;
+
+      const yRailTopNeg = 52;
+      const yRailTopPos = 74;
+
+      const yTop = [118, 142, 166, 190, 214]; // j, i, h, g, f
+      const yBot = [276, 300, 324, 348, 372]; // e, d, c, b, a
+
+      const yRailBotNeg = 416;
+      const yRailBotPos = 438;
+
+      const out = [];
+
+      // Äußeres Steckbrett-Gehäuse
+      out.push(`<rect x="172" y="20" width="1014" height="450" rx="12" fill="#ffffff" stroke="#475569" stroke-width="2"/>`);
+
+      // Stromschienen-Linien oben
+      out.push(`<line x1="${startX - 8}" y1="${yRailTopNeg - 12}" x2="${endX + 8}" y2="${yRailTopNeg - 12}" stroke="#2563eb" stroke-width="2"/>`);
+      out.push(`<line x1="${startX - 8}" y1="${yRailTopPos + 12}" x2="${endX + 8}" y2="${yRailTopPos + 12}" stroke="#dc2626" stroke-width="2"/>`);
+      out.push(`<text x="190" y="${yRailTopNeg + 5}" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#2563eb">−</text>`);
+      out.push(`<text x="190" y="${yRailTopPos + 5}" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#dc2626">+</text>`);
+
+      // Stromschienen-Linien unten
+      out.push(`<line x1="${startX - 8}" y1="${yRailBotNeg - 12}" x2="${endX + 8}" y2="${yRailBotNeg - 12}" stroke="#2563eb" stroke-width="2"/>`);
+      out.push(`<line x1="${startX - 8}" y1="${yRailBotPos + 12}" x2="${endX + 8}" y2="${yRailBotPos + 12}" stroke="#dc2626" stroke-width="2"/>`);
+      out.push(`<text x="190" y="${yRailBotNeg + 5}" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#2563eb">−</text>`);
+      out.push(`<text x="190" y="${yRailBotPos + 5}" text-anchor="middle" font-family="Calibri, sans-serif" font-size="16" font-weight="700" fill="#dc2626">+</text>`);
+
+      // Mittelgraben
+      out.push(`<rect x="${startX - 10}" y="233" width="${(cols - 1) * stepX + 20}" height="24" rx="4" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="5,4" stroke-width="1.2"/>`);
+      out.push(`<text x="${(startX + endX) / 2}" y="249" text-anchor="middle" font-family="Calibri, sans-serif" font-size="11" font-weight="700" fill="#64748b">MITTELGRABEN (keine Verbindung zwischen f und e)</text>`);
+
+      // Reihen-Buchstaben links und rechts
+      const topLabels = ['j', 'i', 'h', 'g', 'f'];
+      const botLabels = ['e', 'd', 'c', 'b', 'a'];
+      topLabels.forEach((lbl, idx) => {
+        out.push(`<text x="190" y="${yTop[idx] + 4}" text-anchor="middle" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#475569">${lbl}</text>`);
+        out.push(`<text x="${endX + 18}" y="${yTop[idx] + 4}" text-anchor="middle" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#475569">${lbl}</text>`);
+      });
+      botLabels.forEach((lbl, idx) => {
+        out.push(`<text x="190" y="${yBot[idx] + 4}" text-anchor="middle" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#475569">${lbl}</text>`);
+        out.push(`<text x="${endX + 18}" y="${yBot[idx] + 4}" text-anchor="middle" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#475569">${lbl}</text>`);
+      });
+
+      // Stromschienen-Löcher: 10 x 5er-Gruppen = 50 Löcher pro Schiene (Standard 830er-Steckbrett)
+      for (let grp = 0; grp < 10; grp++) {
+        const halfGap = grp >= 5 ? 12 : 0;
+        const gx = startX + 14 + grp * (4 * stepX + 31.5) + halfGap;
+        for (let k = 0; k < 5; k++) {
+          const rx = gx + k * stepX;
+          [yRailTopNeg, yRailTopPos, yRailBotNeg, yRailBotPos].forEach(y => {
+            out.push(`<rect x="${rx - 3.4}" y="${y - 3.4}" width="6.8" height="6.8" rx="1.3" fill="#ffffff" stroke="#475569" stroke-width="1.2"/>`);
+          });
+        }
+      }
+
+      // Hauptfeld: 63 Spalten (a-e und f-j)
+      for (let c = 1; c <= cols; c++) {
+        const x = startX + (c - 1) * stepX;
+
+        // Dezenter Spaltenrahmen oben und unten
+        out.push(`<rect x="${x - 5.4}" y="${yTop[0] - 7}" width="10.8" height="${yTop[4] - yTop[0] + 14}" rx="3" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.9"/>`);
+        out.push(`<rect x="${x - 5.4}" y="${yBot[0] - 7}" width="10.8" height="${yBot[4] - yBot[0] + 14}" rx="3" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.9"/>`);
+
+        // Spaltennummern: 1, alle 5er sowie 63
+        if (c === 1 || c % 5 === 0 || c === cols) {
+          out.push(`<text x="${x}" y="102" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#1e3a8a">${c}</text>`);
+          out.push(`<text x="${x}" y="394" text-anchor="middle" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#1e3a8a">${c}</text>`);
+        }
+
+        // Hauptfeld-Löcher
+        [...yTop, ...yBot].forEach(y => {
+          out.push(`<rect x="${x - 3.4}" y="${y - 3.4}" width="6.8" height="6.8" rx="1.3" fill="#ffffff" stroke="#334155" stroke-width="1.2"/>`);
+        });
+      }
+
+      g.innerHTML = out.join('');
+    })();
+  </script>
+</body>
+</html>

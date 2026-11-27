@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Übungsblatt: Binomische Formeln sicher anwenden | Mathe 9b</title>
+
+  <!-- KaTeX für mathematische Formeln -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    function triggerKaTeX() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      } else {
+        setTimeout(triggerKaTeX, 30);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', triggerKaTeX);
+    } else {
+      triggerKaTeX();
+    }
+    window.addEventListener('load', triggerKaTeX);
+  </script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 9mm 13mm 9mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      background: #f1f5f9;
+      color: #111827;
+      line-height: 1.38;
+      font-size: 10.5pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================================
+       TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1f2937;
+      color: #ffffff;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-btn-nav {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+    }
+    .toolbar-btn-nav:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-teacher-active {
+      display: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #f87171;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    body.teacher-mode .badge-teacher-active {
+      display: inline-block;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-toggle-teacher {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-toggle-teacher:hover {
+      background: #e2e8f0;
+    }
+    body.teacher-mode .btn-toggle-teacher {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #b91c1c;
+    }
+
+    .btn-print {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-download-pdf {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #047857;
+    }
+
+    /* ========================================================
+       DIN-A4-BLATT (EXAKT 1 SEITE)
+       ======================================================== */
+    .sheet-wrapper {
+      max-width: 210mm;
+      margin: 1.5rem auto 3rem auto;
+    }
+
+    .page {
+      background: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 13mm;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ========================================================
+       KOPFBEREICH & METADATEN
+       ======================================================== */
+    .doc-header {
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .doc-course {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 2px;
+    }
+
+    .doc-title {
+      font-size: 14.5pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      line-height: 1.2;
+    }
+
+    .doc-subtitle {
+      font-size: 9.5pt;
+      color: #475569;
+      margin-top: 2px;
+    }
+
+    .doc-meta-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .badge-sheet {
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 8pt;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-meta-name {
+      font-size: 8.5pt;
+      color: #475569;
+      white-space: nowrap;
+    }
+
+    /* ========================================================
+       ERKLÄR- & MERKE-KASTEN (ROTER RAHMEN, SCHWARZER TEXT)
+       ======================================================== */
+    .merke-box {
+      border: 2.5px solid #dc2626;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 11px 14px 10px 14px;
+      margin-top: 4px;
+      position: relative;
+    }
+
+    .merke-tag {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 8pt;
+      font-weight: 800;
+      padding: 1px 9px;
+      border-radius: 3px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .merke-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 122px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .formula-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 10pt;
+      color: #111827;
+    }
+
+    .formula-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .formula-label {
+      font-weight: 700;
+      color: #1e3a8a;
+      min-width: 68px;
+      font-size: 9.2pt;
+    }
+
+    .explain-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-size: 9.4pt;
+      color: #111827;
+      line-height: 1.42;
+    }
+
+    .explain-title {
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 2px;
+      font-size: 9.5pt;
+    }
+
+    .warn-inline {
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 9pt;
+      color: #111827;
+    }
+
+    .warn-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 800;
+      font-size: 7.8pt;
+      padding: 0 5px;
+      border-radius: 3px;
+      margin-right: 4px;
+      text-transform: uppercase;
+    }
+
+    .area-sketch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sketch-caption {
+      font-size: 7.8pt;
+      color: #475569;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    /* ========================================================
+       AUFGABEN-BEREICHE
+       ======================================================== */
+    .task-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .task-title {
+      font-size: 11.5pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-num {
+      width: 21px;
+      height: 21px;
+      background: #1e3a8a;
+      color: #ffffff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9pt;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .task-format-tag {
+      font-size: 8pt;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 1px 8px;
+      border-radius: 4px;
+    }
+
+    .task-desc {
+      font-size: 10pt;
+      color: #111827;
+    }
+
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 10pt;
+      line-height: 1.95;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.8pt;
+      background: #ffffff;
+    }
+
+    .calc-table th, .calc-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 9px;
+      vertical-align: middle;
+      text-align: left;
+    }
+
+    .calc-table th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      font-size: 9.2pt;
+    }
+
+    /* ========================================================
+       SCHÜLER-LÜCKEN & LEHRER-MUSTERLÖSUNG
+       ======================================================== */
+    .blank-line {
+      display: inline-block;
+      border-bottom: 1.5px dotted #64748b;
+      min-width: 34px;
+      height: 1.15em;
+      vertical-align: bottom;
+      margin: 0 2px;
+    }
+
+    .blank-wide {
+      min-width: 115px;
+    }
+
+    .blank-medium {
+      min-width: 68px;
+    }
+
+    .sol-val {
+      display: none;
+      color: #dc2626 !important;
+      font-weight: 700;
+      padding: 0 2px;
+    }
+
+    body.teacher-mode .sol-val {
+      display: inline !important;
+    }
+
+    body.teacher-mode .blank-line,
+    body.teacher-mode .student-only {
+      display: none !important;
+    }
+
+    /* ========================================================
+       DRUCK-STYLES (EXAKT 1 SEITE DIN A4)
+       ======================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .sheet-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .page {
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        gap: 10px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP SCREEN TOOLBAR (BEIM DRUCKEN AUSGEBLENDET)
+       ======================================================== -->
+  <div class="screen-toolbar no-print">
+    <div class="toolbar-left">
+      <a href="index.html" class="toolbar-btn-nav">← Portal-Übersicht</a>
+      <span class="toolbar-title">
+        Übungsblatt: Binomische Formeln sicher anwenden
+      </span>
+      <span class="badge-teacher-active">Musterlösung aktiv</span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn-action btn-toggle-teacher" id="btnToggleTeacher" onclick="toggleTeacherMode()">
+        Musterlösung einblenden
+      </button>
+      <button class="btn-action btn-print" onclick="window.print()">
+        Drucken / Als PDF speichern
+      </button>
+      <a href="Uebungsblatt_Binomische_Formeln_Mathe_9b.pdf" download class="btn-action btn-download-pdf">
+        Schüler-PDF
+      </a>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       ÜBUNGSBLATT (MAXIMAL 1 DIN-A4-SEITE)
+       ======================================================== -->
+  <div class="sheet-wrapper">
+    <div class="page">
+
+      <!-- KOPFZEILE -->
+      <header class="doc-header">
+        <div>
+          <div class="doc-course">Mathematik 9b • Training zu Termen &amp; Quadratischen Funktionen</div>
+          <h1 class="doc-title">Binomische Formeln – Verstehen &amp; sicher anwenden</h1>
+          <p class="doc-subtitle">Vom sicheren Ausmultiplizieren bis zur Fehlerkontrolle und Rückwärts-Anwendung</p>
+        </div>
+        <div class="doc-meta-right">
+          <span class="badge-sheet">Übungsblatt</span>
+          <span class="doc-meta-name">Name: _____________________ &nbsp; Datum: __________</span>
+        </div>
+      </header>
+
+      <!-- MERKE- & ERKLÄRBOX -->
+      <div class="merke-box">
+        <div class="merke-tag">Merke &amp; Erklärung</div>
+        <div class="merke-grid">
+          <!-- Die 3 Formeln -->
+          <div class="formula-list">
+            <div class="formula-row">
+              <span class="formula-label">1. Formel:</span>
+              <span>$(a + b)^2 = a^2 + 2ab + b^2$</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-label">2. Formel:</span>
+              <span>$(a - b)^2 = a^2 - 2ab + b^2$</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-label">3. Formel:</span>
+              <span>$(a + b)(a - b) = a^2 - b^2$</span>
+            </div>
+          </div>
+
+          <!-- Beispiel & Typische Falle -->
+          <div class="explain-box">
+            <div class="explain-title">So rechnest du in 3 Schritten:</div>
+            Beispiel $(x + 3)^2$ mit $a = x$, $b = 3$:<br>
+            $= x^2 + 2 \cdot x \cdot 3 + 3^2$<br>
+            $= x^2 + 6x + 9$
+            <div class="warn-inline">
+              <span class="warn-badge">Achtung</span> $(x+3)^2 \neq x^2 + 9$ – das Mittelstück $2ab$ nicht vergessen!
+            </div>
+          </div>
+
+          <!-- Flächen-Skizze im Tafelbild-Stil -->
+          <div class="area-sketch">
+            <svg viewBox="0 0 110 100" width="110" height="100" style="display: block;">
+              <!-- Quadrat (a+b)^2 -->
+              <rect x="18" y="8" width="54" height="54" fill="#eff6ff" stroke="#1e3a8a" stroke-width="1.2"/>
+              <rect x="72" y="8" width="26" height="54" fill="#fef3c7" stroke="#1e3a8a" stroke-width="1.2"/>
+              <rect x="18" y="62" width="54" height="26" fill="#fef3c7" stroke="#1e3a8a" stroke-width="1.2"/>
+              <rect x="72" y="62" width="26" height="26" fill="#dbeafe" stroke="#1e3a8a" stroke-width="1.2"/>
+
+              <!-- Flächenbeschriftung -->
+              <text x="45" y="39" font-size="10" font-weight="700" fill="#1e3a8a" text-anchor="middle">a²</text>
+              <text x="85" y="39" font-size="9" font-weight="700" fill="#92400e" text-anchor="middle">ab</text>
+              <text x="45" y="79" font-size="9" font-weight="700" fill="#92400e" text-anchor="middle">ab</text>
+              <text x="85" y="79" font-size="9" font-weight="700" fill="#1e3a8a" text-anchor="middle">b²</text>
+
+              <!-- Seitenlängen -->
+              <text x="45" y="97" font-size="8.5" font-weight="700" fill="#334155" text-anchor="middle">a</text>
+              <text x="85" y="97" font-size="8.5" font-weight="700" fill="#334155" text-anchor="middle">b</text>
+              <text x="10" y="38" font-size="8.5" font-weight="700" fill="#334155" text-anchor="middle">a</text>
+              <text x="10" y="78" font-size="8.5" font-weight="700" fill="#334155" text-anchor="middle">b</text>
+            </svg>
+            <div class="sketch-caption">Darum entsteht $2ab$!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUFGABE 1: LÜCKEN FÜLLEN (MIT HILFESTELLUNG) -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">1</span>
+            Schrittweise anwenden: Fülle die Lücken aus
+          </h2>
+          <span class="task-format-tag">Lückentext</span>
+        </div>
+        <div class="sub-card">
+          <div>
+            <strong>a)</strong> $(x + 4)^2 = x^2 + 2 \cdot x$ $\cdot$ <span class="blank-line"></span><span class="sol-val">$4$</span> $+$ <span class="student-only"><span class="blank-line" style="margin-right: 0;"></span><sup>2</sup></span><span class="sol-val">$4^2$</span> $=$ <span class="blank-line blank-wide"></span><span class="sol-val">$x^2 + 8x + 16$</span>
+          </div>
+          <div>
+            <strong>b)</strong> $(x - 5)^2 =$ <span class="blank-line"></span><span class="sol-val">$x^2$</span> $-$ $2$ $\cdot$ <span class="blank-line"></span><span class="sol-val">$x$</span> $\cdot$ <span class="blank-line"></span><span class="sol-val">$5$</span> $+$ <span class="student-only"><span class="blank-line" style="margin-right: 0;"></span><sup>2</sup></span><span class="sol-val">$5^2$</span> $=$ <span class="blank-line blank-wide"></span><span class="sol-val">$x^2 - 10x + 25$</span>
+          </div>
+          <div>
+            <strong>c)</strong> $(x + 6)(x - 6) =$ <span class="blank-line"></span><span class="sol-val">$x^2$</span> $-$ <span class="student-only"><span class="blank-line" style="margin-right: 0;"></span><sup>2</sup></span><span class="sol-val">$6^2$</span> $=$ <span class="blank-line blank-wide"></span><span class="sol-val">$x^2 - 36$</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 2: SELBSTSTÄNDIG AUSMULTIPLIZIEREN -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">2</span>
+            Ohne Zwischenhilfe: Löse die Klammern mithilfe der passenden Formel auf
+          </h2>
+          <span class="task-format-tag">Ausmultiplizieren</span>
+        </div>
+        <div class="grid-2">
+          <div class="sub-card">
+            <div><strong>a)</strong> $(x + 7)^2 =$ <span class="blank-line blank-wide"></span><span class="sol-val">$x^2 + 14x + 49$</span></div>
+            <div><strong>b)</strong> $(3 - y)^2 =$ <span class="blank-line blank-wide"></span><span class="sol-val">$9 - 6y + y^2$</span></div>
+          </div>
+          <div class="sub-card">
+            <div><strong>c)</strong> $(2x + 5)^2 =$ <span class="blank-line blank-wide"></span><span class="sol-val">$4x^2 + 20x + 25$</span></div>
+            <div><strong>d)</strong> $(4a + 3)(4a - 3) =$ <span class="blank-line blank-wide"></span><span class="sol-val">$16a^2 - 9$</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUFGABE 3: FEHLERDETEKTIV -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">3</span>
+            Fehlerdetektiv: In jeder Rechnung steckt ein typischer Fehler – finde und korrigiere ihn
+          </h2>
+          <span class="task-format-tag">Fehleranalyse</span>
+        </div>
+        <table class="calc-table">
+          <thead>
+            <tr>
+              <th style="width: 35%;">Fehlerhafte Rechnung</th>
+              <th style="width: 37%;">Was wurde falsch gemacht?</th>
+              <th style="width: 28%;">Richtiges Ergebnis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>a)</strong> $(x + 5)^2 = x^2 + 25$</td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">Mittelstück $2 \cdot x \cdot 5 = 10x$ fehlt</span></td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">$x^2 + 10x + 25$</span></td>
+            </tr>
+            <tr>
+              <td><strong>b)</strong> $(x - 3)^2 = x^2 - 6x - 9$</td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">$(-3)^2 = +9$, nicht $-9$</span></td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">$x^2 - 6x + 9$</span></td>
+            </tr>
+            <tr>
+              <td><strong>c)</strong> $(x + 4)(x - 4) = x^2 + 8x - 16$</td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">3. Formel hat kein Mittelstück</span></td>
+              <td><span class="blank-line" style="width: 100%;"></span><span class="sol-val">$x^2 - 16$</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- AUFGABE 4: RÜCKWÄRTS DENKEN (FAKTORISIEREN) -->
+      <section class="task-card">
+        <div class="task-header">
+          <h2 class="task-title">
+            <span class="task-num">4</span>
+            Rückwärts denken: Finde die ursprünglichen Klammern (Faktorisieren)
+          </h2>
+          <span class="task-format-tag">Umkehraufgabe</span>
+        </div>
+        <div class="sub-card">
+          <div>
+            <strong>a)</strong> $x^2 + 10x + 25 = ($<span class="blank-line blank-medium"></span><span class="sol-val">$x + 5$</span>$)^2$
+          </div>
+          <div>
+            <strong>b)</strong> $x^2 - 14x$ $+$ <span class="blank-line" style="min-width: 34px;"></span><span class="sol-val">$49$</span> $= (x$ $-$ <span class="blank-line" style="min-width: 34px;"></span><span class="sol-val">$7$</span>$)^2$
+          </div>
+          <div>
+            <strong>c)</strong> $x^2 - 81 = ($<span class="blank-line" style="min-width: 55px;"></span><span class="sol-val">$x + 9$</span>$)($<span class="blank-line" style="min-width: 55px;"></span><span class="sol-val">$x - 9$</span>$)$
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleTeacherMode() {
+      const isTeacher = document.body.classList.toggle('teacher-mode');
+      const btn = document.getElementById('btnToggleTeacher');
+      if (isTeacher) {
+        btn.textContent = 'Schülerversion anzeigen (Lösungen verbergen)';
+      } else {
+        btn.textContent = 'Musterlösung einblenden';
+      }
+    }
+  </script>
+</body>
+</html>
